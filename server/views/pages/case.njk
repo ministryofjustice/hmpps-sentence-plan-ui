@@ -19,7 +19,7 @@
         <h2>{{ caseDetails.name }} has {{ rows | length }} sentence plan{% if rows | length > 1 %}s{% endif %}</h2>
         <p>Select to view or update one below</p>
         {{ govukTable({ head: head, rows: rows }) }}
-        {% if not hasDraft %}
+        {% if not hasDraft and not hasActive %}
             {{ govukButton({
                 text: 'Add another',
                 href: '/case/' + caseDetails.crn + '/create-sentence-plan',

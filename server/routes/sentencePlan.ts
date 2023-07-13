@@ -1,4 +1,5 @@
 import { Request, type RequestHandler, Response, Router } from 'express'
+import { formatISO } from 'date-fns'
 import asyncMiddleware from '../middleware/asyncMiddleware'
 import type { Services } from '../services'
 import { formatDate } from '../utils/utils'
@@ -60,6 +61,7 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
         },
       ]),
       hasDraft: sentencePlans.some(it => it.status === 'Draft'),
+      hasActive: sentencePlans.some(it => it.status === 'Active'),
       initialAppointmentDate,
       arrivalIntoCustodyDate,
     })
@@ -167,6 +169,13 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
     })
   })
 
+  get('/sentence-plan/:sentencePlanId/confirmDelete', async function deleteAction(req, res) {
+    const { sentencePlanId } = req.params
+    res.render('pages/sentencePlan/confirmDeleteSentencePlan', {
+      ...(await loadSentencePlan(sentencePlanId)),
+    })
+  })
+
   async function loadNeeds(crn: string): Promise<OasysNeed[]> {
     const needs = await service.oasysClient.getNeeds(crn)
     return needs.criminogenicNeeds
@@ -204,6 +213,16 @@ export default function sentencePlanRoutes(router: Router, service: Services): R
     res.render('pages/sentencePlan/confirmStartSentencePlan', {
       ...(await loadSentencePlan(sentencePlanId)),
     })
+  })
+
+  post('/sentence-plan/:sentencePlanId/start', async function deleteAction(req, res) {
+    const { sentencePlanId } = req.params
+    const existingSentencePlan = await service.sentencePlanClient.getSentencePlan(sentencePlanId)
+    await service.sentencePlanClient.updateSentencePlan({
+      ...existingSentencePlan,
+      activeDate: formatISO(new Date()),
+    })
+    res.redirect(`/case/${existingSentencePlan.crn}`)
   })
 
   return router
