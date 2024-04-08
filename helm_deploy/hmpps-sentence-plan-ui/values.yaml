@@ -1,21 +1,21 @@
 generic-service:
-  nameOverride: hmpps-template-typescript
-  productId: "UNASSIGNED" # productId for the product that this belongs too, i.e. DPS001, see README.md for details
+  nameOverride: hmpps-sentence-plan-ui
+  productId: "hmpps-sentence-plan-notifications" # productId for the product that this belongs too, i.e. DPS001, see README.md for details
 
   # the IRSA service account name for accessing AWS resources
-  # serviceAccountName: "hmpps-template-typescript"
+  # serviceAccountName: "hmpps-sentence-plan-ui"
 
   replicaCount: 4
 
   image:
-    repository: quay.io/hmpps/hmpps-template-typescript
+    repository: quay.io/hmpps/hmpps-sentence-plan-ui
     tag: app_version # override at deployment time
     port: 3000
 
   ingress:
     enabled: true
     host: app-hostname.local # override per environment
-    tlsSecretName: hmpps-template-typescript-cert
+    tlsSecretName: hmpps-sentence-plan-ui-cert
 
   livenessProbe:
     httpGet:
@@ -47,7 +47,7 @@ generic-service:
   #     [name of environment variable as seen by app]: [key of kubernetes secret to load]
 
   namespace_secrets:
-    hmpps-template-typescript:
+    hmpps-sentence-plan-ui:
       APPINSIGHTS_INSTRUMENTATIONKEY: "APPINSIGHTS_INSTRUMENTATIONKEY"
       API_CLIENT_ID: "API_CLIENT_ID"
       API_CLIENT_SECRET: "API_CLIENT_SECRET"
@@ -66,4 +66,4 @@ generic-service:
       - internal
 
 generic-prometheus-alerts:
-  targetApplication: hmpps-template-typescript
+  targetApplication: hmpps-sentence-plan-ui
