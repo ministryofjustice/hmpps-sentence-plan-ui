@@ -1,0 +1,20 @@
+{% extends "govuk/template.njk" %}
+
+{% block head %}
+  <link href="/assets/stylesheets/application.css?{{ version }}" rel="stylesheet"/>
+{% endblock %}
+
+{% block pageTitle %}{{pageTitle | default(applicationName)}}{% endblock %}
+
+{% block header %}
+  {% include "./header.njk" %}
+{% endblock %}
+
+{% block bodyStart %}
+{% endblock %}
+
+{% block bodyEnd %}
+  <script type="module" src="/assets/govukFrontendInit.js"></script>
+  <script src="/assets/moj/all.js"></script>
+  <script src="/assets/mojFrontendInit.js"></script>
+{% endblock %}
