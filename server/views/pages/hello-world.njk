@@ -1,0 +1,12 @@
+{% extends "../partials/layout.njk" %}
+
+{% set pageTitle = applicationName + " - Home" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block content %}
+
+  <h1>This is Hello world page </h1>
+  <p><storng>Request : </storng> {{q}}</p>
+  <p><storng>Response : </storng> {{response.message}}</p>
+
+{% endblock %}
