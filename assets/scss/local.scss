@@ -1,3 +1,13 @@
 .govuk-main-wrapper {
   min-height: 600px;
 }
+.goal-count{
+  color:  govuk-colour("red")	;
+  font-weight: 600;
+  width: 90%;
+ text-align: right;
+ display: block;
+}
+.card{
+border: 1px solid  $govuk-border-colour;
+}

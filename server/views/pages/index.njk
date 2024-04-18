@@ -1,10 +1,16 @@
 {% extends "../partials/layout.njk" %}
+{% from "../partials/area.njk" import areasList %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
 
 {% set pageTitle = applicationName + " - Home" %}
 {% set mainClasses = "app-container govuk-body" %}
 
 {% block content %}
-
+ 
+ 
+{{areasList(rowsData)}}
   <h1>This site is under construction...</h1>
   <p>Please check back later when there is content to view.</p>
 
