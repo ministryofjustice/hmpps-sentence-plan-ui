@@ -1,16 +1,10 @@
-import logger from '../../logger'
-import config from '../config'
-import RestClient from '../data/restClient'
+import SentencePlanApiClient from '../data/sentencePlanApiClient'
 
+// TODO: This is a test service and can be removed once we've added other API calls
 export default class HelloWorldService {
-  constructor() {}
-
-  private static restClient(): RestClient {
-    return new RestClient('Hello world', config.apis.helloWorld, null)
-  }
+  constructor(private readonly sentencePlanApiClient: SentencePlanApiClient) {}
 
   helloWorld(world: string): Promise<string> {
-    logger.info('Calling hello world service')
-    return HelloWorldService.restClient().get<string>({ path: `/${world}` })
+    return this.sentencePlanApiClient.getHelloWorld(world)
   }
 }

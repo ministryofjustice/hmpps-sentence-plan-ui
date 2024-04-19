@@ -4,11 +4,11 @@ import UserService from './userService'
 import HelloWorldService from './helloWorld'
 
 export const services = () => {
-  const { applicationInfo, manageUsersApiClient, hmppsAuditClient } = dataAccess()
+  const { applicationInfo, manageUsersApiClient, sentencePlanApiClient, hmppsAuditClient } = dataAccess()
 
   const userService = new UserService(manageUsersApiClient)
   const auditService = new AuditService(hmppsAuditClient)
-  const helloWorldService = new HelloWorldService()
+  const helloWorldService = new HelloWorldService(sentencePlanApiClient)
   return {
     applicationInfo,
     userService,
