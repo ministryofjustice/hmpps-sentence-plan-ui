@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
-import HelloWorldService from '../../services/helloWorld'
+import HelloWorldService from '../../services/sentence-plan/helloWorld'
 
 export default class HelloWorldController {
   constructor(private readonly helloWorldService: HelloWorldService) {}
