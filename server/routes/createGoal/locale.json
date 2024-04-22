@@ -1,0 +1,29 @@
+{
+  "en": {
+    "title": "Create a goal with {POP_NAME}",
+    "section": "{AREA_OF_NEED} goal",
+    "notes": {
+      "title": "Notes from {POP_NAME}'s assessment",
+      "attribution": "Created on {NOTE_CREATION_DATE} by {NOTE_AUTHOR}."
+    },
+    "goalSelection": {
+      "label": "What goal is {POP_NAME} trying to achieve?",
+      "hint": "Select one option",
+      "customRadioOptionText": "Something else",
+      "customOptionLabel": "Enter a custom goal"
+    },
+    "dateSelection": {
+      "label": "When should {POP_NAME} achieve this?",
+      "hint": "Select one option",
+      "customRadioOptionText": "Something else",
+      "customOptionLabel": "Enter a custom date",
+      "customOptionHint": "For example, 27 3 2007",
+      "options": {
+        "threeMonths": "In 3 months (by {3_MONTHS_DATE})",
+        "sixMonths": "In 6 months (by {6_MONTHS_DATE})",
+        "twelveMonths": "In 12 months (by {12_MONTHS_DATE})"
+      }
+    },
+    "saveButtonText": "Save and continue"
+  }
+}
