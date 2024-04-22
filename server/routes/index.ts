@@ -4,6 +4,7 @@ import type { Services } from '../services'
 import { areasData } from '../data/ui/areas'
 import { Page } from '../services/auditService'
 import setupHelloWorldRoutes from './helloWorld/routes'
+import setupCreateGoalRoutes from './createGoal/routes'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
 export default function routes(services: Services): Router {
@@ -26,6 +27,7 @@ export default function routes(services: Services): Router {
   })
 
   setupHelloWorldRoutes(router, services)
+  setupCreateGoalRoutes(router, services)
 
   return router
 }
