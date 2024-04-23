@@ -1,0 +1,19 @@
+{
+  "en": {
+    "title": "Review and agree goal with {POP_NAME}",
+    "goalPurpose": "Check {POP_NAME} agrees to this goal. It should reflect {POP_NAME}, and their strengths, needs and risk.",
+    "goalBreakdown": {
+      "rowGoal": "Goal",
+      "rowArea": "Area of need",
+      "rowDate": "Aiming to achieve this"
+    },
+    "stepSectionTitle": "Steps to achieve this goal",
+    "goalAgreement": {
+      "label": "Does {POP_NAME} agree to this goal?",
+      "hint": "{POP_NAME} must answer this question",
+      "agree": "Yes I agree",
+      "disagree": "No, I do not agree"
+    },
+    "saveButtonText": "Save and add to plan"
+  }
+}

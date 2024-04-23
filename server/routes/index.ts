@@ -5,6 +5,7 @@ import { areasData } from '../data/ui/areas'
 import { Page } from '../services/auditService'
 import setupHelloWorldRoutes from './helloWorld/routes'
 import setupCreateGoalRoutes from './createGoal/routes'
+import setupConfirmGoalRoutes from './confirmGoal/routes'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
 export default function routes(services: Services): Router {
@@ -18,7 +19,7 @@ export default function routes(services: Services): Router {
     })
     const rowsData = areasData.map(area => [
       {
-        html: `<p>${area.name}</p> <a href="goals/${area.url}"  draggable="false" >Create goal</a>
+        html: `<p>${area.name}</p> <a href=create-goal/${area.url}  draggable="false" >Create goal</a>
       `,
       },
       { html: "<span class='goal-count'>0</span>" },
@@ -28,6 +29,7 @@ export default function routes(services: Services): Router {
 
   setupHelloWorldRoutes(router, services)
   setupCreateGoalRoutes(router, services)
+  setupConfirmGoalRoutes(router, services)
 
   return router
 }
