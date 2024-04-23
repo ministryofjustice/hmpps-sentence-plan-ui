@@ -10,8 +10,8 @@
 {# Setup arrays and custom HTML #}
     {% set customGoalHtml %}
         {{ govukInput({
-            id: "goalSelection-custom",
-            name: "goalSelection-custom",
+            id: "goal-selection-custom",
+            name: "goal-selection-custom",
             label: {
                 text: locale.goalSelection.customOptionLabel
             }
@@ -19,8 +19,8 @@
     {% endset -%}
     {% set customDateHtml %}
         {{ govukDateInput({
-            id: "dateSelection-custom",
-            name: "dateSelection-custom",
+            id: "date-selection-custom",
+            namePrefix: "date-selection-custom",
             fieldset: {
                 legend: {
                     text: locale.dateSelection.customOptionLabel
@@ -36,14 +36,14 @@
 
     {% for goal in data.referenceData.Goals %}
         {% set goals = (goals.push({
-            id: "goalSelectionRadio-" + goal.id,
-            value: goal.id,
+            id: "goal-selection-radio-" + goal.id,
+            value: goal.Name,
             text: goal.Name
         }), goals) %}
     {% endfor %}
     {% set goals = (goals.push({divider: "or"}), goals) %}
     {% set goals = (goals.push({
-            value: "text",
+            value: "custom",
             text: locale.goalSelection.customRadioOptionText,
             conditional: {
                 html: customGoalHtml
@@ -67,12 +67,15 @@
                             | replace("{NOTE_CREATION_DATE}", (data.noteData.creationDate | formatSimpleDate ))
                             | replace("{NOTE_AUTHOR}", (data.noteData.author ))
                         }}</p>
-                        <p>{{ data.noteData.content }}</p>
+                        <p class="govuk-body">{{ data.noteData.content }}</p>
                     </div>
 
-                    <form id="createGoalForm" method="POST">
+                    <form id="create-goal-form" method="POST">
+                        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+                        <input type="hidden" name="area-of-need" value="{{ data.referenceData.Name }}">
+
                         {{ govukRadios({
-                            name: "goalSelection",
+                            name: "goal-selection-radio",
                             fieldset: {
                                 legend: {
                                     text: locale.goalSelection.label | replace("{POP_NAME}", data.popData.firstName),
@@ -87,7 +90,7 @@
                         }) }}
 
                         {{ govukRadios({
-                            name: "dateSelection",
+                            name: "date-selection-radio",
                             fieldset: {
                                 legend: {
                                     text: locale.dateSelection.label | replace("{POP_NAME}", data.popData.firstName),
@@ -115,7 +118,7 @@
                                     divider: "or"
                                 },
                                 {
-                                    value: "text",
+                                    value: "custom",
                                     text: locale.dateSelection.customRadioOptionText,
                                     conditional: {
                                         html: customDateHtml
@@ -127,8 +130,8 @@
                         <div class="govuk-button-group">
                             {{ govukButton({
                                 text: locale.saveButtonText,
-                                name: "_action",
-                                value: "save"
+                                name: "action",
+                                value: "continue"
                             }) }}
                         </div>
                     </form>
