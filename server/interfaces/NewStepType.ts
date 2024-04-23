@@ -1,4 +1,5 @@
 export type NewStep = {
-  title: string
+  description: string
   actor: string
+  status: string
 }

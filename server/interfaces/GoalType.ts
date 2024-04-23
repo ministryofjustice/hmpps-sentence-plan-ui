@@ -1,5 +1,6 @@
 export type Goal = {
   id: number
+  uuid: string
   title: string
   areaOfNeed: string
   creationDate: Date
