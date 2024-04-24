@@ -63,4 +63,16 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
   njkEnv.addFilter('formatISODate', date => {
     return new Date(date).toISOString().substring(0, 10)
   })
+
+  njkEnv.addGlobal('getFormattedError', (errors: any, locale: any, fieldName: string) => {
+    if (errors?.body?.[fieldName]) {
+      // Ensuring 'body' and 'fieldName' exist safely
+      const entry = Object.entries(errors.body[fieldName]).find(([errorType, hasError]) => hasError)
+      if (entry) {
+        const [errorType] = entry
+        return { text: locale.errors[fieldName][errorType] }
+      }
+    }
+    return false
+  })
 }

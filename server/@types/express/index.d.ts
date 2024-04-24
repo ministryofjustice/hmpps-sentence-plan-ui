@@ -22,6 +22,11 @@ export declare global {
       verified?: boolean
       id: string
       logout(done: (err: unknown) => void): void
+      errors?: {
+        body?: any
+        params?: any
+        query?: any
+      }
     }
 
     interface Locals {
