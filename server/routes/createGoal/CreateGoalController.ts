@@ -13,33 +13,12 @@ export default class CreateGoalController {
     private readonly noteService: NoteService,
   ) {}
 
-  get = async (req: Request, res: Response, next: NextFunction) => {
-    const { areaOfNeed } = req.params
-    const crn = 'ABC123XYZ' // TODO: This is likely to be a session value, get from there
-
-    try {
-      const popData = await this.infoService.getPopData(crn)
-      const referenceData = await this.getReferenceDataForAreaOfNeed(areaOfNeed)
-      const noteData = await this.noteService.getNoteDataByAreaOfNeed(areaOfNeed, crn)
-      const dateOptionsDate = getAchieveDateOptions(new Date())
-
-      res.render('pages/create-goal', {
-        locale: locale.en,
-        data: {
-          popData,
-          referenceData,
-          noteData,
-          dateOptionsDate,
-        },
-      })
-    } catch (e) {
-      next(e)
+  private saveAndRedirect = async (req: Request, res: Response, next: NextFunction) => {
+    if (req.errors.body) {
+      return this.render(req, res, next)
     }
-  }
 
-  post = async (req: Request, res: Response, next: NextFunction) => {
     const formHandlerService = new FormHandlerService(req)
-    // TODO: Handle errors/perform sanitization, don't redirect if there's errors
     formHandlerService.saveFormData(FORMS.CREATE_GOAL, {
       processed: this.processGoalData(req.body),
       raw: req.body,
@@ -65,9 +44,30 @@ export default class CreateGoalController {
     return res.redirect(URLs.CONFIRM_GOAL)
   }
 
-  private async getReferenceDataForAreaOfNeed(areaOfNeed: string) {
-    const referenceData = await this.referentialDataService.getAllQuestionData()
-    return referenceData.AreasOfNeed.find(area => toKebabCase(area.Name) === areaOfNeed)
+  private render = async (req: Request, res: Response, next: NextFunction) => {
+    const crn = 'ABC123XYZ' // TODO: This is likely to be a session value, get from there
+    const { areaOfNeed } = req.params
+    const { errors } = req
+
+    try {
+      const popData = await this.infoService.getPopData(crn)
+      const referenceData = await this.referentialDataService.getQuestionDataByAreaOfNeed(areaOfNeed)
+      const noteData = await this.noteService.getNoteDataByAreaOfNeed(areaOfNeed, crn)
+      const dateOptionsDate = this.getAchieveDateOptions(new Date())
+
+      return res.render('pages/create-goal', {
+        locale: locale.en,
+        data: {
+          popData,
+          referenceData,
+          noteData,
+          dateOptionsDate,
+        },
+        errors,
+      })
+    } catch (e) {
+      return next(e)
+    }
   }
 
   private processGoalData(rawGoalData: any) {
@@ -95,16 +95,16 @@ export default class CreateGoalController {
       targetDate,
     }
   }
-}
 
-function toKebabCase(string: string) {
-  return string.replace(/ /g, '-').toLowerCase()
-}
+  private getAchieveDateOptions = (date: Date, dateOptionsInMonths = [3, 6, 12]) => {
+    return dateOptionsInMonths.map(option => {
+      const achieveDate = new Date(date)
+      achieveDate.setMonth(date.getMonth() + option)
+      return achieveDate
+    })
+  }
 
-function getAchieveDateOptions(date: Date, dateOptionsInMonths = [3, 6, 12]) {
-  return dateOptionsInMonths.map(option => {
-    const achieveDate = new Date(date)
-    achieveDate.setMonth(date.getMonth() + option)
-    return achieveDate
-  })
+  public get = this.render
+
+  public post = this.saveAndRedirect
 }

@@ -14,7 +14,8 @@
             name: "goal-selection-custom",
             label: {
                 text: locale.goalSelection.customOptionLabel
-            }
+            },
+            errorMessage: getFormattedError(errors, locale, "goal-selection-custom")
         }) }}
     {% endset -%}
     {% set customDateHtml %}
@@ -52,7 +53,6 @@
     %}
 
 {% block content %}
-
     <div class="govuk-width-container">
         <a href="#" class="govuk-back-link">Back</a>
         <main class="govuk-main-wrapper">
@@ -86,6 +86,7 @@
                             hint: {
                                 text: locale.goalSelection.hint
                             },
+                            errorMessage: getFormattedError(errors, locale, 'goal-selection-radio'),
                             items: goals
                         }) }}
 
@@ -101,6 +102,7 @@
                             hint: {
                                 text: locale.dateSelection.hint
                             },
+                            errorMessage: getFormattedError(errors, locale, 'date-selection-radio'),
                             items: [
                                 {
                                     value: data.dateOptionsDate[0] | formatISODate,

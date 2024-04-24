@@ -24,6 +24,26 @@
         "twelveMonths": "In 12 months (by {12_MONTHS_DATE})"
       }
     },
-    "saveButtonText": "Save and continue"
+    "saveButtonText": "Save and continue",
+    "errors": {
+      "goal-selection-radio": {
+        "isNotEmpty": "You need to select a goal"
+      },
+      "goal-selection-custom": {
+        "isNotEmpty": "You need to enter a goal"
+      },
+      "date-selection-radio": {
+        "isNotEmpty": "You need to select a timeframe"
+      },
+      "date-selection-custom-day": {
+        "isInt": "You must enter a number"
+      },
+      "date-selection-custom-month": {
+        "isInt": "You must enter a number"
+      },
+      "date-selection-custom-year": {
+        "isInt": "You must enter a number"
+      }
+    }
   }
 }
