@@ -14,6 +14,17 @@
       "agree": "Yes I agree",
       "disagree": "No, I do not agree"
     },
-    "saveButtonText": "Save and add to plan"
+    "goalAgreementNote": {
+      "label": "Enter why {POP_NAME} does not agree with this goal"
+    },
+    "saveButtonText": "Save and add to plan",
+    "errors": {
+      "goal-agreement": {
+        "isNotEmpty": "You need to select an option"
+      },
+      "goal-agreement-note": {
+        "isNotEmpty": "A reason must be entered"
+      }
+    }
   }
 }

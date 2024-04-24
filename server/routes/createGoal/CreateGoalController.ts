@@ -14,10 +14,6 @@ export default class CreateGoalController {
   ) {}
 
   private saveAndRedirect = async (req: Request, res: Response, next: NextFunction) => {
-    if (req.errors.body) {
-      return this.render(req, res, next)
-    }
-
     const formHandlerService = new FormHandlerService(req)
     formHandlerService.saveFormData(FORMS.CREATE_GOAL, {
       processed: this.processGoalData(req.body),
@@ -106,5 +102,11 @@ export default class CreateGoalController {
 
   public get = this.render
 
-  public post = this.saveAndRedirect
+  post = (req: Request, res: Response, next: NextFunction) => {
+    if (Object.keys(req.errors.body).length) {
+      return this.render(req, res, next)
+    }
+
+    return this.saveAndRedirect(req, res, next)
+  }
 }

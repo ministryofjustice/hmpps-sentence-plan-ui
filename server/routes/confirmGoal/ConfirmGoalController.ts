@@ -14,10 +14,10 @@ export default class ConfirmGoalController {
     private readonly stepService: StepService,
   ) {}
 
-  get = async (req: Request, res: Response, next: NextFunction) => {
+  render = async (req: Request, res: Response, next: NextFunction) => {
     const formHandlerService = new FormHandlerService(req)
-
     const crn = 'ABC123XYZ' // TODO: This is likely to be a session value, get from there
+    const { errors } = req
 
     try {
       const popData = await this.infoService.getPopData(crn)
@@ -31,19 +31,19 @@ export default class ConfirmGoalController {
           goalData,
           stepData,
         },
+        errors,
       })
     } catch (e) {
       return next(e)
     }
   }
 
-  post = async (req: Request, res: Response, next: NextFunction) => {
+  saveAndRedirect = async (req: Request, res: Response, next: NextFunction) => {
     const formHandlerService = new FormHandlerService(req)
 
-    // TODO: Do sanitization/error handling for POST data
     const goalData: NewGoal = {
       ...formHandlerService.getFormData<NewGoal>(FORMS.CREATE_GOAL).processed,
-      agreementNote: '',
+      agreementNote: req.body['goal-agreement-note'],
       isAgreed: req.body['goal-agreement'],
     }
     const stepsData = formHandlerService.getFormData<NewStep[]>(FORMS.CREATE_STEPS).processed
@@ -64,5 +64,15 @@ export default class ConfirmGoalController {
 
     // TODO: Handle if PoP disagrees
     return next()
+  }
+
+  get = this.render
+
+  post = (req: Request, res: Response, next: NextFunction) => {
+    if (Object.keys(req.errors.body).length) {
+      return this.render(req, res, next)
+    }
+
+    return this.saveAndRedirect(req, res, next)
   }
 }

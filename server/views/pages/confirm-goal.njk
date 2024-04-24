@@ -1,6 +1,6 @@
 {% extends "../partials/layout.njk" %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
-{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
@@ -29,6 +29,17 @@
                 }
             }), steps) %}
     {% endfor %}
+
+    {% set goalAgreementNoteHtml %}
+        {{ govukTextarea({
+            id: "goal-agreement-note",
+            name: "goal-agreement-note",
+            label: {
+                text: locale.goalAgreementNote.label | replace("{POP_NAME}", data.popData.firstName)
+            },
+            errorMessage: getFormattedError(errors, locale, "goal-agreement-note")
+        }) }}
+    {% endset -%}
 
 
 {% block content %}
@@ -118,6 +129,7 @@
                             hint: {
                                 text: locale.goalAgreement.hint | replace("{POP_NAME}", data.popData.firstName)
                             },
+                            errorMessage: getFormattedError(errors, locale, 'goal-agreement'),
                             items: [
                                 {
                                     value: true,
@@ -125,7 +137,10 @@
                                 },
                                 {
                                     value: false,
-                                    text: locale.goalAgreement.disagree
+                                    text: locale.goalAgreement.disagree,
+                                    conditional: {
+                                        html: goalAgreementNoteHtml
+                                    }
                                 }
                             ]
                         }) }}
