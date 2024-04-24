@@ -9,7 +9,7 @@ export const areasData: Array<Areas> = [
     id: 1,
     name: 'Accomodation',
     active: true,
-    url: 'accomodation',
+    url: 'accommodation',
   },
   {
     id: 2,
