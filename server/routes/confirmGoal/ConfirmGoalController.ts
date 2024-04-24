@@ -30,6 +30,7 @@ export default class ConfirmGoalController {
           popData,
           goalData,
           stepData,
+          form: req.body,
         },
         errors,
       })

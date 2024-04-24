@@ -37,7 +37,8 @@
             label: {
                 text: locale.goalAgreementNote.label | replace("{POP_NAME}", data.popData.firstName)
             },
-            errorMessage: getFormattedError(errors, locale, "goal-agreement-note")
+            errorMessage: getFormattedError(errors, locale, "goal-agreement-note"),
+            value: data.form["goal-agreement-note"]
         }) }}
     {% endset -%}
 
@@ -130,13 +131,14 @@
                                 text: locale.goalAgreement.hint | replace("{POP_NAME}", data.popData.firstName)
                             },
                             errorMessage: getFormattedError(errors, locale, 'goal-agreement'),
+                            value: data.form["goal-agreement"],
                             items: [
                                 {
-                                    value: true,
+                                    value: "true",
                                     text: locale.goalAgreement.agree
                                 },
                                 {
-                                    value: false,
+                                    value: "false",
                                     text: locale.goalAgreement.disagree,
                                     conditional: {
                                         html: goalAgreementNoteHtml

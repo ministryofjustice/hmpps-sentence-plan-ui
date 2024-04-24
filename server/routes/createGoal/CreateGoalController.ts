@@ -58,6 +58,7 @@ export default class CreateGoalController {
           referenceData,
           noteData,
           dateOptionsDate,
+          form: req.body,
         },
         errors,
       })
@@ -66,24 +67,12 @@ export default class CreateGoalController {
     }
   }
 
-  private processGoalData(rawGoalData: any) {
-    let title
-    let targetDate
-
-    if (rawGoalData['goal-selection-radio'] === 'custom') {
-      title = rawGoalData['goal-selection-custom']
-    } else {
-      title = rawGoalData['goal-selection-radio']
-    }
-
-    if (rawGoalData['date-selection-radio'] === 'custom') {
-      const dateString = `${rawGoalData['date-selection-custom-year']}-${rawGoalData['date-selection-custom-month']}-${rawGoalData['date-selection-custom-day']}`
-      targetDate = new Date(dateString)
-    } else {
-      targetDate = new Date(rawGoalData['date-selection-radio'])
-    }
-
-    const areaOfNeed = rawGoalData['area-of-need']
+  private processGoalData(body: any) {
+    const title =
+      body['goal-selection-radio'] === 'custom' ? body['goal-selection-custom'] : body['goal-selection-radio']
+    const targetDate =
+      body['date-selection-radio'] === 'custom' ? body['date-selection-custom'] : body['date-selection-radio']
+    const areaOfNeed = body['area-of-need']
 
     return {
       title,

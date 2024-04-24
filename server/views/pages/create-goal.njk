@@ -15,7 +15,8 @@
             label: {
                 text: locale.goalSelection.customOptionLabel
             },
-            errorMessage: getFormattedError(errors, locale, "goal-selection-custom")
+            errorMessage: getFormattedError(errors, locale, "goal-selection-custom"),
+            value: data.form['goal-selection-custom']
         }) }}
     {% endset -%}
     {% set customDateHtml %}
@@ -29,7 +30,25 @@
             },
             hint: {
                 text: locale.dateSelection.customOptionHint
-            }
+            },
+            errorMessage: getFormattedError(errors, locale, 'date-selection-custom'),
+            items: [
+                {
+                    name: "day",
+                    classes: "govuk-input--width-2",
+                    value: data.form["date-selection-custom-day"]
+                },
+                {
+                    name: "month",
+                    classes: "govuk-input--width-2",
+                    value: data.form["date-selection-custom-month"]
+                },
+                {
+                    name: "year",
+                    classes: "govuk-input--width-4",
+                    value: data.form["date-selection-custom-year"]
+                }
+            ]
         }) }}
     {% endset -%}
 
@@ -87,6 +106,7 @@
                                 text: locale.goalSelection.hint
                             },
                             errorMessage: getFormattedError(errors, locale, 'goal-selection-radio'),
+                            value: data.form['goal-selection-radio'],
                             items: goals
                         }) }}
 
@@ -103,6 +123,7 @@
                                 text: locale.dateSelection.hint
                             },
                             errorMessage: getFormattedError(errors, locale, 'date-selection-radio'),
+                            value: data.form['date-selection-radio'],
                             items: [
                                 {
                                     value: data.dateOptionsDate[0] | formatISODate,

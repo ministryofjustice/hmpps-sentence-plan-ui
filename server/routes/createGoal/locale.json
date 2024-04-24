@@ -35,14 +35,9 @@
       "date-selection-radio": {
         "isNotEmpty": "You need to select a timeframe"
       },
-      "date-selection-custom-day": {
-        "isInt": "You must enter a number"
-      },
-      "date-selection-custom-month": {
-        "isInt": "You must enter a number"
-      },
-      "date-selection-custom-year": {
-        "isInt": "You must enter a number"
+      "date-selection-custom": {
+        "isDate": "You must enter a date",
+        "minDate": "You must enter a future date"
       }
     }
   }
