@@ -5,7 +5,6 @@ import { ReferneceDataType } from '../interfaces/ReferenceDataType'
 import { NewGoal } from '../interfaces/NewGoalType'
 import { NewStep } from '../interfaces/NewStepType'
 import { Goal } from '../interfaces/GoalType'
-import { Steps } from './ui/steps'
 
 export default class SentencePlanApiClient {
   constructor() {}
@@ -58,6 +57,6 @@ export default class SentencePlanApiClient {
 
   saveSteps(steps: NewStep[], parentGoalId: string) {
     logger.info('Saving multiple steps')
-    return SentencePlanApiClient.restClient().post<Steps[]>({ path: `/goals/${parentGoalId}/steps`, data: steps })
+    return SentencePlanApiClient.restClient().post({ path: `/goals/${parentGoalId}/steps`, data: steps })
   }
 }
