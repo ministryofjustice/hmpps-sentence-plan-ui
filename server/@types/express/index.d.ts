@@ -1,4 +1,5 @@
 import type { UserDetails } from '../../services/userService'
+import { RequestServices } from '../../services'
 
 export default {}
 
@@ -27,6 +28,7 @@ export declare global {
         params?: any
         query?: any
       }
+      services: RequestServices
     }
 
     interface Locals {

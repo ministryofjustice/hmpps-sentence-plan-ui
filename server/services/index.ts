@@ -7,6 +7,7 @@ import InfoService from './sentence-plan/infoService'
 import NoteService from './sentence-plan/noteService'
 import GoalService from './sentence-plan/goalService'
 import StepService from './sentence-plan/stepsService'
+import FormStorageService from './formStorageService'
 
 export const services = () => {
   const { applicationInfo, manageUsersApiClient, sentencePlanApiClient, hmppsAuditClient } = dataAccess()
@@ -31,6 +32,14 @@ export const services = () => {
     goalService,
     stepService,
   }
+}
+
+export const requestServices = () => ({
+  formStorageService: FormStorageService, // Assuming this is a class
+})
+
+export type RequestServices = {
+  [K in keyof ReturnType<typeof requestServices>]: InstanceType<ReturnType<typeof requestServices>[K]>
 }
 
 export type Services = ReturnType<typeof services>
