@@ -1,6 +1,6 @@
 import { Request } from 'express'
 
-export default class FormHandlerService {
+export default class FormStorageService {
   constructor(private readonly req: Request) {}
 
   getFormData<T>(part: string): Form<T> {
@@ -23,6 +23,10 @@ export default class FormHandlerService {
     if (this.req.session.forms && this.req.session.forms[part]) {
       delete this.req.session.forms[part]
     }
+  }
+
+  hasFormData(part: string): boolean {
+    return this.req.session.forms && this.req.session.forms[part]
   }
 }
 

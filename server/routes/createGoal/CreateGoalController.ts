@@ -4,7 +4,7 @@ import locale from './locale.json'
 import InfoService from '../../services/sentence-plan/infoService'
 import NoteService from '../../services/sentence-plan/noteService'
 import URLs from '../URLs'
-import FormHandlerService, { FORMS } from '../../services/formHandlerService'
+import { FORMS } from '../../services/formStorageService'
 
 export default class CreateGoalController {
   constructor(
@@ -14,14 +14,13 @@ export default class CreateGoalController {
   ) {}
 
   private saveAndRedirect = async (req: Request, res: Response, next: NextFunction) => {
-    const formHandlerService = new FormHandlerService(req)
-    formHandlerService.saveFormData(FORMS.CREATE_GOAL, {
+    req.services.formStorageService.saveFormData(FORMS.CREATE_GOAL, {
       processed: this.processGoalData(req.body),
       raw: req.body,
     })
 
     // TODO: Step data hasn't been decided in the design yet, so just mock some
-    formHandlerService.saveFormData(FORMS.CREATE_STEPS, {
+    req.services.formStorageService.saveFormData(FORMS.CREATE_STEPS, {
       processed: [
         {
           description: 'Make a referral to housing officer',
