@@ -25,6 +25,11 @@
       }
     },
     "saveButtonText": "Save and continue",
+    "motivationsToChangeWidget": {
+      "title": "Motivation to make changes in this area",
+      "motivationLevel": "wants ot make changes and knows how.",
+      "lastUpdated": "Last updated: {MOTIVATION_UPDATE_DATE}"
+    },
     "errors": {
       "goal-selection-radio": {
         "isNotEmpty": "You need to select a goal"

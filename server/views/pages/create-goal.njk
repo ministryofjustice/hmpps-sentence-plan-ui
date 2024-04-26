@@ -3,6 +3,7 @@
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "../partials/summary-card.njk" import summaryCard %}
 
 {% set pageTitle = applicationName + " - Create a goal" %}
 {% set mainClasses = "app-container govuk-body" %}
@@ -160,8 +161,15 @@
                     </form>
                 </div>
                 <div class="govuk-grid-column-one-third">
-                    <h2 class="govuk-heading-m">One-third column</h2>
-                    <p class="govuk-body">This is a paragraph inside a one-third wide column</p>
+                    {% call summaryCard({
+                        title: {
+                            text: locale.motivationsToChangeWidget.title
+                        }
+                    }) %}
+                    {# TODO: Placeholder until pulled from API #}
+                        <p>{{ data.popData.firstName}} <b>{{ locale.motivationsToChangeWidget.motivationLevel }}</b></p>
+                        <span class="govuk-secondary-text">{{ locale.motivationsToChangeWidget.lastUpdated | replace("{MOTIVATION_UPDATE_DATE}", "25th December 2023") }}</span>
+                    {% endcall %}
                 </div>
             </div>
         </main>
