@@ -1,9 +1,9 @@
-export type StepType = {
-  id: string
+export type Step = {
+  id: number
   uuid: string
   relatedGoalId: string
-  title: string
+  description: string
   actor: string
-  creationDate: Date
+  creationDate: string
   status: string
 }

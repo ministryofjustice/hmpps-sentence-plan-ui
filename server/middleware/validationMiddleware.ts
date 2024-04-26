@@ -25,7 +25,7 @@ function validatePart<T>(req: Request, dtoClass: ClassConstructor<T>, source: Da
   req.errors[source] = simplifyValidationErrors(errors)
 }
 
-export default function validate<T>(data: { [K in DataSources]?: ClassConstructor<T> }) {
+export default function validate(data: { [K in DataSources]?: ClassConstructor<any> }) {
   return (req: Request, res: Response, next: NextFunction) => {
     if (!req.errors) {
       req.errors = {}

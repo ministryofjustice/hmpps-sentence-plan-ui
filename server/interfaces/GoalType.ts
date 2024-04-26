@@ -3,9 +3,9 @@ export type Goal = {
   uuid: string
   title: string
   areaOfNeed: string
-  creationDate: Date
-  completedDate?: Date
-  targetDate: Date
+  creationDate: string
+  completedDate?: string
+  targetDate: string
   isAgreed: boolean
   agreementNote: string
 }

@@ -1,7 +1,7 @@
 export type NewGoal = {
   title: string
   areaOfNeed: string
-  targetDate: Date
+  targetDate: string
   isAgreed: boolean
   agreementNote: string
 }

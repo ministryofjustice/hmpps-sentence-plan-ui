@@ -1,10 +1,11 @@
 import logger from '../../logger'
 import config from '../config'
 import RestClient from './restClient'
-import { ReferneceDataType } from '../interfaces/ReferenceDataType'
+import { ReferenceData } from '../interfaces/ReferenceDataType'
 import { NewGoal } from '../interfaces/NewGoalType'
 import { NewStep } from '../interfaces/NewStepType'
 import { Goal } from '../interfaces/GoalType'
+import { Step } from '../interfaces/StepType'
 
 export default class SentencePlanApiClient {
   constructor() {}
@@ -18,9 +19,9 @@ export default class SentencePlanApiClient {
     return SentencePlanApiClient.restClient().get<string>({ path: `/hello/${world}` })
   }
 
-  getAllReferenceData(): Promise<ReferneceDataType> {
+  getAllReferenceData(): Promise<ReferenceData> {
     logger.info('Getting question reference data')
-    return SentencePlanApiClient.restClient().get<ReferneceDataType>({ path: `/question-reference-data` })
+    return SentencePlanApiClient.restClient().get<ReferenceData>({ path: `/question-reference-data` })
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -59,6 +60,6 @@ export default class SentencePlanApiClient {
 
   saveSteps(steps: NewStep[], parentGoalId: string) {
     logger.info('Saving multiple steps')
-    return SentencePlanApiClient.restClient().post({ path: `/goals/${parentGoalId}/steps`, data: steps })
+    return SentencePlanApiClient.restClient().post<Step[]>({ path: `/goals/${parentGoalId}/steps`, data: steps })
   }
 }

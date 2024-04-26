@@ -1,4 +1,4 @@
-export type ReferneceDataType = {
+export type ReferenceData = {
   AreasOfNeed: [
     {
       id: number
