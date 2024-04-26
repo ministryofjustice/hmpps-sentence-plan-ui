@@ -23,6 +23,7 @@ export default class SentencePlanApiClient {
     return SentencePlanApiClient.restClient().get<ReferneceDataType>({ path: `/question-reference-data` })
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getPopData(crn: string) {
     // TODO: Not implemented on API yet
     return {
@@ -37,6 +38,7 @@ export default class SentencePlanApiClient {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getNotesByAreaOfNeed(areaOfNeed: string, crn: string) {
     // TODO: Not implemented on API yet
     // TODO: Probably will return an array of notes, refactor later :)

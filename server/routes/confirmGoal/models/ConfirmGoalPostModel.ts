@@ -1,4 +1,4 @@
-import { IsInt, IsNotEmpty, ValidateIf } from 'class-validator'
+import { IsNotEmpty, ValidateIf } from 'class-validator'
 
 export default class ConfirmGoalPostModel {
   @IsNotEmpty()

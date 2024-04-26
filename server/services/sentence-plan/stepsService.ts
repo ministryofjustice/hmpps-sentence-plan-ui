@@ -1,5 +1,4 @@
 import SentencePlanApiClient from '../../data/sentencePlanApiClient'
-import { NewGoal } from '../../interfaces/NewGoalType'
 import { NewStep } from '../../interfaces/NewStepType'
 
 export default class StepService {

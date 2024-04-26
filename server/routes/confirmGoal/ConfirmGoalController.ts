@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import locale from './locale.json'
 import InfoService from '../../services/sentence-plan/infoService'
-import FormStorageService, { FORMS } from '../../services/formStorageService'
+import { FORMS } from '../../services/formStorageService'
 import GoalService from '../../services/sentence-plan/goalService'
 import StepService from '../../services/sentence-plan/stepsService'
 import { NewGoal } from '../../interfaces/NewGoalType'
