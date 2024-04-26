@@ -1,4 +1,4 @@
-import { convertToTitleCase, initialiseName } from './utils'
+import { convertToTitleCase, initialiseName, toKebabCase } from './utils'
 
 describe('convert to title case', () => {
   it.each([
@@ -26,5 +26,21 @@ describe('initialise name', () => {
     ['Double barrelled', 'Robert-John Smith-Jones-Wilson', 'R. Smith-Jones-Wilson'],
   ])('%s initialiseName(%s, %s)', (_: string, a: string, expected: string) => {
     expect(initialiseName(a)).toEqual(expected)
+  })
+})
+
+describe('toKebabCase', () => {
+  it.each([
+    [null, null, ''],
+    ['empty string', '', ''],
+    ['Lower case', 'robert', 'robert'],
+    ['Upper case', 'ROBERT', 'robert'],
+    ['Mixed case', 'RoBErT', 'robert'],
+    ['Multiple words', 'RobeRT SMiTH', 'robert-smith'],
+    ['Leading spaces', '  RobeRT', 'robert'],
+    ['Trailing spaces', 'RobeRT  ', 'robert'],
+    ['Hyphenated', 'Robert-John SmiTH-jONes-WILSON', 'robert-john-smith-jones-wilson'],
+  ])('%s initialiseName(%s, %s)', (_: string, a: string, expected: string) => {
+    expect(toKebabCase(a)).toEqual(expected)
   })
 })
