@@ -1,9 +1,11 @@
 {% extends "../partials/layout.njk" %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
 
 {% set pageTitle = applicationName + " - About " + data.popData.firstName %}
 {% set mainClasses = "app-container govuk-body" %}
 
+{# TODO: Probably could just make this whole widget a macro considering how big it is#}
 {# Setup Goals To Achieve widget #}
     {% set goalsToAchieveWidgetRows = [] %}
     {% set goalsToAchieveWidgetRows = (goalsToAchieveWidgetRows.push({
@@ -31,10 +33,23 @@
             },
             value: {
                 text: 0,
-                classes: "govuk-!-text-align-right"
+                classes: "govuk-!-text-align-right govuk-!-font-weight-bold rosh-low-risk"
             }
         }), goalsToAchieveWidgetRows) %}
     {% endfor %}
+    {% set goalsToAchieveWidgetLastRow %}
+        {{ govukDetails({
+            summaryText: locale.goalsToAchieve.viewPreviousGoalsLink,
+            text: locale.goalsToAchieve.noPreviousGoals
+        }) }}
+    {% endset %}
+    {% set goalsToAchieveWidgetRows = (goalsToAchieveWidgetRows.push({
+        key: {
+            html: goalsToAchieveWidgetLastRow,
+            classes: "govuk-!-width-full"
+        }
+    }), goalsToAchieveWidgetRows)
+    %}
 
 {% block content %}
     <div class="govuk-width-container">

@@ -5,7 +5,9 @@
       "title": "Goals to achieve",
       "areaOfNeedHeading": "Area of need",
       "goalHeading": "Goal",
-      "createGoalLink": "Create goal"
+      "createGoalLink": "Create goal",
+      "viewPreviousGoalsLink": "View previous goals",
+      "noPreviousGoals": "No previous goals"
     }
   }
 }
