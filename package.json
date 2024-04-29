@@ -100,6 +100,9 @@
     "body-parser": "^1.20.2",
     "bunyan": "^1.8.15",
     "bunyan-format": "^0.2.1",
+    "class-sanitizer": "^1.0.1",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.1",
     "compression": "^1.7.4",
     "connect-flash": "^0.1.1",
     "connect-redis": "^7.1.1",
@@ -117,6 +120,7 @@
     "passport-oauth2": "^1.8.0",
     "prom-client": "^15.1.1",
     "redis": "^4.6.13",
+    "reflect-metadata": "^0.2.2",
     "superagent": "^8.1.2",
     "url-value-parser": "^2.2.0",
     "uuid": "^9.0.1"

@@ -1,4 +1,5 @@
 import type { UserDetails } from '../../services/userService'
+import { RequestServices } from '../../services'
 
 export default {}
 
@@ -7,6 +8,7 @@ declare module 'express-session' {
   interface SessionData {
     returnTo: string
     nowInMinutes: number
+    forms?: any
   }
 }
 
@@ -21,6 +23,12 @@ export declare global {
       verified?: boolean
       id: string
       logout(done: (err: unknown) => void): void
+      errors?: {
+        body?: any
+        params?: any
+        query?: any
+      }
+      services: RequestServices
     }
 
     interface Locals {

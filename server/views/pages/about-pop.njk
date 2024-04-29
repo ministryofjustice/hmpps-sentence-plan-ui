@@ -1,0 +1,72 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+
+{% set pageTitle = applicationName + " - About " + data.popData.firstName %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{# TODO: Probably could just make this whole widget a macro considering how big it is#}
+{# Setup Goals To Achieve widget #}
+    {% set goalsToAchieveWidgetRows = [] %}
+    {% set goalsToAchieveWidgetRows = (goalsToAchieveWidgetRows.push({
+        key: {
+            text: locale.goalsToAchieve.areaOfNeedHeading,
+            classes: "govuk-!-width-three-quarters govuk-!-font-weight-bold"
+        },
+        value: {
+            text: locale.goalsToAchieve.goalHeading,
+            classes: "govuk-!-text-align-right govuk-!-font-weight-bold"
+        }
+    }), goalsToAchieveWidgetRows)
+    %}
+    {% for areaOfNeed in data.referenceData %}
+        {% set HTML %}
+            <div class="govuk-!-width-three-quarters">
+                <p class="govuk-!-margin-bottom-0">{{ areaOfNeed.Name }}</p>
+                <a class="govuk-link" href="/create-goal/{{ areaOfNeed.url }}">{{ locale.goalsToAchieve.createGoalLink }}</a>
+            </div>
+        {% endset %}
+        {% set goalsToAchieveWidgetRows = (goalsToAchieveWidgetRows.push({
+            key: {
+                html: HTML,
+                classes: "govuk-!-width-three-quarters govuk-!-font-weight-regular"
+            },
+            value: {
+                text: 0,
+                classes: "govuk-!-text-align-right govuk-!-font-weight-bold rosh-low-risk"
+            }
+        }), goalsToAchieveWidgetRows) %}
+    {% endfor %}
+    {% set goalsToAchieveWidgetLastRow %}
+        {{ govukDetails({
+            summaryText: locale.goalsToAchieve.viewPreviousGoalsLink,
+            text: locale.goalsToAchieve.noPreviousGoals
+        }) }}
+    {% endset %}
+    {% set goalsToAchieveWidgetRows = (goalsToAchieveWidgetRows.push({
+        key: {
+            html: goalsToAchieveWidgetLastRow,
+            classes: "govuk-!-width-full"
+        }
+    }), goalsToAchieveWidgetRows)
+    %}
+
+{% block content %}
+    <div class="govuk-width-container">
+        <main class="govuk-main-wrapper">
+            <h1>{{ locale.title | replace("{POP_NAME}", data.popData.firstName) }}</h1>
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-one-third">
+                    {{ govukSummaryList({
+                        card: {
+                            title: {
+                                text: locale.goalsToAchieve.title
+                            }
+                        },
+                        rows: goalsToAchieveWidgetRows
+                    }) }}
+                </div>
+            </div>
+        </main>
+    </div>
+{% endblock %}

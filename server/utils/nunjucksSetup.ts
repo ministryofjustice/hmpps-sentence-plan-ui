@@ -41,4 +41,37 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
   )
 
   njkEnv.addFilter('initialiseName', initialiseName)
+
+  // Filter to format date as 'Month YYYY'
+  njkEnv.addFilter('formatMonthYear', date => {
+    return new Date(date).toLocaleDateString('en-GB', {
+      month: 'long',
+      year: 'numeric',
+    })
+  })
+
+  // Filter to format date as 'DD MMMMM YYYY'
+  njkEnv.addFilter('formatSimpleDate', date => {
+    return new Date(date).toLocaleDateString('en-GB', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    })
+  })
+
+  // Filter to format date as 'YYYY-MM-DD'
+  njkEnv.addFilter('formatISODate', date => {
+    return new Date(date).toISOString().substring(0, 10)
+  })
+
+  njkEnv.addGlobal('getFormattedError', (errors: any, locale: any, fieldName: string) => {
+    if (errors?.body?.[fieldName]) {
+      const entry = Object.entries(errors.body[fieldName]).find(([errorType, hasError]) => hasError)
+      if (entry) {
+        const [errorType] = entry
+        return { text: locale.errors[fieldName][errorType] }
+      }
+    }
+    return false
+  })
 }

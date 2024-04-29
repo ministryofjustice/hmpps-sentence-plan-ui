@@ -1,0 +1,13 @@
+{
+  "en": {
+    "title": "About {POP_NAME}",
+    "goalsToAchieve": {
+      "title": "Goals to achieve",
+      "areaOfNeedHeading": "Area of need",
+      "goalHeading": "Goal",
+      "createGoalLink": "Create goal",
+      "viewPreviousGoalsLink": "View previous goals",
+      "noPreviousGoals": "No previous goals"
+    }
+  }
+}

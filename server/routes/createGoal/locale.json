@@ -1,0 +1,49 @@
+{
+  "en": {
+    "title": "Create a goal with {POP_NAME}",
+    "section": "{AREA_OF_NEED} goal",
+    "notes": {
+      "title": "Notes from {POP_NAME}'s assessment",
+      "attribution": "Created on {NOTE_CREATION_DATE} by {NOTE_AUTHOR}."
+    },
+    "goalSelection": {
+      "label": "What goal is {POP_NAME} trying to achieve?",
+      "hint": "Select one option",
+      "customRadioOptionText": "Something else",
+      "customOptionLabel": "Enter a custom goal"
+    },
+    "dateSelection": {
+      "label": "When should {POP_NAME} achieve this?",
+      "hint": "Select one option",
+      "customRadioOptionText": "Something else",
+      "customOptionLabel": "Enter a custom date",
+      "customOptionHint": "For example, 27 3 2007",
+      "options": {
+        "threeMonths": "In 3 months (by {3_MONTHS_DATE})",
+        "sixMonths": "In 6 months (by {6_MONTHS_DATE})",
+        "twelveMonths": "In 12 months (by {12_MONTHS_DATE})"
+      }
+    },
+    "saveButtonText": "Save and continue",
+    "motivationsToChangeWidget": {
+      "title": "Motivation to make changes in this area",
+      "motivationLevel": "wants ot make changes and knows how.",
+      "lastUpdated": "Last updated: {MOTIVATION_UPDATE_DATE}"
+    },
+    "errors": {
+      "goal-selection-radio": {
+        "isNotEmpty": "You need to select a goal"
+      },
+      "goal-selection-custom": {
+        "isNotEmpty": "You need to enter a goal"
+      },
+      "date-selection-radio": {
+        "isNotEmpty": "You need to select a timeframe"
+      },
+      "date-selection-custom": {
+        "isDate": "You must enter a date",
+        "minDate": "You must enter a future date"
+      }
+    }
+  }
+}
