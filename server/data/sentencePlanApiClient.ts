@@ -39,6 +39,7 @@ export default class SentencePlanApiClient {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getRoSHData(crn: string) {
     // TODO: Not implemented on API yet
     return {
