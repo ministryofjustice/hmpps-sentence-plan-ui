@@ -39,6 +39,27 @@ export default class SentencePlanApiClient {
     }
   }
 
+  getRoSHData(crn: string) {
+    // TODO: Not implemented on API yet
+    return {
+      overallRisk: 'VERY_HIGH',
+      assessedOn: '2024-04-23T02:00:58',
+      riskInCommunity: {
+        Public: 'HIGH',
+        Children: 'LOW',
+        'Known Adult': 'MEDIUM',
+        Staff: 'VERY_HIGH',
+      },
+      riskInCustody: {
+        Public: 'HIGH',
+        Children: 'LOW',
+        'Known Adult': 'MEDIUM',
+        Staff: 'VERY_HIGH',
+        Prisoners: 'MEDIUM',
+      },
+    }
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   getNotesByAreaOfNeed(areaOfNeed: string, crn: string) {
     // TODO: Not implemented on API yet

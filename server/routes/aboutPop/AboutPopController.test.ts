@@ -2,7 +2,7 @@ import ReferentialDataService from '../../services/sentence-plan/referentialData
 import InfoService from '../../services/sentence-plan/infoService'
 import mockRes from '../../testutils/preMadeMocks/mockRes'
 import mockReq from '../../testutils/preMadeMocks/mockReq'
-import testPopData from '../../testutils/data/popData'
+import { testPopData, parsedRoshData } from '../../testutils/data/popData'
 import testReferenceData from '../../testutils/data/referenceData'
 import AboutPopController from './AboutPopController'
 import locale from './locale.json'
@@ -21,6 +21,7 @@ jest.mock('../../services/sentence-plan/referentialDataService', () => {
 jest.mock('../../services/sentence-plan/infoService', () => {
   return jest.fn().mockImplementation(() => ({
     getPopData: jest.fn().mockResolvedValue(testPopData),
+    getRoSHData: jest.fn().mockResolvedValue(parsedRoshData),
   }))
 })
 
@@ -43,22 +44,24 @@ describe('AboutPopController', () => {
       const next = jest.fn()
 
       await controller.get(req, res, next)
-
-      expect(res.render).toHaveBeenCalledWith('pages/about-pop', {
+      const { id, Name, active } = testReferenceData.AreasOfNeed[0]
+      const payload = {
         locale: locale.en,
+        roshData: parsedRoshData,
         data: {
           popData: testPopData,
           referenceData: [
             {
-              id: testReferenceData.AreasOfNeed[0].id,
-              Name: testReferenceData.AreasOfNeed[0].Name,
-              active: testReferenceData.AreasOfNeed[0].active,
-              url: testReferenceData.AreasOfNeed[0].Name.replace(/ /g, '-').toLowerCase(),
+              id,
+              Name,
+              active,
+              url: Name.replace(/ /g, '-').toLowerCase(),
             },
           ],
         },
         errors: {},
-      })
+      }
+      expect(res.render).toHaveBeenCalledWith('pages/about-pop', payload)
     })
 
     it('should forward to error handler if an exception occurs', async () => {
@@ -66,7 +69,6 @@ describe('AboutPopController', () => {
       const res = mockRes()
       const next = jest.fn()
       const testError = new Error('test error')
-
       mockReferentialDataService.getAreasOfNeedQuestionData.mockRejectedValue(testError)
 
       await controller.get(req, res, next)

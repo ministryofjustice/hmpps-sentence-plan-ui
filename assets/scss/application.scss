@@ -8,5 +8,6 @@ $govuk-page-width: $moj-page-width;
 @import 'moj/all';
 
 @import './components/header-bar';
+@import './components/rosh-widget';
 @import "./components/colors";
 @import 'assets/scss/local';
