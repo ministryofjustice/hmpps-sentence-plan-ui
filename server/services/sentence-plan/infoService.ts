@@ -1,6 +1,5 @@
 import SentencePlanApiClient from '../../data/sentencePlanApiClient'
 import { RoshData } from '../../interfaces/Rosh'
-import { unComplitedRoSH } from '../../testutils/data/roshData'
 import { formatRoSHData } from '../../utils/utils'
 
 export default class InfoService {
@@ -11,12 +10,12 @@ export default class InfoService {
   }
 
   getRoSHData(crn: string) {
+    let rosh: Partial<RoshData> = { hasbeenCompleted: false }
     try {
-      const result: RoshData = this.sentencePlanApiClient.getRoSHData(crn)
-      const formatedRosh = formatRoSHData(result)
-      return formatedRosh
+      rosh = this.sentencePlanApiClient.getRoSHData(crn)
+      return formatRoSHData(rosh as RoshData)
     } catch (e) {
-      return unComplitedRoSH
+      return rosh
     }
   }
 }

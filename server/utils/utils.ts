@@ -1,5 +1,4 @@
 import { RoshData } from '../interfaces/Rosh'
-import { unComplitedRoSH } from '../testutils/data/roshData'
 
 const properCase = (word: string): string =>
   word.length >= 1 ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word
@@ -30,7 +29,7 @@ export const toKebabCase = (string: string) => (isBlank(string) ? '' : string.tr
 export function formatRoSHData(data: RoshData) {
   const { overallRisk, assessedOn, riskInCommunity } = data
   if ([overallRisk, assessedOn, riskInCommunity].includes(undefined)) {
-    return unComplitedRoSH
+    return { hasBeenCompleted: false }
   }
   return {
     hasBeenCompleted: true,

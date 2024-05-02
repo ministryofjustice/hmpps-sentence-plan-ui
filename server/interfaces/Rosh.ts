@@ -6,6 +6,7 @@ export interface RoshDetail {
   Prisoners?: string
 }
 export interface RoshData {
+  hasbeenCompleted?: boolean
   overallRisk?: string
   assessedOn: string
   riskInCommunity: RoshDetail
