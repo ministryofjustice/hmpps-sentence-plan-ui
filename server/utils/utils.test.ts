@@ -1,4 +1,6 @@
-import { convertToTitleCase, initialiseName, toKebabCase } from './utils'
+import { RoshData } from '../interfaces/Rosh'
+import { parsedRoshData, roSHData, unComplitedRoSH } from '../testutils/data/roshData'
+import { convertToTitleCase, formatRoSHData, initialiseName, toKebabCase } from './utils'
 
 describe('convert to title case', () => {
   it.each([
@@ -43,4 +45,11 @@ describe('toKebabCase', () => {
   ])('%s initialiseName(%s, %s)', (_: string, a: string, expected: string) => {
     expect(toKebabCase(a)).toEqual(expected)
   })
+})
+
+describe('to return formated RoSH data', () => {
+  expect(formatRoSHData(roSHData)).toEqual(parsedRoshData)
+})
+describe('to return uncompleted ', () => {
+  expect(formatRoSHData({} as RoshData)).toEqual(unComplitedRoSH)
 })

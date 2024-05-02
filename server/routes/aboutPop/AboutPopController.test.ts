@@ -2,10 +2,11 @@ import ReferentialDataService from '../../services/sentence-plan/referentialData
 import InfoService from '../../services/sentence-plan/infoService'
 import mockRes from '../../testutils/preMadeMocks/mockRes'
 import mockReq from '../../testutils/preMadeMocks/mockReq'
-import { testPopData, parsedRoshData } from '../../testutils/data/popData'
+import testPopData from '../../testutils/data/popData'
 import testReferenceData from '../../testutils/data/referenceData'
 import AboutPopController from './AboutPopController'
 import locale from './locale.json'
+import { parsedRoshData } from '../../testutils/data/roshData'
 
 jest.mock('../../services/sentence-plan/referentialDataService', () => {
   return jest.fn().mockImplementation(() => ({
@@ -47,8 +48,8 @@ describe('AboutPopController', () => {
       const { id, Name, active } = testReferenceData.AreasOfNeed[0]
       const payload = {
         locale: locale.en,
-        roshData: parsedRoshData,
         data: {
+          roshData: parsedRoshData,
           popData: testPopData,
           referenceData: [
             {

@@ -1,10 +1,7 @@
-import moment from 'moment'
 import SentencePlanApiClient from '../../data/sentencePlanApiClient'
-import { RoshData } from '../../@types/rosh'
-
-const unComplitedRoSH = { hasBeenCompleted: false }
-
-moment.locale('en-gb')
+import { RoshData } from '../../interfaces/Rosh'
+import { unComplitedRoSH } from '../../testutils/data/roshData'
+import { formatRoSHData } from '../../utils/utils'
 
 export default class InfoService {
   constructor(private readonly sentencePlanApiClient: SentencePlanApiClient) {}
@@ -21,16 +18,5 @@ export default class InfoService {
     } catch (e) {
       return unComplitedRoSH
     }
-  }
-}
-export function formatRoSHData(data: RoshData) {
-  const { overallRisk, assessedOn, riskInCommunity } = data
-  if ([overallRisk, assessedOn, riskInCommunity].includes(undefined)) {
-    return unComplitedRoSH
-  }
-  return {
-    hasBeenCompleted: true,
-    riskInCommunity,
-    lastUpdated: moment(assessedOn).format('LL'),
   }
 }

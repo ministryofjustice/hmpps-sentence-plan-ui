@@ -4,9 +4,10 @@ import { appWithAllRoutes } from '../testutils/appSetup'
 import locale from './locale.json'
 import URLs from '../URLs'
 import testReferenceData from '../../testutils/data/referenceData'
-import { testPopData, getRoSHData } from '../../testutils/data/popData'
+import testPopData from '../../testutils/data/popData'
 import ReferentialDataService from '../../services/sentence-plan/referentialDataService'
 import InfoService from '../../services/sentence-plan/infoService'
+import { roSHData } from '../../testutils/data/roshData'
 
 jest.mock('../../services/sentence-plan/referentialDataService', () => {
   return jest.fn().mockImplementation(() => ({
@@ -22,7 +23,7 @@ jest.mock('../../services/sentence-plan/referentialDataService', () => {
 jest.mock('../../services/sentence-plan/infoService', () => {
   return jest.fn().mockImplementation(() => ({
     getPopData: jest.fn().mockResolvedValue(testPopData),
-    getRoSHData: jest.fn().mockResolvedValue(getRoSHData),
+    getRoSHData: jest.fn().mockResolvedValue(roSHData),
   }))
 })
 

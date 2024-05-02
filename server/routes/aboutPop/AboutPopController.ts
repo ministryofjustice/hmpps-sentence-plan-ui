@@ -19,11 +19,11 @@ export default class AboutPopController {
       const popData = await this.infoService.getPopData(crn)
       const roshData = await this.infoService.getRoSHData(crn)
       return res.render('pages/about-pop', {
-        roshData,
         locale: locale.en,
         data: {
           referenceData,
           popData,
+          roshData,
         },
         errors,
       })
