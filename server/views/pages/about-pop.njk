@@ -1,6 +1,7 @@
 {% extends "../partials/layout.njk" %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "../components/rosh/macro.njk" import roshWidget %}
 
 {% set pageTitle = applicationName + " - About " + data.popData.firstName %}
 {% set mainClasses = "app-container govuk-body" %}
@@ -65,6 +66,9 @@
                         },
                         rows: goalsToAchieveWidgetRows
                     }) }}
+                </div>
+                <div class="govuk-grid-column-one-third">
+                    {{ roshWidget( data.roshData )  }}
                 </div>
             </div>
         </main>

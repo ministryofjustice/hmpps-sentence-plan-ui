@@ -1,3 +1,5 @@
+import { RoshData } from '../interfaces/Rosh'
+
 const properCase = (word: string): string =>
   word.length >= 1 ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word
 
@@ -23,3 +25,19 @@ export const initialiseName = (fullName?: string): string | null => {
 }
 
 export const toKebabCase = (string: string) => (isBlank(string) ? '' : string.trim().replace(/ /g, '-').toLowerCase())
+
+export function formatRoSHData(data: RoshData) {
+  const { overallRisk, assessedOn, riskInCommunity } = data
+  if ([overallRisk, assessedOn, riskInCommunity].includes(undefined)) {
+    return { hasBeenCompleted: false }
+  }
+  return {
+    hasBeenCompleted: true,
+    riskInCommunity,
+    lastUpdated: new Date(assessedOn).toLocaleDateString('en-GB', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    }),
+  }
+}

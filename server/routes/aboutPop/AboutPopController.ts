@@ -17,12 +17,13 @@ export default class AboutPopController {
     try {
       const referenceData = await this.buildReferenceData()
       const popData = await this.infoService.getPopData(crn)
-
+      const roshData = await this.infoService.getRoSHData(crn)
       return res.render('pages/about-pop', {
         locale: locale.en,
         data: {
           referenceData,
           popData,
+          roshData,
         },
         errors,
       })

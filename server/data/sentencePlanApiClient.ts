@@ -6,6 +6,7 @@ import { NewGoal } from '../interfaces/NewGoalType'
 import { NewStep } from '../interfaces/NewStepType'
 import { Goal } from '../interfaces/GoalType'
 import { Step } from '../interfaces/StepType'
+import { roSHData } from '../testutils/data/roshData'
 
 export default class SentencePlanApiClient {
   constructor() {}
@@ -37,6 +38,12 @@ export default class SentencePlanApiClient {
       PRC: 'ABC123XYZ',
       courtOrderRequirements: {},
     }
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  getRoSHData(crn: string) {
+    // TODO: Not implemented on API yet
+    return roSHData
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
