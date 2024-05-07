@@ -7,22 +7,25 @@ import { NewStep } from '../interfaces/NewStepType'
 import { Goal } from '../interfaces/GoalType'
 import { Step } from '../interfaces/StepType'
 import { roSHData } from '../testutils/data/roshData'
+import HmppsAuthClient from './hmppsAuthClient'
 
 export default class SentencePlanApiClient {
-  constructor() {}
+  constructor(private readonly authClient: HmppsAuthClient) {}
 
-  private static restClient(): RestClient {
-    return new RestClient('Sentence Plan Api Client', config.apis.sentencePlanApi, null)
+  private static restClient(token?: string): RestClient {
+    return new RestClient('Sentence Plan Api Client', config.apis.sentencePlanApi, token)
   }
 
-  getHelloWorld(world: string): Promise<string> {
+  async getHelloWorld(world: string): Promise<string> {
     logger.info('Calling hello world service')
-    return SentencePlanApiClient.restClient().get<string>({ path: `/hello/${world}` })
+    const token = await this.authClient.getSystemClientToken()
+    return SentencePlanApiClient.restClient(token).get<string>({ path: `/hello/${world}` })
   }
 
-  getAllReferenceData(): Promise<ReferenceData> {
+  async getAllReferenceData(): Promise<ReferenceData> {
     logger.info('Getting question reference data')
-    return SentencePlanApiClient.restClient().get<ReferenceData>({ path: `/question-reference-data` })
+    const token = await this.authClient.getSystemClientToken()
+    return SentencePlanApiClient.restClient(token).get<ReferenceData>({ path: `/question-reference-data` })
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -60,13 +63,15 @@ export default class SentencePlanApiClient {
     }
   }
 
-  saveGoal(goal: NewGoal) {
+  async saveGoal(goal: NewGoal) {
     logger.info('Saving goal data')
-    return SentencePlanApiClient.restClient().post<Goal>({ path: `/goals`, data: goal })
+    const token = await this.authClient.getSystemClientToken()
+    return SentencePlanApiClient.restClient(token).post<Goal>({ path: `/goals`, data: goal })
   }
 
-  saveSteps(steps: NewStep[], parentGoalId: string) {
+  async saveSteps(steps: NewStep[], parentGoalId: string) {
     logger.info('Saving multiple steps')
-    return SentencePlanApiClient.restClient().post<Step[]>({ path: `/goals/${parentGoalId}/steps`, data: steps })
+    const token = await this.authClient.getSystemClientToken()
+    return SentencePlanApiClient.restClient(token).post<Step[]>({ path: `/goals/${parentGoalId}/steps`, data: steps })
   }
 }

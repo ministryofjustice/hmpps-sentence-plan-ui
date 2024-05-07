@@ -21,15 +21,22 @@ import SentencePlanApiClient from './sentencePlanApiClient'
 
 type RestClientBuilder<T> = (token: string) => T
 
-export const dataAccess = () => ({
-  applicationInfo,
-  hmppsAuthClient: new HmppsAuthClient(
+export const dataAccess = () => {
+  const hmppsAuthClient = new HmppsAuthClient(
     config.redis.enabled ? new RedisTokenStore(createRedisClient()) : new InMemoryTokenStore(),
-  ),
-  manageUsersApiClient: new ManageUsersApiClient(),
-  sentencePlanApiClient: new SentencePlanApiClient(),
-  hmppsAuditClient: new HmppsAuditClient(config.sqs.audit),
-})
+  )
+  const manageUsersApiClient = new ManageUsersApiClient()
+  const sentencePlanApiClient = new SentencePlanApiClient(hmppsAuthClient)
+  const hmppsAuditClient = new HmppsAuditClient(config.sqs.audit)
+
+  return {
+    applicationInfo,
+    hmppsAuthClient,
+    manageUsersApiClient,
+    sentencePlanApiClient,
+    hmppsAuditClient,
+  }
+}
 
 export type DataAccess = ReturnType<typeof dataAccess>
 
