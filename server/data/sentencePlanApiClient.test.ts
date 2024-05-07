@@ -4,13 +4,21 @@ import SentencePlanApiClient from './sentencePlanApiClient'
 import testReferenceData from '../testutils/data/referenceData'
 import { testGoal, testNewGoal } from '../testutils/data/goalData'
 import { testNewStep, testStep } from '../testutils/data/stepData'
+import HmppsAuthClient from './hmppsAuthClient'
+
+jest.mock('./hmppsAuthClient', () => {
+  return jest.fn().mockImplementation(() => ({
+    getSystemClientToken: jest.fn().mockResolvedValue('a-mock-token'),
+  }))
+})
 
 describe('SentencePlanApiClient', () => {
   let client: SentencePlanApiClient
   let fakeApi: nock.Scope
+  const hmppsAuthClient: HmppsAuthClient = new HmppsAuthClient(null)
 
   beforeEach(() => {
-    client = new SentencePlanApiClient()
+    client = new SentencePlanApiClient(hmppsAuthClient)
     fakeApi = nock(config.apis.sentencePlanApi.url)
   })
 
