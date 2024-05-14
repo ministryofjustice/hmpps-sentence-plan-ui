@@ -1,5 +1,5 @@
-import { NewStep } from '../../interfaces/NewStepType'
-import { Step } from '../../interfaces/StepType'
+import { NewStep } from '../../@types/NewStepType'
+import { Step } from '../../@types/StepType'
 import { testGoal } from './goalData'
 
 export const testNewStep: NewStep = {

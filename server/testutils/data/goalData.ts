@@ -1,5 +1,5 @@
-import { NewGoal } from '../../interfaces/NewGoalType'
-import { Goal } from '../../interfaces/GoalType'
+import { NewGoal } from '../../@types/NewGoalType'
+import { Goal } from '../../@types/GoalType'
 
 const oneWeekInMs = 1000 * 60 * 60 * 24 * 7
 

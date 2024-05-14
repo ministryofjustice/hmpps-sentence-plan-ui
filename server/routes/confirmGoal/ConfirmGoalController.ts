@@ -4,8 +4,8 @@ import InfoService from '../../services/sentence-plan/infoService'
 import { FORMS } from '../../services/formStorageService'
 import GoalService from '../../services/sentence-plan/goalService'
 import StepService from '../../services/sentence-plan/stepsService'
-import { NewGoal } from '../../interfaces/NewGoalType'
-import { NewStep } from '../../interfaces/NewStepType'
+import { NewGoal } from '../../@types/NewGoalType'
+import { NewStep } from '../../@types/NewStepType'
 import URLs from '../URLs'
 
 export default class ConfirmGoalController {
