@@ -1,5 +1,5 @@
 import SentencePlanApiClient from '../../data/sentencePlanApiClient'
-import { RoshData } from '../../interfaces/Rosh'
+import { RoshData } from '../../@types/Rosh'
 import { formatRoSHData } from '../../utils/utils'
 
 export default class InfoService {

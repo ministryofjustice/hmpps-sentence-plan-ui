@@ -1,13 +1,14 @@
 import logger from '../../logger'
 import config from '../config'
 import RestClient from './restClient'
-import { ReferenceData } from '../interfaces/ReferenceDataType'
-import { NewGoal } from '../interfaces/NewGoalType'
-import { NewStep } from '../interfaces/NewStepType'
-import { Goal } from '../interfaces/GoalType'
-import { Step } from '../interfaces/StepType'
+import { ReferenceData } from '../@types/ReferenceDataType'
+import { NewGoal } from '../@types/NewGoalType'
+import { NewStep } from '../@types/NewStepType'
+import { Goal } from '../@types/GoalType'
+import { Step } from '../@types/StepType'
 import { roSHData } from '../testutils/data/roshData'
 import HmppsAuthClient from './hmppsAuthClient'
+import { Gender, Person } from '../@types/Person'
 
 export default class SentencePlanApiClient {
   constructor(private readonly authClient: HmppsAuthClient) {}
@@ -29,16 +30,20 @@ export default class SentencePlanApiClient {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getPopData(crn: string) {
+  getPopData(crn: string): Person {
     // TODO: Not implemented on API yet
     return {
       title: 'Miss',
       firstName: 'Joan',
       lastName: 'Scott',
-      gender: 'female',
-      DoB: new Date('01/01/1997'),
+      gender: Gender.female,
+      DoB: new Date('01/01/1997').toLocaleDateString('en-GB', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+      }),
       CRN: '12345678',
-      PRC: 'ABC123XYZ',
+      PNC: 'ABC123XYZ',
       courtOrderRequirements: {},
     }
   }

@@ -1,5 +1,5 @@
 import SentencePlanApiClient from '../../data/sentencePlanApiClient'
-import { NewGoal } from '../../interfaces/NewGoalType'
+import { NewGoal } from '../../@types/NewGoalType'
 
 export default class GoalService {
   constructor(private readonly sentencePlanApiClient: SentencePlanApiClient) {}

@@ -1,5 +1,5 @@
 import SentencePlanApiClient from '../../data/sentencePlanApiClient'
-import { NewStep } from '../../interfaces/NewStepType'
+import { NewStep } from '../../@types/NewStepType'
 
 export default class StepService {
   constructor(private readonly sentencePlanApiClient: SentencePlanApiClient) {}

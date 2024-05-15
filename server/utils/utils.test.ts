@@ -1,4 +1,4 @@
-import { RoshData } from '../interfaces/Rosh'
+import { RoshData } from '../@types/Rosh'
 import { parsedRoshData, roSHData, unComplitedRoSH } from '../testutils/data/roshData'
 import { convertToTitleCase, formatRoSHData, initialiseName, toKebabCase } from './utils'
 
