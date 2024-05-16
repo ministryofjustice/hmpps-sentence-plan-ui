@@ -6,9 +6,9 @@ import { NewGoal } from '../@types/NewGoalType'
 import { NewStep } from '../@types/NewStepType'
 import { Goal } from '../@types/GoalType'
 import { Step } from '../@types/StepType'
-import { roSHData } from '../testutils/data/roshData'
 import HmppsAuthClient from './hmppsAuthClient'
-import { Gender, Person } from '../@types/Person'
+import { Person } from '../@types/Person'
+import { RoshData } from '../@types/Rosh'
 
 export default class SentencePlanApiClient {
   constructor(private readonly authClient: HmppsAuthClient) {}
@@ -29,29 +29,16 @@ export default class SentencePlanApiClient {
     return SentencePlanApiClient.restClient(token).get<ReferenceData>({ path: `/question-reference-data` })
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getPopData(crn: string): Person {
-    // TODO: Not implemented on API yet
-    return {
-      title: 'Miss',
-      firstName: 'Joan',
-      lastName: 'Scott',
-      gender: Gender.female,
-      DoB: new Date('01/01/1997').toLocaleDateString('en-GB', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-      }),
-      CRN: '12345678',
-      PNC: 'ABC123XYZ',
-      courtOrderRequirements: {},
-    }
+  async getPopData(crn: string): Promise<Person> {
+    logger.info('Getting roSH data')
+    const token = await this.authClient.getSystemClientToken()
+    return SentencePlanApiClient.restClient(token).post<Person>({ path: `/info/pop`, data: { crn } })
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getRoSHData(crn: string) {
-    // TODO: Not implemented on API yet
-    return roSHData
+  async getRoSHData(crn: string): Promise<RoshData> {
+    logger.info('Getting roSH data')
+    const token = await this.authClient.getSystemClientToken()
+    return SentencePlanApiClient.restClient(token).post<RoshData>({ path: `/info/pop/scores/risk`, data: { crn } })
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

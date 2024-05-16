@@ -1,6 +1,6 @@
 import { RoshData } from '../@types/Rosh'
 import { parsedRoshData, roSHData, unComplitedRoSH } from '../testutils/data/roshData'
-import { convertToTitleCase, formatRoSHData, initialiseName, toKebabCase } from './utils'
+import { convertToTitleCase, formatDate, formatRoSHData, initialiseName, toKebabCase } from './utils'
 
 describe('convert to title case', () => {
   it.each([
@@ -52,4 +52,7 @@ describe('to return formated RoSH data', () => {
 })
 describe('to return uncompleted ', () => {
   expect(formatRoSHData({} as RoshData)).toEqual(unComplitedRoSH)
+})
+describe('to return formated date ', () => {
+  expect(formatDate('2000-05-09')).toEqual('9 May 2000')
 })

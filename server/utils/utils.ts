@@ -1,3 +1,4 @@
+import { Person } from '../@types/Person'
 import { RoshData } from '../@types/Rosh'
 
 const properCase = (word: string): string =>
@@ -34,10 +35,18 @@ export function formatRoSHData(data: RoshData) {
   return {
     hasBeenCompleted: true,
     riskInCommunity,
-    lastUpdated: new Date(assessedOn).toLocaleDateString('en-GB', {
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric',
-    }),
+    lastUpdated: formatDate(assessedOn),
   }
+}
+
+export function formatPOPData(data: Person): Person {
+  return { ...data, doB: formatDate(data.doB) }
+}
+
+export function formatDate(date: string): string {
+  return new Date(date).toLocaleDateString('en-GB', {
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  })
 }
