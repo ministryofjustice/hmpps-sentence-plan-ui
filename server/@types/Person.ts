@@ -3,9 +3,9 @@ export interface Person {
   firstName: string
   lastName: string
   gender: Gender
-  DoB: string
-  CRN: string
-  PNC: string
+  doB: string
+  crn: string
+  prc: string
   courtOrderRequirements?: object
 }
 export enum Gender {
