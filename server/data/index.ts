@@ -11,7 +11,6 @@ initialiseAppInsights()
 buildAppInsightsClient(applicationInfo)
 
 import HmppsAuthClient from './hmppsAuthClient'
-import ManageUsersApiClient from './manageUsersApiClient'
 import { createRedisClient } from './redisClient'
 import RedisTokenStore from './tokenStore/redisTokenStore'
 import InMemoryTokenStore from './tokenStore/inMemoryTokenStore'
@@ -25,14 +24,12 @@ export const dataAccess = () => {
   const hmppsAuthClient = new HmppsAuthClient(
     config.redis.enabled ? new RedisTokenStore(createRedisClient()) : new InMemoryTokenStore(),
   )
-  const manageUsersApiClient = new ManageUsersApiClient()
   const sentencePlanApiClient = new SentencePlanApiClient(hmppsAuthClient)
   const hmppsAuditClient = new HmppsAuditClient(config.sqs.audit)
 
   return {
     applicationInfo,
     hmppsAuthClient,
-    manageUsersApiClient,
     sentencePlanApiClient,
     hmppsAuditClient,
   }
@@ -40,4 +37,4 @@ export const dataAccess = () => {
 
 export type DataAccess = ReturnType<typeof dataAccess>
 
-export { HmppsAuthClient, RestClientBuilder, ManageUsersApiClient, SentencePlanApiClient, HmppsAuditClient }
+export { HmppsAuthClient, RestClientBuilder, SentencePlanApiClient, HmppsAuditClient }

@@ -15,6 +15,7 @@ export default class AboutPopController {
     const { errors } = req
 
     try {
+      const contextData = await req.services.handoverContextService.getContext()
       const referenceData = await this.buildReferenceData()
       const popData = await this.infoService.getPopData(crn)
       const roshData = await this.infoService.getRoSHData(crn)
@@ -24,6 +25,7 @@ export default class AboutPopController {
           referenceData,
           popData,
           roshData,
+          contextData,
         },
         errors,
       })
