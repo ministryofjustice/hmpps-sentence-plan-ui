@@ -7,4 +7,12 @@ export default class GoalService {
   saveGoal(goal: NewGoal) {
     return this.sentencePlanApiClient.saveGoal(goal)
   }
+
+  async getGoals() {
+    return this.sentencePlanApiClient.getGoals()
+  }
+
+  async changeGoalOrder(goals: Array<any>) {
+    return this.sentencePlanApiClient.changeGoalOrder(goals)
+  }
 }

@@ -55,6 +55,12 @@ export default class SentencePlanApiClient {
     }
   }
 
+  async getGoals(): Promise<Goal[]> {
+    logger.info('Getting goals list')
+    const token = await this.authClient.getSystemClientToken()
+    return SentencePlanApiClient.restClient(token).get<Goal[]>({ path: `/goals` })
+  }
+
   async saveGoal(goal: NewGoal) {
     logger.info('Saving goal data')
     const token = await this.authClient.getSystemClientToken()
@@ -65,5 +71,11 @@ export default class SentencePlanApiClient {
     logger.info('Saving multiple steps')
     const token = await this.authClient.getSystemClientToken()
     return SentencePlanApiClient.restClient(token).post<Step[]>({ path: `/goals/${parentGoalId}/steps`, data: steps })
+  }
+
+  async changeGoalOrder(goals: Array<Goal>) {
+    logger.info('Reordering goals')
+    const token = await this.authClient.getSystemClientToken()
+    return SentencePlanApiClient.restClient(token).post<Step[]>({ path: `/goals/order`, data: goals })
   }
 }

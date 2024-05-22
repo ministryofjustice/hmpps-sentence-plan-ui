@@ -1,3 +1,4 @@
+import { Goal } from '../@types/GoalType'
 import { Person } from '../@types/Person'
 import { RoshData } from '../@types/Rosh'
 
@@ -49,4 +50,45 @@ export function formatDate(date: string): string {
     month: 'long',
     year: 'numeric',
   })
+}
+
+export function getCurrentGoals(goals: Array<Goal>): Array<Goal> {
+  if (!Array.isArray(goals) || goals.length === 0) return []
+  const future = new Date()
+  future.setMonth(future.getMonth() + 3)
+  return goals.filter((goal): Goal => {
+    const targetDate = new Date(goal.targetDate)
+    return targetDate <= future ? goal : null
+  })
+}
+export function getFutureGoals(goals: Array<Goal>): Array<Goal> {
+  if (!Array.isArray(goals) || goals.length === 0) return []
+  const future = new Date()
+  future.setMonth(future.getMonth() + 3)
+  return goals.filter((goal): Goal => {
+    const targetDate = new Date(goal.targetDate)
+    return targetDate > future ? goal : null
+  })
+}
+export function moveGoal(goals: Array<any>, uuid: string, operation: string) {
+  const orderedGoals = [...goals]
+  const index = orderedGoals.findIndex(goal => goal.uuid === uuid)
+
+  if (index === -1 || (operation !== 'up' && operation !== 'down')) {
+    return orderedGoals
+  }
+  const valueSetter = {
+    up: (i: number) => i - 1,
+    down: (i: number) => i + 1,
+  }
+  const targetIndex = valueSetter[operation](index)
+
+  if (targetIndex < 0 || targetIndex >= orderedGoals.length) {
+    return orderedGoals
+  }
+
+  ;[orderedGoals[index], orderedGoals[targetIndex]] = [orderedGoals[targetIndex], orderedGoals[index]]
+  orderedGoals[index].goalOrder = index
+  orderedGoals[targetIndex].goalOrder = targetIndex
+  return orderedGoals.map(({ uuid: goalId, goalOrder }) => ({ goalId, goalOrder }))
 }

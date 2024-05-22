@@ -1,0 +1,9 @@
+{% macro goalItem (goal) %}
+<div class="moj-scrollable-pane">
+  <h2>{{goal.goalOrder}}. {{goal.title}}</h2>
+  <h3>Related area: {{goal.areaOfNeed}}</h3>
+  <div><a href="/goal/{{goal.uuid}}">Add/uppdate timescales and steps</a></div>
+ {%if goal.moveUpURL %} <div><a href="{{goal.moveUpURL}}">Move goal up</a></div>{% endif %}
+ {%if goal.moveDownURL %} <div><a href="{{goal.moveDownURL}}">Move goal down</a></div>{% endif %}
+</div>
+{% endmacro %}
