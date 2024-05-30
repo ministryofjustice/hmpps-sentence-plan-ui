@@ -1,0 +1,10 @@
+{
+  "en": {
+    "testCommonString1": "This is the first common test string",
+    "testCommonString2": "This is the second common test string with a {COMMON_REPLACEABLE_VARIABLE}"
+  },
+  "cy": {
+    "testCommonString1": "In Welsh, this is the first common test string",
+    "testCommonString2": "In Welsh, this is the second common test string with a {COMMON_REPLACEABLE_VARIABLE}"
+  }
+}

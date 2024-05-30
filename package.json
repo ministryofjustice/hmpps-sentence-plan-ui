@@ -133,6 +133,7 @@
     "@types/cookie-session": "^2.0.48",
     "@types/csurf": "^1.11.5",
     "@types/express-session": "^1.18.0",
+    "@types/glob": "^8.1.0",
     "@types/http-errors": "^2.0.4",
     "@types/jest": "^29.5.12",
     "@types/jsonwebtoken": "^9.0.6",
