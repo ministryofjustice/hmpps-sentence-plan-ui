@@ -3,6 +3,7 @@ import locale from './locale.json'
 import InfoService from '../../services/sentence-plan/infoService'
 import ReferentialDataService from '../../services/sentence-plan/referentialDataService'
 import { toKebabCase } from '../../utils/utils'
+import { HandoverContextData } from '../../@types/Handover'
 
 export default class AboutPopController {
   constructor(
@@ -11,13 +12,23 @@ export default class AboutPopController {
   ) {}
 
   render = async (req: Request, res: Response, next: NextFunction) => {
-    const crn = 'ABC123XYZ' // TODO: This is likely to be a session value, get from there
+    // TODO: This is likely to be a session value, get from there
     const { errors } = req
 
     try {
-      const contextData = await req.services.handoverContextService.getContext()
+      const contextData: HandoverContextData = await req.services.handoverContextService.getContext()
+      const { crn, dateOfBirth } = contextData.subject
+      const popData = {
+        ...contextData.subject,
+        dateOfBirth: new Date(dateOfBirth).toLocaleDateString('en-GB', {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric',
+        }),
+      }
       const referenceData = await this.buildReferenceData()
-      const popData = await this.infoService.getPopData(crn)
+      // comented out till we are clear which data we will receive from this service
+      // const popData = await this.infoService.getPopData(crn)
       const roshData = await this.infoService.getRoSHData(crn)
       return res.render('pages/about-pop', {
         locale: locale.en,
@@ -25,7 +36,6 @@ export default class AboutPopController {
           referenceData,
           popData,
           roshData,
-          contextData,
         },
         errors,
       })

@@ -8,6 +8,7 @@ import testPopData from '../../testutils/data/popData'
 import ReferentialDataService from '../../services/sentence-plan/referentialDataService'
 import InfoService from '../../services/sentence-plan/infoService'
 import { roSHData } from '../../testutils/data/roshData'
+import handoverData from '../../testutils/data/handoverData'
 
 jest.mock('../../services/sentence-plan/referentialDataService', () => {
   return jest.fn().mockImplementation(() => ({
@@ -26,11 +27,14 @@ jest.mock('../../services/sentence-plan/infoService', () => {
     getRoSHData: jest.fn().mockResolvedValue(roSHData),
   }))
 })
-
+jest.mock('../../services/handover/handoverContextService', () => {
+  return jest.fn().mockImplementation(() => ({
+    getContext: jest.fn().mockResolvedValue(handoverData),
+  }))
+})
 let app: Express
 const referentialDataService = new ReferentialDataService(null) as jest.Mocked<ReferentialDataService>
 const infoService = new InfoService(null) as jest.Mocked<InfoService>
-
 beforeEach(() => {
   app = appWithAllRoutes({
     services: {
@@ -50,7 +54,7 @@ describe(`GET ${URLs.ABOUT_POP}`, () => {
       .get(URLs.ABOUT_POP)
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain(locale.en.title.replace('{POP_NAME}', testPopData.firstName))
+        expect(res.text).toContain(locale.en.title.replace('{POP_NAME}', testPopData.givenName))
       })
   })
 })

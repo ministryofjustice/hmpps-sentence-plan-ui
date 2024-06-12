@@ -7,6 +7,7 @@ import testReferenceData from '../../testutils/data/referenceData'
 import AboutPopController from './AboutPopController'
 import locale from './locale.json'
 import { parsedRoshData } from '../../testutils/data/roshData'
+import handoverData from '../../testutils/data/handoverData'
 
 jest.mock('../../services/sentence-plan/referentialDataService', () => {
   return jest.fn().mockImplementation(() => ({
@@ -25,12 +26,16 @@ jest.mock('../../services/sentence-plan/infoService', () => {
     getRoSHData: jest.fn().mockResolvedValue(parsedRoshData),
   }))
 })
+jest.mock('../../services/handover/handoverContextService', () => {
+  return jest.fn().mockImplementation(() => ({
+    getContext: jest.fn().mockResolvedValue(handoverData),
+  }))
+})
 
 describe('AboutPopController', () => {
   let controller: AboutPopController
   let mockReferentialDataService: jest.Mocked<ReferentialDataService>
   let mockInfoService: jest.Mocked<InfoService>
-
   beforeEach(() => {
     mockReferentialDataService = new ReferentialDataService(null) as jest.Mocked<ReferentialDataService>
     mockInfoService = new InfoService(null) as jest.Mocked<InfoService>

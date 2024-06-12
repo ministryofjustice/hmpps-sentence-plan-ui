@@ -1,5 +1,6 @@
 import { Request } from 'express'
 import HandoverApiClient from '../../data/handoverApiClient'
+import { HandoverContextData } from '../../@types/Handover'
 
 export default class HandoverContextService {
   constructor(
@@ -9,8 +10,7 @@ export default class HandoverContextService {
 
   getToken = () => this.req.res.locals?.user?.token
 
-  async getContext() {
-    const data = await this.handoverApiClient.getContextData(this.getToken())
-    return data
+  async getContext(): Promise<HandoverContextData> {
+    return this.handoverApiClient.getContextData(this.getToken())
   }
 }

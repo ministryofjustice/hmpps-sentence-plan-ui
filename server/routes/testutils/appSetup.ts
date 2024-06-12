@@ -21,7 +21,7 @@ const testAppInfo: ApplicationInfo = {
   branchName: 'main',
 }
 
-export const user: Express.User = {
+export const user = {
   name: 'FIRST LAST',
   userId: 'id',
   token: 'token',

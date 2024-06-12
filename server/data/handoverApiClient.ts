@@ -1,5 +1,6 @@
 import RestClient from './restClient'
 import config from '../config'
+import { HandoverContextData } from '../@types/Handover'
 
 export default class HandoverApiClient {
   private static restClient(token?: string): RestClient {
@@ -7,6 +8,6 @@ export default class HandoverApiClient {
   }
 
   getContextData(token: string) {
-    return HandoverApiClient.restClient(token).get<object>({ path: `/context` })
+    return HandoverApiClient.restClient(token).get<HandoverContextData>({ path: `/context` })
   }
 }
