@@ -12,7 +12,6 @@ export default class AboutPopController {
   ) {}
 
   render = async (req: Request, res: Response, next: NextFunction) => {
-    // TODO: This is likely to be a session value, get from there
     const { errors } = req
 
     try {
