@@ -5,7 +5,8 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "../partials/summary-card.njk" import summaryCard %}
 
-{% set pageTitle = applicationName + " - Create a goal" %}
+{% set pageTitle = applicationName + " - Create a goal with "+ data.popData.givenName %}
+
 {% set mainClasses = "app-container govuk-body" %}
 
 {# Setup arrays and custom HTML #}

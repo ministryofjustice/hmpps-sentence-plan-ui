@@ -4,7 +4,7 @@
 {% from "../components/rosh/macro.njk" import roshWidget %}
 {% from "moj/components/sub-navigation/macro.njk" import mojSubNavigation %}
 
-{% set pageTitle = applicationName + " - About " + data.popData.firstName %}
+{% set pageTitle = applicationName + " - About " + data.popData.givenName %}
 {% set mainClasses = "app-container govuk-body" %}
 
 {# TODO: Probably could just make this whole widget a macro considering how big it is#}
