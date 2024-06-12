@@ -7,9 +7,10 @@ import routes from '../index'
 import nunjucksSetup from '../../utils/nunjucksSetup'
 import errorHandler from '../../errorHandler'
 import * as auth from '../../authentication/auth'
-import type { Services } from '../../services'
+import { requestServices, Services } from '../../services'
 import type { ApplicationInfo } from '../../applicationInfo'
 import AuditService from '../../services/auditService'
+import setupRequestServices from '../../middleware/setupRequestServices'
 
 jest.mock('../../services/auditService')
 
@@ -21,7 +22,7 @@ const testAppInfo: ApplicationInfo = {
   branchName: 'main',
 }
 
-export const user: Express.User = {
+export const user = {
   name: 'FIRST LAST',
   userId: 'id',
   token: 'token',
@@ -55,6 +56,7 @@ function appSetup(services: Services, production: boolean, userSupplier: () => E
   })
   app.use(express.json())
   app.use(express.urlencoded({ extended: true }))
+  app.use(setupRequestServices(requestServices()))
   app.use(routes(services))
   app.use((req, res, next) => next(new NotFound()))
   app.use(errorHandler(production))

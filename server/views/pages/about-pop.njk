@@ -4,7 +4,7 @@
 {% from "../components/rosh/macro.njk" import roshWidget %}
 {% from "moj/components/sub-navigation/macro.njk" import mojSubNavigation %}
 
-{% set pageTitle = applicationName + " - About " + data.popData.firstName %}
+{% set pageTitle = applicationName + " - About " + data.popData.givenName %}
 {% set mainClasses = "app-container govuk-body" %}
 
 {# TODO: Probably could just make this whole widget a macro considering how big it is#}
@@ -58,7 +58,7 @@
 {{ mojSubNavigation({
     label: 'Sub navigation',
     items: [{
-      text: 'About '+data.popData.firstName,
+      text: 'About '+data.popData.givenName,
       href: '/about-pop',
       active: true
     }, {
@@ -71,7 +71,7 @@
   }) }}
     <div class="govuk-width-container">
         <main class="govuk-main-wrapper">
-            <h1>{{ locale.title | replace("{POP_NAME}", data.popData.firstName) }}</h1>
+            <h1>{{ locale.title | replace("{POP_NAME}", data.popData.givenName) }}</h1>
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-one-third">
                     {{ govukSummaryList({

@@ -3,11 +3,8 @@ import createError from 'http-errors'
 import nunjucksSetup from './utils/nunjucksSetup'
 import errorHandler from './errorHandler'
 import { appInsightsMiddleware } from './utils/azureAppInsights'
-// import authorisationMiddleware from './middleware/authorisationMiddleware'
 import { metricsMiddleware } from './monitoring/metricsApp'
-// import setUpAuthentication from './middleware/setUpAuthentication'
 import setUpCsrf from './middleware/setUpCsrf'
-// import setUpCurrentUser from './middleware/setUpCurrentUser'
 import setUpHealthChecks from './middleware/setUpHealthChecks'
 import setUpStaticResources from './middleware/setUpStaticResources'
 import setUpWebRequestParsing from './middleware/setupRequestParsing'
@@ -16,6 +13,8 @@ import setUpWebSession from './middleware/setUpWebSession'
 import routes from './routes'
 import { requestServices, Services } from './services'
 import setupRequestServices from './middleware/setupRequestServices'
+import setUpAuth from './middleware/setUpAuthentication'
+import authorisationMiddleware from './middleware/authorisationMiddleware'
 
 export default function createApp(services: Services): express.Application {
   const app = express()
@@ -32,10 +31,9 @@ export default function createApp(services: Services): express.Application {
   app.use(setUpWebRequestParsing())
   app.use(setUpStaticResources())
   nunjucksSetup(app, services.applicationInfo)
-  // app.use(setUpAuthentication())
-  // app.use(authorisationMiddleware())
+  app.use(setUpAuth())
+  app.use(authorisationMiddleware())
   app.use(setUpCsrf())
-  // app.use(setUpCurrentUser(services))
   app.use(setupRequestServices(requestServices()))
 
   app.use(routes(services))

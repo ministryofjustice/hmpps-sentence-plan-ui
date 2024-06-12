@@ -53,7 +53,7 @@ describe(`GET ${URLs.CREATE_GOAL}`, () => {
       .get(URLs.CREATE_GOAL)
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain(locale.en.title.replace('{POP_NAME}', testPopData.firstName))
+        expect(res.text).toContain(locale.en.title.replace('{POP_NAME}', testPopData.givenName))
       })
   })
 })

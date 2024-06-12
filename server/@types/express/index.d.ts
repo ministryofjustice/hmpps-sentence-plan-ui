@@ -15,6 +15,7 @@ declare module 'express-session' {
 export declare global {
   namespace Express {
     interface User extends Partial<UserDetails> {
+      username: string
       token: string
       authSource: string
     }

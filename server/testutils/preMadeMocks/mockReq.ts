@@ -1,7 +1,10 @@
 import { Request } from 'express'
 import FormStorageService from '../../services/formStorageService'
+import HandoverContextService from '../../services/handover/handoverContextService'
 
 jest.mock('../../services/formStorageService')
+
+jest.mock('../../services/handover/handoverContextService')
 
 type MockReqOptions = {
   body?: Record<string, any>
@@ -20,7 +23,10 @@ const mockReq = ({
   params = {},
   query = {},
   errors = {},
-  services = { formStorageService: new FormStorageService(null) },
+  services = {
+    formStorageService: new FormStorageService(null),
+    handoverContextService: new HandoverContextService(null),
+  },
 }: MockReqOptions = {}): jest.Mocked<Request> =>
   ({
     body,

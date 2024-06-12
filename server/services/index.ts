@@ -1,6 +1,5 @@
 import { dataAccess } from '../data'
 import AuditService from './auditService'
-import UserService from './userService'
 import HelloWorldService from './sentence-plan/helloWorld'
 import ReferentialDataService from './sentence-plan/referentialDataService'
 import InfoService from './sentence-plan/infoService'
@@ -8,11 +7,11 @@ import NoteService from './sentence-plan/noteService'
 import GoalService from './sentence-plan/goalService'
 import StepService from './sentence-plan/stepsService'
 import FormStorageService from './formStorageService'
+import HandoverContextService from './handover/handoverContextService'
 
 export const services = () => {
-  const { applicationInfo, manageUsersApiClient, sentencePlanApiClient, hmppsAuditClient } = dataAccess()
+  const { applicationInfo, sentencePlanApiClient, hmppsAuditClient } = dataAccess()
 
-  const userService = new UserService(manageUsersApiClient)
   const auditService = new AuditService(hmppsAuditClient)
   const helloWorldService = new HelloWorldService(sentencePlanApiClient)
   const referentialDataService = new ReferentialDataService(sentencePlanApiClient)
@@ -23,7 +22,6 @@ export const services = () => {
 
   return {
     applicationInfo,
-    userService,
     auditService,
     helloWorldService,
     referentialDataService,
@@ -36,6 +34,7 @@ export const services = () => {
 
 export const requestServices = () => ({
   formStorageService: FormStorageService, // Assuming this is a class
+  handoverContextService: HandoverContextService,
 })
 
 export type RequestServices = {
@@ -43,5 +42,3 @@ export type RequestServices = {
 }
 
 export type Services = ReturnType<typeof services>
-
-export { UserService }
