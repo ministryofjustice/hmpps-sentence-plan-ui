@@ -17,6 +17,7 @@ import locale from './locale.json'
 jest.mock('../../services/sentence-plan/referentialDataService', () => {
   return jest.fn().mockImplementation(() => ({
     getQuestionDataByAreaOfNeed: jest.fn().mockResolvedValue(testReferenceData.AreasOfNeed[0]),
+    getReferenceData: jest.fn().mockResolvedValue(testReferenceData),
   }))
 })
 jest.mock('../../services/sentence-plan/infoService', () => {
@@ -261,7 +262,7 @@ describe('CreateGoalController', () => {
 
         await controller.post(req, res, jest.fn)
 
-        expect(res.redirect).toHaveBeenCalledWith(URLs.CONFIRM_GOAL)
+        expect(res.redirect).toHaveBeenCalledWith(URLs.CREATE_STEP)
       })
     })
   })

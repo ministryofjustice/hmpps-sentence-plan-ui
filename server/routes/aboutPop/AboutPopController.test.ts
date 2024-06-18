@@ -18,6 +18,13 @@ jest.mock('../../services/sentence-plan/referentialDataService', () => {
         active: testReferenceData.AreasOfNeed[0].active,
       },
     ]),
+    getReferenceData: jest.fn().mockResolvedValue([
+      {
+        id: testReferenceData.AreasOfNeed[0].id,
+        Name: testReferenceData.AreasOfNeed[0].Name,
+        active: testReferenceData.AreasOfNeed[0].active,
+      },
+    ]),
   }))
 })
 jest.mock('../../services/sentence-plan/infoService', () => {
@@ -61,7 +68,6 @@ describe('AboutPopController', () => {
               id,
               Name,
               active,
-              url: Name.replace(/ /g, '-').toLowerCase(),
             },
           ],
         },

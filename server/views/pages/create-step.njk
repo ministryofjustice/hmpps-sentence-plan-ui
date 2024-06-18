@@ -1,0 +1,179 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "../partials/summary-card.njk" import summaryCard %}
+
+{% set pageTitle = applicationName + " - Create a goal with "+ data.popData.givenName %}
+
+{% set mainClasses = "app-container govuk-body" %}
+
+{# Setup arrays and custom HTML #}
+{% set customGoalHtml %}
+{{ govukInput({
+            id: "goal-selection-custom",
+            name: "goal-selection-custom",
+            label: {
+                text: locale.goalSelection.customOptionLabel
+            },
+            errorMessage: getFormattedError(errors, locale, "goal-selection-custom"),
+            value: data.form['goal-selection-custom']
+        }) }}
+{% endset -%}
+{% set customDateHtml %}
+{{ govukDateInput({
+            id: "date-selection-custom",
+            namePrefix: "date-selection-custom",
+            fieldset: {
+                legend: {
+                    text: locale.dateSelection.customOptionLabel
+                }
+            },
+            hint: {
+                text: locale.dateSelection.customOptionHint
+            },
+            errorMessage: getFormattedError(errors, locale, 'date-selection-custom'),
+            items: [
+                {
+                    name: "day",
+                    classes: "govuk-input--width-2",
+                    value: data.form["date-selection-custom-day"]
+                },
+                {
+                    name: "month",
+                    classes: "govuk-input--width-2",
+                    value: data.form["date-selection-custom-month"]
+                },
+                {
+                    name: "year",
+                    classes: "govuk-input--width-4",
+                    value: data.form["date-selection-custom-year"]
+                }
+            ]
+        }) }}
+{% endset -%}
+
+{% set goals = [] %}
+
+{% for goal in data.referenceData.Goals %}
+    {% set goals = (goals.push({
+            id: "goal-selection-radio-" + goal.id,
+            value: goal.Name,
+            text: goal.Name
+        }), goals) %}
+{% endfor %}
+{% set goals = (goals.push({divider: "or"}), goals) %}
+{% set goals = (goals.push({
+    value: "custom",
+    text: locale.goalSelection.customRadioOptionText,
+    conditional: {
+        html: customGoalHtml
+    }
+}), goals)
+ %}
+
+{% block content %}
+    <div class="govuk-width-container">
+        <a href="#" class="govuk-back-link">Back</a>
+        <main class="govuk-main-wrapper">
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-one-third">
+                    <p>
+                        <b>{{ locale.motivationsToChangeWidget.motivationLevel }}</b>{{ data.popData.firstName}}</p>
+                    <span class="govuk-secondary-text">{{ locale.motivationsToChangeWidget.lastUpdated | replace("{MOTIVATION_UPDATE_DATE}", "25th December 2023") }}</span>
+                    {# TODO: Placeholder until pulled from API #}
+                    {% call summaryCard({
+                        title: {
+                            text: locale.motivationsToChangeWidget.title
+                        }
+                    }) %}
+                    {% endcall %}
+                </div>
+                <div class="govuk-grid-column-two-thirds">
+                    <div class="govuk-inset-text">
+                        <h2 class="govuk-heading-s govuk-!-margin-bottom-0">{{ locale.notes.title | replace("{POP_NAME}", data.popData.firstName) }}</h2>
+                        <p class="govuk-body govuk-!-font-size-16">{{ locale.notes.attribution
+                            | replace("{NOTE_CREATION_DATE}", (data.noteData.creationDate | formatSimpleDate ))
+                            | replace("{NOTE_AUTHOR}", (data.noteData.author ))
+                        }}</p>
+                        <p class="govuk-body">{{ data.noteData.content }}</p>
+                        {# todo: Probably needs to be changed to be an auto-generated array of HTML for notes #}
+                    </div>
+
+                    <form id="create-goal-form" method="POST">
+
+                        <div class="govuk-button-group">
+                            {{ govukButton({
+                                text: locale.saveButtonText,
+                                name: "action",
+                                value: "continue"
+                            }) }}
+                        </div>
+                        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+                        <input type="hidden" name="area-of-need" value="{{ data.referenceData.Name }}">
+
+                        {{ govukRadios({
+                            name: "date-selection-radio",
+                            fieldset: {
+                                legend: {
+                                    text: locale.dateSelection.label | replace("{POP_NAME}", data.popData.firstName),
+                                    isPageHeading: false,
+                                    classes: "govuk-fieldset__legend--l"
+                                }
+                            },
+                            hint: {
+                                text: locale.dateSelection.hint
+                            },
+                            errorMessage: getFormattedError(errors, locale, 'date-selection-radio'),
+                            value: data.form['date-selection-radio'],
+                            items: [
+                                {
+                                    value: data.dateOptionsDate[0] | formatISODate,
+                                    text: locale.dateSelection.options.threeMonths | replace("{3_MONTHS_DATE}", (data.dateOptionsDate[0] | formatMonthYear))
+                                },
+                                {
+                                    value: data.dateOptionsDate[1] | formatISODate,
+                                    text: locale.dateSelection.options.sixMonths | replace("{6_MONTHS_DATE}", (data.dateOptionsDate[1] | formatMonthYear))
+                                },
+                                {
+                                    value: data.dateOptionsDate[2] | formatISODate,
+                                    text: locale.dateSelection.options.twelveMonths | replace("{12_MONTHS_DATE}", (data.dateOptionsDate[2] | formatMonthYear))
+                                },
+                                {
+                                    divider: "or"
+                                },
+                                {
+                                    value: "custom",
+                                    text: locale.dateSelection.customRadioOptionText,
+                                    conditional: {
+                                        html: customDateHtml
+                                    }
+                                }
+                            ]
+                        }) }}
+
+                        {{ govukRadios({
+                            name: "goal-selection-radio",
+                            fieldset: {
+                                legend: {
+                                    text: locale.goalSelection.label | replace("{POP_NAME}", data.popData.firstName),
+                                    isPageHeading: false,
+                                    classes: "govuk-fieldset__legend--l"
+                                }
+                            },
+                            hint: {
+                                text: locale.goalSelection.hint
+                            },
+                            errorMessage: getFormattedError(errors, locale, 'goal-selection-radio'),
+                            value: data.form['goal-selection-radio'],
+                            items: goals
+                        }) }}
+                    </form>
+                    <h1 class="govuk-heading-xl">{{ locale.title | replace("{POP_NAME}", data.popData.firstName) }}</h1>
+                    <span class="govuk-caption-xl">{{ locale.section | replace("{AREA_OF_NEED}", data.referenceData.Name) }}</span>
+                </div>
+            </div>
+        </main>
+    </div>
+{% endblock %}

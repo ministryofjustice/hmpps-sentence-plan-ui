@@ -19,6 +19,7 @@ jest.mock('../../services/sentence-plan/referentialDataService', () => {
         active: testReferenceData.AreasOfNeed[0].active,
       },
     ]),
+    getReferenceData: jest.fn().mockResolvedValue(testReferenceData),
   }))
 })
 jest.mock('../../services/sentence-plan/infoService', () => {

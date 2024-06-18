@@ -36,7 +36,7 @@ export default class CreateGoalController {
       raw: req.body,
     })
 
-    return res.redirect(URLs.CONFIRM_GOAL)
+    return res.redirect(URLs.CREATE_STEP)
   }
 
   private render = async (req: Request, res: Response, next: NextFunction) => {
@@ -45,11 +45,12 @@ export default class CreateGoalController {
     const { errors } = req
 
     try {
-      const popData = await this.infoService.getPopData(crn)
-      const referenceData = await this.referentialDataService.getQuestionDataByAreaOfNeed(areaOfNeed)
-      const noteData = await this.noteService.getNoteDataByAreaOfNeed(areaOfNeed, crn)
       const dateOptionsDate = this.getAchieveDateOptions(new Date())
-
+      const [popData, referenceData, noteData] = await Promise.all([
+        this.infoService.getPopData(crn),
+        this.referentialDataService.getQuestionDataByAreaOfNeed(areaOfNeed),
+        this.noteService.getNoteDataByAreaOfNeed(areaOfNeed, crn),
+      ])
       return res.render('pages/create-goal', {
         locale: locale.en,
         data: {
