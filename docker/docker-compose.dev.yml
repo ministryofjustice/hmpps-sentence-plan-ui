@@ -1,0 +1,30 @@
+services:
+  ui:
+    image: quay.io/hmpps/hmpps-sentence-plan-ui:local
+    build:
+      target: development
+    command: npm run start:dev
+    ports:
+      - "3000:3000"
+      - "9229:9229"
+    volumes:
+      - code:/app
+      - node_modules_volume:/app/node_modules
+
+volumes:
+  code:
+  node_modules_volume:
+
+x-mutagen:
+  sync:
+    defaults:
+      mode: 'two-way-resolved'
+      ignore:
+        vcs: true
+        paths:
+          - '.idea'
+          - 'node_modules'
+          - 'docker'
+    code:
+      alpha: '../'
+      beta: 'volume://code'
