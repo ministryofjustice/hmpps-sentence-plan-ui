@@ -81,15 +81,16 @@ export default {
       systemClientId: get('SYSTEM_CLIENT_ID', 'clientid', requiredInProduction),
       systemClientSecret: get('SYSTEM_CLIENT_SECRET', 'clientsecret', requiredInProduction),
     },
-    hmppsHandover: {
-      url: get('HMPPS_HANDOVER_URL', 'http://localhost:8080', requiredInProduction),
+    arnsHandover: {
+      url: get('HMPPS_ARNS_HANDOVER_URL', 'http://localhost:8080/oauth2/authorize', requiredInProduction),
+      externalUrl: get('HMPPS_ARNS_HANDOVER_EXTERNAL_URL', get('HMPPS_ARNS_HANDOVER_URL', 'http://localhost:9090/auth')),
       timeout: {
-        response: Number(get('HMPPS_HANDOVER_TIMEOUT_RESPONSE', 10000)),
-        deadline: Number(get('HMPPS_HANDOVER_TIMEOUT_DEADLINE', 10000)),
+        response: Number(get('HMPPS_ARNS_HANDOVER_TIMEOUT_RESPONSE', 10000)),
+        deadline: Number(get('HMPPS_ARNS_HANDOVER_TIMEOUT_DEADLINE', 10000)),
       },
-      agent: new AgentConfig(Number(get('HMPPS_HANDOVER_TIMEOUT_RESPONSE', 10000))),
-      clientId: get('HMPPS_HANDOVER_CLIENT_ID', 'sentence-plan', requiredInProduction),
-      clientSecret: get('HMPPS_HANDOVER_CLIENT_SECRET', 'sp-secret', requiredInProduction),
+      agent: new AgentConfig(Number(get('HMPPS_ARNS_HANDOVER_TIMEOUT_RESPONSE', 10000))),
+      clientId: get('HMPPS_ARNS_HANDOVER_CLIENT_ID', 'clientid', requiredInProduction),
+      clientSecret: get('HMPPS_ARNS_HANDOVER_CLIENT_SECRET', 'clientsecret', requiredInProduction),
     },
     manageUsersApi: {
       url: get('MANAGE_USERS_API_URL', 'http://localhost:9091', requiredInProduction),

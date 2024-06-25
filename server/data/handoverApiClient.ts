@@ -4,7 +4,7 @@ import { HandoverContextData } from '../@types/Handover'
 
 export default class HandoverApiClient {
   private static restClient(token?: string): RestClient {
-    return new RestClient('HMPPS Handover Api Client', config.apis.hmppsHandover, token)
+    return new RestClient('HMPPS Handover Api Client', config.apis.arnsHandover, token)
   }
 
   getContextData(token: string) {

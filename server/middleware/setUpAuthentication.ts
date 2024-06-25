@@ -28,8 +28,8 @@ export default function setUpAuth(): Router {
     })(req, res, next),
   )
 
-  const authUrl = config.apis.hmppsHandover.url
-  const authParameters = `client_id=${config.apis.hmppsHandover.clientId}&redirect_uri=${config.domain}`
+  const authUrl = config.apis.arnsHandover.url
+  const authParameters = `client_id=${config.apis.arnsHandover.clientId}&redirect_uri=${config.domain}`
 
   router.use('/sign-out', (req, res, next) => {
     const authSignOutUrl = `${authUrl}/sign-out?${authParameters}`
