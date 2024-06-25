@@ -10,9 +10,7 @@ const buildConfig = {
   isProduction: process.env.NODE_ENV === 'production',
   app: {
     outDir: path.join(cwd, 'dist'),
-    entryPoints: glob
-      .sync([path.join(cwd, '*.ts'), path.join(cwd, 'server/**/*.ts')])
-      .filter(file => !file.endsWith('.test.ts')),
+    entryPoints: path.join(cwd, 'server.ts'),
     copy: [
       {
         from: path.join(cwd, 'server/views/**/*'),
@@ -50,7 +48,9 @@ function main() {
     let serverProcess = null
     chokidar.watch(['dist']).on('all', () => {
       if (serverProcess) serverProcess.kill()
-      serverProcess = spawn('node', ['-r', 'dotenv/config', 'dist/server.js'], { stdio: 'inherit' })
+      serverProcess = spawn('node', ['-r', 'dotenv/config', '--enable-source-maps', 'dist/server.js'], {
+        stdio: 'inherit',
+      })
     })
   }
 
