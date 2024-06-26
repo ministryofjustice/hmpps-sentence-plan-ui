@@ -48,10 +48,10 @@ describe('SentencePlanApiClient', () => {
 
   describe('saveSteps', () => {
     it('should save steps data via the API', async () => {
-      const parentGoalId = testGoal.uuid
-      fakeApi.post(`/goals/${parentGoalId}/steps`, [testNewStep]).reply(200, testStep)
+      const parentGoalUuid = testGoal.uuid
+      fakeApi.post(`/goals/${parentGoalUuid}/steps`, [testNewStep]).reply(200, testStep)
 
-      const result = await client.saveSteps([testNewStep], parentGoalId)
+      const result = await client.saveSteps([testNewStep], parentGoalUuid)
 
       expect(result).toEqual(testStep)
     })
