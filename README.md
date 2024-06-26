@@ -85,7 +85,7 @@ And then, to build the assets and start the app with nodemon:
 
 ### Run tests
 
-`npm run test`
+`npm test`
 
 ### Running integration tests
 
