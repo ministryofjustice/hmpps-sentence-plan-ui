@@ -5,6 +5,7 @@ import testReferenceData from '../testutils/data/referenceData'
 import { testGoal, testNewGoal } from '../testutils/data/goalData'
 import { testNewStep, testStep } from '../testutils/data/stepData'
 import HmppsAuthClient from './hmppsAuthClient'
+import testPlan from '../testutils/data/planData'
 
 jest.mock('./hmppsAuthClient', () => {
   return jest.fn().mockImplementation(() => ({
@@ -54,6 +55,36 @@ describe('SentencePlanApiClient', () => {
       const result = await client.saveSteps([testNewStep], parentGoalUuid)
 
       expect(result).toEqual(testStep)
+    })
+  })
+
+  describe('getPlanByUuid', () => {
+    it('should fetch a plan by its UUID', async () => {
+      const mockTestPlan = testPlan
+      fakeApi.get(`/plan/123`).reply(200, mockTestPlan)
+
+      const result = await client.getPlanByUuid('123')
+
+      expect(result).toEqual({
+        ...mockTestPlan,
+        createdAt: mockTestPlan.createdAt.toISOString(),
+        updatedAt: mockTestPlan.updatedAt.toISOString(),
+      })
+    })
+  })
+
+  describe('getPlanByOasysAssessmentPk', () => {
+    it('should fetch a plan by its related OASys Assessment PK', async () => {
+      const mockTestPlan = testPlan
+      fakeApi.get(`/oasys/123`).reply(200, mockTestPlan)
+
+      const result = await client.getPlanByOasysAssessmentPk('123')
+
+      expect(result).toEqual({
+        ...mockTestPlan,
+        createdAt: mockTestPlan.createdAt.toISOString(),
+        updatedAt: mockTestPlan.updatedAt.toISOString(),
+      })
     })
   })
 })

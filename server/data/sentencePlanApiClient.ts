@@ -9,6 +9,7 @@ import { Step } from '../@types/StepType'
 import HmppsAuthClient from './hmppsAuthClient'
 import { Person } from '../@types/Person'
 import { RoshData } from '../@types/Rosh'
+import { PlanType } from '../@types/PlanType'
 
 export default class SentencePlanApiClient {
   constructor(private readonly authClient: HmppsAuthClient) {}
@@ -68,5 +69,17 @@ export default class SentencePlanApiClient {
       path: `/goals/${parentGoalUuidId}/steps`,
       data: steps,
     })
+  }
+
+  async getPlanByUuid(planUuid: string) {
+    logger.info(`Getting plan with plan UUID: ${planUuid}`)
+    const token = await this.authClient.getSystemClientToken()
+    return SentencePlanApiClient.restClient(token).get<PlanType>({ path: `/plan/${planUuid}` })
+  }
+
+  async getPlanByOasysAssessmentPk(oasysAssessmentPk: string) {
+    logger.info(`Getting plan with OASys Assessment PK: ${oasysAssessmentPk}`)
+    const token = await this.authClient.getSystemClientToken()
+    return SentencePlanApiClient.restClient(token).get<PlanType>({ path: `/oasys/${oasysAssessmentPk}` })
   }
 }
