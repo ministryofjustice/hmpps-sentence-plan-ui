@@ -61,9 +61,12 @@ export default class SentencePlanApiClient {
     return SentencePlanApiClient.restClient(token).post<Goal>({ path: `/goals`, data: goal })
   }
 
-  async saveSteps(steps: NewStep[], parentGoalId: string) {
+  async saveSteps(steps: NewStep[], parentGoalUuidId: string) {
     logger.info('Saving multiple steps')
     const token = await this.authClient.getSystemClientToken()
-    return SentencePlanApiClient.restClient(token).post<Step[]>({ path: `/goals/${parentGoalId}/steps`, data: steps })
+    return SentencePlanApiClient.restClient(token).post<Step[]>({
+      path: `/goals/${parentGoalUuidId}/steps`,
+      data: steps,
+    })
   }
 }
