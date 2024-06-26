@@ -48,7 +48,7 @@ function main() {
     let serverProcess = null
     chokidar.watch(['dist']).on('all', () => {
       if (serverProcess) serverProcess.kill()
-      serverProcess = spawn('node', ['-r', 'dotenv/config', '--enable-source-maps', 'dist/server.js'], {
+      serverProcess = spawn('node', ['-r', 'dotenv/config', '--inspect=0.0.0.0', '--enable-source-maps', 'dist/server.js'], {
         stdio: 'inherit',
       })
     })

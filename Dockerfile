@@ -27,15 +27,12 @@ COPY . .
 RUN rm -rf dist node_modules
 RUN CYPRESS_INSTALL_BINARY=0 npm ci --no-audit
 RUN npm run build
-RUN npm run record-build-info
 RUN npm prune --no-audit --omit=dev
 
 FROM base AS production
 COPY --from=build --chown=appuser:appgroup /app/package.json /app/package-lock.json ./
-COPY --from=build --chown=appuser:appgroup /app/build-info.json ./dist/build-info.json
 COPY --from=build --chown=appuser:appgroup /app/dist ./dist
 COPY --from=build --chown=appuser:appgroup /app/node_modules ./node_modules
-COPY --from=build --chown=appuser:appgroup /app/docker/healthcheck.js ./docker/healthcheck.js
 EXPOSE 3000 3001
 ENV NODE_ENV='production'
 USER 2000

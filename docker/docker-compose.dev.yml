@@ -10,6 +10,8 @@ services:
     volumes:
       - code:/app
       - node_modules_volume:/app/node_modules
+    tmpfs:
+      - /app/dist
 
 volumes:
   code:
@@ -25,6 +27,7 @@ x-mutagen:
           - '.idea'
           - 'node_modules'
           - 'docker'
+          - 'dist'
     code:
       alpha: '../'
       beta: 'volume://code'

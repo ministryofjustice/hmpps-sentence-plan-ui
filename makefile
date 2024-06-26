@@ -25,6 +25,15 @@ install_requirements: ## Install any missing required packages outlined in REQUI
 		fi; \
 	done
 
+install_node_modules: ## Installs Node modules into the Docker volume.
+	docker run --rm \
+      -e CYPRESS_INSTALL_BINARY=0 \
+	  -v ./package.json:/app/package.json \
+	  -v ./package-lock.json:/app/package-lock.json \
+	  -v ~/.npm:/npm_cache \
+	  -v ${PROJECT_NAME}_node_modules_volume:/app/node_modules \
+	  node:20-bullseye-slim sh -c "cd /app && npm ci --cache /npm_cache --prefer-offline"
+
 up: ## Starts/restarts the UI in a production container.
 	docker compose ${LOCAL_COMPOSE_FILES} down ui
 	docker compose ${LOCAL_COMPOSE_FILES} up ui --wait --no-recreate
