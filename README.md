@@ -15,7 +15,11 @@ This service and all of its dependencies are run in Docker containers.
 
 Before starting, run `make install-node-modules`.
 
-**Note: Every command can be printed using `make`**
+**Note:** Every command can be printed using `make`
+
+**Note:** Due to requiring authentication through the ARNS Handover Service,
+to access the Sentence Plan UI - you can create a handover through the OAStub 
+hosted at http://localhost:7072 and select `localhost` as the target service.
 
 ### Production
 1. To start a production version of the application, run `make up`
