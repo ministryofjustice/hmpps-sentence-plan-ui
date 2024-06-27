@@ -1,5 +1,5 @@
 SHELL = '/bin/bash'
-PROJECT_NAME = hmpps-sentence-plan-ui
+PROJECT_NAME = hmpps-sentence-plan
 DEV_COMPOSE_FILES = -f docker/docker-compose.yml -f docker/docker-compose.dev.yml
 TEST_COMPOSE_FILES = -f docker/docker-compose.yml -f docker/docker-compose.test.yml
 LOCAL_COMPOSE_FILES = -f docker/docker-compose.yml
