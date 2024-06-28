@@ -79,7 +79,7 @@ services:
       SBNA_API_URL: false
 
   api:
-    image: quay.io/hmpps/hmpps-sentence-plan:${APP_VERSION:-latest}
+    image: quay.io/hmpps/hmpps-sentence-plan:latest
     depends_on:
       - postgres
       - hmpps-auth

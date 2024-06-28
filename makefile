@@ -23,18 +23,19 @@ build-ui: ## Builds a production image of the UI.
 	docker compose build ui
 
 dev-up: ## Starts/restarts the UI in a development container. A remote debugger can be attached on port 9229.
+	@make install-node-modules
 	docker compose ${DEV_COMPOSE_FILES} down ui
 	docker compose ${DEV_COMPOSE_FILES} up ui --wait --no-recreate
 
 dev-build: ## Builds a development image of the UI and installs Node dependencies.
 	make install-node-modules
 	docker compose ${DEV_COMPOSE_FILES} build ui
-	docker compose ${DEV_COMPOSE_FILES} run --rm --no-deps ui npm install --include=dev
 
 dev-down: ## Stops and removes all dev containers.
 	docker compose ${DEV_COMPOSE_FILES} down
 
 test: ## Runs the unit test suite.
+	@make install-node-modules
 	docker compose ${DEV_COMPOSE_FILES} run --rm --no-deps ui npm run test
 
 lint: ## Runs the linter.
@@ -44,14 +45,20 @@ lint-fix: ## Automatically fixes linting issues.
 	docker compose ${DEV_COMPOSE_FILES} run --rm --no-deps ui npm run lint-fix
 
 install-node-modules: ## Installs Node modules into the Docker volume.
-	docker run --rm \
+	@docker run --rm \
 	  -e CYPRESS_INSTALL_BINARY=0 \
 	  -v ./package.json:/package.json \
 	  -v ./package-lock.json:/package-lock.json \
 	  -v ~/.npm:/npm_cache \
 	  -v ${PROJECT_NAME}_node_modules:/node_modules \
 	  node:20-bullseye-slim \
-	  npm ci --cache /npm_cache --prefer-offline
+	  /bin/bash -c 'if [ ! -f /node_modules/.last-updated ] || [ /package.json -nt /node_modules/.last-updated ]; then \
+	    echo "Running npm ci as container node_modules is outdated or missing."; \
+	    npm ci --cache /npm_cache --prefer-offline; \
+	    touch /node_modules/.last-updated; \
+	  else \
+	    echo "Container node_modules is up-to-date."; \
+	  fi'
 
 clean: ## Stops and removes all project containers. Deletes local build/cache directories.
 	docker compose down
