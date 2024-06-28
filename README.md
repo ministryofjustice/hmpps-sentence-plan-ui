@@ -8,7 +8,6 @@ sentence plans for individuals on probation or in prison.
 ## Prerequisites
 - Docker
 - Node.js
-- Homebrew
 
 ## Running the application
 This service and all of its dependencies are run in Docker containers.
