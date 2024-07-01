@@ -1,3 +1,4 @@
+import './accessible-autocomplete.min.js'
 async function getSteps() {
   console.log('loading')
   const url = new URL(document.querySelector('#stepsSrc').src);
