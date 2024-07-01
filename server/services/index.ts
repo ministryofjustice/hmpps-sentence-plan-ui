@@ -7,6 +7,7 @@ import GoalService from './sentence-plan/goalService'
 import StepService from './sentence-plan/stepsService'
 import FormStorageService from './formStorageService'
 import HandoverContextService from './handover/handoverContextService'
+import PlanService from './sentence-plan/planService'
 
 export const services = () => {
   const { applicationInfo, sentencePlanApiClient, hmppsAuditClient } = dataAccess()
@@ -17,6 +18,7 @@ export const services = () => {
   const noteService = new NoteService(sentencePlanApiClient)
   const goalService = new GoalService(sentencePlanApiClient)
   const stepService = new StepService(sentencePlanApiClient)
+  const planService = new PlanService(sentencePlanApiClient)
 
   return {
     applicationInfo,
@@ -26,6 +28,7 @@ export const services = () => {
     noteService,
     goalService,
     stepService,
+    planService,
   }
 }
 

@@ -9,6 +9,7 @@ export const testNewStep: NewStep = {
 export const testStep: Step = {
   id: 123,
   uuid: 'a-un1qu3-t3st-Uu1d',
+  relatedGoalUuid: testGoal.uuid,
   creationDate: new Date().toISOString().substring(0, 10),
   ...testNewStep,
 }
