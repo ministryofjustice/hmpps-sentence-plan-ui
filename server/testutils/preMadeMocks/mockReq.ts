@@ -8,6 +8,7 @@ type MockReqOptions = {
   body?: Record<string, any>
   params?: Record<string, any>
   query?: Record<string, any>
+  session?: Record<string, any>
   errors?: {
     body?: Record<string, any>
     params?: Record<string, any>
@@ -21,9 +22,10 @@ const mockReq = ({
   params = {},
   query = {},
   errors = {},
+  session = {},
   services = {
     formStorageService: new FormStorageService(null),
-    handoverContextService: new HandoverContextService(null),
+    sessionService: new SessionService(null, null, null),
   },
 }: MockReqOptions = {}): jest.Mocked<Request> =>
   ({
@@ -31,6 +33,7 @@ const mockReq = ({
     params,
     query,
     errors,
+    session,
     services,
   }) as jest.Mocked<Request>
 

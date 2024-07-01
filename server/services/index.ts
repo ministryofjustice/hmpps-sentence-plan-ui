@@ -10,6 +10,7 @@ import StepService from './sentence-plan/stepsService'
 import FormStorageService from './formStorageService'
 import HandoverContextService from './handover/handoverContextService'
 import PlanService from './sentence-plan/planService'
+import SessionService from './sessionService'
 
 export const services = () => {
   const { applicationInfo, sentencePlanApiClient, handoverApiClient, hmppsAuditClient } = dataAccess()
@@ -38,10 +39,10 @@ export const services = () => {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const requestServices = (appServices: Services) => ({
   formStorageService: (req: Request) => new FormStorageService(req),
-  handoverContextService: (req: Request) => new HandoverContextService(req),
+  sessionService: (req: Request) =>
+    new SessionService(req, appServices.handoverContextService, appServices.planService),
 })
 
 export type RequestServices = {

@@ -4,7 +4,7 @@ const testPopData = {
   nomisId: '',
   givenName: 'Buster',
   familyName: 'Sanford',
-  dateOfBirth: '15 January 2002',
+  dateOfBirth: '2002-01-15',
   gender: 1,
   location: 'COMMUNITY',
   sexuallyMotivatedOffenceHistory: 'YES',
