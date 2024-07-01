@@ -60,12 +60,12 @@ function main() {
   if (args.includes('--watch')) {
     console.log('\u{1b}[1m\u{1F52D} Watching for changes...\u{1b}[0m')
     // Assets
-    chokidar.watch(['assets/**/*'], chokidarOptions).on('all', () => buildAssets(buildConfig).catch(console.log))
+    chokidar.watch(['assets/**/*'], chokidarOptions).on('all', () => buildAssets(buildConfig).catch(console.error))
 
     // App
     chokidar
       .watch(['server/**/*'], { ...chokidarOptions, ignored: ['**/*.test.ts'] })
-      .on('all', () => buildApp(buildConfig).catch(console.log))
+      .on('all', () => buildApp(buildConfig).catch(console.error))
   }
 }
 main()
