@@ -1,0 +1,136 @@
+services:
+  redis:
+    image: redis:7.2
+    ports:
+      - "6379:6379"
+    environment:
+      ALLOW_EMPTY_PASSWORD: yes
+
+  postgres:
+    image: postgres:16
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: sentence-plan
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
+  forward-proxy:
+    image: nginx:latest
+    depends_on:
+      - hmpps-auth
+      - arns-handover
+    ports:
+      - "9091:9091"
+      - "7071:7071"
+    volumes:
+      - ./forward-proxy/nginx.conf:/etc/nginx/nginx.conf
+
+  hmpps-auth:
+    image: quay.io/hmpps/hmpps-auth:latest
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://hmpps-auth:9090/auth/health"]
+      interval: 5s
+      retries: 60
+    ports:
+      - "9090:9090"
+    environment:
+      SERVER_PORT: 9090
+      SPRING_PROFILES_ACTIVE: dev
+      APPLICATION_AUTHENTICATION_UI_ALLOWLIST: 0.0.0.0/0
+      LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY: DEBUG
+
+  arns-handover:
+    image: quay.io/hmpps/hmpps-assess-risks-and-needs-handover-service:latest
+    depends_on:
+      - redis
+    ports:
+      - "7070:7070"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://arns-handover:7070/health/ping"]
+    environment:
+      SERVER_PORT: 7070
+      REDIS_HOST: redis
+      SPRING_PROFILES_ACTIVE: local
+      HMPPS_HANDOVER_BASE_URL: http://arns-handover:7070
+      HMPPS_HANDOVER_EXTERNAL_URL: http://localhost:7070
+      HMPPS_AUTH_BASE_URL: http://hmpps-auth:9090
+      SERVER_ERROR_WHITELABEL_ENABLED: true
+
+  oastub:
+    image: quay.io/hmpps/hmpps-assess-risks-and-needs-oastub-ui:latest
+    ports:
+      - "7072:3000"
+    environment:
+      ENVIRONMENT_NAME: DEV
+      INGRESS_URL: http://localhost:3000
+      PRODUCT_ID: ARNS
+      AUDIT_ENABLED: "false"
+      REDIS_ENABLED: true
+      REDIS_HOST: redis
+      SYSTEM_CLIENT_ID: sentence-plan-api-client
+      SYSTEM_CLIENT_SECRET: sentence-plan-api-client
+      SESSION_SECRET: sessionsecret
+      TOKEN_VERIFICATION_ENABLED: false
+      TOKEN_VERIFICATION_API_URL: http://hmpps-auth:9091/verification
+      HMPPS_AUTH_URL: http://hmpps-auth:9090/auth
+      HMPPS_ARNS_HANDOVER_URL: http://arns-handover:7070
+      SBNA_API_URL: false
+
+  api:
+    image: quay.io/hmpps/hmpps-sentence-plan:latest
+    depends_on:
+      - postgres
+      - hmpps-auth
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://api:8080/health/ping"]
+      interval: 5s
+      retries: 100
+    ports:
+      - "8080:8080"
+    environment:
+      SERVER_PORT: 8080
+      DB_ENDPOINT: postgres:5432
+      ARNS_API_CLIENT_ID: sentence-plan-api-client
+      ARNS_API_CLIENT_SECRET: sentence-plan-api-client
+      HMPPS_AUTH_BASE_URL: http://hmpps-auth:9090
+      ARNS_API_BASE_URL: http://wiremock:8080/arns-api
+      DELIUS_API_BASE_URL: http://wiremock:8080/delius-api
+      USE_STUB: true
+
+  ui:
+    image: quay.io/hmpps/hmpps-sentence-plan-ui:${APP_VERSION:-latest}
+    build:
+      context: ../
+      target: production
+    depends_on:
+      - redis
+      - hmpps-auth
+      - forward-proxy
+      - oastub
+      - arns-handover
+      - api
+    ports:
+      - "3000:3000"
+    environment:
+      PRODUCT_ID: SP
+      INGRESS_URL: http://localhost:3000
+      HTTPS: false
+      PORT: 3000
+      REDIS_ENABLED: true
+      REDIS_HOST: redis
+      HMPPS_AUTH_URL: http://hmpps-auth:9090/auth
+      HMPPS_AUTH_EXTERNAL_URL: http://localhost:9090/auth
+      HMPPS_ARNS_HANDOVER_URL: http://arns-handover:7070
+      HMPPS_ARNS_HANDOVER_EXTERNAL_URL: http://localhost:7070
+      TOKEN_VERIFICATION_ENABLED: false
+      TOKEN_VERIFICATION_API_URL: http://hmpps-auth:9091/verification
+      API_CLIENT_ID: sentence-plan-api-client
+      API_CLIENT_SECRET: sentence-plan-api-client
+      SYSTEM_CLIENT_ID: sentence-plan-api-client
+      SYSTEM_CLIENT_SECRET: sentence-plan-api-client
+      HMPPS_ARNS_HANDOVER_CLIENT_ID: sentence-plan
+      HMPPS_ARNS_HANDOVER_CLIENT_SECRET: sp-secret
+      SESSION_SECRET: sessionsecret
+      SENTENCE_PLAN_API_URL: http://api:8080
