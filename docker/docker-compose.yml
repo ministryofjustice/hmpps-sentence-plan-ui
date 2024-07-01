@@ -69,8 +69,8 @@ services:
       AUDIT_ENABLED: "false"
       REDIS_ENABLED: true
       REDIS_HOST: redis
-      SYSTEM_CLIENT_SECRET: clientsecret
-      SYSTEM_CLIENT_ID: hmpps-strengths-and-needs-ui-client
+      SYSTEM_CLIENT_ID: sentence-plan-api-client
+      SYSTEM_CLIENT_SECRET: sentence-plan-api-client
       SESSION_SECRET: sessionsecret
       TOKEN_VERIFICATION_ENABLED: false
       TOKEN_VERIFICATION_API_URL: http://hmpps-auth:9091/verification
