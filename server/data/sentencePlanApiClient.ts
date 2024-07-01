@@ -56,17 +56,20 @@ export default class SentencePlanApiClient {
     }
   }
 
-  async saveGoal(goal: NewGoal) {
+  async saveGoal(goal: NewGoal, parentPlanUuid: string) {
     logger.info('Saving goal data')
     const token = await this.authClient.getSystemClientToken()
-    return SentencePlanApiClient.restClient(token).post<Goal>({ path: `/goals`, data: goal })
+    return SentencePlanApiClient.restClient(token).post<Goal>({
+      path: `/plans/${parentPlanUuid}/goals`,
+      data: goal,
+    })
   }
 
-  async saveSteps(steps: NewStep[], parentGoalUuidId: string) {
+  async saveSteps(steps: NewStep[], parentGoalUuid: string) {
     logger.info('Saving multiple steps')
     const token = await this.authClient.getSystemClientToken()
     return SentencePlanApiClient.restClient(token).post<Step[]>({
-      path: `/goals/${parentGoalUuidId}/steps`,
+      path: `/goals/${parentGoalUuid}/steps`,
       data: steps,
     })
   }
@@ -74,7 +77,7 @@ export default class SentencePlanApiClient {
   async getPlanByUuid(planUuid: string) {
     logger.info(`Getting plan with plan UUID: ${planUuid}`)
     const token = await this.authClient.getSystemClientToken()
-    return SentencePlanApiClient.restClient(token).get<PlanType>({ path: `/plan/${planUuid}` })
+    return SentencePlanApiClient.restClient(token).get<PlanType>({ path: `/plans/${planUuid}` })
   }
 
   async getPlanByOasysAssessmentPk(oasysAssessmentPk: string) {
