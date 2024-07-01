@@ -7,5 +7,6 @@ export default function setupStepRoutes(
   { stepService, referentialDataService, infoService }: Services,
 ) {
   const controller = new StepsController(stepService, referentialDataService, infoService)
-  router.get('/goals/:goalId/steps/create', controller.get)
+  router.get('/steps/create', controller.get)
+  router.post('/steps/create', controller.post)
 }

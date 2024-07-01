@@ -38,7 +38,7 @@ describe('CreateGoalController', () => {
   let mockNoteService: jest.Mocked<NoteService>
 
   beforeEach(() => {
-    mockReferentialDataService = new ReferentialDataService(null) as jest.Mocked<ReferentialDataService>
+    mockReferentialDataService = new ReferentialDataService() as jest.Mocked<ReferentialDataService>
     mockInfoService = new InfoService(null) as jest.Mocked<InfoService>
     mockNoteService = new NoteService(null) as jest.Mocked<NoteService>
 
@@ -226,7 +226,7 @@ describe('CreateGoalController', () => {
         const next = jest.fn()
         const testError = new Error('test error')
 
-        mockReferentialDataService.getQuestionDataByAreaOfNeed.mockRejectedValue(testError)
+        mockReferentialDataService.getGoals.mockRejectedValue(testError)
 
         await controller.post(req, res, next)
 

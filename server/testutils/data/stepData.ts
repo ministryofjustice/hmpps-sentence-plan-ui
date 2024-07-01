@@ -3,7 +3,7 @@ import { Step } from '../../@types/StepType'
 
 export const testNewStep: NewStep = {
   description: 'A test step',
-  actor: 'The actor',
+  actor: ['The actor'],
   status: 'PENDING',
 }
 export const testStep: Step = {

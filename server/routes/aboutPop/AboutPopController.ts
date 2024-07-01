@@ -24,7 +24,7 @@ export default class AboutPopController {
           year: 'numeric',
         }),
       }
-      const referenceData = await this.referentialDataService.getReferenceData()
+      const referenceData = this.referentialDataService.getAreasOfNeed().slice(0, 3)
       // comented out till we are clear which data we will receive from this service
       // const popData = await this.infoService.getPopData(crn)
       const roshData = await this.infoService.getRoSHData(crn)

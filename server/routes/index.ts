@@ -6,6 +6,7 @@ import setupConfirmGoalRoutes from './confirmGoal/routes'
 import setupAboutPopRoutes from './aboutPop/routes'
 import { Page } from '../services/auditService'
 import setupStepRoutes from './steps/routes'
+import setupReferenceDataRoutes from './ReferenceData/routes'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
 export default function routes(services: Services): Router {
@@ -24,5 +25,6 @@ export default function routes(services: Services): Router {
   setupCreateGoalRoutes(router, services)
   setupConfirmGoalRoutes(router, services)
   setupStepRoutes(router, services)
+  setupReferenceDataRoutes(router, services)
   return router
 }

@@ -44,7 +44,7 @@ describe('AboutPopController', () => {
   let mockReferentialDataService: jest.Mocked<ReferentialDataService>
   let mockInfoService: jest.Mocked<InfoService>
   beforeEach(() => {
-    mockReferentialDataService = new ReferentialDataService(null) as jest.Mocked<ReferentialDataService>
+    mockReferentialDataService = new ReferentialDataService() as jest.Mocked<ReferentialDataService>
     mockInfoService = new InfoService(null) as jest.Mocked<InfoService>
 
     controller = new AboutPopController(mockReferentialDataService, mockInfoService)
@@ -74,19 +74,6 @@ describe('AboutPopController', () => {
         errors: {},
       }
       expect(res.render).toHaveBeenCalledWith('pages/about-pop', payload)
-    })
-
-    it('should forward to error handler if an exception occurs', async () => {
-      const req = mockReq()
-      const res = mockRes()
-      const next = jest.fn()
-      const testError = new Error('test error')
-      mockReferentialDataService.getAreasOfNeedQuestionData.mockRejectedValue(testError)
-
-      await controller.get(req, res, next)
-
-      expect(res.render).not.toHaveBeenCalledWith('pages/about-pop', expect.anything())
-      expect(next).toHaveBeenCalledWith(testError)
     })
   })
 })

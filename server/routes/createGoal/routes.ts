@@ -7,9 +7,9 @@ import validate from '../../middleware/validationMiddleware'
 
 export default function setupCreateGoalRoutes(
   router: Router,
-  { referentialDataService, infoService, noteService }: Services,
+  { referentialDataService, infoService, noteService, goalService }: Services,
 ) {
-  const controller = new CreateGoalController(referentialDataService, infoService, noteService)
+  const controller = new CreateGoalController(referentialDataService, infoService, noteService, goalService)
 
   router.get(URLs.CREATE_GOAL, controller.get)
   router.post(URLs.CREATE_GOAL, validate({ body: CreateGoalPostModel }), controller.post)

@@ -12,7 +12,7 @@ export const services = () => {
   const { applicationInfo, sentencePlanApiClient, hmppsAuditClient } = dataAccess()
 
   const auditService = new AuditService(hmppsAuditClient)
-  const referentialDataService = new ReferentialDataService(sentencePlanApiClient)
+  const referentialDataService = new ReferentialDataService()
   const infoService = new InfoService(sentencePlanApiClient)
   const noteService = new NoteService(sentencePlanApiClient)
   const goalService = new GoalService(sentencePlanApiClient)

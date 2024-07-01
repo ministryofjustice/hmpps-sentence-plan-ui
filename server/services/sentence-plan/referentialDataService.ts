@@ -1,43 +1,17 @@
-import { ReferenceData } from '../../@types/ReferenceDataType'
-import SentencePlanApiClient from '../../data/sentencePlanApiClient'
+import { AreaOfNeed } from '../../@types/ReferenceDataType'
 import { toKebabCase } from '../../utils/utils'
+import refenceData from '../../data/refenceData'
 
 export default class ReferentialDataService {
-  private cachedResult: ReferenceData
+  getAreasOfNeed = (): Array<AreaOfNeed> => refenceData.map(({ id, name }) => ({ id, name, url: toKebabCase(name) }))
 
-  constructor(private readonly sentencePlanApiClient: SentencePlanApiClient) {}
+  getSteps = (areaOfNeed: string) =>
+    refenceData
+      .map(({ name, steps }) => ({ name: toKebabCase(name), steps }))
+      .find(({ name, steps }) => name === areaOfNeed && steps)
 
-  async getAllReferenceData(): Promise<ReferenceData> {
-    const restClient = await this.sentencePlanApiClient.restClient('Getting question reference data')
-    return restClient.get<ReferenceData>({ path: `/question-reference-data` })
-  }
-
-  async getAllQuestionData(): Promise<ReferenceData> {
-    if (!this.cachedResult) {
-      this.cachedResult = await this.getAllReferenceData()
-    }
-    return this.cachedResult
-  }
-
-  async getAreasOfNeedQuestionData() {
-    const { AreasOfNeed } = await this.getAllQuestionData()
-    return AreasOfNeed.map((area: any) => ({
-      id: area.id,
-      Name: area.Name,
-      active: area.active,
-    }))
-  }
-
-  async getQuestionDataByAreaOfNeed(areaOfNeed: string) {
-    const { AreasOfNeed } = await this.getAllQuestionData()
-    return AreasOfNeed.find((area: any) => toKebabCase(area.Name) === areaOfNeed)
-  }
-
-  async getReferenceData(): Promise<any> {
-    const referenceData = await this.getAreasOfNeedQuestionData()
-    return referenceData.map((areaOfNeed: any) => ({
-      ...areaOfNeed,
-      url: toKebabCase(areaOfNeed.Name),
-    }))
-  }
+  getGoals = (areaOfNeed: string) =>
+    refenceData
+      .map(({ name, goals }) => ({ name: toKebabCase(name), goals }))
+      .find(({ name, goals }) => name === areaOfNeed && goals)
 }

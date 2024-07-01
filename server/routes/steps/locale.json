@@ -1,7 +1,7 @@
 {
   "en": {
     "title": "Create a goal with {POP_NAME}",
-    "section": "{AREA_OF_NEED} goal",
+    "section": "{AREA_OF_NEED} goals",
  
     "stepsSection": {
       "label": "What goal is {POP_NAME} trying to achieve?",

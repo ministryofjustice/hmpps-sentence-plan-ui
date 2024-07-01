@@ -34,7 +34,7 @@ jest.mock('../../services/handover/handoverContextService', () => {
   }))
 })
 let app: Express
-const referentialDataService = new ReferentialDataService(null) as jest.Mocked<ReferentialDataService>
+const referentialDataService = new ReferentialDataService() as jest.Mocked<ReferentialDataService>
 const infoService = new InfoService(null) as jest.Mocked<InfoService>
 beforeEach(() => {
   app = appWithAllRoutes({
