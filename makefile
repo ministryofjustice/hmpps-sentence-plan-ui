@@ -66,4 +66,4 @@ clean: ## Stops and removes all project containers. Deletes local build/cache di
 	rm -rf dist node_modules test_results
 
 update: ## Downloads the latest versions of container images.
-	docker compose ${DEV_COMPOSE_FILES} pull
+	docker compose ${LOCAL_COMPOSE_FILES} pull
