@@ -17,6 +17,7 @@ import InMemoryTokenStore from './tokenStore/inMemoryTokenStore'
 import config from '../config'
 import HmppsAuditClient from './hmppsAuditClient'
 import SentencePlanApiClient from './sentencePlanApiClient'
+import HandoverApiClient from './handoverApiClient'
 
 type RestClientBuilder<T> = (token: string) => T
 
@@ -25,16 +26,18 @@ export const dataAccess = () => {
     config.redis.enabled ? new RedisTokenStore(createRedisClient()) : new InMemoryTokenStore(),
   )
   const sentencePlanApiClient = new SentencePlanApiClient(hmppsAuthClient)
+  const handoverApiClient = new HandoverApiClient()
   const hmppsAuditClient = new HmppsAuditClient(config.sqs.audit)
 
   return {
     applicationInfo,
     hmppsAuthClient,
     sentencePlanApiClient,
+    handoverApiClient,
     hmppsAuditClient,
   }
 }
 
 export type DataAccess = ReturnType<typeof dataAccess>
 
-export { HmppsAuthClient, RestClientBuilder, SentencePlanApiClient, HmppsAuditClient }
+export { HmppsAuthClient, RestClientBuilder, SentencePlanApiClient, HandoverApiClient, HmppsAuditClient }

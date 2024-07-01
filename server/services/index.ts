@@ -12,7 +12,7 @@ import HandoverContextService from './handover/handoverContextService'
 import PlanService from './sentence-plan/planService'
 
 export const services = () => {
-  const { applicationInfo, sentencePlanApiClient, hmppsAuditClient } = dataAccess()
+  const { applicationInfo, sentencePlanApiClient, handoverApiClient, hmppsAuditClient } = dataAccess()
 
   const auditService = new AuditService(hmppsAuditClient)
   const helloWorldService = new HelloWorldService(sentencePlanApiClient)
@@ -22,12 +22,14 @@ export const services = () => {
   const goalService = new GoalService(sentencePlanApiClient)
   const stepService = new StepService(sentencePlanApiClient)
   const planService = new PlanService(sentencePlanApiClient)
+  const handoverContextService = new HandoverContextService(handoverApiClient)
 
   return {
     applicationInfo,
     auditService,
     helloWorldService,
     referentialDataService,
+    handoverContextService,
     infoService,
     noteService,
     goalService,

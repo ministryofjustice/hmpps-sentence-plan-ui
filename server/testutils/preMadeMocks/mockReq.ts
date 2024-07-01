@@ -1,10 +1,8 @@
 import { Request } from 'express'
 import FormStorageService from '../../services/formStorageService'
-import HandoverContextService from '../../services/handover/handoverContextService'
+import SessionService from '../../services/sessionService'
 
 jest.mock('../../services/formStorageService')
-
-jest.mock('../../services/handover/handoverContextService')
 
 type MockReqOptions = {
   body?: Record<string, any>
