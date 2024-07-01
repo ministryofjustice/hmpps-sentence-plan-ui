@@ -1,3 +1,4 @@
+import { Request } from 'express'
 import { dataAccess } from '../data'
 import AuditService from './auditService'
 import ReferentialDataService from './sentence-plan/referentialDataService'
@@ -32,13 +33,14 @@ export const services = () => {
   }
 }
 
-export const requestServices = () => ({
-  formStorageService: FormStorageService, // Assuming this is a class
-  handoverContextService: HandoverContextService,
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const requestServices = (appServices: Services) => ({
+  formStorageService: (req: Request) => new FormStorageService(req),
+  handoverContextService: (req: Request) => new HandoverContextService(req),
 })
 
 export type RequestServices = {
-  [K in keyof ReturnType<typeof requestServices>]: InstanceType<ReturnType<typeof requestServices>[K]>
+  [K in keyof ReturnType<typeof requestServices>]: ReturnType<ReturnType<typeof requestServices>[K]>
 }
 
 export type Services = ReturnType<typeof services>
