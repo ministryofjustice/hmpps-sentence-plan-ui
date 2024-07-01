@@ -40,8 +40,7 @@ function main() {
 
   const args = process.argv
   if (args.includes('--build')) {
-    buildApp(buildConfig)
-    buildAssets(buildConfig)
+    Promise.all([buildApp(buildConfig), buildAssets(buildConfig)]).catch(() => process.exit(1))
   }
 
   if (args.includes('--dev-server')) {
@@ -57,12 +56,12 @@ function main() {
   if (args.includes('--watch')) {
     console.log('\u{1b}[1m\u{1F52D} Watching for changes...\u{1b}[0m')
     // Assets
-    chokidar.watch(['assets/**/*'], chokidarOptions).on('all', () => buildAssets(buildConfig))
+    chokidar.watch(['assets/**/*'], chokidarOptions).on('all', () => buildAssets(buildConfig).catch(console.log))
 
     // App
     chokidar
       .watch(['server/**/*'], { ...chokidarOptions, ignored: ['**/*.test.ts'] })
-      .on('all', () => buildApp(buildConfig))
+      .on('all', () => buildApp(buildConfig).catch(console.log))
   }
 }
 main()

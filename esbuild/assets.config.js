@@ -16,8 +16,8 @@ const buildAdditionalAssets = buildConfig =>
     ],
   })
 
-const buildAssets = buildConfig => {
-  return esbuild.build({
+const buildAssets = buildConfig =>
+  esbuild.build({
     entryPoints: buildConfig.assets.entryPoints,
     outdir: buildConfig.assets.outDir,
     entryNames: '[ext]/app',
@@ -37,13 +37,9 @@ const buildAssets = buildConfig => {
       }),
     ],
   })
-}
 
 module.exports = buildConfig => {
   console.log('\u{1b}[1m\u{2728}  Building assets....\u{1b}[0m')
 
-  Promise.all([buildAssets(buildConfig), buildAdditionalAssets(buildConfig)]).catch(e => {
-    console.log(e)
-    process.exit(1)
-  })
+  return Promise.all([buildAssets(buildConfig), buildAdditionalAssets(buildConfig)])
 }
