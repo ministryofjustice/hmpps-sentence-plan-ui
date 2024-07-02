@@ -39,9 +39,10 @@ describe('SentencePlanApiClient', () => {
 
   describe('saveGoal', () => {
     it('should save goal data via the API', async () => {
-      fakeApi.post(`/goals`, testNewGoal).reply(200, testGoal)
+      const planUUid = '123'
+      fakeApi.post(`/plans/${planUUid}/goals`, testNewGoal).reply(200, testGoal)
 
-      const result = await client.saveGoal(testNewGoal)
+      const result = await client.saveGoal(testNewGoal, planUUid)
 
       expect(result).toEqual(testGoal)
     })
@@ -60,15 +61,15 @@ describe('SentencePlanApiClient', () => {
 
   describe('getPlanByUuid', () => {
     it('should fetch a plan by its UUID', async () => {
-      const mockTestPlan = testPlan
-      fakeApi.get(`/plan/123`).reply(200, mockTestPlan)
+      const planUuid = '123'
+      fakeApi.get(`/plans/${planUuid}`).reply(200, testPlan)
 
-      const result = await client.getPlanByUuid('123')
+      const result = await client.getPlanByUuid(planUuid)
 
       expect(result).toEqual({
-        ...mockTestPlan,
-        createdAt: mockTestPlan.createdAt.toISOString(),
-        updatedAt: mockTestPlan.updatedAt.toISOString(),
+        ...testPlan,
+        createdAt: testPlan.createdAt.toISOString(),
+        updatedAt: testPlan.updatedAt.toISOString(),
       })
     })
   })

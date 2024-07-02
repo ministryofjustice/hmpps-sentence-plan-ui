@@ -1,6 +1,7 @@
-export default {
+import { HandoverContextData } from '../../@types/Handover'
+
+const testHandoverContext: HandoverContextData = {
   handoverSessionId: 'e7501b21-3951-426d-9a73-0c2c4527aa27',
-  createdAt: '2024-06-12T15:03:19.387906919',
   principal: {
     identifier: 'a23ccacf-7160-4431-9b4d-c560be9c9f5c',
     displayName: 'Dr. Benjamin Runolfsdottir',
@@ -19,5 +20,7 @@ export default {
     sexuallyMotivatedOffenceHistory: 'YES',
   },
   assessmentContext: { oasysAssessmentPk: '306708', assessmentVersion: 0 },
-  sentencePlanContext: null,
+  sentencePlanContext: { oasysAssessmentPk: '306708', planVersion: 0 },
 }
+
+export default testHandoverContext

@@ -22,9 +22,18 @@ export default function setUpAuth(): Router {
   router.get('/sign-in', passport.authenticate('oauth2'))
 
   router.get('/sign-in/callback', (req, res, next) =>
-    passport.authenticate('oauth2', {
-      successReturnToOrRedirect: req.session.returnTo || '/about-pop',
-      failureRedirect: '/autherror',
+    passport.authenticate('oauth2', {}, (err: any, user: Express.User) => {
+      if (err) return next(err)
+      if (!user) return res.redirect('/autherror')
+
+      return req.logIn(user, loginErr => {
+        if (err) return next(loginErr)
+
+        return req.services.sessionService
+          .setupSession()
+          .then(() => res.redirect(req.session.returnTo || '/about-pop'))
+          .catch(next)
+      })
     })(req, res, next),
   )
 
@@ -42,7 +51,7 @@ export default function setUpAuth(): Router {
   })
 
   router.use((req, res, next) => {
-    res.locals.user = req.user
+    res.locals.user = { ...req.user, ...req.services.sessionService.getPrincipalDetails() }
     next()
   })
 

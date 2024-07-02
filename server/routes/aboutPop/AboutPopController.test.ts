@@ -33,9 +33,9 @@ jest.mock('../../services/sentence-plan/infoService', () => {
     getRoSHData: jest.fn().mockResolvedValue(parsedRoshData),
   }))
 })
-jest.mock('../../services/handover/handoverContextService', () => {
+jest.mock('../../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
-    getContext: jest.fn().mockResolvedValue(handoverData),
+    getSubjectDetails: jest.fn().mockReturnValue(handoverData.subject),
   }))
 })
 

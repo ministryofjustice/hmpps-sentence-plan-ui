@@ -28,11 +28,12 @@ jest.mock('../../services/sentence-plan/infoService', () => {
     getRoSHData: jest.fn().mockResolvedValue(roSHData),
   }))
 })
-jest.mock('../../services/handover/handoverContextService', () => {
+jest.mock('../../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
-    getContext: jest.fn().mockResolvedValue(handoverData),
+    getSubjectDetails: jest.fn().mockReturnValue(handoverData.subject),
   }))
 })
+
 let app: Express
 const referentialDataService = new ReferentialDataService() as jest.Mocked<ReferentialDataService>
 const infoService = new InfoService(null) as jest.Mocked<InfoService>
