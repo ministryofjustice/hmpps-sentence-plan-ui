@@ -4,7 +4,7 @@ import { NewGoal } from '../../@types/NewGoalType'
 export default class GoalService {
   constructor(private readonly sentencePlanApiClient: SentencePlanApiClient) {}
 
-  saveGoal(goal: NewGoal) {
-    return this.sentencePlanApiClient.saveGoal(goal)
+  saveGoal(goal: NewGoal, parentPlanUuid: string) {
+    return this.sentencePlanApiClient.saveGoal(goal, parentPlanUuid)
   }
 }

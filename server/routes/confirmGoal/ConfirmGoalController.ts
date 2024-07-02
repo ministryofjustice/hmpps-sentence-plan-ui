@@ -40,6 +40,7 @@ export default class ConfirmGoalController {
   }
 
   saveAndRedirect = async (req: Request, res: Response, next: NextFunction) => {
+    const planUuid = req.services.sessionService.getPlanUUID()
     const goalData: NewGoal = {
       ...req.services.formStorageService.getFormData<NewGoal>(FORMS.CREATE_GOAL).processed,
       agreementNote: req.body['goal-agreement-note'],
@@ -49,7 +50,7 @@ export default class ConfirmGoalController {
 
     if (goalData.isAgreed) {
       try {
-        const responseGoalData = await this.goalService.saveGoal(goalData)
+        const responseGoalData = await this.goalService.saveGoal(goalData, planUuid)
         await this.stepService.saveSteps(stepsData, responseGoalData.uuid)
 
         req.services.formStorageService.clearFormData(FORMS.CREATE_GOAL)
