@@ -3,6 +3,7 @@ export type HandoverContextData = {
   principal: HandoverPrincipal
   subject: HandoverSubject
   assessmentContext: HandoverAssessmentContext
+  sentencePlanContext: HandoverSentencePlanContext
 }
 
 export type HandoverPrincipal = {
@@ -29,9 +30,14 @@ export type HandoverAssessmentContext = {
   assessmentVersion: number
 }
 
+export type HandoverSentencePlanContext = {
+  oasysAssessmentPk: string
+  planVersion: number
+}
+
 export const enum Gender {
-  NotKnown = 'NOT_KNOWN',
-  Male = 'MALE',
-  Female = 'FEMALE',
-  NotSpecified = 'NOT_SPECIFIED',
+  NotKnown = 0,
+  Male = 1,
+  Female = 2,
+  NotSpecified = 9,
 }

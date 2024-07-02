@@ -3,7 +3,8 @@ import SentencePlanApiClient from '../../data/sentencePlanApiClient'
 export default class PlanService {
   constructor(private readonly sentencePlanApiClient: SentencePlanApiClient) {}
 
-  getPlanByUuid = this.sentencePlanApiClient.getPlanByUuid
+  getPlanByUuid = (uuid: string) => this.sentencePlanApiClient.getPlanByUuid(uuid)
 
-  getPlanByOasysAssessmentPk = this.sentencePlanApiClient.getPlanByOasysAssessmentPk
+  getPlanByOasysAssessmentPk = (oasysAssessmentPk: string) =>
+    this.sentencePlanApiClient.getPlanByOasysAssessmentPk(oasysAssessmentPk)
 }

@@ -10,9 +10,10 @@ import StepService from './sentence-plan/stepsService'
 import FormStorageService from './formStorageService'
 import HandoverContextService from './handover/handoverContextService'
 import PlanService from './sentence-plan/planService'
+import SessionService from './sessionService'
 
 export const services = () => {
-  const { applicationInfo, sentencePlanApiClient, hmppsAuditClient } = dataAccess()
+  const { applicationInfo, sentencePlanApiClient, handoverApiClient, hmppsAuditClient } = dataAccess()
 
   const auditService = new AuditService(hmppsAuditClient)
   const helloWorldService = new HelloWorldService(sentencePlanApiClient)
@@ -22,12 +23,14 @@ export const services = () => {
   const goalService = new GoalService(sentencePlanApiClient)
   const stepService = new StepService(sentencePlanApiClient)
   const planService = new PlanService(sentencePlanApiClient)
+  const handoverContextService = new HandoverContextService(handoverApiClient)
 
   return {
     applicationInfo,
     auditService,
     helloWorldService,
     referentialDataService,
+    handoverContextService,
     infoService,
     noteService,
     goalService,
@@ -36,10 +39,10 @@ export const services = () => {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const requestServices = (appServices: Services) => ({
   formStorageService: (req: Request) => new FormStorageService(req),
-  handoverContextService: (req: Request) => new HandoverContextService(req),
+  sessionService: (req: Request) =>
+    new SessionService(req, appServices.handoverContextService, appServices.planService),
 })
 
 export type RequestServices = {
