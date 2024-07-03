@@ -67,7 +67,7 @@ services:
       INGRESS_URL: http://localhost:3000
       PRODUCT_ID: ARNS
       AUDIT_ENABLED: "false"
-      REDIS_ENABLED: true
+      REDIS_ENABLED: false
       REDIS_HOST: redis
       SYSTEM_CLIENT_ID: sentence-plan-api-client
       SYSTEM_CLIENT_SECRET: sentence-plan-api-client
@@ -77,6 +77,8 @@ services:
       HMPPS_AUTH_URL: http://hmpps-auth:9090/auth
       HMPPS_ARNS_HANDOVER_URL: http://arns-handover:7070
       SBNA_API_URL: false
+      SP_API_URL: http://api:8080
+
 
   api:
     image: quay.io/hmpps/hmpps-sentence-plan:latest
