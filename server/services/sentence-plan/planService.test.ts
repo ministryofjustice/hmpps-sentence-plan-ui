@@ -1,39 +1,47 @@
 import { SentencePlanApiClient } from '../../data'
 import PlanService from './planService'
-import testPlan from '../../testutils/data/planData'
 
 jest.mock('../../data/sentencePlanApiClient')
 
 describe('PlanService', () => {
-  let sentencePlanApiClientMock: jest.Mocked<SentencePlanApiClient>
   let planService: PlanService
+  let mockSentencePlanApiClient: jest.Mocked<SentencePlanApiClient>
+  let mockRestClient: jest.Mocked<any>
 
   beforeEach(() => {
-    sentencePlanApiClientMock = new SentencePlanApiClient(null) as jest.Mocked<SentencePlanApiClient>
-    planService = new PlanService(sentencePlanApiClientMock)
+    mockRestClient = {
+      get: jest.fn(),
+    }
+
+    mockSentencePlanApiClient = new SentencePlanApiClient(null) as jest.Mocked<SentencePlanApiClient>
+    mockSentencePlanApiClient.restClient = jest.fn().mockResolvedValue(mockRestClient)
+
+    planService = new PlanService(mockSentencePlanApiClient)
   })
 
   describe('getPlanByUuid', () => {
-    it('should call getPlanByUuid method of SentencePlanApiClient', async () => {
-      const mockPlan = testPlan
+    it('should call restClient.get with correct path', async () => {
+      const planUuid = '123-456-789'
+      const expectedPath = `/plans/${planUuid}`
 
-      sentencePlanApiClientMock.getPlanByUuid.mockResolvedValue(mockPlan)
+      await planService.getPlanByUuid(planUuid)
 
-      const result = await planService.getPlanByUuid('some-uuid')
-      expect(sentencePlanApiClientMock.getPlanByUuid).toHaveBeenCalledWith('some-uuid')
-      expect(result).toBe(mockPlan)
+      expect(mockSentencePlanApiClient.restClient).toHaveBeenCalledWith(`Getting plan with plan UUID: ${planUuid}`)
+      expect(mockRestClient.get).toHaveBeenCalledWith({ path: expectedPath })
     })
   })
 
   describe('getPlanByOasysAssessmentPk', () => {
-    it('should call getPlanByOasysAssessmentPk method of SentencePlanApiClient', async () => {
-      const mockPlan = testPlan
+    it('should call restClient.get with correct path', async () => {
+      const oasysAssessmentPk = '987654'
+      const expectedPath = `/oasys/${oasysAssessmentPk}`
 
-      sentencePlanApiClientMock.getPlanByOasysAssessmentPk.mockResolvedValue(mockPlan)
+      await planService.getPlanByOasysAssessmentPk(oasysAssessmentPk)
 
-      const result = await planService.getPlanByOasysAssessmentPk('12345')
-      expect(sentencePlanApiClientMock.getPlanByOasysAssessmentPk).toHaveBeenCalledWith('12345')
-      expect(result).toBe(mockPlan)
+      expect(mockSentencePlanApiClient.restClient).toHaveBeenCalledWith(
+        `Getting plan with OASys Assessment PK: ${oasysAssessmentPk}`,
+      )
+      expect(mockRestClient.get).toHaveBeenCalledWith({ path: expectedPath })
     })
   })
 })

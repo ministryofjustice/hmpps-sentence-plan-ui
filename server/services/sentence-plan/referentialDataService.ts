@@ -1,17 +1,18 @@
 import { AreaOfNeed } from '../../@types/ReferenceDataType'
 import { toKebabCase } from '../../utils/utils'
-import refenceData from '../../data/refenceData'
+import referenceData from '../../data/referenceData'
 
 export default class ReferentialDataService {
-  getAreasOfNeed = (): Array<AreaOfNeed> => refenceData.map(({ id, name }) => ({ id, name, url: toKebabCase(name) }))
+  constructor() {}
+  getAreasOfNeed = (): Array<AreaOfNeed> => referenceData.map(({ id, name }) => ({ id, name, url: toKebabCase(name) }))
 
   getSteps = (areaOfNeed: string) =>
-    refenceData
+    referenceData
       .map(({ name, steps }) => ({ name: toKebabCase(name), steps }))
       .find(({ name, steps }) => name === areaOfNeed && steps)
 
   getGoals = (areaOfNeed: string) =>
-    refenceData
+    referenceData
       .map(({ name, goals }) => ({ name: toKebabCase(name), goals }))
       .find(({ name, goals }) => name === areaOfNeed && goals)
 }
