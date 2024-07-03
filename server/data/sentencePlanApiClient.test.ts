@@ -77,7 +77,7 @@ describe('SentencePlanApiClient', () => {
   describe('getPlanByOasysAssessmentPk', () => {
     it('should fetch a plan by its related OASys Assessment PK', async () => {
       const mockTestPlan = testPlan
-      fakeApi.get(`/oasys/123`).reply(200, mockTestPlan)
+      fakeApi.get(`/oasys/plans/123`).reply(200, mockTestPlan)
 
       const result = await client.getPlanByOasysAssessmentPk('123')
 
