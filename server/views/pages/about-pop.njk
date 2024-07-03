@@ -9,8 +9,8 @@
 
 {# TODO: Probably could just make this whole widget a macro considering how big it is#}
 {# Setup Goals To Achieve widget #}
-    {% set goalsToAchieveWidgetRows = [] %}
-    {% set goalsToAchieveWidgetRows = (goalsToAchieveWidgetRows.push({
+{% set goalsToAchieveWidgetRows = [] %}
+{% set goalsToAchieveWidgetRows = (goalsToAchieveWidgetRows.push({
         key: {
             text: locale.goalsToAchieve.areaOfNeedHeading,
             classes: "govuk-!-width-three-quarters govuk-!-font-weight-bold"
@@ -21,14 +21,14 @@
         }
     }), goalsToAchieveWidgetRows)
     %}
-    {% for areaOfNeed in data.referenceData %}
-        {% set HTML %}
-            <div class="govuk-!-width-three-quarters">
-                <p class="govuk-!-margin-bottom-0">{{ areaOfNeed.Name }}</p>
-                <a class="govuk-link" href="/create-goal/{{ areaOfNeed.url }}">{{ locale.goalsToAchieve.createGoalLink }}</a>
-            </div>
-        {% endset %}
-        {% set goalsToAchieveWidgetRows = (goalsToAchieveWidgetRows.push({
+{% for areaOfNeed in data.referenceData %}
+    {% set HTML %}
+    <div class="govuk-!-width-three-quarters">
+        <p class="govuk-!-margin-bottom-0">{{ areaOfNeed.name }}</p>
+        <a class="govuk-link" href="/create-goal/{{ areaOfNeed.url }}">{{ locale.goalsToAchieve.createGoalLink }}</a>
+    </div>
+    {% endset %}
+    {% set goalsToAchieveWidgetRows = (goalsToAchieveWidgetRows.push({
             key: {
                 html: HTML,
                 classes: "govuk-!-width-three-quarters govuk-!-font-weight-regular"
@@ -38,14 +38,14 @@
                 classes: "govuk-!-text-align-right govuk-!-font-weight-bold rosh-low-risk"
             }
         }), goalsToAchieveWidgetRows) %}
-    {% endfor %}
-    {% set goalsToAchieveWidgetLastRow %}
-        {{ govukDetails({
+{% endfor %}
+{% set goalsToAchieveWidgetLastRow %}
+{{ govukDetails({
             summaryText: locale.goalsToAchieve.viewPreviousGoalsLink,
             text: locale.goalsToAchieve.noPreviousGoals
         }) }}
-    {% endset %}
-    {% set goalsToAchieveWidgetRows = (goalsToAchieveWidgetRows.push({
+{% endset %}
+{% set goalsToAchieveWidgetRows = (goalsToAchieveWidgetRows.push({
         key: {
             html: goalsToAchieveWidgetLastRow,
             classes: "govuk-!-width-full"
@@ -54,8 +54,8 @@
     %}
 
 {% block content %}
-{% include "../partials/personal-data-header.njk" %}
-{{ mojSubNavigation({
+    {% include "../partials/personal-data-header.njk" %}
+    {{ mojSubNavigation({
     label: 'Sub navigation',
     items: [{
       text: 'About '+data.popData.givenName,

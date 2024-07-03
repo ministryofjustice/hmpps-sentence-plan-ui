@@ -2,8 +2,6 @@ import { NextFunction, Request, Response } from 'express'
 import locale from './locale.json'
 import InfoService from '../../services/sentence-plan/infoService'
 import ReferentialDataService from '../../services/sentence-plan/referentialDataService'
-import { HandoverContextData } from '../../@types/Handover'
-import { toKebabCase } from '../../utils/utils'
 
 export default class AboutPopController {
   constructor(
@@ -17,6 +15,7 @@ export default class AboutPopController {
     try {
       const popData = req.services.sessionService.getSubjectDetails()
       const referenceData = this.referentialDataService.getAreasOfNeed().slice(0, 3)
+      console.log(referenceData)
       const roshData = await this.infoService.getRoSHData(popData.crn)
       return res.render('pages/about-pop', {
         locale: locale.en,

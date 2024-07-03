@@ -7,9 +7,7 @@
 {% set pageTitle = applicationName + " - Create a goal with "+ data.popData.givenName %}
 
 {% set mainClasses = "app-container govuk-body" %}
-{% block bodyStart %}
-    <script type="module" src="/assets/js/steps.js?q={{data.areaOfNeed}}" id='stepsSrc'></script>
-{% endblock %}
+{% block bodyStart %}{% endblock %}
 
 {% block content %}
     <div class="govuk-width-container">
@@ -29,42 +27,41 @@
 
                     <form id="create-goal-form" method="POST">
                         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+                        <input type="hidden" id="_areaOfNeed" value="{{ data.areaOfNeed }}">
+                        <input type="hidden" id="page" value="steps">
+
                         <input type="hidden" name="area-of-need" value="{{ data.referenceData.name }}">
                         {{ govukDetails({
   summaryText: "SMART goals and steps",
   text: "Goals and steps should be SMART, meaning ‘specific’, ‘measurable’, ‘achievable’, ‘realistic’, and ‘time-bound’. This allows progress to be better measured and evaluated.
-
 Adding steps makes goals more measurable and achievable."
 }) }}
-                        <label for="stepName">Select your country</label>
-                        <div id="my-autocomplete-container">
-                            {{ govukInput({
-                        label: {
-                            text: "What is the first step?",
-                            classes: "govuk-label--l",
-                            isPageHeading: false
-                        },
-                        hint:{ 
-                            text:"Select one step. You can add more later."
-                            },
-                        id: "stepName",
-                        name: "stepName"
-                        }) }}</div>
+                        <div class="govuk-form-group">
+                            <h1 class="govuk-label-wrapper">
+                                <label class='govuk-label--l' for="step-name">What is the first step?</label>
+                            </h1>
+                            <div id="stepName-hint" class="govuk-hint">
+                                Select one step. You can add more later.
+                            </div>
+                            <input class="govuk-input" id="step-name" name="stepName" type="text">
+                            <div id="my-autocomplete-container"></div>
+                        </div>
 
                         {{ govukCheckboxes({
-  name: "actor",
-  fieldset: {
-    legend: {
-      text: "How will do this step",
-      isPageHeading: true,
-      classes: "govuk-fieldset__legend--l"
-    }
-  },
-  hint: {
-    text: "Select all that apply."
-  },
-  items: data.checkboxOptions
-}) }}
+                        name: "actor",
+                        fieldset: {
+                            legend: {
+                            text: "How will do this step",
+                            isPageHeading: true,
+                            classes: "govuk-fieldset__legend--l"
+                            }
+                        },
+                        hint: {
+                            text: "Select all that apply."
+                        },
+                        items: data.checkboxOptions
+            }) }}
+
                         <div class="govuk-button-group">
                             {{ govukButton({
                                 text: locale.saveButtonText,
@@ -77,5 +74,4 @@ Adding steps makes goals more measurable and achievable."
             </div>
         </main>
     </div>
-
 {% endblock %}

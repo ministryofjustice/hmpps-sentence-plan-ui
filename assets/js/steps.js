@@ -1,17 +1,35 @@
-import './accessible-autocomplete.min.js'
+import accessibleAutocomplete from './accessible-autocomplete.min.js'
+const ops = {
+  steps: async () => {
+    removeStaticInput(document.querySelector('#step-name'))
+    addAutoComplete('step-name', await getSteps())
+  },
+  goals: async () => {
+    removeStaticInput(document.querySelector('#goal-name'))
+    addAutoComplete('goal-name', await getGoals())
+  }
+}
 async function getSteps() {
-  console.log('loading')
-  const url = new URL(document.querySelector('#stepsSrc').src);
-  const areaOfNeed = url.searchParams.get('q')
+  const areaOfNeed = document.querySelector('#_areaOfNeed').value
   const response = await fetch(`/reference-data/${areaOfNeed}/steps`);
   const { steps } = await response.json();
   return steps
 }
-
-window.addEventListener('load', () => {
+async function getGoals() {
+  const areaOfNeed = document.querySelector('#_areaOfNeed').value
+  const response = await fetch(`/reference-data/${areaOfNeed}/goals`);
+  const { steps } = await response.json();
+  return steps
+}
+function removeStaticInput(element) {
+  if (element && element.parentNode) element.parentNode.removeChild(element)
+}
+function addAutoComplete(id, source) {
   accessibleAutocomplete({
-    element: document.querySelector('#stepName'),
-    id: 'my-autocomplete', // To match it to the existing <label>.
-    source: getSteps()
+    element: document.querySelector('#my-autocomplete-container'), id, source
   })
+}
+window.addEventListener('DOMContentLoaded', async () => {
+  const page = document.querySelector('#page').value
+  if (page && ops[page]) ops[page]()
 })

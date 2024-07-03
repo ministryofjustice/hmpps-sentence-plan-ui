@@ -22,7 +22,8 @@ export default class CreateGoalController {
       raw: req.body,
     })
     const processedData: NewGoal = this.processGoalData(req.body)
-    const { uuid } = await this.goalService.saveGoal({ ...processedData })
+    const planUuid = req.services.sessionService.getPlanUUID()
+    const { uuid } = await this.goalService.saveGoal(processedData, planUuid)
     req.services.formStorageService.saveFormData('currentGoal', {
       processed: null,
       raw: { uuid },
