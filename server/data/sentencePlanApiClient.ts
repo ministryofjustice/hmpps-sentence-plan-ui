@@ -83,6 +83,6 @@ export default class SentencePlanApiClient {
   async getPlanByOasysAssessmentPk(oasysAssessmentPk: string) {
     logger.info(`Getting plan with OASys Assessment PK: ${oasysAssessmentPk}`)
     const token = await this.authClient.getSystemClientToken()
-    return SentencePlanApiClient.restClient(token).get<PlanType>({ path: `/oasys/${oasysAssessmentPk}` })
+    return SentencePlanApiClient.restClient(token).get<PlanType>({ path: `/oasys/plans/${oasysAssessmentPk}` })
   }
 }
