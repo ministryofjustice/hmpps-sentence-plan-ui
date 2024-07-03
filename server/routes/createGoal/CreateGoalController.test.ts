@@ -13,11 +13,13 @@ import testReferenceData from '../../testutils/data/referenceData'
 import { FORMS } from '../../services/formStorageService'
 import URLs from '../URLs'
 import locale from './locale.json'
+import GoalService from '../../services/sentence-plan/goalService'
 
 jest.mock('../../services/sentence-plan/referentialDataService', () => {
   return jest.fn().mockImplementation(() => ({
     getQuestionDataByAreaOfNeed: jest.fn().mockResolvedValue(testReferenceData.AreasOfNeed[0]),
     getReferenceData: jest.fn().mockResolvedValue(testReferenceData),
+    getGoals: jest.fn().mockReturnValue(testReferenceData.AreasOfNeed[0].Goals[0]),
   }))
 })
 jest.mock('../../services/sentence-plan/infoService', () => {
@@ -36,13 +38,15 @@ describe('CreateGoalController', () => {
   let mockReferentialDataService: jest.Mocked<ReferentialDataService>
   let mockInfoService: jest.Mocked<InfoService>
   let mockNoteService: jest.Mocked<NoteService>
+  let mockGoalService: jest.Mocked<GoalService>
 
   beforeEach(() => {
     mockReferentialDataService = new ReferentialDataService() as jest.Mocked<ReferentialDataService>
     mockInfoService = new InfoService(null) as jest.Mocked<InfoService>
     mockNoteService = new NoteService(null) as jest.Mocked<NoteService>
+    mockGoalService = new GoalService(null) as jest.Mocked<GoalService>
 
-    controller = new CreateGoalController(mockReferentialDataService, mockInfoService, mockNoteService)
+    controller = new CreateGoalController(mockReferentialDataService, mockInfoService, mockNoteService, mockGoalService)
   })
 
   describe('post', () => {
@@ -317,7 +321,7 @@ describe('CreateGoalController', () => {
           popData: testPopData,
           noteData: testNoteData,
           dateOptionsDate: expect.anything(),
-          referenceData: testReferenceData.AreasOfNeed[0],
+          referenceData: testReferenceData.AreasOfNeed[0].Goals[0],
           form: {},
         },
         errors: {},

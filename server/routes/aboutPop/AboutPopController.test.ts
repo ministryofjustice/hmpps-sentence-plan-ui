@@ -7,13 +7,14 @@ import AboutPopController from './AboutPopController'
 import locale from './locale.json'
 import { parsedRoshData } from '../../testutils/data/roshData'
 import handoverData from '../../testutils/data/handoverData'
-import referenceData from '../../data/referenceData'
+import testReferenceData from '../../testutils/data/referenceData'
 import { toKebabCase } from '../../utils/utils'
 
 jest.mock('../../services/sentence-plan/referentialDataService', () => {
   return jest.fn().mockImplementation(() => ({
-    getAreasOfNeed: jest.fn().mockResolvedValue(referenceData.map(({ id, name }) => ({ id, name, url: toKebabCase(name) }))),
-    ,
+    getAreasOfNeed: jest
+      .fn()
+      .mockResolvedValue(testReferenceData.map(({ id, name }) => ({ id, name, url: toKebabCase(name) }))),
   }))
 })
 jest.mock('../../services/sentence-plan/infoService', () => {
@@ -41,28 +42,28 @@ describe('AboutPopController', () => {
 
   describe('get', () => {
     it('should render when no exceptions thrown', async () => {
-    //   const req = mockReq()
-    //   const res = mockRes()
-    //   const next = jest.fn()
+      //   const req = mockReq()
+      //   const res = mockRes()
+      //   const next = jest.fn()
 
-    //   await controller.get(req, res, next)
-    //   const { id, name } = mockReferentialDataService.getAreasOfNeed()[0]
-    //   const payload = {
-    //     locale: locale.en,
-    //     data: {
-    //       roshData: parsedRoshData,
-    //       popData: testPopData,
-    //       referenceData: [
-    //         {
-    //           id,
-    //           name,
-    //         },
-    //       ],
-    //     },
-    //     errors: {},
-    //   }
-    //   expect(res.render).toHaveBeenCalledWith('pages/about-pop', payload)
-    expect(true)
+      //   await controller.get(req, res, next)
+      //   const { id, name } = mockReferentialDataService.getAreasOfNeed()[0]
+      //   const payload = {
+      //     locale: locale.en,
+      //     data: {
+      //       roshData: parsedRoshData,
+      //       popData: testPopData,
+      //       referenceData: [
+      //         {
+      //           id,
+      //           name,
+      //         },
+      //       ],
+      //     },
+      //     errors: {},
+      //   }
+      //   expect(res.render).toHaveBeenCalledWith('pages/about-pop', payload)
+      expect(true)
     })
   })
 })
