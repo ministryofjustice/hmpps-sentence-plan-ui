@@ -13,7 +13,7 @@ import { roSHData } from '../../testutils/data/roshData'
 
 jest.mock('../../services/sentence-plan/referentialDataService', () => {
   return jest.fn().mockImplementation(() => ({
-    getQuestionDataByAreaOfNeed: jest.fn().mockResolvedValue(testReferenceData.AreasOfNeed[0]),
+    getQuestionDataByAreaOfNeed: jest.fn().mockResolvedValue(testReferenceData[0]),
   }))
 })
 jest.mock('../../services/sentence-plan/infoService', () => {

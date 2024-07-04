@@ -17,9 +17,9 @@ import GoalService from '../../services/sentence-plan/goalService'
 
 jest.mock('../../services/sentence-plan/referentialDataService', () => {
   return jest.fn().mockImplementation(() => ({
-    getQuestionDataByAreaOfNeed: jest.fn().mockResolvedValue(testReferenceData.AreasOfNeed[0]),
+    getQuestionDataByAreaOfNeed: jest.fn().mockResolvedValue(testReferenceData[0]),
     getReferenceData: jest.fn().mockResolvedValue(testReferenceData),
-    getGoals: jest.fn().mockReturnValue(testReferenceData.AreasOfNeed[0].Goals[0]),
+    getGoals: jest.fn().mockReturnValue(testReferenceData[0].goals[0]),
   }))
 })
 jest.mock('../../services/sentence-plan/infoService', () => {
@@ -217,7 +217,7 @@ describe('CreateGoalController', () => {
             popData: testPopData,
             noteData: testNoteData,
             dateOptionsDate: expect.anything(),
-            referenceData: testReferenceData.AreasOfNeed[0],
+            referenceData: testReferenceData[0],
             form: req.body,
           },
           errors,
@@ -287,7 +287,7 @@ describe('CreateGoalController', () => {
           popData: testPopData,
           noteData: testNoteData,
           dateOptionsDate: expect.anything(),
-          referenceData: testReferenceData.AreasOfNeed[0],
+          referenceData: testReferenceData[0],
           form: req.body,
         },
         errors: {},
@@ -321,7 +321,7 @@ describe('CreateGoalController', () => {
           popData: testPopData,
           noteData: testNoteData,
           dateOptionsDate: expect.anything(),
-          referenceData: testReferenceData.AreasOfNeed[0].Goals[0],
+          referenceData: testReferenceData[0].goals[0],
           form: {},
         },
         errors: {},

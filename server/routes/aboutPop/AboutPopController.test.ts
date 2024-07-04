@@ -9,6 +9,7 @@ import { parsedRoshData } from '../../testutils/data/roshData'
 import handoverData from '../../testutils/data/handoverData'
 import testReferenceData from '../../testutils/data/referenceData'
 import { toKebabCase } from '../../utils/utils'
+import referenceData from '../../testutils/data/referenceData'
 
 jest.mock('../../services/sentence-plan/referentialDataService', () => {
   return jest.fn().mockImplementation(() => ({
@@ -42,28 +43,27 @@ describe('AboutPopController', () => {
 
   describe('get', () => {
     it('should render when no exceptions thrown', async () => {
-      //   const req = mockReq()
-      //   const res = mockRes()
-      //   const next = jest.fn()
+      const req = mockReq()
+      const res = mockRes()
+      const next = jest.fn()
 
-      //   await controller.get(req, res, next)
-      //   const { id, name } = mockReferentialDataService.getAreasOfNeed()[0]
-      //   const payload = {
-      //     locale: locale.en,
-      //     data: {
-      //       roshData: parsedRoshData,
-      //       popData: testPopData,
-      //       referenceData: [
-      //         {
-      //           id,
-      //           name,
-      //         },
-      //       ],
-      //     },
-      //     errors: {},
-      //   }
-      //   expect(res.render).toHaveBeenCalledWith('pages/about-pop', payload)
-      expect(true)
+      await controller.get(req, res, next)
+      const { id, name } = referenceData[0]
+      const payload = {
+        locale: locale.en,
+        data: {
+          roshData: parsedRoshData,
+          popData: testPopData,
+          referenceData: [
+            {
+              id,
+              name,
+            },
+          ],
+        },
+        errors: {},
+      }
+      expect(res.render).toHaveBeenCalledWith('pages/about-pop', payload)
     })
   })
 })
