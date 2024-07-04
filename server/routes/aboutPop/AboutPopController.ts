@@ -14,7 +14,8 @@ export default class AboutPopController {
 
     try {
       const popData = req.services.sessionService.getSubjectDetails()
-      const referenceData = this.referentialDataService.getAreasOfNeed().slice(0, 3)
+      const areasOfNeed = this.referentialDataService.getAreasOfNeed()
+      const referenceData = Array.isArray(areasOfNeed) ? areasOfNeed.slice(0, 3) : []
       const roshData = await this.infoService.getRoSHData(popData.crn)
       return res.render('pages/about-pop', {
         locale: locale.en,

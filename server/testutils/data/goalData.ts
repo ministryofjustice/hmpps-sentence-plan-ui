@@ -15,4 +15,4 @@ export const testGoal: Goal = {
   uuid: 'a-un1qu3-t3st-Uu1d',
   creationDate: new Date().toISOString().substring(0, 10),
   ...testNewGoal,
-}
+} as Goal

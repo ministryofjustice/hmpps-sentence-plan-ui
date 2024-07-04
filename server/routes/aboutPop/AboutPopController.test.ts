@@ -7,15 +7,13 @@ import AboutPopController from './AboutPopController'
 import locale from './locale.json'
 import { parsedRoshData } from '../../testutils/data/roshData'
 import handoverData from '../../testutils/data/handoverData'
-import testReferenceData from '../../testutils/data/referenceData'
-import { toKebabCase } from '../../utils/utils'
-import referenceData from '../../testutils/data/referenceData'
+import { AreaOfNeed } from '../../testutils/data/referenceData'
+
+const refData = AreaOfNeed.slice(0, 3)
 
 jest.mock('../../services/sentence-plan/referentialDataService', () => {
   return jest.fn().mockImplementation(() => ({
-    getAreasOfNeed: jest
-      .fn()
-      .mockResolvedValue(testReferenceData.map(({ id, name }) => ({ id, name, url: toKebabCase(name) }))),
+    getAreasOfNeed: jest.fn().mockReturnValue(AreaOfNeed),
   }))
 })
 jest.mock('../../services/sentence-plan/infoService', () => {
@@ -48,18 +46,13 @@ describe('AboutPopController', () => {
       const next = jest.fn()
 
       await controller.get(req, res, next)
-      const { id, name } = referenceData[0]
+
       const payload = {
         locale: locale.en,
         data: {
           roshData: parsedRoshData,
           popData: testPopData,
-          referenceData: [
-            {
-              id,
-              name,
-            },
-          ],
+          referenceData: refData,
         },
         errors: {},
       }

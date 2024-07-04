@@ -11,6 +11,13 @@ jest.mock('../config', () => ({
     sentencePlanApi: {
       url: 'http://localhost:8080',
     },
+    hmppsAuth: {
+      url: 'http://localhost:9090/auth',
+      timeout: {
+        response: 10000,
+        deadline: 10000,
+      },
+    },
   },
 }))
 jest.mock('../../logger', () => ({

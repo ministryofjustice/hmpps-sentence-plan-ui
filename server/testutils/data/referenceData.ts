@@ -1,5 +1,27 @@
 import { ReferenceData } from '../../@types/ReferenceDataType'
 
+export const AreaOfNeed = [
+  { id: 1, name: 'Accommodation', url: 'accommodation' },
+  {
+    id: 2,
+    name: 'Employment and education',
+    url: 'employment-and-education',
+  },
+  { id: 3, name: 'Finance', url: 'finance' },
+  { id: 4, name: 'Drug use', url: 'drug-use' },
+  { id: 5, name: 'Alcohol use', url: 'alcohol-use' },
+  { id: 6, name: 'Health and wellbeing', url: 'health-and-wellbeing' },
+  {
+    id: 7,
+    name: 'Personal relationships and community',
+    url: 'personal-relationships-and-community',
+  },
+  {
+    id: 8,
+    name: 'Thinking, behaviours and attitudes',
+    url: 'thinking-behaviours-and-attitudes',
+  },
+]
 const referenceData: Array<ReferenceData> = [
   {
     id: 1,

@@ -4,6 +4,7 @@ import referenceData from '../../data/referenceData'
 
 export default class ReferentialDataService {
   constructor() {}
+
   getAreasOfNeed = (): Array<AreaOfNeed> => referenceData.map(({ id, name }) => ({ id, name, url: toKebabCase(name) }))
 
   getSteps = (areaOfNeed: string) =>

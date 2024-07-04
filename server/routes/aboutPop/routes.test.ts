@@ -8,14 +8,11 @@ import ReferentialDataService from '../../services/sentence-plan/referentialData
 import InfoService from '../../services/sentence-plan/infoService'
 import { roSHData } from '../../testutils/data/roshData'
 import handoverData from '../../testutils/data/handoverData'
-import referenceData from '../../data/referenceData'
-import { toKebabCase } from '../../utils/utils'
+import { AreaOfNeed } from '../../testutils/data/referenceData'
 
 jest.mock('../../services/sentence-plan/referentialDataService', () => {
   return jest.fn().mockImplementation(() => ({
-    getAreasOfNeed: jest
-      .fn()
-      .mockResolvedValue(referenceData.map(({ id, name }) => ({ id, name, url: toKebabCase(name) }))),
+    getAreasOfNeed: jest.fn().mockResolvedValue(AreaOfNeed),
   }))
 })
 jest.mock('../../services/sentence-plan/infoService', () => {
@@ -48,12 +45,11 @@ afterEach(() => {
 
 describe(`GET ${URLs.ABOUT_POP}`, () => {
   it('should render about pop page', () => {
-    // return request(app)
-    //   .get(URLs.ABOUT_POP)
-    //   .expect('Content-Type', /html/)
-    //   .expect(res => {
-    //     expect(res.text).toContain(locale.en.title.replace('{POP_NAME}', testPopData.givenName))
-    //   })
-    expect(true)
+    return request(app)
+      .get(URLs.ABOUT_POP)
+      .expect('Content-Type', /html/)
+      .expect(res => {
+        expect(res.text).toContain(locale.en.title.replace('{POP_NAME}', testPopData.givenName))
+      })
   })
 })

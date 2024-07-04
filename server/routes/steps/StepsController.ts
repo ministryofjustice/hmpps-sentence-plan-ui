@@ -89,7 +89,8 @@ export default class StepsController {
       const payloadOptions = [...options]
       delete payloadOptions[5].conditional
       if (someOneElse) payloadOptions[5].text = someOneElse
-      const actorNumbers: number[] = actor.map(item => Number(item))
+      const actorArray = Array.isArray(actor) ? actor : [actor]
+      const actorNumbers: number[] = actorArray.map((item: string | number): number => Number(item))
       const mappedActor: Array<any> = payloadOptions.filter(option => actorNumbers.includes(option.value))
       const payload = { description: stepName, actor: mappedActor } as NewStep
       await this.stepService.saveSteps([payload], currentGoal)
