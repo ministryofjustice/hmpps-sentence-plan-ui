@@ -1,8 +1,8 @@
 {% extends "../partials/layout.njk" %}
+{% from "../partials/who-will-do.njk" import whoWillDo %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
-{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 
 {% set pageTitle = applicationName + " - Create a goal with "+ data.popData.givenName %}
 
@@ -47,20 +47,7 @@ Adding steps makes goals more measurable and achievable."
                             <div id="my-autocomplete-container"></div>
                         </div>
 
-                        {{ govukCheckboxes({
-                        name: "actor",
-                        fieldset: {
-                            legend: {
-                            text: "How will do this step",
-                            isPageHeading: true,
-                            classes: "govuk-fieldset__legend--l"
-                            }
-                        },
-                        hint: {
-                            text: "Select all that apply."
-                        },
-                        items: data.checkboxOptions
-            }) }}
+                        {{ whoWillDo(data.popData.firstName) }}
 
                         <div class="govuk-button-group">
                             {{ govukButton({

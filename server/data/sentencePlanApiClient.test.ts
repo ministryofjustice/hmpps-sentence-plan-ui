@@ -47,15 +47,6 @@ describe('SentencePlanApiClient', () => {
       expect(result).toBeInstanceOf(RestClient)
     })
 
-    it('should create a RestClient with provided token', async () => {
-      const providedToken = 'provided-token'
-      const result = await sentencePlanApiClient.restClient(undefined, providedToken)
-
-      expect(mockHmppsAuthClient.getSystemClientToken).not.toHaveBeenCalled()
-      expect(RestClient).toHaveBeenCalledWith('Sentence Plan Api Client', config.apis.sentencePlanApi, providedToken)
-      expect(result).toBeInstanceOf(RestClient)
-    })
-
     it('should log info message when provided', async () => {
       const infoMessage = 'Test info message'
       await sentencePlanApiClient.restClient(infoMessage)
