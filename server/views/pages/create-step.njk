@@ -1,0 +1,64 @@
+{% extends "../partials/layout.njk" %}
+{% from "../partials/who-will-do.njk" import whoWillDo %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+
+{% set pageTitle = applicationName + " - Create a goal with "+ data.popData.givenName %}
+
+{% set mainClasses = "app-container govuk-body" %}
+{% block bodyStart %}{% endblock %}
+
+{% block content %}
+    <div class="govuk-width-container">
+        <a href="#" class="govuk-back-link">Back</a>
+        <main class="govuk-main-wrapper">
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                    <span class="govuk-caption-xl capital">{{ locale.section | replace("{AREA_OF_NEED}", data.areaOfNeed) }}</span>
+                    <h1 class="govuk-heading-xl">{{ locale.title | replace("{POP_NAME}", data.popData.firstName) }}</h1>
+                    <div class="govuk-inset-text">
+                        {# todo: Probably needs to be changed to be an auto-generated array of HTML for notes #}
+                        <h2 class="govuk-heading-l govuk-!-margin-bottom-0">
+                            Goal:
+                            {{ data.goal }}
+                        </h2>
+                    </div>
+
+                    <form id="create-goal-form" method="POST">
+                        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+                        <input type="hidden" id="_areaOfNeed" value="{{ data.areaOfNeed }}">
+                        <input type="hidden" id="page" value="steps">
+
+                        <input type="hidden" name="area-of-need" value="{{ data.referenceData.name }}">
+                        {{ govukDetails({
+  summaryText: "SMART goals and steps",
+  text: "Goals and steps should be SMART, meaning ‘specific’, ‘measurable’, ‘achievable’, ‘realistic’, and ‘time-bound’. This allows progress to be better measured and evaluated.
+Adding steps makes goals more measurable and achievable."
+}) }}
+                        <div class="govuk-form-group">
+                            <h1 class="govuk-label-wrapper">
+                                <label class='govuk-label--l' for="step-name">What is the first step?</label>
+                            </h1>
+                            <div id="stepName-hint" class="govuk-hint">
+                                Select one step. You can add more later.
+                            </div>
+                            <input class="govuk-input" id="step-name" name="stepName" type="text">
+                            <div id="my-autocomplete-container"></div>
+                        </div>
+
+                        {{ whoWillDo(data.popData.firstName) }}
+
+                        <div class="govuk-button-group">
+                            {{ govukButton({
+                                text: locale.saveButtonText,
+                                name: "action",
+                                value: "continue"
+                            }) }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+{% endblock %}

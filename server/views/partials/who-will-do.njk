@@ -1,0 +1,45 @@
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+
+{% macro whoWillDo(popName) %}
+    {% set options = [] %}
+
+    {% set _ = options.push({value: "1", text: popName}) %}
+
+    {% set _ = options.push({value: "2", text: "Probation practitioner"}) %}
+
+    {% set _ = options.push({value: "3", text: "Programme staff"}) %}
+
+    {% set _ = options.push({value: "4", text: "Partnership agency"}) %}
+
+    {% set _ = options.push({value: "5", text: "Commissioned rehabilitative services (CRS) provider"}) %}
+
+    {% set _ = options.push({
+    value: "6",
+    text: "Someone else",
+    conditional: {
+      html: "<div class=\"govuk-form-group\">
+        <h1 class=\"govuk-label-wrapper\">
+          <label class=\"govuk-label govuk-label--s\" for=\"some-one-else\">
+            Enter who will do this step
+          </label>
+        </h1>
+        <input class=\"govuk-input govuk-!-width-one-third\" id=\"some-one-else\" name=\"someOneElse\" type=\"text\">
+      </div>"
+    }
+  }) %}
+
+    {{ govukCheckboxes({
+    name: "actor",
+    fieldset: {
+      legend: {
+        text: "Who will do this step",
+        isPageHeading: true,
+        classes: "govuk-fieldset__legend--l"
+      }
+    },
+    hint: {
+      text: "Select all that apply."
+    },
+    items: options
+  }) }}
+{% endmacro %}

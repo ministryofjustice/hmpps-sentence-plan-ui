@@ -10,8 +10,8 @@
 {% set mainClasses = "app-container govuk-body" %}
 
 {# Setup arrays and custom HTML #}
-    {% set customGoalHtml %}
-        {{ govukInput({
+{% set customGoalHtml %}
+{{ govukInput({
             id: "goal-selection-custom",
             name: "goal-selection-custom",
             label: {
@@ -20,9 +20,9 @@
             errorMessage: getFormattedError(errors, locale, "goal-selection-custom"),
             value: data.form['goal-selection-custom']
         }) }}
-    {% endset -%}
-    {% set customDateHtml %}
-        {{ govukDateInput({
+{% endset -%}
+{% set customDateHtml %}
+{{ govukDateInput({
             id: "date-selection-custom",
             namePrefix: "date-selection-custom",
             fieldset: {
@@ -52,26 +52,26 @@
                 }
             ]
         }) }}
-    {% endset -%}
+{% endset -%}
 
-    {% set goals = [] %}
+{% set goals = [] %}
 
-    {% for goal in data.referenceData.Goals %}
-        {% set goals = (goals.push({
-            id: "goal-selection-radio-" + goal.id,
-            value: goal.Name,
-            text: goal.Name
-        }), goals) %}
-    {% endfor %}
-    {% set goals = (goals.push({divider: "or"}), goals) %}
+{% for goal in data.referenceData.goals %}
     {% set goals = (goals.push({
-            value: "custom",
-            text: locale.goalSelection.customRadioOptionText,
-            conditional: {
-                html: customGoalHtml
-            }
-        }), goals)
-    %}
+            id: "goal-selection-radio-" + goal.id,
+            value: goal,
+            text: goal
+        }), goals) %}
+{% endfor %}
+{% set goals = (goals.push({divider: "or"}), goals) %}
+{% set goals = (goals.push({
+    value: "custom",
+    text: locale.goalSelection.customRadioOptionText,
+    conditional: {
+        html: customGoalHtml
+    }
+}), goals)
+ %}
 
 {% block content %}
     <div class="govuk-width-container">
@@ -79,7 +79,7 @@
         <main class="govuk-main-wrapper">
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-two-thirds">
-                    <span class="govuk-caption-xl">{{ locale.section | replace("{AREA_OF_NEED}", data.referenceData.Name) }}</span>
+                    <span class="govuk-caption-xl">{{ locale.section | replace("{AREA_OF_NEED}", data.referenceData.name) }}</span>
                     <h1 class="govuk-heading-xl">{{ locale.title | replace("{POP_NAME}", data.popData.firstName) }}</h1>
                     <div class="govuk-inset-text">
                         {# todo: Probably needs to be changed to be an auto-generated array of HTML for notes #}
@@ -93,7 +93,7 @@
 
                     <form id="create-goal-form" method="POST">
                         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-                        <input type="hidden" name="area-of-need" value="{{ data.referenceData.Name }}">
+                        <input type="hidden" name="area-of-need" value="{{ data.referenceData.name }}">
 
                         {{ govukRadios({
                             name: "goal-selection-radio",
@@ -168,8 +168,10 @@
                         }
                     }) %}
                     {# TODO: Placeholder until pulled from API #}
-                        <p>{{ data.popData.firstName}} <b>{{ locale.motivationsToChangeWidget.motivationLevel }}</b></p>
-                        <span class="govuk-secondary-text">{{ locale.motivationsToChangeWidget.lastUpdated | replace("{MOTIVATION_UPDATE_DATE}", "25th December 2023") }}</span>
+                    <p>{{ data.popData.firstName}}
+                        <b>{{ locale.motivationsToChangeWidget.motivationLevel }}</b>
+                    </p>
+                    <span class="govuk-secondary-text">{{ locale.motivationsToChangeWidget.lastUpdated | replace("{MOTIVATION_UPDATE_DATE}", "25th December 2023") }}</span>
                     {% endcall %}
                 </div>
             </div>

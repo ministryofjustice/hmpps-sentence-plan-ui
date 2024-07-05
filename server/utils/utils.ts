@@ -25,7 +25,8 @@ export const initialiseName = (fullName?: string): string | null => {
   return `${array[0][0]}. ${array.reverse()[0]}`
 }
 
-export const toKebabCase = (string: string) => (isBlank(string) ? '' : string.trim().replace(/ /g, '-').toLowerCase())
+export const toKebabCase = (string: string) =>
+  isBlank(string) ? '' : string.trim().replace(/ /g, '-').toLowerCase().replace(',', '')
 
 export function formatRoSHData(data: RoshData) {
   const { overallRisk, assessedOn, riskInCommunity } = data

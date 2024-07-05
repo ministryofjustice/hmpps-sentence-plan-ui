@@ -1,91 +1,57 @@
-import nock from 'nock'
-import config from '../config'
 import SentencePlanApiClient from './sentencePlanApiClient'
-import testReferenceData from '../testutils/data/referenceData'
-import { testGoal, testNewGoal } from '../testutils/data/goalData'
-import { testNewStep, testStep } from '../testutils/data/stepData'
 import HmppsAuthClient from './hmppsAuthClient'
-import testPlan from '../testutils/data/planData'
+import RestClient from './restClient'
+import config from '../config'
+import logger from '../../logger'
 
-jest.mock('./hmppsAuthClient', () => {
-  return jest.fn().mockImplementation(() => ({
-    getSystemClientToken: jest.fn().mockResolvedValue('a-mock-token'),
-  }))
-})
+jest.mock('./hmppsAuthClient')
+jest.mock('./restClient')
+jest.mock('../config', () => ({
+  apis: {
+    sentencePlanApi: {
+      url: 'http://localhost:8080',
+    },
+    hmppsAuth: {
+      url: 'http://localhost:9090/auth',
+      timeout: {
+        response: 10000,
+        deadline: 10000,
+      },
+    },
+  },
+}))
+jest.mock('../../logger', () => ({
+  info: jest.fn(),
+}))
 
 describe('SentencePlanApiClient', () => {
-  let client: SentencePlanApiClient
-  let fakeApi: nock.Scope
-  const hmppsAuthClient: HmppsAuthClient = new HmppsAuthClient(null)
+  let sentencePlanApiClient: SentencePlanApiClient
+  let mockHmppsAuthClient: jest.Mocked<HmppsAuthClient>
 
   beforeEach(() => {
-    client = new SentencePlanApiClient(hmppsAuthClient)
-    fakeApi = nock(config.apis.sentencePlanApi.url)
+    mockHmppsAuthClient = new HmppsAuthClient(null) as jest.Mocked<HmppsAuthClient>
+    mockHmppsAuthClient.getSystemClientToken = jest.fn().mockResolvedValue('mock-token')
+    sentencePlanApiClient = new SentencePlanApiClient(mockHmppsAuthClient)
   })
 
   afterEach(() => {
-    nock.cleanAll()
+    jest.clearAllMocks()
   })
 
-  describe('getAllReferenceData', () => {
-    it('should fetch all reference data from the API', async () => {
-      fakeApi.get(`/question-reference-data`).reply(200, testReferenceData)
+  describe('restClient', () => {
+    it('should create a RestClient with system token when no token is provided', async () => {
+      const result = await sentencePlanApiClient.restClient()
 
-      const result = await client.getAllReferenceData()
-
-      expect(result).toEqual(testReferenceData)
+      expect(mockHmppsAuthClient.getSystemClientToken).toHaveBeenCalled()
+      expect(RestClient).toHaveBeenCalledWith('Sentence Plan Api Client', config.apis.sentencePlanApi, 'mock-token')
+      expect(result).toBeInstanceOf(RestClient)
     })
-  })
 
-  describe('saveGoal', () => {
-    it('should save goal data via the API', async () => {
-      const planUUid = '123'
-      fakeApi.post(`/plans/${planUUid}/goals`, testNewGoal).reply(200, testGoal)
+    it('should log info message when provided', async () => {
+      const infoMessage = 'Test info message'
+      await sentencePlanApiClient.restClient(infoMessage)
 
-      const result = await client.saveGoal(testNewGoal, planUUid)
-
-      expect(result).toEqual(testGoal)
-    })
-  })
-
-  describe('saveSteps', () => {
-    it('should save steps data via the API', async () => {
-      const parentGoalUuid = testGoal.uuid
-      fakeApi.post(`/goals/${parentGoalUuid}/steps`, [testNewStep]).reply(200, testStep)
-
-      const result = await client.saveSteps([testNewStep], parentGoalUuid)
-
-      expect(result).toEqual(testStep)
-    })
-  })
-
-  describe('getPlanByUuid', () => {
-    it('should fetch a plan by its UUID', async () => {
-      const planUuid = '123'
-      fakeApi.get(`/plans/${planUuid}`).reply(200, testPlan)
-
-      const result = await client.getPlanByUuid(planUuid)
-
-      expect(result).toEqual({
-        ...testPlan,
-        createdAt: testPlan.createdAt.toISOString(),
-        updatedAt: testPlan.updatedAt.toISOString(),
-      })
-    })
-  })
-
-  describe('getPlanByOasysAssessmentPk', () => {
-    it('should fetch a plan by its related OASys Assessment PK', async () => {
-      const mockTestPlan = testPlan
-      fakeApi.get(`/oasys/plans/123`).reply(200, mockTestPlan)
-
-      const result = await client.getPlanByOasysAssessmentPk('123')
-
-      expect(result).toEqual({
-        ...mockTestPlan,
-        createdAt: mockTestPlan.createdAt.toISOString(),
-        updatedAt: mockTestPlan.updatedAt.toISOString(),
-      })
+      expect(logger.info).toHaveBeenCalledWith(infoMessage)
     })
   })
 })

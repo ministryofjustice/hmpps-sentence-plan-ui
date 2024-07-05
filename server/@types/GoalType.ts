@@ -6,6 +6,6 @@ export type Goal = {
   creationDate: string
   completedDate?: string
   targetDate: string
-  isAgreed: boolean
+  isAgreed?: boolean
   agreementNote: string
 }

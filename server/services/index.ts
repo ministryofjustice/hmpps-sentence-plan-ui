@@ -1,7 +1,6 @@
 import { Request } from 'express'
 import { dataAccess } from '../data'
 import AuditService from './auditService'
-import HelloWorldService from './sentence-plan/helloWorld'
 import ReferentialDataService from './sentence-plan/referentialDataService'
 import InfoService from './sentence-plan/infoService'
 import NoteService from './sentence-plan/noteService'
@@ -16,8 +15,7 @@ export const services = () => {
   const { applicationInfo, sentencePlanApiClient, handoverApiClient, hmppsAuditClient } = dataAccess()
 
   const auditService = new AuditService(hmppsAuditClient)
-  const helloWorldService = new HelloWorldService(sentencePlanApiClient)
-  const referentialDataService = new ReferentialDataService(sentencePlanApiClient)
+  const referentialDataService = new ReferentialDataService()
   const infoService = new InfoService(sentencePlanApiClient)
   const noteService = new NoteService(sentencePlanApiClient)
   const goalService = new GoalService(sentencePlanApiClient)
@@ -28,7 +26,6 @@ export const services = () => {
   return {
     applicationInfo,
     auditService,
-    helloWorldService,
     referentialDataService,
     handoverContextService,
     infoService,

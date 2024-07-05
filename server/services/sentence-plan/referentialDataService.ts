@@ -1,26 +1,19 @@
-import SentencePlanApiClient from '../../data/sentencePlanApiClient'
+import { AreaOfNeed } from '../../@types/ReferenceDataType'
 import { toKebabCase } from '../../utils/utils'
+import referenceData from '../../data/referenceData'
 
 export default class ReferentialDataService {
-  constructor(private readonly sentencePlanApiClient: SentencePlanApiClient) {}
+  constructor() {}
 
-  getAllQuestionData() {
-    return this.sentencePlanApiClient.getAllReferenceData()
-  }
+  getAreasOfNeed = (): Array<AreaOfNeed> => referenceData.map(({ id, name }) => ({ id, name, url: toKebabCase(name) }))
 
-  getAreasOfNeedQuestionData() {
-    return this.getAllQuestionData().then(({ AreasOfNeed }) => {
-      return AreasOfNeed.map((area: any) => ({
-        id: area.id,
-        Name: area.Name,
-        active: area.active,
-      }))
-    })
-  }
+  getSteps = (areaOfNeed: string) =>
+    referenceData
+      .map(({ name, steps }) => ({ name: toKebabCase(name), steps }))
+      .find(({ name, steps }) => name === areaOfNeed && steps)
 
-  getQuestionDataByAreaOfNeed(areaOfNeed: string) {
-    return this.getAllQuestionData().then(({ AreasOfNeed }) => {
-      return AreasOfNeed.find(area => toKebabCase(area.Name) === areaOfNeed)
-    })
-  }
+  getGoals = (areaOfNeed: string) =>
+    referenceData
+      .map(({ name, goals }) => ({ name: toKebabCase(name), goals }))
+      .find(({ name, goals }) => name === areaOfNeed && goals)
 }

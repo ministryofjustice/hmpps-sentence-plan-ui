@@ -1,17 +1,17 @@
 {% extends "govuk/template.njk" %}
 
 {% block head %}
-  <link href="/assets/css/app.css?{{ version }}" rel="stylesheet"/>
+  <link href="/assets/css/app.css?{{ version }}" rel="stylesheet" />
 {% endblock %}
 
-{% block pageTitle %}{{pageTitle | default(applicationName)}}{% endblock %}
+{% block pageTitle %}{{pageTitle | default(applicationName)}}
+{% endblock %}
 
 {% block header %}
   {% include "./header.njk" %}
 {% endblock %}
 
-{% block bodyStart %}
-{% endblock %}
+{% block bodyStart %}{% endblock %}
 
 {% block bodyEnd %}
   <script type="module" src="/assets/js/app.js"></script>

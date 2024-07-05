@@ -4,7 +4,7 @@ import { testGoal } from './goalData'
 
 export const testNewStep: NewStep = {
   description: 'A test step',
-  actor: 'The actor',
+  actor: ['The actor'],
   status: 'PENDING',
 }
 export const testStep: Step = {
@@ -13,4 +13,4 @@ export const testStep: Step = {
   relatedGoalUuid: testGoal.uuid,
   creationDate: new Date().toISOString().substring(0, 10),
   ...testNewStep,
-}
+} as Step

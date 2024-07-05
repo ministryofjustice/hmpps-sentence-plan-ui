@@ -1,11 +1,12 @@
 import { RequestHandler, Router } from 'express'
 import asyncMiddleware from '../middleware/asyncMiddleware'
 import type { Services } from '../services'
-import setupHelloWorldRoutes from './helloWorld/routes'
 import setupCreateGoalRoutes from './createGoal/routes'
 import setupConfirmGoalRoutes from './confirmGoal/routes'
 import setupAboutPopRoutes from './aboutPop/routes'
 import { Page } from '../services/auditService'
+import setupStepRoutes from './steps/routes'
+import setupReferenceDataRoutes from './ReferenceData/routes'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
 export default function routes(services: Services): Router {
@@ -20,10 +21,10 @@ export default function routes(services: Services): Router {
     res.render('pages/index')
   })
 
-  setupHelloWorldRoutes(router, services)
   setupAboutPopRoutes(router, services)
   setupCreateGoalRoutes(router, services)
   setupConfirmGoalRoutes(router, services)
-
+  setupStepRoutes(router, services)
+  setupReferenceDataRoutes(router, services)
   return router
 }

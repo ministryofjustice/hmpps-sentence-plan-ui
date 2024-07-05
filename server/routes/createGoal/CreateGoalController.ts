@@ -5,12 +5,15 @@ import InfoService from '../../services/sentence-plan/infoService'
 import NoteService from '../../services/sentence-plan/noteService'
 import URLs from '../URLs'
 import { FORMS } from '../../services/formStorageService'
+import GoalService from '../../services/sentence-plan/goalService'
+import { NewGoal } from '../../@types/NewGoalType'
 
 export default class CreateGoalController {
   constructor(
     private readonly referentialDataService: ReferentialDataService,
     private readonly infoService: InfoService,
     private readonly noteService: NoteService,
+    private readonly goalService: GoalService,
   ) {}
 
   private saveAndRedirect = async (req: Request, res: Response, next: NextFunction) => {
@@ -18,25 +21,14 @@ export default class CreateGoalController {
       processed: this.processGoalData(req.body),
       raw: req.body,
     })
-
-    // TODO: Step data hasn't been decided in the design yet, so just mock some
-    req.services.formStorageService.saveFormData(FORMS.CREATE_STEPS, {
-      processed: [
-        {
-          description: 'Make a referral to housing officer',
-          actor: 'Probation practitioner',
-          status: 'PENDING',
-        },
-        {
-          description: 'Provide any information that is required',
-          actor: 'Joan',
-          status: 'PENDING',
-        },
-      ],
-      raw: req.body,
+    const processedData: NewGoal = this.processGoalData(req.body)
+    const planUuid = req.services.sessionService.getPlanUUID()
+    const { uuid } = await this.goalService.saveGoal(processedData, planUuid)
+    req.services.formStorageService.saveFormData('currentGoal', {
+      processed: null,
+      raw: { uuid },
     })
-
-    return res.redirect(URLs.CONFIRM_GOAL)
+    return res.redirect(URLs.CREATE_STEP)
   }
 
   private render = async (req: Request, res: Response, next: NextFunction) => {
@@ -45,11 +37,12 @@ export default class CreateGoalController {
     const { errors } = req
 
     try {
-      const popData = await this.infoService.getPopData(crn)
-      const referenceData = await this.referentialDataService.getQuestionDataByAreaOfNeed(areaOfNeed)
-      const noteData = await this.noteService.getNoteDataByAreaOfNeed(areaOfNeed, crn)
       const dateOptionsDate = this.getAchieveDateOptions(new Date())
-
+      const referenceData = this.referentialDataService.getGoals(areaOfNeed)
+      const [popData, noteData] = await Promise.all([
+        this.infoService.getPopData(crn),
+        this.noteService.getNoteDataByAreaOfNeed(areaOfNeed, crn),
+      ])
       return res.render('pages/create-goal', {
         locale: locale.en,
         data: {
@@ -94,7 +87,6 @@ export default class CreateGoalController {
     if (Object.keys(req.errors.body).length) {
       return this.render(req, res, next)
     }
-
     return this.saveAndRedirect(req, res, next)
   }
 }
