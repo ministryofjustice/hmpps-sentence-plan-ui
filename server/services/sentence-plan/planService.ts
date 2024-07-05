@@ -13,6 +13,6 @@ export default class PlanService {
     const restClient = await this.sentencePlanApiClient.restClient(
       `Getting plan with OASys Assessment PK: ${oasysAssessmentPk}`,
     )
-    return restClient.get<PlanType>({ path: `/oasys/${oasysAssessmentPk}` })
+    return restClient.get<PlanType>({ path: `/oasys/plans/${oasysAssessmentPk}` })
   }
 }

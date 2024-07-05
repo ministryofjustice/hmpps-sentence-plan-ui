@@ -34,7 +34,7 @@ describe('PlanService', () => {
   describe('getPlanByOasysAssessmentPk', () => {
     it('should call restClient.get with correct path', async () => {
       const oasysAssessmentPk = '987654'
-      const expectedPath = `/oasys/${oasysAssessmentPk}`
+      const expectedPath = `/oasys/plans/${oasysAssessmentPk}`
 
       await planService.getPlanByOasysAssessmentPk(oasysAssessmentPk)
 
