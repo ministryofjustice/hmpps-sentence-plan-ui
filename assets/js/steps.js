@@ -32,6 +32,6 @@ function addAutoComplete(id, source) {
   })
 }
 window.addEventListener('DOMContentLoaded', async () => {
-  const page = document.querySelector('#page').value
+  const page = document.querySelector('#page')?.value
   if (page && ops[page]) ops[page]()
 })
