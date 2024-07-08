@@ -1,7 +1,7 @@
 const login = () => {
   cy.session('id', () => {
     cy.visit(Cypress.env('oaStubUrl'))
-    cy.get('#target-service').select('sentence-plan')
+    cy.get('#target-service').select('localhost')
     cy.get('button').contains('Create handover link').click()
     cy.location('href').should('eq', Cypress.env('oaStubUrl'))
     cy.get('body > div a[role=button]').contains('Open').invoke('removeAttr', 'target').click()
