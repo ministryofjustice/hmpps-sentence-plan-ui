@@ -1,0 +1,11 @@
+services:
+  cypress:
+    image: cypress/included
+    environment:
+      CYPRESS_BASE_URL: http://ui:3000
+    volumes:
+      - ../:/integration_tests
+    working_dir: /integration_tests
+
+volumes:
+  test_results:
