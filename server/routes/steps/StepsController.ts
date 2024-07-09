@@ -45,17 +45,25 @@ export default class StepsController {
       const {
         raw: { uuid: currentGoal },
       }: Record<string, any> = req.services.formStorageService.getFormData('currentGoal')
-      const { stepName, actor, someOneElse } = req.body
+      const { actor, someOneElse } = req.body
+      const stepName = req.body['input-autocomplete']
       const payloadOptions = [...options]
       if (someOneElse) payloadOptions[5].text = someOneElse
       const actorArray = Array.isArray(actor) ? actor : [actor]
       const actorNumbers: number[] = actorArray.map((item: string | number): number => Number(item))
       const mappedActor: Array<any> = payloadOptions.filter(option => actorNumbers.includes(option.value))
-      const payload = { description: stepName, actor: mappedActor } as NewStep
+      mappedActor.forEach( obj => renameKey( obj, 'value', 'actorOptionId' ) );
+      mappedActor.forEach( obj => renameKey( obj, 'text', 'actor' ) );
+      const payload = { description: stepName, status: '', actor: mappedActor } as NewStep
       await this.stepService.saveSteps([payload], currentGoal)
       res.redirect(URLs.CREATE_STEP)
     } catch (e) {
       next(e)
     }
   }
+}
+
+function renameKey ( obj, oldKey, newKey ) {
+  obj[newKey] = obj[oldKey];
+  delete obj[oldKey];
 }
