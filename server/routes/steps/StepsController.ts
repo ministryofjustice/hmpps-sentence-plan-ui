@@ -63,7 +63,7 @@ export default class StepsController {
   }
 }
 
-function renameKey ( obj, oldKey, newKey ) {
+function renameKey ( obj: Array<any> , oldKey: string, newKey: string ) {
   obj[newKey] = obj[oldKey];
   delete obj[oldKey];
 }
