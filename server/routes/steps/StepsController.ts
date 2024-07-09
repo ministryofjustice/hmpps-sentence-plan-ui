@@ -52,8 +52,8 @@ export default class StepsController {
       const actorArray = Array.isArray(actor) ? actor : [actor]
       const actorNumbers: number[] = actorArray.map((item: string | number): number => Number(item))
       const mappedActor: Array<any> = payloadOptions.filter(option => actorNumbers.includes(option.value))
-      mappedActor.forEach( obj => renameKey( obj, 'value', 'actorOptionId' ) );
-      mappedActor.forEach( obj => renameKey( obj, 'text', 'actor' ) );
+      mappedActor.forEach(obj => renameKey(obj, 'value', 'actorOptionId'))
+      mappedActor.forEach(obj => renameKey(obj, 'text', 'actor'))
       const payload = { description: stepName, status: '', actor: mappedActor } as NewStep
       await this.stepService.saveSteps([payload], currentGoal)
       res.redirect(URLs.CREATE_STEP)
@@ -63,7 +63,13 @@ export default class StepsController {
   }
 }
 
-function renameKey ( obj: { [key: string]: any }, oldKey: string, newKey: string ): void {
-  obj[newKey] = obj[oldKey];
-  delete obj[oldKey];
+function renameKey(obj: Array<any>, oldKey: string, newKey: string): void {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  // eslint-disable-next-line no-param-reassign
+  obj[newKey] = obj[oldKey]
+  // eslint-disable-next-line no-param-reassign,@typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  // eslint-disable-next-line no-param-reassign
+  delete obj[oldKey]
 }
