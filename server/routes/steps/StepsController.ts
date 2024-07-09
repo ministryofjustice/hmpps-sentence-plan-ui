@@ -45,17 +45,27 @@ export default class StepsController {
       const {
         raw: { uuid: currentGoal },
       }: Record<string, any> = req.services.formStorageService.getFormData('currentGoal')
-      const { stepName, actor, someOneElse } = req.body
+      const { actor, someOneElse } = req.body
+      const stepName = req.body['input-autocomplete']
       const payloadOptions = [...options]
       if (someOneElse) payloadOptions[5].text = someOneElse
       const actorArray = Array.isArray(actor) ? actor : [actor]
       const actorNumbers: number[] = actorArray.map((item: string | number): number => Number(item))
       const mappedActor: Array<any> = payloadOptions.filter(option => actorNumbers.includes(option.value))
-      const payload = { description: stepName, actor: mappedActor } as NewStep
+      const actors = transformActor(mappedActor)
+      const payload = { description: stepName, status: '', actor: actors } as NewStep
       await this.stepService.saveSteps([payload], currentGoal)
       res.redirect(URLs.CREATE_STEP)
     } catch (e) {
       next(e)
     }
   }
+}
+
+function transformActor(mappedActor: Array<any>): Array<any> {
+  const actorArray: Array<any> = []
+  mappedActor.forEach(obj => {
+    actorArray.push({ actor: obj.text, actorOptionId: obj.value })
+  })
+  return actorArray
 }
