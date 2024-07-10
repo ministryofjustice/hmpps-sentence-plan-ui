@@ -5,7 +5,7 @@ const login = () => {
     cy.get('button').contains('Create handover link').click()
     cy.location('href').should('eq', Cypress.env('oaStubUrl'))
     cy.get('body > div a[role=button]').contains('Open').invoke('removeAttr', 'target').click()
-    cy.location('href').should('eq', 'http://localhost:3000/about-pop')
+    cy.location('href').should('eq', `${Cypress.config().baseUrl}/about-pop`)
   })
   // no visit here
 }
