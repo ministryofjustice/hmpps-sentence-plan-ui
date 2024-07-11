@@ -3,14 +3,7 @@ import { Expose, Transform } from 'class-transformer'
 
 export default class CreateGoalPostModel {
   @IsNotEmpty()
-  'goal-selection-radio': string
-
-  @ValidateIf(o => o['goal-selection-radio'] === 'custom')
-  @IsNotEmpty()
-  'goal-selection-custom': string
-
-  @IsNotEmpty()
-  'date-selection-radio': string
+  'other-area-of-need-radio': string
 
   'date-selection-custom-day': string
 

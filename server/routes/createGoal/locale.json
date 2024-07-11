@@ -12,6 +12,9 @@
       "customRadioOptionText": "Something else",
       "customOptionLabel": "Enter a custom goal"
     },
+    "startWorking": {
+      "label": "Can {POP_NAME} start working on this goal now?"
+    },
     "dateSelection": {
       "label": "When should {POP_NAME} achieve this?",
       "hint": "Select one option",
@@ -31,8 +34,8 @@
       "lastUpdated": "Last updated: {MOTIVATION_UPDATE_DATE}"
     },
     "errors": {
-      "goal-selection-radio": {
-        "isNotEmpty": "You need to select a goal"
+      "other-area-of-need-radio": {
+        "isNotEmpty": "You need to select an area of need"
       },
       "goal-selection-custom": {
         "isNotEmpty": "You need to enter a goal"

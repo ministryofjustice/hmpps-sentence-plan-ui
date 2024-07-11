@@ -37,6 +37,10 @@ export default class CreateGoalController {
     const { errors } = req
 
     try {
+      const otherAreaOfNeed = this.referentialDataService
+        .getAreasOfNeed()
+        .filter(aon => aon.url !== areaOfNeed)
+        .map(aon => ({ text: aon.name, value: aon.id }))
       const dateOptionsDate = this.getAchieveDateOptions(new Date())
       const referenceData = this.referentialDataService.getGoals(areaOfNeed)
       const [popData, noteData] = await Promise.all([
@@ -50,6 +54,7 @@ export default class CreateGoalController {
           referenceData,
           noteData,
           dateOptionsDate,
+          otherAreaOfNeed,
           form: req.body,
         },
         errors,
