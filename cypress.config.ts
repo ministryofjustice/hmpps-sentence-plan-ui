@@ -1,9 +1,6 @@
 import { defineConfig } from 'cypress'
-import { config } from 'dotenv'
 import { resetStubs } from './integration_tests/mockApis/wiremock'
 import auth from './integration_tests/mockApis/auth'
-
-config()
 
 export default defineConfig({
   chromeWebSecurity: false,
@@ -27,7 +24,7 @@ export default defineConfig({
     specPattern: 'integration_tests/e2e/**/*.{cy,spec}.{js,jsx,ts,tsx}',
     supportFile: 'integration_tests/support/index.ts',
     env: {
-      oaStubUrl: process.env.OASTUB_URL,
+      OASTUB_URL: 'http://localhost:7072/',
     },
   },
 })

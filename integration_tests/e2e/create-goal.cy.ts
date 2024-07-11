@@ -1,9 +1,9 @@
 const login = () => {
   cy.session('id', () => {
-    cy.visit(Cypress.env('oaStubUrl'))
+    cy.visit(Cypress.env('OASTUB_URL'))
     cy.get('#target-service').select('sentence-plan')
     cy.get('button').contains('Create handover link').click()
-    cy.location('href').should('eq', Cypress.env('oaStubUrl'))
+    cy.location('href').should('eq', Cypress.env('OASTUB_URL'))
     cy.get('body > div a[role=button]').contains('Open').invoke('removeAttr', 'target').click()
     cy.location('href').should('eq', `${Cypress.config().baseUrl}/about-pop`)
   })
