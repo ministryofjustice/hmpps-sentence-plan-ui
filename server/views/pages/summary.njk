@@ -1,1 +1,19 @@
-SUMMARY
+{% extends "../partials/layout.njk" %}
+
+{% set pageTitle = applicationName + " - Summary" %}
+
+{% set mainClasses = "app-container govuk-body" %}
+{% block bodyStart %}{% endblock %}
+
+{% block content %}
+    <div class="govuk-width-container">
+        <a href="#" class="govuk-back-link">Back</a>
+        <main class="govuk-main-wrapper">
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-two-thirds">
+                    <h1 class="govuk-heading-xl">{{ popData.firstName }}'s plan</h1>
+                </div>
+            </div>
+        </main>
+    </div>
+{% endblock %}

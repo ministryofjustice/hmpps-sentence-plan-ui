@@ -27,6 +27,6 @@ export default function routes(services: Services): Router {
   setupConfirmGoalRoutes(router, services)
   setupStepRoutes(router, services)
   setupReferenceDataRoutes(router, services)
-  setupSummaryRoutes(router)
+  setupSummaryRoutes(router, services)
   return router
 }
