@@ -5,6 +5,10 @@ const login = () => {
     cy.get('button').contains('Create handover link').click()
     cy.location('href').should('eq', Cypress.env('OASTUB_URL'))
     cy.get('body > div a[role=button]').contains('Open').invoke('removeAttr', 'target').click()
+    cy.url().then(url => {
+      cy.log(`Current URL is: ${url}`)
+      console.log(`Current URL is: ${url}`) // Prints to the console (not the Cypress log)
+    })
     cy.location('href').should('eq', `${Cypress.config().baseUrl}/about-pop`)
   })
   // no visit here

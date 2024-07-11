@@ -1,9 +1,13 @@
 services:
+  arns-handover:
+    environment:
+      CLIENT_SP_OAUTH_REDIRECT_URI: http://ui:3000/sign-in/callback
+      CLIENT_SP_HANDOVER_REDIRECT_URI: http://ui:3000/sign-in
   cypress:
     image: cypress/included
     environment:
       CYPRESS_BASE_URL: http://ui:3000
-      CYPRESS_OASTUB_URL: http://oastub:3000/
+      CYPRESS_OASTUB_URL: http://oastub:3005/
     volumes:
       - ../:/integration_tests
     working_dir: /integration_tests
