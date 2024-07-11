@@ -50,6 +50,7 @@ export default class CreateGoalController {
       return res.render('pages/create-goal', {
         locale: locale.en,
         data: {
+          areaOfNeed,
           popData,
           referenceData,
           noteData,
@@ -65,8 +66,8 @@ export default class CreateGoalController {
   }
 
   private processGoalData(body: any) {
-    const title =
-      body['goal-selection-radio'] === 'custom' ? body['goal-selection-custom'] : body['goal-selection-radio']
+    const title = body['area-of-need']
+    // body['goal-selection-radio'] === 'custom' ? body['goal-selection-custom'] : body['goal-selection-radio']
     const targetDate =
       body['date-selection-radio'] === 'custom' ? body['date-selection-custom'] : body['date-selection-radio']
     const areaOfNeed = body['area-of-need']

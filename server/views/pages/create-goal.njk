@@ -76,15 +76,17 @@
 
                     <form id="create-goal-form" method="POST">
                         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+                        <input type="hidden" id="_areaOfNeed" value="{{ data.areaOfNeed }}">
                         <input type="hidden" name="area-of-need" value="{{ data.referenceData.name }}">
+                        <input type="hidden" id="page" value="goals">
                         <div class="govuk-form-group">
                             <h1 class="govuk-label-wrapper">
                                 <label class='govuk-label--l' for="step-name">What goal should {{ data.popData.firstName }} try to achieve?</label>
                             </h1>
-                            <div id="stepName-hint" class="govuk-hint">
+                            <div id="goalName-hint" class="govuk-hint">
                                 Search for a suggested goal or enter your own. Add one goal at a time.
                             </div>
-                            <input class="govuk-input" id="step-name" name="stepName" type="text">
+                            <input class="govuk-input" id="goal-name" name="goalName" type="text">
                             <div id="my-autocomplete-container"></div>
 
                         </div>

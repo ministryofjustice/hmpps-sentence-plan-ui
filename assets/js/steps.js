@@ -18,8 +18,8 @@ async function getSteps() {
 async function getGoals() {
   const areaOfNeed = document.querySelector('#_areaOfNeed').value
   const response = await fetch(`/reference-data/areaOfNeed/${areaOfNeed}/goals`)
-  const { steps } = await response.json()
-  return steps
+  const { goals } = await response.json()
+  return goals
 }
 function removeStaticInput(element) {
   if (element && element.parentNode) element.parentNode.removeChild(element)
