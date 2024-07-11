@@ -3,7 +3,7 @@ services:
     image: cypress/included
     environment:
       CYPRESS_BASE_URL: http://ui:3000
-      OASTUB_URL: http://oastub:3000/
+      CYPRESS_OASTUB_URL: http://oastub:3000/
     volumes:
       - ../:/integration_tests
     working_dir: /integration_tests
