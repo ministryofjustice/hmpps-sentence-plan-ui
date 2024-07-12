@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
 import StepService from '../../services/sentence-plan/stepsService'
-import ReferentialDataService from '../../services/sentence-plan/referentialDataService'
 import locale from './locale.json'
 import { FORMS } from '../../services/formStorageService'
 import { NewStep } from '../../@types/NewStepType'
