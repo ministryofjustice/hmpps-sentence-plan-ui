@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
 import StepService from '../../services/sentence-plan/stepsService'
-import InfoService from '../../services/sentence-plan/infoService'
 import ReferentialDataService from '../../services/sentence-plan/referentialDataService'
 import locale from './locale.json'
 import { FORMS } from '../../services/formStorageService'
@@ -8,14 +7,8 @@ import { NewStep } from '../../@types/NewStepType'
 import URLs from '../URLs'
 import options from './options'
 
-const crn = 'A123456'
-
 export default class StepsController {
-  constructor(
-    private readonly stepService: StepService,
-    private readonly referentialDataService: ReferentialDataService,
-    private readonly infoService: InfoService,
-  ) {}
+  constructor(private readonly stepService: StepService) {}
 
   get = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -24,7 +17,7 @@ export default class StepsController {
       const {
         processed: { areaOfNeed, title: goal },
       } = result
-      const popData = await this.infoService.getPopData(crn)
+      const popData = await req.services.sessionService.getSubjectDetails()
       res.render('pages/create-step', {
         locale: locale.en,
         data: {
