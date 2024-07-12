@@ -24,7 +24,12 @@ export default defineConfig({
     specPattern: 'integration_tests/e2e/**/*.{cy,spec}.{js,jsx,ts,tsx}',
     supportFile: 'integration_tests/support/index.ts',
     env: {
-      OASTUB_URL: 'http://localhost:7072/',
+      CLIENT_ID: 'sentence-plan-api-client',
+      CLIENT_SECRET: 'sentence-plan-api-client',
+      HMPPS_AUTH_URL: 'http://localhost:9091',
+      ARNS_HANDOVER_URL: 'http://localhost:7070',
+      ARNS_HANDOVER_CLIENT_ID: 'sentence-plan',
+      SP_API_URL: 'http://localhost:8080',
     },
   },
 })
