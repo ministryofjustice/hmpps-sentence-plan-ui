@@ -17,6 +17,6 @@ describe('Create a new Goal', () => {
     cy.get('#actor').click()
     cy.get('#actor-2').click()
     cy.get('button').contains('Save and continue').click()
-    cy.url().should('include', '/steps/create')
+    cy.url().should('include', '/summary')
   })
 })
