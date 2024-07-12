@@ -1,4 +1,5 @@
-import accessibleAutocomplete from './accessible-autocomplete.min'
+import accessibleAutocomplete from 'accessible-autocomplete/dist/accessible-autocomplete.min'
+
 const ops = {
   steps: async () => {
     removeStaticInput(document.querySelector('#step-name'))
@@ -29,6 +30,7 @@ function addAutoComplete(id, source) {
     element: document.querySelector('#my-autocomplete-container'),
     id,
     source,
+    minLength: 3,
   })
 }
 window.addEventListener('DOMContentLoaded', async () => {

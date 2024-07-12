@@ -1,8 +1,8 @@
 {
   "en": {
-    "title": "Create a goal with {POP_NAME}",
+    "title": "Add steps to {POP_NAME}'s goal",
     "section": "{AREA_OF_NEED} goals",
- 
+
     "stepsSection": {
       "label": "What goal is {POP_NAME} trying to achieve?",
       "hint": "Select one option",

@@ -6,7 +6,7 @@ import type { ApplicationInfo } from '../applicationInfo'
 
 const healthCheckGauge = new promClient.Gauge({
   name: 'upstream_healthcheck',
-  help: 'health of an upstream dependency - 1 = healthy, 0 = not healthy',
+  help: 'health of an upstream dependency: 1 = healthy, 0 = not healthy',
   labelNames: ['service'],
 })
 

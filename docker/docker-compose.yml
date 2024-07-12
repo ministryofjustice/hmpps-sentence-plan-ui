@@ -61,7 +61,7 @@ services:
   oastub:
     image: quay.io/hmpps/hmpps-assess-risks-and-needs-oastub-ui:latest
     ports:
-      - "7072:3000"
+      - "7072:3005"
     environment:
       ENVIRONMENT_NAME: DEV
       INGRESS_URL: http://localhost:3000
@@ -78,6 +78,7 @@ services:
       HMPPS_ARNS_HANDOVER_URL: http://arns-handover:7070
       SBNA_API_URL: false
       SP_API_URL: http://api:8080
+      PORT: 3005
 
 
   api:
