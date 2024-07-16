@@ -64,6 +64,48 @@
   }), goals)
 %}
 
+{% set customDateRadioHtml %}
+    {{ govukRadios({
+        name: "date-selection-radio",
+        fieldset: {
+            legend: {
+                text: locale.dateSelection.label | replace("{POP_NAME}", data.popData.firstName),
+                isPageHeading: false,
+                classes: "govuk-fieldset__legend--l"
+            }
+        },
+        hint: {
+            text: locale.dateSelection.hint
+        },
+        errorMessage: getFormattedError(errors, locale, 'date-selection-radio'),
+        value: data.form['date-selection-radio'],
+        items: [
+            {
+                value: data.dateOptionsDate[0] | formatISODate,
+                text: locale.dateSelection.options.threeMonths | replace("{3_MONTHS_DATE}", (data.dateOptionsDate[0] | formatMonthYear))
+            },
+            {
+                value: data.dateOptionsDate[1] | formatISODate,
+                text: locale.dateSelection.options.sixMonths | replace("{6_MONTHS_DATE}", (data.dateOptionsDate[1] | formatMonthYear))
+            },
+            {
+                value: data.dateOptionsDate[2] | formatISODate,
+                text: locale.dateSelection.options.twelveMonths | replace("{12_MONTHS_DATE}", (data.dateOptionsDate[2] | formatMonthYear))
+            },
+            {
+                divider: "or"
+            },
+            {
+                value: "custom",
+                text: locale.dateSelection.customRadioOptionText,
+                conditional: {
+                    html: customDateHtml
+                }
+            }
+        ]
+    }) }}
+{% endset -%}
+
 {% block content %}
     <div class="govuk-width-container">
         <a href="#" class="govuk-back-link">Back</a>
@@ -129,7 +171,10 @@
                             items: [
                                 {
                                   value: "yes",
-                                  text: "Yes"
+                                  text: "Yes",
+                                  conditional: {
+                                      html: customDateRadioHtml
+                                  }
                                 },
                                 {
                                   value: "no",
@@ -137,47 +182,6 @@
                                 }
                               ]
                         }) }}
-
-                        {{ govukRadios({
-                            name: "date-selection-radio",
-                            fieldset: {
-                                legend: {
-                                    text: locale.dateSelection.label | replace("{POP_NAME}", data.popData.firstName),
-                                    isPageHeading: false,
-                                    classes: "govuk-fieldset__legend--l"
-                                }
-                            },
-                            hint: {
-                                text: locale.dateSelection.hint
-                            },
-                            errorMessage: getFormattedError(errors, locale, 'date-selection-radio'),
-                            value: data.form['date-selection-radio'],
-                            items: [
-                                {
-                                    value: data.dateOptionsDate[0] | formatISODate,
-                                    text: locale.dateSelection.options.threeMonths | replace("{3_MONTHS_DATE}", (data.dateOptionsDate[0] | formatMonthYear))
-                                },
-                                {
-                                    value: data.dateOptionsDate[1] | formatISODate,
-                                    text: locale.dateSelection.options.sixMonths | replace("{6_MONTHS_DATE}", (data.dateOptionsDate[1] | formatMonthYear))
-                                },
-                                {
-                                    value: data.dateOptionsDate[2] | formatISODate,
-                                    text: locale.dateSelection.options.twelveMonths | replace("{12_MONTHS_DATE}", (data.dateOptionsDate[2] | formatMonthYear))
-                                },
-                                {
-                                    divider: "or"
-                                },
-                                {
-                                    value: "custom",
-                                    text: locale.dateSelection.customRadioOptionText,
-                                    conditional: {
-                                        html: customDateHtml
-                                    }
-                                }
-                            ]
-                        }) }}
-
 
                         <div class="govuk-button-group">
                             {{ govukButton({
