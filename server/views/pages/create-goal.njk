@@ -71,7 +71,7 @@
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-two-thirds">
 
-                    <span class="govuk-caption-xl">{{ data.referenceData.name }}</span>
+                    <span class="govuk-caption-xl">{{ data.displayAreaOfNeed }}</span>
                     <h1 class="govuk-heading-xl">{{ locale.title | replace("{POP_NAME}", data.popData.firstName) }}</h1>
 
                     <form id="create-goal-form" method="POST">
@@ -133,11 +133,11 @@
                                 },
                                 {
                                   value: "no",
-                                  text: "No"
+                                  text: "No, it is a future goal"
                                 }
                               ]
                         }) }}
-<div id="customDate">
+
                         {{ govukRadios({
                             name: "date-selection-radio",
                             fieldset: {
@@ -177,31 +177,19 @@
                                 }
                             ]
                         }) }}
-    </div>
-    <div id="nothing">
-    <p>
-        This is some text</p>
-    </div>
 
-
-<input type="radio" name="navbar_menu_store" id="input_description" class="radio_item_menu">
-<label for="input_description" class="label_item_menu">Description</label>
-<br>
-<input type="radio" name="navbar_menu_store" id="input_shipping" class="radio_item_menu">
-<label for="input_shipping" class="label_item_menu">Shipping</label>
-<div id="contentDescription">
-  <p>This is some text</p>
-</div>
-
-<div id="contentShipping">
-  <p>This is some other text</p>
-</div>
 
                         <div class="govuk-button-group">
                             {{ govukButton({
-                                text: locale.saveButtonText,
+                                text: locale.addStepsButton,
                                 name: "action",
-                                value: "continue"
+                                value: "addStep"
+                            }) }}
+                            {{ govukButton({
+                                name: "action",
+                                value: "saveWithoutSteps",
+                                text: "Save without steps",
+                                classes: "govuk-button--secondary"
                             }) }}
                         </div>
                     </form>

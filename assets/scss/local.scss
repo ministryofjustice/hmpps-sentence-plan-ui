@@ -41,23 +41,3 @@ min-height: 1em;
 }
 
 .capital:first-letter {text-transform: uppercase}
-
-#start-working-goal-radio:checked~#customDate,
-#start-working-goal-radio-2:checked~#nothing {
-  display: block;
-}
-
-#customDate,
-#nothing {
-  display: none;
-}
-
-#input_description:checked~#contentDescription,
-#input_shipping:checked~#contentShipping {
-  display: block;
-}
-
-#contentDescription,
-#contentShipping {
-  display: none;
-}

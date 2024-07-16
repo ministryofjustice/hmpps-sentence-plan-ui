@@ -28,6 +28,8 @@
       }
     },
     "saveButtonText": "Save and continue",
+    "addStepsButton": "Add steps",
+    "saveWithoutStepsButton": "Save without steps",
     "motivationsToChangeWidget": {
       "title": "Motivation to make changes in this area",
       "motivationLevel": "wants ot make changes and knows how.",

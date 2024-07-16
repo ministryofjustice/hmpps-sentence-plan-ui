@@ -10,6 +10,9 @@ export default class CreateGoalPostModel {
 
   @ValidateIf(o => o['other-area-of-need-radio'] === 'yes')
   @IsNotEmpty()
+  @Transform(({ obj }) => {
+    return typeof obj['other-area-of-need'] === 'string' ? [obj['other-area-of-need']] : obj['other-area-of-need']
+  })
   'other-area-of-need': string[]
 
   @IsNotEmpty()

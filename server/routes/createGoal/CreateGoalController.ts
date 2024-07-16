@@ -28,7 +28,8 @@ export default class CreateGoalController {
       processed: null,
       raw: { uuid },
     })
-    return res.redirect(URLs.CREATE_STEP)
+    const redirectUrl: string = req.body.action === 'addStep' ? URLs.CREATE_STEP : URLs.SUMMARY
+    return res.redirect(redirectUrl)
   }
 
   private render = async (req: Request, res: Response, next: NextFunction) => {
@@ -41,6 +42,9 @@ export default class CreateGoalController {
         .getAreasOfNeed()
         .filter(aon => aon.url !== areaOfNeed)
         .map(aon => ({ text: aon.name, value: aon.id }))
+      const displayAreaOfNeed = this.referentialDataService
+        .getAreasOfNeed()
+        .filter(aon => aon.url === areaOfNeed)[0].name
       const dateOptionsDate = this.getAchieveDateOptions(new Date())
       const referenceData = this.referentialDataService.getGoals(areaOfNeed)
       const [popData, noteData] = await Promise.all([
@@ -50,6 +54,7 @@ export default class CreateGoalController {
       return res.render('pages/create-goal', {
         locale: locale.en,
         data: {
+          displayAreaOfNeed,
           areaOfNeed,
           popData,
           referenceData,
@@ -66,16 +71,17 @@ export default class CreateGoalController {
   }
 
   private processGoalData(body: any) {
-    const title = body['area-of-need']
-    // body['goal-selection-radio'] === 'custom' ? body['goal-selection-custom'] : body['goal-selection-radio']
+    const title = body['input-autocomplete']
     const targetDate =
       body['date-selection-radio'] === 'custom' ? body['date-selection-custom'] : body['date-selection-radio']
     const areaOfNeed = body['area-of-need']
+    const otherAreaOfNeed = body['other-area-of-need-radio'] === 'yes' ? body['other-area-of-need'] : undefined
 
     return {
       title,
       areaOfNeed,
       targetDate,
+      otherAreaOfNeed,
     }
   }
 
