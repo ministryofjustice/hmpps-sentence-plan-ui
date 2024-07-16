@@ -37,8 +37,17 @@
       "other-area-of-need-radio": {
         "isNotEmpty": "You need to select an area of need"
       },
+      "input-autocomplete": {
+        "isNotEmpty": "You need to select one of the goal"
+      },
+      "other-area-of-need": {
+        "isNotEmpty": "You need to select one or more area of need"
+      },
       "goal-selection-custom": {
         "isNotEmpty": "You need to enter a goal"
+      },
+      "start-working-goal-radio": {
+        "isNotEmpty": "You need to select when start working on this goal"
       },
       "date-selection-radio": {
         "isNotEmpty": "You need to select a timeframe"

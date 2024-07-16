@@ -15,7 +15,7 @@
 
 {% set areasOfNeedHtml %}
     {{ govukCheckboxes({
-      name: "otherAreaOfNeed",
+      name: "other-area-of-need",
       hint: {
         text: "Select all that apply."
       },
@@ -37,8 +37,8 @@
 
 {% set customDateHtml %}
     {{ hmppsDatePicker({
-        id: "datePicker",
-        name: "datePicker",
+        id: "date-selection-custom",
+        name: "date-selection-custom",
         classes: "govuk-input--width-10",
         hint: { text: "For example, 31/3/2023." },
         label: { text: "Select a date", classes: "govuk-fieldset__legend--s" }
@@ -129,10 +129,7 @@
                             items: [
                                 {
                                   value: "yes",
-                                  text: "Yes",
-                                  conditional: {
-                                      html: areasOfNeedHtml
-                                  }
+                                  text: "Yes"
                                 },
                                 {
                                   value: "no",
@@ -140,7 +137,7 @@
                                 }
                               ]
                         }) }}
-
+<div id="customDate">
                         {{ govukRadios({
                             name: "date-selection-radio",
                             fieldset: {
@@ -180,6 +177,25 @@
                                 }
                             ]
                         }) }}
+    </div>
+    <div id="nothing">
+    <p>
+        This is some text</p>
+    </div>
+
+
+<input type="radio" name="navbar_menu_store" id="input_description" class="radio_item_menu">
+<label for="input_description" class="label_item_menu">Description</label>
+<br>
+<input type="radio" name="navbar_menu_store" id="input_shipping" class="radio_item_menu">
+<label for="input_shipping" class="label_item_menu">Shipping</label>
+<div id="contentDescription">
+  <p>This is some text</p>
+</div>
+
+<div id="contentShipping">
+  <p>This is some other text</p>
+</div>
 
                         <div class="govuk-button-group">
                             {{ govukButton({
