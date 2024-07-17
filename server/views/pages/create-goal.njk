@@ -136,7 +136,7 @@
                     <form id="create-goal-form" method="POST">
                         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
                         <input type="hidden" id="_areaOfNeed" value="{{ data.areaOfNeed }}">
-                        <input type="hidden" name="area-of-need" value="{{ data.referenceData.name }}">
+                        <input type="hidden" name="area-of-need" value="{{ data.displayAreaOfNeed }}">
                         <input type="hidden" id="page" value="goals">
                         <div class="govuk-form-group">
                             <h1 class="govuk-label-wrapper">

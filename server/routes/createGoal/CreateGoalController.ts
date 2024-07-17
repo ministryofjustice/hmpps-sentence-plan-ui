@@ -47,7 +47,7 @@ export default class CreateGoalController {
       const selectedOtherAreaOfNeed: string[] = req.body['other-area-of-need'] || []
       const otherAreaOfNeed = allAreaOfNeed
         .filter(aon => aon.url !== areaOfNeed)
-        .map(({ id, name }) => ({ text: name, value: id, checked: selectedOtherAreaOfNeed.includes(id.toString()) }))
+        .map(({ name }) => ({ text: name, value: name, checked: selectedOtherAreaOfNeed.includes(name) }))
       const displayAreaOfNeed = this.referentialDataService
         .getAreasOfNeed()
         .filter(aon => aon.url === areaOfNeed)[0].name
