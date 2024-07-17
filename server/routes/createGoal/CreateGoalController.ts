@@ -38,14 +38,21 @@ export default class CreateGoalController {
     const { errors } = req
 
     try {
-      const otherAreaOfNeed = this.referentialDataService
-        .getAreasOfNeed()
+      const allAreaOfNeed = this.referentialDataService.getAreasOfNeed()
+      const navigationLinks = allAreaOfNeed.map(aon => ({
+        text: aon.name,
+        href: aon.url,
+        active: aon.url === areaOfNeed,
+      }))
+      const selectedOtherAreaOfNeed: string[] = req.body['other-area-of-need'] || []
+      const otherAreaOfNeed = allAreaOfNeed
         .filter(aon => aon.url !== areaOfNeed)
-        .map(aon => ({ text: aon.name, value: aon.id }))
+        .map(({ id, name }) => ({ text: name, value: id, checked: selectedOtherAreaOfNeed.includes(id.toString()) }))
       const displayAreaOfNeed = this.referentialDataService
         .getAreasOfNeed()
         .filter(aon => aon.url === areaOfNeed)[0].name
       const dateOptionsDate = this.getAchieveDateOptions(new Date())
+      dateOptionsDate.push(new Date(new Date().setDate(new Date().getDate() + 7)))
       const referenceData = this.referentialDataService.getGoals(areaOfNeed)
       const [popData, noteData] = await Promise.all([
         this.infoService.getPopData(crn),
@@ -54,6 +61,7 @@ export default class CreateGoalController {
       return res.render('pages/create-goal', {
         locale: locale.en,
         data: {
+          navigationLinks,
           displayAreaOfNeed,
           areaOfNeed,
           popData,
@@ -70,22 +78,26 @@ export default class CreateGoalController {
     }
   }
 
+  private displayableDateFormat(date: Date): string {
+    return new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'long', year: 'numeric' }).format(date)
+  }
+
   private processGoalData(body: any) {
     const title = body['input-autocomplete']
     const targetDate =
       body['date-selection-radio'] === 'custom' ? body['date-selection-custom'] : body['date-selection-radio']
     const areaOfNeed = body['area-of-need']
-    const otherAreaOfNeed = body['other-area-of-need-radio'] === 'yes' ? body['other-area-of-need'] : undefined
+    const relatedAreasOfNeed = body['other-area-of-need-radio'] === 'yes' ? body['other-area-of-need'] : undefined
 
     return {
       title,
       areaOfNeed,
       targetDate,
-      otherAreaOfNeed,
+      relatedAreasOfNeed,
     }
   }
 
-  private getAchieveDateOptions = (date: Date, dateOptionsInMonths = [3, 6, 12]) => {
+  private getAchieveDateOptions = (date: Date, dateOptionsInMonths = [3, 6, 12, 24]) => {
     return dateOptionsInMonths.map(option => {
       const achieveDate = new Date(date)
       achieveDate.setMonth(date.getMonth() + option)

@@ -18,6 +18,10 @@ export default class CreateGoalPostModel {
   @IsNotEmpty()
   'start-working-goal-radio': string
 
+  @ValidateIf(o => o['start-working-goal-radio'] === 'yes')
+  @IsNotEmpty()
+  'date-selection-radio': string
+
   @ValidateIf(o => o['date-selection-radio'] === 'custom')
   @MinDate(new Date())
   @IsDate()
