@@ -5,6 +5,7 @@ import { FORMS } from '../../services/formStorageService'
 import { NewStep } from '../../@types/NewStepType'
 import URLs from '../URLs'
 import options from './options'
+import { toKebabCase } from '../../utils/utils'
 
 export default class StepsController {
   constructor(private readonly stepService: StepService) {}
@@ -21,7 +22,7 @@ export default class StepsController {
         locale: locale.en,
         data: {
           popData,
-          areaOfNeed,
+          areaOfNeed: toKebabCase(areaOfNeed),
           goal,
           form: req.body,
         },

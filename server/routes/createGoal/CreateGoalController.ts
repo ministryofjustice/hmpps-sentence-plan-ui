@@ -55,7 +55,7 @@ export default class CreateGoalController {
       dateOptionsDate.push(new Date(new Date().setDate(new Date().getDate() + 7)))
       const referenceData = this.referentialDataService.getGoals(areaOfNeed)
       const [popData, noteData] = await Promise.all([
-        this.infoService.getPopData(crn),
+        req.services.sessionService.getSubjectDetails(),
         this.noteService.getNoteDataByAreaOfNeed(areaOfNeed, crn),
       ])
       return res.render('pages/create-goal', {

@@ -16,11 +16,10 @@ export default class ConfirmGoalController {
   ) {}
 
   render = async (req: Request, res: Response, next: NextFunction) => {
-    const crn = 'ABC123XYZ' // TODO: This is likely to be a session value, get from there
     const { errors } = req
 
     try {
-      const popData = await this.infoService.getPopData(crn)
+      const popData = await req.services.sessionService.getSubjectDetails()
       const goalData = req.services.formStorageService.getFormData(FORMS.CREATE_GOAL)
       const stepData = req.services.formStorageService.getFormData(FORMS.CREATE_STEPS)
 

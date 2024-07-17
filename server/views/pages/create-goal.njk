@@ -73,7 +73,7 @@
             legend: {
                 text: locale.dateSelection.label | replace("{POP_NAME}", data.popData.firstName),
                 isPageHeading: false,
-                classes: "govuk-fieldset__legend--l"
+                classes: "govuk-fieldset__legend--m"
             }
         },
         hint: {
@@ -131,7 +131,7 @@
                 <div class="govuk-grid-column-two-thirds">
 
                     <span class="govuk-caption-l">{{ data.displayAreaOfNeed }}</span>
-                    <h1 class="govuk-heading-l">{{ locale.title | replace("{POP_NAME}", data.popData.firstName) }}</h1>
+                    <h1 class="govuk-heading-l">{{ locale.title | replace("{POP_NAME}", data.popData.givenName) }}</h1>
 
                     <form id="create-goal-form" method="POST">
                         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
