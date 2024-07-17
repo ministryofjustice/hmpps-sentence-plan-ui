@@ -35,7 +35,7 @@
             id: "goal-agreement-note",
             name: "goal-agreement-note",
             label: {
-                text: locale.goalAgreementNote.label | replace("{POP_NAME}", data.popData.firstName)
+                text: locale.goalAgreementNote.label | replace("{POP_NAME}", data.popData.givenName)
             },
             errorMessage: getFormattedError(errors, locale, "goal-agreement-note"),
             value: data.form["goal-agreement-note"]
@@ -49,8 +49,8 @@
         <main class="govuk-main-wrapper">
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-two-thirds">
-                    <h1 class="govuk-heading-xl">{{ locale.title | replace("{POP_NAME}", data.popData.firstName) }}</h1>
-                    <p class="govuk-body">{{ locale.goalPurpose | replace("{POP_NAME}", data.popData.firstName) }}</p>
+                    <h1 class="govuk-heading-xl">{{ locale.title | replace("{POP_NAME}", data.popData.givenName) }}</h1>
+                    <p class="govuk-body">{{ locale.goalPurpose | replace("{POP_NAME}", data.popData.givenName) }}</p>
 
                     {{ govukSummaryList({
                         rows: [
@@ -122,13 +122,13 @@
                             name: "goal-agreement",
                             fieldset: {
                                 legend: {
-                                    text: locale.goalAgreement.label | replace("{POP_NAME}", data.popData.firstName),
+                                    text: locale.goalAgreement.label | replace("{POP_NAME}", data.popData.givenName),
                                     isPageHeading: false,
                                     classes: "govuk-fieldset__legend--l"
                                 }
                             },
                             hint: {
-                                text: locale.goalAgreement.hint | replace("{POP_NAME}", data.popData.firstName)
+                                text: locale.goalAgreement.hint | replace("{POP_NAME}", data.popData.givenName)
                             },
                             errorMessage: getFormattedError(errors, locale, 'goal-agreement'),
                             value: data.form["goal-agreement"],

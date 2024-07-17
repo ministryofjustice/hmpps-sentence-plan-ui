@@ -71,7 +71,7 @@
         name: "date-selection-radio",
         fieldset: {
             legend: {
-                text: locale.dateSelection.label | replace("{POP_NAME}", data.popData.firstName),
+                text: locale.dateSelection.label | replace("{POP_NAME}", data.popData.givenName),
                 isPageHeading: false,
                 classes: "govuk-fieldset__legend--m"
             }
@@ -101,7 +101,7 @@
             },
             {
                 value: data.dateOptionsDate[3] | formatISODate,
-                text: locale.dateSelection.options.twentyFourMonths | replace("{24_MONTHS_DATE}", (data.dateOptionsDate[3] | formatSimpleDate)) | replace("{POP_NAME}", data.popData.firstName)
+                text: locale.dateSelection.options.twentyFourMonths | replace("{24_MONTHS_DATE}", (data.dateOptionsDate[3] | formatSimpleDate)) | replace("{POP_NAME}", data.popData.givenName)
             },
             {
                 divider: "or"
@@ -180,7 +180,7 @@
                             name: "start-working-goal-radio",
                             fieldset: {
                                 legend: {
-                                    text: locale.startWorking.label | replace("{POP_NAME}", data.popData.firstName),
+                                    text: locale.startWorking.label | replace("{POP_NAME}", data.popData.givenName),
                                     isPageHeading: false,
                                     classes: "govuk-fieldset__legend--m"
                                 }
