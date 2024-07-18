@@ -16,7 +16,7 @@
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-two-thirds">
                     <span class="govuk-caption-xl capital">{{ locale.section | replace("{AREA_OF_NEED}", data.areaOfNeed) }}</span>
-                    <h1 class="govuk-heading-xl">{{ locale.title | replace("{POP_NAME}", data.popData.firstName) }}</h1>
+                    <h1 class="govuk-heading-xl">{{ locale.title | replace("{POP_NAME}", data.popData.givenName) }}</h1>
                     <div class="govuk-inset-text">
                         {# todo: Probably needs to be changed to be an auto-generated array of HTML for notes #}
                         <h2 class="govuk-label--m govuk-!-margin-bottom-0">
@@ -25,7 +25,7 @@
                         </h2>
                     </div>
 
-                    <form id="create-goal-form" method="POST">
+                    <form id="create-step-form" method="POST">
                         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
                         <input type="hidden" id="_areaOfNeed" value="{{ data.areaOfNeed }}">
                         <input type="hidden" id="page" value="steps">

@@ -12,6 +12,9 @@
       "customRadioOptionText": "Something else",
       "customOptionLabel": "Enter a custom goal"
     },
+    "startWorking": {
+      "label": "Can {POP_NAME} start working on this goal now?"
+    },
     "dateSelection": {
       "label": "When should {POP_NAME} achieve this?",
       "hint": "Select one option",
@@ -19,23 +22,31 @@
       "customOptionLabel": "Enter a custom date",
       "customOptionHint": "For example, 27 3 2007",
       "options": {
+        "nextMeeting": "At our next meeting (by {NEXT_MEETING})",
         "threeMonths": "In 3 months (by {3_MONTHS_DATE})",
         "sixMonths": "In 6 months (by {6_MONTHS_DATE})",
-        "twelveMonths": "In 12 months (by {12_MONTHS_DATE})"
+        "twelveMonths": "In 12 months (by {12_MONTHS_DATE})",
+        "twentyFourMonths": "At the end of {POP_NAME}'s sentence (by {24_MONTHS_DATE})"
       }
     },
     "saveButtonText": "Save and continue",
-    "motivationsToChangeWidget": {
-      "title": "Motivation to make changes in this area",
-      "motivationLevel": "wants ot make changes and knows how.",
-      "lastUpdated": "Last updated: {MOTIVATION_UPDATE_DATE}"
-    },
+    "addStepsButton": "Add steps",
+    "saveWithoutStepsButton": "Save without steps",
     "errors": {
-      "goal-selection-radio": {
-        "isNotEmpty": "You need to select a goal"
+      "other-area-of-need-radio": {
+        "isNotEmpty": "You need to select an area of need"
+      },
+      "input-autocomplete": {
+        "isNotEmpty": "You need to select one of the goal"
+      },
+      "other-area-of-need": {
+        "isNotEmpty": "You need to select one or more area of need"
       },
       "goal-selection-custom": {
         "isNotEmpty": "You need to enter a goal"
+      },
+      "start-working-goal-radio": {
+        "isNotEmpty": "You need to select when start working on this goal"
       },
       "date-selection-radio": {
         "isNotEmpty": "You need to select a timeframe"
