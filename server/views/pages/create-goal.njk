@@ -9,7 +9,13 @@
 {% from "moj/components/side-navigation/macro.njk" import mojSideNavigation %}
 {% from "../partials/summary-card.njk" import summaryCard %}
 
-{% set pageTitle = applicationName + " - Create a goal with "+ data.popData.givenName %}
+{% set pageTitle %}
+    {% if errors %}
+        Error: applicationName + " - Create a goal with "+ data.popData.givenName
+    {% else %}
+        applicationName + " - Create a goal with "+ data.popData.givenName
+    {% endif %}
+{% endset -%}
 
 {% set mainClasses = "app-container govuk-body" %}
 
@@ -203,7 +209,7 @@
                                     classes: "govuk-fieldset__legend--m"
                                 }
                             },
-                            errorMessage: getFormattedError(errors, locale, 'start-working-goal-radio'),
+                            errorMessage: { text: locale.errors['start-working-goal-radio'].isNotEmpty | replace("{POP_NAME}", data.popData.givenName) },
                             items: [
                                 {
                                   value: "yes",
