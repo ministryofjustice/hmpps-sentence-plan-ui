@@ -11,9 +11,9 @@
 
 {% set pageTitle %}
     {% if errors %}
-        Error: applicationName + " - Create a goal with "+ data.popData.givenName
+        Error: {{ applicationName }} - Create a goal with {{ data.popData.givenName }}
     {% else %}
-        applicationName + " - Create a goal with "+ data.popData.givenName
+       {{ applicationName }} - Create a goal with {{ data.popData.givenName }}
     {% endif %}
 {% endset -%}
 
