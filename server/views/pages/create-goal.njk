@@ -42,6 +42,7 @@
     {{ hmppsDatePicker({
         id: "date-selection-custom",
         name: "date-selection-custom",
+        errorMessage: getFormattedError(errors, locale, 'date-selection-custom'),
         classes: "govuk-input--width-10",
         hint: { text: "For example, 31/3/2023." },
         label: { text: "Select a date", classes: "govuk-fieldset__legend--s" }

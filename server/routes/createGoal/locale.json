@@ -53,7 +53,7 @@
       },
       "date-selection-custom": {
         "isDate": "Select a date",
-        "minDate": "Date must be today or in the future"
+        "isNotEmpty": "Select a date"
       }
     }
   }
