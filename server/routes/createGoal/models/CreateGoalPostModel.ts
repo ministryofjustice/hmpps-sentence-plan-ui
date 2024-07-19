@@ -1,4 +1,4 @@
-import { IsDate, IsNotEmpty, MinDate, ValidateIf } from 'class-validator'
+import { IsNotEmpty, MinDate, ValidateIf } from 'class-validator'
 import { Expose, Transform } from 'class-transformer'
 
 export default class CreateGoalPostModel {
