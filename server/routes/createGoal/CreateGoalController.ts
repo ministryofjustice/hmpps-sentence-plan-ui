@@ -36,7 +36,12 @@ export default class CreateGoalController {
     const crn = 'ABC123XYZ' // TODO: This is likely to be a session value, get from there
     const { areaOfNeed } = req.params
     const { errors } = req
-
+    const errorKeys: string[] = []
+    if (errors) {
+      Object.keys(errors.body).forEach(key =>
+        key === 'input-autocomplete' ? errorKeys.push('goal-name') : errorKeys.push(key),
+      )
+    }
     try {
       const allAreaOfNeed = this.referentialDataService.getAreasOfNeed()
       const navigationLinks = allAreaOfNeed.map(aon => ({
@@ -58,6 +63,9 @@ export default class CreateGoalController {
         req.services.sessionService.getSubjectDetails(),
         this.noteService.getNoteDataByAreaOfNeed(areaOfNeed, crn),
       ])
+      const inputAutocompleteDivClass = errors?.body['input-autocomplete']
+        ? 'govuk-form-group govuk-form-group--error'
+        : 'govuk-form-group'
       return res.render('pages/create-goal', {
         locale: locale.en,
         data: {
@@ -70,8 +78,11 @@ export default class CreateGoalController {
           dateOptionsDate,
           otherAreaOfNeed,
           form: req.body,
+          inputAutocompleteDivClass,
         },
         errors,
+        errorKeys,
+        inputAutocompleteDivClass,
       })
     } catch (e) {
       return next(e)

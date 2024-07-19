@@ -4,6 +4,7 @@
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "hmpps/components/date-picker/macro.njk" import hmppsDatePicker %}
 {% from "moj/components/side-navigation/macro.njk" import mojSideNavigation %}
 {% from "../partials/summary-card.njk" import summaryCard %}
@@ -47,14 +48,21 @@
     }) }}
 {% endset -%}
 
-{% set goals = [] %}
+{% set errorSummary = [] %}
+{% for key in errorKeys %}
+    {% set errorSummary = (errorSummary.push({
+            text: locale.errors[key].isNotEmpty | replace("{POP_NAME}", data.popData.givenName),
+            href: "#" + key
+    }), errorSummary) %}
+{% endfor %}
 
+{% set goals = [] %}
 {% for goal in data.referenceData.goals %}
     {% set goals = (goals.push({
             id: "goal-selection-radio-" + goal.id,
             value: goal,
             text: goal
-        }), goals) %}
+    }), goals) %}
 {% endfor %}
 {% set goals = (goals.push({divider: "or"}), goals) %}
 {% set goals = (goals.push({
@@ -129,22 +137,31 @@
                     }) }}
                 </div>
                 <div class="govuk-grid-column-two-thirds">
-
+                {% if errors %}
+                    {{ govukErrorSummary({
+                      titleText: "There is a problem",
+                      errorList: errorSummary
+                    }) }}
+                {% endif %}
                     <span class="govuk-caption-l">{{ data.displayAreaOfNeed }}</span>
                     <h1 class="govuk-heading-l">{{ locale.title | replace("{POP_NAME}", data.popData.givenName) }}</h1>
-
                     <form id="create-goal-form" method="POST">
                         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
                         <input type="hidden" id="_areaOfNeed" value="{{ data.areaOfNeed }}">
                         <input type="hidden" name="area-of-need" value="{{ data.displayAreaOfNeed }}">
                         <input type="hidden" id="page" value="goals">
-                        <div class="govuk-form-group">
+                        <div class="{{ inputAutocompleteDivClass }}">
                             <h1 class="govuk-label-wrapper">
                                 <label class='govuk-label--m' for="step-name">What goal should {{ data.popData.givenName }} try to achieve?</label>
                             </h1>
                             <div id="goalName-hint" class="govuk-hint">
                                 Search for a suggested goal or enter your own. Add one goal at a time.
                             </div>
+                            {% if inputAutocompleteDivClass == 'govuk-form-group govuk-form-group--error' %}
+                                <p id="input-autocomplete-error" class="govuk-error-message">
+                                  <span class="govuk-visually-hidden">Error:</span> {{ locale.errors["goal-name"].isNotEmpty | replace("{POP_NAME}", data.popData.givenName) }}
+                                </p>
+                            {% endif %}
                             <input class="govuk-input" id="goal-name" name="goalName" type="text">
                             <div id="my-autocomplete-container"></div>
                         </div>

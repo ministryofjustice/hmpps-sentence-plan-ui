@@ -36,8 +36,8 @@
       "other-area-of-need-radio": {
         "isNotEmpty": "You need to select an area of need"
       },
-      "input-autocomplete": {
-        "isNotEmpty": "You need to select one of the goal"
+      "goal-name": {
+        "isNotEmpty": "Select or enter what goal {POP_NAME} should try to achieve"
       },
       "other-area-of-need": {
         "isNotEmpty": "You need to select one or more area of need"
