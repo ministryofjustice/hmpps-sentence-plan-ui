@@ -77,7 +77,6 @@ export default class CreateGoalController {
           noteData,
           dateOptionsDate,
           otherAreaOfNeed,
-          today: new Date(),
           form: req.body,
           inputAutocompleteDivClass,
         },
