@@ -1,4 +1,4 @@
-import { IsNotEmpty, MinDate, ValidateIf } from 'class-validator'
+import { IsNotEmpty, ValidateIf } from 'class-validator'
 import { Expose, Transform } from 'class-transformer'
 
 export default class CreateGoalPostModel {
@@ -23,7 +23,6 @@ export default class CreateGoalPostModel {
   'date-selection-radio': string
 
   @ValidateIf(o => o['date-selection-radio'] === 'custom')
-  @MinDate(new Date())
   @IsNotEmpty()
   @Expose()
   @Transform(({ obj }) => {

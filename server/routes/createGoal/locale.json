@@ -37,7 +37,7 @@
         "isNotEmpty": "You need to select an area of need"
       },
       "goal-name": {
-        "isNotEmpty": "Select or enter what goal {POP_NAME} should try to achieve"
+        "isNotEmpty": "Select or enter what goal they should try to achieve"
       },
       "other-area-of-need": {
         "isNotEmpty": "Select yes if this goal is related to any other area of need"
@@ -46,10 +46,10 @@
         "isNotEmpty": "Select all related areas"
       },
       "start-working-goal-radio": {
-        "isNotEmpty": "Select yes if {POP_NAME} can start working on this goal now"
+        "isNotEmpty": "Select yes if they can start working on this goal now"
       },
       "date-selection-radio": {
-        "isNotEmpty": "Select when {POP_NAME} should aim to achieve this goal"
+        "isNotEmpty": "Select when they should aim to achieve this goal"
       },
       "date-selection-custom": {
         "isNotEmpty": "Select a date"

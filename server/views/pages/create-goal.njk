@@ -58,7 +58,7 @@
 {% set errorSummary = [] %}
 {% for key in errorKeys %}
     {% set errorSummary = (errorSummary.push({
-            text: locale.errors[key].isNotEmpty | replace("{POP_NAME}", data.popData.givenName),
+            text: locale.errors[key].isNotEmpty,
             href: "#" + key
     }), errorSummary) %}
 {% endfor %}
@@ -166,7 +166,7 @@
                             </div>
                             {% if inputAutocompleteDivClass == 'govuk-form-group govuk-form-group--error' %}
                                 <p id="input-autocomplete-error" class="govuk-error-message">
-                                  <span class="govuk-visually-hidden">Error:</span> {{ locale.errors["goal-name"].isNotEmpty | replace("{POP_NAME}", data.popData.givenName) }}
+                                  <span class="govuk-visually-hidden">Error:</span> {{ locale.errors["goal-name"].isNotEmpty }}
                                 </p>
                             {% endif %}
                             <input class="govuk-input" id="goal-name" name="goalName" type="text">
@@ -209,7 +209,7 @@
                                     classes: "govuk-fieldset__legend--m"
                                 }
                             },
-                            errorMessage: { text: locale.errors['start-working-goal-radio'].isNotEmpty | replace("{POP_NAME}", data.popData.givenName) },
+                            errorMessage: getFormattedError(errors, locale, 'start-working-goal-radio'),
                             items: [
                                 {
                                   value: "yes",
