@@ -40,10 +40,10 @@
         "isNotEmpty": "Select or enter what goal they should try to achieve"
       },
       "other-area-of-need": {
-        "isNotEmpty": "Select yes if this goal is related to any other area of need"
+        "isNotEmpty": "Select all related areas"
       },
       "goal-selection-custom": {
-        "isNotEmpty": "Select all related areas"
+        "isNotEmpty": "Select yes if this goal is related to any other area of need"
       },
       "start-working-goal-radio": {
         "isNotEmpty": "Select yes if they can start working on this goal now"
