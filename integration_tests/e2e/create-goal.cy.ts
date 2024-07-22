@@ -33,7 +33,7 @@ describe('Create a new Goal', () => {
     cy.get('.govuk-radios').last().contains('In 6 months').click()
     cy.get('button').contains('Add steps').click()
     cy.url().should('include', '/create-goal/accommodation')
-    cy.contains('#other-area-of-need-radio-error', 'You need to select an area of need')
+    cy.contains('#other-area-of-need-radio-error', 'Select yes if this goal is related to any other area of need')
   })
 
   it('Creates a new goal without steps', () => {

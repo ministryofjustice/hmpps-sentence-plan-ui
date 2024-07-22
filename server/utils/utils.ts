@@ -51,3 +51,12 @@ export function formatDate(date: string): string {
     year: 'numeric',
   })
 }
+
+export function formatDateWithStyle(isoDate: string, style: 'short' | 'full' | 'long' | 'medium' = 'long'): string {
+  return new Date(isoDate).toLocaleDateString('en-gb', { dateStyle: style })
+}
+
+export function dateToISOFormat(date: string): string {
+  const [day, month, year] = date.split('/')
+  return [year, month, day].join('-')
+}

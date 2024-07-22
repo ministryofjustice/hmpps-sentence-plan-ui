@@ -1,13 +1,13 @@
 import accessibleAutocomplete from 'accessible-autocomplete/dist/accessible-autocomplete.min'
 
 const ops = {
-  steps: async () => {
+  steps: async autoInputVal => {
     removeStaticInput(document.querySelector('#step-name'))
-    addAutoComplete('step-name', await getSteps())
+    addAutoComplete('step-name', await getSteps(), autoInputVal)
   },
-  goals: async () => {
+  goals: async autoInputVal => {
     removeStaticInput(document.querySelector('#goal-name'))
-    addAutoComplete('goal-name', await getGoals())
+    addAutoComplete('goal-name', await getGoals(), autoInputVal)
   },
 }
 async function getSteps() {
@@ -25,15 +25,17 @@ async function getGoals() {
 function removeStaticInput(element) {
   if (element && element.parentNode) element.parentNode.removeChild(element)
 }
-function addAutoComplete(id, source) {
+function addAutoComplete(id, source, defaultValue) {
   accessibleAutocomplete({
     element: document.querySelector('#my-autocomplete-container'),
     id,
     source,
     minLength: 3,
+    defaultValue,
   })
 }
 window.addEventListener('DOMContentLoaded', async () => {
   const page = document.querySelector('#page')?.value
-  if (page && ops[page]) ops[page]()
+  const autoInputVal = page === 'goals' ? document.querySelector('#goalAutoInputVal')?.value : ''
+  if (page && ops[page]) ops[page](autoInputVal)
 })

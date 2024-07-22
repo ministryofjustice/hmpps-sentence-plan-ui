@@ -7,6 +7,7 @@ import URLs from '../URLs'
 import { FORMS } from '../../services/formStorageService'
 import GoalService from '../../services/sentence-plan/goalService'
 import { NewGoal } from '../../@types/NewGoalType'
+import { formatDateWithStyle, dateToISOFormat } from '../../utils/utils'
 
 export default class CreateGoalController {
   constructor(
@@ -36,7 +37,12 @@ export default class CreateGoalController {
     const crn = 'ABC123XYZ' // TODO: This is likely to be a session value, get from there
     const { areaOfNeed } = req.params
     const { errors } = req
-
+    const errorKeys: string[] = []
+    if (errors) {
+      Object.keys(errors.body).forEach(key =>
+        key === 'input-autocomplete' ? errorKeys.push('goal-name') : errorKeys.push(key),
+      )
+    }
     try {
       const allAreaOfNeed = this.referentialDataService.getAreasOfNeed()
       const navigationLinks = allAreaOfNeed.map(aon => ({
@@ -44,6 +50,7 @@ export default class CreateGoalController {
         href: aon.url,
         active: aon.url === areaOfNeed,
       }))
+      const today = formatDateWithStyle(new Date().toISOString(), 'short')
       const selectedOtherAreaOfNeed: string[] = req.body['other-area-of-need'] || []
       const otherAreaOfNeed = allAreaOfNeed
         .filter(aon => aon.url !== areaOfNeed)
@@ -58,6 +65,9 @@ export default class CreateGoalController {
         req.services.sessionService.getSubjectDetails(),
         this.noteService.getNoteDataByAreaOfNeed(areaOfNeed, crn),
       ])
+      const inputAutocompleteDivClass = errors?.body['input-autocomplete']
+        ? 'govuk-form-group govuk-form-group--error'
+        : 'govuk-form-group'
       return res.render('pages/create-goal', {
         locale: locale.en,
         data: {
@@ -70,22 +80,24 @@ export default class CreateGoalController {
           dateOptionsDate,
           otherAreaOfNeed,
           form: req.body,
+          inputAutocompleteDivClass,
+          today,
         },
         errors,
+        errorKeys,
+        inputAutocompleteDivClass,
       })
     } catch (e) {
       return next(e)
     }
   }
 
-  private displayableDateFormat(date: Date): string {
-    return new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'long', year: 'numeric' }).format(date)
-  }
-
   private processGoalData(body: any) {
     const title = body['input-autocomplete']
     const targetDate =
-      body['date-selection-radio'] === 'custom' ? body['date-selection-custom'] : body['date-selection-radio']
+      body['date-selection-radio'] === 'custom'
+        ? dateToISOFormat(body['date-selection-custom'])
+        : body['date-selection-radio']
     const areaOfNeed = body['area-of-need']
     const relatedAreasOfNeed = body['other-area-of-need-radio'] === 'yes' ? body['other-area-of-need'] : undefined
 
