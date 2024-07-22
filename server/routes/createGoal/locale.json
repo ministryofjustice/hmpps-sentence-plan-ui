@@ -34,16 +34,13 @@
     "saveWithoutStepsButton": "Save without steps",
     "errors": {
       "other-area-of-need-radio": {
-        "isNotEmpty": "You need to select an area of need"
+        "isNotEmpty": "Select yes if this goal is related to any other area of need"
       },
       "goal-name": {
         "isNotEmpty": "Select or enter what goal they should try to achieve"
       },
       "other-area-of-need": {
         "isNotEmpty": "Select all related areas"
-      },
-      "goal-selection-custom": {
-        "isNotEmpty": "Select yes if this goal is related to any other area of need"
       },
       "start-working-goal-radio": {
         "isNotEmpty": "Select yes if they can start working on this goal now"
