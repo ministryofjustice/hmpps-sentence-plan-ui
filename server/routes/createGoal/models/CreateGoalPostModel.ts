@@ -25,8 +25,5 @@ export default class CreateGoalPostModel {
   @ValidateIf(o => o['date-selection-radio'] === 'custom')
   @IsNotEmpty()
   @Expose()
-  @Transform(({ obj }) => {
-    return new Date(obj['date-selection-custom'])
-  })
   'date-selection-custom': Date
 }

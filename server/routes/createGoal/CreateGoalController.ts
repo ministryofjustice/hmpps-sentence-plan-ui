@@ -7,6 +7,7 @@ import URLs from '../URLs'
 import { FORMS } from '../../services/formStorageService'
 import GoalService from '../../services/sentence-plan/goalService'
 import { NewGoal } from '../../@types/NewGoalType'
+import { formatDateWithStyle, dateToISOFormat } from '../../utils/utils'
 
 export default class CreateGoalController {
   constructor(
@@ -49,6 +50,7 @@ export default class CreateGoalController {
         href: aon.url,
         active: aon.url === areaOfNeed,
       }))
+      const today = formatDateWithStyle(new Date().toISOString(), 'short')
       const selectedOtherAreaOfNeed: string[] = req.body['other-area-of-need'] || []
       const otherAreaOfNeed = allAreaOfNeed
         .filter(aon => aon.url !== areaOfNeed)
@@ -79,6 +81,7 @@ export default class CreateGoalController {
           otherAreaOfNeed,
           form: req.body,
           inputAutocompleteDivClass,
+          today,
         },
         errors,
         errorKeys,
@@ -96,7 +99,9 @@ export default class CreateGoalController {
   private processGoalData(body: any) {
     const title = body['input-autocomplete']
     const targetDate =
-      body['date-selection-radio'] === 'custom' ? body['date-selection-custom'] : body['date-selection-radio']
+      body['date-selection-radio'] === 'custom'
+        ? dateToISOFormat(body['date-selection-custom'])
+        : body['date-selection-radio']
     const areaOfNeed = body['area-of-need']
     const relatedAreasOfNeed = body['other-area-of-need-radio'] === 'yes' ? body['other-area-of-need'] : undefined
 

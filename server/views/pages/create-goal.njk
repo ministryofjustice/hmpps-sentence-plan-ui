@@ -51,7 +51,9 @@
         errorMessage: getFormattedError(errors, locale, 'date-selection-custom'),
         classes: "govuk-input--width-10",
         hint: { text: "For example, 31/3/2023." },
-        label: { text: "Select a date", classes: "govuk-fieldset__legend--s" }
+        label: { text: "Select a date", classes: "govuk-fieldset__legend--s" },
+        value: data.form['date-selection-custom'],
+        minDate: data.today
     }) }}
 {% endset -%}
 
@@ -152,6 +154,7 @@
                 {% endif %}
                     <span class="govuk-caption-l">{{ data.displayAreaOfNeed }}</span>
                     <h1 class="govuk-heading-l">{{ locale.title | replace("{POP_NAME}", data.popData.givenName) }}</h1>
+                    {{ data.form['date-selection-custom'] }}
                     <form id="create-goal-form" method="POST">
                         <input type="hidden" name="_csrf" value="{{ csrfToken }}">
                         <input type="hidden" id="_areaOfNeed" value="{{ data.areaOfNeed }}">
