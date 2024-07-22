@@ -92,10 +92,6 @@ export default class CreateGoalController {
     }
   }
 
-  private displayableDateFormat(date: Date): string {
-    return new Intl.DateTimeFormat('en-GB', { day: '2-digit', month: 'long', year: 'numeric' }).format(date)
-  }
-
   private processGoalData(body: any) {
     const title = body['input-autocomplete']
     const targetDate =
