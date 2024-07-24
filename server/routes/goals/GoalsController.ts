@@ -17,7 +17,7 @@ export default class GoalsController {
 
     try {
       const planUuid = req.services.sessionService.getPlanUUID()
-      const popData = await this.infoService.getPopData(crn)
+      const popData = req.services.sessionService.getSubjectDetails()
       const goals = await this.goalService.getGoals(planUuid)
       const currentGoals = getCurrentGoals(goals).map((goal, i, main) => {
         const newGoal = { ...goal }

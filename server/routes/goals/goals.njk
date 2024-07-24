@@ -17,7 +17,7 @@
     {{ mojSubNavigation({
       label: 'Sub navigation',
       items: [{
-        text: locale.subNav.about+" "+data.popData.firstName,
+        text: locale.subNav.about+" "+data.popData.givenName,
         href: '/about-pop'
       }, {
         text: locale.subNav.goals,
@@ -44,11 +44,11 @@
   </div>
     <div class="govuk-width-container">
         <main class="govuk-main-wrapper">
-            <h1>{{  data.popData.firstName }}'s goals to work on now</h1>
+            <h1>{{  data.popData.givenName }}'s goals to work on now</h1>
             <div class="govuk-grid-row">
             {{goalList(data.currentGoals)}}
             </div>
-            <h1>{{  data.popData.firstName }}'s goals to work on later</h1>
+            <h1>{{  data.popData.givenName }}'s goals to work on later</h1>
             <div class="govuk-grid-row">
              {{goalList(data.futureGoals)}}
             </div>
