@@ -58,15 +58,15 @@
     {{ mojSubNavigation({
     label: 'Sub navigation',
     items: [{
-      text: 'About '+data.popData.givenName,
+      text: locale.subNav.about+" "+data.popData.givenName,
       href: '/about-pop',
       active: true
     }, {
-      text: 'Goals',
+      text: locale.subNav.goals,
       href: '/goals'
     }, {
-      text: 'Plan summary',
-      href: '/plan-summary'
+      text: locale.subNav.summary,
+      href: '/summary'
     }]
   }) }}
     <div class="govuk-width-container">

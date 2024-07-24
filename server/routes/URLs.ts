@@ -4,4 +4,7 @@ export default {
   CONFIRM_GOAL: '/confirm-goal',
   CREATE_STEP: '/steps/create',
   SUMMARY: '/summary',
+  GOAL_DETAIL: '/goal/:uuid',
+  GOALS: '/goals',
+  GOALS_ORDER: '/goals/:uuid/:operation',
 }

@@ -1,0 +1,8 @@
+{% from "./goal-summary-item.njk" import goalItem %}
+{% macro goalList (goals) %}
+
+{% for goal in goals %}
+ {{goalItem(goal)}}
+{% endfor %}
+
+{% endmacro %}

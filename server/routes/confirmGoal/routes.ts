@@ -10,4 +10,5 @@ export default function setupConfirmGoalRoutes(router: Router, { infoService, go
 
   router.get(URLs.CONFIRM_GOAL, controller.get)
   router.post(URLs.CONFIRM_GOAL, validate({ body: ConfirmGoalPostModel }), controller.post)
+  router.get(URLs.GOAL_DETAIL, controller.get)
 }
