@@ -40,7 +40,9 @@ export default class StepsController {
       }: Record<string, any> = req.services.formStorageService.getFormData('currentGoal')
       const { actor, someOneElse } = req.body
       const stepName = req.body['input-autocomplete']
+      const popData = await req.services.sessionService.getSubjectDetails()
       const payloadOptions = [...options]
+      payloadOptions.unshift({ value: 1, text: popData.givenName })
       if (someOneElse) payloadOptions[5].text = someOneElse
       const actorArray = Array.isArray(actor) ? actor : [actor]
       const actorNumbers: number[] = actorArray.map((item: string | number): number => Number(item))

@@ -12,7 +12,6 @@ export default class GoalsController {
   ) {}
 
   render = async (req: Request, res: Response, next: NextFunction) => {
-    const crn = 'X756510' // TODO: This is likely to be a session value, get from there
     const { errors } = req
 
     try {

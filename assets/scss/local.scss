@@ -37,7 +37,19 @@
   padding-left: 5px
 }
 dl:empty{
-min-height: 1em;
+  min-height: 1em;
 }
 
 .capital:first-letter {text-transform: uppercase}
+
+.plan-menu-header div {
+  display: inline-block;
+}
+
+.plan-menu {
+  float: right;
+}
+
+.plan-header {
+  margin-bottom: 30px;
+}

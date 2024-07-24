@@ -1,9 +1,5 @@
 export default [
   {
-    value: 1,
-    text: '',
-  },
-  {
     value: 2,
     text: 'Probation practitioner',
   },

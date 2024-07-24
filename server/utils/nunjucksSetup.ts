@@ -77,4 +77,9 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
     }
     return false
   })
+
+  // Filter to format actors
+  njkEnv.addFilter('getActors', actors => {
+    return actors.map((item: any) => item.actor).join(', ')
+  })
 }

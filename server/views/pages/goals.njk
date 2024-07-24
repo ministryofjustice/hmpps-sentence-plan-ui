@@ -4,54 +4,121 @@
 {% from "../components/rosh/macro.njk" import roshWidget %}
 {% from "moj/components/sub-navigation/macro.njk" import mojSubNavigation %}
 {% from "moj/components/button-menu/macro.njk" import mojButtonMenu %}
+{%- from "moj/components/banner/macro.njk" import mojBanner -%}
 {% from "../partials/goal-list.njk" import goalList %}
+{% from "../partials/summary-card.njk" import summaryCard %}
 
 {% set pageTitle = applicationName + " - About " + data.popData.firstName %}
 {% set mainClasses = "app-container govuk-body" %}
 
+{% block main %}
+  {% include "../partials/primary-navigation.njk" %}
+  {{ super() }}
+{% endblock %}
 
 {% block content %}
-{% include "../partials/personal-data-header.njk" %}
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    {{ mojSubNavigation({
-      label: 'Sub navigation',
-      items: [{
-        text: locale.subNav.about+" "+data.popData.firstName,
-        href: '/about-pop'
-      }, {
-        text: locale.subNav.goals,
-        href: '/goals',
-        active: true
-      }, {
-        text: locale.subNav.summary,
-        href: '/plan-summary'
-      }]
-    }) }}
-  </div>
-  <div class="govuk-grid-column-one-third">
-    {{ mojButtonMenu({
-      items: [{
-        text: "Add new goal",
-        href: "/about-pop",
-        classes: "govuk-button--secondary"
-      },{
-        text: "Agree plan",
-        href: "#"
-      }]
-    }) }}
+    <div class="govuk-grid-column-full">
+        {% include "../partials/personal-data-header.njk" %}
+        <div class="plan-menu-header">
+           <div class="plan-header">
+              <h1 class="govuk-heading-l govuk-!-margin-bottom-0">{{  data.popData.givenName }}'s plan</h1>
+           </div>
+           <div class="plan-menu">
+                {{ mojButtonMenu({
+                  items: [{
+                    text: "Create goal",
+                    href: "/create-goal/accommodation",
+                    classes: "govuk-button--secondary"
+                  },{
+                    text: "Agree plan",
+                    href: "#"
+                  }]
+                }) }}
+           </div>
+        </div>
+
+          {{ mojBanner({
+            type: 'success',
+            text: 'You added a goal to '+data.popData.givenName+'’s plan',
+            iconFallbackText: 'Success'
+          }) }}
+            <p class="govuk-body">
+               Add steps to the goals {{ data.popData.givenName }} is working on now. You can then agree the plan with {{ data.popData.givenName }}.
+            </p>
+
+            {{ mojSubNavigation({
+              label: 'Sub navigation',
+              items: [{
+                text: 'Goals to work on now ('+ data.currentGoals.length +')',
+                href: '#1',
+                active: true
+              }, {
+                text: 'Future goals ('+ data.futureGoals.length +')',
+                href: '#2'
+              }]
+            }) }}
+            {% for goal in data.currentGoals %}
+                {% call summaryCard({
+                    title: {
+                        text:  goal.title
+                    },
+                    actions: {
+                      items: [
+                        {
+                          href: "/edit-goal",
+                          text: "Change goal",
+                          visuallyHiddenText: "Change goal"
+                        },
+                        {
+                          href: "/add-change-steps",
+                          text: "Add or change steps",
+                          visuallyHiddenText: "Add or change steps"
+                        },
+                        {
+                          href: "/remove-goal",
+                          text: "Remove goal",
+                          visuallyHiddenText: "Remove goal"
+                        }
+                      ]
+                    }
+                }) %}
+
+                    <div class="govuk-summary-card__content">
+                        <p class="govuk-body">Aim to achieve {{ goal.targetDate | formatSimpleDate }}</p>
+                        {% if goal.steps and goal.steps.length > 0 %}
+                        <table class="govuk-table">
+                          <thead class="govuk-table__head">
+                          <tr class="govuk-table__row">
+                            <th scope="col" class="govuk-table__header">Step</th>
+                            <th scope="col" class="govuk-table__header">Who will do this</th>
+                            <th scope="col" class="govuk-table__header">Due date</th>
+                          </tr>
+                          </thead>
+                          <tbody class="govuk-table__body">
+                          {% for step in goal.steps %}
+                          <tr class="govuk-table__row">
+                            <td class="govuk-table__cell">{{ step.description }}</td>
+                            <td class="govuk-table__cell">{{ step.actors | getActors }}</td>
+                            <td class="govuk-table__cell">{{ step.creationDate | formatSimpleDate }}</td>
+                          </tr>
+                          {% endfor %}
+                          </tbody>
+                        </table>
+                        {% else %}
+                          <strong class="govuk-body govuk-!-font-weight-bold">No steps added</strong>
+                          <hr></hr>
+                        {% endif %}
+                      </div>
+                      <p class="govuk-body-s">
+                        Area of need: {{ goal.needArea }}<br>
+                        {% if goal.relatedNeedAreas.length > 0 %}
+                          Also relates to: {{ goal.relatedNeedAreas | join(', ') }}
+                        {% endif %}
+                      </p>
+                {% endcall %}
+
+            {% endfor %}
+      </div>
 </div>
-  </div>
-    <div class="govuk-width-container">
-        <main class="govuk-main-wrapper">
-            <h1>{{  data.popData.firstName }}'s goals to work on now</h1>
-            <div class="govuk-grid-row">
-            {{goalList(data.currentGoals)}}
-            </div>
-            <h1>{{  data.popData.firstName }}'s goals to work on later</h1>
-            <div class="govuk-grid-row">
-             {{goalList(data.futureGoals)}}
-            </div>
-        </main>
-    </div>
 {% endblock %}
