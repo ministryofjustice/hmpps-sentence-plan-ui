@@ -5,7 +5,7 @@ import GoalService from '../../services/sentence-plan/goalService'
 import { getCurrentGoals, getFutureGoals, moveGoal } from '../../utils/utils'
 import URLs from '../URLs'
 
-export default class GoalsController {
+export default class PlanSummaryController {
   constructor(
     private readonly infoService: InfoService,
     private readonly goalService: GoalService,
@@ -32,12 +32,14 @@ export default class GoalsController {
         newGoal.goalOrder = currentGoals.length + i + 1
         return newGoal
       })
-      return res.render('pages/goals', {
+      const type = req.query?.type
+      return res.render('pages/plan-summary', {
         locale: locale.en,
         data: {
           popData,
           currentGoals,
           futureGoals,
+          type,
         },
         errors,
       })
