@@ -32,6 +32,7 @@ export default class PlanSummaryController {
         newGoal.goalOrder = currentGoals.length + i + 1
         return newGoal
       })
+      const source = req.query?.source
       const type = req.query?.type
       return res.render('pages/plan-summary', {
         locale: locale.en,
@@ -40,6 +41,7 @@ export default class PlanSummaryController {
           currentGoals,
           futureGoals,
           type,
+          source,
         },
         errors,
       })

@@ -21,12 +21,13 @@
         {{ planHeader({
             firstName: data.popData.givenName
         }) }}
-
-          {{ mojBanner({
-            type: 'success',
-            text: 'You added a goal to '+data.popData.givenName+'’s plan',
-            iconFallbackText: 'Success'
-          }) }}
+          {% if data.source != 'nav' %}
+              {{ mojBanner({
+                type: 'success',
+                text: 'You added a goal to '+data.popData.givenName+'’s plan',
+                iconFallbackText: 'Success'
+              }) }}
+          {% endif %}
             <p class="govuk-body">
                Add steps to the goals {{ data.popData.givenName }} is working on now. You can then agree the plan with {{ data.popData.givenName }}.
             </p>
