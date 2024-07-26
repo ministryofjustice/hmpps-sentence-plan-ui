@@ -1,12 +1,10 @@
 {% extends "../partials/layout.njk" %}
-{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "../components/rosh/macro.njk" import roshWidget %}
 {% from "moj/components/sub-navigation/macro.njk" import mojSubNavigation %}
 {% from "moj/components/button-menu/macro.njk" import mojButtonMenu %}
 {%- from "moj/components/banner/macro.njk" import mojBanner -%}
-{% from "../partials/goal-list.njk" import goalList %}
-{% from "../partials/summary-card.njk" import summaryCard %}
+{% from "../partials/summary-card-with-steps.njk" import summaryListWithSteps %}
 
 {% set pageTitle = applicationName + " - About " + data.popData.firstName %}
 {% set mainClasses = "app-container govuk-body" %}
@@ -62,128 +60,11 @@
 
             {% if data.type == 'future' %}
                 {% for goal in data.futureGoals %}
-                    {% call summaryCard({
-                        title: {
-                            text:  goal.title
-                        },
-                        actions: {
-                          items: [
-                            {
-                              href: "/edit-goal",
-                              text: "Change goal",
-                              visuallyHiddenText: "Change goal"
-                            },
-                            {
-                              href: "/add-change-steps",
-                              text: "Add or change steps",
-                              visuallyHiddenText: "Add or change steps"
-                            },
-                            {
-                              href: "/remove-goal",
-                              text: "Remove goal",
-                              visuallyHiddenText: "Remove goal"
-                            }
-                          ]
-                        }
-                    }) %}
-
-                        <div class="govuk-summary-card__content">
-                            <p class="govuk-body">Aim to achieve {{ goal.targetDate | formatSimpleDate }}</p>
-                            {% if goal.steps and goal.steps.length > 0 %}
-                            <table class="govuk-table">
-                              <thead class="govuk-table__head">
-                              <tr class="govuk-table__row">
-                                <th scope="col" class="govuk-table__header">Step</th>
-                                <th scope="col" class="govuk-table__header">Who will do this</th>
-                                <th scope="col" class="govuk-table__header">Due date</th>
-                              </tr>
-                              </thead>
-                              <tbody class="govuk-table__body">
-                              {% for step in goal.steps %}
-                              <tr class="govuk-table__row">
-                                <td class="govuk-table__cell">{{ step.description }}</td>
-                                <td class="govuk-table__cell">{{ step.actors | getActors }}</td>
-                                <td class="govuk-table__cell">{{ step.creationDate | formatSimpleDate }}</td>
-                              </tr>
-                              {% endfor %}
-                              </tbody>
-                            </table>
-                            {% else %}
-                              <strong class="govuk-body govuk-!-font-weight-bold">No steps added</strong>
-                              <hr></hr>
-                            {% endif %}
-                          </div>
-                          <p class="govuk-body-s">
-                            Area of need: {{ goal.needArea }}<br>
-                            {% if goal.relatedNeedAreas.length > 0 %}
-                              Also relates to: {{ goal.relatedNeedAreas | join(', ') }}
-                            {% endif %}
-                          </p>
-                    {% endcall %}
-
+                     {{ summaryListWithSteps(goal) }}
                 {% endfor %}
             {% else %}
-
                 {% for goal in data.currentGoals %}
-                    {% call summaryCard({
-                        title: {
-                            text:  goal.title
-                        },
-                        actions: {
-                          items: [
-                            {
-                              href: "/edit-goal",
-                              text: "Change goal",
-                              visuallyHiddenText: "Change goal"
-                            },
-                            {
-                              href: "/add-change-steps",
-                              text: "Add or change steps",
-                              visuallyHiddenText: "Add or change steps"
-                            },
-                            {
-                              href: "/remove-goal",
-                              text: "Remove goal",
-                              visuallyHiddenText: "Remove goal"
-                            }
-                          ]
-                        }
-                    }) %}
-
-                        <div class="govuk-summary-card__content">
-                            <p class="govuk-body">Aim to achieve {{ goal.targetDate | formatSimpleDate }}</p>
-                            {% if goal.steps and goal.steps.length > 0 %}
-                            <table class="govuk-table">
-                              <thead class="govuk-table__head">
-                              <tr class="govuk-table__row">
-                                <th scope="col" class="govuk-table__header">Step</th>
-                                <th scope="col" class="govuk-table__header">Who will do this</th>
-                                <th scope="col" class="govuk-table__header">Due date</th>
-                              </tr>
-                              </thead>
-                              <tbody class="govuk-table__body">
-                              {% for step in goal.steps %}
-                              <tr class="govuk-table__row">
-                                <td class="govuk-table__cell">{{ step.description }}</td>
-                                <td class="govuk-table__cell">{{ step.actors | getActors }}</td>
-                                <td class="govuk-table__cell">{{ step.creationDate | formatSimpleDate }}</td>
-                              </tr>
-                              {% endfor %}
-                              </tbody>
-                            </table>
-                            {% else %}
-                              <strong class="govuk-body govuk-!-font-weight-bold">No steps added</strong>
-                              <hr></hr>
-                            {% endif %}
-                          </div>
-                          <p class="govuk-body-s">
-                            Area of need: {{ goal.needArea }}<br>
-                            {% if goal.relatedNeedAreas.length > 0 %}
-                              Also relates to: {{ goal.relatedNeedAreas | join(', ') }}
-                            {% endif %}
-                          </p>
-                    {% endcall %}
-
+                    {{ summaryListWithSteps(goal) }}
                 {% endfor %}
               {% endif %}
       </div>

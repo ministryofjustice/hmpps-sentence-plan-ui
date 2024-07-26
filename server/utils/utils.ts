@@ -67,6 +67,9 @@ export function getCurrentGoals(goals: Array<Goal>): Array<Goal> {
   const future = new Date()
   future.setMonth(future.getMonth() + 3)
   return goals.filter((goal): Goal => {
+    if (goal.targetDate == null) {
+      return null
+    }
     const targetDate = new Date(goal.targetDate)
     return targetDate <= future ? goal : null
   })
@@ -77,6 +80,9 @@ export function getFutureGoals(goals: Array<Goal>): Array<Goal> {
   const future = new Date()
   future.setMonth(future.getMonth() + 3)
   return goals.filter((goal): Goal => {
+    if (goal.targetDate == null) {
+      return goal
+    }
     const targetDate = new Date(goal.targetDate)
     return targetDate > future ? goal : null
   })
