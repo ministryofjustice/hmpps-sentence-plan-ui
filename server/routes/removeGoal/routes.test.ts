@@ -5,15 +5,10 @@ import URLs from '../URLs'
 import testPopData from '../../testutils/data/popData'
 import ReferentialDataService from '../../services/sentence-plan/referentialDataService'
 import InfoService from '../../services/sentence-plan/infoService'
+import GoalService from '../../services/sentence-plan/goalService'
 import { roSHData } from '../../testutils/data/roshData'
 import handoverData from '../../testutils/data/handoverData'
-
-jest.mock('../../services/sentence-plan/infoService', () => {
-  return jest.fn().mockImplementation(() => ({
-    getPopData: jest.fn().mockResolvedValue(testPopData),
-    getRoSHData: jest.fn().mockResolvedValue(roSHData),
-  }))
-})
+import { testGoal } from '../../testutils/data/goalData'
 
 jest.mock('../../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
@@ -22,15 +17,30 @@ jest.mock('../../services/sessionService', () => {
   }))
 })
 
+jest.mock('../../services/sentence-plan/infoService', () => {
+  return jest.fn().mockImplementation(() => ({
+    getPopData: jest.fn().mockResolvedValue(testPopData),
+    getRoSHData: jest.fn().mockResolvedValue(roSHData),
+  }))
+})
+
+jest.mock('../../services/sentence-plan/goalService', () => {
+  return jest.fn().mockImplementation(() => ({
+    getGoal: jest.fn().mockReturnValue(testGoal),
+  }))
+})
+
 let app: Express
 const referentialDataService = new ReferentialDataService() as jest.Mocked<ReferentialDataService>
 const infoService = new InfoService(null) as jest.Mocked<InfoService>
+const goalService = new GoalService(null) as jest.Mocked<GoalService>
 
 beforeEach(() => {
   app = appWithAllRoutes({
     services: {
       referentialDataService,
       infoService,
+      goalService,
     },
   })
 })
@@ -45,7 +55,7 @@ describe(`GET ${URLs.REMOVE_GOAL}`, () => {
       .get(URLs.REMOVE_GOAL)
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('Remove this goal')
+        expect(res.text).toContain('Are you sure you want to remove this goal?')
       })
   })
 })

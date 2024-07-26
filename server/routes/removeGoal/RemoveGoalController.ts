@@ -14,16 +14,17 @@ export default class RemoveGoalController {
     const { errors } = req
 
     try {
-      const planUuid = req.services.sessionService.getPlanUUID()
       const popData = req.services.sessionService.getSubjectDetails()
-      // const goals = await this.goalService.getGoals(planUuid)
-
       const type = req.query?.type
+      const { uuid } = req.params
+      const goal = await this.goalService.getGoal(uuid) // this is a bad idea. instead make the actions in the summary-card be submits in a form with action values and pass the goal data around
+
       return res.render('pages/remove-goal', {
         locale: locale.en,
         data: {
           popData,
           type,
+          goal,
         },
         errors,
       })

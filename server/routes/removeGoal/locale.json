@@ -1,5 +1,7 @@
 {
   "en": {
-    "title": "Remove goal"
+    "title": "Remove goal",
+    "removeGoalButtonText": "Yes, remove it",
+    "cancelButtonText": "No, do not remove it"
   }
 }

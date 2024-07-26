@@ -7,4 +7,5 @@ export default function setupRemoveGoalRoutes(router: Router, { infoService, goa
   const controller = new RemoveGoalController(infoService, goalService)
 
   router.get(URLs.REMOVE_GOAL, controller.render)
+  router.post(URLs.REMOVE_GOAL, controller.remove)
 }
