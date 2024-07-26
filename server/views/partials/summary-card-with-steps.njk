@@ -1,4 +1,4 @@
-{% from "./summary-card.njk" import summaryCard %}
+{% from "../components/summary-card.njk" import summaryCard %}
 
 {% macro summaryListWithSteps (goal) %}
     {% call summaryCard({
@@ -26,32 +26,30 @@
         }
     }) %}
 
-    <div class="govuk-summary-card__content">
-        <p class="govuk-body">Aim to achieve {{ goal.targetDate | formatSimpleDate }}</p>
-        {% if goal.steps and goal.steps.length > 0 %}
-        <table class="govuk-table">
-          <thead class="govuk-table__head">
-          <tr class="govuk-table__row">
-            <th scope="col" class="govuk-table__header">Step</th>
-            <th scope="col" class="govuk-table__header">Who will do this</th>
-            <th scope="col" class="govuk-table__header">Due date</th>
-          </tr>
-          </thead>
-          <tbody class="govuk-table__body">
-          {% for step in goal.steps %}
-          <tr class="govuk-table__row">
-            <td class="govuk-table__cell">{{ step.description }}</td>
-            <td class="govuk-table__cell">{{ step.actors | getActors | join(', ') }}</td>
-            <td class="govuk-table__cell">{{ step.creationDate | formatSimpleDate }}</td>
-          </tr>
-          {% endfor %}
-          </tbody>
-        </table>
-        {% else %}
-          <strong class="govuk-body govuk-!-font-weight-bold">No steps added</strong>
-          <hr></hr>
-        {% endif %}
-    </div>
+    <p class="govuk-body">Aim to achieve {{ goal.targetDate | formatSimpleDate }}</p>
+    {% if goal.steps and goal.steps.length > 0 %}
+    <table class="govuk-table">
+      <thead class="govuk-table__head">
+      <tr class="govuk-table__row">
+        <th scope="col" class="govuk-table__header">Step</th>
+        <th scope="col" class="govuk-table__header">Who will do this</th>
+        <th scope="col" class="govuk-table__header">Due date</th>
+      </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+      {% for step in goal.steps %}
+      <tr class="govuk-table__row">
+        <td class="govuk-table__cell">{{ step.description }}</td>
+        <td class="govuk-table__cell">{{ step.actors | getActors | join(', ') }}</td>
+        <td class="govuk-table__cell">{{ step.creationDate | formatSimpleDate }}</td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+      <strong class="govuk-body govuk-!-font-weight-bold">No steps added</strong>
+      <hr></hr>
+    {% endif %}
     <p class="govuk-body-s">
         Area of need: {{ goal.areaOfNeed.name }}<br>
         {% if goal.relatedAreasOfNeed.length > 0 %}
