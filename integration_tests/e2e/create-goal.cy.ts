@@ -21,7 +21,7 @@ describe('Create a new Goal', () => {
     cy.get('#actor').click()
     cy.get('#actor-2').click()
     cy.get('button').contains('Save and continue').click()
-    cy.url().should('include', '/summary')
+    cy.url().should('include', '/plan-summary')
   })
 
   it('Creates a new goal with errors', () => {
@@ -47,6 +47,6 @@ describe('Create a new Goal', () => {
     cy.get('#start-working-goal-radio').click()
     cy.get('.govuk-radios').last().contains('In 6 months').click()
     cy.get('button').contains('Save without steps').click()
-    cy.url().should('include', '/summary')
+    cy.url().should('include', '/plan-summary')
   })
 })
