@@ -1,0 +1,30 @@
+{% from "moj/components/button-menu/macro.njk" import mojButtonMenu %}
+
+{%- macro planHeader(params) %}
+    {% if params.firstName.endsWith('s') %}
+        {% set possessiveName = params.firstName + "'" %}
+    {% else %}
+        {% set possessiveName = params.firstName + "'s" %}
+    {% endif %}
+
+    {% set defaultItems = [{
+        text: "Create goal",
+        href: "/create-goal/accommodation",
+        classes: "govuk-button--secondary"
+    },
+    {
+        text: "Agree plan",
+        href: "#"
+    }] %}
+    {% set items = params.items | default(defaultItems) %}
+
+    <div class="plan-header">
+        <div class="plan-header-title">
+            <h1 class="govuk-heading-l govuk-!-margin-bottom-0">{{ possessiveName }} plan</h1>
+        </div>
+        {{ mojButtonMenu({
+            class: "plan-header-menu",
+            items: items
+        }) }}
+    </div>
+{% endmacro %}

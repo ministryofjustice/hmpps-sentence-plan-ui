@@ -11,4 +11,6 @@ $govuk-page-width: $moj-page-width;
 @import './components/header-bar';
 @import './components/rosh-widget';
 @import "./components/colors";
+@import "./components/summary-card";
+@import "./components/plan-header";
 @import './local';

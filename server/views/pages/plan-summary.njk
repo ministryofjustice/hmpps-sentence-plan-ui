@@ -1,9 +1,9 @@
 {% extends "../partials/layout.njk" %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
-{% from "../components/rosh/macro.njk" import roshWidget %}
 {% from "moj/components/sub-navigation/macro.njk" import mojSubNavigation %}
 {% from "moj/components/button-menu/macro.njk" import mojButtonMenu %}
 {%- from "moj/components/banner/macro.njk" import mojBanner -%}
+{% from "../components/plan-header/plan-header.njk" import planHeader %}
 {% from "../partials/summary-card-with-steps.njk" import summaryListWithSteps %}
 
 {% set pageTitle = applicationName + " - About " + data.popData.firstName %}
@@ -18,23 +18,9 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
         {% include "../partials/personal-data-header.njk" %}
-        <div class="plan-menu-header">
-           <div class="plan-header">
-              <h1 class="govuk-heading-l govuk-!-margin-bottom-0">{{  data.popData.givenName }}'s plan</h1>
-           </div>
-           <div class="plan-menu">
-                {{ mojButtonMenu({
-                  items: [{
-                    text: "Create goal",
-                    href: "/create-goal/accommodation",
-                    classes: "govuk-button--secondary"
-                  },{
-                    text: "Agree plan",
-                    href: "#"
-                  }]
-                }) }}
-           </div>
-        </div>
+        {{ planHeader({
+            firstName: data.popData.givenName
+        }) }}
 
           {{ mojBanner({
             type: 'success',
