@@ -1,7 +1,6 @@
 import type { Express } from 'express'
 import request from 'supertest'
 import { appWithAllRoutes } from '../testutils/appSetup'
-import locale from './locale.json'
 import URLs from '../URLs'
 import testPopData from '../../testutils/data/popData'
 import ReferentialDataService from '../../services/sentence-plan/referentialDataService'
