@@ -29,7 +29,7 @@ export default class CreateGoalController {
       processed: null,
       raw: { uuid },
     })
-    const redirectUrl: string = req.body.action === 'addStep' ? URLs.CREATE_STEP : URLs.PLAN_SUMMARY
+    const redirectUrl: string = req.body.action === 'addStep' ? URLs.CREATE_STEP : `${URLs.PLAN_SUMMARY}?status=success`
     return res.redirect(redirectUrl)
   }
 

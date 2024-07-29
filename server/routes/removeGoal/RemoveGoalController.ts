@@ -35,11 +35,15 @@ export default class RemoveGoalController {
 
   remove = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      return res.redirect(URLs.GOALS)
+      return res.redirect(`${URLs.PLAN_SUMMARY}?status=removed`)
     } catch (e) {
       return next(e)
     }
   }
 
   get = this.render
+
+  post = (req: Request, res: Response, next: NextFunction) => {
+    return this.remove(req, res, next)
+  }
 }

@@ -22,19 +22,23 @@
 
         {{ summaryListWithSteps(data.goal, showActions=false) }}
 
-        <div class="govuk-button-group">
-            {{ govukButton({
-                text: locale.removeGoalButtonText,
-                name: "action",
-                value: "remove"
-            }) }}
-            {{ govukButton({
-                text: locale.cancelButtonText,
-                name: "action",
-                classes: "govuk-button--secondary",
-                value: "cancel"
-            }) }}
-        </div>
+        <form id="remove-goal-form" method="POST">
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+            <input type="hidden" name="goalUuid" value="{{ data.goal.uuid }}">
+            <div class="govuk-button-group">
+                {{ govukButton({
+                    text: locale.removeGoalButtonText,
+                    name: "action",
+                    value: "remove"
+                }) }}
+                {{ govukButton({
+                    text: locale.cancelButtonText,
+                    name: "action",
+                    classes: "govuk-button--secondary",
+                    value: "cancel"
+                }) }}
+            </div>
+        </form>
     </div>
 </div>
 
