@@ -1,0 +1,52 @@
+.plan-header {
+  @include govuk-width-container;
+  box-shadow: inset 0 -1px 0 $govuk-border-colour;
+  padding-bottom: govuk-spacing(3);
+  margin-top: govuk-spacing(4);
+  margin-bottom: govuk-spacing(-6);
+
+  &__subject-details {
+    * {
+      display: inline-block;
+    }
+
+    &:not(:last-child) {
+      margin: 0 0 govuk-spacing(3) 0;
+    }
+
+    &__title {
+      font-weight: bold;
+      margin-right: govuk-spacing(3);
+      margin-bottom: 0;
+    }
+
+    &__identifiers {
+      @include govuk-font($size: 19, $weight: 'normal');
+      margin: 0;
+
+      dd {
+        margin-left: govuk-spacing(1);
+      }
+
+      & > * {
+        color: $govuk-secondary-text-colour;
+        padding-right: govuk-spacing(2);
+        margin-right: govuk-spacing(1);
+
+        &:not(:last-child) {
+          box-shadow: inset -1px 0 0 $govuk-border-colour;
+        }
+      }
+    }
+  }
+
+  &__extended {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .govuk-button {
+      margin-bottom: 0;
+    }
+  }
+}
