@@ -6,9 +6,9 @@ $govuk-page-width: $moj-page-width;
 
 @import "govuk-frontend/dist/govuk/all";
 @import "@ministryofjustice/frontend/moj/all";
-@import "hmpps-court-cases-release-dates-design/hmpps/assets/stylesheets/all";
 @import "accessible-autocomplete/dist/accessible-autocomplete.min.css";
 @import './components/header-bar';
 @import './components/rosh-widget';
+@import "./components/date-picker";
 @import "./components/colors";
 @import './local';
