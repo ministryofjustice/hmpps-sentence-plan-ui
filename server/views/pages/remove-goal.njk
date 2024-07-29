@@ -20,8 +20,7 @@
         <a href="#" class="govuk-back-link">Back</a>
         <h1 class="govuk-heading-xl">Are you sure you want to remove this goal?</h1>
 
-        // TODO get rid of actions list
-        {{ summaryListWithSteps(data.goal) }}
+        {{ summaryListWithSteps(data.goal, false) }}
 
         <div class="govuk-button-group">
             {{ govukButton({

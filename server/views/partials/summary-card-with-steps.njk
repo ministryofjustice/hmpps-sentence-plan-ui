@@ -1,31 +1,40 @@
 {% from "../components/summary-card/summary-card.njk" import summaryCard %}
 
-{% macro summaryListWithSteps (goal) %}
-    {% call summaryCard({
-        title: {
-            text:  goal.title
-        },
-        actions: {
-          items: [
-            {
-              href: "/edit-goal",
-              text: "Change goal",
-              visuallyHiddenText: "Change goal"
+{% macro summaryListWithSteps (goal, showActions=true) %}
+    {% if showActions %}
+        {% set cardData = {
+            title: {
+                text:  goal.title
             },
-            {
-              href: "/add-change-steps",
-              text: "Add or change steps",
-              visuallyHiddenText: "Add or change steps"
-            },
-            {
-              href: "/remove-goal/"+goal.uuid,
-              text: "Remove goal",
-              visuallyHiddenText: "Remove goal",
-              goal: goal
+            actions: {
+                items: [
+                    {
+                        href: "/edit-goal",
+                        text: "Change goal",
+                        visuallyHiddenText: "Change goal"
+                    },
+                    {
+                        href: "/add-change-steps",
+                        text: "Add or change steps",
+                        visuallyHiddenText: "Add or change steps"
+                    },
+                    {
+                        href: "/remove-goal/"+goal.uuid,
+                        text: "Remove goal",
+                        visuallyHiddenText: "Remove goal",
+                        goal: goal
+                    }
+                ]
             }
-          ]
-        }
-    }) %}
+        } %}
+    {% else %}
+        {% set cardData = {
+                title: {
+                text:  goal.title
+            }
+        } %}
+    {% endif %}
+    {% call summaryCard(cardData) %}
 
     <p class="govuk-body">Aim to achieve {{ goal.targetDate | formatSimpleDate }}</p>
     {% if goal.steps and goal.steps.length > 0 %}
