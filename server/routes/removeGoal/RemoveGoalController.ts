@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
+import * as superagent from 'superagent'
 import locale from './locale.json'
 import InfoService from '../../services/sentence-plan/infoService'
 import GoalService from '../../services/sentence-plan/goalService'
@@ -35,7 +36,18 @@ export default class RemoveGoalController {
 
   remove = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      return res.redirect(`${URLs.PLAN_SUMMARY}?status=removed`)
+      if (req.body.action === 'remove') {
+        const { goalUuid } = req.body
+        const response: superagent.Response = <superagent.Response>await this.goalService.removeGoal(goalUuid)
+        if (response.status === 204) {
+          return res.redirect(`${URLs.PLAN_SUMMARY}?status=removed`)
+        }
+
+        // stay on this page and display error message
+        return res.redirect(`${URLs.PLAN_SUMMARY}`)
+      }
+
+      return res.redirect(`${URLs.PLAN_SUMMARY}`)
     } catch (e) {
       return next(e)
     }

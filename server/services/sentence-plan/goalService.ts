@@ -16,6 +16,11 @@ export default class GoalService {
     return restClient.post<Goal>({ path: `/plans/${parentPlanUuid}/goals`, data: goal })
   }
 
+  async removeGoal(goalUuid: string) {
+    const restClient = await this.sentencePlanApiClient.restClient('Removing goal data')
+    return restClient.delete({ path: `/goals/${goalUuid}`, raw: true })
+  }
+
   async getGoals(parentPlanUuid: string) {
     const restClient = await this.sentencePlanApiClient.restClient('Getting goals list')
     return restClient.get<Goal[]>({ path: `/plans/${parentPlanUuid}/goals` })
