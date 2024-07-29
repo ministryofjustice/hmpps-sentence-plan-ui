@@ -2,42 +2,4 @@
   min-height: 600px;
 }
 
-.offender-details {
-  margin-bottom: 25px
-}
-
-.offender-details * {
-  display: inline;
-  float: left;
-  margin: 0;
-  padding: 0 15px
-}
-
-.offender-details * dd {
-  border-right: 1px solid gray
-}
-
-.offender-details * dd:last-of-type {
-  border: none
-}
-
-.offender-details *:first-child {
-  padding-left: 0
-}
-
-.offender-details *:last-child {
-  padding-right: 0
-}
-
-.offender-details dt {
-  padding-right: 5px
-}
-
-.offender-details dd {
-  padding-left: 5px
-}
-dl:empty{
-min-height: 1em;
-}
-
 .capital:first-letter {text-transform: uppercase}
