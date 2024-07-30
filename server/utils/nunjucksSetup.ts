@@ -93,8 +93,8 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
 
   // get months difference
   njkEnv.addGlobal('getMonthsDifference', (creationDate: string, targetDate: string) => {
-    const [creationYear, creationMonth] = creationDate.split('-').map(Number);
-    const [targetYear, targetMonth] = targetDate.split('-').map(Number);
-    return (targetYear - creationYear) * 12 + (targetMonth - creationMonth);
+    const [creationYear, creationMonth] = creationDate.split('-').map(Number)
+    const [targetYear, targetMonth] = targetDate.split('-').map(Number)
+    return (targetYear - creationYear) * 12 + (targetMonth - creationMonth)
   })
 }
