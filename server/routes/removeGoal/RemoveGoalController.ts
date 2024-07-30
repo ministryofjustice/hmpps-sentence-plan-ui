@@ -43,9 +43,6 @@ export default class RemoveGoalController {
         if (response.status === 204) {
           return res.redirect(`${URLs.PLAN_SUMMARY}?status=removed`)
         }
-
-        // stay on this page and display error message
-        return res.redirect(`${URLs.PLAN_SUMMARY}`)
       }
 
       return res.redirect(`${URLs.PLAN_SUMMARY}`)
