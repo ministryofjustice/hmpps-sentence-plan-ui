@@ -1,6 +1,5 @@
 import { Person } from '../@types/Person'
 import { RoshData } from '../@types/Rosh'
-import { Goal } from '../@types/GoalType'
 
 const properCase = (word: string): string =>
   word.length >= 1 ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word
@@ -60,32 +59,6 @@ export function formatDateWithStyle(isoDate: string, style: 'short' | 'full' | '
 export function dateToISOFormat(date: string): string {
   const [day, month, year] = date.split('/')
   return [year, month, day].join('-')
-}
-
-export function getCurrentGoals(goals: Array<Goal>): Array<Goal> {
-  if (!Array.isArray(goals) || goals.length === 0) return []
-  const future = new Date()
-  future.setMonth(future.getMonth() + 3)
-  return goals.filter((goal): Goal => {
-    if (goal.targetDate == null) {
-      return null
-    }
-    const targetDate = new Date(goal.targetDate)
-    return targetDate <= future ? goal : null
-  })
-}
-
-export function getFutureGoals(goals: Array<Goal>): Array<Goal> {
-  if (!Array.isArray(goals) || goals.length === 0) return []
-  const future = new Date()
-  future.setMonth(future.getMonth() + 3)
-  return goals.filter((goal): Goal => {
-    if (goal.targetDate == null) {
-      return goal
-    }
-    const targetDate = new Date(goal.targetDate)
-    return targetDate > future ? goal : null
-  })
 }
 
 export function moveGoal(goals: Array<any>, uuid: string, operation: string) {

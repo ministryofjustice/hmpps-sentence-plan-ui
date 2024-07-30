@@ -51,9 +51,9 @@
       <hr></hr>
     {% endif %}
     <p class="govuk-body-s">
-        Area of need: {{ goal.areaOfNeed.name }}<br>
+        Area of need: {{ goal.areaOfNeed.name | lower }} <br>
         {% if goal.relatedAreasOfNeed.length > 0 %}
-          Also relates to: {{ goal.relatedAreasOfNeed | getRelatedAreaOfNeed | join(', ') }}
+          Also relates to: {{ goal.relatedAreasOfNeed | getRelatedAreaOfNeed | join(', ') | lower }}
         {% endif %}
     </p>
     {% endcall %}

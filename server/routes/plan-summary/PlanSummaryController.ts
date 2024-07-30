@@ -2,8 +2,9 @@ import { NextFunction, Request, Response } from 'express'
 import locale from './locale.json'
 import InfoService from '../../services/sentence-plan/infoService'
 import GoalService from '../../services/sentence-plan/goalService'
-import { getCurrentGoals, getFutureGoals, moveGoal } from '../../utils/utils'
+import { moveGoal } from '../../utils/utils'
 import URLs from '../URLs'
+import { Goal } from '../../@types/GoalType'
 
 export default class PlanSummaryController {
   constructor(
@@ -18,20 +19,8 @@ export default class PlanSummaryController {
       const planUuid = req.services.sessionService.getPlanUUID()
       const popData = req.services.sessionService.getSubjectDetails()
       const goals = await this.goalService.getGoals(planUuid)
-      const currentGoals = getCurrentGoals(goals).map((goal, i, main) => {
-        const newGoal = { ...goal }
-        if (i > 0) newGoal.moveUpURL = `${URLs.GOALS}/${goal.uuid}/up`
-        if (i < main.length - 1) newGoal.moveDownURL = `${URLs.GOALS}/${goal.uuid}/down`
-        newGoal.goalOrder = i + 1
-        return newGoal
-      })
-      const futureGoals = getFutureGoals(goals).map((goal, i, main) => {
-        const newGoal = { ...goal }
-        if (i > 0) newGoal.moveUpURL = `${URLs.GOALS}/${goal.uuid}/up`
-        if (i < main.length - 1) newGoal.moveDownURL = `${URLs.GOALS}/${goal.uuid}/down`
-        newGoal.goalOrder = currentGoals.length + i + 1
-        return newGoal
-      })
+      const currentGoals = goals.now
+      const futureGoals = goals.future
       const source = req.query?.source
       const type = req.query?.type
       return res.render('pages/plan-summary', {
@@ -55,7 +44,7 @@ export default class PlanSummaryController {
       const planUuid = req.services.sessionService.getPlanUUID()
       const goals = await this.goalService.getGoals(planUuid)
       const { uuid, operation } = req.params
-      const reorderedList = moveGoal(goals, uuid, operation)
+      const reorderedList = moveGoal(goals.now, uuid, operation)
       await this.goalService.changeGoalOrder(reorderedList)
       return res.redirect(URLs.GOALS)
     } catch (e) {
