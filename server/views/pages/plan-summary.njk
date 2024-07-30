@@ -14,10 +14,10 @@
         href: "/create-goal/accommodation",
         classes: "govuk-button--secondary"
     },
-        {
-            text: "Agree plan",
-            href: "#"
-        }]
+    {
+        text: "Agree plan",
+        href: "#"
+    }]
 } %}
 
 {% block content %}
@@ -57,13 +57,63 @@
         {% if data.type == 'future' %}
             {% for goal in data.futureGoals %}
                  {{ goalSummaryCard({
-                     goal: goal
+                     goal: goal,
+                     actions: [
+                         {
+                             href: "/edit-goal",
+                             text: "Change goal",
+                             visuallyHiddenText: "Change goal"
+                         },
+                         {
+                             href: "/add-change-steps",
+                             text: "Add or change steps",
+                             visuallyHiddenText: "Add or change steps"
+                         },
+                         {
+                             href: "/remove-goal/" + goal.uuid,
+                             text: "Remove goal",
+                             visuallyHiddenText: "Remove goal"
+                         }
+                     ]
                  }) }}
             {% endfor %}
         {% else %}
             {% for goal in data.currentGoals %}
+                {% set buttons = [] %}
+                {% if not loop.first %}
+                    {% set buttons = buttons.concat({
+                        text: "Move goal up",
+                        classes: "govuk-button--secondary"
+                    }) %}
+                {% endif %}
+
+                {% if not loop.last %}
+                    {% set buttons = buttons.concat({
+                        text: "Move goal down",
+                        classes: "govuk-button--secondary"
+                    }) %}
+                {% endif %}
+
                 {{ goalSummaryCard({
-                    goal: goal
+                    goal: goal,
+                    buttons: buttons,
+                    actions: [
+                        {
+                            href: "/edit-goal",
+                            text: "Change goal",
+                            visuallyHiddenText: "Change goal"
+                        },
+                        {
+                            href: "/add-change-steps",
+                            text: "Add or change steps",
+                            visuallyHiddenText: "Add or change steps"
+                        },
+                        {
+                            href: "/remove-goal/" + goal.uuid,
+                            text: "Remove goal",
+                            visuallyHiddenText: "Remove goal"
+                        }
+                    ]
                 }) }}
             {% endfor %}
           {% endif %}
