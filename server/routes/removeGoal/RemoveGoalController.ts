@@ -18,7 +18,8 @@ export default class RemoveGoalController {
       const popData = req.services.sessionService.getSubjectDetails()
       const type = req.query?.type
       const { uuid } = req.params
-      const goal = await this.goalService.getGoal(uuid) // this is a bad idea. instead make the actions in the summary-card be submits in a form with action values and pass the goal data around
+      // TODO rather than fetch the goal again we should be able to retrieve it from a local store since the previous page must have retrieved it already
+      const goal = await this.goalService.getGoal(uuid)
 
       return res.render('pages/remove-goal', {
         locale: locale.en,
