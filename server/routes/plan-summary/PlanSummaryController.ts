@@ -4,7 +4,6 @@ import InfoService from '../../services/sentence-plan/infoService'
 import GoalService from '../../services/sentence-plan/goalService'
 import { moveGoal } from '../../utils/utils'
 import URLs from '../URLs'
-import { Goal } from '../../@types/GoalType'
 
 export default class PlanSummaryController {
   constructor(
