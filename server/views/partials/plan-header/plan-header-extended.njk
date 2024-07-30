@@ -1,0 +1,15 @@
+{% extends "./plan-header-mini.njk" %}
+{% from "moj/components/button-menu/macro.njk" import mojButtonMenu %}
+
+{% block extension %}
+    <div class="plan-header__extended">
+        <div class="plan-header__extended__title">
+            <h1 class="govuk-heading-l govuk-!-margin-bottom-0">{{ possessiveName }} plan</h1>
+        </div>
+
+        {{ mojButtonMenu({
+            class: "plan-header__extended__menu",
+            items: header.items
+        }) }}
+    </div>
+{% endblock %}

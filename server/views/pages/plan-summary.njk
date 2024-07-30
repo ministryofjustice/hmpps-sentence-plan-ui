@@ -8,58 +8,62 @@
 
 {% set pageTitle = applicationName + " - About " + data.popData.firstName %}
 {% set mainClasses = "app-container govuk-body" %}
-
-{% block main %}
-  {% include "../partials/primary-navigation.njk" %}
-  {{ super() }}
-{% endblock %}
+{% set header = {
+    type: "extended",
+    items: [{
+        text: "Create goal",
+        href: "/create-goal/accommodation",
+        classes: "govuk-button--secondary"
+    },
+        {
+            text: "Agree plan",
+            href: "#"
+        }]
+} %}
 
 {% block content %}
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-        {% include "../partials/personal-data-header.njk" %}
-        {{ planHeader({
-            firstName: data.popData.givenName
-        }) }}
-          {% if data.status == 'success' %}
-              {{ mojBanner({
+        {% if data.status == 'success' %}
+            {{ mojBanner({
                 type: 'success',
                 text: 'You added a goal to '+data.popData.givenName+'’s plan',
                 iconFallbackText: 'Success'
-              }) }}
-          {% elseif data.status == 'removed' %}
-              {{ mojBanner({
-                  type: 'success',
-                  text: 'You removed a goal from '+data.popData.givenName+'’s plan',
-                  iconFallbackText: 'Success'
-              }) }}
-          {% endif %}
-            <p class="govuk-body">
-               Add steps to the goals {{ data.popData.givenName }} is working on now. You can then agree the plan with {{ data.popData.givenName }}.
-            </p>
-
-            {{ mojSubNavigation({
-              label: 'Sub navigation',
-              items: [{
-                text: 'Goals to work on now ('+ data.currentGoals.length +')',
-                href: '/plan-summary?type=current',
-                active: data.type != 'future'
-              }, {
-                text: 'Future goals ('+ data.futureGoals.length +')',
-                href: '/plan-summary?type=future',
-                active: data.type == 'future'
-              }]
             }) }}
+        {% elseif data.status == 'removed' %}
+            {{ mojBanner({
+                type: 'success',
+                text: 'You removed a goal from '+data.popData.givenName+'’s plan',
+                iconFallbackText: 'Success'
+            }) }}
+        {% endif %}
+        
+        <p class="govuk-body">
+           Add steps to the goals {{ data.popData.givenName }} is working on now. You can then agree the plan with {{ data.popData.givenName }}.
+        </p>
 
-            {% if data.type == 'future' %}
-                {% for goal in data.futureGoals %}
-                     {{ summaryListWithSteps(goal) }}
-                {% endfor %}
-            {% else %}
-                {% for goal in data.currentGoals %}
-                    {{ summaryListWithSteps(goal) }}
-                {% endfor %}
-              {% endif %}
+        {{ mojSubNavigation({
+          label: 'Sub navigation',
+          items: [{
+            text: 'Goals to work on now ('+ data.currentGoals.length +')',
+            href: '/plan-summary?type=current',
+            active: data.type != 'future'
+          }, {
+            text: 'Future goals ('+ data.futureGoals.length +')',
+            href: '/plan-summary?type=future',
+            active: data.type == 'future'
+          }]
+        }) }}
+
+        {% if data.type == 'future' %}
+            {% for goal in data.futureGoals %}
+                 {{ summaryListWithSteps(goal) }}
+            {% endfor %}
+        {% else %}
+            {% for goal in data.currentGoals %}
+                {{ summaryListWithSteps(goal) }}
+            {% endfor %}
+          {% endif %}
       </div>
 </div>
 {% endblock %}
