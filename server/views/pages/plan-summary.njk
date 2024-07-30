@@ -3,8 +3,7 @@
 {% from "moj/components/sub-navigation/macro.njk" import mojSubNavigation %}
 {% from "moj/components/button-menu/macro.njk" import mojButtonMenu %}
 {%- from "moj/components/banner/macro.njk" import mojBanner -%}
-{% from "../components/plan-header/plan-header.njk" import planHeader %}
-{% from "../partials/summary-card-with-steps.njk" import summaryListWithSteps %}
+{% from "../components/summary-card/goal-summary-card.njk" import goalSummaryCard %}
 
 {% set pageTitle = applicationName + " - About " + data.popData.firstName %}
 {% set mainClasses = "app-container govuk-body" %}
@@ -57,11 +56,15 @@
 
         {% if data.type == 'future' %}
             {% for goal in data.futureGoals %}
-                 {{ summaryListWithSteps(goal) }}
+                 {{ goalSummaryCard({
+                     goal: goal
+                 }) }}
             {% endfor %}
         {% else %}
             {% for goal in data.currentGoals %}
-                {{ summaryListWithSteps(goal) }}
+                {{ goalSummaryCard({
+                    goal: goal
+                }) }}
             {% endfor %}
           {% endif %}
       </div>

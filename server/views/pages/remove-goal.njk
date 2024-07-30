@@ -1,5 +1,5 @@
 {% extends "../partials/layout.njk" %}
-{% from "../partials/goal-summary-card.njk" import goalSummaryCard %}
+{% from "../components/summary-card/goal-summary-card.njk" import goalSummaryCard %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% set pageTitle = applicationName + " - Remove Goal" %}
@@ -12,7 +12,10 @@
         <a href="#" class="govuk-back-link">Back</a>
         <h1 class="govuk-heading-xl">Are you sure you want to remove this goal?</h1>
 
-        {{ summaryListWithSteps(data.goal, showActions=false) }}
+        {{ goalSummaryCard({
+            goal: data.goal,
+            actions: false
+        }) }}
 
         <form id="remove-goal-form" method="POST">
             <input type="hidden" name="_csrf" value="{{ csrfToken }}">
