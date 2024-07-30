@@ -1,7 +1,7 @@
 {% from "../components/summary-card/summary-card.njk" import summaryCard %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
-{% macro summaryListWithSteps (goal, index, length) %}
+{% macro summaryListWithSteps (goal, type, index, length) %}
     {% call summaryCard({
         title: {
             text:  goal.title
@@ -26,8 +26,9 @@
           ]
         }
     }) %}
-
-    <p class="govuk-body">Aim to achieve in {{ getMonthsDifference(goal.creationDate, goal.targetDate) }} months ({{ goal.targetDate | formatSimpleDate }})</p>
+    {% if type == "current" %}
+        <p class="govuk-body">Aim to achieve in {{ getMonthsDifference(goal.creationDate, goal.targetDate) }} months ({{ goal.targetDate | formatSimpleDate }})</p>
+    {% endif %}
     {% if goal.steps and goal.steps.length > 0 %}
     <table class="govuk-table">
       <thead class="govuk-table__head">
