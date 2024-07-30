@@ -13,5 +13,6 @@ $govuk-page-width: $moj-page-width;
 @import "./components/plan-header";
 @import "./components/colors";
 @import "./components/summary-card";
-@import "./components/plan-header";
+@import "./components/goal-summary-card";
+@import "./components/goal-list";
 @import './local';
