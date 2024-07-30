@@ -7,46 +7,54 @@
         title: {
             text:  params.goal.title
         },
+        classes: "goal-summary-card",
         actions: {
             items: params.actions
         }
     }) %}
-        <p class="govuk-body">Aim to achieve {{ params.goal.targetDate | formatSimpleDate }}</p>
-        {% if params.goal.steps and params.goal.steps.length > 0 %}
-            <table class="govuk-table">
-              <thead class="govuk-table__head">
-              <tr class="govuk-table__row">
-                <th scope="col" class="govuk-table__header">Step</th>
-                <th scope="col" class="govuk-table__header">Who will do this</th>
-                <th scope="col" class="govuk-table__header">Due date</th>
-              </tr>
-              </thead>
-              <tbody class="govuk-table__body">
-              {% for step in params.goal.steps %}
-              <tr class="govuk-table__row">
-                <td class="govuk-table__cell">{{ step.description }}</td>
-                <td class="govuk-table__cell">{{ step.actors | getActors | join(', ') }}</td>
-                <td class="govuk-table__cell">{{ step.creationDate | formatSimpleDate }}</td>
-              </tr>
-              {% endfor %}
-              </tbody>
-            </table>
-        {% else %}
-            <strong class="govuk-body govuk-!-font-weight-bold">No steps added</strong>
-            <hr>
+        {% if params.goal.targerDate %}
+            <p class="goal-summary-card__target-date">
+                Aim to achieve in {{ getMonthsDifference(params.goal.creationDate, params.goal.targetDate) }} months ({{ params.goal.targetDate | formatSimpleDate }})
+            </p>
         {% endif %}
 
-        <p class="govuk-body-s">
+        {% if params.goal.steps and params.goal.steps.length > 0 %}
+            <table class="govuk-table goal-summary-card__steps">
+                <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                    <th scope="col" class="govuk-table__header">Step</th>
+                    <th scope="col" class="govuk-table__header">Who will do this</th>
+                    <th scope="col" class="govuk-table__header">Due date</th>
+                </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                {% for step in params.goal.steps %}
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">{{ step.description }}</td>
+                        <td class="govuk-table__cell">{{ step.actors | getActors | join(', ') }}</td>
+                        <td class="govuk-table__cell">{{ step.creationDate | formatSimpleDate }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="goal-summary-card__steps--empty">
+                <strong>No steps added</strong>
+                <a href="/goals/${{ params.goal.uuid }}/steps">Add steps</a>
+            </div>
+        {% endif %}
+
+        <p class="goal-summary-card__areas-of-need">
             Area of need: {{ params.goal.areaOfNeed.name }}<br>
             {% if params.goal.relatedAreasOfNeed.length > 0 %}
-              Also relates to: {{ params.goal.relatedAreasOfNeed | getRelatedAreaOfNeed | join(', ') }}
+                Also relates to: {{ params.goal.relatedAreasOfNeed | getRelatedAreaOfNeed | join(', ') }}
             {% endif %}
         </p>
 
         {% if params.buttons and params.buttons.length > 0 %}
-            <hr>
             {{ mojButtonMenu({
-                items: params.buttons
+                items: params.buttons,
+                classes: "goal-summary-card__buttons"
             }) }}
         {% endif %}
     {% endcall %}
