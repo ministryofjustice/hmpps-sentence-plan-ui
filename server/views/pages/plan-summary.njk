@@ -49,13 +49,13 @@
 
         {% if data.type == 'future' %}
             {% for goal in data.futureGoals %}
-                 {{ summaryListWithSteps(goal) }}
+                 {{ summaryListWithSteps(goal, loop.index, loop.length) }}
             {% endfor %}
         {% else %}
             {% for goal in data.currentGoals %}
-                {{ summaryListWithSteps(goal) }}
+                {{ summaryListWithSteps(goal, loop.index, loop.length) }}
             {% endfor %}
-          {% endif %}
+        {% endif %}
       </div>
 </div>
 {% endblock %}

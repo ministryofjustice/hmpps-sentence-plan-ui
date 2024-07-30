@@ -1,6 +1,7 @@
 {% from "../components/summary-card/summary-card.njk" import summaryCard %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 
-{% macro summaryListWithSteps (goal) %}
+{% macro summaryListWithSteps (goal, index, length) %}
     {% call summaryCard({
         title: {
             text:  goal.title
@@ -56,5 +57,29 @@
           Also relates to: {{ goal.relatedAreasOfNeed | getRelatedAreaOfNeed | join(', ') | lower }}
         {% endif %}
     </p>
+        <hr></hr>
+        {% if length > 1 %}
+            {% if index == 1 %}
+            {{ govukButton({
+                text: "Move goal down",
+                classes: "govuk-button--secondary"
+              }) }}
+            </div>
+            {% elseif index > 1 and index < length %}
+              {{ govukButton({
+                text: "Move goal up",
+                classes: "govuk-button--secondary"
+              }) }}&nbsp; &nbsp;
+              {{ govukButton({
+                  text: "Move goal down",
+                  classes: "govuk-button--secondary"
+              }) }}
+            {% elseif index == length %}
+              {{ govukButton({
+                text: "Move goal up",
+                classes: "govuk-button--secondary"
+              }) }}
+            {% endif %}
+        {% endif %}
     {% endcall %}
 {% endmacro %}
