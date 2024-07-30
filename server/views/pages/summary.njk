@@ -3,7 +3,18 @@
 {% set pageTitle = applicationName + " - Summary" %}
 
 {% set mainClasses = "app-container govuk-body" %}
-{% block bodyStart %}{% endblock %}
+{% set header = {
+    type: "extended",
+    items: [{
+        text: "Create goal",
+        href: "/create-goal/accommodation",
+        classes: "govuk-button--secondary"
+    },
+        {
+            text: "Agree plan",
+            href: "#"
+        }]
+} %}
 
 {% block content %}
     <a href="#" class="govuk-back-link">Back</a>

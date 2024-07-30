@@ -2,7 +2,6 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "../components/rosh/macro.njk" import roshWidget %}
-{% from "moj/components/sub-navigation/macro.njk" import mojSubNavigation %}
 
 {% set pageTitle = applicationName + " - About " + data.popData.givenName %}
 {% set mainClasses = "app-container govuk-body" %}
@@ -54,21 +53,6 @@
     %}
 
 {% block content %}
-    {% include "../partials/personal-data-header.njk" %}
-    {{ mojSubNavigation({
-    label: 'Sub navigation',
-    items: [{
-      text: 'About '+data.popData.givenName,
-      href: '/about-pop',
-      active: true
-    }, {
-      text: 'Goals',
-      href: '/goals'
-    }, {
-      text: 'Plan summary',
-      href: '/plan-summary'
-    }]
-  }) }}
     <h1>{{ locale.title | replace("{POP_NAME}", data.popData.givenName) }}</h1>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-one-third">
