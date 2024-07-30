@@ -134,118 +134,114 @@
 {% endset -%}
 
 {% block content %}
-    <div class="govuk-width-container">
-        <a href="#" class="govuk-back-link">Back</a>
-        <main class="govuk-main-wrapper">
-            <div class="govuk-grid-row">
-                <div class="govuk-grid-column-one-third">
-                    {{ mojSideNavigation({
-                      label: 'Side navigation',
-                      items: data.navigationLinks
+    <a href="#" class="govuk-back-link">Back</a>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-third">
+            {{ mojSideNavigation({
+              label: 'Side navigation',
+              items: data.navigationLinks
+            }) }}
+        </div>
+        <div class="govuk-grid-column-two-thirds">
+        {% if errors %}
+            {{ govukErrorSummary({
+              titleText: "There is a problem",
+              errorList: errorSummary
+            }) }}
+        {% endif %}
+            <span class="govuk-caption-l">{{ data.displayAreaOfNeed }}</span>
+            <h1 class="govuk-heading-l">{{ locale.title | replace("{POP_NAME}", data.popData.givenName) }}</h1>
+
+            <form id="create-goal-form" method="POST">
+                <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+                <input type="hidden" id="_areaOfNeed" value="{{ data.areaOfNeed }}">
+                <input type="hidden" name="area-of-need" value="{{ data.displayAreaOfNeed }}">
+                <input type="hidden" id="page" value="goals">
+                <input type="hidden" id="goalAutoInputVal" value="{{ data.form['input-autocomplete'] }}">
+                <div class="{{ inputAutocompleteDivClass }}">
+                    <h1 class="govuk-label-wrapper">
+                        <label class='govuk-label--m' for="step-name">What goal should {{ data.popData.givenName }} try to achieve?</label>
+                    </h1>
+                    <div id="goalName-hint" class="govuk-hint">
+                        Search for a suggested goal or enter your own. Add one goal at a time.
+                    </div>
+                    {% if inputAutocompleteDivClass == 'govuk-form-group govuk-form-group--error' %}
+                        <p id="input-autocomplete-error" class="govuk-error-message">
+                          <span class="govuk-visually-hidden">Error:</span> {{ locale.errors["goal-name"].isNotEmpty }}
+                        </p>
+                    {% endif %}
+                    <input class="govuk-input" id="goal-name" name="goalName" type="text">
+                    <div id="my-autocomplete-container"></div>
+                </div>
+
+                {{ govukRadios({
+                    name: "other-area-of-need-radio",
+                    fieldset: {
+                        legend: {
+                            text: "Is this goal related to any other area of need?",
+                            isPageHeading: false,
+                            classes: "govuk-fieldset__legend--m"
+                        }
+                    },
+                    errorMessage: getFormattedError(errors, locale, 'other-area-of-need-radio'),
+                    items: [
+                        {
+                          value: "yes",
+                          text: "Yes",
+                          checked: data.form['other-area-of-need-radio'] == 'yes',
+                          conditional: {
+                              html: areasOfNeedHtml
+                          }
+                        },
+                        {
+                          value: "no",
+                          text: "No",
+                          checked: data.form['other-area-of-need-radio'] == 'no'
+                        }
+                      ]
+                }) }}
+
+                {{ govukRadios({
+                    name: "start-working-goal-radio",
+                    fieldset: {
+                        legend: {
+                            text: locale.startWorking.label | replace("{POP_NAME}", data.popData.givenName),
+                            isPageHeading: false,
+                            classes: "govuk-fieldset__legend--m"
+                        }
+                    },
+                    errorMessage: getFormattedError(errors, locale, 'start-working-goal-radio'),
+                    items: [
+                        {
+                          value: "yes",
+                          text: "Yes",
+                          checked: data.form['start-working-goal-radio'] == 'yes',
+                          conditional: {
+                              html: customDateRadioHtml
+                          }
+                        },
+                        {
+                          value: "no",
+                          text: "No, it is a future goal",
+                          checked: data.form['start-working-goal-radio'] == 'no'
+                        }
+                      ]
+                }) }}
+
+                <div class="govuk-button-group">
+                    {{ govukButton({
+                        text: locale.addStepsButton,
+                        name: "action",
+                        value: "addStep"
+                    }) }}
+                    {{ govukButton({
+                        name: "action",
+                        value: "saveWithoutSteps",
+                        text: "Save without steps",
+                        classes: "govuk-button--secondary"
                     }) }}
                 </div>
-                <div class="govuk-grid-column-two-thirds">
-                {% if errors %}
-                    {{ govukErrorSummary({
-                      titleText: "There is a problem",
-                      errorList: errorSummary
-                    }) }}
-                {% endif %}
-                    <span class="govuk-caption-l">{{ data.displayAreaOfNeed }}</span>
-                    <h1 class="govuk-heading-l">{{ locale.title | replace("{POP_NAME}", data.popData.givenName) }}</h1>
-
-                    <form id="create-goal-form" method="POST">
-                        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-                        <input type="hidden" id="_areaOfNeed" value="{{ data.areaOfNeed }}">
-                        <input type="hidden" name="area-of-need" value="{{ data.displayAreaOfNeed }}">
-                        <input type="hidden" id="page" value="goals">
-                        <input type="hidden" id="goalAutoInputVal" value="{{ data.form['input-autocomplete'] }}">
-                        <div class="{{ inputAutocompleteDivClass }}">
-                            <h1 class="govuk-label-wrapper">
-                                <label class='govuk-label--m' for="step-name">What goal should {{ data.popData.givenName }} try to achieve?</label>
-                            </h1>
-                            <div id="goalName-hint" class="govuk-hint">
-                                Search for a suggested goal or enter your own. Add one goal at a time.
-                            </div>
-                            {% if inputAutocompleteDivClass == 'govuk-form-group govuk-form-group--error' %}
-                                <p id="input-autocomplete-error" class="govuk-error-message">
-                                  <span class="govuk-visually-hidden">Error:</span> {{ locale.errors["goal-name"].isNotEmpty }}
-                                </p>
-                            {% endif %}
-                            <input class="govuk-input" id="goal-name" name="goalName" type="text">
-                            <div id="my-autocomplete-container"></div>
-                        </div>
-
-                        {{ govukRadios({
-                            name: "other-area-of-need-radio",
-                            fieldset: {
-                                legend: {
-                                    text: "Is this goal related to any other area of need?",
-                                    isPageHeading: false,
-                                    classes: "govuk-fieldset__legend--m"
-                                }
-                            },
-                            errorMessage: getFormattedError(errors, locale, 'other-area-of-need-radio'),
-                            items: [
-                                {
-                                  value: "yes",
-                                  text: "Yes",
-                                  checked: data.form['other-area-of-need-radio'] == 'yes',
-                                  conditional: {
-                                      html: areasOfNeedHtml
-                                  }
-                                },
-                                {
-                                  value: "no",
-                                  text: "No",
-                                  checked: data.form['other-area-of-need-radio'] == 'no'
-                                }
-                              ]
-                        }) }}
-
-                        {{ govukRadios({
-                            name: "start-working-goal-radio",
-                            fieldset: {
-                                legend: {
-                                    text: locale.startWorking.label | replace("{POP_NAME}", data.popData.givenName),
-                                    isPageHeading: false,
-                                    classes: "govuk-fieldset__legend--m"
-                                }
-                            },
-                            errorMessage: getFormattedError(errors, locale, 'start-working-goal-radio'),
-                            items: [
-                                {
-                                  value: "yes",
-                                  text: "Yes",
-                                  checked: data.form['start-working-goal-radio'] == 'yes',
-                                  conditional: {
-                                      html: customDateRadioHtml
-                                  }
-                                },
-                                {
-                                  value: "no",
-                                  text: "No, it is a future goal",
-                                  checked: data.form['start-working-goal-radio'] == 'no'
-                                }
-                              ]
-                        }) }}
-
-                        <div class="govuk-button-group">
-                            {{ govukButton({
-                                text: locale.addStepsButton,
-                                name: "action",
-                                value: "addStep"
-                            }) }}
-                            {{ govukButton({
-                                name: "action",
-                                value: "saveWithoutSteps",
-                                text: "Save without steps",
-                                classes: "govuk-button--secondary"
-                            }) }}
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </main>
+            </form>
+        </div>
     </div>
 {% endblock %}
