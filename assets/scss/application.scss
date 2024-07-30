@@ -9,6 +9,7 @@ $govuk-page-width: $moj-page-width;
 @import "accessible-autocomplete/dist/accessible-autocomplete.min.css";
 @import "hmpps-court-cases-release-dates-design/hmpps/components/date-picker/date-picker";
 @import './components/header-bar';
+@import "./components/back-to-top";
 @import './components/rosh-widget';
 @import "./components/plan-header";
 @import "./components/colors";
