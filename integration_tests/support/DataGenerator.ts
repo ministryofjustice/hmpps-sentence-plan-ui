@@ -17,8 +17,6 @@ export class DataGenerator {
   }
 
   static getRandomFutureDate = (rangeInDays = 900) => {
-    const date = new Date(Date.now() + Math.random() * (rangeInDays * 86400 * 1000)).toISOString()
-    console.log(date)
-    return date
+    return new Date(Date.now() + Math.random() * (rangeInDays * 86400 * 1000)).toISOString()
   }
 }
