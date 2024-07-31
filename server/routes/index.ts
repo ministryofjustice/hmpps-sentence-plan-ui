@@ -9,7 +9,7 @@ import { Page } from '../services/auditService'
 import setupStepRoutes from './steps/routes'
 import setupReferenceDataRoutes from './ReferenceData/routes'
 import setupPlanSummaryRoutes from './plan-summary/routes'
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import URLs from './URLs'
 
 export default function routes(services: Services): Router {
   const router = Router()
@@ -20,7 +20,7 @@ export default function routes(services: Services): Router {
       who: res.locals.user?.username,
       correlationId: req.id,
     })
-    res.render('pages/index')
+    res.redirect(URLs.PLAN_SUMMARY)
   })
 
   setupAboutPopRoutes(router, services)
