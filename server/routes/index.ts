@@ -2,6 +2,7 @@ import { RequestHandler, Router } from 'express'
 import asyncMiddleware from '../middleware/asyncMiddleware'
 import type { Services } from '../services'
 import setupCreateGoalRoutes from './createGoal/routes'
+import setupRemoveGoalRoutes from './removeGoal/routes'
 import setupConfirmGoalRoutes from './confirmGoal/routes'
 import setupAboutPopRoutes from './aboutPop/routes'
 import { Page } from '../services/auditService'
@@ -24,6 +25,7 @@ export default function routes(services: Services): Router {
 
   setupAboutPopRoutes(router, services)
   setupCreateGoalRoutes(router, services)
+  setupRemoveGoalRoutes(router, services)
   setupConfirmGoalRoutes(router, services)
   setupStepRoutes(router, services)
   setupReferenceDataRoutes(router, services)

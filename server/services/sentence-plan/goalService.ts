@@ -6,9 +6,19 @@ import { Goals } from '../../@types/GoalsType'
 export default class GoalService {
   constructor(private readonly sentencePlanApiClient: SentencePlanApiClient) {}
 
+  async getGoal(goalUuid: string) {
+    const restClient = await this.sentencePlanApiClient.restClient('Getting goal')
+    return restClient.get<Goal>({ path: `/goals/${goalUuid}` })
+  }
+
   async saveGoal(goal: NewGoal, parentPlanUuid: string) {
     const restClient = await this.sentencePlanApiClient.restClient('Saving goal data')
     return restClient.post<Goal>({ path: `/plans/${parentPlanUuid}/goals`, data: goal })
+  }
+
+  async removeGoal(goalUuid: string) {
+    const restClient = await this.sentencePlanApiClient.restClient('Removing goal data')
+    return restClient.delete({ path: `/goals/${goalUuid}`, raw: true })
   }
 
   async getGoals(parentPlanUuid: string) {

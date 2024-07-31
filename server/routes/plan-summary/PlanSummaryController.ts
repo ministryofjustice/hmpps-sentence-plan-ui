@@ -20,7 +20,7 @@ export default class PlanSummaryController {
       const goals = await this.goalService.getGoals(planUuid)
       const currentGoals = goals.now
       const futureGoals = goals.future
-      const source = req.query?.source
+      const status = req.query?.status
       const type = req.query?.type
       return res.render('pages/plan-summary', {
         locale: locale.en,
@@ -29,7 +29,7 @@ export default class PlanSummaryController {
           currentGoals,
           futureGoals,
           type,
-          source,
+          status,
         },
         errors,
       })

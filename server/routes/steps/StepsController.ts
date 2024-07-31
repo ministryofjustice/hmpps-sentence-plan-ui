@@ -50,7 +50,7 @@ export default class StepsController {
       const actors = transformActor(mappedActor)
       const payload = { description: stepName, status: '', actor: actors } as NewStep
       await this.stepService.saveSteps([payload], currentGoal)
-      res.redirect(URLs.PLAN_SUMMARY)
+      res.redirect(`${URLs.PLAN_SUMMARY}?status=success`)
     } catch (e) {
       next(e)
     }

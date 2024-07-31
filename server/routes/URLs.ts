@@ -7,4 +7,5 @@ export default {
   GOAL_DETAIL: '/goal/:uuid',
   GOALS: '/goals',
   GOALS_ORDER: '/goals/:uuid/:operation',
+  REMOVE_GOAL: '/remove-goal/:uuid',
 }
