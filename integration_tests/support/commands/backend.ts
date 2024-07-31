@@ -1,5 +1,5 @@
 import {NewGoal} from "../../../server/@types/NewGoalType";
-import {DataGenerator} from "../DataGenerator";
+import {NewStep} from "../../../server/@types/NewStepType";
 
 const getApiToken = () => {
   const apiToken = Cypress.env('API_TOKEN')
@@ -28,8 +28,8 @@ const getApiToken = () => {
 }
 
 export const openSentencePlan = (oasysAssessmentPk) => {
-  cy.session(oasysAssessmentPk, () => {
-    getApiToken().then(apiToken => {
+  cy.session(oasysAssessmentPk, () =>
+    getApiToken().then(apiToken =>
       cy.request({
         url: `${Cypress.env('ARNS_HANDOVER_URL')}/handover`,
         method: 'POST',
@@ -50,20 +50,22 @@ export const openSentencePlan = (oasysAssessmentPk) => {
             gender: 0,
             location: 'COMMUNITY',
             sexuallyMotivatedOffenceHistory: 'NO',
-          },
-        },
-      }).then(handoverResponse => {
-        cy.visit(`${handoverResponse.body.handoverLink}?clientId=${Cypress.env('ARNS_HANDOVER_CLIENT_ID')}`)
+          }
+        }
       })
-    })
-  })
-  cy.visit('about-pop')
+      .then(handoverResponse =>
+        cy.visit(`${handoverResponse.body.handoverLink}?clientId=${Cypress.env('ARNS_HANDOVER_CLIENT_ID')}`)
+      )
+    )
+  )
+
+  return cy.visit('/')
 }
 
 export const createSentencePlan = () => {
   const oasysAssessmentPk = Math.random().toString().substring(2, 9)
 
-  getApiToken().then(apiToken => {
+  return getApiToken().then(apiToken =>
     cy.request({
       url: `${Cypress.env('SP_API_URL')}/oasys/plans`,
       method: 'POST',
@@ -73,16 +75,27 @@ export const createSentencePlan = () => {
       planUuid: createResponse.body.uuid,
       oasysAssessmentPk
     }))
-  })
+  )
 }
 
-export const addGoalToPlan = (planUUid, goal: NewGoal) => {
-  getApiToken().then(apiToken => {
+export const addGoalToPlan = (planUUid: string, goal: NewGoal) => {
+  return getApiToken().then(apiToken =>
     cy.request({
       url: `${Cypress.env('SP_API_URL')}/plans/${planUUid}/goals`,
       method: 'POST',
-      auth: {bearer: apiToken},
-      body: { ...DataGenerator.generateGoal(), goal },
+      auth: { bearer: apiToken },
+      body: goal
     }).then(createResponse => createResponse.body)
-  })
+  )
+}
+
+export const addStepToGoal = (goalUuid: string, step: NewStep) => {
+  return getApiToken().then(apiToken =>
+    cy.request({
+      url: `${Cypress.env('SP_API_URL')}/goals/${goalUuid}/steps`,
+      method: 'POST',
+      auth: { bearer: apiToken },
+      body: [ step ],
+    }).then(createResponse => createResponse.body)
+  )
 }
