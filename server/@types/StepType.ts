@@ -1,11 +1,12 @@
 export type Step = {
   uuid: string
-  relatedGoalUuid: string
   description: string
-  actor: {
-    actor: string
-    actorOptionId: number
-  }[]
-  creationDate?: string
   status?: string
+  creationDate?: string
+  actor: Actor[]
+}
+
+type Actor = {
+  actor: string
+  actorOptionId: number
 }

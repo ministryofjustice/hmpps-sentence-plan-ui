@@ -1,6 +1,6 @@
 export type PlanType = {
   uuid: string
   status: string
-  createdAt: Date
-  updatedAt: Date
+  creationDate: Date
+  updatedDate: Date
 }

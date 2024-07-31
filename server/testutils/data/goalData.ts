@@ -10,8 +10,18 @@ export const testNewGoal: NewGoal = {
   relatedAreasOfNeed: ['Test related area of need'],
 }
 export const testGoal: Goal = {
+  ...testNewGoal,
   id: 123,
   uuid: 'a-un1qu3-t3st-Uu1d',
   creationDate: new Date().toISOString().substring(0, 10),
-  ...testNewGoal,
+  areaOfNeed: {
+    name: testNewGoal.areaOfNeed,
+    uuid: 'some-random-uuid',
+  },
+  relatedAreasOfNeed: [
+    {
+      name: testNewGoal.relatedAreasOfNeed[0],
+      uuid: 'some-random-related-uuid',
+    },
+  ],
 } as Goal
