@@ -1,22 +1,28 @@
 import {NewGoal} from "../../server/@types/NewGoalType";
+import {NewStep} from "../../server/@types/NewStepType";
+import {faker} from "@faker-js/faker";
+import {AreaOfNeed} from "../../server/testutils/data/referenceData";
 
 export class DataGenerator {
-  private static areasOfNeed = ['Accommodation', 'Health and wellbeing', 'Drug use']
+  static generateGoal = (): NewGoal => ({
+    title: faker.lorem.sentence(8),
+    areaOfNeed: DataGenerator.getRandomAreaOfNeed(),
+    relatedAreasOfNeed: [DataGenerator.getRandomAreaOfNeed()],
+    targetDate: faker.date.future({ years: 1, refDate: new Date }).toISOString().split('T')[0]
+  })
 
-  static generateGoal = (): NewGoal => {
-    return {
-      areaOfNeed: this.getRandomAreaOfNeed(),
-      title: "Random goal " + Math.floor(Math.random() * 1000),
-      relatedAreasOfNeed: [this.getRandomAreaOfNeed()],
-      targetDate: this.getRandomFutureDate()
-    }
-  }
+  static generateStep  = (): NewStep => ({
+    description: faker.lorem.lines(1),
+    status: faker.helpers.arrayElement(['INACTIVE', 'ACTIVE', 'COMPLETED']),
+    actor: [
+      {
+        actor: "Probation practitioner",
+        actorOptionId: 2
+      }
+    ]
+  })
 
-  static getRandomAreaOfNeed = () => {
-    return this.areasOfNeed[Math.floor(Math.random() * this.areasOfNeed.length)]
-  }
-
-  static getRandomFutureDate = (rangeInDays = 900) => {
-    return new Date(Date.now() + Math.random() * (rangeInDays * 86400 * 1000)).toISOString()
+  private static getRandomAreaOfNeed = () => {
+    return faker.helpers.arrayElement(AreaOfNeed.map(x => x.name))
   }
 }

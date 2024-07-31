@@ -1,4 +1,6 @@
 declare namespace Cypress {
+  import {NewStep} from "../server/@types/NewStepType";
+  import {Step} from "../server/@types/StepType";
   import {NewGoal} from "../server/@types/NewGoalType";
   import {Goal} from "../server/@types/GoalType";
 
@@ -10,6 +12,7 @@ declare namespace Cypress {
     createSentencePlan(): Chainable<T>
 
     // API
-    addGoalToPlan(planUuid: string, goal?: NewGoal): Goal
+    addGoalToPlan(planUuid: string, goal: NewGoal): Chainable<Goal>
+    addStepToGoal(goalUuid: string, step: NewStep): Chainable<Step>
   }
 }
