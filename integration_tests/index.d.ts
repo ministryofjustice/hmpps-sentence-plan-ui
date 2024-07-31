@@ -1,5 +1,7 @@
 declare namespace Cypress {
   import {NewGoal} from "../server/@types/NewGoalType";
+  import {Goal} from "../server/@types/GoalType";
+
   interface Chainable<T> {
     get<S = JQuery<HTMLElement>>(alias: string, options?: Partial<Loggable & Timeoutable & Withinable & Shadow>): Chainable<S>
 
@@ -8,6 +10,6 @@ declare namespace Cypress {
     createSentencePlan(): Chainable<T>
 
     // API
-    addGoalsToPlan(planUuid: string, goal?: NewGoal): Chainable<T>
+    addGoalToPlan(planUuid: string, goal?: NewGoal): Goal
   }
 }

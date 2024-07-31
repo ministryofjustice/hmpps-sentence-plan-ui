@@ -2,7 +2,10 @@ export type Goal = {
   id: number
   uuid: string
   title: string
-  areaOfNeed: string
+  areaOfNeed: {
+    uuid: string,
+    name: string
+  },
   creationDate: string
   completedDate?: string
   targetDate: string

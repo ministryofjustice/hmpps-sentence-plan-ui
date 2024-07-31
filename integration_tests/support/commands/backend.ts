@@ -76,7 +76,7 @@ export const createSentencePlan = () => {
   })
 }
 
-export const addGoalsToPlan = (planUUid, goal: NewGoal) => {
+export const addGoalToPlan = (planUUid, goal: NewGoal) => {
   getApiToken().then(apiToken => {
     cy.request({
       url: `${Cypress.env('SP_API_URL')}/plans/${planUUid}/goals`,
