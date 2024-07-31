@@ -8,4 +8,7 @@ export type Goal = {
   targetDate: string
   isAgreed?: boolean
   agreementNote: string
+  goalOrder?: number
+  moveUpURL?: string
+  moveDownURL?: string
 }

@@ -1,0 +1,129 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "moj/components/sub-navigation/macro.njk" import mojSubNavigation %}
+{% from "moj/components/button-menu/macro.njk" import mojButtonMenu %}
+{%- from "moj/components/banner/macro.njk" import mojBanner -%}
+{% from "../components/summary-card/goal-summary-card.njk" import goalSummaryCard %}
+
+{% set pageTitle = applicationName + " - View plan " %}
+{% set mainClasses = "app-container govuk-body" %}
+{% set header = {
+    type: "extended",
+    items: [{
+        text: "Create goal",
+        href: "/create-goal/accommodation",
+        classes: "govuk-button--secondary"
+    },
+        {
+            text: "Agree plan",
+            href: "#"
+        }]
+} %}
+
+{% block bodyStart %}
+    <div id="top"></div>
+{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      {% if data.source != 'nav' %}
+          {{ mojBanner({
+            type: 'success',
+            text: 'You added a goal to '+data.popData.givenName+'’s plan',
+            iconFallbackText: 'Success'
+          }) }}
+      {% endif %}
+        <p class="govuk-body">
+           Add steps to the goals {{ data.popData.givenName }} is working on now. You can then agree the plan with {{ data.popData.givenName }}.
+        </p>
+
+        {{ mojSubNavigation({
+          label: 'Sub navigation',
+          items: [{
+            text: 'Goals to work on now ('+ data.currentGoals.length +')',
+            href: '/plan-summary?type=current',
+            active: data.type != 'future'
+          }, {
+            text: 'Future goals ('+ data.futureGoals.length +')',
+            href: '/plan-summary?type=future',
+            active: data.type == 'future'
+          }]
+        }) }}
+
+        <ol class="goal-list govuk-list govuk-list--number">
+            {% if data.type == 'future' %}
+                {% for goal in data.futureGoals %}
+                    <li>
+                        {{ goalSummaryCard({
+                            goal: goal,
+                            actions: [
+                                {
+                                    href: "/edit-goal",
+                                    text: "Change goal",
+                                    visuallyHiddenText: "Change goal"
+                                },
+                                {
+                                    href: "/add-change-steps",
+                                    text: "Add or change steps",
+                                    visuallyHiddenText: "Add or change steps"
+                                },
+                                {
+                                    href: "/remove-goal/" + goal.uuid,
+                                    text: "Remove goal",
+                                    visuallyHiddenText: "Remove goal"
+                                }
+                            ]
+                        }) }}
+                    </li>
+                {% endfor %}
+            {% else %}
+                {% for goal in data.currentGoals %}
+                    {% set buttons = [] %}
+                    {% if not loop.first %}
+                        {% set buttons = buttons.concat({
+                            text: "Move goal up",
+                            href: "#",
+                            classes: "govuk-button--secondary"
+                        }) %}
+                    {% endif %}
+
+                    {% if not loop.last %}
+                        {% set buttons = buttons.concat({
+                            text: "Move goal down",
+                            href: "#",
+                            classes: "govuk-button--secondary"
+                        }) %}
+                    {% endif %}
+
+                    <li>
+                        {{ goalSummaryCard({
+                            goal: goal,
+                            buttons: buttons,
+                            actions: [
+                                {
+                                    href: "/edit-goal",
+                                    text: "Change goal",
+                                    visuallyHiddenText: "Change goal"
+                                },
+                                {
+                                    href: "/add-change-steps",
+                                    text: "Add or change steps",
+                                    visuallyHiddenText: "Add or change steps"
+                                },
+                                {
+                                    href: "/remove-goal/" + goal.uuid,
+                                    text: "Remove goal",
+                                    visuallyHiddenText: "Remove goal"
+                                }
+                            ]
+                        }) }}
+                    </li>
+                {% endfor %}
+            {% endif %}
+        </ol>
+
+        {% include "../partials/back-to-top-link.njk" %}
+      </div>
+</div>
+{% endblock %}
