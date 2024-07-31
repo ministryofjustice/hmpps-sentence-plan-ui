@@ -75,7 +75,7 @@ export const createSentencePlan = () => {
         body: { oasysAssessmentPk },
       })
       .then(createResponse => ({
-        planUuid: createResponse.body.uuid,
+        plan: createResponse.body,
         oasysAssessmentPk,
       })),
   )
