@@ -12,7 +12,7 @@
             items: params.actions
         }
     }) %}
-        {% if params.goal.targerDate %}
+        {% if params.goal.targetDate %}
             <p class="goal-summary-card__target-date">
                 Aim to achieve in {{ getMonthsDifference(params.goal.creationDate, params.goal.targetDate) }} months ({{ params.goal.targetDate | formatSimpleDate }})
             </p>
