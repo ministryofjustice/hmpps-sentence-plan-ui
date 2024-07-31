@@ -45,9 +45,9 @@
         {% endif %}
 
         <p class="goal-summary-card__areas-of-need">
-            Area of need: {{ params.goal.areaOfNeed.name }}<br>
+            Area of need: {{ params.goal.areaOfNeed.name | lower }}<br>
             {% if params.goal.relatedAreasOfNeed.length > 0 %}
-                Also relates to: {{ params.goal.relatedAreasOfNeed | getRelatedAreaOfNeed | join(', ') }}
+                Also relates to: {{ params.goal.relatedAreasOfNeed | getRelatedAreaOfNeed | join(', ') | lower }}
             {% endif %}
         </p>
 
