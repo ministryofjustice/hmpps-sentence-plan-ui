@@ -27,13 +27,19 @@
 {% block content %}
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-      {% if data.source != 'nav' %}
-          {{ mojBanner({
-            type: 'success',
-            text: 'You added a goal to '+data.popData.givenName+'’s plan',
-            iconFallbackText: 'Success'
-          }) }}
-      {% endif %}
+        {% if data.status == 'success' %}
+            {{ mojBanner({
+                type: 'success',
+                text: 'You added a goal to '+data.popData.givenName+'’s plan',
+                iconFallbackText: 'Success'
+            }) }}
+        {% elseif data.status == 'removed' %}
+            {{ mojBanner({
+                type: 'success',
+                text: 'You removed a goal from '+data.popData.givenName+'’s plan',
+                iconFallbackText: 'Success'
+            }) }}
+        {% endif %}
         <p class="govuk-body">
            Add steps to the goals {{ data.popData.givenName }} is working on now. You can then agree the plan with {{ data.popData.givenName }}.
         </p>
