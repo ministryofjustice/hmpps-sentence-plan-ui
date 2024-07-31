@@ -31,7 +31,7 @@ export default function setUpAuth(): Router {
 
         return req.services.sessionService
           .setupSession()
-          .then(() => res.redirect(req.session.returnTo || '/about-pop'))
+          .then(() => res.redirect(req.session.returnTo || '/plan-summary'))
           .catch(next)
       })
     })(req, res, next),
