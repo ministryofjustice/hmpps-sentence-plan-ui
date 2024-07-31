@@ -83,6 +83,7 @@
                     {% if not loop.first %}
                         {% set buttons = buttons.concat({
                             text: "Move goal up",
+                            href: "#",
                             classes: "govuk-button--secondary"
                         }) %}
                     {% endif %}
@@ -90,6 +91,7 @@
                     {% if not loop.last %}
                         {% set buttons = buttons.concat({
                             text: "Move goal down",
+                            href: "#",
                             classes: "govuk-button--secondary"
                         }) %}
                     {% endif %}

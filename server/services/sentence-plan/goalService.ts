@@ -17,8 +17,8 @@ export default class GoalService {
     return restClient.get<Goals>({ path: `/plans/${parentPlanUuid}/goals` })
   }
 
-  async changeGoalOrder(goals: Array<Goal>) {
+  async changeGoalOrder(goals: Goal[]) {
     const restClient = await this.sentencePlanApiClient.restClient('Reordering goals')
-    return restClient.post<Step[]>({ path: `/goals/order`, data: goals })
+    return restClient.post<Goal[]>({ path: `/goals/order`, data: goals })
   }
 }
