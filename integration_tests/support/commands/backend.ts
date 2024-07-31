@@ -1,3 +1,6 @@
+import {NewGoal} from "../../../server/@types/NewGoalType";
+import {DataGenerator} from "../DataGenerator";
+
 const getApiToken = () => {
   const apiToken = Cypress.env('API_TOKEN')
 
@@ -24,15 +27,15 @@ const getApiToken = () => {
     })
 }
 
-export const enterSentencePlan = () => {
-  cy.session(Cypress.env('last_sentence_plan').planUuid, () => {
+export const openSentencePlan = (oasysAssessmentPk) => {
+  cy.session(oasysAssessmentPk, () => {
     getApiToken().then(apiToken => {
       cy.request({
         url: `${Cypress.env('ARNS_HANDOVER_URL')}/handover`,
         method: 'POST',
         auth: { bearer: apiToken },
         body: {
-          oasysAssessmentPk: Cypress.env('last_sentence_plan').oasysAssessmentPk,
+          oasysAssessmentPk: oasysAssessmentPk,
           user: {
             identifier: 123,
             displayName: 'Cypress User',
@@ -64,13 +67,22 @@ export const createSentencePlan = () => {
     cy.request({
       url: `${Cypress.env('SP_API_URL')}/oasys/plans`,
       method: 'POST',
-      auth: { bearer: apiToken },
-      body: { oasysAssessmentPk },
-    }).then(createResponse => {
-      Cypress.env('last_sentence_plan', {
-        planUuid: createResponse.body.uuid,
-        oasysAssessmentPk,
-      })
-    })
+      auth: {bearer: apiToken},
+      body: {oasysAssessmentPk},
+    }).then(createResponse => ({
+      planUuid: createResponse.body.uuid,
+      oasysAssessmentPk
+    }))
+  })
+}
+
+export const addGoalsToPlan = (planUUid, goal: NewGoal) => {
+  getApiToken().then(apiToken => {
+    cy.request({
+      url: `${Cypress.env('SP_API_URL')}/plans/${planUUid}/goals`,
+      method: 'POST',
+      auth: {bearer: apiToken},
+      body: { ...DataGenerator.generateGoal(), goal },
+    }).then(createResponse => createResponse.body)
   })
 }
