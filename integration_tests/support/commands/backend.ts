@@ -1,5 +1,5 @@
-import {NewGoal} from "../../../server/@types/NewGoalType";
-import {NewStep} from "../../../server/@types/NewStepType";
+import { NewGoal } from '../../../server/@types/NewGoalType'
+import { NewStep } from '../../../server/@types/NewStepType'
 
 const getApiToken = () => {
   const apiToken = Cypress.env('API_TOKEN')
@@ -27,36 +27,37 @@ const getApiToken = () => {
     })
 }
 
-export const openSentencePlan = (oasysAssessmentPk) => {
+export const openSentencePlan = oasysAssessmentPk => {
   cy.session(oasysAssessmentPk, () =>
     getApiToken().then(apiToken =>
-      cy.request({
-        url: `${Cypress.env('ARNS_HANDOVER_URL')}/handover`,
-        method: 'POST',
-        auth: { bearer: apiToken },
-        body: {
-          oasysAssessmentPk: oasysAssessmentPk,
-          user: {
-            identifier: 123,
-            displayName: 'Cypress User',
-            accessMode: 'READ_WRITE',
+      cy
+        .request({
+          url: `${Cypress.env('ARNS_HANDOVER_URL')}/handover`,
+          method: 'POST',
+          auth: { bearer: apiToken },
+          body: {
+            oasysAssessmentPk,
+            user: {
+              identifier: 123,
+              displayName: 'Cypress User',
+              accessMode: 'READ_WRITE',
+            },
+            subjectDetails: {
+              crn: 'X123456',
+              pnc: '01/123456789A',
+              givenName: 'Sam',
+              familyName: 'Whitfield',
+              dateOfBirth: '1970-01-01',
+              gender: 0,
+              location: 'COMMUNITY',
+              sexuallyMotivatedOffenceHistory: 'NO',
+            },
           },
-          subjectDetails: {
-            crn: 'X123456',
-            pnc: '01/123456789A',
-            givenName: 'Sam',
-            familyName: 'Whitfield',
-            dateOfBirth: '1970-01-01',
-            gender: 0,
-            location: 'COMMUNITY',
-            sexuallyMotivatedOffenceHistory: 'NO',
-          }
-        }
-      })
-      .then(handoverResponse =>
-        cy.visit(`${handoverResponse.body.handoverLink}?clientId=${Cypress.env('ARNS_HANDOVER_CLIENT_ID')}`)
-      )
-    )
+        })
+        .then(handoverResponse =>
+          cy.visit(`${handoverResponse.body.handoverLink}?clientId=${Cypress.env('ARNS_HANDOVER_CLIENT_ID')}`),
+        ),
+    ),
   )
 
   return cy.visit('/')
@@ -66,36 +67,42 @@ export const createSentencePlan = () => {
   const oasysAssessmentPk = Math.random().toString().substring(2, 9)
 
   return getApiToken().then(apiToken =>
-    cy.request({
-      url: `${Cypress.env('SP_API_URL')}/oasys/plans`,
-      method: 'POST',
-      auth: {bearer: apiToken},
-      body: {oasysAssessmentPk},
-    }).then(createResponse => ({
-      planUuid: createResponse.body.uuid,
-      oasysAssessmentPk
-    }))
+    cy
+      .request({
+        url: `${Cypress.env('SP_API_URL')}/oasys/plans`,
+        method: 'POST',
+        auth: { bearer: apiToken },
+        body: { oasysAssessmentPk },
+      })
+      .then(createResponse => ({
+        planUuid: createResponse.body.uuid,
+        oasysAssessmentPk,
+      })),
   )
 }
 
 export const addGoalToPlan = (planUUid: string, goal: NewGoal) => {
   return getApiToken().then(apiToken =>
-    cy.request({
-      url: `${Cypress.env('SP_API_URL')}/plans/${planUUid}/goals`,
-      method: 'POST',
-      auth: { bearer: apiToken },
-      body: goal
-    }).then(createResponse => createResponse.body)
+    cy
+      .request({
+        url: `${Cypress.env('SP_API_URL')}/plans/${planUUid}/goals`,
+        method: 'POST',
+        auth: { bearer: apiToken },
+        body: goal,
+      })
+      .then(createResponse => createResponse.body),
   )
 }
 
 export const addStepToGoal = (goalUuid: string, step: NewStep) => {
   return getApiToken().then(apiToken =>
-    cy.request({
-      url: `${Cypress.env('SP_API_URL')}/goals/${goalUuid}/steps`,
-      method: 'POST',
-      auth: { bearer: apiToken },
-      body: [ step ],
-    }).then(createResponse => createResponse.body)
+    cy
+      .request({
+        url: `${Cypress.env('SP_API_URL')}/goals/${goalUuid}/steps`,
+        method: 'POST',
+        auth: { bearer: apiToken },
+        body: [step],
+      })
+      .then(createResponse => createResponse.body),
   )
 }

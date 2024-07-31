@@ -1,15 +1,13 @@
-import {addGoalsToPlan} from "../support/commands/backend";
-
 describe('Create a new Goal', () => {
   beforeEach(() => {
-    cy.createSentencePlan().then((planDetails) => {
-        cy.wrap(planDetails).as('planDetails')
-        cy.openSentencePlan(planDetails.oasysAssessmentPk)
-        cy.visit('/about-pop')
+    cy.createSentencePlan().then(planDetails => {
+      cy.wrap(planDetails).as('planDetails')
+      cy.openSentencePlan(planDetails.oasysAssessmentPk)
+      cy.visit('/about-pop')
     })
   })
 
-  it('Creates a new goal with steps', function () {
+  it('Creates a new goal with steps', () => {
     cy.get("a[href='/create-goal/accommodation']").click()
     cy.url().should('include', '/create-goal/accommodation')
     cy.get('#goal-name').type('acc{downArrow},{enter}')

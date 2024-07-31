@@ -1,11 +1,14 @@
 declare namespace Cypress {
-  import {NewStep} from "../server/@types/NewStepType";
-  import {Step} from "../server/@types/StepType";
-  import {NewGoal} from "../server/@types/NewGoalType";
-  import {Goal} from "../server/@types/GoalType";
+  import { NewStep } from '../server/@types/NewStepType'
+  import { Step } from '../server/@types/StepType'
+  import { NewGoal } from '../server/@types/NewGoalType'
+  import { Goal } from '../server/@types/GoalType'
 
   interface Chainable<T> {
-    get<S = JQuery<HTMLElement>>(alias: string, options?: Partial<Loggable & Timeoutable & Withinable & Shadow>): Chainable<S>
+    get<S = JQuery<HTMLElement>>(
+      alias: string,
+      options?: Partial<Loggable & Timeoutable & Withinable & Shadow>,
+    ): Chainable<S>
 
     // Handover/Auth
     openSentencePlan(oasysAssessmentPk: string): Chainable<T>
