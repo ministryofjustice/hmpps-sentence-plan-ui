@@ -1,11 +1,13 @@
 describe('Create a new Goal', () => {
   beforeEach(() => {
-    cy.createSentencePlan()
-    cy.enterSentencePlan()
+    cy.createSentencePlan().then(planDetails => {
+      cy.wrap(planDetails).as('planDetails')
+      cy.openSentencePlan(planDetails.oasysAssessmentPk)
+      cy.visit('/about-pop')
+    })
   })
 
   it('Creates a new goal with steps', () => {
-    cy.url().should('include', '/about-pop')
     cy.get("a[href='/create-goal/accommodation']").click()
     cy.url().should('include', '/create-goal/accommodation')
     cy.get('#goal-name').type('acc{downArrow},{enter}')
@@ -25,7 +27,6 @@ describe('Create a new Goal', () => {
   })
 
   it('Creates a new goal with errors', () => {
-    cy.url().should('include', '/about-pop')
     cy.get("a[href='/create-goal/accommodation']").click()
     cy.url().should('include', '/create-goal/accommodation')
     cy.get('#goal-name').type('acc{downArrow},{enter}')
@@ -37,7 +38,6 @@ describe('Create a new Goal', () => {
   })
 
   it('Creates a new goal without steps', () => {
-    cy.url().should('include', '/about-pop')
     cy.get("a[href='/create-goal/accommodation']").click()
     cy.url().should('include', '/create-goal/accommodation')
     cy.get('#goal-name').type('acc{downArrow},{enter}')
