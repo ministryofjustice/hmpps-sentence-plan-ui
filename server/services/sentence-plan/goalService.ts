@@ -2,6 +2,7 @@ import SentencePlanApiClient from '../../data/sentencePlanApiClient'
 import { NewGoal } from '../../@types/NewGoalType'
 import { Goal } from '../../@types/GoalType'
 import { Goals } from '../../@types/GoalsType'
+import { GoalOrder } from '../../@types/GoalOrderType'
 
 export default class GoalService {
   constructor(private readonly sentencePlanApiClient: SentencePlanApiClient) {}
@@ -26,8 +27,8 @@ export default class GoalService {
     return restClient.get<Goals>({ path: `/plans/${parentPlanUuid}/goals` })
   }
 
-  async changeGoalOrder(goals: Goal[]) {
+  async changeGoalOrder(goalOrders: GoalOrder[]) {
     const restClient = await this.sentencePlanApiClient.restClient('Reordering goals')
-    return restClient.post<Goal[]>({ path: `/goals/order`, data: goals })
+    return restClient.post({ path: `/goals/order`, data: goalOrders })
   }
 }

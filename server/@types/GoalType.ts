@@ -6,9 +6,7 @@ export type Goal = {
   creationDate: string
   completedDate?: string
   targetDate: string
-  goalOrder?: number
-  moveUpURL?: string
-  moveDownURL?: string
+  goalOrder: number
 }
 
 type AreaOfNeed = {

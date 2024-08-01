@@ -61,9 +61,9 @@ export function dateToISOFormat(date: string): string {
   return [year, month, day].join('-')
 }
 
-export function moveGoal(goals: Array<any>, uuid: string, operation: string) {
+export function moveGoal(goals: Array<any>, gUuid: string, operation: string) {
   const orderedGoals = [...goals]
-  const index = orderedGoals.findIndex(goal => goal.uuid === uuid)
+  const index = orderedGoals.findIndex(goal => goal.uuid === gUuid)
 
   if (index === -1 || (operation !== 'up' && operation !== 'down')) {
     return orderedGoals
@@ -81,5 +81,5 @@ export function moveGoal(goals: Array<any>, uuid: string, operation: string) {
   ;[orderedGoals[index], orderedGoals[targetIndex]] = [orderedGoals[targetIndex], orderedGoals[index]]
   orderedGoals[index].goalOrder = index
   orderedGoals[targetIndex].goalOrder = targetIndex
-  return orderedGoals.map(({ uuid: goalId, goalOrder }) => ({ goalId, goalOrder }))
+  return orderedGoals.map(({ uuid: goalUuid, goalOrder }) => ({ goalUuid, goalOrder }))
 }

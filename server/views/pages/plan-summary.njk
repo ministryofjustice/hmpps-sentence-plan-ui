@@ -60,9 +60,26 @@
         <ol class="goal-list govuk-list govuk-list--number">
             {% if data.type == 'future' %}
                 {% for goal in data.futureGoals %}
+                    {% set buttons = [] %}
+                    {% if not loop.first %}
+                        {% set buttons = buttons.concat({
+                            text: "Move goal up",
+                            href: "/goals/future/"+goal.uuid+"/up",
+                            classes: "govuk-button--secondary"
+                        }) %}
+                    {% endif %}
+
+                    {% if not loop.last %}
+                        {% set buttons = buttons.concat({
+                            text: "Move goal down",
+                            href: "/goals/future/"+goal.uuid+"/down",
+                            classes: "govuk-button--secondary"
+                        }) %}
+                    {% endif %}
                     <li>
                         {{ goalSummaryCard({
                             goal: goal,
+                            buttons: buttons,
                             actions: [
                                 {
                                     href: "/edit-goal",
@@ -89,7 +106,7 @@
                     {% if not loop.first %}
                         {% set buttons = buttons.concat({
                             text: "Move goal up",
-                            href: "#",
+                            href: "/goals/current/"+goal.uuid+"/up",
                             classes: "govuk-button--secondary"
                         }) %}
                     {% endif %}
@@ -97,7 +114,7 @@
                     {% if not loop.last %}
                         {% set buttons = buttons.concat({
                             text: "Move goal down",
-                            href: "#",
+                            href: "/goals/current/"+goal.uuid+"/down",
                             classes: "govuk-button--secondary"
                         }) %}
                     {% endif %}

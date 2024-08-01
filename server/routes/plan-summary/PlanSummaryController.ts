@@ -42,10 +42,11 @@ export default class PlanSummaryController {
     try {
       const planUuid = req.services.sessionService.getPlanUUID()
       const goals = await this.goalService.getGoals(planUuid)
-      const { uuid, operation } = req.params
-      const reorderedList = moveGoal(goals.now, uuid, operation)
+      const { uuid, type, operation } = req.params
+      const goalList = type === 'current' ? goals.now : goals.future
+      const reorderedList = moveGoal(goalList, uuid, operation)
       await this.goalService.changeGoalOrder(reorderedList)
-      return res.redirect(URLs.GOALS)
+      return res.redirect(`${URLs.PLAN_SUMMARY}?type=${type}`)
     } catch (e) {
       return next(e)
     }
