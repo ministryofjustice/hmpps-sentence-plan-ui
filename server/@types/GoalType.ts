@@ -9,6 +9,4 @@ export type Goal = {
   isAgreed?: boolean
   agreementNote: string
   goalOrder?: number
-  moveUpURL?: string
-  moveDownURL?: string
 }
