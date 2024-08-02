@@ -19,6 +19,7 @@
         <form id="remove-goal-form" method="POST">
             <input type="hidden" name="_csrf" value="{{ csrfToken }}">
             <input type="hidden" name="goalUuid" value="{{ data.goal.uuid }}">
+            <input type="hidden" name="type" value="{{ data.type }}">
             <div class="govuk-button-group">
                 {{ govukButton({
                     text: locale.removeGoalButtonText,
