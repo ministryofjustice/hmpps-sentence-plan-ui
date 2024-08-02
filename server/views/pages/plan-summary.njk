@@ -39,6 +39,12 @@
                 text: 'You removed a goal from '+data.popData.givenName+'’s plan',
                 iconFallbackText: 'Success'
             }) }}
+        {% elseif data.status == 'updated' %}
+            {{ mojBanner({
+            type: 'success',
+            text: 'You updated a goal from '+data.popData.givenName+'’s plan',
+            iconFallbackText: 'Success'
+            }) }}
         {% endif %}
         <p class="govuk-body">
            Add steps to the goals {{ data.popData.givenName }} is working on now. You can then agree the plan with {{ data.popData.givenName }}.
@@ -82,7 +88,7 @@
                             buttons: buttons,
                             actions: [
                                 {
-                                    href: "/edit-goal",
+                                    href: "/edit-goal/" + goal.uuid,
                                     text: "Change goal",
                                     visuallyHiddenText: "Change goal"
                                 },
@@ -125,7 +131,7 @@
                             buttons: buttons,
                             actions: [
                                 {
-                                    href: "/edit-goal",
+                                    href: "/edit-goal/" + goal.uuid,
                                     text: "Change goal",
                                     visuallyHiddenText: "Change goal"
                                 },

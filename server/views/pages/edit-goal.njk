@@ -1,0 +1,235 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "hmpps/components/date-picker/macro.njk" import hmppsDatePicker %}
+{% from "moj/components/side-navigation/macro.njk" import mojSideNavigation %}
+
+{% set pageTitle %}
+    {% if errors %}
+        Error: {{ applicationName }} - Edit a goal with {{ data.popData.givenName }}
+    {% else %}
+       {{ applicationName }} - Edit a goal with {{ data.popData.givenName }}
+    {% endif %}
+{% endset -%}
+
+{% set mainClasses = "app-container govuk-body" %}
+
+{# Setup arrays and custom HTML #}
+
+{% set areasOfNeedHtml %}
+    {{ govukCheckboxes({
+      name: "other-area-of-need",
+      hint: {
+        text: "Select all that apply."
+      },
+      errorMessage: getFormattedError(errors, locale, "other-area-of-need"),
+      items: data.otherAreaOfNeed
+    }) }}
+{% endset -%}
+
+{% set customGoalHtml %}
+{{ govukInput({
+            id: "goal-selection-custom",
+            name: "goal-selection-custom",
+            label: {
+                text: locale.goalSelection.customOptionLabel
+            },
+            errorMessage: getFormattedError(errors, locale, "goal-selection-custom"),
+            value: data.form['goal-selection-custom']
+        }) }}
+{% endset -%}
+
+{% set customDateHtml %}
+    {{ hmppsDatePicker({
+        id: "date-selection-custom",
+        name: "date-selection-custom",
+        errorMessage: getFormattedError(errors, locale, 'date-selection-custom'),
+        classes: "govuk-input--width-10",
+        hint: { text: "For example, 31/3/2023." },
+        label: { text: "Select a date", classes: "govuk-fieldset__legend--s" },
+        value: data.form['date-selection-custom'],
+        minDate: data.today
+    }) }}
+{% endset -%}
+
+{% set errorSummary = [] %}
+{% for key in errorKeys %}
+    {% set errorSummary = (errorSummary.push({
+            text: locale.errors[key].isNotEmpty,
+            href: "#" + key
+    }), errorSummary) %}
+{% endfor %}
+
+{% set goals = [] %}
+{% for goal in data.referenceData.goals %}
+    {% set goals = (goals.push({
+            id: "goal-selection-radio-" + goal.id,
+            value: goal,
+            text: goal
+    }), goals) %}
+{% endfor %}
+{% set goals = (goals.push({divider: "or"}), goals) %}
+{% set goals = (goals.push({
+    value: "custom",
+    text: locale.goalSelection.customRadioOptionText,
+    conditional: {
+        html: customGoalHtml
+    }
+  }), goals)
+%}
+
+{% set customDateRadioHtml %}
+    {{ govukRadios({
+        name: "date-selection-radio",
+        fieldset: {
+            legend: {
+                text: locale.dateSelection.label | replace("{POP_NAME}", data.popData.givenName),
+                isPageHeading: false,
+                classes: "govuk-fieldset__legend--m"
+            }
+        },
+        hint: {
+            text: locale.dateSelection.hint
+        },
+        errorMessage: getFormattedError(errors, locale, 'date-selection-radio'),
+        value: data.form['date-selection-radio'],
+        items: [
+            {
+                value: data.dateOptionsDate[4] | formatISODate,
+                text: locale.dateSelection.options.nextMeeting | replace("{NEXT_MEETING}", (data.dateOptionsDate[4] | formatSimpleDate)),
+                checked: data.form['date-selection-radio'] == data.dateOptionsDate[4] | formatISODate
+            },
+            {
+                value: data.dateOptionsDate[0] | formatISODate,
+                text: locale.dateSelection.options.threeMonths | replace("{3_MONTHS_DATE}", (data.dateOptionsDate[0] | formatSimpleDate))
+            },
+            {
+                value: data.dateOptionsDate[1] | formatISODate,
+                text: locale.dateSelection.options.sixMonths | replace("{6_MONTHS_DATE}", (data.dateOptionsDate[1] | formatSimpleDate))
+            },
+            {
+                value: data.dateOptionsDate[2] | formatISODate,
+                text: locale.dateSelection.options.twelveMonths | replace("{12_MONTHS_DATE}", (data.dateOptionsDate[2] | formatSimpleDate))
+            },
+            {
+                value: data.dateOptionsDate[3] | formatISODate,
+                text: locale.dateSelection.options.twentyFourMonths | replace("{24_MONTHS_DATE}", (data.dateOptionsDate[3] | formatSimpleDate)) | replace("{POP_NAME}", data.popData.givenName)
+            },
+            {
+                divider: "or"
+            },
+            {
+                value: "custom",
+                text: locale.dateSelection.customRadioOptionText,
+                conditional: {
+                    html: customDateHtml
+                }
+            }
+        ]
+    }) }}
+{% endset -%}
+
+{% block content %}
+    <a href="#" class="govuk-back-link">Back</a>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            {% if errors %}
+            {{ govukErrorSummary({
+                titleText: "There is a problem",
+                errorList: errorSummary
+            }) }}
+            {% endif %}
+            <span class="govuk-caption-l">{{ data.areaOfNeed }}</span>
+            <h1 class="govuk-heading-l">{{ locale.title | replace("{POP_NAME}", data.popData.givenName) }}</h1>
+
+            <form id="create-goal-form" method="POST">
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+            <input type="hidden" id="_areaOfNeed" value="{{ data.arnUrl }}">
+            <input type="hidden" name="area-of-need" value="{{ data.areaOfNeed }}">
+            <input type="hidden" id="page" value="goals">
+            <input type="hidden" id="goalAutoInputVal" value="{{ data.form['input-autocomplete'] }}">
+            <div class="{{ inputAutocompleteDivClass }}">
+                <h1 class="govuk-label-wrapper">
+                    <label class='govuk-label--m' for="goal-name">What goal should {{ data.popData.givenName }} try to achieve?</label>
+                </h1>
+                <div id="goalName-hint" class="govuk-hint">
+                    Search for a suggested goal or enter your own. Add one goal at a time.
+                </div>
+                {% if inputAutocompleteDivClass == 'govuk-form-group govuk-form-group--error' %}
+                    <p id="input-autocomplete-error" class="govuk-error-message">
+                      <span class="govuk-visually-hidden">Error:</span> {{ locale.errors["goal-name"].isNotEmpty }}
+                    </p>
+                {% endif %}
+                <input class="govuk-input" id="goal-name" name="goalName" type="text">
+                <div id="my-autocomplete-container"></div>
+            </div>
+
+                {{ govukRadios({
+                    name: "other-area-of-need-radio",
+                    fieldset: {
+                        legend: {
+                            text: "Is this goal related to any other area of need?",
+                            isPageHeading: false,
+                            classes: "govuk-fieldset__legend--m"
+                        }
+                    },
+                    errorMessage: getFormattedError(errors, locale, 'other-area-of-need-radio'),
+                    items: [
+                        {
+                          value: "yes",
+                          text: "Yes",
+                          checked: data.form['other-area-of-need-radio'] == 'yes',
+                          conditional: {
+                              html: areasOfNeedHtml
+                          }
+                        },
+                        {
+                          value: "no",
+                          text: "No",
+                          checked: data.form['other-area-of-need-radio'] == 'no'
+                        }
+                      ]
+                }) }}
+
+                {{ govukRadios({
+                    name: "start-working-goal-radio",
+                    fieldset: {
+                        legend: {
+                            text: locale.startWorking.label | replace("{POP_NAME}", data.popData.givenName),
+                            isPageHeading: false,
+                            classes: "govuk-fieldset__legend--m"
+                        }
+                    },
+                    errorMessage: getFormattedError(errors, locale, 'start-working-goal-radio'),
+                    items: [
+                        {
+                          value: "yes",
+                          text: "Yes",
+                          checked: data.form['start-working-goal-radio'] == 'yes',
+                          conditional: {
+                              html: customDateRadioHtml
+                          }
+                        },
+                        {
+                          value: "no",
+                          text: "No, it is a future goal",
+                          checked: data.form['start-working-goal-radio'] == 'no'
+                        }
+                      ]
+                }) }}
+
+                <div class="govuk-button-group">
+                    {{ govukButton({
+                        text: locale.saveButtonText,
+                        name: "action",
+                        value: "addStep"
+                    }) }}
+                </div>
+            </input>
+        </div>
+    </div>
+{% endblock %}
