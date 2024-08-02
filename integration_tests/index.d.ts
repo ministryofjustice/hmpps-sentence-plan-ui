@@ -17,5 +17,19 @@ declare namespace Cypress {
     // API
     addGoalToPlan(planUuid: string, goal: NewGoal): Chainable<Goal>
     addStepToGoal(goalUuid: string, step: NewStep): Chainable<Step>
+
+    // Accessibility
+    checkAccessibility(): Chainable
+
+    // Frontend
+    selectGoalAutocompleteOption(text: string, option: number): Chainable
+    createGoal(goalType: string): Chainable
+    selectOtherAreasOfNeedRadio(value: string): Chainable
+    selectStartWorkingRadio(value: string): Chainable
+    selectOtherAreasOfNeed(values: string[]): Chainable
+    selectAchievementDate(value: string): Chainable
+    selectAchievementDateSomethingElse(value: string): Chainable
+    clickButton(value: string): Chainable
+    createCompleteGoal(): Chainable
   }
 }
