@@ -17,7 +17,6 @@ export default class EditGoalController {
 
   private render = async (req: Request, res: Response, next: NextFunction) => {
     const crn = 'ABC123XYZ' // TODO: This is likely to be a session value, get from there
-    // const type = req.query?.type;
     const { uuid } = req.params
     const { errors } = req
     const errorKeys: string[] = []
@@ -51,7 +50,7 @@ export default class EditGoalController {
     const otherAreaOfNeed = allAreaOfNeed
       .filter(aon => aon.name !== areaOfNeed)
       .map(({ name }) => ({ text: name, value: name, checked: selectedOtherAreaOfNeed.includes(name) }))
-    const [popData] = await Promise.all([this.noteService.getNoteDataByAreaOfNeed(areaOfNeed, crn)])
+    const popData = req.services.sessionService.getSubjectDetails()
     const inputAutocompleteDivClass = errors?.body['input-autocomplete']
       ? 'govuk-form-group govuk-form-group--error'
       : 'govuk-form-group'
@@ -87,6 +86,7 @@ export default class EditGoalController {
       processed: this.processGoalData(req.body),
       raw: req.body,
     })
+    const type = req.query?.type
     const processedData: NewGoal = this.processGoalData(req.body)
     const planUuid = req.services.sessionService.getPlanUUID()
     const { uuid } = await this.goalService.saveGoal(processedData, planUuid)
@@ -94,16 +94,19 @@ export default class EditGoalController {
       processed: null,
       raw: { uuid },
     })
-    const redirectUrl: string = `${URLs.PLAN_SUMMARY}?status=updated`
+    const redirectUrl: string = `${URLs.PLAN_SUMMARY}?status=updated&type=${type}`
     return res.redirect(redirectUrl)
   }
 
   private processGoalData(body: any) {
     const title = body['input-autocomplete']
     const targetDate =
-      body['date-selection-radio'] === 'custom'
-        ? dateToISOFormat(body['date-selection-custom'])
-        : body['date-selection-radio']
+      // eslint-disable-next-line no-nested-ternary
+      body['start-working-goal-radio'] === 'yes'
+        ? body['date-selection-radio'] === 'custom'
+          ? dateToISOFormat(body['date-selection-custom'])
+          : body['date-selection-radio']
+        : null
     const areaOfNeed = body['area-of-need']
     const relatedAreasOfNeed = body['other-area-of-need-radio'] === 'yes' ? body['other-area-of-need'] : undefined
 

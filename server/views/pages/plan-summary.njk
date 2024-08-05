@@ -88,7 +88,7 @@
                             buttons: buttons,
                             actions: [
                                 {
-                                    href: "/edit-goal/" + goal.uuid,
+                                    href: "/edit-goal/" + goal.uuid + "?type=future",
                                     text: "Change goal",
                                     visuallyHiddenText: "Change goal"
                                 },
@@ -141,7 +141,7 @@
                                     visuallyHiddenText: "Add or change steps"
                                 },
                                 {
-                                    href: "/remove-goal/" + goal.uuid,
+                                    href: "/remove-goal/" + goal.uuid + "?type=current",
                                     text: "Remove goal",
                                     visuallyHiddenText: "Remove goal"
                                 }
