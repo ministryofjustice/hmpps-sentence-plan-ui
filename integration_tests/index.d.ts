@@ -30,6 +30,7 @@ declare namespace Cypress {
     selectAchievementDate(value: string): Chainable
     selectAchievementDateSomethingElse(value: string): Chainable
     clickButton(value: string): Chainable
-    createCompleteGoal(): Chainable
+    createCompleteGoal(value: number): Chainable
+    selectFutureGoalsSubNavigation(): Chainable
   }
 }

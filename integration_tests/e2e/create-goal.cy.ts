@@ -14,6 +14,7 @@ describe('Create a new Goal', () => {
     cy.selectStartWorkingRadio('yes')
     cy.selectAchievementDate('In 6 months')
     cy.clickButton('Add steps')
+
     cy.url().should('include', '/steps/create')
     cy.get('#step-name').click()
     cy.get('#step-name').type('This is the first step')
@@ -50,5 +51,14 @@ describe('Create a new Goal', () => {
     cy.clickButton('Save without steps')
 
     cy.url().should('include', '/plan-summary')
+  })
+
+  it('Creates three new goals, and moves the middle goal up', () => {
+    cy.createCompleteGoal(0)
+    cy.createCompleteGoal(1)
+    cy.createCompleteGoal(2)
+    cy.selectFutureGoalsSubNavigation()
+    cy.contains('.govuk-button', 'Move goal up').click()
+    cy.get('.govuk-summary-card').first().should('contain', 'Accommodation Goal 2')
   })
 })

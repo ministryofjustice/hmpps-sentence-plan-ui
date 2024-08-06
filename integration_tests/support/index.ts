@@ -7,6 +7,7 @@ import {
   createGoal,
   selectAchievementDate,
   selectAchievementDateSomethingElse,
+  selectFutureGoalsSubNavigation,
   selectGoalAutocompleteOption,
   selectOtherAreasOfNeed,
   selectOtherAreasOfNeedRadio,
@@ -34,3 +35,4 @@ Cypress.Commands.add('selectAchievementDate', selectAchievementDate)
 Cypress.Commands.add('selectAchievementDateSomethingElse', selectAchievementDateSomethingElse)
 Cypress.Commands.add('clickButton', clickButton)
 Cypress.Commands.add('createCompleteGoal', createCompleteGoal)
+Cypress.Commands.add('selectFutureGoalsSubNavigation', selectFutureGoalsSubNavigation)

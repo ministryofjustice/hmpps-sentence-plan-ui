@@ -9,11 +9,11 @@ export const createGoal = (goalType: string) => {
 }
 
 export const selectOtherAreasOfNeedRadio = (value: string) => {
-  cy.get('#other-area-of-need-radio').check(value)
+  cy.get('input[name="other-area-of-need-radio"]').check(value)
 }
 
 export const selectStartWorkingRadio = (value: string) => {
-  cy.get('#start-working-goal-radio').check(value)
+  cy.get('input[name="start-working-goal-radio"]').check(value)
 }
 
 export const selectOtherAreasOfNeed = (values: string[]) => {
@@ -32,14 +32,17 @@ export const selectAchievementDateSomethingElse = (value: string) => {
 }
 
 export const clickButton = (value: string) => {
-  cy.get('button').contains(value).click()
+  cy.contains('button', value).click()
 }
 
-export const createCompleteGoal = () => {
+export const createCompleteGoal = (value: number) => {
   cy.createGoal('accommodation')
-  cy.selectGoalAutocompleteOption('acc', 0)
-  cy.selectOtherAreasOfNeedRadio('No')
-  cy.selectStartWorkingRadio('yes')
-  cy.selectAchievementDate('In 6 months')
+  cy.selectGoalAutocompleteOption('acc', value)
+  cy.selectOtherAreasOfNeedRadio('no')
+  cy.selectStartWorkingRadio('no')
   cy.clickButton('Save without steps')
+}
+
+export const selectFutureGoalsSubNavigation = () => {
+  cy.get('.moj-sub-navigation__list > li:nth-child(2)').click()
 }
