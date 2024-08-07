@@ -3,7 +3,7 @@ import { Expose, Transform } from 'class-transformer'
 
 export default class CreateGoalPostModel {
   @IsNotEmpty()
-  'input-autocomplete': string
+  'goal-input-autocomplete': string
 
   @IsNotEmpty()
   'other-area-of-need-radio': string

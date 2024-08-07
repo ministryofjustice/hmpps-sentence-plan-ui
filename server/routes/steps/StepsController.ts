@@ -39,7 +39,7 @@ export default class StepsController {
         raw: { uuid: currentGoal },
       }: Record<string, any> = req.services.formStorageService.getFormData('currentGoal')
       const { actor, someOneElse } = req.body
-      const stepName = req.body['input-autocomplete']
+      const stepName = req.body['step-input-autocomplete']
       const popData = await req.services.sessionService.getSubjectDetails()
       const payloadOptions = [...options]
       payloadOptions.unshift({ value: 1, text: popData.givenName })
