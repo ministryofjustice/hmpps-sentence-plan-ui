@@ -10,7 +10,7 @@ describe('Create a new Goal', () => {
   it('Creates a new goal with steps', () => {
     cy.get("a[href='/create-goal/accommodation']").click()
     cy.url().should('include', '/create-goal/accommodation')
-    cy.get('#goal-name').type('acc{downArrow},{enter}')
+    cy.get('#goal-input-autocomplete').type('acc{downArrow},{enter}')
     cy.get('#other-area-of-need-radio').click()
     cy.get('.govuk-checkboxes').first().contains('Employment and education').click()
     cy.get('.govuk-checkboxes').first().contains('Drug use').click()
@@ -18,8 +18,8 @@ describe('Create a new Goal', () => {
     cy.get('.govuk-radios').last().contains('In 6 months').click()
     cy.get('button').contains('Add steps').click()
     cy.url().should('include', '/steps/create')
-    cy.get('#step-name').click()
-    cy.get('#step-name').type('This is the first step')
+    cy.get('#step-input-autocomplete').click()
+    cy.get('#step-input-autocomplete').type('This is the first step')
     cy.get('#actor').click()
     cy.get('#actor-2').click()
     cy.get('button').contains('Save and continue').click()
@@ -29,7 +29,7 @@ describe('Create a new Goal', () => {
   it('Creates a new goal with errors', () => {
     cy.get("a[href='/create-goal/accommodation']").click()
     cy.url().should('include', '/create-goal/accommodation')
-    cy.get('#goal-name').type('acc{downArrow},{enter}')
+    cy.get('#goal-input-autocomplete').type('acc{downArrow},{enter}')
     cy.get('#start-working-goal-radio').click()
     cy.get('.govuk-radios').last().contains('In 6 months').click()
     cy.get('button').contains('Add steps').click()
@@ -40,7 +40,7 @@ describe('Create a new Goal', () => {
   it('Creates a new goal without steps', () => {
     cy.get("a[href='/create-goal/accommodation']").click()
     cy.url().should('include', '/create-goal/accommodation')
-    cy.get('#goal-name').type('acc{downArrow},{enter}')
+    cy.get('#goal-input-autocomplete').type('acc{downArrow},{enter}')
     cy.get('#other-area-of-need-radio').click()
     cy.get('.govuk-checkboxes').first().contains('Employment and education').click()
     cy.get('.govuk-checkboxes').first().contains('Drug use').click()
