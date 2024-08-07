@@ -4,9 +4,9 @@
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
-{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "hmpps/components/date-picker/macro.njk" import hmppsDatePicker %}
 {% from "moj/components/side-navigation/macro.njk" import mojSideNavigation %}
+{% from "../components/error-summary/error-summary.njk" import errorSummary %}
 
 {% set pageTitle %}
     {% if errors %}
@@ -48,32 +48,6 @@
         minDate: data.today
     }) }}
 {% endset -%}
-
-{% set errorSummary = [] %}
-{% for key in errorKeys %}
-    {% set errorSummary = (errorSummary.push({
-            text: locale.errors[key].isNotEmpty,
-            href: "#" + key
-    }), errorSummary) %}
-{% endfor %}
-
-{% set goals = [] %}
-{% for goal in data.referenceData.goals %}
-    {% set goals = (goals.push({
-            id: "goal-selection-radio-" + goal.id,
-            value: goal,
-            text: goal
-    }), goals) %}
-{% endfor %}
-{% set goals = (goals.push({divider: "or"}), goals) %}
-{% set goals = (goals.push({
-    value: "custom",
-    text: locale.goalSelection.customRadioOptionText,
-    conditional: {
-        html: customGoalHtml
-    }
-  }), goals)
-%}
 
 {% set customDateRadioHtml %}
     {{ govukRadios({
@@ -136,12 +110,11 @@
             }) }}
         </div>
         <div class="govuk-grid-column-two-thirds">
-        {% if errors %}
-            {{ govukErrorSummary({
-              titleText: "There is a problem",
-              errorList: errorSummary
+            {{ errorSummary({
+                errors: errors,
+                locale: locale
             }) }}
-        {% endif %}
+
             <span class="govuk-caption-l">{{ data.displayAreaOfNeed }}</span>
             <h1 class="govuk-heading-l">{{ locale.title | replace("{POP_NAME}", data.popData.givenName) }}</h1>
 

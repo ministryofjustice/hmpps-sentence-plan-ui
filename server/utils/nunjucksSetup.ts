@@ -71,11 +71,16 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
   })
 
   njkEnv.addGlobal('getFormattedError', (errors: any, locale: any, fieldName: string) => {
+    const fieldErrors = errors?.body?.[fieldName]
+
     if (errors?.body?.[fieldName]) {
-      const entry = Object.entries(errors.body[fieldName]).find(([errorType, hasError]) => hasError)
-      if (entry) {
-        const [errorType] = entry
-        return { text: locale.errors[fieldName][errorType] }
+      const errorType = Object.keys(fieldErrors)[0]
+
+      if (errorType) {
+        return {
+          text: locale.errors[fieldName][errorType],
+          href: `#${fieldName}`,
+        }
       }
     }
     return false
