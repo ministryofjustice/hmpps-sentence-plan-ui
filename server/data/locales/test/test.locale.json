@@ -1,0 +1,16 @@
+{
+  "en": {
+    "testLocaleString1": "This is the first test string",
+    "testLocaleString2": "This is the second test string, with a {REPLACEABLE_VARIABLE}",
+    "testSubLocale1": {
+      "testSubLocaleString1": "This is the first test string of sublocale testSubLocale1",
+      "testSubLocaleString2": "This is the second test string of sublocale testSubLocale1, with a {SECOND_REPLACEABLE_VARIABLE}"}
+  },
+  "cy": {
+    "testLocaleString1": "In Welsh, this is the first test string",
+    "testLocaleString2": "In Welsh, his is the second test string, with a {REPLACEABLE_VARIABLE}",
+    "testSubLocale1": {
+      "testSubLocaleString1": "In Welsh, this is the first test string of sublocale testSubLocale1",
+      "testSubLocaleString2": "In Welsh, this is the second test string of sublocale testSubLocale1, with a {SECOND_REPLACEABLE_VARIABLE}"}
+  }
+}

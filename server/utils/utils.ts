@@ -52,6 +52,23 @@ export function formatDate(date: string): string {
   })
 }
 
+export function deepMerge(target: Record<string, any>, source: Record<string, any>): Record<string, any> {
+  for (const key in source) {
+    if (source.hasOwnProperty(key)) {
+      if (typeof source[key] === 'object' && !Array.isArray(source[key])) {
+        if (!target[key] || typeof target[key] !== 'object') {
+          target[key] = {};
+        }
+        target[key] = deepMerge(target[key], source[key]);
+      } else {
+        target[key] = source[key];
+      }
+    }
+  }
+
+  return target;
+}
+
 export function formatDateWithStyle(isoDate: string, style: 'short' | 'full' | 'long' | 'medium' = 'long'): string {
   return new Date(isoDate).toLocaleDateString('en-gb', { dateStyle: style })
 }
