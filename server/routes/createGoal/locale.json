@@ -36,7 +36,7 @@
       "other-area-of-need-radio": {
         "isNotEmpty": "Select yes if this goal is related to any other area of need"
       },
-      "goal-name": {
+      "goal-input-autocomplete": {
         "isNotEmpty": "Select or enter what goal they should try to achieve"
       },
       "other-area-of-need": {

@@ -34,15 +34,9 @@ export default class CreateGoalController {
   }
 
   private render = async (req: Request, res: Response, next: NextFunction) => {
-    const crn = 'ABC123XYZ' // TODO: This is likely to be a session value, get from there
     const { areaOfNeed } = req.params
     const { errors } = req
-    const errorKeys: string[] = []
-    if (errors) {
-      Object.keys(errors.body).forEach(key =>
-        key === 'input-autocomplete' ? errorKeys.push('goal-name') : errorKeys.push(key),
-      )
-    }
+
     try {
       const allAreaOfNeed = this.referentialDataService.getAreasOfNeed()
       const navigationLinks = allAreaOfNeed.map(aon => ({
@@ -51,23 +45,23 @@ export default class CreateGoalController {
         active: aon.url === areaOfNeed,
       }))
       const today = formatDateWithStyle(new Date().toISOString(), 'short')
+
       const selectedOtherAreaOfNeed: string[] = req.body['other-area-of-need'] || []
+
       const otherAreaOfNeed = allAreaOfNeed
         .filter(aon => aon.url !== areaOfNeed)
         .map(({ name }) => ({ text: name, value: name, checked: selectedOtherAreaOfNeed.includes(name) }))
+
       const displayAreaOfNeed = this.referentialDataService
         .getAreasOfNeed()
         .filter(aon => aon.url === areaOfNeed)[0].name
+
       const dateOptionsDate = this.getAchieveDateOptions(new Date())
       dateOptionsDate.push(new Date(new Date().setDate(new Date().getDate() + 7)))
+
       const referenceData = this.referentialDataService.getGoals(areaOfNeed)
-      const [popData, noteData] = await Promise.all([
-        req.services.sessionService.getSubjectDetails(),
-        this.noteService.getNoteDataByAreaOfNeed(areaOfNeed, crn),
-      ])
-      const inputAutocompleteDivClass = errors?.body['input-autocomplete']
-        ? 'govuk-form-group govuk-form-group--error'
-        : 'govuk-form-group'
+      const popData = await req.services.sessionService.getSubjectDetails()
+
       return res.render('pages/create-goal', {
         locale: locale.en,
         data: {
@@ -76,16 +70,12 @@ export default class CreateGoalController {
           areaOfNeed,
           popData,
           referenceData,
-          noteData,
           dateOptionsDate,
           otherAreaOfNeed,
           form: req.body,
-          inputAutocompleteDivClass,
           today,
         },
         errors,
-        errorKeys,
-        inputAutocompleteDivClass,
       })
     } catch (e) {
       return next(e)
@@ -93,7 +83,7 @@ export default class CreateGoalController {
   }
 
   private processGoalData(body: any) {
-    const title = body['input-autocomplete']
+    const title = body['goal-input-autocomplete']
     const targetDate =
       body['date-selection-radio'] === 'custom'
         ? dateToISOFormat(body['date-selection-custom'])
