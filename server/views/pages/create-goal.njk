@@ -4,9 +4,9 @@
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
-{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "hmpps/components/date-picker/macro.njk" import hmppsDatePicker %}
 {% from "moj/components/side-navigation/macro.njk" import mojSideNavigation %}
+{% from "../components/error-summary/error-summary.njk" import errorSummary %}
 
 {% set pageTitle %}
     {% if errors %}
@@ -31,56 +31,23 @@
     }) }}
 {% endset -%}
 
-{% set customGoalHtml %}
-{{ govukInput({
-            id: "goal-selection-custom",
-            name: "goal-selection-custom",
-            label: {
-                text: locale.goalSelection.customOptionLabel
-            },
-            errorMessage: getFormattedError(errors, locale, "goal-selection-custom"),
-            value: data.form['goal-selection-custom']
-        }) }}
-{% endset -%}
-
 {% set customDateHtml %}
     {{ hmppsDatePicker({
         id: "date-selection-custom",
         name: "date-selection-custom",
         errorMessage: getFormattedError(errors, locale, 'date-selection-custom'),
         classes: "govuk-input--width-10",
-        hint: { text: "For example, 31/3/2023." },
-        label: { text: "Select a date", classes: "govuk-fieldset__legend--s" },
+        hint: {
+            text: "For example, 31/3/2023."
+        },
+        label: {
+            text: "Select a date",
+            classes: "govuk-fieldset__legend--s"
+        },
         value: data.form['date-selection-custom'],
         minDate: data.today
     }) }}
 {% endset -%}
-
-{% set errorSummary = [] %}
-{% for key in errorKeys %}
-    {% set errorSummary = (errorSummary.push({
-            text: locale.errors[key].isNotEmpty,
-            href: "#" + key
-    }), errorSummary) %}
-{% endfor %}
-
-{% set goals = [] %}
-{% for goal in data.referenceData.goals %}
-    {% set goals = (goals.push({
-            id: "goal-selection-radio-" + goal.id,
-            value: goal,
-            text: goal
-    }), goals) %}
-{% endfor %}
-{% set goals = (goals.push({divider: "or"}), goals) %}
-{% set goals = (goals.push({
-    value: "custom",
-    text: locale.goalSelection.customRadioOptionText,
-    conditional: {
-        html: customGoalHtml
-    }
-  }), goals)
-%}
 
 {% set customDateRadioHtml %}
     {{ govukRadios({
@@ -143,12 +110,11 @@
             }) }}
         </div>
         <div class="govuk-grid-column-two-thirds">
-        {% if errors %}
-            {{ govukErrorSummary({
-              titleText: "There is a problem",
-              errorList: errorSummary
+            {{ errorSummary({
+                errors: errors,
+                locale: locale
             }) }}
-        {% endif %}
+
             <span class="govuk-caption-l">{{ data.displayAreaOfNeed }}</span>
             <h1 class="govuk-heading-l">{{ locale.title | replace("{POP_NAME}", data.popData.givenName) }}</h1>
 
@@ -158,21 +124,24 @@
                 <input type="hidden" name="area-of-need" value="{{ data.displayAreaOfNeed }}">
                 <input type="hidden" id="page" value="goals">
                 <input type="hidden" id="goalAutoInputVal" value="{{ data.form['input-autocomplete'] }}">
-                <div class="{{ inputAutocompleteDivClass }}">
-                    <h1 class="govuk-label-wrapper">
-                        <label class='govuk-label--m' for="step-name">What goal should {{ data.popData.givenName }} try to achieve?</label>
-                    </h1>
-                    <div id="goalName-hint" class="govuk-hint">
-                        Search for a suggested goal or enter your own. Add one goal at a time.
-                    </div>
-                    {% if inputAutocompleteDivClass == 'govuk-form-group govuk-form-group--error' %}
-                        <p id="input-autocomplete-error" class="govuk-error-message">
-                          <span class="govuk-visually-hidden">Error:</span> {{ locale.errors["goal-name"].isNotEmpty }}
-                        </p>
-                    {% endif %}
-                    <input class="govuk-input" id="goal-name" name="goalName" type="text">
-                    <div id="my-autocomplete-container"></div>
-                </div>
+
+                {{ govukInput({
+                    label: {
+                        text: "What goal should {POP_NAME} try to achieve?" | replace("{POP_NAME}", data.popData.givenName),
+                        classes: "govuk-label--m",
+                        isPageHeading: false
+                    },
+                    hint: {
+                        text: "Search for a suggested goal or enter your own. Add one goal at a time."
+                    },
+                    formGroup: {
+                        classes: "goal-input-autocomplete-wrapper"
+                    },
+                    errorMessage: getFormattedError(errors, locale, 'goal-input-autocomplete'),
+                    id: "goal-input-autocomplete",
+                    name: "goal-input-autocomplete",
+                    value: data.form['goal-input-autocomplete']
+                }) }}
 
                 {{ govukRadios({
                     name: "other-area-of-need-radio",

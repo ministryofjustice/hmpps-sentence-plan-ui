@@ -34,16 +34,24 @@
                   text: "Goals and steps should be SMART, meaning ‘specific’, ‘measurable’, ‘achievable’, ‘realistic’, and ‘time-bound’. This allows progress to be better measured and evaluated.
                         Adding steps makes goals more measurable and achievable."
                 }) }}
-                <div class="govuk-form-group">
-                    <fieldset class="govuk-fieldset" aria-describedby="stepName-hint">
-                        <legend class='govuk-fieldset__legend govuk-fieldset__legend--m'>What is the first step?</legend>
-                        <div id="stepName-hint" class="govuk-hint">
-                            Select one step. You can add more later.
-                        </div>
-                        <input class="govuk-input" id="step-name" name="stepName" type="text">
-                        <div id="my-autocomplete-container"></div>
-                    </fieldset>
-                </div>
+
+                {{ govukInput({
+                    label: {
+                        text: "What is the first step?",
+                        classes: "govuk-label--m",
+                        isPageHeading: false
+                    },
+                    hint: {
+                        text: "Select one step. You can add more later."
+                    },
+                    formGroup: {
+                        classes: "step-input-autocomplete-wrapper"
+                    },
+                    errorMessage: getFormattedError(errors, locale, 'goal-input-autocomplete'),
+                    id: "step-input-autocomplete",
+                    name: "step-input-autocomplete",
+                    value: data.form['step-input-autocomplete']
+                }) }}
 
                 {{ whoWillDo(data.popData.givenName) }}
 

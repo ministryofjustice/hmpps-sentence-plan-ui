@@ -10,7 +10,7 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
         <a href="#" class="govuk-back-link">Back</a>
-        <h1 class="govuk-heading-xl">Are you sure you want to remove this goal?</h1>
+        <h1 class="govuk-heading-l">Are you sure you want to remove this goal?</h1>
 
         {{ goalSummaryCard({
             goal: data.goal
@@ -19,6 +19,7 @@
         <form id="remove-goal-form" method="POST">
             <input type="hidden" name="_csrf" value="{{ csrfToken }}">
             <input type="hidden" name="goalUuid" value="{{ data.goal.uuid }}">
+            <input type="hidden" name="type" value="{{ data.type }}">
             <div class="govuk-button-group">
                 {{ govukButton({
                     text: locale.removeGoalButtonText,

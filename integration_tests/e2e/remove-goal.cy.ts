@@ -94,10 +94,10 @@ describe('Remove a goal', () => {
       cy.get('.goal-summary-card').should('contain', goalData.title)
 
       // Confirm delete
-      cy.contains('button', 'Yes, remove it').click()
+      cy.contains('button', 'Yes, remove goal').click()
 
       // Check goal has been deleted
-      cy.url().should('contain', '/plan-summary?status=removed')
+      cy.url().should('contain', '/plan-summary?type=current&status=removed')
       cy.get('.goal-list .goal-summary-card').should('have.length', 2).and('not.contain', goalData.title)
     })
 
@@ -118,7 +118,7 @@ describe('Remove a goal', () => {
       cy.get('.goal-summary-card').should('contain', goalData.title)
 
       // Confirm delete
-      cy.contains('button', 'No, do not remove it').click()
+      cy.contains('button', 'No, do not remove goal').click()
 
       // Check goal has been deleted
       cy.url().should('contain', '/plan-summary')
