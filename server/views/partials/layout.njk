@@ -1,20 +1,41 @@
 {% extends "govuk/template.njk" %}
+{%- from "moj/components/primary-navigation/macro.njk" import mojPrimaryNavigation -%}
 
 {% block head %}
-  <link href="/assets/stylesheets/application.css?{{ version }}" rel="stylesheet"/>
+  <link href="/assets/css/app.css?{{ version }}" rel="stylesheet" />
 {% endblock %}
 
-{% block pageTitle %}{{pageTitle | default(applicationName)}}{% endblock %}
+{% block pageTitle %}{{pageTitle | default(applicationName)}}
+{% endblock %}
 
 {% block header %}
   {% include "./header.njk" %}
+  {# TODO: Provide a way to set the active sub-navigation, or, programtically set it based on URL #}
+  {% if data.popData %}
+    {{ mojPrimaryNavigation({
+      label: 'Primary navigation',
+      items: [{
+          text: data.popData.givenName + "'s plan",
+          href: '/plan-summary?source=nav',
+          active: true
+        },
+        {
+          text: 'About ' + data.popData.givenName,
+          href: '/about-pop'
+        }
+      ]
+    }) }}
+
+    {% if header.type == 'extended' %}
+      {% include "./plan-header/plan-header-extended.njk" %}
+    {% else %}
+      {% include "./plan-header/plan-header-mini.njk" %}
+    {% endif %}
+  {% endif  %}
 {% endblock %}
 
-{% block bodyStart %}
-{% endblock %}
+{% block bodyStart %}{% endblock %}
 
 {% block bodyEnd %}
-  <script type="module" src="/assets/govukFrontendInit.js"></script>
-  <script src="/assets/moj/all.js"></script>
-  <script src="/assets/mojFrontendInit.js"></script>
+  <script type="module" src="/assets/js/app.js"></script>
 {% endblock %}

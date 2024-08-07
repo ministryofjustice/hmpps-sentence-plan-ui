@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from 'express'
 import locale from './locale.json'
 import InfoService from '../../services/sentence-plan/infoService'
 import ReferentialDataService from '../../services/sentence-plan/referentialDataService'
-import { toKebabCase } from '../../utils/utils'
 
 export default class AboutPopController {
   constructor(
@@ -10,14 +9,14 @@ export default class AboutPopController {
     private readonly infoService: InfoService,
   ) {}
 
-  render = async (req: Request, res: Response, next: NextFunction) => {
-    const crn = 'X756510' // TODO: This is likely to be a session value, get from there
+  get = async (req: Request, res: Response, next: NextFunction) => {
     const { errors } = req
 
     try {
-      const referenceData = await this.buildReferenceData()
-      const popData = await this.infoService.getPopData(crn)
-      const roshData = await this.infoService.getRoSHData(crn)
+      const popData = req.services.sessionService.getSubjectDetails()
+      const areasOfNeed = this.referentialDataService.getAreasOfNeed()
+      const referenceData = Array.isArray(areasOfNeed) ? areasOfNeed.slice(0, 3) : []
+      const roshData = await this.infoService.getRoSHData(popData.crn)
       return res.render('pages/about-pop', {
         locale: locale.en,
         data: {
@@ -30,15 +29,5 @@ export default class AboutPopController {
     } catch (e) {
       return next(e)
     }
-  }
-
-  get = this.render
-
-  private buildReferenceData = async () => {
-    const referenceData = await this.referentialDataService.getAreasOfNeedQuestionData()
-    return referenceData.map(areaOfNeed => ({
-      ...areaOfNeed,
-      url: toKebabCase(areaOfNeed.Name),
-    }))
   }
 }

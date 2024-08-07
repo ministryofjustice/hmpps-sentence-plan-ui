@@ -25,7 +25,8 @@ export const initialiseName = (fullName?: string): string | null => {
   return `${array[0][0]}. ${array.reverse()[0]}`
 }
 
-export const toKebabCase = (string: string) => (isBlank(string) ? '' : string.trim().replace(/ /g, '-').toLowerCase())
+export const toKebabCase = (string: string) =>
+  isBlank(string) ? '' : string.trim().replace(/ /g, '-').toLowerCase().replace(',', '')
 
 export function formatRoSHData(data: RoshData) {
   const { overallRisk, assessedOn, riskInCommunity } = data
@@ -66,4 +67,36 @@ export function deepMerge(target: Record<string, any>, source: Record<string, an
   }
 
   return target;
+}
+
+export function formatDateWithStyle(isoDate: string, style: 'short' | 'full' | 'long' | 'medium' = 'long'): string {
+  return new Date(isoDate).toLocaleDateString('en-gb', { dateStyle: style })
+}
+
+export function dateToISOFormat(date: string): string {
+  const [day, month, year] = date.split('/')
+  return [year, month, day].join('-')
+}
+
+export function moveGoal(goals: Array<any>, gUuid: string, operation: string) {
+  const orderedGoals = [...goals]
+  const index = orderedGoals.findIndex(goal => goal.uuid === gUuid)
+
+  if (index === -1 || (operation !== 'up' && operation !== 'down')) {
+    return orderedGoals
+  }
+  const valueSetter = {
+    up: (i: number) => i - 1,
+    down: (i: number) => i + 1,
+  }
+  const targetIndex = valueSetter[operation](index)
+
+  if (targetIndex < 0 || targetIndex >= orderedGoals.length) {
+    return orderedGoals
+  }
+
+  ;[orderedGoals[index], orderedGoals[targetIndex]] = [orderedGoals[targetIndex], orderedGoals[index]]
+  orderedGoals[index].goalOrder = index
+  orderedGoals[targetIndex].goalOrder = targetIndex
+  return orderedGoals.map(({ uuid: goalUuid, goalOrder }) => ({ goalUuid, goalOrder }))
 }

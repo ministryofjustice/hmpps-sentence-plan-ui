@@ -54,7 +54,7 @@ export default {
   gitRef: get('GIT_REF', 'xxxxxxxxxxxxxxxxxxx', requiredInProduction),
   branchName: get('GIT_BRANCH', 'xxxxxxxxxxxxxxxxxxx', requiredInProduction),
   production,
-  https: production,
+  https: get('HTTPS', `${production}`) === 'true',
   staticResourceCacheDuration: '1h',
   redis: {
     enabled: get('REDIS_ENABLED', 'false', requiredInProduction) === 'true',
@@ -80,6 +80,20 @@ export default {
       apiClientSecret: get('API_CLIENT_SECRET', 'clientsecret', requiredInProduction),
       systemClientId: get('SYSTEM_CLIENT_ID', 'clientid', requiredInProduction),
       systemClientSecret: get('SYSTEM_CLIENT_SECRET', 'clientsecret', requiredInProduction),
+    },
+    arnsHandover: {
+      url: get('HMPPS_ARNS_HANDOVER_URL', 'http://localhost:8080/oauth2/authorize', requiredInProduction),
+      externalUrl: get(
+        'HMPPS_ARNS_HANDOVER_EXTERNAL_URL',
+        get('HMPPS_ARNS_HANDOVER_URL', 'http://localhost:9090/auth'),
+      ),
+      timeout: {
+        response: Number(get('HMPPS_ARNS_HANDOVER_TIMEOUT_RESPONSE', 10000)),
+        deadline: Number(get('HMPPS_ARNS_HANDOVER_TIMEOUT_DEADLINE', 10000)),
+      },
+      agent: new AgentConfig(Number(get('HMPPS_ARNS_HANDOVER_TIMEOUT_RESPONSE', 10000))),
+      clientId: get('HMPPS_ARNS_HANDOVER_CLIENT_ID', 'clientid', requiredInProduction),
+      clientSecret: get('HMPPS_ARNS_HANDOVER_CLIENT_SECRET', 'clientsecret', requiredInProduction),
     },
     manageUsersApi: {
       url: get('MANAGE_USERS_API_URL', 'http://localhost:9091', requiredInProduction),

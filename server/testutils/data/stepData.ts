@@ -4,13 +4,18 @@ import { testGoal } from './goalData'
 
 export const testNewStep: NewStep = {
   description: 'A test step',
-  actor: 'The actor',
+  actor: [
+    {
+      actor: 'Test actor',
+      actorOptionId: 1,
+    },
+  ],
   status: 'PENDING',
 }
 export const testStep: Step = {
   id: 123,
   uuid: 'a-un1qu3-t3st-Uu1d',
-  relatedGoalId: testGoal.uuid,
+  relatedGoalUuid: testGoal.uuid,
   creationDate: new Date().toISOString().substring(0, 10),
   ...testNewStep,
-}
+} as Step

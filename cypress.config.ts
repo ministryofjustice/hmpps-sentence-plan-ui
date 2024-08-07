@@ -1,8 +1,6 @@
 import { defineConfig } from 'cypress'
 import { resetStubs } from './integration_tests/mockApis/wiremock'
 import auth from './integration_tests/mockApis/auth'
-import manageUsersApi from './integration_tests/mockApis/manageUsersApi'
-import tokenVerification from './integration_tests/mockApis/tokenVerification'
 
 export default defineConfig({
   chromeWebSecurity: false,
@@ -19,13 +17,19 @@ export default defineConfig({
       on('task', {
         reset: resetStubs,
         ...auth,
-        ...manageUsersApi,
-        ...tokenVerification,
       })
     },
-    baseUrl: 'http://localhost:3007',
+    baseUrl: 'http://localhost:6789',
     excludeSpecPattern: '**/!(*.cy).ts',
-    specPattern: 'integration_tests/e2e/**/*.cy.{js,jsx,ts,tsx}',
+    specPattern: 'integration_tests/e2e/**/*.{cy,spec}.{js,jsx,ts,tsx}',
     supportFile: 'integration_tests/support/index.ts',
+    env: {
+      CLIENT_ID: 'sentence-plan-api-client',
+      CLIENT_SECRET: 'sentence-plan-api-client',
+      HMPPS_AUTH_URL: 'http://localhost:9091',
+      ARNS_HANDOVER_URL: 'http://localhost:7070',
+      ARNS_HANDOVER_CLIENT_ID: 'sentence-plan',
+      SP_API_URL: 'http://localhost:8080',
+    },
   },
 })

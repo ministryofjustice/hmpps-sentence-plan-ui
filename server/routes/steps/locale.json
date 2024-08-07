@@ -1,0 +1,28 @@
+{
+  "en": {
+    "title": "Add steps to {POP_NAME}'s goal",
+    "section": "{AREA_OF_NEED} goals",
+
+    "stepsSection": {
+      "label": "What goal is {POP_NAME} trying to achieve?",
+      "hint": "Select one option",
+      "customRadioOptionText": "Something else",
+      "customOptionLabel": "Enter a custom goal"
+    },
+    "whoWillDo": {
+      "label": "Who will do this step?",
+      "hint": "Select all that apply.",
+      "customRadioOptionText": "Something else",
+      "customOptionLabel": "Enter who will do this step"
+    },
+    "saveButtonText": "Save and continue",
+    "errors": {
+      "step-selection-radio": {
+        "isNotEmpty": "You need to select a step"
+      },
+      "step-selection-custom": {
+        "isNotEmpty": "You need to enter a step"
+      }
+    }
+  }
+}

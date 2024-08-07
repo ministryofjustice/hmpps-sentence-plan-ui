@@ -4,6 +4,7 @@ import passport from 'passport'
 import flash from 'connect-flash'
 import config from '../config'
 import auth from '../authentication/auth'
+import URLs from '../routes/URLs'
 
 const router = express.Router()
 
@@ -22,14 +23,23 @@ export default function setUpAuth(): Router {
   router.get('/sign-in', passport.authenticate('oauth2'))
 
   router.get('/sign-in/callback', (req, res, next) =>
-    passport.authenticate('oauth2', {
-      successReturnToOrRedirect: req.session.returnTo || '/',
-      failureRedirect: '/autherror',
+    passport.authenticate('oauth2', {}, (err: any, user: Express.User) => {
+      if (err) return next(err)
+      if (!user) return res.redirect('/autherror')
+
+      return req.logIn(user, loginErr => {
+        if (err) return next(loginErr)
+
+        return req.services.sessionService
+          .setupSession()
+          .then(() => res.redirect(req.session.returnTo || URLs.PLAN_SUMMARY))
+          .catch(next)
+      })
     })(req, res, next),
   )
 
-  const authUrl = config.apis.hmppsAuth.externalUrl
-  const authParameters = `client_id=${config.apis.hmppsAuth.apiClientId}&redirect_uri=${config.domain}`
+  const authUrl = config.apis.arnsHandover.url
+  const authParameters = `client_id=${config.apis.arnsHandover.clientId}&redirect_uri=${config.domain}`
 
   router.use('/sign-out', (req, res, next) => {
     const authSignOutUrl = `${authUrl}/sign-out?${authParameters}`
@@ -41,12 +51,8 @@ export default function setUpAuth(): Router {
     } else res.redirect(authSignOutUrl)
   })
 
-  router.use('/account-details', (req, res) => {
-    res.redirect(`${authUrl}/account-details?${authParameters}`)
-  })
-
   router.use((req, res, next) => {
-    res.locals.user = req.user
+    res.locals.user = { ...req.user, ...req.services.sessionService.getPrincipalDetails() }
     next()
   })
 

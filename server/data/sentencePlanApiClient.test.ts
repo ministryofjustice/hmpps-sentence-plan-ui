@@ -1,59 +1,57 @@
-import nock from 'nock'
-import config from '../config'
 import SentencePlanApiClient from './sentencePlanApiClient'
-import testReferenceData from '../testutils/data/referenceData'
-import { testGoal, testNewGoal } from '../testutils/data/goalData'
-import { testNewStep, testStep } from '../testutils/data/stepData'
 import HmppsAuthClient from './hmppsAuthClient'
+import RestClient from './restClient'
+import config from '../config'
+import logger from '../../logger'
 
-jest.mock('./hmppsAuthClient', () => {
-  return jest.fn().mockImplementation(() => ({
-    getSystemClientToken: jest.fn().mockResolvedValue('a-mock-token'),
-  }))
-})
+jest.mock('./hmppsAuthClient')
+jest.mock('./restClient')
+jest.mock('../config', () => ({
+  apis: {
+    sentencePlanApi: {
+      url: 'http://localhost:8080',
+    },
+    hmppsAuth: {
+      url: 'http://localhost:9090/auth',
+      timeout: {
+        response: 10000,
+        deadline: 10000,
+      },
+    },
+  },
+}))
+jest.mock('../../logger', () => ({
+  info: jest.fn(),
+}))
 
 describe('SentencePlanApiClient', () => {
-  let client: SentencePlanApiClient
-  let fakeApi: nock.Scope
-  const hmppsAuthClient: HmppsAuthClient = new HmppsAuthClient(null)
+  let sentencePlanApiClient: SentencePlanApiClient
+  let mockHmppsAuthClient: jest.Mocked<HmppsAuthClient>
 
   beforeEach(() => {
-    client = new SentencePlanApiClient(hmppsAuthClient)
-    fakeApi = nock(config.apis.sentencePlanApi.url)
+    mockHmppsAuthClient = new HmppsAuthClient(null) as jest.Mocked<HmppsAuthClient>
+    mockHmppsAuthClient.getSystemClientToken = jest.fn().mockResolvedValue('mock-token')
+    sentencePlanApiClient = new SentencePlanApiClient(mockHmppsAuthClient)
   })
 
   afterEach(() => {
-    nock.cleanAll()
+    jest.clearAllMocks()
   })
 
-  describe('getAllReferenceData', () => {
-    it('should fetch all reference data from the API', async () => {
-      fakeApi.get(`/question-reference-data`).reply(200, testReferenceData)
+  describe('restClient', () => {
+    it('should create a RestClient with system token when no token is provided', async () => {
+      const result = await sentencePlanApiClient.restClient()
 
-      const result = await client.getAllReferenceData()
-
-      expect(result).toEqual(testReferenceData)
+      expect(mockHmppsAuthClient.getSystemClientToken).toHaveBeenCalled()
+      expect(RestClient).toHaveBeenCalledWith('Sentence Plan Api Client', config.apis.sentencePlanApi, 'mock-token')
+      expect(result).toBeInstanceOf(RestClient)
     })
-  })
 
-  describe('saveGoal', () => {
-    it('should save goal data via the API', async () => {
-      fakeApi.post(`/goals`, testNewGoal).reply(200, testGoal)
+    it('should log info message when provided', async () => {
+      const infoMessage = 'Test info message'
+      await sentencePlanApiClient.restClient(infoMessage)
 
-      const result = await client.saveGoal(testNewGoal)
-
-      expect(result).toEqual(testGoal)
-    })
-  })
-
-  describe('saveSteps', () => {
-    it('should save steps data via the API', async () => {
-      const parentGoalId = testGoal.uuid
-      fakeApi.post(`/goals/${parentGoalId}/steps`, [testNewStep]).reply(200, testStep)
-
-      const result = await client.saveSteps([testNewStep], parentGoalId)
-
-      expect(result).toEqual(testStep)
+      expect(logger.info).toHaveBeenCalledWith(infoMessage)
     })
   })
 })

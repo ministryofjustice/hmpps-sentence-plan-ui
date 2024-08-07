@@ -8,6 +8,10 @@
       "createGoalLink": "Create goal",
       "viewPreviousGoalsLink": "View previous goals",
       "noPreviousGoals": "No previous goals"
+    },
+    "subNav": {
+      "about": "About",
+      "summary": "Plan summary"
     }
   }
 }

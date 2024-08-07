@@ -1,5 +1,6 @@
-import type { UserDetails } from '../../services/userService'
 import { RequestServices } from '../../services'
+import { PlanType } from '../PlanType'
+import { HandoverContextData, HandoverPrincipal } from '../Handover'
 
 export default {}
 
@@ -8,13 +9,16 @@ declare module 'express-session' {
   interface SessionData {
     returnTo: string
     nowInMinutes: number
+    plan?: PlanType
     forms?: any
+    handover?: HandoverContextData
   }
 }
 
 export declare global {
   namespace Express {
-    interface User extends Partial<UserDetails> {
+    interface User extends Partial<HandoverPrincipal> {
+      username: string
       token: string
       authSource: string
     }

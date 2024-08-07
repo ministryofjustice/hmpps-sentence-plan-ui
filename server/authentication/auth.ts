@@ -31,13 +31,19 @@ const authenticationMiddleware: AuthenticationMiddleware = verifyToken => {
 function init(): void {
   const strategy = new Strategy(
     {
-      authorizationURL: `${config.apis.hmppsAuth.externalUrl}/oauth/authorize`,
-      tokenURL: `${config.apis.hmppsAuth.url}/oauth/token`,
-      clientID: config.apis.hmppsAuth.apiClientId,
-      clientSecret: config.apis.hmppsAuth.apiClientSecret,
+      authorizationURL: `${config.apis.arnsHandover.externalUrl}/oauth2/authorize`,
+      tokenURL: `${config.apis.arnsHandover.url}/oauth2/token`,
+      clientID: config.apis.arnsHandover.clientId,
+      clientSecret: config.apis.arnsHandover.clientSecret,
       callbackURL: `${config.domain}/sign-in/callback`,
       state: true,
-      customHeaders: { Authorization: generateOauthClientToken() },
+      customHeaders: {
+        Authorization: generateOauthClientToken(
+          config.apis.arnsHandover.clientId,
+          config.apis.arnsHandover.clientSecret,
+        ),
+      },
+      scope: 'openid profile',
     },
     (token, refreshToken, params, profile, done) => {
       return done(null, { token, username: params.user_name, authSource: params.auth_source })

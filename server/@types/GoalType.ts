@@ -1,11 +1,15 @@
 export type Goal = {
-  id: number
   uuid: string
   title: string
-  areaOfNeed: string
+  areaOfNeed: AreaOfNeed
+  relatedAreasOfNeed: AreaOfNeed[]
   creationDate: string
   completedDate?: string
   targetDate: string
-  isAgreed: boolean
-  agreementNote: string
+  goalOrder: number
+}
+
+type AreaOfNeed = {
+  uuid: string
+  name: string
 }

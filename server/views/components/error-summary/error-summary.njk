@@ -1,0 +1,19 @@
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+
+{% macro errorSummary(params) %}
+    {% set errorList = [] %}
+    {% for id, errorObj in params.errors.body %}
+        {% set errorList = errorList.concat(getFormattedError(
+            params.errors,
+            params.locale,
+            id
+        )) %}
+    {% endfor %}
+
+    {% if errorList.length %}
+        {{ govukErrorSummary({
+            titleText: "There is a problem",
+            errorList: errorList
+        }) }}
+    {% endif %}
+{% endmacro %}

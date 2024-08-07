@@ -3,6 +3,7 @@ version: 2.1
 orbs:
   hmpps: ministryofjustice/hmpps@8
   slack: circleci/slack@4.12.5
+  mem: circleci/rememborb@0.0.2
 
 parameters:
   alerts-slack-channel:
@@ -20,8 +21,13 @@ parameters:
     type: string
     default: 20.11-browsers
 
+  deploy:
+    description: Trigger a manual deployment
+    type: string
+    default: ""
+
 jobs:
-  build:
+  lint:
     executor:
       name: hmpps/node
       tag: << pipeline.parameters.node-version >>
@@ -41,18 +47,8 @@ jobs:
             - node_modules
             - ~/.cache
       - run:
-          command: |
-            npm run build
-      - run: # Run linter after build because the integration test code depend on compiled typescript...
           name: Linter check
           command: npm run lint
-      - persist_to_workspace:
-          root: .
-          paths:
-            - node_modules
-            - build
-            - dist
-            - assets/stylesheets
 
   unit_test:
     executor:
@@ -70,61 +66,69 @@ jobs:
       - store_artifacts:
           path: test_results/unit-test-reports.html
 
-  integration_test:
-    executor:
-      name: hmpps/node
-      tag: << pipeline.parameters.node-version >>
+  e2e_test:
+    machine:
+      image: ubuntu-2204:current
+      resource_class: medium
+    working_directory: ~/app
     steps:
       - checkout
       - attach_workspace:
           at: ~/app
       - run:
-          name: Install missing OS dependency
-          command: sudo apt-get install libxss1
+          name: Extract saved container image
+          command: docker load --input docker_cache/build_image.tar
       - restore_cache:
           key: dependency-cache-{{ checksum "package-lock.json" }}
+      - mem/recall:
+          env_var: APP_VERSION
       - run:
-          name: Get wiremock
-          command: curl -o wiremock.jar https://repo1.maven.org/maven2/org/wiremock/wiremock-standalone/3.3.1/wiremock-standalone-3.3.1.jar
+          name: Stand up a test environment
+          command: make test-up
       - run:
-          name: Run wiremock
-          command: java -jar wiremock.jar --port 9091
-          background: true
-      - run:
-          name: Run the node app.
-          command: npm run start-feature
-          background: true
-      - run:
-          name: Wait for node app to start
-          command: sleep 5
-      - run:
-          name: integration tests
-          command: npm run int-test
+          name: Run the end-to-end tests
+          command: make e2e-ci
       - store_test_results:
           path: test_results
       - store_artifacts:
-          path: integration_tests/videos
+          path: cypress/videos
       - store_artifacts:
           path: integration_tests/screenshots
 
 workflows:
   version: 2
   build-test-and-deploy:
+    when:
+      not: << pipeline.parameters.deploy >>
     jobs:
-      - build:
+      - lint:
           filters:
             tags:
               ignore: /.*/
       - unit_test:
           requires:
-            - build
-      - integration_test:
-          requires:
-            - build
+            - lint
       - hmpps/helm_lint:
           name: helm_lint
       - hmpps/build_docker:
           name: build_docker
+          publish: false
+          persist_container_image: true
+          jira_update: true
+          pipeline_id: << pipeline.id >>
+          pipeline_number: << pipeline.number >>
+          context: hmpps-common-vars
+      - e2e_test:
+          context: hmpps-common-vars
+          requires:
+            - build_docker
+      - hmpps/publish_docker:
+          name: publish_docker
+          publish_latest_tag: true
+          context: hmpps-common-vars
+          requires:
+            - unit_test
+            - e2e_test
           filters:
             branches:
               only:
@@ -133,8 +137,8 @@ workflows:
           name: deploy_dev
           env: "dev"
           jira_update: true
-          pipeline_id: <<pipeline.id>>
-          pipeline_number: <<pipeline.number>>
+          pipeline_id: << pipeline.id >>
+          pipeline_number: << pipeline.number >>
           context: hmpps-common-vars
           filters:
             branches:
@@ -142,46 +146,43 @@ workflows:
                 - main
           requires:
             - helm_lint
-            - unit_test
-            - integration_test
-            - build_docker
+            - publish_docker
           helm_timeout: 5m
-#      - request-preprod-approval:
-#          type: approval
-#          requires:
-#            - deploy_dev
-#      - hmpps/deploy_env:
-#          name: deploy_preprod
-#          env: "preprod"
-#          jira_update: true
-#          jira_env_type: staging
-#          pipeline_id: <<pipeline.id>>
-#          pipeline_number: <<pipeline.number>>
-#          context:
-#            - hmpps-common-vars
-#            - hmpps-sentence-plan-ui-preprod
-#          requires:
-#            - request-preprod-approval
-#          helm_timeout: 5m
-#      - request-prod-approval:
-#          type: approval
-#          requires:
-#            - deploy_preprod
-#      - hmpps/deploy_env:
-#          name: deploy_prod
-#          env: "prod"
-#          jira_update: true
-#          jira_env_type: production
-#          pipeline_id: <<pipeline.id>>
-#          pipeline_number: <<pipeline.number>>
-#          slack_notification: true
-#          slack_channel_name: << pipeline.parameters.releases-slack-channel >>
-#          context:
-#            - hmpps-common-vars
-#            - hmpps-sentence-plan-ui-prod
-#          requires:
-#            - request-prod-approval
-#          helm_timeout: 5m
+
+  deploy-to-test-env:
+    when:
+      and:
+        - equal: [ "test", << pipeline.parameters.deploy >> ]
+    jobs:
+      - hmpps/build_docker:
+          name: build_docker
+          publish: false
+          persist_container_image: true
+          jira_update: true
+          pipeline_id: << pipeline.id >>
+          pipeline_number: << pipeline.number >>
+          context:
+            - hmpps-common-vars
+            - hmpps-sentence-plan-test
+      - hmpps/publish_docker:
+          name: publish_docker
+          publish_latest_tag: false
+          context: hmpps-common-vars
+          requires:
+            - build_docker
+      - hmpps/deploy_env:
+          name: deploy_test
+          env: "test"
+          jira_update: true
+          jira_env_type: testing
+          pipeline_id: << pipeline.id >>
+          pipeline_number: << pipeline.number >>
+          context:
+            - hmpps-common-vars
+            - hmpps-sentence-plan-test
+          requires:
+            - publish_docker
+          helm_timeout: 5m
 
   security:
     triggers:
