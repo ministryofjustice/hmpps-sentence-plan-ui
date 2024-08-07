@@ -1,6 +1,5 @@
 import * as govukFrontend from 'govuk-frontend'
 import * as mojFrontend from '@ministryofjustice/frontend'
-import './autocomplete.js'
 import './datepicker.js'
 import './autocomplete/goal-autocomplete'
 import './autocomplete/step-autocomplete'
