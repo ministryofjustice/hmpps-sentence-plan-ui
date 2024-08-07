@@ -22,19 +22,37 @@ describe('View Plan Summary', () => {
     planSummary
       .getSummaryCard(0)
       .should('contain', 'Accommodation Goal 2')
-      .should('contain', 'Move goal down')
+      .and('contain', 'Move goal down')
       .and('not.contain', 'Move goal up')
     planSummary
       .getSummaryCard(1)
       .should('contain', 'Accommodation Goal 1')
-      .should('contain', 'Move goal down')
+      .and('contain', 'Move goal down')
       .and('contain', 'Move goal up')
+  })
+
+  it('Creates three new goals, and moves the middle goal down', () => {
+    createGoalPage.createCompleteGoal(0)
+    createGoalPage.createCompleteGoal(1)
+    createGoalPage.createCompleteGoal(2)
+    planSummary.clickDownOnSummaryCard(1)
+
+    planSummary
+      .getSummaryCard(1)
+      .should('contain', 'Accommodation Goal 3')
+      .and('contain', 'Move goal down')
+      .and('contain', 'Move goal up')
+    planSummary
+      .getSummaryCard(2)
+      .should('contain', 'Accommodation Goal 2')
+      .and('contain', 'Move goal up')
+      .and('not.contain', 'Move goal down')
   })
 
   it('Adds a long goal title', () => {
     createGoalPage.createGoal('accommodation')
     createGoalPage.addGoalAutoCompletionText(
-      'This is an example of an extremely long goal title, a goal title that some may say is too long. This goal is far longer.',
+      'This is an example of an extremely long goal title, a goal title that some may say is too long. This goal is far longer than we might anticipate a goal being, but nevertheless someone might write a goal that is, in fact, this long.',
     )
     createGoalPage.selectOtherAreasOfNeedRadio('no')
     createGoalPage.selectStartWorkingRadio('yes')
