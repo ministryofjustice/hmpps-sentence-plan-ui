@@ -35,6 +35,7 @@ describe('Remove a goal', () => {
         .and('contain', `No steps added`)
         .and('contain', `Area of need: ${goalData.areaOfNeed.toLowerCase()}`)
         .and('contain', `Also relates to: ${goalData.relatedAreasOfNeed[0].toLowerCase()}`)
+        .and('not.contain', `Add steps`)
     })
 
     it('Goal with steps renders correctly', () => {
@@ -55,6 +56,7 @@ describe('Remove a goal', () => {
         .and('contain', `Aim to achieve in 6 months`)
         .and('contain', `Area of need: ${goalData.areaOfNeed.toLowerCase()}`)
         .and('contain', `Also relates to: ${goalData.relatedAreasOfNeed[0].toLowerCase()}`)
+        .and('not.contain', `Add steps`)
 
       // Check steps data is rendered correctly
       cy.get('.goal-summary-card__steps')

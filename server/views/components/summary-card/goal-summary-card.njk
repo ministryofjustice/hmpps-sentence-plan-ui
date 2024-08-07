@@ -38,7 +38,9 @@
         {% else %}
             <div class="goal-summary-card__steps--empty">
                 <strong>No steps added</strong>
-                <a href="/goals/${{ params.goal.uuid }}/steps">Add steps</a>
+                {% if params.actions.length > 0 %}
+                    <a href="/goals/{{ params.goal.uuid }}/steps">Add steps</a>
+                {% endif %}
             </div>
         {% endif %}
 
