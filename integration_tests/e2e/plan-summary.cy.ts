@@ -60,7 +60,7 @@ describe('View Plan Summary', () => {
     createGoalPage.clickButton('Save without steps')
 
     planSummary.getSummaryCard(0).within(() => {
-      cy.get('.govuk-summary-card__actions').invoke('height').should('equal', 25)
+      cy.get('.govuk-summary-card__action').first().invoke('height').should('equal', 25)
     })
   })
 
