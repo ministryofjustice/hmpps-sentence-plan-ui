@@ -48,7 +48,7 @@ services:
     ports:
       - "7070:7070"
     healthcheck:
-      test: ["CMD", "curl", "-fs", "http://arns-handover:7070/health/ping"]
+      test: ["CMD", "wget", "-q", "-O", "-", "http://localhost:7070/health/ping"]
     environment:
       SERVER_PORT: 7070
       REDIS_HOST: redis

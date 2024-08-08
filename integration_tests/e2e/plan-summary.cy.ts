@@ -49,10 +49,10 @@ describe('View Plan Summary', () => {
       .and('not.contain', 'Move goal down')
   })
 
-  it('Adds a long goal title', () => {
+  it('Adds a long goal title (less than 128 chars)', () => {
     createGoalPage.createGoal('accommodation')
     createGoalPage.addGoalAutoCompletionText(
-      'This is an example of an extremely long goal title, a goal title that some may say is too long. This goal is far longer than we might anticipate a goal being, but nevertheless someone might write a goal that is, in fact, this long.',
+      'This is an example of an extremely long goal title, a goal title that some may say is too long. This goal is far longer.',
     )
     createGoalPage.selectOtherAreasOfNeedRadio('no')
     createGoalPage.selectStartWorkingRadio('yes')
