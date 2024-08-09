@@ -16,7 +16,6 @@ export default class EditGoalController {
   ) {}
 
   private render = async (req: Request, res: Response, next: NextFunction) => {
-    const crn = 'ABC123XYZ' // TODO: This is likely to be a session value, get from there
     const { uuid } = req.params
     const { errors } = req
     const errorKeys: string[] = []
@@ -26,14 +25,14 @@ export default class EditGoalController {
     dateOptionsDate.push(new Date(new Date().setDate(new Date().getDate() + 7)))
     if (errors) {
       Object.keys(errors.body).forEach(key =>
-        key === 'input-autocomplete' ? errorKeys.push('goal-name') : errorKeys.push(key),
+        key === 'goal-input-autocomplete' ? errorKeys.push('goal-name') : errorKeys.push(key),
       )
       form = req.body
     } else {
       const targetDate = goal.targetDate?.substring(0, 10)
       const customDate = dateOptionsDate.filter(date => date.toISOString().substring(0, 10) === targetDate).length === 0
       form = {
-        'input-autocomplete': goal.title,
+        'goal-input-autocomplete': goal.title,
         'other-area-of-need-radio': goal.relatedAreasOfNeed.length === 0 ? 'no' : 'yes',
         'start-working-goal-radio': goal.targetDate ? 'yes' : 'no',
         'date-selection-radio': customDate ? 'custom' : targetDate,
@@ -51,9 +50,6 @@ export default class EditGoalController {
       .filter(aon => aon.name !== areaOfNeed)
       .map(({ name }) => ({ text: name, value: name, checked: selectedOtherAreaOfNeed.includes(name) }))
     const popData = req.services.sessionService.getSubjectDetails()
-    const inputAutocompleteDivClass = errors?.body['input-autocomplete']
-      ? 'govuk-form-group govuk-form-group--error'
-      : 'govuk-form-group'
     return res.render('pages/edit-goal', {
       locale: locale.en,
       data: {
@@ -61,14 +57,12 @@ export default class EditGoalController {
         otherAreaOfNeed,
         areaOfNeed,
         popData,
-        inputAutocompleteDivClass,
         dateOptionsDate,
         arnUrl,
         form,
       },
       errors,
       errorKeys,
-      inputAutocompleteDivClass,
     })
   }
 
@@ -89,7 +83,7 @@ export default class EditGoalController {
     const type = req.query?.type
     const processedData: NewGoal = this.processGoalData(req.body)
     const planUuid = req.services.sessionService.getPlanUUID()
-    const { uuid } = await this.goalService.saveGoal(processedData, planUuid)
+    const { uuid } = await this.goalService.updateGoal(processedData, planUuid)
     req.services.formStorageService.saveFormData('currentGoal', {
       processed: null,
       raw: { uuid },
@@ -99,7 +93,7 @@ export default class EditGoalController {
   }
 
   private processGoalData(body: any) {
-    const title = body['input-autocomplete']
+    const title = body['goal-input-autocomplete']
     const targetDate =
       // eslint-disable-next-line no-nested-ternary
       body['start-working-goal-radio'] === 'yes'
