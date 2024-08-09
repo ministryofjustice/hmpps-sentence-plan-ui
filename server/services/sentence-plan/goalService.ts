@@ -12,9 +12,9 @@ export default class GoalService {
     return restClient.get<Goal>({ path: `/goals/${goalUuid}` })
   }
 
-  async saveGoal(goal: NewGoal, parentPlanUuid: string) {
-    const restClient = await this.sentencePlanApiClient.restClient('Saving goal data')
-    return restClient.post<Goal>({ path: `/plans/${parentPlanUuid}/goals`, data: goal })
+  async saveGoal(goal: NewGoal, goalUuid: string) {
+    const restClient = await this.sentencePlanApiClient.restClient('Update goal data')
+    return restClient.post<Goal>({ path: `/plans/${goalUuid}/goals`, data: goal })
   }
 
   async updateGoal(goal: NewGoal, parentPlanUuid: string) {

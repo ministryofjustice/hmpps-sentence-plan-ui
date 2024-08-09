@@ -81,9 +81,9 @@ export default class EditGoalController {
       raw: req.body,
     })
     const type = req.query?.type
+    const goalUuid = req.params.uuid
     const processedData: NewGoal = this.processGoalData(req.body)
-    const planUuid = req.services.sessionService.getPlanUUID()
-    const { uuid } = await this.goalService.updateGoal(processedData, planUuid)
+    const { uuid } = await this.goalService.updateGoal(processedData, goalUuid)
     req.services.formStorageService.saveFormData('currentGoal', {
       processed: null,
       raw: { uuid },
