@@ -19,6 +19,8 @@ async function initializeGoalInputAutocomplete() {
     const source = await getGoalOptionsByAreaOfNeed(areaOfNeed);
     const wrapperElement = document.querySelector(`.${GOAL_AUTOCOMPLETE_WRAPPER_CLASS}`)
     const inputElement = document.querySelector(`#${GOAL_AUTOCOMPLETE_INPUT_ID}`)
+    const defaultValue = inputElement?.value ?? ''
+    inputElement.remove()
 
     accessibleAutocomplete({
         element: wrapperElement,
@@ -26,8 +28,6 @@ async function initializeGoalInputAutocomplete() {
         name: "goal-input-autocomplete",
         source,
         minLength: 3,
-        defaultValue: inputElement?.value ?? ''
+        defaultValue
     })
-
-    inputElement.remove();
 }
