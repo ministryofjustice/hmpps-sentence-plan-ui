@@ -19,6 +19,8 @@ async function initializeStepInputAutocomplete() {
   const source = await getStepOptionsByAreaOfNeed(areaOfNeed)
   const wrapperElement = document.querySelector(`.${STEP_AUTOCOMPLETE_WRAPPER_CLASS}`)
   const inputElement = document.querySelector(`#${STEP_AUTOCOMPLETE_INPUT_ID}`)
+  const defaultValue = inputElement?.value ?? ''
+  inputElement.remove()
 
   accessibleAutocomplete({
     element: wrapperElement,
@@ -26,8 +28,6 @@ async function initializeStepInputAutocomplete() {
     name: 'step-input-autocomplete',
     source,
     minLength: 3,
-    defaultValue: inputElement?.value ?? '',
+    defaultValue,
   })
-
-  inputElement.remove()
 }
