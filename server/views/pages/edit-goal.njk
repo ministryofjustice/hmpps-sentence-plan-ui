@@ -4,15 +4,15 @@
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "../components/error-summary/error-summary.njk" import errorSummary %}
 {% from "hmpps/components/date-picker/macro.njk" import hmppsDatePicker %}
 {% from "moj/components/side-navigation/macro.njk" import mojSideNavigation %}
-{% from "../components/error-summary/error-summary.njk" import errorSummary %}
 
 {% set pageTitle %}
     {% if errors %}
-        Error: {{ applicationName }} - Create a goal with {{ data.popData.givenName }}
+        Error: {{ applicationName }} - Edit a goal with {{ data.popData.givenName }}
     {% else %}
-       {{ applicationName }} - Create a goal with {{ data.popData.givenName }}
+       {{ applicationName }} - Edit a goal with {{ data.popData.givenName }}
     {% endif %}
 {% endset -%}
 
@@ -103,27 +103,20 @@
 {% block content %}
     <a href="#" class="govuk-back-link">Back</a>
     <div class="govuk-grid-row">
-        <div class="govuk-grid-column-one-third">
-            {{ mojSideNavigation({
-              label: 'Side navigation',
-              items: data.navigationLinks
-            }) }}
-        </div>
         <div class="govuk-grid-column-two-thirds">
             {{ errorSummary({
                 errors: errors,
                 locale: locale
             }) }}
-
-            <span class="govuk-caption-l">{{ data.displayAreaOfNeed }}</span>
+            <span class="govuk-caption-l">{{ data.areaOfNeed }}</span>
             <h1 class="govuk-heading-l">{{ locale.title | replace("{POP_NAME}", data.popData.givenName) }}</h1>
 
             <form id="create-goal-form" method="POST">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-                <input type="hidden" id="_areaOfNeed" value="{{ data.areaOfNeed }}">
-                <input type="hidden" name="area-of-need" value="{{ data.displayAreaOfNeed }}">
+                <input type="hidden" id="_areaOfNeed" value="{{ data.arnUrl }}">
+                <input type="hidden" name="area-of-need" value="{{ data.areaOfNeed }}">
                 <input type="hidden" id="page" value="goals">
-                <input type="hidden" id="goalAutoInputVal" value="{{ data.form['goal-input-autocomplete'] }}">
+                <form type="hidden" id="goalAutoInputVal" value="{{ data.form['goal-input-autocomplete'] }}">
 
                 {{ govukInput({
                     label: {
@@ -199,15 +192,9 @@
 
                 <div class="govuk-button-group">
                     {{ govukButton({
-                        text: locale.addStepsButton,
+                        text: locale.saveButtonText,
                         name: "action",
                         value: "addStep"
-                    }) }}
-                    {{ govukButton({
-                        name: "action",
-                        value: "saveWithoutSteps",
-                        text: "Save without steps",
-                        classes: "govuk-button--secondary"
                     }) }}
                 </div>
             </form>

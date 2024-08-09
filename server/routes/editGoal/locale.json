@@ -1,0 +1,56 @@
+{
+  "en": {
+    "title": "Create a goal with {POP_NAME}",
+    "section": "{AREA_OF_NEED} goal",
+    "notes": {
+      "title": "Notes from {POP_NAME}'s assessment",
+      "attribution": "Created on {NOTE_CREATION_DATE} by {NOTE_AUTHOR}."
+    },
+    "goalSelection": {
+      "label": "What goal is {POP_NAME} trying to achieve?",
+      "hint": "Select one option",
+      "customRadioOptionText": "Something else",
+      "customOptionLabel": "Enter a custom goal"
+    },
+    "startWorking": {
+      "label": "Can {POP_NAME} start working on this goal now?"
+    },
+    "dateSelection": {
+      "label": "When should {POP_NAME} achieve this?",
+      "hint": "Select one option",
+      "customRadioOptionText": "Something else",
+      "customOptionLabel": "Enter a custom date",
+      "customOptionHint": "For example, 27 3 2007",
+      "options": {
+        "nextMeeting": "At our next meeting (by {NEXT_MEETING})",
+        "threeMonths": "In 3 months (by {3_MONTHS_DATE})",
+        "sixMonths": "In 6 months (by {6_MONTHS_DATE})",
+        "twelveMonths": "In 12 months (by {12_MONTHS_DATE})",
+        "twentyFourMonths": "At the end of {POP_NAME}'s sentence (by {24_MONTHS_DATE})"
+      }
+    },
+    "saveButtonText": "Save and continue",
+    "addStepsButton": "Add steps",
+    "saveWithoutStepsButton": "Save without steps",
+    "errors": {
+      "other-area-of-need-radio": {
+        "isNotEmpty": "Select yes if this goal is related to any other area of need"
+      },
+      "goal-name": {
+        "isNotEmpty": "Select or enter what goal they should try to achieve"
+      },
+      "other-area-of-need": {
+        "isNotEmpty": "Select all related areas"
+      },
+      "start-working-goal-radio": {
+        "isNotEmpty": "Select yes if they can start working on this goal now"
+      },
+      "date-selection-radio": {
+        "isNotEmpty": "Select when they should aim to achieve this goal"
+      },
+      "date-selection-custom": {
+        "isNotEmpty": "Select a date"
+      }
+    }
+  }
+}
