@@ -42,7 +42,7 @@ class CreateGoal {
 
   createCompleteGoal = (value: number) => {
     this.createGoal('accommodation')
-    this.selectGoalAutocompleteOption('acc', value)
+    this.addGoalAutoCompletionText(`Test Accommodation ${value}`)
     this.selectOtherAreasOfNeedRadio('no')
     this.selectStartWorkingRadio('yes')
     this.selectAchievementDate('In 6 months')

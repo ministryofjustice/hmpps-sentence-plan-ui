@@ -14,37 +14,37 @@ describe('View Plan Summary', () => {
   })
 
   it('Creates three new goals, and moves the middle goal up', () => {
-    createGoalPage.createCompleteGoal(0)
     createGoalPage.createCompleteGoal(1)
     createGoalPage.createCompleteGoal(2)
+    createGoalPage.createCompleteGoal(3)
     planSummary.clickUpOnSummaryCard(1)
 
     planSummary
       .getSummaryCard(0)
-      .should('contain', 'Accommodation Goal 2')
+      .should('contain', 'Test Accommodation 2')
       .and('contain', 'Move goal down')
       .and('not.contain', 'Move goal up')
     planSummary
       .getSummaryCard(1)
-      .should('contain', 'Accommodation Goal 1')
+      .should('contain', 'Test Accommodation 1')
       .and('contain', 'Move goal down')
       .and('contain', 'Move goal up')
   })
 
   it('Creates three new goals, and moves the middle goal down', () => {
-    createGoalPage.createCompleteGoal(0)
     createGoalPage.createCompleteGoal(1)
     createGoalPage.createCompleteGoal(2)
+    createGoalPage.createCompleteGoal(3)
     planSummary.clickDownOnSummaryCard(1)
 
     planSummary
       .getSummaryCard(1)
-      .should('contain', 'Accommodation Goal 3')
+      .should('contain', 'Test Accommodation 3')
       .and('contain', 'Move goal down')
       .and('contain', 'Move goal up')
     planSummary
       .getSummaryCard(2)
-      .should('contain', 'Accommodation Goal 2')
+      .should('contain', 'Test Accommodation 2')
       .and('contain', 'Move goal up')
       .and('not.contain', 'Move goal down')
   })
