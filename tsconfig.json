@@ -22,6 +22,7 @@
     "assets/**/*.js",
     "integration_tests",
     "dist",
+    "cypress",
     "cypress.config.ts",
     "esbuild",
     "coverage"

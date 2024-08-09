@@ -24,13 +24,18 @@ export default class CreateGoalController {
     })
     const processedData: NewGoal = this.processGoalData(req.body)
     const planUuid = req.services.sessionService.getPlanUUID()
-    const { uuid } = await this.goalService.saveGoal(processedData, planUuid)
-    req.services.formStorageService.saveFormData('currentGoal', {
-      processed: null,
-      raw: { uuid },
-    })
-    const redirectUrl: string = req.body.action === 'addStep' ? URLs.CREATE_STEP : `${URLs.PLAN_SUMMARY}?status=success`
-    return res.redirect(redirectUrl)
+    try {
+      const { uuid } = await this.goalService.saveGoal(processedData, planUuid)
+      req.services.formStorageService.saveFormData('currentGoal', {
+        processed: null,
+        raw: { uuid },
+      })
+      const redirectUrl: string =
+        req.body.action === 'addStep' ? URLs.CREATE_STEP : `${URLs.PLAN_SUMMARY}?status=success`
+      return res.redirect(redirectUrl)
+    } catch (e) {
+      return next(e)
+    }
   }
 
   private render = async (req: Request, res: Response, next: NextFunction) => {

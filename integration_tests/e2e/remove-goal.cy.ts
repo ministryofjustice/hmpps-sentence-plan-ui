@@ -21,7 +21,7 @@ describe('Remove a goal', () => {
     }
 
     it('Goal with no steps renders correctly', () => {
-      // Add goal amd access remove page
+      // Add goal and access remove page
       cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
         cy.addGoalToPlan(plan.uuid, goalData).then(goal => {
           cy.visit(`/remove-goal/${goal.uuid}`)

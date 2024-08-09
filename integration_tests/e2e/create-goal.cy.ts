@@ -1,4 +1,10 @@
+import CreateGoal from '../pages/create-goal'
+import AddSteps from '../pages/add-steps'
+
 describe('Create a new Goal', () => {
+  const createGoalPage = new CreateGoal()
+  const addStep = new AddSteps()
+
   beforeEach(() => {
     cy.createSentencePlan().then(planDetails => {
       cy.wrap(planDetails).as('planDetails')
@@ -8,45 +14,51 @@ describe('Create a new Goal', () => {
   })
 
   it('Creates a new goal with steps', () => {
-    cy.get("a[href='/create-goal/accommodation']").click()
-    cy.url().should('include', '/create-goal/accommodation')
-    cy.get('#goal-input-autocomplete').type('acc{downArrow},{enter}')
-    cy.get('#other-area-of-need-radio').click()
-    cy.get('.govuk-checkboxes').first().contains('Employment and education').click()
-    cy.get('.govuk-checkboxes').first().contains('Drug use').click()
-    cy.get('#start-working-goal-radio').click()
-    cy.get('.govuk-radios').last().contains('In 6 months').click()
-    cy.get('button').contains('Add steps').click()
+    createGoalPage.createGoal('accommodation')
+    createGoalPage.selectGoalAutocompleteOption('acc', 0)
+    createGoalPage.selectOtherAreasOfNeedRadio('yes')
+    createGoalPage.selectOtherAreasOfNeed(['Employment and education', 'Drug use'])
+    createGoalPage.selectStartWorkingRadio('yes')
+    createGoalPage.selectAchievementDate('In 6 months')
+    createGoalPage.clickButton('Add steps')
+
     cy.url().should('include', '/steps/create')
-    cy.get('#step-input-autocomplete').click()
-    cy.get('#step-input-autocomplete').type('This is the first step')
-    cy.get('#actor').click()
-    cy.get('#actor-2').click()
-    cy.get('button').contains('Save and continue').click()
+    addStep.addStepAutocompleteText('This is the first step')
+    addStep.selectStepActors(['Sam', 'Probation practitioner'])
+    addStep.saveAndContinue()
+
     cy.url().should('include', '/plan-summary')
   })
 
   it('Creates a new goal with errors', () => {
-    cy.get("a[href='/create-goal/accommodation']").click()
+    createGoalPage.createGoal('accommodation')
+    createGoalPage.selectGoalAutocompleteOption('acc', 0)
+    createGoalPage.selectStartWorkingRadio('yes')
+    createGoalPage.selectAchievementDateSomethingElse('{backspace}')
+    createGoalPage.clickButton('Add steps')
+
     cy.url().should('include', '/create-goal/accommodation')
-    cy.get('#goal-input-autocomplete').type('acc{downArrow},{enter}')
-    cy.get('#start-working-goal-radio').click()
-    cy.get('.govuk-radios').last().contains('In 6 months').click()
-    cy.get('button').contains('Add steps').click()
-    cy.url().should('include', '/create-goal/accommodation')
+    cy.get('.govuk-error-summary')
+      .should('contain', 'Select yes if this goal is related to any other area of need')
+      .should('contain', 'Select a date')
     cy.contains('#other-area-of-need-radio-error', 'Select yes if this goal is related to any other area of need')
+    cy.contains('.hmpps-datepicker', 'Select a date')
+    cy.title().should('contain', 'Error:')
   })
 
   it('Creates a new goal without steps', () => {
-    cy.get("a[href='/create-goal/accommodation']").click()
-    cy.url().should('include', '/create-goal/accommodation')
-    cy.get('#goal-input-autocomplete').type('acc{downArrow},{enter}')
-    cy.get('#other-area-of-need-radio').click()
-    cy.get('.govuk-checkboxes').first().contains('Employment and education').click()
-    cy.get('.govuk-checkboxes').first().contains('Drug use').click()
-    cy.get('#start-working-goal-radio').click()
-    cy.get('.govuk-radios').last().contains('In 6 months').click()
-    cy.get('button').contains('Save without steps').click()
+    createGoalPage.createGoal('accommodation')
+    createGoalPage.selectGoalAutocompleteOption('acc', 0)
+    createGoalPage.selectOtherAreasOfNeedRadio('yes')
+    createGoalPage.selectOtherAreasOfNeed(['Employment and education', 'Drug use'])
+    createGoalPage.selectStartWorkingRadio('yes')
+    createGoalPage.selectAchievementDate('In 6 months')
+    createGoalPage.clickButton('Save without steps')
+
     cy.url().should('include', '/plan-summary')
+  })
+
+  it.skip('Should have no accessibility violations', () => {
+    cy.checkAccessibility()
   })
 })

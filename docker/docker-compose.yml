@@ -30,7 +30,7 @@ services:
   hmpps-auth:
     image: quay.io/hmpps/hmpps-auth:latest
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://hmpps-auth:9090/auth/health"]
+      test: ["CMD", "curl", "-fs", "http://hmpps-auth:9090/auth/health"]
       interval: 5s
       retries: 60
     ports:
@@ -48,7 +48,7 @@ services:
     ports:
       - "7070:7070"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://arns-handover:7070/health/ping"]
+      test: ["CMD", "wget", "-q", "-O", "-", "http://arns-handover:7070/health/ping"]
     environment:
       SERVER_PORT: 7070
       REDIS_HOST: redis
@@ -80,14 +80,13 @@ services:
       SP_API_URL: http://api:8080
       PORT: 3005
 
-
   api:
     image: quay.io/hmpps/hmpps-sentence-plan:latest
     depends_on:
       - postgres
       - hmpps-auth
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://api:8080/health/ping"]
+      test: ["CMD", "curl", "-fs", "http://api:8080/health/ping"]
       interval: 5s
       retries: 100
     ports:
