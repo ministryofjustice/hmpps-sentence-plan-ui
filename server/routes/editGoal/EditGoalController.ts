@@ -24,9 +24,6 @@ export default class EditGoalController {
     const dateOptionsDate = getAchieveDateOptions(new Date())
     dateOptionsDate.push(new Date(new Date().setDate(new Date().getDate() + 7)))
     if (errors) {
-      Object.keys(errors.body).forEach(key =>
-        key === 'goal-input-autocomplete' ? errorKeys.push('goal-name') : errorKeys.push(key),
-      )
       form = req.body
     } else {
       const targetDate = goal.targetDate?.substring(0, 10)
