@@ -4,7 +4,12 @@ import { testGoal } from './goalData'
 
 export const testNewStep: NewStep = {
   description: 'A test step',
-  actor: ['The actor'],
+  actor: [
+    {
+      actor: 'Test actor',
+      actorOptionId: 1,
+    },
+  ],
   status: 'PENDING',
 }
 export const testStep: Step = {

@@ -1,0 +1,21 @@
+---
+# Per environment values which override defaults in hmpps-sentence-plan-ui/values.yaml
+
+generic-service:
+  replicaCount: 2
+
+  ingress:
+    host: sentence-plan-test.hmpps.service.justice.gov.uk
+
+  env:
+    INGRESS_URL: "https://sentence-plan-test.hmpps.service.justice.gov.uk"
+    SENTENCE_PLAN_API_URL: "https://sentence-plan-api-test.hmpps.service.justice.gov.uk"
+    HMPPS_AUTH_URL: "https://sign-in-dev.hmpps.service.justice.gov.uk/auth"
+    HMPPS_ARNS_HANDOVER_URL: "https://arns-handover-service-test.hmpps.service.justice.gov.uk"
+    MANAGE_USERS_API_URL: "https://manage-users-api-dev.hmpps.service.justice.gov.uk"
+    TOKEN_VERIFICATION_API_URL: "https://token-verification-api-dev.prison.service.justice.gov.uk"
+    ENVIRONMENT_NAME: TEST
+    AUDIT_ENABLED: "false"
+
+generic-prometheus-alerts:
+  alertSeverity: hmpps-sentence-plan-notifications

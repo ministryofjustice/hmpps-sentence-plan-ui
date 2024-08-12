@@ -1,5 +1,9 @@
-import { createSentencePlan, enterSentencePlan } from './commands/backend'
+import { addGoalToPlan, addStepToGoal, createSentencePlan, openSentencePlan } from './commands/backend'
 
-// Backend
-Cypress.Commands.add('enterSentencePlan', enterSentencePlan)
+// Handover/Auth
+Cypress.Commands.add('openSentencePlan', openSentencePlan)
 Cypress.Commands.add('createSentencePlan', createSentencePlan)
+
+// API
+Cypress.Commands.add('addGoalToPlan', addGoalToPlan)
+Cypress.Commands.add('addStepToGoal', addStepToGoal)

@@ -12,7 +12,7 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
   app.set('view engine', 'njk')
 
   app.locals.asset_path = '/assets/'
-  app.locals.applicationName = 'Hmpps Sentence Plan Ui'
+  app.locals.applicationName = 'Sentence Plan'
   app.locals.environmentName = config.environmentName
   app.locals.environmentNameColour = config.environmentName === 'PRE-PRODUCTION' ? 'govuk-tag--green' : ''
 
@@ -34,6 +34,8 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
       path.join(__dirname, 'server/views'),
       'node_modules/govuk-frontend/dist/',
       'node_modules/@ministryofjustice/frontend/',
+      'node_modules/hmpps-court-cases-release-dates-design/',
+      'node_modules/hmpps-court-cases-release-dates-design/hmpps/components/',
     ],
     {
       autoescape: true,
@@ -53,6 +55,9 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
 
   // Filter to format date as 'DD MMMMM YYYY'
   njkEnv.addFilter('formatSimpleDate', date => {
+    if (date == null) {
+      return ''
+    }
     return new Date(date).toLocaleDateString('en-GB', {
       day: 'numeric',
       month: 'long',
@@ -66,13 +71,35 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
   })
 
   njkEnv.addGlobal('getFormattedError', (errors: any, locale: any, fieldName: string) => {
+    const fieldErrors = errors?.body?.[fieldName]
+
     if (errors?.body?.[fieldName]) {
-      const entry = Object.entries(errors.body[fieldName]).find(([errorType, hasError]) => hasError)
-      if (entry) {
-        const [errorType] = entry
-        return { text: locale.errors[fieldName][errorType] }
+      const errorType = Object.keys(fieldErrors)[0]
+
+      if (errorType) {
+        return {
+          text: locale.errors[fieldName][errorType],
+          href: `#${fieldName}`,
+        }
       }
     }
     return false
+  })
+
+  // Filter to format actors
+  njkEnv.addFilter('getActors', actors => {
+    return actors.map((item: any) => item.actor)
+  })
+
+  // Filter to format related area of need
+  njkEnv.addFilter('getRelatedAreaOfNeed', relatedAreaOfNeed => {
+    return relatedAreaOfNeed.map((item: any) => item.name)
+  })
+
+  // get months difference
+  njkEnv.addGlobal('getMonthsDifference', (creationDate: string, targetDate: string) => {
+    const [creationYear, creationMonth] = creationDate.split('-').map(Number)
+    const [targetYear, targetMonth] = targetDate.split('-').map(Number)
+    return (targetYear - creationYear) * 12 + (targetMonth - creationMonth)
   })
 }

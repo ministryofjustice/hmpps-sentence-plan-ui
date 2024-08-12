@@ -1,4 +1,5 @@
 {% extends "govuk/template.njk" %}
+{%- from "moj/components/primary-navigation/macro.njk" import mojPrimaryNavigation -%}
 
 {% block head %}
   <link href="/assets/css/app.css?{{ version }}" rel="stylesheet" />
@@ -9,6 +10,28 @@
 
 {% block header %}
   {% include "./header.njk" %}
+  {# TODO: Provide a way to set the active sub-navigation, or, programtically set it based on URL #}
+  {% if data.popData %}
+    {{ mojPrimaryNavigation({
+      label: 'Primary navigation',
+      items: [{
+          text: data.popData.givenName + "'s plan",
+          href: '/plan-summary?source=nav',
+          active: true
+        },
+        {
+          text: 'About ' + data.popData.givenName,
+          href: '/about-pop'
+        }
+      ]
+    }) }}
+
+    {% if header.type == 'extended' %}
+      {% include "./plan-header/plan-header-extended.njk" %}
+    {% else %}
+      {% include "./plan-header/plan-header-mini.njk" %}
+    {% endif %}
+  {% endif  %}
 {% endblock %}
 
 {% block bodyStart %}{% endblock %}

@@ -35,7 +35,7 @@
             id: "goal-agreement-note",
             name: "goal-agreement-note",
             label: {
-                text: locale.goalAgreementNote.label | replace("{POP_NAME}", data.popData.firstName)
+                text: locale.goalAgreementNote.label | replace("{POP_NAME}", data.popData.givenName)
             },
             errorMessage: getFormattedError(errors, locale, "goal-agreement-note"),
             value: data.form["goal-agreement-note"]
@@ -44,123 +44,119 @@
 
 
 {% block content %}
-    <div class="govuk-width-container">
-        <a href="#" class="govuk-back-link">Back</a>
-        <main class="govuk-main-wrapper">
-            <div class="govuk-grid-row">
-                <div class="govuk-grid-column-two-thirds">
-                    <h1 class="govuk-heading-xl">{{ locale.title | replace("{POP_NAME}", data.popData.firstName) }}</h1>
-                    <p class="govuk-body">{{ locale.goalPurpose | replace("{POP_NAME}", data.popData.firstName) }}</p>
+    <a href="#" class="govuk-back-link">Back</a>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <h1 class="govuk-heading-xl">{{ locale.title | replace("{POP_NAME}", data.popData.givenName) }}</h1>
+            <p class="govuk-body">{{ locale.goalPurpose | replace("{POP_NAME}", data.popData.givenName) }}</p>
 
-                    {{ govukSummaryList({
-                        rows: [
-                            {
-                                key: {
-                                    text: locale.goalBreakdown.rowGoal
-                                },
-                                value: {
-                                    text: data.goalData.processed.title
-                                },
-                                actions: {
-                                    items: [
-                                        {
-                                            href: "#",
-                                            text: "Change",
-                                            visuallyHiddenText: "name"
-                                        }
-                                    ]
-                                }
-                            },
-                            {
-                                key: {
-                                    text: locale.goalBreakdown.rowArea
-                                },
-                                value: {
-                                    text: data.goalData.processed.areaOfNeed
-                                },
-                                actions: {
-                                    items: [
-                                        {
-                                            href: "#",
-                                            text: "Change",
-                                            visuallyHiddenText: "date of birth"
-                                        }
-                                    ]
-                                }
-                            },
-                            {
-                                key: {
-                                    text: locale.goalBreakdown.rowDate
-                                },
-                                value: {
-                                    html: data.goalData.processed.targetDate | formatSimpleDate
-                                },
-                                actions: {
-                                    items: [
-                                        {
-                                            href: "#",
-                                            text: "Change",
-                                            visuallyHiddenText: "address"
-                                        }
-                                    ]
-                                }
-                            }
-                        ]
-                    }) }}
-
-
-                    <h2 class="govuk-heading-l">{{ locale.stepSectionTitle }}</h2>
-
-                    {{ govukSummaryList({
-                        rows: steps
-                    }) }}
-
-                    <form id="create-goal-form" method="POST">
-                        <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-
-                        {{ govukRadios({
-                            name: "goal-agreement",
-                            fieldset: {
-                                legend: {
-                                    text: locale.goalAgreement.label | replace("{POP_NAME}", data.popData.firstName),
-                                    isPageHeading: false,
-                                    classes: "govuk-fieldset__legend--l"
-                                }
-                            },
-                            hint: {
-                                text: locale.goalAgreement.hint | replace("{POP_NAME}", data.popData.firstName)
-                            },
-                            errorMessage: getFormattedError(errors, locale, 'goal-agreement'),
-                            value: data.form["goal-agreement"],
+            {{ govukSummaryList({
+                rows: [
+                    {
+                        key: {
+                            text: locale.goalBreakdown.rowGoal
+                        },
+                        value: {
+                            text: data.goalData.processed.title
+                        },
+                        actions: {
                             items: [
                                 {
-                                    value: "true",
-                                    text: locale.goalAgreement.agree
-                                },
-                                {
-                                    value: "false",
-                                    text: locale.goalAgreement.disagree,
-                                    conditional: {
-                                        html: goalAgreementNoteHtml
-                                    }
+                                    href: "#",
+                                    text: "Change",
+                                    visuallyHiddenText: "name"
                                 }
                             ]
-                        }) }}
+                        }
+                    },
+                    {
+                        key: {
+                            text: locale.goalBreakdown.rowArea
+                        },
+                        value: {
+                            text: data.goalData.processed.areaOfNeed
+                        },
+                        actions: {
+                            items: [
+                                {
+                                    href: "#",
+                                    text: "Change",
+                                    visuallyHiddenText: "date of birth"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        key: {
+                            text: locale.goalBreakdown.rowDate
+                        },
+                        value: {
+                            html: data.goalData.processed.targetDate | formatSimpleDate
+                        },
+                        actions: {
+                            items: [
+                                {
+                                    href: "#",
+                                    text: "Change",
+                                    visuallyHiddenText: "address"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }) }}
 
-                        <div class="govuk-button-group">
-                            {{ govukButton({
-                                text: locale.saveButtonText,
-                                name: "action",
-                                value: "save"
-                            }) }}
-                        </div>
-                    </form>
+
+            <h2 class="govuk-heading-l">{{ locale.stepSectionTitle }}</h2>
+
+            {{ govukSummaryList({
+                rows: steps
+            }) }}
+
+            <form id="confirm-goal-form" method="POST">
+                <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+
+                {{ govukRadios({
+                    name: "goal-agreement",
+                    fieldset: {
+                        legend: {
+                            text: locale.goalAgreement.label | replace("{POP_NAME}", data.popData.givenName),
+                            isPageHeading: false,
+                            classes: "govuk-fieldset__legend--l"
+                        }
+                    },
+                    hint: {
+                        text: locale.goalAgreement.hint | replace("{POP_NAME}", data.popData.givenName)
+                    },
+                    errorMessage: getFormattedError(errors, locale, 'goal-agreement'),
+                    value: data.form["goal-agreement"],
+                    items: [
+                        {
+                            value: "true",
+                            text: locale.goalAgreement.agree
+                        },
+                        {
+                            value: "false",
+                            text: locale.goalAgreement.disagree,
+                            conditional: {
+                                html: goalAgreementNoteHtml
+                            }
+                        }
+                    ]
+                }) }}
+
+                <div class="govuk-button-group">
+                    {{ govukButton({
+                        text: locale.saveButtonText,
+                        name: "action",
+                        value: "save"
+                    }) }}
                 </div>
-                <div class="govuk-grid-column-one-third">
-                    <h2 class="govuk-heading-m">One-third column</h2>
-                    <p class="govuk-body">This is a paragraph inside a one-third wide column</p>
-                </div>
-            </div>
-        </main>
+            </form>
+        </div>
+        <div class="govuk-grid-column-one-third">
+            <h2 class="govuk-heading-m">One-third column</h2>
+            <p class="govuk-body">This is a paragraph inside a one-third wide column</p>
+        </div>
     </div>
 {% endblock %}
