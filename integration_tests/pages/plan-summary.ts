@@ -1,4 +1,4 @@
-class PlanSummary {
+export default class PlanSummary {
   getSummaryCard = (value: number) => {
     return cy.get('.govuk-summary-card').eq(value)
   }
@@ -11,5 +11,3 @@ class PlanSummary {
     this.getSummaryCard(value).contains('.govuk-button', 'Move goal down').click()
   }
 }
-
-export default PlanSummary

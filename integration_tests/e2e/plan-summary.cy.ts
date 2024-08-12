@@ -61,11 +61,11 @@ describe('View Plan Summary', () => {
 
     planSummary.getSummaryCard(0).within(() => {
       cy.get('.govuk-summary-card__action')
-        .eq(0)
+        .contains('Change goal')
         .then($el => $el.position().top)
         .then(firstTop => {
           cy.get('.govuk-summary-card__action')
-            .eq(2)
+            .contains('Remove goal')
             .then($el => $el.position().top)
             .then(lastTop => {
               expect(firstTop).to.be.equal(lastTop)

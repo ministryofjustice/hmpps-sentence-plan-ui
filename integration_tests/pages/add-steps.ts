@@ -1,4 +1,4 @@
-class AddSteps {
+export default class AddSteps {
   addStepAutocompleteText = (text: string) => {
     cy.get('#step-input-autocomplete').click()
     cy.get('#step-input-autocomplete').type(text)
@@ -14,5 +14,3 @@ class AddSteps {
     cy.get('button').contains('Save and continue').click()
   }
 }
-
-export default AddSteps

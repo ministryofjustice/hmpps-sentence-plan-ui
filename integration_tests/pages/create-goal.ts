@@ -1,4 +1,4 @@
-class CreateGoal {
+export default class CreateGoal {
   selectGoalAutocompleteOption = (text: string, option: number) => {
     this.addGoalAutoCompletionText(text)
     cy.get(`#goal-input-autocomplete__option--${option}`).click()
@@ -50,8 +50,6 @@ class CreateGoal {
   }
 
   selectFutureGoalsSubNavigation = () => {
-    cy.get('.moj-sub-navigation__list > li:nth-child(2)').click()
+    cy.get('.moj-sub-navigation__list > li').contains('Future goals').click()
   }
 }
-
-export default CreateGoal
