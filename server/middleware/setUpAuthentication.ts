@@ -4,6 +4,7 @@ import passport from 'passport'
 import flash from 'connect-flash'
 import config from '../config'
 import auth from '../authentication/auth'
+import URLs from '../routes/URLs'
 
 const router = express.Router()
 
@@ -31,7 +32,7 @@ export default function setUpAuth(): Router {
 
         return req.services.sessionService
           .setupSession()
-          .then(() => res.redirect(req.session.returnTo || '/about-pop'))
+          .then(() => res.redirect(req.session.returnTo || URLs.PLAN_SUMMARY))
           .catch(next)
       })
     })(req, res, next),

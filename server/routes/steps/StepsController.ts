@@ -5,6 +5,7 @@ import { FORMS } from '../../services/formStorageService'
 import { NewStep } from '../../@types/NewStepType'
 import URLs from '../URLs'
 import options from './options'
+import { toKebabCase } from '../../utils/utils'
 
 export default class StepsController {
   constructor(private readonly stepService: StepService) {}
@@ -21,7 +22,7 @@ export default class StepsController {
         locale: locale.en,
         data: {
           popData,
-          areaOfNeed,
+          areaOfNeed: toKebabCase(areaOfNeed),
           goal,
           form: req.body,
         },
@@ -38,8 +39,10 @@ export default class StepsController {
         raw: { uuid: currentGoal },
       }: Record<string, any> = req.services.formStorageService.getFormData('currentGoal')
       const { actor, someOneElse } = req.body
-      const stepName = req.body['input-autocomplete']
+      const stepName = req.body['step-input-autocomplete']
+      const popData = await req.services.sessionService.getSubjectDetails()
       const payloadOptions = [...options]
+      payloadOptions.unshift({ value: 1, text: popData.givenName })
       if (someOneElse) payloadOptions[5].text = someOneElse
       const actorArray = Array.isArray(actor) ? actor : [actor]
       const actorNumbers: number[] = actorArray.map((item: string | number): number => Number(item))
@@ -47,7 +50,7 @@ export default class StepsController {
       const actors = transformActor(mappedActor)
       const payload = { description: stepName, status: '', actor: actors } as NewStep
       await this.stepService.saveSteps([payload], currentGoal)
-      res.redirect(URLs.SUMMARY)
+      res.redirect(`${URLs.PLAN_SUMMARY}?status=success`)
     } catch (e) {
       next(e)
     }

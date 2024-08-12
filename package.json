@@ -83,7 +83,7 @@
     ]
   },
   "dependencies": {
-    "@aws-sdk/client-sqs": "^3.554.0",
+    "@aws-sdk/client-sqs": "^3.621.0",
     "@ministryofjustice/frontend": "^2.1.2",
     "accessible-autocomplete": "^3.0.0",
     "agentkeepalive": "^4.5.0",
@@ -103,6 +103,7 @@
     "express-session": "^1.18.0",
     "govuk-frontend": "^5.3.0",
     "helmet": "^7.1.0",
+    "hmpps-court-cases-release-dates-design": "^2.6.2",
     "http-errors": "^2.0.0",
     "jwt-decode": "^4.0.0",
     "nocache": "^4.0.0",
@@ -117,6 +118,7 @@
     "uuid": "^9.0.1"
   },
   "devDependencies": {
+    "@faker-js/faker": "^8.4.1",
     "@jgoz/esbuild-plugin-typecheck": "^4.0.0",
     "@types/bunyan": "^1.8.11",
     "@types/bunyan-format": "^0.2.9",

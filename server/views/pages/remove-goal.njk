@@ -1,0 +1,40 @@
+{% extends "../partials/layout.njk" %}
+{% from "../components/summary-card/goal-summary-card.njk" import goalSummaryCard %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set pageTitle = applicationName + " - Remove Goal" %}
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <a href="#" class="govuk-back-link">Back</a>
+        <h1 class="govuk-heading-l">Are you sure you want to remove this goal?</h1>
+
+        {{ goalSummaryCard({
+            goal: data.goal
+        }) }}
+
+        <form id="remove-goal-form" method="POST">
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+            <input type="hidden" name="goalUuid" value="{{ data.goal.uuid }}">
+            <input type="hidden" name="type" value="{{ data.type }}">
+            <div class="govuk-button-group">
+                {{ govukButton({
+                    text: locale.removeGoalButtonText,
+                    name: "action",
+                    value: "remove"
+                }) }}
+                {{ govukButton({
+                    text: locale.cancelButtonText,
+                    name: "action",
+                    classes: "govuk-button--secondary",
+                    value: "cancelRemove"
+                }) }}
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

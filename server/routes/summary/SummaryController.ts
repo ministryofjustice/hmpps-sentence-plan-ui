@@ -6,9 +6,8 @@ export default class SummaryController {
 
   get = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const crn = 'ABC123XYZ'
-      const popData = await Promise.resolve(this.infoService.getPopData(crn))
-      res.render('pages/summary', { popData })
+      const popData = await req.services.sessionService.getSubjectDetails()
+      res.render('pages/summary', { data: { popData } })
     } catch (e) {
       next(e)
     }

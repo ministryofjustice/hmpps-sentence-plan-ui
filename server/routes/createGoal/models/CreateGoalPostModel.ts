@@ -1,34 +1,29 @@
-import { IsDate, IsNotEmpty, MinDate, ValidateIf } from 'class-validator'
+import { IsNotEmpty, ValidateIf } from 'class-validator'
 import { Expose, Transform } from 'class-transformer'
 
 export default class CreateGoalPostModel {
   @IsNotEmpty()
-  'goal-selection-radio': string
+  'goal-input-autocomplete': string
 
-  @ValidateIf(o => o['goal-selection-radio'] === 'custom')
   @IsNotEmpty()
-  'goal-selection-custom': string
+  'other-area-of-need-radio': string
 
+  @ValidateIf(o => o['other-area-of-need-radio'] === 'yes')
+  @IsNotEmpty()
+  @Transform(({ obj }) => {
+    return typeof obj['other-area-of-need'] === 'string' ? [obj['other-area-of-need']] : obj['other-area-of-need']
+  })
+  'other-area-of-need': string[]
+
+  @IsNotEmpty()
+  'start-working-goal-radio': string
+
+  @ValidateIf(o => o['start-working-goal-radio'] === 'yes')
   @IsNotEmpty()
   'date-selection-radio': string
 
-  'date-selection-custom-day': string
-
-  'date-selection-custom-month': string
-
-  'date-selection-custom-year': string
-
   @ValidateIf(o => o['date-selection-radio'] === 'custom')
-  @MinDate(new Date())
-  @IsDate()
+  @IsNotEmpty()
   @Expose()
-  @Transform(({ obj }) => {
-    const {
-      'date-selection-custom-year': year,
-      'date-selection-custom-month': month,
-      'date-selection-custom-day': day,
-    } = obj
-    return year && month && day ? new Date(year, month - 1, day) : false
-  })
   'date-selection-custom': Date
 }
