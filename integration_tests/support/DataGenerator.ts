@@ -11,6 +11,13 @@ export default class DataGenerator {
     targetDate: faker.date.future({ years: 1, refDate: new Date() }).toISOString().split('T')[0],
   })
 
+  static generateGoalWithTitle = (title: string): NewGoal => ({
+    title,
+    areaOfNeed: DataGenerator.getRandomAreaOfNeed(),
+    relatedAreasOfNeed: [DataGenerator.getRandomAreaOfNeed()],
+    targetDate: faker.date.future({ years: 1, refDate: new Date() }).toISOString().split('T')[0],
+  })
+
   static generateStep = (): NewStep => ({
     description: faker.lorem.lines(1),
     status: faker.helpers.arrayElement(['INACTIVE', 'ACTIVE', 'COMPLETED']),

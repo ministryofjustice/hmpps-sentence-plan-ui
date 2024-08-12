@@ -1,22 +1,25 @@
-import CreateGoal from '../pages/create-goal'
 import PlanSummary from '../pages/plan-summary'
+import { PlanType } from '../../server/@types/PlanType'
+import DataGenerator from '../support/DataGenerator'
 
 describe('View Plan Summary', () => {
   const planSummary = new PlanSummary()
-  const createGoalPage = new CreateGoal()
 
   beforeEach(() => {
     cy.createSentencePlan().then(planDetails => {
-      cy.wrap(planDetails).as('planDetails')
+      cy.wrap(planDetails).as('plan')
       cy.openSentencePlan(planDetails.oasysAssessmentPk)
-      cy.visit('/plan-summary?source=nav')
     })
   })
 
   it('Creates three new goals, and moves the middle goal up', () => {
-    createGoalPage.createCompleteGoal(1)
-    createGoalPage.createCompleteGoal(2)
-    createGoalPage.createCompleteGoal(3)
+    cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
+      ;[1, 2, 3].forEach(i => {
+        cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoalWithTitle(`Test Accommodation ${i}`))
+      })
+      cy.visit('/plan-summary?source=nav')
+    })
+
     planSummary.clickUpOnSummaryCard(1)
 
     planSummary
@@ -32,9 +35,13 @@ describe('View Plan Summary', () => {
   })
 
   it('Creates three new goals, and moves the middle goal down', () => {
-    createGoalPage.createCompleteGoal(1)
-    createGoalPage.createCompleteGoal(2)
-    createGoalPage.createCompleteGoal(3)
+    cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
+      ;[1, 2, 3].forEach(i => {
+        cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoalWithTitle(`Test Accommodation ${i}`))
+      })
+      cy.visit('/plan-summary?source=nav')
+    })
+
     planSummary.clickDownOnSummaryCard(1)
 
     planSummary
@@ -50,14 +57,15 @@ describe('View Plan Summary', () => {
   })
 
   it('Adds a long goal title (less than 128 chars)', () => {
-    createGoalPage.createGoal('accommodation')
-    createGoalPage.addGoalAutoCompletionText(
-      'This is an example of an extremely long goal title, a goal title that some may say is too long. This goal is far longer.',
-    )
-    createGoalPage.selectOtherAreasOfNeedRadio('no')
-    createGoalPage.selectStartWorkingRadio('yes')
-    createGoalPage.selectAchievementDate('In 6 months')
-    createGoalPage.clickButton('Save without steps')
+    cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
+      cy.addGoalToPlan(
+        plan.uuid,
+        DataGenerator.generateGoalWithTitle(
+          'This is an example of an extremely long goal title, a goal title that some may say is too long. This goal is far longer.',
+        ),
+      )
+      cy.visit('/plan-summary?source=nav')
+    })
 
     planSummary.getSummaryCard(0).within(() => {
       cy.get('.govuk-summary-card__action')
