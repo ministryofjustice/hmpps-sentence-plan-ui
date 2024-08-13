@@ -83,3 +83,11 @@ export function moveGoal(goals: Array<any>, gUuid: string, operation: string) {
   orderedGoals[targetIndex].goalOrder = targetIndex
   return orderedGoals.map(({ uuid: goalUuid, goalOrder }) => ({ goalUuid, goalOrder }))
 }
+
+export function getAchieveDateOptions(date: Date, dateOptionsInMonths = [3, 6, 12, 24]) {
+  return dateOptionsInMonths.map(option => {
+    const achieveDate = new Date(date)
+    achieveDate.setMonth(date.getMonth() + option)
+    return achieveDate
+  })
+}

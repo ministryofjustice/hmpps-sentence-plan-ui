@@ -17,6 +17,11 @@ export default defineConfig({
       on('task', {
         reset: resetStubs,
         ...auth,
+        table(message) {
+          // eslint-disable-next-line no-console
+          console.table(message)
+          return null
+        },
       })
     },
     baseUrl: 'http://localhost:6789',

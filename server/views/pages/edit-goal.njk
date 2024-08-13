@@ -4,30 +4,42 @@
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "../components/error-summary/error-summary.njk" import errorSummary %}
 {% from "hmpps/components/date-picker/macro.njk" import hmppsDatePicker %}
 {% from "moj/components/side-navigation/macro.njk" import mojSideNavigation %}
-{% from "../components/error-summary/error-summary.njk" import errorSummary %}
 
 {% set pageTitle %}
     {% if errors %}
-        Error: {{ applicationName }} - Create a goal with {{ data.popData.givenName }}
+        Error: {{ applicationName }} - Edit a goal with {{ data.popData.givenName }}
     {% else %}
-       {{ applicationName }} - Create a goal with {{ data.popData.givenName }}
+       {{ applicationName }} - Edit a goal with {{ data.popData.givenName }}
     {% endif %}
 {% endset -%}
 
 {% set mainClasses = "app-container govuk-body" %}
 
 {# Setup arrays and custom HTML #}
+{% set additionalAreaOfNeedCheckboxes = [] %}
+{% for areaOfNeed in data.allAreaOfNeed %}
+    {% if areaOfNeed.name != data.areaOfNeed %}
+        {% set isChecked = data.form['other-area-of-need'] and (areaOfNeed.name in data.form['other-area-of-need']) %}
+        {% set additionalAreaOfNeedCheckboxes = additionalAreaOfNeedCheckboxes.concat({
+            value: areaOfNeed.name,
+            text: areaOfNeed.name,
+            checked: isChecked
+        }) %}
+    {% endif %}
+{% endfor %}
+
 
 {% set areasOfNeedHtml %}
     {{ govukCheckboxes({
-      name: "other-area-of-need",
-      hint: {
-        text: "Select all that apply."
-      },
-      errorMessage: getFormattedError(errors, locale, "other-area-of-need"),
-      items: data.otherAreaOfNeed
+        name: "other-area-of-need",
+        hint: {
+          text: "Select all that apply."
+        },
+        errorMessage: getFormattedError(errors, locale, "other-area-of-need"),
+        items: additionalAreaOfNeedCheckboxes
     }) }}
 {% endset -%}
 
@@ -45,7 +57,7 @@
             classes: "govuk-fieldset__legend--s"
         },
         value: data.form['date-selection-custom'],
-        minDate: data.today
+        minDate: data.minimumDatePickerDate
     }) }}
 {% endset -%}
 
@@ -66,25 +78,25 @@
         value: data.form['date-selection-radio'],
         items: [
             {
-                value: data.dateOptionsDate[4] | formatISODate,
-                text: locale.dateSelection.options.nextMeeting | replace("{NEXT_MEETING}", (data.dateOptionsDate[4] | formatSimpleDate)),
-                checked: data.form['date-selection-radio'] == data.dateOptionsDate[4] | formatISODate
+                value: data.dateOptions[4] | formatISODate,
+                text: locale.dateSelection.options.nextMeeting | replace("{NEXT_MEETING}", (data.dateOptions[4] | formatSimpleDate)),
+                checked: data.form['date-selection-radio'] == data.dateOptions[4] | formatISODate
             },
             {
-                value: data.dateOptionsDate[0] | formatISODate,
-                text: locale.dateSelection.options.threeMonths | replace("{3_MONTHS_DATE}", (data.dateOptionsDate[0] | formatSimpleDate))
+                value: data.dateOptions[0] | formatISODate,
+                text: locale.dateSelection.options.threeMonths | replace("{3_MONTHS_DATE}", (data.dateOptions[0] | formatSimpleDate))
             },
             {
-                value: data.dateOptionsDate[1] | formatISODate,
-                text: locale.dateSelection.options.sixMonths | replace("{6_MONTHS_DATE}", (data.dateOptionsDate[1] | formatSimpleDate))
+                value: data.dateOptions[1] | formatISODate,
+                text: locale.dateSelection.options.sixMonths | replace("{6_MONTHS_DATE}", (data.dateOptions[1] | formatSimpleDate))
             },
             {
-                value: data.dateOptionsDate[2] | formatISODate,
-                text: locale.dateSelection.options.twelveMonths | replace("{12_MONTHS_DATE}", (data.dateOptionsDate[2] | formatSimpleDate))
+                value: data.dateOptions[2] | formatISODate,
+                text: locale.dateSelection.options.twelveMonths | replace("{12_MONTHS_DATE}", (data.dateOptions[2] | formatSimpleDate))
             },
             {
-                value: data.dateOptionsDate[3] | formatISODate,
-                text: locale.dateSelection.options.twentyFourMonths | replace("{24_MONTHS_DATE}", (data.dateOptionsDate[3] | formatSimpleDate)) | replace("{POP_NAME}", data.popData.givenName)
+                value: data.dateOptions[3] | formatISODate,
+                text: locale.dateSelection.options.twentyFourMonths | replace("{24_MONTHS_DATE}", (data.dateOptions[3] | formatSimpleDate)) | replace("{POP_NAME}", data.popData.givenName)
             },
             {
                 divider: "or"
@@ -93,8 +105,8 @@
                 value: "custom",
                 text: locale.dateSelection.customRadioOptionText,
                 conditional: {
-                    html: customDateHtml
-                }
+                html: customDateHtml
+            }
             }
         ]
     }) }}
@@ -103,25 +115,17 @@
 {% block content %}
     <a href="#" class="govuk-back-link">Back</a>
     <div class="govuk-grid-row">
-        <div class="govuk-grid-column-one-third">
-            {{ mojSideNavigation({
-              label: 'Side navigation',
-              items: data.navigationLinks
-            }) }}
-        </div>
         <div class="govuk-grid-column-two-thirds">
             {{ errorSummary({
                 errors: errors,
                 locale: locale
             }) }}
-
-            <span class="govuk-caption-l">{{ data.displayAreaOfNeed }}</span>
+            <span class="govuk-caption-l">{{ data.areaOfNeed }}</span>
             <h1 class="govuk-heading-l">{{ locale.title | replace("{POP_NAME}", data.popData.givenName) }}</h1>
 
-            <form id="create-goal-form" method="POST">
+            <form id="edit-goal-form" method="POST">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-                <input type="hidden" id="_areaOfNeed" value="{{ data.areaOfNeed }}">
-                <input type="hidden" name="area-of-need" value="{{ data.displayAreaOfNeed }}">
+                <input type="hidden" name="area-of-need" value="{{ data.form['area-of-need'] }}">
                 <input type="hidden" id="page" value="goals">
 
                 {{ govukInput({
@@ -154,19 +158,19 @@
                     errorMessage: getFormattedError(errors, locale, 'other-area-of-need-radio'),
                     items: [
                         {
-                          value: "yes",
-                          text: "Yes",
-                          checked: data.form['other-area-of-need-radio'] == 'yes',
-                          conditional: {
-                              html: areasOfNeedHtml
-                          }
+                            value: "yes",
+                            text: "Yes",
+                            checked: data.form['other-area-of-need-radio'] == 'yes',
+                            conditional: {
+                            html: areasOfNeedHtml
+                        }
                         },
                         {
                           value: "no",
                           text: "No",
                           checked: data.form['other-area-of-need-radio'] == 'no'
                         }
-                      ]
+                    ]
                 }) }}
 
                 {{ govukRadios({
@@ -181,32 +185,26 @@
                     errorMessage: getFormattedError(errors, locale, 'start-working-goal-radio'),
                     items: [
                         {
-                          value: "yes",
-                          text: "Yes",
-                          checked: data.form['start-working-goal-radio'] == 'yes',
-                          conditional: {
-                              html: customDateRadioHtml
-                          }
+                            value: "yes",
+                            text: "Yes",
+                            checked: data.form['start-working-goal-radio'] == 'yes',
+                            conditional: {
+                                html: customDateRadioHtml
+                            }
                         },
                         {
-                          value: "no",
-                          text: "No, it is a future goal",
-                          checked: data.form['start-working-goal-radio'] == 'no'
+                            value: "no",
+                            text: "No, it is a future goal",
+                            checked: data.form['start-working-goal-radio'] == 'no'
                         }
-                      ]
+                    ]
                 }) }}
 
                 <div class="govuk-button-group">
                     {{ govukButton({
-                        text: locale.addStepsButton,
+                        text: locale.saveButtonText,
                         name: "action",
                         value: "addStep"
-                    }) }}
-                    {{ govukButton({
-                        name: "action",
-                        value: "saveWithoutSteps",
-                        text: "Save without steps",
-                        classes: "govuk-button--secondary"
                     }) }}
                 </div>
             </form>

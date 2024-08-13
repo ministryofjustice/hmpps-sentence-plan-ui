@@ -1,7 +1,7 @@
 import { IsNotEmpty, ValidateIf } from 'class-validator'
 import { Expose, Transform } from 'class-transformer'
 
-export default class CreateGoalPostModel {
+export default class EditGoalPostModel {
   @IsNotEmpty()
   'goal-input-autocomplete': string
 

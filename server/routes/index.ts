@@ -3,6 +3,7 @@ import asyncMiddleware from '../middleware/asyncMiddleware'
 import type { Services } from '../services'
 import setupCreateGoalRoutes from './createGoal/routes'
 import setupRemoveGoalRoutes from './removeGoal/routes'
+import setupEditGoalRoutes from './editGoal/routes'
 import setupAboutPopRoutes from './aboutPop/routes'
 import { Page } from '../services/auditService'
 import setupStepRoutes from './steps/routes'
@@ -25,6 +26,7 @@ export default function routes(services: Services): Router {
   setupAboutPopRoutes(router, services)
   setupCreateGoalRoutes(router, services)
   setupRemoveGoalRoutes(router, services)
+  setupEditGoalRoutes(router, services)
   setupStepRoutes(router, services)
   setupReferenceDataRoutes(router, services)
   setupPlanSummaryRoutes(router, services)
