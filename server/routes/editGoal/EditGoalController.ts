@@ -67,7 +67,7 @@ export default class EditGoalController {
     const today = new Date()
     return [
       ...getAchieveDateOptions(today),
-      new Date(today.setDate(today.getDate() + 7)), // Correctly add 7 days
+      new Date(today.setDate(today.getDate() + 7)),
     ]
   }
 
