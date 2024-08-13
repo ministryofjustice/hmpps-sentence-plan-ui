@@ -41,7 +41,9 @@ export default class EditGoalController {
     const today = formatDateWithStyle(new Date().toISOString(), 'short')
     const allAreaOfNeed = this.referentialDataService.getAreasOfNeed()
     const arnUrl = allAreaOfNeed.filter(arn => arn.name === areaOfNeed)[0].url
-    const relatedAreaOfNeed = goal.relatedAreasOfNeed.map(raon => raon.name)
+    const relatedAreaOfNeed = errors?.body['other-area-of-need']?.isNotEmpty
+      ? []
+      : goal.relatedAreasOfNeed.map(raon => raon.name)
     const selectedOtherAreaOfNeed: string[] = req.body['other-area-of-need'] || relatedAreaOfNeed
     const otherAreaOfNeed = allAreaOfNeed
       .filter(aon => aon.name !== areaOfNeed)
