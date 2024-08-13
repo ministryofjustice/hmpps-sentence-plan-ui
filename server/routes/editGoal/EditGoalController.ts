@@ -5,8 +5,8 @@ import URLs from '../URLs'
 import NoteService from '../../services/sentence-plan/noteService'
 import ReferentialDataService from '../../services/sentence-plan/referentialDataService'
 import { dateToISOFormat, formatDateWithStyle, getAchieveDateOptions } from '../../utils/utils'
-import { FORMS } from '../../services/formStorageService'
 import { NewGoal } from '../../@types/NewGoalType'
+import { Goal } from '../../@types/GoalType'
 
 export default class EditGoalController {
   constructor(
@@ -18,50 +18,25 @@ export default class EditGoalController {
   private render = async (req: Request, res: Response, next: NextFunction) => {
     const { uuid } = req.params
     const { errors } = req
-    const errorKeys: string[] = []
-    let form = {}
-    const goal = await this.goalService.getGoal(uuid)
-    const dateOptionsDate = getAchieveDateOptions(new Date())
-    dateOptionsDate.push(new Date(new Date().setDate(new Date().getDate() + 7)))
-    if (errors) {
-      form = req.body
-    } else {
-      const targetDate = goal.targetDate?.substring(0, 10)
-      const customDate = dateOptionsDate.filter(date => date.toISOString().substring(0, 10) === targetDate).length === 0
-      form = {
-        'goal-input-autocomplete': goal.title,
-        'other-area-of-need-radio': goal.relatedAreasOfNeed.length === 0 ? 'no' : 'yes',
-        'start-working-goal-radio': goal.targetDate ? 'yes' : 'no',
-        'date-selection-radio': customDate ? 'custom' : targetDate,
-        'date-selection-custom': customDate ? targetDate : undefined,
-      }
-    }
 
-    const areaOfNeed = goal.areaOfNeed.name
-    const today = formatDateWithStyle(new Date().toISOString(), 'short')
     const allAreaOfNeed = this.referentialDataService.getAreasOfNeed()
-    const arnUrl = allAreaOfNeed.filter(arn => arn.name === areaOfNeed)[0].url
-    const relatedAreaOfNeed = errors?.body['other-area-of-need']?.isNotEmpty
-      ? []
-      : goal.relatedAreasOfNeed.map(raon => raon.name)
-    const selectedOtherAreaOfNeed: string[] = req.body['other-area-of-need'] || relatedAreaOfNeed
-    const otherAreaOfNeed = allAreaOfNeed
-      .filter(aon => aon.name !== areaOfNeed)
-      .map(({ name }) => ({ text: name, value: name, checked: selectedOtherAreaOfNeed.includes(name) }))
     const popData = req.services.sessionService.getSubjectDetails()
+    const goal = await this.goalService.getGoal(uuid)
+
+    const dateOptions = this.getDateOptions()
+    const minimumDatePickerDate = formatDateWithStyle(new Date().toISOString(), 'short')
+    const form = errors ? req.body : this.mapGoalToForm(goal)
+
     return res.render('pages/edit-goal', {
       locale: locale.en,
       data: {
-        today,
-        otherAreaOfNeed,
-        areaOfNeed,
+        minimumDatePickerDate,
+        allAreaOfNeed,
         popData,
-        dateOptionsDate,
-        arnUrl,
+        dateOptions,
         form,
       },
       errors,
-      errorKeys,
     })
   }
 
@@ -75,20 +50,37 @@ export default class EditGoalController {
   }
 
   private saveAndRedirect = async (req: Request, res: Response, next: NextFunction) => {
-    req.services.formStorageService.saveFormData(FORMS.CREATE_GOAL, {
-      processed: this.processGoalData(req.body),
-      raw: req.body,
-    })
     const type = req.query?.type
     const goalUuid = req.params.uuid
     const processedData: NewGoal = this.processGoalData(req.body)
-    const { uuid } = await this.goalService.updateGoal(processedData, goalUuid)
-    req.services.formStorageService.saveFormData('currentGoal', {
-      processed: null,
-      raw: { uuid },
-    })
+    await this.goalService.updateGoal(processedData, goalUuid)
     const redirectUrl: string = `${URLs.PLAN_SUMMARY}?status=updated&type=${type}`
     return res.redirect(redirectUrl)
+  }
+
+  private getDateOptions = () => {
+    const today = new Date()
+    return [...getAchieveDateOptions(today), new Date(today.setDate(today.getDate() + 7))]
+  }
+
+  private mapGoalToForm = (goal: Goal) => {
+    const isCustomTargetDate = !this.getDateOptions().some(
+      dateOption => dateOption.toISOString().substring(0, 10) === goal.targetDate.substring(0, 10),
+    )
+
+    const formattedTargetDate = isCustomTargetDate
+      ? formatDateWithStyle(goal.targetDate, 'short')
+      : goal.targetDate.substring(0, 10)
+
+    return {
+      'goal-input-autocomplete': goal.title,
+      'area-of-need': goal.areaOfNeed.name,
+      'other-area-of-need-radio': goal.relatedAreasOfNeed.length ? 'yes' : 'no',
+      'other-area-of-need': goal.relatedAreasOfNeed.map(areaOfNeed => areaOfNeed.name),
+      'start-working-goal-radio': goal.targetDate ? 'yes' : 'no',
+      'date-selection-radio': isCustomTargetDate ? 'custom' : formattedTargetDate,
+      'date-selection-custom': isCustomTargetDate ? formattedTargetDate : undefined,
+    }
   }
 
   private processGoalData(body: any) {
