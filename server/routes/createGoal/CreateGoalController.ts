@@ -47,31 +47,25 @@ export default class CreateGoalController {
   private render = async (req: Request, res: Response, next: NextFunction) => {
     const { errors } = req
 
-    try {
-      const selectedAreaOfNeed = this.referentialDataService
-        .getAreasOfNeed()
-        .find(areaOfNeed => areaOfNeed.url === req.params.areaOfNeed)
+    const areasOfNeed = this.referentialDataService.getAreasOfNeed()
+    const popData = req.services.sessionService.getSubjectDetails()
 
-      const areasOfNeed = this.referentialDataService.getAreasOfNeed()
-      const minimumDatePickerDate = formatDateWithStyle(new Date().toISOString(), 'short')
-      const dateOptions = this.getDateOptions()
-      const popData = await req.services.sessionService.getSubjectDetails()
+    const dateOptions = this.getDateOptions()
+    const selectedAreaOfNeed = areasOfNeed.find(areaOfNeed => areaOfNeed.url === req.params.areaOfNeed)
+    const minimumDatePickerDate = formatDateWithStyle(new Date().toISOString(), 'short')
 
-      return res.render('pages/create-goal', {
-        locale: locale.en,
-        data: {
-          areasOfNeed,
-          selectedAreaOfNeed,
-          popData,
-          dateOptions,
-          minimumDatePickerDate,
-          form: req.body,
-        },
-        errors,
-      })
-    } catch (e) {
-      return next(e)
-    }
+    return res.render('pages/create-goal', {
+      locale: locale.en,
+      data: {
+        areasOfNeed,
+        selectedAreaOfNeed,
+        popData,
+        dateOptions,
+        minimumDatePickerDate,
+        form: req.body,
+      },
+      errors,
+    })
   }
 
   private processGoalData(body: any) {
