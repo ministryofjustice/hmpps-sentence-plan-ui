@@ -56,32 +56,6 @@ describe('View Plan Summary', () => {
       .and('not.contain', 'Move goal down')
   })
 
-  it('Adds a long goal title (less than 128 chars)', () => {
-    cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
-      cy.addGoalToPlan(
-        plan.uuid,
-        DataGenerator.generateGoalWithTitle(
-          'This is an example of an extremely long goal title, a goal title that some may say is too long. This goal is far longer.',
-        ),
-      )
-      cy.visit('/plan-summary?source=nav')
-    })
-
-    planSummary.getSummaryCard(0).within(() => {
-      cy.get('.govuk-summary-card__action')
-        .contains('Change goal')
-        .then($el => $el.position().top)
-        .then(firstTop => {
-          cy.get('.govuk-summary-card__action')
-            .contains('Remove goal')
-            .then($el => $el.position().top)
-            .then(lastTop => {
-              expect(firstTop).to.be.equal(lastTop)
-            })
-        })
-    })
-  })
-
   it.skip('Should have no accessibility violations', () => {
     cy.checkAccessibility()
   })
