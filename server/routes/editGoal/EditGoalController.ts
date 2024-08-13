@@ -18,19 +18,14 @@ export default class EditGoalController {
   private render = async (req: Request, res: Response, next: NextFunction) => {
     const { uuid } = req.params
     const { errors } = req
-    let form = {}
 
     const allAreaOfNeed = this.referentialDataService.getAreasOfNeed()
     const popData = req.services.sessionService.getSubjectDetails()
     const goal = await this.goalService.getGoal(uuid)
+
     const dateOptions = this.getDateOptions()
     const minimumDatePickerDate = formatDateWithStyle(new Date().toISOString(), 'short')
-
-    if (errors) {
-      form = req.body
-    } else {
-      form = this.mapGoalToForm(goal)
-    }
+    const form = errors ? req.body : this.mapGoalToForm(goal)
 
     return res.render('pages/edit-goal', {
       locale: locale.en,
