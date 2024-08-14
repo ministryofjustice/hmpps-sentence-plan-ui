@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
-import locale from '../createGoal/locale.json'
+import locale from './locale.json'
 import GoalService from '../../services/sentence-plan/goalService'
 import URLs from '../URLs'
 import NoteService from '../../services/sentence-plan/noteService'
