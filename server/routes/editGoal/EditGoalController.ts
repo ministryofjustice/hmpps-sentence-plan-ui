@@ -43,7 +43,7 @@ export default class EditGoalController {
   get = this.render
 
   post = (req: Request, res: Response, next: NextFunction) => {
-    if (req.errors && Object.keys(req.errors?.body).length) {
+    if (Object.keys(req.errors?.body).length) {
       return this.render(req, res, next)
     }
     return this.saveAndRedirect(req, res, next)
