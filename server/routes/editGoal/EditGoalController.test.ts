@@ -47,8 +47,8 @@ describe('EditGoalController', () => {
       selectedAreaOfNeed: AreaOfNeed.find(x => x.name === testGoal.areaOfNeed.name),
       minimumDatePickerDate: '01/01/2024',
       dateOptions: [
-        new Date('2024-03-31T23:00:00.000Z'),
-        new Date('2024-06-30T23:00:00.000Z'),
+        new Date('2024-04-01T00:00:00.000Z'),
+        new Date('2024-07-01T00:00:00.000Z'),
         new Date('2025-01-01T00:00:00.000Z'),
         new Date('2026-01-01T00:00:00.000Z'),
         new Date('2024-01-08T00:00:00.000Z'),
