@@ -1,7 +1,4 @@
 import { NewGoal } from '../../server/@types/NewGoalType'
-import { NewStep } from '../../server/@types/NewStepType'
-import { Goal } from '../../server/@types/GoalType'
-import DataGenerator from '../support/DataGenerator'
 import { PlanType } from '../../server/@types/PlanType'
 
 describe('Change a goal', () => {
