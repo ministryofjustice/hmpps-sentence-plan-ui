@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from 'express'
 import ReferentialDataService from '../../services/sentence-plan/referentialDataService'
 import locale from './locale.json'
 import InfoService from '../../services/sentence-plan/infoService'
-import NoteService from '../../services/sentence-plan/noteService'
 import URLs from '../URLs'
 import { FORMS } from '../../services/formStorageService'
 import GoalService from '../../services/sentence-plan/goalService'
@@ -12,8 +11,6 @@ import { formatDateWithStyle, dateToISOFormat, getAchieveDateOptions } from '../
 export default class CreateGoalController {
   constructor(
     private readonly referentialDataService: ReferentialDataService,
-    private readonly infoService: InfoService,
-    private readonly noteService: NoteService,
     private readonly goalService: GoalService,
   ) {}
 
