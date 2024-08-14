@@ -7,9 +7,9 @@ import EditGoalPostModel from './models/EditGoalPostModel'
 
 export default function setupEditGoalRoutes(
   router: Router,
-  { referentialDataService, noteService, goalService }: Services,
+  { referentialDataService, goalService }: Services,
 ) {
-  const controller = new EditGoalController(referentialDataService, noteService, goalService)
+  const controller = new EditGoalController(referentialDataService, goalService)
 
   router.get(URLs.EDIT_GOAL, controller.get)
   router.post(URLs.EDIT_GOAL, validate({ body: EditGoalPostModel }), controller.post)
