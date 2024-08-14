@@ -20,14 +20,36 @@
 
 {# Setup arrays and custom HTML #}
 
+{% set areaOfNeedNavigationLinks = [] %}
+{% for areaOfNeed in data.areasOfNeed %}
+    {% set isActive = areaOfNeed.name === data.selectedAreaOfNeed.name %}
+    {% set areaOfNeedNavigationLinks = areaOfNeedNavigationLinks.concat({
+        text: areaOfNeed.name,
+        href: areaOfNeed.url,
+        active: isActive
+    }) %}
+{% endfor %}
+
+{% set relatedAreaOfNeedCheckboxes = [] %}
+{% for areaOfNeed in data.areasOfNeed %}
+    {% if areaOfNeed.name != data.selectedAreaOfNeed.name %}
+        {% set isChecked = data.form['related-area-of-need'] and (areaOfNeed.name in data.form['related-area-of-need']) %}
+        {% set relatedAreaOfNeedCheckboxes = relatedAreaOfNeedCheckboxes.concat({
+            value: areaOfNeed.name,
+            text: areaOfNeed.name,
+            checked: isChecked
+        }) %}
+    {% endif %}
+{% endfor %}
+
 {% set areasOfNeedHtml %}
     {{ govukCheckboxes({
-      name: "other-area-of-need",
+      name: "related-area-of-need",
       hint: {
         text: "Select all that apply."
       },
-      errorMessage: getFormattedError(errors, locale, "other-area-of-need"),
-      items: data.otherAreaOfNeed
+      errorMessage: getFormattedError(errors, locale, "related-area-of-need"),
+      items: relatedAreaOfNeedCheckboxes
     }) }}
 {% endset -%}
 
@@ -45,7 +67,7 @@
             classes: "govuk-fieldset__legend--s"
         },
         value: data.form['date-selection-custom'],
-        minDate: data.today
+        minDate: data.minimumDatePickerDate
     }) }}
 {% endset -%}
 
@@ -66,25 +88,25 @@
         value: data.form['date-selection-radio'],
         items: [
             {
-                value: data.dateOptionsDate[4] | formatISODate,
-                text: locale.dateSelection.options.nextMeeting | replace("{NEXT_MEETING}", (data.dateOptionsDate[4] | formatSimpleDate)),
-                checked: data.form['date-selection-radio'] == data.dateOptionsDate[4] | formatISODate
+                value: data.dateOptions[4] | formatISODate,
+                text: locale.dateSelection.options.nextMeeting | replace("{NEXT_MEETING}", (data.dateOptions[4] | formatSimpleDate)),
+                checked: data.form['date-selection-radio'] == data.dateOptions[4] | formatISODate
             },
             {
-                value: data.dateOptionsDate[0] | formatISODate,
-                text: locale.dateSelection.options.threeMonths | replace("{3_MONTHS_DATE}", (data.dateOptionsDate[0] | formatSimpleDate))
+                value: data.dateOptions[0] | formatISODate,
+                text: locale.dateSelection.options.threeMonths | replace("{3_MONTHS_DATE}", (data.dateOptions[0] | formatSimpleDate))
             },
             {
-                value: data.dateOptionsDate[1] | formatISODate,
-                text: locale.dateSelection.options.sixMonths | replace("{6_MONTHS_DATE}", (data.dateOptionsDate[1] | formatSimpleDate))
+                value: data.dateOptions[1] | formatISODate,
+                text: locale.dateSelection.options.sixMonths | replace("{6_MONTHS_DATE}", (data.dateOptions[1] | formatSimpleDate))
             },
             {
-                value: data.dateOptionsDate[2] | formatISODate,
-                text: locale.dateSelection.options.twelveMonths | replace("{12_MONTHS_DATE}", (data.dateOptionsDate[2] | formatSimpleDate))
+                value: data.dateOptions[2] | formatISODate,
+                text: locale.dateSelection.options.twelveMonths | replace("{12_MONTHS_DATE}", (data.dateOptions[2] | formatSimpleDate))
             },
             {
-                value: data.dateOptionsDate[3] | formatISODate,
-                text: locale.dateSelection.options.twentyFourMonths | replace("{24_MONTHS_DATE}", (data.dateOptionsDate[3] | formatSimpleDate)) | replace("{POP_NAME}", data.popData.givenName)
+                value: data.dateOptions[3] | formatISODate,
+                text: locale.dateSelection.options.twentyFourMonths | replace("{24_MONTHS_DATE}", (data.dateOptions[3] | formatSimpleDate)) | replace("{POP_NAME}", data.popData.givenName)
             },
             {
                 divider: "or"
@@ -106,7 +128,7 @@
         <div class="govuk-grid-column-one-third">
             {{ mojSideNavigation({
               label: 'Side navigation',
-              items: data.navigationLinks
+              items: areaOfNeedNavigationLinks
             }) }}
         </div>
         <div class="govuk-grid-column-two-thirds">
@@ -120,8 +142,8 @@
 
             <form id="create-goal-form" method="POST">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-                <input type="hidden" id="_areaOfNeed" value="{{ data.areaOfNeed }}">
-                <input type="hidden" name="area-of-need" value="{{ data.displayAreaOfNeed }}">
+                <input type="hidden" id="_areaOfNeed" value="{{ data.selectedAreaOfNeed.url }}">
+                <input type="hidden" name="area-of-need" value="{{ data.selectedAreaOfNeed.name }}">
                 <input type="hidden" id="page" value="goals">
 
                 {{ govukInput({
@@ -143,7 +165,7 @@
                 }) }}
 
                 {{ govukRadios({
-                    name: "other-area-of-need-radio",
+                    name: "related-area-of-need-radio",
                     fieldset: {
                         legend: {
                             text: "Is this goal related to any other area of need?",
@@ -151,12 +173,12 @@
                             classes: "govuk-fieldset__legend--m"
                         }
                     },
-                    errorMessage: getFormattedError(errors, locale, 'other-area-of-need-radio'),
+                    errorMessage: getFormattedError(errors, locale, 'related-area-of-need-radio'),
                     items: [
                         {
                           value: "yes",
                           text: "Yes",
-                          checked: data.form['other-area-of-need-radio'] == 'yes',
+                          checked: data.form['related-area-of-need-radio'] == 'yes',
                           conditional: {
                               html: areasOfNeedHtml
                           }
@@ -164,7 +186,7 @@
                         {
                           value: "no",
                           text: "No",
-                          checked: data.form['other-area-of-need-radio'] == 'no'
+                          checked: data.form['related-area-of-need-radio'] == 'no'
                         }
                       ]
                 }) }}

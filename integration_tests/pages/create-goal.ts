@@ -14,7 +14,7 @@ export default class CreateGoal {
   }
 
   selectOtherAreasOfNeedRadio = (value: string) => {
-    cy.get('input[name="other-area-of-need-radio"]').check(value)
+    cy.get('input[name="related-area-of-need-radio"]').check(value)
   }
 
   selectStartWorkingRadio = (value: string) => {

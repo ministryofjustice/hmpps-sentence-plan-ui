@@ -6,14 +6,14 @@ export default class CreateGoalPostModel {
   'goal-input-autocomplete': string
 
   @IsNotEmpty()
-  'other-area-of-need-radio': string
+  'related-area-of-need-radio': string
 
-  @ValidateIf(o => o['other-area-of-need-radio'] === 'yes')
+  @ValidateIf(o => o['related-area-of-need-radio'] === 'yes')
   @IsNotEmpty()
   @Transform(({ obj }) => {
-    return typeof obj['other-area-of-need'] === 'string' ? [obj['other-area-of-need']] : obj['other-area-of-need']
+    return typeof obj['related-area-of-need'] === 'string' ? [obj['related-area-of-need']] : obj['related-area-of-need']
   })
-  'other-area-of-need': string[]
+  'related-area-of-need': string[]
 
   @IsNotEmpty()
   'start-working-goal-radio': string
