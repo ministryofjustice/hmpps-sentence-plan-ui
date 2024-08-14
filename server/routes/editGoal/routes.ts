@@ -5,10 +5,7 @@ import EditGoalController from './EditGoalController'
 import validate from '../../middleware/validationMiddleware'
 import EditGoalPostModel from './models/EditGoalPostModel'
 
-export default function setupEditGoalRoutes(
-  router: Router,
-  { referentialDataService, goalService }: Services,
-) {
+export default function setupEditGoalRoutes(router: Router, { referentialDataService, goalService }: Services) {
   const controller = new EditGoalController(referentialDataService, goalService)
 
   router.get(URLs.EDIT_GOAL, controller.get)
