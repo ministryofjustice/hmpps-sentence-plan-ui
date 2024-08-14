@@ -66,13 +66,20 @@ export default class EditGoalController {
   }
 
   private mapGoalToForm = (goal: Goal) => {
-    const isCustomTargetDate = !this.getDateOptions().some(
-      dateOption => dateOption.toISOString().substring(0, 10) === goal.targetDate.substring(0, 10),
-    )
+    let isCustomTargetDate = false
+    let formattedTargetDate
 
-    const formattedTargetDate = isCustomTargetDate
-      ? formatDateWithStyle(goal.targetDate, 'short')
-      : goal.targetDate.substring(0, 10)
+    if (goal.targetDate) {
+      isCustomTargetDate = !this.getDateOptions().some(
+        dateOption => dateOption.toISOString().substring(0, 10) === goal.targetDate.substring(0, 10),
+      )
+
+      if (isCustomTargetDate) {
+        formattedTargetDate = formatDateWithStyle(goal.targetDate, 'short')
+      } else {
+        formattedTargetDate = goal.targetDate.substring(0, 10)
+      }
+    }
 
     return {
       'goal-input-autocomplete': goal.title,
