@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import ReferentialDataService from '../../services/sentence-plan/referentialDataService'
 import locale from './locale.json'
-import InfoService from '../../services/sentence-plan/infoService'
 import URLs from '../URLs'
 import { FORMS } from '../../services/formStorageService'
 import GoalService from '../../services/sentence-plan/goalService'
