@@ -1,68 +1,180 @@
 {% extends "../partials/layout.njk" %}
-{% from "../partials/who-will-do.njk" import whoWillDo %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "hmpps/components/date-picker/macro.njk" import hmppsDatePicker %}
+{% from "moj/components/side-navigation/macro.njk" import mojSideNavigation %}
+{% from "../components/error-summary/error-summary.njk" import errorSummary %}
 
-{% set pageTitle = applicationName + " - Create a goal with "+ data.popData.givenName %}
-
-{% set mainClasses = "app-container govuk-body" %}
-{% block bodyStart %}{% endblock %}
+{% set pageTitle %}
+    {% if errors %}
+        Error: {{ applicationName }} - Add steps to {{ data.popData.givenName }}'s goal
+    {% else %}
+        {{ applicationName }} - Add steps to {{ data.popData.givenName }}'s goal
+    {% endif %}
+{% endset -%}
 
 {% block content %}
-    <a href="#" class="govuk-back-link">Back</a>
-    <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
-            <span class="govuk-caption-xl capital">{{ locale.section | replace("{AREA_OF_NEED}", data.areaOfNeed) }}</span>
-            <h1 class="govuk-heading-xl">{{ locale.title | replace("{POP_NAME}", data.popData.givenName) }}</h1>
-            <div class="govuk-inset-text">
-                {# todo: Probably needs to be changed to be an auto-generated array of HTML for notes #}
-                <h2 class="govuk-label--m govuk-!-margin-bottom-0">
-                    Goal:
-                    {{ data.goal }}
-                </h2>
-            </div>
+<a href="#" class="govuk-back-link">Back</a>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        {{ errorSummary({
+            errors: errors,
+            locale: locale
+        }) }}
+        <h1 class="govuk-heading-l">{{ locale.title | replace("{POP_NAME}", data.popData.givenName) }}</h1>
 
-            <form id="create-step-form" method="POST">
-                <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-                <input type="hidden" id="_areaOfNeed" value="{{ data.areaOfNeed }}">
-                <input type="hidden" id="page" value="steps">
-
-                <input type="hidden" name="area-of-need" value="{{ data.referenceData.name }}">
-                {{ govukDetails({
-                  summaryText: "SMART goals and steps",
-                  text: "Goals and steps should be SMART, meaning ‘specific’, ‘measurable’, ‘achievable’, ‘realistic’, and ‘time-bound’. This allows progress to be better measured and evaluated.
-                        Adding steps makes goals more measurable and achievable."
-                }) }}
-
-                {{ govukInput({
-                    label: {
-                        text: "What is the first step?",
-                        classes: "govuk-label--m",
-                        isPageHeading: false
-                    },
-                    hint: {
-                        text: "Select one step. You can add more later."
-                    },
-                    formGroup: {
-                        classes: "step-input-autocomplete-wrapper"
-                    },
-                    errorMessage: getFormattedError(errors, locale, 'goal-input-autocomplete'),
-                    id: "step-input-autocomplete",
-                    name: "step-input-autocomplete",
-                    value: data.form['step-input-autocomplete']
-                }) }}
-
-                {{ whoWillDo(data.popData.givenName) }}
-
-                <div class="govuk-button-group">
-                    {{ govukButton({
-                        text: locale.saveButtonText,
-                        name: "action",
-                        value: "continue"
-                    }) }}
+        {{ govukDetails({
+            summaryText: locale.detailHeading,
+            text: "...."
+        }) }}
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full">
+                <div class="govuk-grid-column-one-quarter">
+                    <label class="govuk-label">{{ locale.whoWillDo.label }}</label>
+                    <p class="govuk-hint">{{ locale.whoWillDo.hint }}</p>
                 </div>
+                <div class="govuk-grid-column-three-quarters">
+                    <label class="govuk-label">{{ locale.stepsSection.label }}</label>
+                    <p class="govuk-hint">{{ locale.stepsSection.hint }}</p>
+                </div>
+            </div>
+            <form id="create-goal-form" method="POST">
+                <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+                <input type="hidden" id="_areaOfNeed" value="{{ data.areaOfNeed }}"/>
+                <input type="hidden" id="page" value="steps"/>
+                {% for step in data.addedSteps %}
+                <div class="govuk-grid-column-full">
+                    <div class="govuk-grid-column-one-quarter">
+                        {{ govukSelect({
+                            id: "actor-"+loop.index,
+                            name: "actor-"+loop.index,
+                            items:
+                                [
+                                    {
+                                        value: "select",
+                                        text: "Select who",
+                                        disabled: true
+                                    },
+                                    {
+                                        value: data.popData.givenName,
+                                        text: data.popData.givenName,
+                                        selected: step.actor == data.popData.givenName
+                                    },
+                                    {
+                                        value: locale.whoWillDoInput.probPrac,
+                                        text: locale.whoWillDoInput.probPrac,
+                                        selected: step.actor == locale.whoWillDoInput.probPrac
+                                    },
+                                    {
+                                        value: locale.whoWillDoInput.progStaff,
+                                        text: locale.whoWillDoInput.progStaff,
+                                        selected: step.actor == locale.whoWillDoInput.progStaff
+                                    },
+                                    {
+                                        value: locale.whoWillDoInput.partAgency,
+                                        text: locale.whoWillDoInput.partAgency,
+                                        selected: step.actor == locale.whoWillDoInput.partAgency
+                                    },
+                                    {
+                                        value: locale.whoWillDoInput.crsp,
+                                        text: locale.whoWillDoInput.crsp,
+                                        selected: step.actor == locale.whoWillDoInput.crsp
+                                    },
+                                    {
+                                        value: locale.whoWillDoInput.someOneElse,
+                                        text: locale.whoWillDoInput.someOneElse,
+                                        selected: step.actor == locale.whoWillDoInput.someOneElse
+                                    }
+                                ]
+                        }) }}
+                    </div>
+                    <div class="govuk-grid-column-one-half">
+                        {{ govukInput({
+                            formGroup: {
+                            classes: "step-input-autocomplete-wrapper"
+                        },
+                        errorMessage: getFormattedError(errors, locale, 'step-input-autocomplete'),
+                            id: "step-input-autocomplete",
+                            name: "step-input-autocomplete-"+loop.index,
+                            value: step.description
+                        }) }}
+                    </div>
+                </div>
+                {% endfor %}
+                <div class="govuk-grid-column-full">
+                    <div class="govuk-grid-column-one-quarter">
+                        {{ govukSelect({
+                            id: "actor",
+                            name: "actor",
+                            items:
+                            [
+                                {
+                                    value: "select",
+                                    text: "Select who"
+                                },
+                                {
+                                    value: data.popData.givenName,
+                                    text: data.popData.givenName
+                                },
+                                {
+                                    value: locale.whoWillDoInput.probPrac,
+                                    text: locale.whoWillDoInput.probPrac,
+                                selected: step.actor == locale.whoWillDoInput.probPrac
+                                },
+                                {
+                                    value: locale.whoWillDoInput.progStaff,
+                                    text: locale.whoWillDoInput.progStaff,
+                                    selected: step.actor == locale.whoWillDoInput.progStaff
+                                },
+                                {
+                                    value: locale.whoWillDoInput.partAgency,
+                                    text: locale.whoWillDoInput.partAgency,
+                                    selected: step.actor == locale.whoWillDoInput.partAgency
+                                },
+                                {
+                                    value: locale.whoWillDoInput.crsp,
+                                    text: locale.whoWillDoInput.crsp,
+                                    selected: step.actor == locale.whoWillDoInput.crsp
+                                },
+                                {
+                                    value: locale.whoWillDoInput.someOneElse,
+                                    text: locale.whoWillDoInput.someOneElse,
+                                    selected: step.actor == locale.whoWillDoInput.someOneElse
+                                }
+                            ]
+                        }) }}
+                    </div>
+                    <div class="govuk-grid-column-one-half">
+                        {{ govukInput({
+                            formGroup: {
+                                classes: "step-input-autocomplete-wrapper"
+                            },
+                            errorMessage: getFormattedError(errors, locale, 'step-input-autocomplete'),
+                            id: "step-input-autocomplete",
+                            name: "step-input-autocomplete",
+                            value: data.form['step-input-autocomplete']
+                        }) }}
+                    </div>
+                </div>
+                <p>
+                {{ govukButton({
+                    text: locale.addAnotherButton,
+                    name: "action",
+                    value: "addAnother",
+                    classes: "govuk-button--secondary"
+                }) }}
+                </p>
+                {{ govukButton({
+                    name: "action",
+                    value: "save",
+                    text: locale.saveButtonText
+                }) }}
             </form>
         </div>
     </div>
+</div>
 {% endblock %}
