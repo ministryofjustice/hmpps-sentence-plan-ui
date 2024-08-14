@@ -2,20 +2,29 @@
   "en": {
     "title": "Add steps to {POP_NAME}'s goal",
     "section": "{AREA_OF_NEED} goals",
+    "detailHeading": "View information from John’s assessment",
 
     "stepsSection": {
-      "label": "What goal is {POP_NAME} trying to achieve?",
-      "hint": "Select one option",
+      "label": "What should they do to achieve the goal?",
+      "hint": "Add one step in each box.",
       "customRadioOptionText": "Something else",
       "customOptionLabel": "Enter a custom goal"
     },
     "whoWillDo": {
       "label": "Who will do this step?",
-      "hint": "Select all that apply.",
+      "hint": "Add one person or agency.",
       "customRadioOptionText": "Something else",
       "customOptionLabel": "Enter who will do this step"
     },
+    "whoWillDoInput": {
+      "probPrac": "Probation practitioner",
+      "progStaff": "Programme staff",
+      "partAgency": "Partnership agency",
+      "crsp": "Commissioned rehabilitative services (CRS) provider",
+      "someOneElse": "Someone else (include who in the step)"
+    },
     "saveButtonText": "Save and continue",
+    "addAnotherButton": "Add another step",
     "errors": {
       "step-selection-radio": {
         "isNotEmpty": "You need to select a step"
