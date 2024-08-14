@@ -5,9 +5,9 @@ const oneWeekInMs = 1000 * 60 * 60 * 24 * 7
 
 export const testNewGoal: NewGoal = {
   title: 'Test goal',
-  areaOfNeed: 'Test area of need',
+  areaOfNeed: 'Health and wellbeing',
   targetDate: new Date(Date.now() + oneWeekInMs).toISOString().substring(0, 10),
-  relatedAreasOfNeed: ['Test related area of need'],
+  relatedAreasOfNeed: ['Drug use'],
 }
 export const testGoal: Goal = {
   ...testNewGoal,
