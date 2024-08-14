@@ -7,7 +7,7 @@ import URLs from '../URLs'
 import { FORMS } from '../../services/formStorageService'
 import GoalService from '../../services/sentence-plan/goalService'
 import { NewGoal } from '../../@types/NewGoalType'
-import { formatDateWithStyle, dateToISOFormat } from '../../utils/utils'
+import { formatDateWithStyle, dateToISOFormat, getAchieveDateOptions } from '../../utils/utils'
 
 export default class CreateGoalController {
   constructor(
@@ -18,73 +18,54 @@ export default class CreateGoalController {
   ) {}
 
   private saveAndRedirect = async (req: Request, res: Response, next: NextFunction) => {
+    // TODO: Delete this saved form data when the new steps controller/logic is in
     req.services.formStorageService.saveFormData(FORMS.CREATE_GOAL, {
       processed: this.processGoalData(req.body),
       raw: req.body,
     })
+
     const processedData: NewGoal = this.processGoalData(req.body)
     const planUuid = req.services.sessionService.getPlanUUID()
     try {
       const { uuid } = await this.goalService.saveGoal(processedData, planUuid)
+
+      // TODO: Delete this saved form data when the new steps controller/logic is in
       req.services.formStorageService.saveFormData('currentGoal', {
         processed: null,
         raw: { uuid },
       })
-      const redirectUrl: string =
-        req.body.action === 'addStep' ? URLs.CREATE_STEP : `${URLs.PLAN_SUMMARY}?status=success`
-      return res.redirect(redirectUrl)
+
+      if (req.body.action === 'addStep') {
+        return res.redirect(URLs.CREATE_STEP)
+      }
+      return res.redirect(`${URLs.PLAN_SUMMARY}?status=success`)
     } catch (e) {
       return next(e)
     }
   }
 
   private render = async (req: Request, res: Response, next: NextFunction) => {
-    const { areaOfNeed } = req.params
     const { errors } = req
 
-    try {
-      const allAreaOfNeed = this.referentialDataService.getAreasOfNeed()
-      const navigationLinks = allAreaOfNeed.map(aon => ({
-        text: aon.name,
-        href: aon.url,
-        active: aon.url === areaOfNeed,
-      }))
-      const today = formatDateWithStyle(new Date().toISOString(), 'short')
+    const areasOfNeed = this.referentialDataService.getAreasOfNeed()
+    const popData = req.services.sessionService.getSubjectDetails()
 
-      const selectedOtherAreaOfNeed: string[] = req.body['other-area-of-need'] || []
+    const dateOptions = this.getDateOptions()
+    const selectedAreaOfNeed = areasOfNeed.find(areaOfNeed => areaOfNeed.url === req.params.areaOfNeed)
+    const minimumDatePickerDate = formatDateWithStyle(new Date().toISOString(), 'short')
 
-      const otherAreaOfNeed = allAreaOfNeed
-        .filter(aon => aon.url !== areaOfNeed)
-        .map(({ name }) => ({ text: name, value: name, checked: selectedOtherAreaOfNeed.includes(name) }))
-
-      const displayAreaOfNeed = this.referentialDataService
-        .getAreasOfNeed()
-        .filter(aon => aon.url === areaOfNeed)[0].name
-
-      const dateOptionsDate = this.getAchieveDateOptions(new Date())
-      dateOptionsDate.push(new Date(new Date().setDate(new Date().getDate() + 7)))
-
-      const referenceData = this.referentialDataService.getGoals(areaOfNeed)
-      const popData = await req.services.sessionService.getSubjectDetails()
-
-      return res.render('pages/create-goal', {
-        locale: locale.en,
-        data: {
-          navigationLinks,
-          displayAreaOfNeed,
-          areaOfNeed,
-          popData,
-          referenceData,
-          dateOptionsDate,
-          otherAreaOfNeed,
-          form: req.body,
-          today,
-        },
-        errors,
-      })
-    } catch (e) {
-      return next(e)
-    }
+    return res.render('pages/create-goal', {
+      locale: locale.en,
+      data: {
+        areasOfNeed,
+        selectedAreaOfNeed,
+        popData,
+        dateOptions,
+        minimumDatePickerDate,
+        form: req.body,
+      },
+      errors,
+    })
   }
 
   private processGoalData(body: any) {
@@ -94,7 +75,7 @@ export default class CreateGoalController {
         ? dateToISOFormat(body['date-selection-custom'])
         : body['date-selection-radio']
     const areaOfNeed = body['area-of-need']
-    const relatedAreasOfNeed = body['other-area-of-need-radio'] === 'yes' ? body['other-area-of-need'] : undefined
+    const relatedAreasOfNeed = body['related-area-of-need-radio'] === 'yes' ? body['related-area-of-need'] : undefined
 
     return {
       title,
@@ -104,15 +85,12 @@ export default class CreateGoalController {
     }
   }
 
-  private getAchieveDateOptions = (date: Date, dateOptionsInMonths = [3, 6, 12, 24]) => {
-    return dateOptionsInMonths.map(option => {
-      const achieveDate = new Date(date)
-      achieveDate.setMonth(date.getMonth() + option)
-      return achieveDate
-    })
+  private getDateOptions = () => {
+    const today = new Date()
+    return [...getAchieveDateOptions(today), new Date(today.setDate(today.getDate() + 7))]
   }
 
-  public get = this.render
+  get = this.render
 
   post = (req: Request, res: Response, next: NextFunction) => {
     if (Object.keys(req.errors.body).length) {
