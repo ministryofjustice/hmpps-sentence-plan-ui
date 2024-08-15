@@ -25,6 +25,7 @@ export default class PlanSummaryController {
       return res.render('pages/plan-summary', {
         locale: locale.en,
         data: {
+          planUuid,
           popData,
           currentGoals,
           futureGoals,
