@@ -55,12 +55,6 @@ describe('RemoveGoalController', () => {
   })
 
   describe('post', () => {
-    it('should return to plan-summary if cancel removal', async () => {
-      req = { body: { type: 'some-type', action: 'cancelRemove' } } as Request
-      await controller.post(req as Request, res as Response, next)
-      expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_SUMMARY}?type=some-type`)
-    })
-
     it('should return to plan-summary with removing goal if cancel removal', async () => {
       req = { body: { type: 'some-type', action: 'cancelRemove' } } as Request
       await controller.post(req as Request, res as Response, next)
