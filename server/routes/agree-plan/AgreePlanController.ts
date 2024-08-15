@@ -26,7 +26,7 @@ export default class AgreePlanController {
 
   private saveAndRedirect = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      const planUuid = req.services.sessionService.getPlanUUID()
+      // const planUuid = req.services.sessionService.getPlanUUID()
       return res.redirect(`${URLs.PLAN_SUMMARY}`)
     } catch (e) {
       return next(e)
