@@ -1,0 +1,10 @@
+{
+  "en": {
+    "title": "Does {POP_NAME} agree to this plan?",
+    "subNav": {
+      "goals": "Goals",
+      "about": "About",
+      "summary": "Plan summary"
+    }
+  }
+}
