@@ -2,6 +2,12 @@ import { NewGoal } from '../../server/@types/NewGoalType'
 import { PlanType } from '../../server/@types/PlanType'
 
 describe('Change a goal', () => {
+  const goalData: NewGoal = {
+    title: 'Test goal',
+    areaOfNeed: 'Drug use',
+    relatedAreasOfNeed: ['Health and wellbeing'],
+    targetDate: new Date(new Date().setMonth(new Date().getMonth() + 6)).toISOString().split('T')[0],
+  }
   beforeEach(() => {
     cy.createSentencePlan().then(planDetails => {
       cy.wrap(planDetails).as('plan')
@@ -10,13 +16,6 @@ describe('Change a goal', () => {
   })
 
   describe('Rendering', () => {
-    const goalData: NewGoal = {
-      title: 'Test goal',
-      areaOfNeed: 'Drug use',
-      relatedAreasOfNeed: ['Health and wellbeing'],
-      targetDate: new Date(new Date().setMonth(new Date().getMonth() + 6)).toISOString().split('T')[0],
-    }
-
     it('Edit goal page populated correctly', () => {
       // Add goal and access remove page
       cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
@@ -33,7 +32,9 @@ describe('Change a goal', () => {
       cy.get('input[name="start-working-goal-radio"]').should('be.checked').and('have.value', 'yes')
       cy.get('#date-selection-radio-3').should('be.checked')
     })
+  })
 
+  describe('Validation behaviours', () => {
     it('Edit goal page display errors correctly', () => {
       // Add goal and access remove page
       cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
@@ -50,7 +51,9 @@ describe('Change a goal', () => {
       cy.contains('#other-area-of-need-error', 'Select all related areas')
       cy.title().should('contain', 'Error:')
     })
+  })
 
+  describe('Submission behaviours', () => {
     it('Should update goal data', () => {
       // Add goal and access remove page
       cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
