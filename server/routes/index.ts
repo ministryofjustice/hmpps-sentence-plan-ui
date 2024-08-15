@@ -31,6 +31,6 @@ export default function routes(services: Services): Router {
   setupStepRoutes(router, services)
   setupReferenceDataRoutes(router, services)
   setupPlanSummaryRoutes(router, services)
-  setupAgreePlanRoutes(router)
+  setupAgreePlanRoutes(router, services)
   return router
 }
