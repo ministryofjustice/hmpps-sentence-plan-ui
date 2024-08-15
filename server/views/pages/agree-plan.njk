@@ -1,4 +1,6 @@
 {% extends "../partials/layout.njk" %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "../components/error-summary/error-summary.njk" import errorSummary %}
 
 {% set pageTitle = applicationName + " - Agree plan" %}
 
@@ -8,7 +10,33 @@
     <a href="#" class="govuk-back-link">Back</a>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-            <h1 class="govuk-heading-xl">{{ locale.title | replace("{POP_NAME}", data.popData.givenName) }}</h1>
+            <h1 class="govuk-heading-l">{{ locale.title | replace("{POP_NAME}", data.popData.givenName) }}</h1>
+            <p class="govuk-body-s govuk-secondary-text">{{ locale.subtitle | replace("{POP_NAME}", data.popData.givenName) }}</p>
+
+            {{ govukRadios({
+                name: "agree-plan-radio",
+                errorMessage: getFormattedError(errors, locale, 'agree-plan-radio'),
+                items: [
+                    {
+                        value: "yes",
+                        text: locale.agree_plan_options.yes | replace("{POP_NAME}", data.popData.givenName),
+                        checked: data.form['agree-plan-radio'] == 'yes',
+                        conditional: {
+                        html: areasOfNeedHtml
+                    }
+                    },
+                    {
+                        value: "no",
+                        text: locale.agree_plan_options.no | replace("{POP_NAME}", data.popData.givenName),
+                        checked: data.form['agree-plan-radio'] == 'no'
+                    },
+                    {
+                        value: "couldnotanswer",
+                        text: locale.agree_plan_options.could_not_answer | replace("{POP_NAME}", data.popData.givenName),
+                        checked: data.form['agree-plan-radio'] == 'couldnotanswer'
+                    }
+                ]
+            }) }}
         </div>
     </div>
 {% endblock %}
