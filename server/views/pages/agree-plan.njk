@@ -1,0 +1,14 @@
+{% extends "../partials/layout.njk" %}
+
+{% set pageTitle = applicationName + " - Agree plan" %}
+
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block content %}
+    <a href="#" class="govuk-back-link">Back</a>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <h1 class="govuk-heading-xl">{{ locale.title | replace("{POP_NAME}", data.popData.givenName) }}</h1>
+        </div>
+    </div>
+{% endblock %}
