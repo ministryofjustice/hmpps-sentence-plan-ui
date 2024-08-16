@@ -55,7 +55,7 @@ describe('RemoveGoalController', () => {
   })
 
   describe('post', () => {
-    it('should return to plan-summary with removing goal if cancel removal', async () => {
+    it('should return to plan-summary without removing goal if cancel removal', async () => {
       req = { body: { type: 'some-type', action: 'cancelRemove' } } as Request
       await controller.post(req as Request, res as Response, next)
       expect(mockGoalService.removeGoal).not.toHaveBeenCalled()
