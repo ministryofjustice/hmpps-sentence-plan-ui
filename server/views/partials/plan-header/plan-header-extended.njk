@@ -14,7 +14,8 @@
                     classes: "govuk-button--secondary"
                 }) }}
             </form>
-            <form action="/plan/{{ data.planUuid }}/agree">
+            <form action="/plan-summary" method="POST">
+                <input type="hidden" name="_csrf" value="{{ csrfToken }}">
                 {{ govukButton({
                     text: "Agree plan"
                 }) }}

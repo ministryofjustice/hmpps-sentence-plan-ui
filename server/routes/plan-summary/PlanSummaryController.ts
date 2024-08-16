@@ -53,5 +53,14 @@ export default class PlanSummaryController {
     }
   }
 
+  redirectToAgree = async (req: Request, res: Response, next: NextFunction) => {
+    if (Object.keys(req.errors?.body).length) {
+      return this.render(req, res, next)
+    }
+    return res.redirect(URLs.AGREE_PLAN)
+  }
+
   get = this.render
+
+  post = this.redirectToAgree
 }
