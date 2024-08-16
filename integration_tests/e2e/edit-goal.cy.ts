@@ -54,25 +54,78 @@ describe('Change a goal', () => {
   })
 
   describe('Submission behaviours', () => {
-    it('Should update goal data', () => {
-      // Add goal and access remove page
+    beforeEach(() => {
       cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
         cy.addGoalToPlan(plan.uuid, goalData).then(goal => {
           cy.visit(`/edit-goal/${goal.uuid}`)
         })
       })
-
+    })
+    it('Should update goal title, other areas of need', () => {
       // Modify data
+      cy.get('#goal-input-autocomplete').type('some goal')
       cy.get('#other-area-of-need-2').check()
+      cy.get('#other-area-of-need-5').check()
+
       cy.contains('button', 'save').click()
       cy.url().should('include', '/plan-summary')
 
       // Check goal data is saved and rendered correctly
       cy.get('.goal-summary-card')
-        .should('contain', goalData.title)
+        .should('contain', 'some goal')
         .and('contain', `Aim to achieve in 6 months`)
         .and('contain', `Area of need: ${goalData.areaOfNeed.toLowerCase()}`)
-        .and('contain', `Also relates to: employment and education, ${goalData.relatedAreasOfNeed[0].toLowerCase()}`)
+        .and('contain', 'Also relates to: employment and education, alcohol use, health and wellbeing')
+    })
+
+    it('Should update goal with NO other areas of need', () => {
+      // Modify data
+      cy.get('#other-area-of-need-radio-2').check()
+
+      cy.contains('button', 'save').click()
+      cy.url().should('include', '/plan-summary')
+
+      // Check goal data is saved and rendered correctly
+      cy.get('.goal-summary-card').and('not.contain', 'Also relates to:')
+    })
+
+    it('Should update goal with other areas of need', () => {
+      // Modify data
+      cy.get('#other-area-of-need-2').check()
+      cy.get('#other-area-of-need-6').uncheck()
+
+      cy.contains('button', 'save').click()
+      cy.url().should('include', '/plan-summary')
+
+      // Check goal data is saved and rendered correctly
+      cy.get('.goal-summary-card').and('contain', 'Also relates to: employment and education')
+    })
+
+    it('Should update goal with standard date', () => {
+      // Modify data
+      cy.get('#date-selection-radio-2').check()
+
+      cy.contains('button', 'save').click()
+      cy.url().should('include', '/plan-summary')
+
+      // Check goal data is saved and rendered correctly
+      cy.get('.goal-summary-card').and('contain', 'Aim to achieve in 3 months')
+    })
+
+    it('Should update goal with custom date', () => {
+      const twentyMonthsLaterISODate = new Date(new Date().setMonth(new Date().getMonth() + 20))
+        .toISOString()
+        .split('T')[0]
+        .split('-')
+      const date = `${twentyMonthsLaterISODate[2]}/${twentyMonthsLaterISODate[1]}/${twentyMonthsLaterISODate[0]}`
+      // Modify data
+      cy.get('#date-selection-radio-7').check()
+      cy.get('#date-selection-custom').type(date)
+      cy.contains('button', 'save').click()
+      cy.url().should('include', '/plan-summary')
+
+      // Check goal data is saved and rendered correctly
+      cy.get('.goal-summary-card').and('contain', 'Aim to achieve in 20 months')
     })
   })
 })
