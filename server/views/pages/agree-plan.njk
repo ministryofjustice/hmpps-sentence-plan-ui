@@ -4,7 +4,13 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "../components/error-summary/error-summary.njk" import errorSummary %}
 
-{% set pageTitle = applicationName + " - Agree plan" %}
+{% set pageTitle %}
+    {% if errors %}
+        Error: {{ applicationName }} - Agree plan
+    {% else %}
+        {{ applicationName }} - Agree plan
+    {% endif %}
+{% endset -%}
 
 {% set mainClasses = "app-container govuk-body" %}
 
@@ -12,24 +18,43 @@
     <a href="#" class="govuk-back-link">Back</a>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
+            {{ errorSummary({
+                errors: errors,
+                locale: locale
+            }) }}
+
             <h1 class="govuk-heading-l">{{ locale.title | replace("{POP_NAME}", data.popData.givenName) }}</h1>
             <p class="govuk-body-s govuk-secondary-text">{{ locale.subtitle | replace("{POP_NAME}", data.popData.givenName) }}</p>
 
             <form id="agree-plan-form" method="POST">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+                <input type="hidden" name="planUuid" value="{{ data.planUuid }}">
 
-                {% set agreementDetailsHtml %}
+                {% set doesNotAgreeDetailsHtml %}
                     {{ govukTextarea({
-                        name: "agreementDetails",
-                        id: "agreementDetails",
+                        name: "does-not-agree-details",
+                        id: "does-not-agree-details",
                         label: {
                             text: locale.agreePlanOptions.enterDetails
-                        }
+                        },
+                        errorMessage: getFormattedError(errors, locale, 'does-not-agree-details')
+                    }) }}
+                {% endset -%}
+
+                {% set couldNotAnswerDetailsHtml %}
+                    {{ govukTextarea({
+                        name: "could-not-answer-details",
+                        id: "could-not-answer-details",
+                        label: {
+                            text: locale.agreePlanOptions.enterDetails
+                        },
+                        errorMessage: getFormattedError(errors, locale, 'could-not-answer-details')
                     }) }}
                 {% endset -%}
 
                 {{ govukRadios({
                     name: "agree-plan-radio",
+                    id: "agree-plan-radio",
                     errorMessage: getFormattedError(errors, locale, 'agree-plan-radio'),
                     items: [
                         {
@@ -42,15 +67,15 @@
                             text: locale.agreePlanOptions.no | replace("{POP_NAME}", data.popData.givenName),
                             checked: data.form['agree-plan-radio'] == 'no',
                             conditional: {
-                                html: agreementDetailsHtml
+                                html: doesNotAgreeDetailsHtml
                             }
                         },
                         {
-                            value: "couldnotanswer",
+                            value: "couldNotAnswer",
                             text: locale.agreePlanOptions.couldNotAnswer | replace("{POP_NAME}", data.popData.givenName),
-                            checked: data.form['agree-plan-radio'] == 'couldnotanswer',
+                            checked: data.form['agree-plan-radio'] == 'couldNotAnswer',
                             conditional: {
-                                html: agreementDetailsHtml
+                                html: couldNotAnswerDetailsHtml
                             }
                         }
                     ]

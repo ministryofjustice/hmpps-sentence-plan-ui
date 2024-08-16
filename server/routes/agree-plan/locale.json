@@ -11,8 +11,15 @@
     "notes": "Add any notes (optional)",
     "agreePlanButton": "Agree plan with {POP_NAME}",
     "errors": {
-      "nothingSelected": "Select if they agree to the plan",
-      "noDetailsAdded": "TODO need an error message here"
+      "agree-plan-radio": {
+        "isNotEmpty": "Select if they agree to the plan"
+      },
+      "does-not-agree-details": {
+        "isNotEmpty": "Enter details about why they do not agree"
+      },
+      "could-not-answer-details": {
+        "isNotEmpty": "Enter details about why they cannot answer"
+      }
     }
   }
 }

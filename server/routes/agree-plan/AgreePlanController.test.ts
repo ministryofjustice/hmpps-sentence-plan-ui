@@ -23,6 +23,7 @@ describe('AgreePlanController', () => {
     data: {
       planUuid: '9506fba0-d2c7-4978-b3fc-aefd86821844',
       popData: handoverData.subject,
+      form: {},
     },
     errors: {},
     locale: locale.en,

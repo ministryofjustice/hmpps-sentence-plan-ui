@@ -9,20 +9,18 @@ export default class AgreePlanController {
   private render = async (req: Request, res: Response, next: NextFunction) => {
     const { errors } = req
 
-    try {
-      const planUuid = req.services.sessionService.getPlanUUID()
-      const popData = req.services.sessionService.getSubjectDetails()
-      return res.render('pages/agree-plan', {
-        locale: locale.en,
-        data: {
-          planUuid,
-          popData,
-        },
-        errors,
-      })
-    } catch (e) {
-      return next(e)
-    }
+    const planUuid = req.services.sessionService.getPlanUUID()
+    const popData = req.services.sessionService.getSubjectDetails()
+
+    return res.render('pages/agree-plan', {
+      locale: locale.en,
+      data: {
+        planUuid,
+        popData,
+        form: req.body,
+      },
+      errors,
+    })
   }
 
   private saveAndRedirect = async (req: Request, res: Response, next: NextFunction) => {
@@ -38,7 +36,7 @@ export default class AgreePlanController {
   get = this.render
 
   post = (req: Request, res: Response, next: NextFunction) => {
-    if (Object.keys(req.errors?.body).length) {
+    if (Object.keys(req.errors.body).length) {
       return this.render(req, res, next)
     }
     return this.saveAndRedirect(req, res, next)
