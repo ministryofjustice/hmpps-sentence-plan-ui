@@ -127,5 +127,16 @@ describe('Change a goal', () => {
       // Check goal data is saved and rendered correctly
       cy.get('.goal-summary-card').and('contain', 'Aim to achieve in 20 months')
     })
+
+    it('Should update goal with future date', () => {
+      // Modify data
+      cy.get('#start-working-goal-radio-2').check()
+
+      cy.contains('button', 'save').click()
+      cy.url().should('include', '/plan-summary')
+
+      // Check goal data is saved and rendered correctly
+      cy.get('.moj-sub-navigation').and('contain', 'Future goals (1)')
+    })
   })
 })
