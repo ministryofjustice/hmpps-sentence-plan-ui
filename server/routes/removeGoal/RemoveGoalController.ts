@@ -1,15 +1,11 @@
 import { NextFunction, Request, Response } from 'express'
 import * as superagent from 'superagent'
 import locale from './locale.json'
-import InfoService from '../../services/sentence-plan/infoService'
 import GoalService from '../../services/sentence-plan/goalService'
 import URLs from '../URLs'
 
 export default class RemoveGoalController {
-  constructor(
-    private readonly infoService: InfoService,
-    private readonly goalService: GoalService,
-  ) {}
+  constructor(private readonly goalService: GoalService) {}
 
   render = async (req: Request, res: Response, next: NextFunction) => {
     const { errors } = req
