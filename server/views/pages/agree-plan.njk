@@ -24,7 +24,7 @@
             }) }}
 
             <h1 class="govuk-heading-l">{{ locale.title | replace("{POP_NAME}", data.popData.givenName) }}</h1>
-            <p class="govuk-body-s govuk-secondary-text">{{ locale.subtitle | replace("{POP_NAME}", data.popData.givenName) }}</p>
+            <p class="govuk-secondary-text">{{ locale.subtitle | replace("{POP_NAME}", data.popData.givenName) }}</p>
 
             <form id="agree-plan-form" method="POST">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}">
@@ -34,6 +34,7 @@
                     {{ govukTextarea({
                         name: "does-not-agree-details",
                         id: "does-not-agree-details",
+                        rows: 3,
                         label: {
                             text: locale.agreePlanOptions.enterDetails
                         },
@@ -45,6 +46,7 @@
                     {{ govukTextarea({
                         name: "could-not-answer-details",
                         id: "could-not-answer-details",
+                        rows: 3,
                         label: {
                             text: locale.agreePlanOptions.enterDetails
                         },
