@@ -9,6 +9,7 @@ import { Page } from '../services/auditService'
 import setupStepRoutes from './steps/routes'
 import setupReferenceDataRoutes from './ReferenceData/routes'
 import setupPlanSummaryRoutes from './plan-summary/routes'
+import setupAgreePlanRoutes from './agree-plan/routes'
 import URLs from './URLs'
 
 export default function routes(services: Services): Router {
@@ -30,5 +31,6 @@ export default function routes(services: Services): Router {
   setupStepRoutes(router, services)
   setupReferenceDataRoutes(router, services)
   setupPlanSummaryRoutes(router, services)
+  setupAgreePlanRoutes(router, services)
   return router
 }

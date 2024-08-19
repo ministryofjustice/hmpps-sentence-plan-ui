@@ -1,8 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
-import locale from '../createGoal/locale.json'
+import locale from './locale.json'
 import GoalService from '../../services/sentence-plan/goalService'
 import URLs from '../URLs'
-import NoteService from '../../services/sentence-plan/noteService'
 import ReferentialDataService from '../../services/sentence-plan/referentialDataService'
 import { dateToISOFormat, formatDateWithStyle, getAchieveDateOptions } from '../../utils/utils'
 import { NewGoal } from '../../@types/NewGoalType'
@@ -11,7 +10,6 @@ import { Goal } from '../../@types/GoalType'
 export default class EditGoalController {
   constructor(
     private readonly referentialDataService: ReferentialDataService,
-    private readonly noteService: NoteService,
     private readonly goalService: GoalService,
   ) {}
 
@@ -42,10 +40,10 @@ export default class EditGoalController {
     })
   }
 
-  public get = this.render
+  get = this.render
 
   post = (req: Request, res: Response, next: NextFunction) => {
-    if (Object.keys(req.errors.body).length) {
+    if (Object.keys(req.errors?.body).length) {
       return this.render(req, res, next)
     }
     return this.saveAndRedirect(req, res, next)
@@ -55,9 +53,13 @@ export default class EditGoalController {
     const type = req.query?.type
     const goalUuid = req.params.uuid
     const processedData: NewGoal = this.processGoalData(req.body)
-    await this.goalService.updateGoal(processedData, goalUuid)
-    const redirectUrl: string = `${URLs.PLAN_SUMMARY}?status=updated&type=${type}`
-    return res.redirect(redirectUrl)
+
+    try {
+      await this.goalService.updateGoal(processedData, goalUuid)
+      return res.redirect(`${URLs.PLAN_SUMMARY}?status=updated&type=${type}`)
+    } catch (e) {
+      return next(e)
+    }
   }
 
   private getDateOptions = () => {
