@@ -17,6 +17,19 @@
 {% endset -%}
 
 {% set mainClasses = "app-container govuk-body" %}
+{% set locale = interpolate(locale, {
+    subject: merge(data.popData, {
+        possessiveName: data.popData.givenName | possessive
+    }),
+    dateOptions: {
+        threeMonths: data.dateOptions[0] | formatSimpleDate,
+        sixMonths: data.dateOptions[1] | formatSimpleDate,
+        twelveMonths: data.dateOptions[2] | formatSimpleDate,
+        endOfSentence: data.dateOptions[3] | formatSimpleDate,
+        nextMeeting: data.dateOptions[4] | formatSimpleDate
+    },
+    dateOptionsArray: data.dateOptions
+}) %}
 
 {# Setup arrays and custom HTML #}
 {% set additionalAreaOfNeedCheckboxes = [] %}
@@ -50,10 +63,10 @@
         errorMessage: getFormattedError(errors, locale, 'date-selection-custom'),
         classes: "govuk-input--width-10",
         hint: {
-            text: "For example, 31/3/2023."
+            text: locale.datePicker.hint
         },
         label: {
-            text: "Select a date",
+            text: locale.datePicker.label,
             classes: "govuk-fieldset__legend--s"
         },
         value: data.form['date-selection-custom'],
@@ -66,7 +79,7 @@
         name: "date-selection-radio",
         fieldset: {
             legend: {
-                text: locale.dateSelection.label | replace("{POP_NAME}", data.popData.givenName),
+                text: locale.dateSelection.label,
                 isPageHeading: false,
                 classes: "govuk-fieldset__legend--m"
             }
@@ -79,24 +92,24 @@
         items: [
             {
                 value: data.dateOptions[4] | formatISODate,
-                text: locale.dateSelection.options.nextMeeting | replace("{NEXT_MEETING}", (data.dateOptions[4] | formatSimpleDate)),
+                text: locale.dateSelection.options.nextMeeting,
                 checked: data.form['date-selection-radio'] == data.dateOptions[4] | formatISODate
             },
             {
                 value: data.dateOptions[0] | formatISODate,
-                text: locale.dateSelection.options.threeMonths | replace("{3_MONTHS_DATE}", (data.dateOptions[0] | formatSimpleDate))
+                text: locale.dateSelection.options.threeMonths
             },
             {
                 value: data.dateOptions[1] | formatISODate,
-                text: locale.dateSelection.options.sixMonths | replace("{6_MONTHS_DATE}", (data.dateOptions[1] | formatSimpleDate))
+                text: locale.dateSelection.options.sixMonths
             },
             {
                 value: data.dateOptions[2] | formatISODate,
-                text: locale.dateSelection.options.twelveMonths | replace("{12_MONTHS_DATE}", (data.dateOptions[2] | formatSimpleDate))
+                text: locale.dateSelection.options.twelveMonths
             },
             {
                 value: data.dateOptions[3] | formatISODate,
-                text: locale.dateSelection.options.twentyFourMonths | replace("{24_MONTHS_DATE}", (data.dateOptions[3] | formatSimpleDate)) | replace("{POP_NAME}", data.popData.givenName)
+                text: locale.dateSelection.options.twentyFourMonths
             },
             {
                 divider: "or"
@@ -105,8 +118,8 @@
                 value: "custom",
                 text: locale.dateSelection.customRadioOptionText,
                 conditional: {
-                html: customDateHtml
-            }
+                    html: customDateHtml
+                }
             }
         ]
     }) }}
@@ -121,7 +134,7 @@
                 locale: locale
             }) }}
             <span class="govuk-caption-l">{{ data.areaOfNeed }}</span>
-            <h1 class="govuk-heading-l">{{ locale.title | replace("{POP_NAME}", data.popData.givenName) }}</h1>
+            <h1 class="govuk-heading-l">{{ locale.title }}</h1>
 
             <form id="edit-goal-form" method="POST">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}">
@@ -131,12 +144,12 @@
 
                 {{ govukInput({
                     label: {
-                        text: "What goal should {POP_NAME} try to achieve?" | replace("{POP_NAME}", data.popData.givenName),
+                        text: locale.goalSelection.label,
                         classes: "govuk-label--m",
                         isPageHeading: false
                     },
                     hint: {
-                        text: "Search for a suggested goal or enter your own. Add one goal at a time."
+                        text: locale.goalSelection.hint
                     },
                     formGroup: {
                         classes: "goal-input-autocomplete-wrapper"
@@ -178,7 +191,7 @@
                     name: "start-working-goal-radio",
                     fieldset: {
                         legend: {
-                            text: locale.startWorking.label | replace("{POP_NAME}", data.popData.givenName),
+                            text: locale.startWorking.label,
                             isPageHeading: false,
                             classes: "govuk-fieldset__legend--m"
                         }
