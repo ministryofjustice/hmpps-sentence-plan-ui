@@ -23,7 +23,7 @@ export default class AgreePlanController {
     })
   }
 
-  private saveAndRedirect = async (req: Request, res: Response, next: NextFunction) => {
+  private agreePlanAndRedirect = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const planUuid = req.services.sessionService.getPlanUUID()
       this.planService.getPlanByUuid(planUuid)
@@ -39,6 +39,15 @@ export default class AgreePlanController {
     if (Object.keys(req.errors.body).length) {
       return this.render(req, res, next)
     }
-    return this.saveAndRedirect(req, res, next)
+
+    if (req.body.action === 'view') {
+      return res.redirect(URLs.CREATE_STEP)
+    }
+
+    if (req.body.action === 'agree') {
+      return this.agreePlanAndRedirect(req, res, next)
+    }
+
+    return res.redirect(URLs.PLAN_SUMMARY)
   }
 }

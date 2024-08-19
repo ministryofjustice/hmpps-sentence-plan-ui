@@ -39,7 +39,7 @@ export default class PlanSummaryController {
     }
   }
 
-  reorder = async (req: Request, res: Response, next: NextFunction) => {
+  reorderGoals = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const planUuid = req.services.sessionService.getPlanUUID()
       const goals = await this.goalService.getGoals(planUuid)
@@ -53,14 +53,36 @@ export default class PlanSummaryController {
     }
   }
 
-  redirectToAgree = async (req: Request, res: Response, next: NextFunction) => {
-    if (Object.keys(req.errors?.body).length) {
-      return this.render(req, res, next)
+  validatePlanForAgreement = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const planUuid = req.services.sessionService.getPlanUUID()
+      // TODO Goals without steps
+      // TODO everything is good to agree
+      // TODO no goals in this plan
+      const goals = await this.goalService.getGoals(planUuid)
+      const currentGoals = goals.now
+
+      if (currentGoals.length > 0) {
+        const failingGoals = currentGoals.filter(goal => goal.steps.length === 0)
+
+        if (failingGoals.length > 0) {
+          const errors = {
+            body: { phil: { isNotEmpty: true } },
+            params: {},
+            query: {},
+          }
+          req.errors = errors
+          return this.render(req, res, next)
+        }
+      }
+
+      return res.redirect(`/plan/${planUuid}/agree`) // TODO some interpolation instead?
+    } catch (e) {
+      return next(e)
     }
-    return res.redirect(URLs.AGREE_PLAN)
   }
 
   get = this.render
 
-  post = this.redirectToAgree
+  post = this.validatePlanForAgreement
 }

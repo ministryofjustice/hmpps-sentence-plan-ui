@@ -7,5 +7,6 @@ export default function setupPlanSummaryRoutes(router: Router, { infoService, go
   const controller = new PlanSummaryController(infoService, goalService)
 
   router.get(URLs.PLAN_SUMMARY, controller.get)
-  router.get(URLs.GOALS_ORDER, controller.reorder)
+  router.post(URLs.VALIDATE_PLAN, controller.validatePlanForAgreement)
+  router.get(URLs.GOALS_ORDER, controller.reorderGoals)
 }

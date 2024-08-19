@@ -25,4 +25,11 @@ export const testGoal: Goal = {
       uuid: 'some-random-related-uuid',
     },
   ],
+  steps: [
+    {
+      uuid: 'a-step-uuid',
+      description: 'Test Step',
+      actor: [{ actor: 'A step actor', actorOptionId: 1 }],
+    },
+  ],
 } as Goal

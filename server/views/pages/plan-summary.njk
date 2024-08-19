@@ -4,8 +4,16 @@
 {% from "moj/components/button-menu/macro.njk" import mojButtonMenu %}
 {%- from "moj/components/banner/macro.njk" import mojBanner -%}
 {% from "../components/summary-card/goal-summary-card.njk" import goalSummaryCard %}
+{% from "../components/error-summary/error-summary.njk" import errorSummary %}
 
-{% set pageTitle = applicationName + " - View plan " %}
+{% set pageTitle %}
+    {% if errors %}
+        Error: {{ locale.title }} - {{ applicationName }}
+    {% else %}
+        {{ locale.title }} - {{ applicationName }}
+    {% endif %}
+{% endset -%}
+
 {% set mainClasses = "app-container govuk-body" %}
 {% set header = {
     type: "extended",
@@ -27,6 +35,10 @@
 {% block content %}
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
+        {{ errorSummary({
+            errors: errors,
+            locale: locale
+        }) }}
         {% if data.status == 'success' %}
             {{ mojBanner({
                 type: 'success',
@@ -125,7 +137,7 @@
                         }) %}
                     {% endif %}
 
-                    <li>
+                    <li id="{{ goal.uuid }}">
                         {{ goalSummaryCard({
                             goal: goal,
                             buttons: buttons,

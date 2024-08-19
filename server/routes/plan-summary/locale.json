@@ -1,6 +1,7 @@
 {
   "en": {
-    "title": "About {POP_NAME}",
+    "title": "Plan",
+    "mainHeading": "{POP_NAME}'s plan",
     "goalsToAchieve": {
       "title": "Goals to achieve",
       "areaOfNeedHeading": "Area of need",
@@ -13,6 +14,11 @@
       "goals": "Goals",
       "about": "About",
       "summary": "Plan summary"
+    },
+    "errors": {
+      "phil": {
+        "isNotEmpty": "Add steps to agree the plan"
+      }
     }
   }
 }
