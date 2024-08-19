@@ -6,9 +6,9 @@
 
 {% set pageTitle %}
     {% if errors %}
-        Error: {{ applicationName }} - Agree plan
+        Error: {{ locale.title }} - {{ applicationName }}
     {% else %}
-        {{ applicationName }} - Agree plan
+        {{ locale.title }} - {{ applicationName }}
     {% endif %}
 {% endset -%}
 
@@ -23,7 +23,7 @@
                 locale: locale
             }) }}
 
-            <h1 class="govuk-heading-l">{{ locale.title | replace("{POP_NAME}", data.popData.givenName) }}</h1>
+            <h1 class="govuk-heading-l">{{ locale.question | replace("{POP_NAME}", data.popData.givenName) }}</h1>
             <p class="govuk-secondary-text">{{ locale.subtitle | replace("{POP_NAME}", data.popData.givenName) }}</p>
 
             <form id="agree-plan-form" method="POST">

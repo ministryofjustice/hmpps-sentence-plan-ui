@@ -1,6 +1,7 @@
 {
   "en": {
-    "title": "Does {POP_NAME} agree to this plan?",
+    "title": "Do they agree to this plan?",
+    "question": "Does {POP_NAME} agree to this plan?",
     "subtitle": "{POP_NAME} must answer this question, or you must record why {POP_NAME} could not.",
     "agreePlanOptions": {
       "yes": "Yes, {POP_NAME} agrees",
