@@ -1,3 +1,7 @@
+// TODO
+// Once the gating of Agree is in place the tests will start failing because the Plan doesn't have any Goals which contain Steps.
+// At this point use DataGenerator to set that up and also create unhappy path tests for 1) plan with no goals and 2) plan with goals but no steps.
+
 describe('Agree plan', () => {
   beforeEach(() => {
     cy.createSentencePlan().then(planDetails => {
