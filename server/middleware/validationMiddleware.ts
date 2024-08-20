@@ -18,27 +18,31 @@ function simplifyValidationErrors(errors: ValidationError[]): any {
   return result
 }
 
-function validatePart<T>(req: Request, dtoClass: ClassConstructor<T>, source: DataSources) {
-  const dtoInstance = plainToInstance(dtoClass, req[source])
+export function getValidationErrors<T>(objectToValidate: object, dtoClass: ClassConstructor<T>) {
+  const dtoInstance = plainToInstance(dtoClass, objectToValidate)
   const errors = validateSync(dtoInstance as object)
-  req[source] = dtoInstance
-  req.errors[source] = simplifyValidationErrors(errors)
+  return simplifyValidationErrors(errors)
 }
 
-export default function validate(data: { [K in DataSources]?: ClassConstructor<any> }) {
+export default function validateRequest(data: { [K in DataSources]?: ClassConstructor<any> }) {
   return (req: Request, res: Response, next: NextFunction) => {
     if (!req.errors) {
       req.errors = {}
     }
 
     if (data.body) {
-      validatePart(req, data.body, DataSources.BODY)
+      req[DataSources.BODY] = plainToInstance(data.body, req[DataSources.BODY])
+      req.errors[DataSources.BODY] = getValidationErrors(req.body, data.body)
     }
+
     if (data.params) {
-      validatePart(req, data.params, DataSources.PARAMS)
+      req[DataSources.PARAMS] = plainToInstance(data.params, req[DataSources.PARAMS])
+      req.errors[DataSources.PARAMS] = getValidationErrors(req.params, data.params)
     }
+
     if (data.query) {
-      validatePart(req, data.query, DataSources.QUERY)
+      req[DataSources.QUERY] = plainToInstance(data.query, req[DataSources.QUERY])
+      req.errors[DataSources.QUERY] = getValidationErrors(req.query, data.query)
     }
 
     return next()
