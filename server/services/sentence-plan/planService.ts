@@ -18,6 +18,6 @@ export default class PlanService {
 
   async agreePlan(planUuid: string) {
     const restClient = await this.sentencePlanApiClient.restClient(`Agreeing plan with plan UUID: ${planUuid}`)
-    return restClient.get<PlanType>({ path: `/plans/${planUuid}` })
+    return restClient.get<PlanType>({ path: `/plans/${planUuid}` }) // TODO the real API call goes here
   }
 }

@@ -27,7 +27,7 @@ export default class AgreePlanController {
   private agreePlanAndRedirect = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const planUuid = req.services.sessionService.getPlanUUID()
-      this.planService.getPlanByUuid(planUuid)
+      this.planService.getPlanByUuid(planUuid) // TODO this is where the planService.agreePlan call should go once the body is confirmed
       return res.redirect(`${URLs.PLAN_SUMMARY}`)
     } catch (e) {
       return next(e)
@@ -37,14 +37,6 @@ export default class AgreePlanController {
   get = this.render
 
   post = (req: Request, res: Response, next: NextFunction) => {
-    if (Object.keys(req.errors.body).length) {
-      return this.render(req, res, next)
-    }
-
-    if (req.body.action === 'view') {
-      return res.redirect(URLs.CREATE_STEP)
-    }
-
     if (req.body.action === 'agree') {
       return this.agreePlanAndRedirect(req, res, next)
     }
