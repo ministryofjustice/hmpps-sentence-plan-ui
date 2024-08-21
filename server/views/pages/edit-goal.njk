@@ -32,7 +32,7 @@
 
 {# Setup arrays and custom HTML #}
 {% set additionalAreaOfNeedCheckboxes = [] %}
-{% for areaOfNeed in data.areasOfNeed %}
+{% for areaOfNeed in data.sortedAreasOfNeed %}
     {% if areaOfNeed.name != data.areaOfNeed %}
         {% set isChecked = data.form['other-area-of-need'] and (areaOfNeed.name in data.form['other-area-of-need']) %}
         {% set additionalAreaOfNeedCheckboxes = additionalAreaOfNeedCheckboxes.concat({

@@ -17,12 +17,12 @@ export default class EditGoalController {
     const { uuid } = req.params
     const { errors } = req
 
-    const areasOfNeed = this.referentialDataService.getAreasOfNeed()
+    const sortedAreasOfNeed = this.referentialDataService.getSortedAreasOfNeed()
     const popData = req.services.sessionService.getSubjectDetails()
     const goal = await this.goalService.getGoal(uuid)
 
     const dateOptions = this.getDateOptions()
-    const selectedAreaOfNeed = areasOfNeed.find(areaOfNeed => areaOfNeed.name === goal.areaOfNeed.name)
+    const selectedAreaOfNeed = sortedAreasOfNeed.find(areaOfNeed => areaOfNeed.name === goal.areaOfNeed.name)
     const minimumDatePickerDate = formatDateWithStyle(new Date().toISOString(), 'short')
     const form = errors ? req.body : this.mapGoalToForm(goal)
 
@@ -30,7 +30,7 @@ export default class EditGoalController {
       locale: locale.en,
       data: {
         minimumDatePickerDate,
-        areasOfNeed,
+        sortedAreasOfNeed,
         selectedAreaOfNeed,
         popData,
         dateOptions,
