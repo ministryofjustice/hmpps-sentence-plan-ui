@@ -28,7 +28,7 @@ describe('Change a goal', () => {
       cy.contains('#goal-input-autocomplete__option--0', goalData.title)
       cy.get('input[name="other-area-of-need-radio"]').should('be.checked').and('have.value', 'yes')
       cy.get('.govuk-checkboxes').first().contains('Accommodation').should('not.be.checked')
-      cy.get('#other-area-of-need-6').should('be.checked')
+      cy.get('input[value="Health and wellbeing"]').should('be.checked')
       cy.get('input[name="start-working-goal-radio"]').should('be.checked').and('have.value', 'yes')
       cy.get('#date-selection-radio-3').should('be.checked')
     })
@@ -64,8 +64,8 @@ describe('Change a goal', () => {
     it('Should update goal title, other areas of need', () => {
       // Modify data
       cy.get('#goal-input-autocomplete').type('some goal')
-      cy.get('#other-area-of-need-2').check()
-      cy.get('#other-area-of-need-5').check()
+      cy.get('input[value="Employment and education"]').check()
+      cy.get('input[value="Alcohol use"]').check()
 
       cy.contains('button', 'save').click()
       cy.url().should('include', '/plan-summary')
@@ -91,8 +91,8 @@ describe('Change a goal', () => {
 
     it('Should update goal with other areas of need', () => {
       // Modify data
-      cy.get('#other-area-of-need-2').check()
-      cy.get('#other-area-of-need-6').uncheck()
+      cy.get('input[value="Employment and education"]').check()
+      cy.get('input[value="Health and wellbeing"]').uncheck()
 
       cy.contains('button', 'save').click()
       cy.url().should('include', '/plan-summary')
