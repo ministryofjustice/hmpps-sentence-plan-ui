@@ -4,6 +4,8 @@ import InfoService from '../../services/sentence-plan/infoService'
 import GoalService from '../../services/sentence-plan/goalService'
 import { moveGoal } from '../../utils/utils'
 import URLs from '../URLs'
+import { getValidationErrors } from '../../middleware/validationMiddleware'
+import AgreePlanValidationModel from '../agree-plan/models/AgreePlanValidationModel'
 
 export default class PlanSummaryController {
   constructor(
@@ -56,27 +58,18 @@ export default class PlanSummaryController {
   validatePlanForAgreement = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const planUuid = req.services.sessionService.getPlanUUID()
-      // TODO Goals without steps
-      // TODO everything is good to agree
-      // TODO no goals in this plan
       const goals = await this.goalService.getGoals(planUuid)
-      const currentGoals = goals.now
 
-      if (currentGoals.length > 0) {
-        const failingGoals = currentGoals.filter(goal => goal.steps.length === 0)
+      const errors = getValidationErrors(goals, AgreePlanValidationModel)
 
-        if (failingGoals.length > 0) {
-          const errors = {
-            body: { phil: { isNotEmpty: true } },
-            params: {},
-            query: {},
-          }
-          req.errors = errors
-          return this.render(req, res, next)
-        }
+      console.log(errors)
+
+      if (Object.keys(errors).length > 0) {
+        req.errors = { body: errors }
+        return this.render(req, res, next)
       }
 
-      return res.redirect(`/plan/${planUuid}/agree`) // TODO some interpolation instead?
+      return res.redirect(`/plan/${planUuid}/agree`)
     } catch (e) {
       return next(e)
     }

@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express'
 import locale from './locale.json'
 import URLs from '../URLs'
 import PlanService from '../../services/sentence-plan/planService'
+import validateRequest, { getValidationErrors } from '../../middleware/validationMiddleware'
 
 export default class AgreePlanController {
   constructor(private readonly planService: PlanService) {}

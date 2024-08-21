@@ -23,7 +23,7 @@
                 locale: locale
             }) }}
 
-            <h1 class="govuk-heading-l">{{ locale.question | replace("{POP_NAME}", data.popData.givenName) }}</h1>
+            <h1 class="govuk-heading-l">{{ locale.mainHeading | replace("{POP_NAME}", data.popData.givenName) }}</h1>
             <p class="govuk-secondary-text">{{ locale.subtitle | replace("{POP_NAME}", data.popData.givenName) }}</p>
 
             <form id="agree-plan-form" method="POST">
