@@ -43,6 +43,19 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
     },
   )
 
+  njkEnv.addGlobal('merge', (obj1: object, obj2: object) => {
+    if (typeof obj1 !== 'object' || typeof obj2 !== 'object') {
+      throw new Error('Both arguments must be objects')
+    }
+
+    return { ...obj1, ...obj2 }
+  })
+
+  njkEnv.addFilter('possessive', (value: string) => {
+    if (!value) return value
+    return new nunjucks.runtime.SafeString(value.endsWith('s') ? `${value}'` : `${value}'s`)
+  })
+
   njkEnv.addFilter('initialiseName', initialiseName)
 
   // Filter to format date as 'Month YYYY'
@@ -101,5 +114,40 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
     const [creationYear, creationMonth] = creationDate.split('-').map(Number)
     const [targetYear, targetMonth] = targetDate.split('-').map(Number)
     return (targetYear - creationYear) * 12 + (targetMonth - creationMonth)
+  })
+
+  njkEnv.addGlobal('interpolate', (locale: object, replacements: Record<string, any>) => {
+    const interpolateString = (str: string): string => {
+      return str.replace(/\{\{\s*([^}]+)\s*}}/g, (match: string, expression: string) => {
+        return (
+          expression
+            .trim()
+            .split(/[.[\]]+/)
+            .filter(Boolean)
+            .reduce(
+              (acc: Record<string, any> | undefined, key: string) =>
+                acc && acc[key] !== undefined ? acc[key] : undefined,
+              replacements,
+            ) ?? match
+        )
+      })
+    }
+
+    const interpolateObject = (obj: any): any => {
+      if (typeof obj === 'string') {
+        return interpolateString(obj)
+      }
+
+      if (typeof obj === 'object') {
+        return Object.entries(obj).reduce((acc: Record<string, any>, [key, value]) => {
+          acc[key] = interpolateObject(value)
+          return acc
+        }, {})
+      }
+
+      return obj
+    }
+
+    return interpolateObject(locale)
   })
 }
