@@ -50,9 +50,10 @@ export default class EditGoalController {
   }
 
   private saveAndRedirect = async (req: Request, res: Response, next: NextFunction) => {
-    const type = req.query?.type
     const goalUuid = req.params.uuid
     const processedData: NewGoal = this.processGoalData(req.body)
+
+    const type = processedData.targetDate === null ? 'future' : 'current'
 
     try {
       await this.goalService.updateGoal(processedData, goalUuid)

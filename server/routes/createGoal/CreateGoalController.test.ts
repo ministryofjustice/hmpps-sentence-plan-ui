@@ -15,6 +15,7 @@ import { testGoal, testNewGoal } from '../../testutils/data/goalData'
 jest.mock('../../services/sentence-plan/referentialDataService', () => {
   return jest.fn().mockImplementation(() => ({
     getAreasOfNeed: jest.fn().mockReturnValue(AreaOfNeed),
+    getSortedAreasOfNeed: jest.fn().mockReturnValue(AreaOfNeed),
   }))
 })
 
@@ -41,6 +42,7 @@ describe('CreateGoalController', () => {
   const viewData = {
     data: {
       areasOfNeed: AreaOfNeed,
+      sortedAreasOfNeed: AreaOfNeed,
       form: {},
       popData: handoverData.subject,
       selectedAreaOfNeed: AreaOfNeed.find(x => x.url === 'area-url'),

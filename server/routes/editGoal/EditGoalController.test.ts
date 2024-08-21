@@ -265,12 +265,11 @@ describe('EditGoalController', () => {
         body: {},
       }
       req.params.uuid = testGoal.uuid
-      req.query.type = 'some-type'
 
       await controller.post(req as Request, res as Response, next)
 
       expect(mockGoalService.updateGoal).toHaveBeenCalledWith(updatedGoal, testGoal.uuid)
-      expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_SUMMARY}?status=updated&type=some-type`)
+      expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_SUMMARY}?status=updated&type=current`)
       expect(res.render).not.toHaveBeenCalled()
       expect(next).not.toHaveBeenCalled()
     })
