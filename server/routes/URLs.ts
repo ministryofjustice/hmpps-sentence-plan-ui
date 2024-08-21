@@ -1,7 +1,7 @@
 export default {
   ABOUT_POP: '/about-pop',
   CREATE_GOAL: '/create-goal/:areaOfNeed',
-  CREATE_STEP: '/steps/create',
+  ADD_STEPS: '/goal/:uuid/add-steps',
   PLAN_SUMMARY: '/plan-summary',
   GOAL_DETAIL: '/goal/:uuid',
   GOALS: '/goals',

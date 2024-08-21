@@ -281,7 +281,7 @@ describe('CreateGoalController', () => {
       await controller.post(req as Request, res as Response, next)
 
       expect(mockGoalService.saveGoal).toHaveBeenCalledWith(testNewGoal, 'some-plan-uuid')
-      expect(res.redirect).toHaveBeenCalledWith(URLs.CREATE_STEP)
+      expect(res.redirect).toHaveBeenCalledWith(URLs.ADD_STEPS)
       expect(res.render).not.toHaveBeenCalled()
       expect(next).not.toHaveBeenCalled()
     })
