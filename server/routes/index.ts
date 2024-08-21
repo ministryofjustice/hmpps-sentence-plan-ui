@@ -6,11 +6,11 @@ import setupRemoveGoalRoutes from './removeGoal/routes'
 import setupEditGoalRoutes from './editGoal/routes'
 import setupAboutPopRoutes from './aboutPop/routes'
 import { Page } from '../services/auditService'
-import setupStepRoutes from './steps/routes'
 import setupReferenceDataRoutes from './ReferenceData/routes'
 import setupPlanSummaryRoutes from './plan-summary/routes'
 import setupAgreePlanRoutes from './agree-plan/routes'
 import URLs from './URLs'
+import setupAddStepsRoutes from "./add-steps/routes";
 
 export default function routes(services: Services): Router {
   const router = Router()
@@ -28,7 +28,7 @@ export default function routes(services: Services): Router {
   setupCreateGoalRoutes(router, services)
   setupRemoveGoalRoutes(router, services)
   setupEditGoalRoutes(router, services)
-  setupStepRoutes(router, services)
+  setupAddStepsRoutes(router, services)
   setupReferenceDataRoutes(router, services)
   setupPlanSummaryRoutes(router, services)
   setupAgreePlanRoutes(router, services)

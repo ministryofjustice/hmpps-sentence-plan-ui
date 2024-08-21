@@ -6,7 +6,7 @@ import URLs from '../URLs'
 import { toKebabCase } from '../../utils/utils'
 import { NewStep, StepStatus } from '../../@types/StepType'
 
-export default class StepsController {
+export default class AddStepsController {
   constructor(private readonly stepService: StepService) {}
 
   get = async (req: Request, res: Response, next: NextFunction) => {
@@ -51,7 +51,7 @@ export default class StepsController {
           processed: addedSteps,
           raw: req.body,
         })
-        res.redirect(`${URLs.CREATE_STEP}`)
+        res.redirect(`${URLs.ADD_STEPS}`)
       } else {
         // await this.stepService.saveSteps([payload], currentGoal)
         res.redirect(`${URLs.PLAN_SUMMARY}?status=success`)
