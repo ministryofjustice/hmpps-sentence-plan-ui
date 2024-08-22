@@ -1,13 +1,15 @@
 import { NextFunction, Request, Response } from 'express'
+import { plainToInstance } from 'class-transformer'
 import handoverData from '../../testutils/data/handoverData'
 import testPlan from '../../testutils/data/planData'
 import AgreePlanController from './AgreePlanController'
 import PlanService from '../../services/sentence-plan/planService'
 import mockReq from '../../testutils/preMadeMocks/mockReq'
 import mockRes from '../../testutils/preMadeMocks/mockRes'
-import validate from '../../middleware/validationMiddleware'
+import { getValidationErrors } from '../../middleware/validationMiddleware'
 import locale from './locale.json'
 import AgreePlanPostModel from './models/AgreePlanPostModel'
+import runMiddlewareChain from '../../testutils/runMiddlewareChain'
 
 jest.mock('../../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
@@ -73,55 +75,56 @@ describe('AgreePlanController', () => {
 
   describe('post', () => {
     describe('validation', () => {
-      it('should render the form again if there are validation errors', async () => {
-        const errors = {
-          body: { 'agree-plan-radio': { isNotEmpty: true } },
-          params: {},
-          query: {},
-        }
-        req.errors = errors
-        const expectedViewData = {
-          ...viewData,
-          errors,
-        }
-
-        await controller.post(req as Request, res as Response, next)
-
-        expect(res.render).toHaveBeenCalledWith('pages/agree-plan', expectedViewData)
-        expect(mockPlanService.agreePlan).not.toHaveBeenCalled()
-        expect(res.redirect).not.toHaveBeenCalled()
-        expect(next).not.toHaveBeenCalled()
-      })
-
       describe('agree-plan-radio', () => {
-        it('should add error if not selected', async () => {
-          validate({ body: AgreePlanPostModel })(req, null, jest.fn)
+        it('should add error if not selected', () => {
+          const body = plainToInstance(AgreePlanPostModel, req.body)
+          const errors = getValidationErrors(body)
 
-          expect(req.errors.body).toMatchObject({
+          expect(errors).toMatchObject({
             'agree-plan-radio': { isNotEmpty: true },
           })
         })
 
-        it('should add error if no is selected and details are missing', async () => {
+        it('should add error if "no" is selected and details are missing', () => {
           req.body['agree-plan-radio'] = 'no'
+          const body = plainToInstance(AgreePlanPostModel, req.body)
+          const errors = getValidationErrors(body)
 
-          validate({ body: AgreePlanPostModel })(req, null, jest.fn)
-
-          expect(req.errors.body).toMatchObject({
+          expect(errors).toMatchObject({
             'does-not-agree-details': { isNotEmpty: true },
           })
         })
 
-        it('should add error if could-not-answer is selected and details are missing', async () => {
+        it('should add error if "couldNotAnswer" is selected and details are missing', () => {
           req.body['agree-plan-radio'] = 'couldNotAnswer'
+          const body = plainToInstance(AgreePlanPostModel, req.body)
+          const errors = getValidationErrors(body)
 
-          validate({ body: AgreePlanPostModel })(req, null, jest.fn)
-
-          expect(req.errors.body).toMatchObject({
+          expect(errors).toMatchObject({
             'could-not-answer-details': { isNotEmpty: true },
           })
         })
       })
+    })
+
+    it('should render the form again if there are validation errors', async () => {
+      const errors = {
+        body: { 'agree-plan-radio': { isNotEmpty: true } },
+        params: {},
+        query: {},
+      }
+      req.errors = errors
+      const expectedViewData = {
+        ...viewData,
+        errors,
+      }
+
+      await runMiddlewareChain(controller.post, req, res, next)
+
+      expect(res.render).toHaveBeenCalledWith('pages/agree-plan', expectedViewData)
+      expect(mockPlanService.agreePlan).not.toHaveBeenCalled()
+      expect(res.redirect).not.toHaveBeenCalled()
+      expect(next).not.toHaveBeenCalled()
     })
 
     describe('save and redirect', () => {
