@@ -1,7 +1,6 @@
 import { validateSync, ValidationError } from 'class-validator'
 import { NextFunction, Request, Response } from 'express'
-import RequestDataSources from '../@types/RequestDataSources'
-import 'reflect-metadata'
+import RequestDataSources from '../@types/enums/RequestDataSources'
 
 export function getValidationErrors(data: object) {
   function buildPrettyError(errorsInner: ValidationError[], path: string = ''): Record<string, any> {
@@ -29,8 +28,11 @@ export function getValidationErrors(data: object) {
 
   const errors = validateSync(data)
   return buildPrettyError(errors)
+  const errors = validateSync(data)
+  return buildPrettyError(errors)
 }
 
+export default function validateRequest() {
 export default function validateRequest() {
   return (req: Request, res: Response, next: NextFunction) => {
     if (!req.errors) {
@@ -38,7 +40,11 @@ export default function validateRequest() {
     }
 
     Object.values(RequestDataSources).forEach(source => {
-      req.errors[source] = req[source]?.constructor?.name !== 'Object' ? getValidationErrors(req[source]) : {}
+      if (req[source] && req[source].constructor && req[source].constructor.name !== 'Object') {
+        req.errors[source] = getValidationErrors(req[source])
+      } else {
+        req.errors[source] = {}
+      }
     })
 
     return next()

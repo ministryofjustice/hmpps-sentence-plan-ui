@@ -2,6 +2,7 @@
 import { IsInt, IsNotEmpty, Min, MinLength, ValidateNested } from 'class-validator'
 import { Expose, plainToInstance, Transform } from 'class-transformer'
 import validateRequest, { getValidationErrors } from './validationMiddleware'
+import validateRequest, { getValidationErrors } from './validationMiddleware'
 import mockReq from '../testutils/preMadeMocks/mockReq'
 import mockRes from '../testutils/preMadeMocks/mockRes'
 
@@ -38,6 +39,7 @@ describe('validation', () => {
 
       it('should return no errors when nested validation passes', () => {
         const data = {
+        const data = {
           title: 'a test title',
           'nested-foo-1': 'Foo 1',
           'nested-bar-1': 'Bar 1',
@@ -47,10 +49,13 @@ describe('validation', () => {
 
         const dataInstance = plainToInstance(TestModel, data)
         const errors = getValidationErrors(dataInstance)
+        const dataInstance = plainToInstance(TestModel, data)
+        const errors = getValidationErrors(dataInstance)
         expect(errors).toEqual({})
       })
 
       it('should return errors when nested validation fails', () => {
+        const data = {
         const data = {
           title: 'a test title',
           'nested-foo-1': 'Foo 1',
@@ -58,6 +63,8 @@ describe('validation', () => {
           'nested-bar-2': 'bar 2',
         }
 
+        const dataInstance = plainToInstance(TestModel, data)
+        const errors = getValidationErrors(dataInstance)
         const dataInstance = plainToInstance(TestModel, data)
         const errors = getValidationErrors(dataInstance)
         expect(errors).toEqual({
@@ -82,6 +89,7 @@ describe('validation', () => {
 
       it('should return no errors when field validation passes', () => {
         const data = {
+        const data = {
           title: 'a test title',
           anotherString: 'another test string',
           selectedNumber: 4,
@@ -89,15 +97,20 @@ describe('validation', () => {
 
         const dataInstance = plainToInstance(TestModel, data)
         const errors = getValidationErrors(dataInstance)
+        const dataInstance = plainToInstance(TestModel, data)
+        const errors = getValidationErrors(dataInstance)
         expect(errors).toEqual({})
       })
 
       it('should return no errors when field validation passes', () => {
         const data = {
+        const data = {
           title: 'a test title',
           selectedNumber: 'should be a number',
         }
 
+        const dataInstance = plainToInstance(TestModel, data)
+        const errors = getValidationErrors(dataInstance)
         const dataInstance = plainToInstance(TestModel, data)
         const errors = getValidationErrors(dataInstance)
         expect(errors).toEqual({
@@ -134,10 +147,14 @@ describe('validation', () => {
         body: plainToInstance(BodyDTO, { name: '' }),
         params: plainToInstance(ParamsDTO, { id: 'abc' }),
         query: plainToInstance(QueryDTO, { search: 'tooShort' }),
+        body: plainToInstance(BodyDTO, { name: '' }),
+        params: plainToInstance(ParamsDTO, { id: 'abc' }),
+        query: plainToInstance(QueryDTO, { search: 'tooShort' }),
       })
       const res = mockRes()
       const next = jest.fn()
 
+      const middleware = validateRequest()
       const middleware = validateRequest()
 
       middleware(req, res, next)
@@ -163,6 +180,7 @@ describe('validation', () => {
 
       middleware(req, res, next)
 
+      // Check that req.body is an instance of BodyDTO
       expect(req.errors).toEqual({
         body: {},
         params: { id: { isInt: true, min: true } },
@@ -176,10 +194,14 @@ describe('validation', () => {
         body: plainToInstance(BodyDTO, { name: 'Mr. Egg' }),
         params: plainToInstance(ParamsDTO, { id: 3 }),
         query: plainToInstance(QueryDTO, { search: 'justLongEnough' }),
+        body: plainToInstance(BodyDTO, { name: 'Mr. Egg' }),
+        params: plainToInstance(ParamsDTO, { id: 3 }),
+        query: plainToInstance(QueryDTO, { search: 'justLongEnough' }),
       })
       const res = mockRes()
       const next = jest.fn()
 
+      const middleware = validateRequest()
       const middleware = validateRequest()
 
       middleware(req, res, next)
