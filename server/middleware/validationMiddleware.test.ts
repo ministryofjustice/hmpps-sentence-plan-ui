@@ -180,7 +180,6 @@ describe('validation', () => {
 
       middleware(req, res, next)
 
-      // Check that req.body is an instance of BodyDTO
       expect(req.errors).toEqual({
         body: {},
         params: { id: { isInt: true, min: true } },
