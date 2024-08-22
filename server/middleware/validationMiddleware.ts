@@ -1,15 +1,8 @@
-import { ClassConstructor, plainToInstance } from 'class-transformer'
 import { validateSync, ValidationError } from 'class-validator'
 import { NextFunction, Request, Response } from 'express'
-import 'reflect-metadata'
+import RequestDataSources from '../@types/RequestDataSources'
 
-enum DataSources {
-  BODY = 'body',
-  PARAMS = 'params',
-  QUERY = 'query',
-}
-
-function simplifyValidationErrors(errorsList: ValidationError[]): Record<string, any> {
+export function getValidationErrors(data: object) {
   function buildPrettyError(errorsInner: ValidationError[], path: string = ''): Record<string, any> {
     return errorsInner.reduce((accumulator, error) => {
       const currentPath = path ? `${path}.${error.property}` : error.property
@@ -33,35 +26,23 @@ function simplifyValidationErrors(errorsList: ValidationError[]): Record<string,
     }, {})
   }
 
-  return buildPrettyError(errorsList)
+  const errors = validateSync(data)
+  return buildPrettyError(errors)
 }
 
-export function getValidationErrors<T>(objectToValidate: object, dtoClass: ClassConstructor<T>) {
-  const dtoInstance = plainToInstance(dtoClass, objectToValidate)
-  const errors = validateSync(dtoInstance as object)
-  return simplifyValidationErrors(errors)
-}
-
-export default function validateRequest(data: { [K in DataSources]?: ClassConstructor<any> }) {
+export default function validateRequest() {
   return (req: Request, res: Response, next: NextFunction) => {
     if (!req.errors) {
       req.errors = {}
     }
 
-    if (data.body) {
-      req[DataSources.BODY] = plainToInstance(data.body, req[DataSources.BODY])
-      req.errors[DataSources.BODY] = getValidationErrors(req.body, data.body)
-    }
-
-    if (data.params) {
-      req[DataSources.PARAMS] = plainToInstance(data.params, req[DataSources.PARAMS])
-      req.errors[DataSources.PARAMS] = getValidationErrors(req.params, data.params)
-    }
-
-    if (data.query) {
-      req[DataSources.QUERY] = plainToInstance(data.query, req[DataSources.QUERY])
-      req.errors[DataSources.QUERY] = getValidationErrors(req.query, data.query)
-    }
+    Object.values(RequestDataSources).forEach(source => {
+      if (req[source] && req[source].constructor && req[source].constructor.name !== 'Object') {
+        req.errors[source] = getValidationErrors(req[source])
+      } else {
+        req.errors[source] = {}
+      }
+    })
 
     return next()
   }

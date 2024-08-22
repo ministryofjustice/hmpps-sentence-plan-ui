@@ -6,6 +6,9 @@ import { FORMS } from '../../services/formStorageService'
 import GoalService from '../../services/sentence-plan/goalService'
 import { NewGoal } from '../../@types/NewGoalType'
 import { formatDateWithStyle, dateToISOFormat, getAchieveDateOptions } from '../../utils/utils'
+import transformRequest from '../../middleware/transformMiddleware'
+import CreateGoalPostModel from './models/CreateGoalPostModel'
+import validateRequest from '../../middleware/validationMiddleware'
 
 export default class CreateGoalController {
   constructor(
@@ -86,12 +89,21 @@ export default class CreateGoalController {
     return [...getAchieveDateOptions(today), new Date(today.setDate(today.getDate() + 7))]
   }
 
-  get = this.render
-
-  post = (req: Request, res: Response, next: NextFunction) => {
+  private handleValidationErrors = (req: Request, res: Response, next: NextFunction) => {
     if (Object.keys(req.errors.body).length) {
       return this.render(req, res, next)
     }
-    return this.saveAndRedirect(req, res, next)
+    return next()
   }
+
+  get = this.render
+
+  post = [
+    transformRequest({
+      body: CreateGoalPostModel,
+    }),
+    validateRequest(),
+    this.handleValidationErrors,
+    this.saveAndRedirect,
+  ]
 }
