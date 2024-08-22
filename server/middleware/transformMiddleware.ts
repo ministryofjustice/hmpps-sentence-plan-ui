@@ -1,7 +1,7 @@
 import { ClassConstructor, plainToInstance } from 'class-transformer'
 import { NextFunction, Request, Response } from 'express'
 import 'reflect-metadata'
-import RequestDataSources from '../@types/enums/RequestDataSources'
+import RequestDataSources from '../@types/RequestDataSources'
 
 export default function transformRequest(data: { [key in RequestDataSources]?: ClassConstructor<any> }) {
   return (req: Request, res: Response, next: NextFunction) => {
