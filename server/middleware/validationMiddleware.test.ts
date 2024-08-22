@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import { IsInt, IsNotEmpty, Min, MinLength, ValidateNested } from 'class-validator'
 import { Expose, plainToInstance, Transform } from 'class-transformer'
-import validate, { getValidationErrors } from './validationMiddleware'
+import validateRequest, { getValidationErrors } from './validationMiddleware'
 import mockReq from '../testutils/preMadeMocks/mockReq'
 import mockRes from '../testutils/preMadeMocks/mockRes'
 
@@ -37,7 +37,7 @@ describe('validation', () => {
       }
 
       it('should return no errors when nested validation passes', () => {
-        const test = {
+        const data = {
           title: 'a test title',
           'nested-foo-1': 'Foo 1',
           'nested-bar-1': 'Bar 1',
@@ -45,19 +45,21 @@ describe('validation', () => {
           'nested-bar-2': 'bar 2',
         }
 
-        const errors = getValidationErrors(test, TestModel)
+        const dataInstance = plainToInstance(TestModel, data)
+        const errors = getValidationErrors(dataInstance)
         expect(errors).toEqual({})
       })
 
       it('should return errors when nested validation fails', () => {
-        const test = {
+        const data = {
           title: 'a test title',
           'nested-foo-1': 'Foo 1',
           'nested-foo-2': 'Foo 2',
           'nested-bar-2': 'bar 2',
         }
 
-        const errors = getValidationErrors(test, TestModel)
+        const dataInstance = plainToInstance(TestModel, data)
+        const errors = getValidationErrors(dataInstance)
         expect(errors).toEqual({
           'nested.0.bar': {
             isNotEmpty: true,
@@ -79,23 +81,25 @@ describe('validation', () => {
       }
 
       it('should return no errors when field validation passes', () => {
-        const test = {
+        const data = {
           title: 'a test title',
           anotherString: 'another test string',
           selectedNumber: 4,
         }
 
-        const errors = getValidationErrors(test, TestModel)
+        const dataInstance = plainToInstance(TestModel, data)
+        const errors = getValidationErrors(dataInstance)
         expect(errors).toEqual({})
       })
 
       it('should return no errors when field validation passes', () => {
-        const test = {
+        const data = {
           title: 'a test title',
           selectedNumber: 'should be a number',
         }
 
-        const errors = getValidationErrors(test, TestModel)
+        const dataInstance = plainToInstance(TestModel, data)
+        const errors = getValidationErrors(dataInstance)
         expect(errors).toEqual({
           anotherString: {
             isNotEmpty: true,
@@ -127,19 +131,14 @@ describe('validation', () => {
 
     it('should attach errors to req and call next', () => {
       const req = mockReq({
-        body: { name: '' },
-        params: { id: 'abc' },
-        query: { search: 'tooShort' },
+        body: plainToInstance(BodyDTO, { name: '' }),
+        params: plainToInstance(ParamsDTO, { id: 'abc' }),
+        query: plainToInstance(QueryDTO, { search: 'tooShort' }),
       })
       const res = mockRes()
       const next = jest.fn()
 
-      // Assuming validate function setup
-      const middleware = validate({
-        body: BodyDTO,
-        params: ParamsDTO,
-        query: QueryDTO,
-      })
+      const middleware = validateRequest()
 
       middleware(req, res, next)
 
@@ -152,20 +151,38 @@ describe('validation', () => {
       })
     })
 
-    it('should pass validation with no errors and call next', () => {
+    it('should ensure req.body is a class instance and not a plain object', () => {
       const req = mockReq({
-        body: { name: 'Mr. Egg' },
-        params: { id: 3 },
-        query: { search: 'justLongEnough' },
+        body: { name: '' },
+        params: plainToInstance(ParamsDTO, { id: 'abc' }),
+        query: plainToInstance(QueryDTO, { search: 'justLongEnough' }),
       })
       const res = mockRes()
       const next = jest.fn()
 
-      const middleware = validate({
-        body: BodyDTO,
-        params: ParamsDTO,
-        query: QueryDTO,
+      const middleware = validateRequest()
+
+      middleware(req, res, next)
+
+      // Check that req.body is an instance of BodyDTO
+      expect(req.errors).toEqual({
+        body: {},
+        params: { id: { isInt: true, min: true } },
+        query: {},
       })
+      expect(next).toHaveBeenCalled()
+    })
+
+    it('should pass validation with no errors and call next', () => {
+      const req = mockReq({
+        body: plainToInstance(BodyDTO, { name: 'Mr. Egg' }),
+        params: plainToInstance(ParamsDTO, { id: 3 }),
+        query: plainToInstance(QueryDTO, { search: 'justLongEnough' }),
+      })
+      const res = mockRes()
+      const next = jest.fn()
+
+      const middleware = validateRequest()
 
       middleware(req, res, next)
 
