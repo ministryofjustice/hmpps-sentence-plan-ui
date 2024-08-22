@@ -6,6 +6,9 @@ import ReferentialDataService from '../../services/sentence-plan/referentialData
 import { dateToISOFormat, formatDateWithStyle, getAchieveDateOptions } from '../../utils/utils'
 import { NewGoal } from '../../@types/NewGoalType'
 import { Goal } from '../../@types/GoalType'
+import transformRequest from '../../middleware/transformMiddleware'
+import EditGoalPostModel from './models/EditGoalPostModel'
+import validateRequest from '../../middleware/validationMiddleware'
 
 export default class EditGoalController {
   constructor(
@@ -38,15 +41,6 @@ export default class EditGoalController {
       },
       errors,
     })
-  }
-
-  get = this.render
-
-  post = (req: Request, res: Response, next: NextFunction) => {
-    if (Object.keys(req.errors?.body).length) {
-      return this.render(req, res, next)
-    }
-    return this.saveAndRedirect(req, res, next)
   }
 
   private saveAndRedirect = async (req: Request, res: Response, next: NextFunction) => {
@@ -114,4 +108,22 @@ export default class EditGoalController {
       relatedAreasOfNeed,
     }
   }
+
+  private handleValidationErrors = (req: Request, res: Response, next: NextFunction) => {
+    if (Object.keys(req.errors.body).length) {
+      return this.render(req, res, next)
+    }
+    return next()
+  }
+
+  get = this.render
+
+  post = [
+    transformRequest({
+      body: EditGoalPostModel,
+    }),
+    validateRequest(),
+    this.handleValidationErrors,
+    this.saveAndRedirect,
+  ]
 }
