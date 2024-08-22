@@ -37,11 +37,7 @@ export default function validateRequest() {
     }
 
     Object.values(RequestDataSources).forEach(source => {
-      if (req[source] && req[source].constructor && req[source].constructor.name !== 'Object') {
-        req.errors[source] = getValidationErrors(req[source])
-      } else {
-        req.errors[source] = {}
-      }
+      req.errors[source] = req[source]?.constructor?.name !== 'Object' ? getValidationErrors(req[source]) : {}
     })
 
     return next()
