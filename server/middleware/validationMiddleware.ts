@@ -1,6 +1,6 @@
 import { validateSync, ValidationError } from 'class-validator'
 import { NextFunction, Request, Response } from 'express'
-import RequestDataSources from '../@types/enums/RequestDataSources'
+import RequestDataSources from '../@types/RequestDataSources'
 
 export function getValidationErrors(data: object) {
   function buildPrettyError(errorsInner: ValidationError[], path: string = ''): Record<string, any> {

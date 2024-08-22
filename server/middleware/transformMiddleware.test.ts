@@ -4,7 +4,7 @@ import 'reflect-metadata'
 import { Type } from 'class-transformer'
 import mockReq from '../testutils/preMadeMocks/mockReq'
 import mockRes from '../testutils/preMadeMocks/mockRes'
-import RequestDataSources from '../@types/enums/RequestDataSources'
+import RequestDataSources from '../@types/RequestDataSources'
 import transformRequest from './transformMiddleware'
 
 class BodyClass {
