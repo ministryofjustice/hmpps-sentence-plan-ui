@@ -142,7 +142,6 @@ describe('validation', () => {
 
       middleware(req, res, next)
 
-      // Expectations about the next call and req modifications
       expect(next).toHaveBeenCalled()
       expect(req.errors).toEqual({
         body: { name: { isNotEmpty: true } },
@@ -164,7 +163,6 @@ describe('validation', () => {
 
       middleware(req, res, next)
 
-      // Check that req.body is an instance of BodyDTO
       expect(req.errors).toEqual({
         body: {},
         params: { id: { isInt: true, min: true } },
