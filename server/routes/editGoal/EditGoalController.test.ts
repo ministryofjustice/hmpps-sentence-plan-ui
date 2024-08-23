@@ -17,7 +17,7 @@ import runMiddlewareChain from '../../testutils/runMiddlewareChain'
 
 jest.mock('../../services/sentence-plan/referentialDataService', () => {
   return jest.fn().mockImplementation(() => ({
-    getAreasOfNeed: jest.fn().mockReturnValue(AreaOfNeed),
+    getSortedAreasOfNeed: jest.fn().mockReturnValue(AreaOfNeed),
   }))
 })
 
@@ -43,7 +43,7 @@ describe('EditGoalController', () => {
   let next: NextFunction
   const viewData = {
     data: {
-      areasOfNeed: AreaOfNeed,
+      sortedAreasOfNeed: AreaOfNeed,
       form: {},
       popData: handoverData.subject,
       selectedAreaOfNeed: AreaOfNeed.find(x => x.name === testGoal.areaOfNeed.name),
@@ -270,12 +270,11 @@ describe('EditGoalController', () => {
         body: {},
       }
       req.params.uuid = testGoal.uuid
-      req.query.type = 'some-type'
 
       await runMiddlewareChain(controller.post, req, res, next)
 
       expect(mockGoalService.updateGoal).toHaveBeenCalledWith(updatedGoal, testGoal.uuid)
-      expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_SUMMARY}?status=updated&type=some-type`)
+      expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_SUMMARY}?status=updated&type=current`)
       expect(res.render).not.toHaveBeenCalled()
       expect(next).not.toHaveBeenCalled()
     })

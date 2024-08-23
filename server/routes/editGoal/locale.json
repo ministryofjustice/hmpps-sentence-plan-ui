@@ -1,6 +1,7 @@
 {
   "en": {
-    "title": "Create a goal with {{ subject.givenName }}",
+    "title": "Create a goal",
+    "mainHeading": "Create a goal with {{ subject.givenName }}",
     "goalSelection": {
       "label": "What goal should {{ subject.givenName }} try to achieve?",
       "hint": "Search for a suggested goal or enter your own. Add one goal at a time.",
@@ -13,7 +14,9 @@
     "dateSelection": {
       "label": "When should {{ subject.givenName }} achieve this?",
       "hint": "Select one option",
-      "customRadioOptionText": "Something else",
+      "customRadioOptionText": "Set another date",
+      "customOptionLabel": "Enter a custom date",
+      "customOptionHint": "For example, 27 3 2007",
       "options": {
         "nextMeeting": "At our next meeting (by {{ dateOptions.nextMeeting }})",
         "threeMonths": "In 3 months (by {{ dateOptions.threeMonths }})",
