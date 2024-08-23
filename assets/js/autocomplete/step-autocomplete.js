@@ -1,11 +1,12 @@
 import accessibleAutocomplete from 'accessible-autocomplete'
 
-const STEP_AUTOCOMPLETE_WRAPPER_CLASS = 'step-input-autocomplete-wrapper'
-const STEP_AUTOCOMPLETE_INPUT_ID = 'step-input-autocomplete'
 const AREA_OF_NEED_INPUT_ID = '_areaOfNeed'
 
 document.addEventListener('DOMContentLoaded', () => {
-  if (document.querySelector(`.${STEP_AUTOCOMPLETE_WRAPPER_CLASS}`)) initializeStepInputAutocomplete()
+  document.querySelectorAll('input[id^="step-description-"]')
+    .forEach((element) => {
+      initializeStepInputAutocomplete(element)
+    });
 })
 
 async function getStepOptionsByAreaOfNeed(areaOfNeed) {
@@ -14,20 +15,20 @@ async function getStepOptionsByAreaOfNeed(areaOfNeed) {
   return steps
 }
 
-async function initializeStepInputAutocomplete() {
+async function initializeStepInputAutocomplete(inputElement) {
+  const { value, name, parentElement } = inputElement
   const areaOfNeed = document.querySelector(`#${AREA_OF_NEED_INPUT_ID}`).value
+  const row = name.split('step-description-')[1]
   const source = await getStepOptionsByAreaOfNeed(areaOfNeed)
-  const wrapperElement = document.querySelector(`.${STEP_AUTOCOMPLETE_WRAPPER_CLASS}`)
-  const inputElement = document.querySelector(`#${STEP_AUTOCOMPLETE_INPUT_ID}`)
-  const defaultValue = inputElement?.value ?? ''
   inputElement.remove()
 
   accessibleAutocomplete({
-    element: wrapperElement,
-    id: STEP_AUTOCOMPLETE_INPUT_ID,
-    name: 'step-input-autocomplete',
+    element: parentElement,
+    name,
+    id: `step-description-${row}-autocomplete`,
     source,
+    displayMenu: 'overlay',
     minLength: 3,
-    defaultValue,
+    defaultValue: value ?? '',
   })
 }
