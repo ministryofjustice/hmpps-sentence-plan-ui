@@ -138,7 +138,11 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
         return interpolateString(obj)
       }
 
-      if (typeof obj === 'object') {
+      if (Array.isArray(obj)) {
+        return obj.map((item) => interpolateObject(item))
+      }
+
+      if (typeof obj === 'object' && obj !== null) {
         return Object.entries(obj).reduce((acc: Record<string, any>, [key, value]) => {
           acc[key] = interpolateObject(value)
           return acc
