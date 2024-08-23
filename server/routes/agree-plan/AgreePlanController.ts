@@ -2,6 +2,9 @@ import { NextFunction, Request, Response } from 'express'
 import locale from './locale.json'
 import URLs from '../URLs'
 import PlanService from '../../services/sentence-plan/planService'
+import transformRequest from '../../middleware/transformMiddleware'
+import AgreePlanPostModel from './models/AgreePlanPostModel'
+import validateRequest from '../../middleware/validationMiddleware'
 
 export default class AgreePlanController {
   constructor(private readonly planService: PlanService) {}
@@ -33,12 +36,21 @@ export default class AgreePlanController {
     }
   }
 
-  get = this.render
-
-  post = (req: Request, res: Response, next: NextFunction) => {
+  private handleValidationErrors = (req: Request, res: Response, next: NextFunction) => {
     if (Object.keys(req.errors.body).length) {
       return this.render(req, res, next)
     }
-    return this.saveAndRedirect(req, res, next)
+    return next()
   }
+
+  get = this.render
+
+  post = [
+    transformRequest({
+      body: AgreePlanPostModel,
+    }),
+    validateRequest(),
+    this.handleValidationErrors,
+    this.saveAndRedirect,
+  ]
 }
