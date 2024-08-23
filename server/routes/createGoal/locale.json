@@ -1,6 +1,7 @@
 {
   "en": {
-    "title": "Create a goal with {POP_NAME}",
+    "title": "Create a goal",
+    "mainHeading": "Create a goal with {POP_NAME}",
     "section": "{AREA_OF_NEED} goal",
     "notes": {
       "title": "Notes from {POP_NAME}'s assessment",
@@ -18,7 +19,7 @@
     "dateSelection": {
       "label": "When should {POP_NAME} achieve this?",
       "hint": "Select one option",
-      "customRadioOptionText": "Something else",
+      "customRadioOptionText": "Set another date",
       "customOptionLabel": "Enter a custom date",
       "customOptionHint": "For example, 27 3 2007",
       "options": {

@@ -47,6 +47,7 @@ export default class CreateGoalController {
     const { errors } = req
 
     const areasOfNeed = this.referentialDataService.getAreasOfNeed()
+    const sortedAreasOfNeed = this.referentialDataService.getSortedAreasOfNeed()
     const popData = req.services.sessionService.getSubjectDetails()
 
     const dateOptions = this.getDateOptions()
@@ -57,6 +58,7 @@ export default class CreateGoalController {
       locale: locale.en,
       data: {
         areasOfNeed,
+        sortedAreasOfNeed,
         selectedAreaOfNeed,
         popData,
         dateOptions,
