@@ -30,19 +30,19 @@
         {% if data.status == 'success' %}
             {{ mojBanner({
                 type: 'success',
-                text: 'You added a goal to '+data.popData.possessiveName+'’s plan',
+                text: 'You added a goal to '+data.popData.givenName | possessive+' plan',
                 iconFallbackText: 'Success'
             }) }}
         {% elseif data.status == 'removed' %}
             {{ mojBanner({
                 type: 'success',
-                text: 'You removed a goal from '+data.popData.possessiveName+'’s plan',
+                text: 'You removed a goal from '+data.popData.givenName | possessive+' plan',
                 iconFallbackText: 'Success'
             }) }}
         {% elseif data.status == 'updated' %}
             {{ mojBanner({
             type: 'success',
-            text: 'You changed a goal in '+data.popData.possessiveName+'’s plan',
+            text: 'You changed a goal in '+data.popData.givenName | possessive+' plan ',
             iconFallbackText: 'Success'
             }) }}
         {% endif %}
