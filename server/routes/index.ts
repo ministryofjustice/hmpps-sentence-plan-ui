@@ -10,7 +10,7 @@ import setupReferenceDataRoutes from './ReferenceData/routes'
 import setupPlanSummaryRoutes from './plan-summary/routes'
 import setupAgreePlanRoutes from './agree-plan/routes'
 import URLs from './URLs'
-import setupAddStepsRoutes from "./add-steps/routes";
+import setupAddStepsRoutes from './add-steps/routes'
 
 export default function routes(services: Services): Router {
   const router = Router()
