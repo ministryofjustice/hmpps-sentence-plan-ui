@@ -8,7 +8,7 @@
       "title": "Add steps to {{ subject.givenName }} goal",
       "caption": "{{ goal.title }}"
     },
-    "detailHeading": "View information from John’s assessment",
+    "detailHeading": "View information from {{ subject.possessiveName }} assessment",
     "step": {
       "description": {
         "label": "What should they do to achieve the goal?",
