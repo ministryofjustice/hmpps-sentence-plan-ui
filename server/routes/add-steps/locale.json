@@ -32,7 +32,7 @@
     "removeStepLinkButton": "Remove",
     "errors": {
       "step-description": {
-        "isNotEmpty": "You need to enter a step"
+        "isNotEmpty": "Select or enter what they should do to achieve the goal."
       }
     }
   }
