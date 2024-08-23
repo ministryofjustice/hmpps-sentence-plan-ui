@@ -115,8 +115,47 @@
 
         <ol id="goal-list" class="goal-list govuk-list govuk-list--number">
             {% if data.type == 'future' %}
-                {% set goals = futureGoals %}
-                {% set goalType = 'future' %}
+                {% for goal in data.futureGoals %}
+                    {% set buttons = [] %}
+                    {% if not loop.first %}
+                        {% set buttons = buttons.concat({
+                            text: "Move goal up",
+                            href: "/goals/future/"+goal.uuid+"/up",
+                            classes: "govuk-button--secondary"
+                        }) %}
+                    {% endif %}
+
+                    {% if not loop.last %}
+                        {% set buttons = buttons.concat({
+                            text: "Move goal down",
+                            href: "/goals/future/"+goal.uuid+"/down",
+                            classes: "govuk-button--secondary"
+                        }) %}
+                    {% endif %}
+                    <li>
+                        {{ goalSummaryCard({
+                            goal: goal,
+                            buttons: buttons,
+                            actions: [
+                                {
+                                    href: "/edit-goal/" + goal.uuid + "?type=future",
+                                    text: "Change goal",
+                                    visuallyHiddenText: "Change goal"
+                                },
+                                {
+                                    href: "/goal/" + goal.uuid + '/add-steps',
+                                    text: "Add or change steps",
+                                    visuallyHiddenText: "Add or change steps"
+                                },
+                                {
+                                    href: "/remove-goal/" + goal.uuid + "?type=future",
+                                    text: "Remove goal",
+                                    visuallyHiddenText: "Remove goal"
+                                }
+                            ]
+                        }) }}
+                    </li>
+                {% endfor %}
             {% else %}
                 {% set goals = currentGoals %}
                 {% set goalType = 'current' %}
@@ -151,28 +190,31 @@
                     } %}
                 {% endif %}
 
-                <li>
-                    {{ goalSummaryCard({
-                        goal: goal,
-                        buttons: buttons,
-                        actions: [
-                            {
-                                href: "/edit-goal/" + goal.uuid,
-                                text: locale.goalSummaryCard.actions.changeGoal
-                            },
-                            {
-                                href: "/add-change-steps",
-                                text: locale.goalSummaryCard.actions.addOrChangeSteps
-                            },
-                            {
-                                href: "/remove-goal/" + goal.uuid + "?type=current",
-                                text: locale.goalSummaryCard.actions.removeGoal
-                            }
-                        ],
-                        errorMessage: errorMessage
-                    }) }}
-                </li>
-            {% endfor %}
+                    <li>
+                        {{ goalSummaryCard({
+                            goal: goal,
+                            buttons: buttons,
+                            actions: [
+                                {
+                                    href: "/edit-goal/" + goal.uuid,
+                                    text: "Change goal",
+                                    visuallyHiddenText: "Change goal"
+                                },
+                                {
+                                    href: "/goal/" + goal.uuid + '/add-steps',
+                                    text: "Add or change steps",
+                                    visuallyHiddenText: "Add or change steps"
+                                },
+                                {
+                                    href: "/remove-goal/" + goal.uuid + "?type=current",
+                                    text: "Remove goal",
+                                    visuallyHiddenText: "Remove goal"
+                                }
+                            ]
+                        }) }}
+                    </li>
+                {% endfor %}
+            {% endif %}
         </ol>
 
         {% include "../partials/back-to-top-link.njk" %}
