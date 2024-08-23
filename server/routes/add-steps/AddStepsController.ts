@@ -31,6 +31,7 @@ export default class AddStepsController {
       return res.render('pages/add-steps', {
         locale: locale.en,
         data: {
+          goal,
           popData,
           areaOfNeed: toKebabCase(goal.areaOfNeed.name),
           form: req.body,

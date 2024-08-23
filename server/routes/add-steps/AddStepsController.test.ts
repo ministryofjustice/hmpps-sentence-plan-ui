@@ -56,6 +56,7 @@ describe('AddStepsController', () => {
     data: {
       popData: handoverData.subject,
       areaOfNeed: toKebabCase(testGoal.areaOfNeed.name),
+      goal: testGoal,
       form: {
         steps: [
           {
@@ -231,8 +232,9 @@ describe('AddStepsController', () => {
       const expectedViewData = {
         locale: locale.en,
         data: {
-          popData: handoverData.subject,
-          areaOfNeed: toKebabCase(testGoal.areaOfNeed.name),
+          popData: viewData.data.popData,
+          areaOfNeed: viewData.data.areaOfNeed,
+          goal: viewData.data.goal,
           form: {
             action: 'save',
             'step-actor-1': 'Batman',

@@ -1,7 +1,13 @@
 {
   "en": {
-    "title": "Add steps to {POP_NAME}'s goal",
-    "section": "{AREA_OF_NEED} goals",
+    "page": {
+      "title": "Add steps to goal - {{ applicationName }}",
+      "errorTitle": "Error: Add steps to goal - {{ applicationName }}"
+    },
+    "mainHeading": {
+      "title": "Add steps to {{ subject.givenName }} goal",
+      "caption": "{{ goal.title }}"
+    },
     "detailHeading": "View information from John’s assessment",
     "step": {
       "description": {
@@ -12,6 +18,7 @@
         "label": "Who will do this step?",
         "hint": "Add one person or agency.",
         "options": [
+          "{{ subject.givenName }}",
           "Probation practitioner",
           "Programme staff",
           "Partnership agency",
@@ -22,7 +29,7 @@
     },
     "saveButtonText": "Save and continue",
     "addAnotherButton": "Add another step",
-    "removeStepButton": "Remove this step",
+    "removeStepLinkButton": "Remove",
     "errors": {
       "step-description": {
         "isNotEmpty": "You need to enter a step"

@@ -9,11 +9,19 @@
 {% from "moj/components/side-navigation/macro.njk" import mojSideNavigation %}
 {% from "../components/error-summary/error-summary.njk" import errorSummary %}
 
+{% set locale = interpolate(locale, {
+    applicationName: applicationName,
+    subject: merge(data.popData, {
+        possessiveName: data.popData.givenName | possessive
+    }),
+    goal: data.goal
+}) %}
+
 {% set pageTitle %}
     {% if errors %}
-        Error: {{ applicationName }} - Add steps to {{ data.popData.givenName }}'s goal
+        {{ locale.page.errorTitle }}
     {% else %}
-        {{ applicationName }} - Add steps to {{ data.popData.givenName }}'s goal
+        {{ locale.page.title }}
     {% endif %}
 {% endset -%}
 
@@ -21,7 +29,8 @@
 <a href="#" class="govuk-back-link">Back</a>
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-        <h1 class="govuk-heading-l">{{ locale.title | replace("{POP_NAME}", data.popData.givenName) }}</h1>
+        <span class="govuk-caption-l">{{ locale.mainHeading.caption }}</span>
+        <h1 class="govuk-heading-l">{{ locale.mainHeading.title }}</h1>
 
         {{ govukDetails({
             summaryText: locale.detailHeading,
@@ -51,11 +60,7 @@
                 {% for step in steps %}
                     <div class="govuk-summary-list__row">
                         <dt class="govuk-summary-list__value">
-                            {% set actorItemsList = [{
-                                value: data.popData.givenName,
-                                text: data.popData.givenName,
-                                selected: step.actor === data.popData.givenName
-                            }] %}
+                            {% set actorItemsList = [] %}
                             {% for actorOption in locale.step.actor.options %}
                                 {% set actorItemsList = actorItemsList.concat({
                                     value: actorOption,
@@ -108,7 +113,7 @@
                         <dt class="govuk-summary-list__value">
                             {% if not loop.first %}
                                 <button value="remove-step-{{ loop.index }}" type="submit" name="action" class="govuk-link govuk-!-margin-bottom-0" data-module="govuk-button">
-                                    Remove this step
+                                    {{ locale.removeStepLinkButton }}
                                 </button>
                             {% endif %}
                         </dt>
