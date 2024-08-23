@@ -3,33 +3,28 @@
     "title": "Add steps to {POP_NAME}'s goal",
     "section": "{AREA_OF_NEED} goals",
     "detailHeading": "View information from John’s assessment",
-
-    "stepsSection": {
-      "label": "What should they do to achieve the goal?",
-      "hint": "Add one step in each box.",
-      "customRadioOptionText": "Something else",
-      "customOptionLabel": "Enter a custom goal"
-    },
-    "whoWillDo": {
-      "label": "Who will do this step?",
-      "hint": "Add one person or agency.",
-      "customRadioOptionText": "Something else",
-      "customOptionLabel": "Enter who will do this step"
-    },
-    "whoWillDoInput": {
-      "probPrac": "Probation practitioner",
-      "progStaff": "Programme staff",
-      "partAgency": "Partnership agency",
-      "crsp": "Commissioned rehabilitative services (CRS) provider",
-      "someOneElse": "Someone else (include who in the step)"
+    "step": {
+      "description": {
+        "label": "What should they do to achieve the goal?",
+        "hint": "Search for a suggested step or enter your own. Add one step at a time."
+      },
+      "actor": {
+        "label": "Who will do this step?",
+        "hint": "Add one person or agency.",
+        "options": [
+          "Probation practitioner",
+          "Programme staff",
+          "Partnership agency",
+          "Commissioned rehabilitative services (CRS) provider",
+          "Someone else (include who in the step)"
+        ]
+      }
     },
     "saveButtonText": "Save and continue",
     "addAnotherButton": "Add another step",
+    "removeStepButton": "Remove this step",
     "errors": {
-      "step-selection-radio": {
-        "isNotEmpty": "You need to select a step"
-      },
-      "step-selection-custom": {
+      "step-description": {
         "isNotEmpty": "You need to enter a step"
       }
     }

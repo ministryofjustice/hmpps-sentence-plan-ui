@@ -1,64 +1,115 @@
 import { Request, Response, NextFunction } from 'express'
 import StepService from '../../services/sentence-plan/stepsService'
 import locale from './locale.json'
-import { FORMS } from '../../services/formStorageService'
-import { NewStep } from '../../@types/NewStepType'
+import GoalService from '../../services/sentence-plan/goalService'
 import URLs from '../URLs'
 import { toKebabCase } from '../../utils/utils'
+import validateRequest from '../../middleware/validationMiddleware'
+import AddStepsPostModel, { StepModel } from './models/AddStepsPostModel'
+import transformRequest from '../../middleware/transformMiddleware'
 
 export default class AddStepsController {
-  constructor(private readonly stepService: StepService) {}
+  constructor(
+    private readonly stepService: StepService,
+    private readonly goalService: GoalService,
+  ) {}
 
-  get = async (req: Request, res: Response, next: NextFunction) => {
+  private render = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { errors } = req
-      const goalResult: Record<string, any> = req.services.formStorageService.getFormData(FORMS.CREATE_GOAL)
-      const {
-        processed: { areaOfNeed, title: goal },
-      } = goalResult
       const popData = await req.services.sessionService.getSubjectDetails()
-      const stepResult: Record<string, any> = req.services.formStorageService.getFormData(FORMS.CREATE_STEPS)
-      const addedSteps = stepResult ? stepResult.processed : []
+      const goal = await this.goalService.getGoal(req.params.uuid)
+      const steps = await this.stepService.getSteps(req.params.uuid)
 
-      res.render('pages/create-step', {
+      if (!req.body.steps || req.body.steps.length === 0) {
+        req.body.steps = steps.map(step => ({
+          actor: step.actors[0].actor,
+          description: step.description,
+        }))
+      }
+
+      return res.render('pages/add-steps', {
         locale: locale.en,
         data: {
           popData,
-          areaOfNeed: toKebabCase(areaOfNeed),
-          goal,
+          areaOfNeed: toKebabCase(goal.areaOfNeed.name),
           form: req.body,
-          addedSteps,
         },
         errors,
       })
     } catch (e) {
-      next(e)
+      return next(e)
     }
   }
 
-  post = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      // const {
-      //   raw: { uuid: currentGoal },
-      // }: Record<string, any> = req.services.formStorageService.getFormData('currentGoal')
-      const { actor, action } = req.body
-      const stepName = req.body['step-input-autocomplete']
-      const newStep = { description: stepName, status: '', actor } as NewStep
-      if (action === 'addAnother') {
-        const result: Record<string, any> = req.services.formStorageService.getFormData(FORMS.CREATE_STEPS)
-        const addedSteps = result ? result.processed : []
-        addedSteps.push(newStep)
-        req.services.formStorageService.saveFormData(FORMS.CREATE_STEPS, {
-          processed: addedSteps,
-          raw: req.body,
-        })
-        res.redirect(`${URLs.ADD_STEPS}`)
-      } else {
-        // await this.stepService.saveSteps([payload], currentGoal)
-        res.redirect(`${URLs.PLAN_SUMMARY}?status=success`)
-      }
-    } catch (e) {
-      next(e)
-    }
+  private saveAndRedirect = async (req: Request, res: Response, next: NextFunction) => {
+    const goalUuid = req.params.uuid
+    await this.stepService.saveSteps(
+      req.body.steps.map((step: StepModel) => ({
+        description: step.description,
+        actor: [
+          {
+            actor: step.actor,
+            actorOptionId: 0,
+          },
+        ],
+        status: 'in-progress',
+      })),
+      goalUuid,
+    )
+
+    return res.redirect(`${URLs.PLAN_SUMMARY}?status=success`)
   }
+
+  private handleRemoveStep = (req: Request, res: Response, next: NextFunction) => {
+    if (req.body.action.startsWith('remove-step-')) {
+      const index = parseInt(req.body.action.split('remove-step-')[1], 10) - 1
+
+      if (!Number.isNaN(index) && index >= 0 && index < req.body.steps.length) {
+        delete req.body.action
+        delete req.body[`step-actor-${index + 1}`]
+        delete req.body[`step-description-${index + 1}`]
+        req.body.steps.splice(index, 1)
+
+        return this.render(req, res, next)
+      }
+
+      return next(new Error('Invalid array'))
+    }
+
+    return next()
+  }
+
+  private handleAddStep = (req: Request, res: Response, next: NextFunction) => {
+    if (req.body.action === 'add-step') {
+      delete req.body.action
+      req.body.steps.push({
+        actor: req.services.sessionService.getSubjectDetails().givenName,
+        description: '',
+      })
+
+      return this.render(req, res, next)
+    }
+    return next()
+  }
+
+  private handleValidationErrors = (req: Request, res: Response, next: NextFunction) => {
+    if (Object.keys(req.errors?.body).length) {
+      return this.render(req, res, next)
+    }
+    return next()
+  }
+
+  post = [
+    transformRequest({
+      body: AddStepsPostModel,
+    }),
+    this.handleRemoveStep,
+    this.handleAddStep,
+    validateRequest(),
+    this.handleValidationErrors,
+    this.saveAndRedirect,
+  ]
+
+  get = this.render
 }
