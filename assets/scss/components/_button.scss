@@ -1,0 +1,12 @@
+button {
+  &.govuk-link {
+    @include govuk-link-common;
+    @include govuk-font-size(19, $line-height: 1.6, $important: false);
+    background: none;
+    color: $govuk-link-colour;
+    border: none;
+    padding: govuk-spacing(1);
+    cursor: pointer;
+    outline: inherit;
+  }
+}
