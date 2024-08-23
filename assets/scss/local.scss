@@ -3,3 +3,24 @@
 }
 
 .capital:first-letter {text-transform: uppercase}
+
+
+.govuk-visually-hidden {
+  &--mobile {
+    @include govuk-media-query($until: tablet) {
+      @include govuk-visually-hidden($important: true);
+    }
+  }
+
+  &--tablet {
+    @include govuk-media-query($from: mobile, $until: desktop) {
+      @include govuk-visually-hidden($important: true);
+    }
+  }
+
+  &--desktop {
+    @include govuk-media-query($from: tablet) {
+      @include govuk-visually-hidden($important: true);
+    }
+  }
+}
