@@ -141,7 +141,7 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
       }
 
       if (Array.isArray(obj)) {
-        return obj.map((item) => interpolateObject(item))
+        return obj.map(item => interpolateObject(item))
       }
 
       if (typeof obj === 'object' && obj !== null) {
