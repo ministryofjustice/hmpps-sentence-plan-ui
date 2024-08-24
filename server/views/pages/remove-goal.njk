@@ -2,7 +2,25 @@
 {% from "../components/summary-card/goal-summary-card.njk" import goalSummaryCard %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
-{% set pageTitle = applicationName + " - Remove Goal" %}
+{% set locale = interpolate(locale, {
+    applicationName: applicationName,
+    subject: merge(data.popData, {
+        possessiveName: data.popData.givenName | possessive
+    }),
+    goalCounts: {
+        currentGoals: data.currentGoals.length,
+        futureGoals: data.futureGoals.length
+    }
+}) %}
+
+{% set pageTitle %}
+    {% if errors %}
+        {{ locale.page.errorTitle }}
+    {% else %}
+        {{ locale.page.title }}
+    {% endif %}
+{% endset -%}
+
 {% set mainClasses = "app-container govuk-body" %}
 
 {% block content %}
@@ -10,7 +28,7 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
         <a href="#" class="govuk-back-link">Back</a>
-        <h1 class="govuk-heading-l">Are you sure you want to remove this goal?</h1>
+        <h1 class="govuk-heading-l">{{ locale.mainHeading.title }}</h1>
 
         {{ goalSummaryCard({
             goal: data.goal
