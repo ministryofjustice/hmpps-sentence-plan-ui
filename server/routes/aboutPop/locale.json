@@ -1,6 +1,11 @@
 {
   "en": {
-    "title": "About {POP_NAME}",
+    "page": {
+      "title": "About {{ subject.givenName }} - {{ applicationName }}"
+    },
+    "mainHeading": {
+      "title": "About {{ subject.givenName }}"
+    },
     "goalsToAchieve": {
       "title": "Goals to achieve",
       "areaOfNeedHeading": "Area of need",

@@ -49,7 +49,9 @@ describe(`GET ${URLs.ABOUT_POP}`, () => {
       .get(URLs.ABOUT_POP)
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain(locale.en.title.replace('{POP_NAME}', testPopData.givenName))
+        expect(res.text).toContain(
+          locale.en.mainHeading.title.replace('{{ subject.givenName }}', testPopData.givenName),
+        )
       })
   })
 })
