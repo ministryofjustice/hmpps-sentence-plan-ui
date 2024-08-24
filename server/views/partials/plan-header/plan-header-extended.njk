@@ -4,7 +4,7 @@
 {% block extension %}
     <div class="plan-header__extended">
         <div class="plan-header__extended__title">
-            <h1 class="govuk-heading-l govuk-!-margin-bottom-0">{{ possessiveName }} plan</h1>
+            <h1 class="govuk-heading-l govuk-!-margin-bottom-0">{{ data.popData.givenName | possessive }} plan</h1>
         </div>
 
         {{ mojButtonMenu({
