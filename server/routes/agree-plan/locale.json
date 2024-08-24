@@ -1,15 +1,23 @@
 {
   "en": {
-    "title": "Does {POP_NAME} agree to this plan?",
-    "subtitle": "{POP_NAME} must answer this question, or you must record why {POP_NAME} could not.",
+    "page": {
+      "title": "Do they agree to this plan? - {{ applicationName }}",
+      "errorTitle": "Error: Do they agree to this plan? - {{ applicationName }}"
+    },
+    "mainHeading": {
+      "title": "Does {{ subject.givenName }} agree to this plan?",
+      "hint": "{{ subject.givenName }} must answer this question, or you must record why {{ subject.givenName }} could not."
+    },
     "agreePlanOptions": {
-      "yes": "Yes, {POP_NAME} agrees",
-      "no": "No, {POP_NAME} does not agree",
-      "couldNotAnswer": "{POP_NAME} could not answer this question",
+      "yes": "Yes, {{ subject.givenName }} agrees",
+      "no": "No, {{ subject.givenName }} does not agree",
+      "couldNotAnswer": "{{ subject.givenName }} could not answer this question",
       "enterDetails": "Enter details"
     },
-    "notes": "Add any notes (optional)",
-    "agreePlanButton": "Agree plan with {POP_NAME}",
+    "notes": {
+      "label": "Add any notes (optional)"
+    },
+    "agreePlanButton": "Agree plan with {{ subject.givenName }}",
     "errors": {
       "agree-plan-radio": {
         "isNotEmpty": "Select if they agree to the plan"
