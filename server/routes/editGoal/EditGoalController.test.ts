@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
+import { plainToInstance } from 'class-transformer'
 import { AreaOfNeed } from '../../testutils/data/referenceData'
 import handoverData from '../../testutils/data/handoverData'
 import ReferentialDataService from '../../services/sentence-plan/referentialDataService'
@@ -8,14 +9,15 @@ import mockReq from '../../testutils/preMadeMocks/mockReq'
 import mockRes from '../../testutils/preMadeMocks/mockRes'
 import { testGoal } from '../../testutils/data/goalData'
 import locale from './locale.json'
-import validate from '../../middleware/validationMiddleware'
+import { getValidationErrors } from '../../middleware/validationMiddleware'
 import EditGoalPostModel from './models/EditGoalPostModel'
 import URLs from '../URLs'
 import { NewGoal } from '../../@types/NewGoalType'
+import runMiddlewareChain from '../../testutils/runMiddlewareChain'
 
 jest.mock('../../services/sentence-plan/referentialDataService', () => {
   return jest.fn().mockImplementation(() => ({
-    getAreasOfNeed: jest.fn().mockReturnValue(AreaOfNeed),
+    getSortedAreasOfNeed: jest.fn().mockReturnValue(AreaOfNeed),
   }))
 })
 
@@ -41,7 +43,7 @@ describe('EditGoalController', () => {
   let next: NextFunction
   const viewData = {
     data: {
-      areasOfNeed: AreaOfNeed,
+      sortedAreasOfNeed: AreaOfNeed,
       form: {},
       popData: handoverData.subject,
       selectedAreaOfNeed: AreaOfNeed.find(x => x.name === testGoal.areaOfNeed.name),
@@ -109,19 +111,20 @@ describe('EditGoalController', () => {
 
       describe('goal-input-autocomplete', () => {
         it('should add error if not provided', () => {
-          validate({ body: EditGoalPostModel })(req, null, jest.fn)
+          const body = plainToInstance(EditGoalPostModel, req.body)
+          const errors = getValidationErrors(body)
 
-          expect(req.errors.body).toMatchObject({
+          expect(errors).toMatchObject({
             'goal-input-autocomplete': { isNotEmpty: true },
           })
         })
 
         it('should not add error if provided', () => {
           req.body['goal-input-autocomplete'] = 'Title of a goal'
+          const body = plainToInstance(EditGoalPostModel, req.body)
+          const errors = getValidationErrors(body)
 
-          validate({ body: EditGoalPostModel })(req, null, jest.fn)
-
-          expect(req.errors.body).not.toMatchObject({
+          expect(errors).not.toMatchObject({
             'goal-input-autocomplete': { isNotEmpty: true },
           })
         })
@@ -129,19 +132,20 @@ describe('EditGoalController', () => {
 
       describe('other-area-of-need-radio', () => {
         it('should add error if not provided', () => {
-          validate({ body: EditGoalPostModel })(req, null, jest.fn)
+          const body = plainToInstance(EditGoalPostModel, req.body)
+          const errors = getValidationErrors(body)
 
-          expect(req.errors.body).toMatchObject({
+          expect(errors).toMatchObject({
             'other-area-of-need-radio': { isNotEmpty: true },
           })
         })
 
         it('should not add error if provided', () => {
           req.body['other-area-of-need-radio'] = 'yes'
+          const body = plainToInstance(EditGoalPostModel, req.body)
+          const errors = getValidationErrors(body)
 
-          validate({ body: EditGoalPostModel })(req, null, jest.fn)
-
-          expect(req.errors.body).not.toMatchObject({
+          expect(errors).not.toMatchObject({
             'other-area-of-need-radio': { isNotEmpty: true },
           })
         })
@@ -150,10 +154,10 @@ describe('EditGoalController', () => {
       describe('other-area-of-need', () => {
         it('should add error if "other-area-of-need-radio" is "yes" and "other-area-of-need" is not provided', () => {
           req.body['other-area-of-need-radio'] = 'yes'
+          const body = plainToInstance(EditGoalPostModel, req.body)
+          const errors = getValidationErrors(body)
 
-          validate({ body: EditGoalPostModel })(req, null, jest.fn)
-
-          expect(req.errors.body).toMatchObject({
+          expect(errors).toMatchObject({
             'other-area-of-need': { isNotEmpty: true },
           })
         })
@@ -161,20 +165,20 @@ describe('EditGoalController', () => {
         it('should not add error if "other-area-of-need-radio" is "yes" and "other-area-of-need" is provided', () => {
           req.body['other-area-of-need-radio'] = 'yes'
           req.body['other-area-of-need'] = 'Accommodation'
+          const body = plainToInstance(EditGoalPostModel, req.body)
+          const errors = getValidationErrors(body)
 
-          validate({ body: EditGoalPostModel })(req, null, jest.fn)
-
-          expect(req.errors.body).not.toMatchObject({
+          expect(errors).not.toMatchObject({
             'other-area-of-need': { isNotEmpty: true },
           })
         })
 
         it('should not add error if "other-area-of-need-radio" is not "yes"', () => {
           req.body['other-area-of-need-radio'] = 'no'
+          const body = plainToInstance(EditGoalPostModel, req.body)
+          const errors = getValidationErrors(body)
 
-          validate({ body: EditGoalPostModel })(req, null, jest.fn)
-
-          expect(req.errors.body).not.toMatchObject({
+          expect(errors).not.toMatchObject({
             'other-area-of-need': { isNotEmpty: true },
           })
         })
@@ -182,19 +186,20 @@ describe('EditGoalController', () => {
 
       describe('start-working-goal-radio', () => {
         it('should add error if "start-working-goal-radio" is not provided', () => {
-          validate({ body: EditGoalPostModel })(req, null, jest.fn)
+          const body = plainToInstance(EditGoalPostModel, req.body)
+          const errors = getValidationErrors(body)
 
-          expect(req.errors.body).toMatchObject({
+          expect(errors).toMatchObject({
             'start-working-goal-radio': { isNotEmpty: true },
           })
         })
 
         it('should not add error if "start-working-goal-radio" is provided', () => {
           req.body['start-working-goal-radio'] = 'yes'
+          const body = plainToInstance(EditGoalPostModel, req.body)
+          const errors = getValidationErrors(body)
 
-          validate({ body: EditGoalPostModel })(req, null, jest.fn)
-
-          expect(req.errors.body).not.toMatchObject({
+          expect(errors).not.toMatchObject({
             'start-working-goal-radio': { isNotEmpty: true },
           })
         })
@@ -203,10 +208,10 @@ describe('EditGoalController', () => {
       describe('date-selection', () => {
         it('should add error if "date-selection-radio" is not provided', () => {
           req.body['start-working-goal-radio'] = 'yes'
+          const body = plainToInstance(EditGoalPostModel, req.body)
+          const errors = getValidationErrors(body)
 
-          validate({ body: EditGoalPostModel })(req, null, jest.fn)
-
-          expect(req.errors.body).toMatchObject({
+          expect(errors).toMatchObject({
             'date-selection-radio': { isNotEmpty: true },
           })
         })
@@ -214,10 +219,10 @@ describe('EditGoalController', () => {
         it('should not add error if "date-selection-radio" is provided', () => {
           req.body['start-working-goal-radio'] = 'yes'
           req.body['date-selection-radio'] = 'custom'
+          const body = plainToInstance(EditGoalPostModel, req.body)
+          const errors = getValidationErrors(body)
 
-          validate({ body: EditGoalPostModel })(req, null, jest.fn)
-
-          expect(req.errors.body).not.toMatchObject({
+          expect(errors).not.toMatchObject({
             'date-selection-radio': { isNotEmpty: true },
           })
         })
@@ -225,10 +230,10 @@ describe('EditGoalController', () => {
         it('should add error if "date-selection-radio" is "custom", and "date-selection-custom" is not provided', () => {
           req.body['start-working-goal-radio'] = 'yes'
           req.body['date-selection-radio'] = 'custom'
+          const body = plainToInstance(EditGoalPostModel, req.body)
+          const errors = getValidationErrors(body)
 
-          validate({ body: EditGoalPostModel })(req, null, jest.fn)
-
-          expect(req.errors.body).toMatchObject({
+          expect(errors).toMatchObject({
             'date-selection-custom': { isNotEmpty: true },
           })
         })
@@ -237,10 +242,10 @@ describe('EditGoalController', () => {
           req.body['start-working-goal-radio'] = 'yes'
           req.body['date-selection-radio'] = 'custom'
           req.body['date-selection-custom'] = new Date()
+          const body = plainToInstance(EditGoalPostModel, req.body)
+          const errors = getValidationErrors(body)
 
-          validate({ body: EditGoalPostModel })(req, null, jest.fn)
-
-          expect(req.errors.body).not.toMatchObject({
+          expect(errors).not.toMatchObject({
             'date-selection-custom': { isNotEmpty: true },
           })
         })
@@ -265,12 +270,11 @@ describe('EditGoalController', () => {
         body: {},
       }
       req.params.uuid = testGoal.uuid
-      req.query.type = 'some-type'
 
-      await controller.post(req as Request, res as Response, next)
+      await runMiddlewareChain(controller.post, req, res, next)
 
       expect(mockGoalService.updateGoal).toHaveBeenCalledWith(updatedGoal, testGoal.uuid)
-      expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_SUMMARY}?status=updated&type=some-type`)
+      expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_SUMMARY}?status=updated&type=current`)
       expect(res.render).not.toHaveBeenCalled()
       expect(next).not.toHaveBeenCalled()
     })
@@ -287,7 +291,7 @@ describe('EditGoalController', () => {
         errors,
       }
 
-      await controller.post(req as Request, res as Response, next)
+      await runMiddlewareChain(controller.post, req, res, next)
 
       expect(res.render).toHaveBeenCalledWith('pages/edit-goal', expectedViewData)
     })
@@ -311,7 +315,7 @@ describe('EditGoalController', () => {
       }
       const error = new Error('This is a test error')
       mockGoalService.updateGoal = jest.fn().mockRejectedValue(error)
-      await controller.post(req as Request, res as Response, next)
+      await runMiddlewareChain(controller.post, req, res, next)
 
       expect(next).toHaveBeenCalledWith(error)
     })

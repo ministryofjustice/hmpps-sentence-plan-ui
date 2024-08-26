@@ -10,9 +10,9 @@
 
 {% set pageTitle %}
     {% if errors %}
-        Error: {{ applicationName }} - Create a goal with {{ data.popData.givenName }}
+        Error: {{ locale.title }} - {{ applicationName }}
     {% else %}
-       {{ applicationName }} - Create a goal with {{ data.popData.givenName }}
+       {{ locale.title }} - {{ applicationName }}
     {% endif %}
 {% endset -%}
 
@@ -31,7 +31,7 @@
 {% endfor %}
 
 {% set relatedAreaOfNeedCheckboxes = [] %}
-{% for areaOfNeed in data.areasOfNeed %}
+{% for areaOfNeed in data.sortedAreasOfNeed %}
     {% if areaOfNeed.name != data.selectedAreaOfNeed.name %}
         {% set isChecked = data.form['related-area-of-need'] and (areaOfNeed.name in data.form['related-area-of-need']) %}
         {% set relatedAreaOfNeedCheckboxes = relatedAreaOfNeedCheckboxes.concat({
@@ -138,7 +138,7 @@
             }) }}
 
             <span class="govuk-caption-l">{{ data.displayAreaOfNeed }}</span>
-            <h1 class="govuk-heading-l">{{ locale.title | replace("{POP_NAME}", data.popData.givenName) }}</h1>
+            <h1 class="govuk-heading-l">{{ locale.mainHeading | replace("{POP_NAME}", data.popData.givenName) }}</h1>
 
             <form id="create-goal-form" method="POST">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}">

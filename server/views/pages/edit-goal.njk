@@ -10,9 +10,9 @@
 
 {% set pageTitle %}
     {% if errors %}
-        Error: {{ applicationName }} - Change a goal with {{ data.popData.givenName }}
+        Error: {{ locale.title }} - {{ applicationName }}
     {% else %}
-       {{ applicationName }} - Change a goal with {{ data.popData.givenName }}
+        {{ locale.title }} - {{ applicationName }}
     {% endif %}
 {% endset -%}
 
@@ -32,7 +32,7 @@
 
 {# Setup arrays and custom HTML #}
 {% set additionalAreaOfNeedCheckboxes = [] %}
-{% for areaOfNeed in data.areasOfNeed %}
+{% for areaOfNeed in data.sortedAreasOfNeed %}
     {% if areaOfNeed.name != data.areaOfNeed %}
         {% set isChecked = data.form['other-area-of-need'] and (areaOfNeed.name in data.form['other-area-of-need']) %}
         {% set additionalAreaOfNeedCheckboxes = additionalAreaOfNeedCheckboxes.concat({
@@ -133,7 +133,7 @@
                 locale: locale
             }) }}
             <span class="govuk-caption-l">{{ data.areaOfNeed }}</span>
-            <h1 class="govuk-heading-l">{{ locale.title }}</h1>
+            <h1 class="govuk-heading-l">{{ locale.mainHeading }}</h1>
 
             <form id="edit-goal-form" method="POST">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}">
