@@ -2,10 +2,10 @@
 import path from 'path'
 import nunjucks from 'nunjucks'
 import express from 'express'
-import { initialiseName } from './utils'
 import { ApplicationInfo } from '../applicationInfo'
 import config from '../config'
 import { initialiseName, mergeDeep } from './utils'
+import commonLocale from './commonLocale.json'
 
 const production = process.env.NODE_ENV === 'production'
 
@@ -156,5 +156,31 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
     }
 
     return interpolateObject(locale)
+  })
+
+  app.use((req, res, next) => {
+    res.render = new Proxy(res.render, {
+      apply(target, thisArg, [view, options, callback]) {
+        const popData = req.services.sessionService.getSubjectDetails()
+
+        return target.apply(thisArg, [
+          view,
+          mergeDeep(options, {
+            locale: {
+              common: commonLocale.en,
+            },
+            data: {
+              popData: {
+                ...popData,
+                possessiveName: popData.givenName.endsWith('s') ? `${popData.givenName}'` : `${popData.givenName}'s`,
+              },
+            },
+          }),
+          callback,
+        ])
+      },
+    })
+
+    next()
   })
 }
