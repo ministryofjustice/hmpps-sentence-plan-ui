@@ -1,0 +1,39 @@
+{
+  "en": {
+    "header": {
+      "serviceName": "{{ applicationName }}",
+      "managedInOasysText": "OASys User",
+      "signOutLink": "Sign out"
+    },
+    "primaryNavigation": {
+      "planLinkText": "{{ subject.possessiveName }} plan",
+      "aboutPopText": "About {{ subject.givenName }}"
+    },
+    "planHeader": {
+      "mini": {
+        "title": "{{ subject.givenName }} {{ subject.familyName }}",
+        "crnLabel": "CRN:",
+        "pncLabel": "PNC:",
+        "dateOfBirthLabel": "Date of birth:"
+      },
+      "extended": {
+        "title": "{{ subject.possessiveName }} plan",
+        "createGoalButton": "Create goal",
+        "agreePlanButton": "Agree plan"
+      }
+    },
+    "backLink": {
+      "text": "Back"
+    },
+    "radio": {
+      "divider": "or"
+    },
+    "backToTop": {
+      "text": "Back to top"
+    },
+    "buttons": {},
+    "links": {},
+    "footer": {}
+  },
+  "cy": {}
+}
