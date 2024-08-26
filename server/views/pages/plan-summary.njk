@@ -6,10 +6,6 @@
 {% from "../components/summary-card/goal-summary-card.njk" import goalSummaryCard %}
 
 {% set locale = interpolate(locale, {
-    applicationName: applicationName,
-    subject: merge(data.popData, {
-        possessiveName: data.popData.givenName | possessive
-    }),
     goalCounts: {
         currentGoals: data.currentGoals.length,
         futureGoals: data.futureGoals.length
