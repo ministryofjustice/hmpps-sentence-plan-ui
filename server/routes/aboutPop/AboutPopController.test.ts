@@ -2,7 +2,6 @@ import ReferentialDataService from '../../services/sentence-plan/referentialData
 import InfoService from '../../services/sentence-plan/infoService'
 import mockRes from '../../testutils/preMadeMocks/mockRes'
 import mockReq from '../../testutils/preMadeMocks/mockReq'
-import testPopData from '../../testutils/data/popData'
 import AboutPopController from './AboutPopController'
 import locale from './locale.json'
 import { parsedRoshData } from '../../testutils/data/roshData'
@@ -18,7 +17,6 @@ jest.mock('../../services/sentence-plan/referentialDataService', () => {
 })
 jest.mock('../../services/sentence-plan/infoService', () => {
   return jest.fn().mockImplementation(() => ({
-    getPopData: jest.fn().mockResolvedValue(testPopData),
     getRoSHData: jest.fn().mockResolvedValue(parsedRoshData),
   }))
 })
@@ -51,7 +49,6 @@ describe('AboutPopController', () => {
         locale: locale.en,
         data: {
           roshData: parsedRoshData,
-          popData: testPopData,
           referenceData: refData,
         },
         errors: {},

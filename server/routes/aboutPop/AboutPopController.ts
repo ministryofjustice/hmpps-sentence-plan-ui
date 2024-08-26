@@ -21,7 +21,6 @@ export default class AboutPopController {
         locale: locale.en,
         data: {
           referenceData,
-          popData,
           roshData,
         },
         errors,

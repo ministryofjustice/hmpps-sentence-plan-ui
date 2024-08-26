@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
 import { plainToInstance } from 'class-transformer'
-import handoverData from '../../testutils/data/handoverData'
 import testPlan from '../../testutils/data/planData'
 import AgreePlanController from './AgreePlanController'
 import PlanService from '../../services/sentence-plan/planService'
@@ -13,7 +12,6 @@ import runMiddlewareChain from '../../testutils/runMiddlewareChain'
 
 jest.mock('../../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
-    getSubjectDetails: jest.fn().mockReturnValue(handoverData.subject),
     getPlanUUID: jest.fn().mockReturnValue('9506fba0-d2c7-4978-b3fc-aefd86821844'),
   }))
 })
@@ -33,7 +31,6 @@ describe('AgreePlanController', () => {
   const viewData = {
     data: {
       planUuid: '9506fba0-d2c7-4978-b3fc-aefd86821844',
-      popData: handoverData.subject,
       form: {},
     },
     errors: {},

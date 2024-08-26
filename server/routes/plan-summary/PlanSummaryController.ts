@@ -16,7 +16,6 @@ export default class PlanSummaryController {
 
     try {
       const planUuid = req.services.sessionService.getPlanUUID()
-      const popData = req.services.sessionService.getSubjectDetails()
       const goals = await this.goalService.getGoals(planUuid)
       const currentGoals = goals.now
       const futureGoals = goals.future
@@ -26,7 +25,6 @@ export default class PlanSummaryController {
         locale: locale.en,
         data: {
           planUuid,
-          popData,
           currentGoals,
           futureGoals,
           type,

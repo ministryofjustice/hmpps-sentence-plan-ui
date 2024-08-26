@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from 'express'
-import handoverData from '../../testutils/data/handoverData'
 import RemoveGoalController from './RemoveGoalController'
 import GoalService from '../../services/sentence-plan/goalService'
 import mockReq from '../../testutils/preMadeMocks/mockReq'
@@ -7,12 +6,6 @@ import mockRes from '../../testutils/preMadeMocks/mockRes'
 import { testGoal } from '../../testutils/data/goalData'
 import locale from './locale.json'
 import URLs from '../URLs'
-
-jest.mock('../../services/sessionService', () => {
-  return jest.fn().mockImplementation(() => ({
-    getSubjectDetails: jest.fn().mockReturnValue(handoverData.subject),
-  }))
-})
 
 jest.mock('../../services/sentence-plan/goalService', () => {
   return jest.fn().mockImplementation(() => ({
@@ -30,7 +23,6 @@ describe('RemoveGoalController', () => {
   let next: NextFunction
   const viewData = {
     data: {
-      popData: handoverData.subject,
       type: 'some-type',
       goal: testGoal,
     },

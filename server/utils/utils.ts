@@ -97,7 +97,7 @@ export function mergeDeep(...objects: Record<string, any>[]): Record<string, any
 
   return objects.reduce((prev, obj) => {
     if (!isObject(obj)) {
-      return prev;
+      return prev
     }
 
     const newObj: Record<string, any> = { ...prev }
