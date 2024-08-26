@@ -91,3 +91,30 @@ export function getAchieveDateOptions(date: Date, dateOptionsInMonths = [3, 6, 1
     return achieveDate
   })
 }
+
+export function mergeDeep(...objects: Record<string, any>[]): Record<string, any> {
+  const isObject = (obj: any) => obj && typeof obj === 'object'
+
+  return objects.reduce((prev, obj) => {
+    if (!isObject(obj)) {
+      return prev;
+    }
+
+    const newObj: Record<string, any> = { ...prev }
+
+    Object.keys(obj).forEach(key => {
+      const pVal = prev[key]
+      const oVal = obj[key]
+
+      if (Array.isArray(pVal) && Array.isArray(oVal)) {
+        newObj[key] = pVal.concat(...oVal)
+      } else if (isObject(pVal) && isObject(oVal)) {
+        newObj[key] = mergeDeep(pVal, oVal)
+      } else {
+        newObj[key] = oVal
+      }
+    })
+
+    return newObj
+  }, {})
+}
