@@ -1,8 +1,12 @@
 import { NextFunction, Request, Response } from 'express'
+import { plainToInstance } from 'class-transformer'
 import locale from './locale.json'
 import URLs from '../URLs'
 import PlanService from '../../services/sentence-plan/planService'
 import validateRequest, { getValidationErrors } from '../../middleware/validationMiddleware'
+import Plan from '../shared-models/plan.model'
+import transformRequest from '../../middleware/transformMiddleware'
+import AgreePlanPost from './models/AgreePlanPost.model'
 
 export default class AgreePlanController {
   constructor(private readonly planService: PlanService) {}
@@ -34,13 +38,44 @@ export default class AgreePlanController {
     }
   }
 
-  get = this.render
+  private validatePlanForAgreement = async (req, res, next) => {
+    try {
+      req.errors = req.errors ?? {}
 
-  post = (req: Request, res: Response, next: NextFunction) => {
-    if (req.body.action === 'agree') {
-      return this.agreePlanAndRedirect(req, res, next)
+      const planUuid = req.services.sessionService.getPlanUUID()
+      const plan = await this.planService.getPlanByUuid(planUuid)
+
+      req.errors.domain = getValidationErrors(plainToInstance(Plan, plan))
+
+      return next()
+    } catch (e) {
+      return next(e)
+    }
+  }
+
+  private handleValidationErrors = (req: Request, res: Response, next: NextFunction) => {
+    const hasErrors = Object.values(req.errors).some(errorCategory => Object.keys(errorCategory).length > 0)
+
+    if (hasErrors) {
+      if (req.method === 'POST') {
+        return this.render(req, res, next)
+      }
+
+      return res.redirect(URLs.PLAN_SUMMARY)
     }
 
-    return res.redirect(URLs.PLAN_SUMMARY)
+    return next()
   }
+
+  get = [this.validatePlanForAgreement, this.handleValidationErrors, this.render]
+
+  post = [
+    transformRequest({
+      body: AgreePlanPost,
+    }),
+    validateRequest(),
+    this.validatePlanForAgreement,
+    this.handleValidationErrors,
+    this.agreePlanAndRedirect,
+  ]
 }

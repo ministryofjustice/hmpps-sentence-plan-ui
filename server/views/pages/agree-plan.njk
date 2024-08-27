@@ -4,11 +4,18 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "../components/error-summary/error-summary.njk" import errorSummary %}
 
+{% set locale = interpolate(locale, {
+    applicationName: applicationName,
+    subject: merge(data.popData, {
+        possessiveName: data.popData.givenName | possessive
+    })
+}) %}
+
 {% set pageTitle %}
     {% if errors %}
-        Error: {{ locale.title }} - {{ applicationName }}
+        {{ locale.page.errorTitle }}
     {% else %}
-        {{ locale.title }} - {{ applicationName }}
+        {{ locale.page.title }}
     {% endif %}
 {% endset -%}
 
@@ -22,9 +29,6 @@
                 errors: errors,
                 locale: locale
             }) }}
-
-            <h1 class="govuk-heading-l">{{ locale.mainHeading | replace("{POP_NAME}", data.popData.givenName) }}</h1>
-            <p class="govuk-secondary-text">{{ locale.subtitle | replace("{POP_NAME}", data.popData.givenName) }}</p>
 
             <form id="agree-plan-form" method="POST">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}">
@@ -57,6 +61,16 @@
                 {{ govukRadios({
                     name: "agree-plan-radio",
                     id: "agree-plan-radio",
+                    fieldset: {
+                        legend: {
+                            text: locale.mainHeading.title,
+                            isPageHeading: true,
+                            classes: "govuk-fieldset__legend--l"
+                        }
+                    },
+                    hint: {
+                        text: locale.mainHeading.hint
+                    },
                     errorMessage: getFormattedError(errors, locale, 'agree-plan-radio'),
                     items: [
                         {
