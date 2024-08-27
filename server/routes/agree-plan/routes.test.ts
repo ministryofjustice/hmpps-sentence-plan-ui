@@ -5,33 +5,34 @@ import locale from './locale.json'
 import URLs from '../URLs'
 import testPopData from '../../testutils/data/popData'
 import ReferentialDataService from '../../services/sentence-plan/referentialDataService'
-import InfoService from '../../services/sentence-plan/infoService'
-import { roSHData } from '../../testutils/data/roshData'
-import handoverData from '../../testutils/data/handoverData'
+import testPlan from '../../testutils/data/planData'
+import testHandoverContext from '../../testutils/data/handoverData'
+import PlanService from '../../services/sentence-plan/planService'
 
-jest.mock('../../services/sentence-plan/infoService', () => {
+jest.mock('../../services/sentence-plan/planService', () => {
   return jest.fn().mockImplementation(() => ({
-    getPopData: jest.fn().mockResolvedValue(testPopData),
-    getRoSHData: jest.fn().mockResolvedValue(roSHData),
+    agreePlan: jest.fn().mockResolvedValue(testPlan),
+    getPlanByUuid: jest.fn().mockResolvedValue(testPlan),
   }))
 })
 
 jest.mock('../../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
-    getPlanUUID: jest.fn().mockReturnValue('9506fba0-d2c7-4978-b3fc-aefd86821844'),
-    getSubjectDetails: jest.fn().mockReturnValue(handoverData.subject),
+    getPlanUUID: jest.fn().mockReturnValue(testPlan.uuid),
+    getPrincipalDetails: jest.fn().mockReturnValue(testHandoverContext.principal),
+    getSubjectDetails: jest.fn().mockReturnValue(testHandoverContext.subject),
   }))
 })
 
 let app: Express
 const referentialDataService = new ReferentialDataService() as jest.Mocked<ReferentialDataService>
-const infoService = new InfoService(null) as jest.Mocked<InfoService>
+const planService = new PlanService(null) as jest.Mocked<PlanService>
 
 beforeEach(() => {
   app = appWithAllRoutes({
     services: {
       referentialDataService,
-      infoService,
+      planService,
     },
   })
 })
@@ -43,7 +44,7 @@ afterEach(() => {
 describe(`GET ${URLs.AGREE_PLAN}`, () => {
   it('should render agree plan page', () => {
     return request(app)
-      .get(URLs.AGREE_PLAN)
+      .get(URLs.AGREE_PLAN.replace(':uuid', testPlan.uuid))
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain(

@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import { plainToInstance } from 'class-transformer'
 import testPlan from '../../testutils/data/planData'
-import planData from '../../testutils/data/planData'
 import AgreePlanController from './AgreePlanController'
 import PlanService from '../../services/sentence-plan/planService'
 import mockReq from '../../testutils/preMadeMocks/mockReq'
@@ -15,7 +14,6 @@ import { PlanAgreementStatus, PlanType } from '../../@types/PlanType'
 import PlanModel from '../shared-models/PlanModel'
 import { testGoal } from '../../testutils/data/goalData'
 import testHandoverContext from '../../testutils/data/handoverData'
-import handoverData from '../../testutils/data/handoverData'
 
 jest.mock('../../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
@@ -59,7 +57,7 @@ describe('AgreePlanController', () => {
     describe('validation', () => {
       describe('goals', () => {
         it('should add error if no goals', () => {
-          const badPlanData: PlanType = { ...planData, goals: [] }
+          const badPlanData: PlanType = { ...testPlan, goals: [] }
 
           const dataToBeValidated = plainToInstance(PlanModel, badPlanData)
           const errors = getValidationErrors(dataToBeValidated)
@@ -73,7 +71,7 @@ describe('AgreePlanController', () => {
       describe('steps', () => {
         it('should add error if current goal has no steps', () => {
           const badPlanData: Partial<PlanType> = {
-            ...planData,
+            ...testPlan,
             goals: [{ ...testGoal, steps: [] }],
           }
 
@@ -95,7 +93,7 @@ describe('AgreePlanController', () => {
     })
 
     it('should redirect if plan has validation errors', async () => {
-      const badPlanData: PlanType = { ...planData, goals: [] }
+      const badPlanData: PlanType = { ...testPlan, goals: [] }
 
       mockPlanService.getPlanByUuid = jest.fn().mockResolvedValue(badPlanData)
       await runMiddlewareChain(controller.get, req, res, next)
@@ -105,7 +103,7 @@ describe('AgreePlanController', () => {
     })
 
     it('should redirect if plan is not in draft', async () => {
-      const badPlanData: PlanType = { ...planData, agreementStatus: PlanAgreementStatus.AGREED }
+      const badPlanData: PlanType = { ...testPlan, agreementStatus: PlanAgreementStatus.AGREED }
 
       mockPlanService.getPlanByUuid = jest.fn().mockResolvedValue(badPlanData)
       await runMiddlewareChain(controller.get, req, res, next)
@@ -198,8 +196,8 @@ describe('AgreePlanController', () => {
       const expectedAgreementData = {
         agreementStatus: PlanAgreementStatus.AGREED,
         optionalNote: 'test note',
-        personName: `${handoverData.subject.givenName} ${handoverData.subject.familyName}`,
-        practitionerName: handoverData.principal.displayName,
+        personName: `${testHandoverContext.subject.givenName} ${testHandoverContext.subject.familyName}`,
+        practitionerName: testHandoverContext.principal.displayName,
       }
 
       await runMiddlewareChain(controller.post, req, res, next)
@@ -220,13 +218,13 @@ describe('AgreePlanController', () => {
         agreementStatus: PlanAgreementStatus.DO_NOT_AGREE,
         agreementStatusNote: 'test agreement detail note',
         optionalNote: 'test note',
-        personName: `${handoverData.subject.givenName} ${handoverData.subject.familyName}`,
-        practitionerName: handoverData.principal.displayName,
+        personName: `${testHandoverContext.subject.givenName} ${testHandoverContext.subject.familyName}`,
+        practitionerName: testHandoverContext.principal.displayName,
       }
 
       await runMiddlewareChain(controller.post, req, res, next)
 
-      expect(mockPlanService.agreePlan).toHaveBeenCalledWith(planData.uuid, expectedAgreementData)
+      expect(mockPlanService.agreePlan).toHaveBeenCalledWith(testPlan.uuid, expectedAgreementData)
       expect(res.redirect).toHaveBeenCalledWith(URLs.PLAN_SUMMARY)
       expect(next).not.toHaveBeenCalled()
     })
