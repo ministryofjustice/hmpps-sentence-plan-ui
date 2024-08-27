@@ -1,6 +1,11 @@
 {% extends "govuk/template.njk" %}
 {%- from "moj/components/primary-navigation/macro.njk" import mojPrimaryNavigation -%}
 
+{% set locale = interpolate(locale, {
+  applicationName: applicationName,
+  subject: data.popData
+}) %}
+
 {% block head %}
   <link href="/assets/css/app.css?{{ version }}" rel="stylesheet" />
 {% endblock %}
@@ -15,12 +20,12 @@
     {{ mojPrimaryNavigation({
       label: 'Primary navigation',
       items: [{
-          text: data.popData.givenName + "'s plan",
+          text: locale.common.primaryNavigation.planLinkText,
           href: '/plan-summary?source=nav',
           active: true
         },
         {
-          text: 'About ' + data.popData.givenName,
+          text: locale.common.primaryNavigation.aboutPopText,
           href: '/about-pop'
         }
       ]

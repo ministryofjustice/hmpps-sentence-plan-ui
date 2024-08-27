@@ -11,7 +11,6 @@ export default class RemoveGoalController {
     const { errors } = req
 
     try {
-      const popData = req.services.sessionService.getSubjectDetails()
       const type = req.query?.type
       const { uuid } = req.params
       // TODO rather than fetch the goal again we should be able to retrieve it from a local store since the previous page must have retrieved it already
@@ -20,7 +19,6 @@ export default class RemoveGoalController {
       return res.render('pages/remove-goal', {
         locale: locale.en,
         data: {
-          popData,
           type,
           goal,
         },

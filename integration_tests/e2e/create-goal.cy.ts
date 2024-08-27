@@ -16,8 +16,8 @@ describe('Create a new Goal', () => {
   it('Creates a new goal with steps', () => {
     createGoalPage.createGoal('accommodation')
     createGoalPage.selectGoalAutocompleteOption('acc', 0)
-    createGoalPage.selectOtherAreasOfNeedRadio('yes')
-    createGoalPage.selectOtherAreasOfNeed(['Employment and education', 'Drug use'])
+    createGoalPage.selectRelatedAreasOfNeedRadio('yes')
+    createGoalPage.selectRelatedAreasOfNeed(['Employment and education', 'Drug use'])
     createGoalPage.selectStartWorkingRadio('yes')
     createGoalPage.selectAchievementDate('In 6 months')
     createGoalPage.clickButton('Add steps')
@@ -49,8 +49,8 @@ describe('Create a new Goal', () => {
   it('Creates a new goal without steps', () => {
     createGoalPage.createGoal('accommodation')
     createGoalPage.selectGoalAutocompleteOption('acc', 0)
-    createGoalPage.selectOtherAreasOfNeedRadio('yes')
-    createGoalPage.selectOtherAreasOfNeed(['Employment and education', 'Drug use'])
+    createGoalPage.selectRelatedAreasOfNeedRadio('yes')
+    createGoalPage.selectRelatedAreasOfNeed(['Employment and education', 'Drug use'])
     createGoalPage.selectStartWorkingRadio('yes')
     createGoalPage.selectAchievementDate('In 6 months')
     createGoalPage.clickButton('Save without steps')

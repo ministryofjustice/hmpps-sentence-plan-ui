@@ -19,7 +19,6 @@ export default class PlanSummaryController {
 
     try {
       const planUuid = req.services.sessionService.getPlanUUID()
-      const popData = req.services.sessionService.getSubjectDetails()
       const plan = await this.planService.getPlanByUuid(planUuid)
       const status = req.query?.status
       const type = req.query?.type
@@ -28,7 +27,6 @@ export default class PlanSummaryController {
         locale: locale.en,
         data: {
           plan,
-          popData,
           type,
           status,
         },

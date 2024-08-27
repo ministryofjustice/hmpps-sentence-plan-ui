@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
 import { plainToInstance } from 'class-transformer'
-import handoverData from '../../testutils/data/handoverData'
 import testPlan from '../../testutils/data/planData'
 import AgreePlanController from './AgreePlanController'
 import PlanService from '../../services/sentence-plan/planService'
@@ -8,12 +7,11 @@ import mockReq from '../../testutils/preMadeMocks/mockReq'
 import mockRes from '../../testutils/preMadeMocks/mockRes'
 import { getValidationErrors } from '../../middleware/validationMiddleware'
 import locale from './locale.json'
-import AgreePlanPostModel from './models/AgreePlanPostModel'
 import runMiddlewareChain from '../../testutils/runMiddlewareChain'
+import AgreePlanPost from "./models/AgreePlanPost.model";
 
 jest.mock('../../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
-    getSubjectDetails: jest.fn().mockReturnValue(handoverData.subject),
     getPlanUUID: jest.fn().mockReturnValue('9506fba0-d2c7-4978-b3fc-aefd86821844'),
   }))
 })
@@ -33,7 +31,6 @@ describe('AgreePlanController', () => {
   const viewData = {
     data: {
       planUuid: '9506fba0-d2c7-4978-b3fc-aefd86821844',
-      popData: handoverData.subject,
       form: {},
     },
     errors: {},
@@ -67,7 +64,7 @@ describe('AgreePlanController', () => {
         errors,
       }
 
-      await controller.get(req, res, next)
+      await runMiddlewareChain(controller.get, req, res, next)
 
       expect(res.render).toHaveBeenCalledWith('pages/agree-plan', expectedViewData)
     })
@@ -77,7 +74,7 @@ describe('AgreePlanController', () => {
     describe('validation', () => {
       describe('agree-plan-radio', () => {
         it('should add error if not selected', () => {
-          const body = plainToInstance(AgreePlanPostModel, req.body)
+          const body = plainToInstance(AgreePlanPost, req.body)
           const errors = getValidationErrors(body)
 
           expect(errors).toMatchObject({
@@ -87,7 +84,7 @@ describe('AgreePlanController', () => {
 
         it('should add error if "no" is selected and details are missing', () => {
           req.body['agree-plan-radio'] = 'no'
-          const body = plainToInstance(AgreePlanPostModel, req.body)
+          const body = plainToInstance(AgreePlanPost, req.body)
           const errors = getValidationErrors(body)
 
           expect(errors).toMatchObject({
@@ -97,7 +94,7 @@ describe('AgreePlanController', () => {
 
         it('should add error if "couldNotAnswer" is selected and details are missing', () => {
           req.body['agree-plan-radio'] = 'couldNotAnswer'
-          const body = plainToInstance(AgreePlanPostModel, req.body)
+          const body = plainToInstance(AgreePlanPost, req.body)
           const errors = getValidationErrors(body)
 
           expect(errors).toMatchObject({

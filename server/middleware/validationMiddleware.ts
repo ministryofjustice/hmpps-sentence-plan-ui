@@ -1,6 +1,7 @@
 import { validateSync, ValidationError } from 'class-validator'
 import { NextFunction, Request, Response } from 'express'
 import RequestDataSources from '../@types/RequestDataSources'
+import 'reflect-metadata'
 
 export function getValidationErrors(data: object) {
   function buildPrettyError(errorsInner: ValidationError[], path: string = ''): Record<string, any> {

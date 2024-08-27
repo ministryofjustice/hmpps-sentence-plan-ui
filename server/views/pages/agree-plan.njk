@@ -75,12 +75,12 @@
                     items: [
                         {
                             value: "yes",
-                            text: locale.agreePlanOptions.yes | replace("{POP_NAME}", data.popData.givenName),
+                            text: locale.agreePlanOptions.yes,
                             checked: data.form['agree-plan-radio'] == 'yes'
                         },
                         {
                             value: "no",
-                            text: locale.agreePlanOptions.no | replace("{POP_NAME}", data.popData.givenName),
+                            text: locale.agreePlanOptions.no,
                             checked: data.form['agree-plan-radio'] == 'no',
                             conditional: {
                                 html: doesNotAgreeDetailsHtml
@@ -88,7 +88,7 @@
                         },
                         {
                             value: "couldNotAnswer",
-                            text: locale.agreePlanOptions.couldNotAnswer | replace("{POP_NAME}", data.popData.givenName),
+                            text: locale.agreePlanOptions.couldNotAnswer,
                             checked: data.form['agree-plan-radio'] == 'couldNotAnswer',
                             conditional: {
                                 html: couldNotAnswerDetailsHtml
@@ -101,13 +101,13 @@
                     name: "notes",
                     id: "notes",
                     label: {
-                        text: locale.notes,
+                        text: locale.notes.label,
                         classes: "govuk-label--m"
                     }
                 }) }}
 
                 {{ govukButton({
-                    text: locale.agreePlanButton | replace("{POP_NAME}", data.popData.givenName),
+                    text: locale.agreePlanButton,
                     name: "action",
                     value: "agreePlan"
                 }) }}

@@ -6,11 +6,18 @@
 {% from "../components/summary-card/goal-summary-card.njk" import goalSummaryCard %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
+{% set locale = interpolate(locale, {
+    goalCounts: {
+        currentGoals: data.currentGoals.length,
+        futureGoals: data.futureGoals.length
+    }
+}) %}
+
 {% set pageTitle %}
     {% if errors %}
-        Error: {{ locale.title }} - {{ applicationName }}
+        {{ locale.page.errorTitle }}
     {% else %}
-        {{ locale.title }} - {{ applicationName }}
+        {{ locale.page.title }}
     {% endif %}
 {% endset -%}
 
@@ -19,13 +26,13 @@
     type: "extended",
     items: [
         {
-            text: "Create goal",
+            text: locale.header.createGoalButton,
             href: "/create-goal/accommodation",
             classes: "govuk-button--secondary",
             type: 'button'
         },
         {
-            text: "Agree plan",
+            text: locale.header.agreePlanButton,
             type: 'submit',
             value: 'agree-plan'
         } if data.plan.status === 'DRAFT'
@@ -72,34 +79,33 @@
         {% if data.status == 'success' %}
             {{ mojBanner({
                 type: 'success',
-                text: 'You added a goal to '+data.popData.givenName | possessive+' plan',
+                text: locale.notificationBanner.addedGoal,
                 iconFallbackText: 'Success'
             }) }}
         {% elseif data.status == 'removed' %}
             {{ mojBanner({
                 type: 'success',
-                text: 'You removed a goal from '+data.popData.givenName | possessive+' plan',
+                text: locale.notificationBanner.removedGoal,
                 iconFallbackText: 'Success'
             }) }}
         {% elseif data.status == 'updated' %}
             {{ mojBanner({
-            type: 'success',
-            text: 'You changed a goal in '+data.popData.givenName | possessive+' plan ',
-            iconFallbackText: 'Success'
+                type: 'success',
+                text: locale.notificationBanner.changedGoal,
+                iconFallbackText: 'Success'
             }) }}
         {% endif %}
-        <p class="govuk-body">
-           Add steps to the goals {{ data.popData.givenName }} is working on now. You can then agree the plan with {{ data.popData.givenName }}.
-        </p>
+
+        <p class="govuk-body">{{ locale.addStepSuggestion }}</p>
 
         {{ mojSubNavigation({
           label: 'Sub navigation',
           items: [{
-            text: 'Goals to work on now ('+ currentGoals.length +')',
+            text: locale.subNavigation.currentGoals,
             href: '/plan-summary?type=current',
             active: data.type != 'future'
           }, {
-            text: 'Future goals ('+ futureGoals.length +')',
+            text: locale.subNavigation.futureGoals,
             href: '/plan-summary?type=future',
             active: data.type == 'future'
           }]
@@ -120,16 +126,16 @@
 
                 {% if not loop.first %}
                     {% set buttons = buttons.concat({
-                        text: "Move goal up",
-                        href: "/goals/" + goalType + "/" + goal.uuid + "/up",
+                        text: locale.goalSummaryCard.buttons.moveUpButton,
+                        href: "/goals/future/" + goal.uuid + "/up",
                         classes: "govuk-button--secondary"
                     }) %}
                 {% endif %}
 
                 {% if not loop.last %}
                     {% set buttons = buttons.concat({
-                        text: "Move goal down",
-                        href: "/goals/" + goalType + "/" + goal.uuid + "/down",
+                        text: locale.goalSummaryCard.buttons.moveDownButton,
+                        href: "/goals/future/" + goal.uuid + "/down",
                         classes: "govuk-button--secondary"
                     }) %}
                 {% endif %}
@@ -149,19 +155,16 @@
                         buttons: buttons,
                         actions: [
                             {
-                                href: "/edit-goal/" + goal.uuid + "?type=" + goalType,
-                                text: "Change goal",
-                                visuallyHiddenText: "Change goal"
+                                href: "/edit-goal/" + goal.uuid,
+                                text: locale.goalSummaryCard.actions.changeGoal
                             },
                             {
                                 href: "/add-change-steps",
-                                text: "Add or change steps",
-                                visuallyHiddenText: "Add or change steps"
+                                text: locale.goalSummaryCard.actions.addOrChangeSteps
                             },
                             {
-                                href: "/remove-goal/" + goal.uuid + "?type=" + goalType,
-                                text: "Remove goal",
-                                visuallyHiddenText: "Remove goal"
+                                href: "/remove-goal/" + goal.uuid + "?type=current",
+                                text: locale.goalSummaryCard.actions.removeGoal
                             }
                         ],
                         errorMessage: errorMessage
