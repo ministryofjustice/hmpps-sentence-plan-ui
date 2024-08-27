@@ -4,6 +4,13 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "../components/error-summary/error-summary.njk" import errorSummary %}
 
+{% set locale = interpolate(locale, {
+    applicationName: applicationName,
+    subject: merge(data.popData, {
+        possessiveName: data.popData.givenName | possessive
+    })
+}) %}
+
 {% set pageTitle %}
     {% if errors %}
         {{ locale.page.errorTitle }}
