@@ -6,10 +6,27 @@
 {% from "../components/summary-card/goal-summary-card.njk" import goalSummaryCard %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
+{% set currentGoals = [] %}
+{% set futureGoals = [] %}
+
+{% for goal in data.plan.goals %}
+    {% if goal.targetDate %}
+        {% set currentGoals = currentGoals.concat({
+            index: loop.index0,
+            goal: goal
+        }) %}
+    {% else %}
+        {% set futureGoals = futureGoals.concat({
+            index: loop.index0,
+            goal: goal
+        }) %}
+    {% endif %}
+{% endfor %}
+
 {% set locale = interpolate(locale, {
     goalCounts: {
-        currentGoals: data.currentGoals.length,
-        futureGoals: data.futureGoals.length
+        currentGoals: currentGoals.length,
+        futureGoals: futureGoals.length
     }
 }) %}
 
@@ -39,22 +56,7 @@
     ]
 } %}
 
-{% set currentGoals = [] %}
-{% set futureGoals = [] %}
 
-{% for goal in data.plan.goals %}
-    {% if goal.targetDate %}
-        {% set currentGoals = currentGoals.concat({
-            index: loop.index0,
-            goal: goal
-        }) %}
-    {% else %}
-        {% set futureGoals = futureGoals.concat({
-            index: loop.index0,
-            goal: goal
-        }) %}
-    {% endif %}
-{% endfor %}
 
 {% block bodyStart %}
     <div id="top"></div>
