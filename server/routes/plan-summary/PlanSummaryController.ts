@@ -1,36 +1,34 @@
 import { NextFunction, Request, Response } from 'express'
+import { plainToInstance } from 'class-transformer'
 import locale from './locale.json'
-import InfoService from '../../services/sentence-plan/infoService'
 import GoalService from '../../services/sentence-plan/goalService'
 import { moveGoal } from '../../utils/utils'
 import URLs from '../URLs'
 import { getValidationErrors } from '../../middleware/validationMiddleware'
-import AgreePlanValidationModel from '../agree-plan/models/AgreePlanValidationModel'
+import PlanService from '../../services/sentence-plan/planService'
+import Plan from '../shared-models/plan.model'
 
 export default class PlanSummaryController {
   constructor(
-    private readonly infoService: InfoService,
+    private readonly planService: PlanService,
     private readonly goalService: GoalService,
   ) {}
 
-  render = async (req: Request, res: Response, next: NextFunction) => {
+  private render = async (req: Request, res: Response, next: NextFunction) => {
     const { errors } = req
 
     try {
       const planUuid = req.services.sessionService.getPlanUUID()
       const popData = req.services.sessionService.getSubjectDetails()
-      const goals = await this.goalService.getGoals(planUuid)
-      const currentGoals = goals.now
-      const futureGoals = goals.future
+      const plan = await this.planService.getPlanByUuid(planUuid)
       const status = req.query?.status
       const type = req.query?.type
+
       return res.render('pages/plan-summary', {
         locale: locale.en,
         data: {
-          planUuid,
+          plan,
           popData,
-          currentGoals,
-          futureGoals,
           type,
           status,
         },
@@ -55,27 +53,36 @@ export default class PlanSummaryController {
     }
   }
 
-  validatePlanForAgreement = async (req: Request, res: Response, next: NextFunction) => {
+  private validatePlanForAgreement = async (req, res, next) => {
     try {
       const planUuid = req.services.sessionService.getPlanUUID()
-      const goals = await this.goalService.getGoals(planUuid)
+      const plan = await this.planService.getPlanByUuid(planUuid)
+      req.errors = { ...req.errors }
 
-      const errors = getValidationErrors(goals, AgreePlanValidationModel)
+      req.errors.domain = getValidationErrors(plainToInstance(Plan, plan))
 
-      console.log(errors)
-
-      if (Object.keys(errors).length > 0) {
-        req.errors = { body: errors }
-        return this.render(req, res, next)
-      }
-
-      return res.redirect(`/plan/${planUuid}/agree`)
+      return next()
     } catch (e) {
       return next(e)
     }
   }
 
+  private handleValidationErrors = (req: Request, res: Response, next: NextFunction) => {
+    const hasErrors = Object.values(req.errors).some(errorCategory => Object.keys(errorCategory).length)
+
+    if (hasErrors) {
+      return this.render(req, res, next)
+    }
+
+    return next()
+  }
+
+  private handleSuccessRedirect = (req, res) => {
+    const planUuid = req.services.sessionService.getPlanUUID()
+    return res.redirect(`/plan/${planUuid}/agree`)
+  }
+
   get = this.render
 
-  post = this.validatePlanForAgreement
+  post = [this.validatePlanForAgreement, this.handleValidationErrors, this.handleSuccessRedirect]
 }

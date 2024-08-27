@@ -10,10 +10,20 @@
       "viewPreviousGoalsLink": "View previous goals",
       "noPreviousGoals": "No previous goals"
     },
+    "goalSummaryCard": {
+      "state": {
+        "incomplete": "Incomplete"
+      }
+    },
     "subNav": {
       "goals": "Goals",
       "about": "About",
       "summary": "Plan summary"
+    },
+    "errors": {
+      "goal-summary-card": {
+        "arrayNotEmpty": "Add steps to agree the plan"
+      }
     }
   }
 }
