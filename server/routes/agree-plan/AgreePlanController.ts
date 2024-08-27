@@ -7,6 +7,8 @@ import validateRequest, { getValidationErrors } from '../../middleware/validatio
 import Plan from '../shared-models/plan.model'
 import transformRequest from '../../middleware/transformMiddleware'
 import AgreePlanPost from './models/AgreePlanPost.model'
+import { PlanAgreementStatus } from '../../@types/PlanType'
+import { PlanAgreement } from '../../@types/PlanAgreement'
 
 export default class AgreePlanController {
   constructor(private readonly planService: PlanService) {}
@@ -29,9 +31,33 @@ export default class AgreePlanController {
   }
 
   private agreePlanAndRedirect = async (req: Request, res: Response, next: NextFunction) => {
+    const principalDetails = req.services.sessionService.getPrincipalDetails()
+    const subjectDetails = req.services.sessionService.getSubjectDetails()
+
+    const agreement: Partial<PlanAgreement> = {
+      practitionerName: principalDetails.displayName,
+      personName: `${subjectDetails.givenName} ${subjectDetails.familyName}`,
+      optionalNote: (req.body as AgreePlanPost).notes,
+    }
+
+    switch (req.body['agree-plan-radio']) {
+      case 'yes':
+        agreement.agreementStatus = PlanAgreementStatus.AGREED
+        break
+      case 'no':
+        agreement.agreementStatus = PlanAgreementStatus.DO_NOT_AGREE
+        agreement.agreementStatusNote = req.body['does-not-agree-details']
+        break
+      case 'couldNotAnswer':
+      default:
+        agreement.agreementStatus = PlanAgreementStatus.COULD_NOT_ANSWER
+        agreement.agreementStatusNote = req.body['could-not-answer-details']
+    }
+
     try {
       const planUuid = req.services.sessionService.getPlanUUID()
-      this.planService.getPlanByUuid(planUuid) // TODO this is where the planService.agreePlan call should go once the body is confirmed
+      await this.planService.agreePlan(planUuid, agreement)
+
       return res.redirect(`${URLs.PLAN_SUMMARY}`)
     } catch (e) {
       return next(e)
@@ -40,12 +66,16 @@ export default class AgreePlanController {
 
   private validatePlanForAgreement = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      req.errors = req.errors ?? {}
-
       const planUuid = req.services.sessionService.getPlanUUID()
       const plan = await this.planService.getPlanByUuid(planUuid)
 
+      req.errors = req.errors ?? {}
       req.errors.domain = getValidationErrors(plainToInstance(Plan, plan))
+      if (plan.agreementStatus !== PlanAgreementStatus.DRAFT) {
+        req.errors.domain.plan = {
+          alreadyAgreed: true,
+        }
+      }
 
       return next()
     } catch (e) {
@@ -63,8 +93,6 @@ export default class AgreePlanController {
 
       return res.redirect(URLs.PLAN_SUMMARY)
     }
-
-    console.log(locale.en.agreePlanButton.replace())
 
     return next()
   }
