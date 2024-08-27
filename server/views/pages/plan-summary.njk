@@ -17,17 +17,19 @@
 {% set mainClasses = "app-container govuk-body" %}
 {% set header = {
     type: "extended",
-    items: [{
-        text: "Create goal",
-        href: "/create-goal/accommodation",
-        classes: "govuk-button--secondary",
-        type: 'button'
-    },
-    {
-        text: "Agree plan",
-        type: 'submit',
-        value: 'agree-plan'
-    }]
+    items: [
+        {
+            text: "Create goal",
+            href: "/create-goal/accommodation",
+            classes: "govuk-button--secondary",
+            type: 'button'
+        },
+        {
+            text: "Agree plan",
+            type: 'submit',
+            value: 'agree-plan'
+        } if data.plan.status === 'DRAFT'
+    ]
 } %}
 
 {% set currentGoals = [] %}
