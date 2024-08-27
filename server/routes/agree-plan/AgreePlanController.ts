@@ -11,7 +11,7 @@ import AgreePlanPost from './models/AgreePlanPost.model'
 export default class AgreePlanController {
   constructor(private readonly planService: PlanService) {}
 
-  private render = async (req: Request, res: Response, next: NextFunction) => {
+  private render = async (req: Request, res: Response) => {
     const { errors } = req
 
     const planUuid = req.services.sessionService.getPlanUUID()
@@ -38,7 +38,7 @@ export default class AgreePlanController {
     }
   }
 
-  private validatePlanForAgreement = async (req, res, next) => {
+  private validatePlanForAgreement = async (req: Request, res: Response, next: NextFunction) => {
     try {
       req.errors = req.errors ?? {}
 
@@ -58,11 +58,13 @@ export default class AgreePlanController {
 
     if (hasErrors) {
       if (req.method === 'POST') {
-        return this.render(req, res, next)
+        return this.render(req, res)
       }
 
       return res.redirect(URLs.PLAN_SUMMARY)
     }
+
+    console.log(locale.en.agreePlanButton.replace())
 
     return next()
   }

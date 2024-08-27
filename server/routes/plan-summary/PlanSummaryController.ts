@@ -53,7 +53,7 @@ export default class PlanSummaryController {
     }
   }
 
-  private validatePlanForAgreement = async (req, res, next) => {
+  private validatePlanForAgreement = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const planUuid = req.services.sessionService.getPlanUUID()
       const plan = await this.planService.getPlanByUuid(planUuid)
@@ -77,7 +77,7 @@ export default class PlanSummaryController {
     return next()
   }
 
-  private handleSuccessRedirect = (req, res) => {
+  private handleSuccessRedirect = (req: Request, res: Response) => {
     const planUuid = req.services.sessionService.getPlanUUID()
     return res.redirect(`/plan/${planUuid}/agree`)
   }
