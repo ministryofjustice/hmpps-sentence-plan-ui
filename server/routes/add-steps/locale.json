@@ -8,7 +8,17 @@
       "title": "Add steps to {{ subject.givenName }} goal",
       "caption": "{{ goal.title }}"
     },
-    "detailHeading": "View information from {{ subject.possessiveName }} assessment",
+    "detail": {
+      "heading": "View information from {{ subject.possessiveName }} assessment",
+      "header1": "This area is linked to risk of serious harm (RoSH)",
+      "detail1": "{{ subject.possessiveName }} has a history of destabilising quickly if she loses accommodation and therefore having secure accommodation is key in reducing his risk. When NFA she will gravitate to a negative peer group in the form of the rough sleeping community who use substances which then increases the risks of him engaging in harmful behaviours.",
+      "header2": "This area is linked to risk of reoffending",
+      "detail2": "Lack of accommodation destabilises {{ subject.possessiveName }} which then impacts on his mental health which in turn increases the likelihood of using substances to self-medicate. Rough sleeping increases the contact with the local Rough Sleeping community to which Sam is well known and will increase the likelihood of aggressive and violent behaviour as he engages in substance misuse and offending as a way to survive.",
+      "header3": "Motivation to make changes in this area",
+      "detail3": "{{ subject.possessiveName }} wants to make changes and knows how.",
+      "header4": "There are strengths or protective factors related to this area",
+      "detail4": "{{ subject.possessiveName }} is engaged with the RISE team to support him in maintaining his tenancy and has weekly contact with their support worker."
+    },
     "step": {
       "description": {
         "label": "What should they do to achieve the goal?",
