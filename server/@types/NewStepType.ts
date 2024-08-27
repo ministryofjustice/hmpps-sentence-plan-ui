@@ -1,6 +1,6 @@
 export type NewStep = {
   description?: string
-  actor: Actor[]
+  actors: Actor[]
   status?: string
 }
 

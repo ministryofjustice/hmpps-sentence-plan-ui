@@ -46,7 +46,7 @@ export default class StepsController {
       const actorNumbers: number[] = actorArray.map((item: string | number): number => Number(item))
       const mappedActor: Array<any> = payloadOptions.filter(option => actorNumbers.includes(option.value))
       const actors = transformActor(mappedActor)
-      const payload = { description: stepName, status: '', actor: actors } as NewStep
+      const payload = { description: stepName, status: '', actors: actors } as NewStep
       await this.stepService.saveSteps([payload], currentGoal)
       res.redirect(`${URLs.PLAN_SUMMARY}?status=success`)
     } catch (e) {
