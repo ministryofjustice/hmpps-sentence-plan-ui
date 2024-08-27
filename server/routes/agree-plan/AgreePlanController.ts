@@ -56,7 +56,7 @@ export default class AgreePlanController {
 
     try {
       const planUuid = req.services.sessionService.getPlanUUID()
-      await this.planService.agreePlan(planUuid, agreement)
+      await this.planService.agreePlan(planUuid, agreement as PlanAgreement)
 
       return res.redirect(`${URLs.PLAN_SUMMARY}`)
     } catch (e) {
