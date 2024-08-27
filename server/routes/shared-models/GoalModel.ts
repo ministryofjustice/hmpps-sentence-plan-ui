@@ -5,17 +5,15 @@ import {
   IsInt,
   IsNotEmpty,
   IsString,
-  IsUUID,
   Min,
   ValidateIf,
   ValidateNested,
 } from 'class-validator'
 import { Type } from 'class-transformer'
-import AreaOfNeed from './area-of-need.model'
-import Step from './step.model'
+import AreaOfNeedModel from './AreaOfNeedModel'
+import StepModel from './StepModel'
 
-export default class Goal {
-  @IsUUID()
+export default class GoalModel {
   uuid: string
 
   @IsString()
@@ -23,8 +21,8 @@ export default class Goal {
   title: string
 
   @ValidateNested()
-  @Type(() => AreaOfNeed)
-  areaOfNeed: AreaOfNeed
+  @Type(() => AreaOfNeedModel)
+  areaOfNeed: AreaOfNeedModel
 
   targetDate: string
 
@@ -38,12 +36,12 @@ export default class Goal {
   @ValidateIf(o => o.targetDate != null)
   @IsArray()
   @ValidateNested()
-  @Type(() => Step)
+  @Type(() => StepModel)
   @ArrayNotEmpty()
-  steps: Step[]
+  steps: StepModel[]
 
   @IsArray()
   @ValidateNested({ each: true })
-  @Type(() => AreaOfNeed)
-  relatedAreasOfNeed: AreaOfNeed[]
+  @Type(() => AreaOfNeedModel)
+  relatedAreasOfNeed: AreaOfNeedModel[]
 }

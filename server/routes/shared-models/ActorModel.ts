@@ -1,6 +1,6 @@
 import { IsInt, IsNotEmpty, IsString, Min } from 'class-validator'
 
-export default class Actor {
+export default class ActorModel {
   @IsString()
   @IsNotEmpty()
   actor: string

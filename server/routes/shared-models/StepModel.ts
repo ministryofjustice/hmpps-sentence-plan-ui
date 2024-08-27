@@ -1,18 +1,8 @@
-import {
-  ArrayNotEmpty,
-  IsArray,
-  IsDateString,
-  IsNotEmpty,
-  IsOptional,
-  IsString,
-  IsUUID,
-  ValidateNested,
-} from 'class-validator'
+import { ArrayNotEmpty, IsArray, IsDateString, IsNotEmpty, IsOptional, IsString, ValidateNested } from 'class-validator'
 import { Type } from 'class-transformer'
-import Actor from './actor.model'
+import ActorModel from './ActorModel'
 
-export default class Step {
-  @IsUUID()
+export default class StepModel {
   uuid: string
 
   @IsString()
@@ -28,7 +18,7 @@ export default class Step {
 
   @IsArray()
   @ValidateNested({ each: true })
-  @Type(() => Actor)
+  @Type(() => ActorModel)
   @ArrayNotEmpty()
-  actors: Actor[]
+  actors: ActorModel[]
 }

@@ -6,7 +6,7 @@ import { moveGoal } from '../../utils/utils'
 import URLs from '../URLs'
 import { getValidationErrors } from '../../middleware/validationMiddleware'
 import PlanService from '../../services/sentence-plan/planService'
-import Plan from '../shared-models/plan.model'
+import PlanModel from '../shared-models/PlanModel'
 
 export default class PlanSummaryController {
   constructor(
@@ -57,7 +57,7 @@ export default class PlanSummaryController {
       const plan = await this.planService.getPlanByUuid(planUuid)
       req.errors = { ...req.errors }
 
-      req.errors.domain = getValidationErrors(plainToInstance(Plan, plan))
+      req.errors.domain = getValidationErrors(plainToInstance(PlanModel, plan))
 
       return next()
     } catch (e) {

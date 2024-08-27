@@ -1,9 +1,8 @@
-import { IsArray, IsDateString, IsEnum, IsUUID, ValidateNested } from 'class-validator'
+import { ArrayNotEmpty, IsArray, IsDateString, IsEnum, ValidateNested } from 'class-validator'
 import { Type } from 'class-transformer'
-import Goal from './goal.model'
+import GoalModel from './GoalModel'
 
-export default class Plan {
-  @IsUUID()
+export default class PlanModel {
   uuid: string
 
   @IsEnum({
@@ -20,7 +19,8 @@ export default class Plan {
   updatedDate: string
 
   @IsArray()
+  @ArrayNotEmpty()
   @ValidateNested()
-  @Type(() => Goal)
-  goals: Goal[]
+  @Type(() => GoalModel)
+  goals: GoalModel[]
 }

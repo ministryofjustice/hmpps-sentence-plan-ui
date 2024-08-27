@@ -4,9 +4,9 @@ import locale from './locale.json'
 import URLs from '../URLs'
 import PlanService from '../../services/sentence-plan/planService'
 import validateRequest, { getValidationErrors } from '../../middleware/validationMiddleware'
-import Plan from '../shared-models/plan.model'
+import PlanModel from '../shared-models/PlanModel'
 import transformRequest from '../../middleware/transformMiddleware'
-import AgreePlanPost from './models/AgreePlanPost.model'
+import AgreePlanPostModel from './models/AgreePlanPostModel'
 import { PlanAgreementStatus } from '../../@types/PlanType'
 import { PlanAgreement } from '../../@types/PlanAgreement'
 
@@ -35,7 +35,7 @@ export default class AgreePlanController {
     const agreement: Partial<PlanAgreement> = {
       practitionerName: principalDetails.displayName,
       personName: `${subjectDetails.givenName} ${subjectDetails.familyName}`,
-      optionalNote: (req.body as AgreePlanPost).notes,
+      optionalNote: (req.body as AgreePlanPostModel).notes,
     }
 
     switch (req.body['agree-plan-radio']) {
@@ -99,7 +99,7 @@ export default class AgreePlanController {
 
   post = [
     transformRequest({
-      body: AgreePlanPost,
+      body: AgreePlanPostModel,
     }),
     validateRequest(),
     this.validatePlanForAgreement,
