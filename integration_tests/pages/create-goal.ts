@@ -13,7 +13,7 @@ export default class CreateGoal {
     cy.url().should('include', `/create-goal/${goalType}`)
   }
 
-  selectOtherAreasOfNeedRadio = (value: string) => {
+  selectRelatedAreasOfNeedRadio = (value: string) => {
     cy.get('input[name="related-area-of-need-radio"]').check(value)
   }
 
@@ -21,7 +21,7 @@ export default class CreateGoal {
     cy.get('input[name="start-working-goal-radio"]').check(value)
   }
 
-  selectOtherAreasOfNeed = (values: string[]) => {
+  selectRelatedAreasOfNeed = (values: string[]) => {
     values.forEach(value => {
       cy.get('.govuk-checkboxes').first().contains(value).click()
     })
@@ -43,7 +43,7 @@ export default class CreateGoal {
   createCompleteGoal = (value: number) => {
     this.createGoal('accommodation')
     this.addGoalAutoCompletionText(`Test Accommodation ${value}`)
-    this.selectOtherAreasOfNeedRadio('no')
+    this.selectRelatedAreasOfNeedRadio('no')
     this.selectStartWorkingRadio('yes')
     this.selectAchievementDate('In 6 months')
     this.clickButton('Save without steps')

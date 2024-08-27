@@ -79,8 +79,8 @@ export default class EditGoalController {
     return {
       'goal-input-autocomplete': goal.title,
       'area-of-need': goal.areaOfNeed.name,
-      'other-area-of-need-radio': goal.relatedAreasOfNeed.length ? 'yes' : 'no',
-      'other-area-of-need': goal.relatedAreasOfNeed.map(areaOfNeed => areaOfNeed.name),
+      'related-area-of-need-radio': goal.relatedAreasOfNeed.length ? 'yes' : 'no',
+      'related-area-of-need': goal.relatedAreasOfNeed.map(areaOfNeed => areaOfNeed.name),
       'start-working-goal-radio': goal.targetDate ? 'yes' : 'no',
       'date-selection-radio': isCustomTargetDate ? 'custom' : formattedTargetDate,
       'date-selection-custom': isCustomTargetDate ? formattedTargetDate : undefined,
@@ -97,7 +97,7 @@ export default class EditGoalController {
           : body['date-selection-radio']
         : null
     const areaOfNeed = body['area-of-need']
-    const relatedAreasOfNeed = body['other-area-of-need-radio'] === 'yes' ? body['other-area-of-need'] : undefined
+    const relatedAreasOfNeed = body['related-area-of-need-radio'] === 'yes' ? body['related-area-of-need'] : undefined
 
     return {
       title,
