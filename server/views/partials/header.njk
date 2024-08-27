@@ -11,7 +11,7 @@
         HMPPS
       </a>
 
-      <a class="hmpps-header__link hmpps-header__title__service-name" href="/">{{ applicationName }}</a>
+      <a class="hmpps-header__link hmpps-header__title__service-name" href="/">{{ locale.common.header.serviceName }}</a>
 
       {% if environmentName %}
         <div class="govuk-phase-banner">
@@ -30,13 +30,13 @@
           <li class="hmpps-header__navigation__item">
             <a data-qa="manageDetails" class="hmpps-header__link" href="/account-details" data-test="manage-account-link" rel="noopener noreferrer">
               <span data-qa=header-user-name>{{ user.displayName | initialiseName }}</span>
-              <span class="hmpps-header__link__sub-text">Manage your details</span>
+              <span class="hmpps-header__link__sub-text">{{ locale.common.header.managedInOasysText }}</span>
             </a>
           </li>
         {% endif %}
 
         <li class="hmpps-header__navigation__item">
-          <a data-qa="signOut" class="hmpps-header__link" href="/sign-out">Sign out</a>
+          <a data-qa="signOut" class="hmpps-header__link" href="/sign-out">{{ locale.common.header.signOutLink }}</a>
         </li>
       </ul>
     </nav>

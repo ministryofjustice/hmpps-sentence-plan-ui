@@ -21,7 +21,6 @@ export default class EditGoalController {
     const { errors } = req
 
     const sortedAreasOfNeed = this.referentialDataService.getSortedAreasOfNeed()
-    const popData = req.services.sessionService.getSubjectDetails()
     const goal = await this.goalService.getGoal(uuid)
 
     const dateOptions = this.getDateOptions()
@@ -35,7 +34,6 @@ export default class EditGoalController {
         minimumDatePickerDate,
         sortedAreasOfNeed,
         selectedAreaOfNeed,
-        popData,
         dateOptions,
         form,
       },

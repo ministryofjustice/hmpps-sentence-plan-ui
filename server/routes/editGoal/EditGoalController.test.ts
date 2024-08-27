@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import { plainToInstance } from 'class-transformer'
 import { AreaOfNeed } from '../../testutils/data/referenceData'
-import handoverData from '../../testutils/data/handoverData'
 import ReferentialDataService from '../../services/sentence-plan/referentialDataService'
 import EditGoalController from './EditGoalController'
 import GoalService from '../../services/sentence-plan/goalService'
@@ -18,12 +17,6 @@ import runMiddlewareChain from '../../testutils/runMiddlewareChain'
 jest.mock('../../services/sentence-plan/referentialDataService', () => {
   return jest.fn().mockImplementation(() => ({
     getSortedAreasOfNeed: jest.fn().mockReturnValue(AreaOfNeed),
-  }))
-})
-
-jest.mock('../../services/sessionService', () => {
-  return jest.fn().mockImplementation(() => ({
-    getSubjectDetails: jest.fn().mockReturnValue(handoverData.subject),
   }))
 })
 
@@ -45,7 +38,6 @@ describe('EditGoalController', () => {
     data: {
       sortedAreasOfNeed: AreaOfNeed,
       form: {},
-      popData: handoverData.subject,
       selectedAreaOfNeed: AreaOfNeed.find(x => x.name === testGoal.areaOfNeed.name),
       minimumDatePickerDate: '01/01/2024',
       dateOptions: [

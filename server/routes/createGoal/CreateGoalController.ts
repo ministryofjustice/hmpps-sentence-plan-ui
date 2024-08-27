@@ -48,7 +48,6 @@ export default class CreateGoalController {
 
     const areasOfNeed = this.referentialDataService.getAreasOfNeed()
     const sortedAreasOfNeed = this.referentialDataService.getSortedAreasOfNeed()
-    const popData = req.services.sessionService.getSubjectDetails()
 
     const dateOptions = this.getDateOptions()
     const selectedAreaOfNeed = areasOfNeed.find(areaOfNeed => areaOfNeed.url === req.params.areaOfNeed)
@@ -60,7 +59,6 @@ export default class CreateGoalController {
         areasOfNeed,
         sortedAreasOfNeed,
         selectedAreaOfNeed,
-        popData,
         dateOptions,
         minimumDatePickerDate,
         form: req.body,

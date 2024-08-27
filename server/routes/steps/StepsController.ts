@@ -17,11 +17,9 @@ export default class StepsController {
       const {
         processed: { areaOfNeed, title: goal },
       } = result
-      const popData = await req.services.sessionService.getSubjectDetails()
       res.render('pages/create-step', {
         locale: locale.en,
         data: {
-          popData,
           areaOfNeed: toKebabCase(areaOfNeed),
           goal,
           form: req.body,

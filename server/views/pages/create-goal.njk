@@ -9,10 +9,6 @@
 {% from "../components/error-summary/error-summary.njk" import errorSummary %}
 
 {% set locale = interpolate(locale, {
-    applicationName: applicationName,
-    subject: merge(data.popData, {
-        possessiveName: data.popData.givenName | possessive
-    }),
     areaOfNeed: data.selectedAreaOfNeed.name,
     dateOptions: {
         threeMonths: data.dateOptions[0] | formatSimpleDate,
@@ -123,7 +119,7 @@
                 text: locale.dateSelection.options.twentyFourMonths
             },
             {
-                divider: "or"
+                divider: locale.common.radio.divider
             },
             {
                 value: "custom",
@@ -137,7 +133,7 @@
 {% endset -%}
 
 {% block content %}
-    <a href="#" class="govuk-back-link">Back</a>
+    <a href="#" class="govuk-back-link">{{ locale.common.backLink.text }}</a>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-one-third">
             {{ mojSideNavigation({

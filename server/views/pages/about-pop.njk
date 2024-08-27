@@ -3,11 +3,6 @@
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "../components/rosh/macro.njk" import roshWidget %}
 
-{% set locale = interpolate(locale, {
-    applicationName: applicationName,
-    subject: data.popData
-}) %}
-
 {% set pageTitle = locale.page.title %}
 {% set mainClasses = "app-container govuk-body" %}
 

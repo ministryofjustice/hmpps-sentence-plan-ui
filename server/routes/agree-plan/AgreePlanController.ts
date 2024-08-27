@@ -13,13 +13,11 @@ export default class AgreePlanController {
     const { errors } = req
 
     const planUuid = req.services.sessionService.getPlanUUID()
-    const popData = req.services.sessionService.getSubjectDetails()
 
     return res.render('pages/agree-plan', {
       locale: locale.en,
       data: {
         planUuid,
-        popData,
         form: req.body,
       },
       errors,
