@@ -29,7 +29,8 @@ export const testGoal: Goal = {
     {
       uuid: 'a-step-uuid',
       description: 'Test Step',
-      actor: [{ actor: 'A step actor', actorOptionId: 1 }],
+      creationDate: new Date().toISOString().substring(0, 10),
+      actors: [{ actor: 'A step actor', actorOptionId: 1 }],
     },
   ],
 } as Goal

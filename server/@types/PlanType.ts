@@ -1,3 +1,5 @@
+import { Goal } from './GoalType'
+
 export enum PlanAgreementStatus {
   DRAFT = 'DRAFT',
   AGREED = 'AGREED',
@@ -16,6 +18,7 @@ export type PlanType = {
   uuid: string
   status: PlanStatus
   agreementStatus: PlanAgreementStatus
-  creationDate: Date
-  updatedDate: Date
+  creationDate: string
+  updatedDate: string
+  goals: Goal[]
 }
