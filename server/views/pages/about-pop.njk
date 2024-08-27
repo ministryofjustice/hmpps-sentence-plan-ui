@@ -3,7 +3,12 @@
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "../components/rosh/macro.njk" import roshWidget %}
 
-{% set pageTitle = applicationName + " - About " + data.popData.givenName %}
+{% set locale = interpolate(locale, {
+    applicationName: applicationName,
+    subject: data.popData
+}) %}
+
+{% set pageTitle = locale.page.title %}
 {% set mainClasses = "app-container govuk-body" %}
 
 {# TODO: Probably could just make this whole widget a macro considering how big it is#}
@@ -28,32 +33,35 @@
     </div>
     {% endset %}
     {% set goalsToAchieveWidgetRows = (goalsToAchieveWidgetRows.push({
-            key: {
-                html: HTML,
-                classes: "govuk-!-width-three-quarters govuk-!-font-weight-regular"
-            },
-            value: {
-                text: 0,
-                classes: "govuk-!-text-align-right govuk-!-font-weight-bold rosh-low-risk"
-            }
-        }), goalsToAchieveWidgetRows) %}
+        key: {
+            html: HTML,
+            classes: "govuk-!-width-three-quarters govuk-!-font-weight-regular"
+        },
+        value: {
+            text: 0,
+            classes: "govuk-!-text-align-right govuk-!-font-weight-bold rosh-low-risk"
+        }
+    }), goalsToAchieveWidgetRows) %}
 {% endfor %}
+
 {% set goalsToAchieveWidgetLastRow %}
-{{ govukDetails({
-            summaryText: locale.goalsToAchieve.viewPreviousGoalsLink,
-            text: locale.goalsToAchieve.noPreviousGoals
-        }) }}
+    {{ govukDetails({
+        summaryText: locale.goalsToAchieve.viewPreviousGoalsLink,
+        text: locale.goalsToAchieve.noPreviousGoals
+    }) }}
 {% endset %}
-{% set goalsToAchieveWidgetRows = (goalsToAchieveWidgetRows.push({
+
+{% set goalsToAchieveWidgetRows =
+    (goalsToAchieveWidgetRows.push({
         key: {
             html: goalsToAchieveWidgetLastRow,
             classes: "govuk-!-width-full"
         }
     }), goalsToAchieveWidgetRows)
-    %}
+%}
 
 {% block content %}
-    <h1>{{ locale.title | replace("{POP_NAME}", data.popData.givenName) }}</h1>
+    <h1>{{ locale.mainHeading.title }}</h1>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-one-third">
             {{ govukSummaryList({

@@ -13,7 +13,7 @@ describe('Agree plan', () => {
 
   describe('Rendering', () => {
     it('Display agree plan page correctly on load', () => {
-      cy.get('.govuk-heading-l').contains('agree to this plan?')
+      cy.get('.govuk-fieldset__heading').contains('agree to this plan?')
       cy.get('.govuk-label').contains('Yes')
       cy.get('.govuk-label').contains('No')
       cy.get('.govuk-label').contains('could not answer this question')

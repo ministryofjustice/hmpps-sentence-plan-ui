@@ -4,11 +4,18 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "../components/error-summary/error-summary.njk" import errorSummary %}
 
+{% set locale = interpolate(locale, {
+    applicationName: applicationName,
+    subject: merge(data.popData, {
+        possessiveName: data.popData.givenName | possessive
+    })
+}) %}
+
 {% set pageTitle %}
     {% if errors %}
-        Error: {{ applicationName }} - Agree plan
+        {{ locale.page.errorTitle }}
     {% else %}
-        {{ applicationName }} - Agree plan
+        {{ locale.page.title }}
     {% endif %}
 {% endset -%}
 
@@ -22,9 +29,6 @@
                 errors: errors,
                 locale: locale
             }) }}
-
-            <h1 class="govuk-heading-l">{{ locale.title | replace("{POP_NAME}", data.popData.givenName) }}</h1>
-            <p class="govuk-body-s govuk-secondary-text">{{ locale.subtitle | replace("{POP_NAME}", data.popData.givenName) }}</p>
 
             <form id="agree-plan-form" method="POST">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}">
@@ -55,16 +59,26 @@
                 {{ govukRadios({
                     name: "agree-plan-radio",
                     id: "agree-plan-radio",
+                    fieldset: {
+                        legend: {
+                            text: locale.mainHeading.title,
+                            isPageHeading: true,
+                            classes: "govuk-fieldset__legend--l"
+                        }
+                    },
+                    hint: {
+                        text: locale.mainHeading.hint
+                    },
                     errorMessage: getFormattedError(errors, locale, 'agree-plan-radio'),
                     items: [
                         {
                             value: "yes",
-                            text: locale.agreePlanOptions.yes | replace("{POP_NAME}", data.popData.givenName),
+                            text: locale.agreePlanOptions.yes,
                             checked: data.form['agree-plan-radio'] == 'yes'
                         },
                         {
                             value: "no",
-                            text: locale.agreePlanOptions.no | replace("{POP_NAME}", data.popData.givenName),
+                            text: locale.agreePlanOptions.no,
                             checked: data.form['agree-plan-radio'] == 'no',
                             conditional: {
                                 html: doesNotAgreeDetailsHtml
@@ -72,7 +86,7 @@
                         },
                         {
                             value: "couldNotAnswer",
-                            text: locale.agreePlanOptions.couldNotAnswer | replace("{POP_NAME}", data.popData.givenName),
+                            text: locale.agreePlanOptions.couldNotAnswer,
                             checked: data.form['agree-plan-radio'] == 'couldNotAnswer',
                             conditional: {
                                 html: couldNotAnswerDetailsHtml
@@ -85,13 +99,13 @@
                     name: "notes",
                     id: "notes",
                     label: {
-                        text: locale.notes,
+                        text: locale.notes.label,
                         classes: "govuk-label--m"
                     }
                 }) }}
 
                 {{ govukButton({
-                    text: locale.agreePlanButton | replace("{POP_NAME}", data.popData.givenName),
+                    text: locale.agreePlanButton,
                     name: "action",
                     value: "agreePlan"
                 }) }}

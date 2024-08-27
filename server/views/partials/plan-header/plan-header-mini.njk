@@ -1,12 +1,6 @@
 
 
 {% if data.popData %}
-    {% if data.popData.givenName.endsWith('s') %}
-        {% set possessiveName = data.popData.givenName + "'" %}
-    {% else %}
-        {% set possessiveName = data.popData.givenName + "'s" %}
-    {% endif %}
-
     <header class="plan-header">
         <div class="plan-header__subject-details">
             <p class="plan-header__subject-details__title">{{data.popData.givenName}} {{data.popData.familyName}}</p>

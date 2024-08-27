@@ -10,9 +10,9 @@
 
 {% set pageTitle %}
     {% if errors %}
-        Error: {{ locale.title }} - {{ applicationName }}
+        {{ locale.page.errorTitle }}
     {% else %}
-        {{ locale.title }} - {{ applicationName }}
+        {{ locale.page.title }}
     {% endif %}
 {% endset -%}
 
@@ -21,6 +21,7 @@
     subject: merge(data.popData, {
         possessiveName: data.popData.givenName | possessive
     }),
+    areaOfNeed: data.selectedAreaOfNeed.name,
     dateOptions: {
         threeMonths: data.dateOptions[0] | formatSimpleDate,
         sixMonths: data.dateOptions[1] | formatSimpleDate,
@@ -48,7 +49,7 @@
     {{ govukCheckboxes({
         name: "other-area-of-need",
         hint: {
-          text: "Select all that apply."
+          text: locale.relatedAreaOfNeed.hint
         },
         errorMessage: getFormattedError(errors, locale, "other-area-of-need"),
         items: additionalAreaOfNeedCheckboxes
@@ -115,7 +116,7 @@
             },
             {
                 value: "custom",
-                text: locale.dateSelection.customRadioOptionText,
+                text: locale.dateSelection.options.custom,
                 conditional: {
                     html: customDateHtml
                 }
@@ -132,8 +133,8 @@
                 errors: errors,
                 locale: locale
             }) }}
-            <span class="govuk-caption-l">{{ data.areaOfNeed }}</span>
-            <h1 class="govuk-heading-l">{{ locale.mainHeading }}</h1>
+            <span class="govuk-caption-l">{{ locale.mainHeading.caption }}</span>
+            <h1 class="govuk-heading-l">{{ locale.mainHeading.title }}</h1>
 
             <form id="edit-goal-form" method="POST">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}">
@@ -144,8 +145,7 @@
                 {{ govukInput({
                     label: {
                         text: locale.goalSelection.label,
-                        classes: "govuk-label--m",
-                        isPageHeading: false
+                        classes: "govuk-label--m"
                     },
                     hint: {
                         text: locale.goalSelection.hint
@@ -163,25 +163,24 @@
                     name: "other-area-of-need-radio",
                     fieldset: {
                         legend: {
-                            text: "Is this goal related to any other area of need?",
-                            isPageHeading: false,
+                            text: locale.relatedAreaOfNeed.label,
                             classes: "govuk-fieldset__legend--m"
                         }
                     },
                     errorMessage: getFormattedError(errors, locale, 'other-area-of-need-radio'),
                     items: [
                         {
+                            text: locale.relatedAreaOfNeed.options.yes,
                             value: "yes",
-                            text: "Yes",
                             checked: data.form['other-area-of-need-radio'] == 'yes',
                             conditional: {
-                            html: areasOfNeedHtml
-                        }
+                                html: areasOfNeedHtml
+                            }
                         },
                         {
-                          value: "no",
-                          text: "No",
-                          checked: data.form['other-area-of-need-radio'] == 'no'
+                            text: locale.relatedAreaOfNeed.options.no,
+                            value: "no",
+                            checked: data.form['other-area-of-need-radio'] == 'no'
                         }
                     ]
                 }) }}
@@ -198,16 +197,16 @@
                     errorMessage: getFormattedError(errors, locale, 'start-working-goal-radio'),
                     items: [
                         {
+                            text: locale.startWorking.options.yes,
                             value: "yes",
-                            text: "Yes",
                             checked: data.form['start-working-goal-radio'] == 'yes',
                             conditional: {
                                 html: customDateRadioHtml
                             }
                         },
                         {
+                            text: locale.startWorking.options.no,
                             value: "no",
-                            text: "No, it is a future goal",
                             checked: data.form['start-working-goal-radio'] == 'no'
                         }
                     ]
