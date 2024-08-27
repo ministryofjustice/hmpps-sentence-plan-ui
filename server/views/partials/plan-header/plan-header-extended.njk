@@ -1,5 +1,5 @@
 {% extends "./plan-header-mini.njk" %}
-{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "moj/components/button-menu/macro.njk" import mojButtonMenu %}
 
 {% block extension %}
     <div class="plan-header__extended">
@@ -7,19 +7,12 @@
             <h1 class="govuk-heading-l govuk-!-margin-bottom-0">{{ possessiveName }} plan</h1>
         </div>
 
-        <div class="govuk-button-group">
-            <form action="/create-goal/accommodation">
-                {{ govukButton({
-                    text: "Create goal",
-                    classes: "govuk-button--secondary"
-                }) }}
-            </form>
-            <form action="/plan-summary/validate" method="POST">
-                <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-                {{ govukButton({
-                    text: "Agree plan"
-                }) }}
-            </form>
-        </div>
+        <form method="post">
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+            {{ mojButtonMenu({
+                class: "plan-header__extended__menu",
+                items: header.items
+            }) }}
+        </form>
     </div>
 {% endblock %}
