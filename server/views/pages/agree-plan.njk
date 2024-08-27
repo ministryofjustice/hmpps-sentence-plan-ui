@@ -32,7 +32,6 @@
 
             <form id="agree-plan-form" method="POST">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-                <input type="hidden" name="planUuid" value="{{ data.planUuid }}">
 
                 {% set doesNotAgreeDetailsHtml %}
                     {{ govukTextarea({

@@ -16,12 +16,9 @@ export default class AgreePlanController {
   private render = async (req: Request, res: Response) => {
     const { errors } = req
 
-    const planUuid = req.services.sessionService.getPlanUUID()
-
     return res.render('pages/agree-plan', {
       locale: locale.en,
       data: {
-        planUuid,
         form: req.body,
       },
       errors,
@@ -64,11 +61,16 @@ export default class AgreePlanController {
 
   private validatePlanForAgreement = async (req: Request, res: Response, next: NextFunction) => {
     try {
+      req.errors = { ...req.errors }
+
       const planUuid = req.services.sessionService.getPlanUUID()
       const plan = await this.planService.getPlanByUuid(planUuid)
+      const domainErrors = getValidationErrors(plainToInstance(PlanModel, plan))
 
-      req.errors = req.errors ?? {}
-      req.errors.domain = getValidationErrors(plainToInstance(Plan, plan))
+      if (Object.keys(domainErrors).length || plan.agreementStatus !== PlanAgreementStatus.DRAFT) {
+        req.errors.domain = domainErrors
+      }
+
       if (plan.agreementStatus !== PlanAgreementStatus.DRAFT) {
         req.errors.domain.plan = {
           alreadyAgreed: true,
