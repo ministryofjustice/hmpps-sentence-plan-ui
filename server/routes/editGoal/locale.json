@@ -47,13 +47,13 @@
     "addStepsButton": "Add steps",
     "saveWithoutStepsButton": "Save without steps",
     "errors": {
-      "other-area-of-need-radio": {
+      "related-area-of-need-radio": {
         "isNotEmpty": "Select yes if this goal is related to any other area of need"
       },
       "goal-input-autocomplete": {
         "isNotEmpty": "Select or enter what goal they should try to achieve"
       },
-      "other-area-of-need": {
+      "related-area-of-need": {
         "isNotEmpty": "Select all related areas"
       },
       "start-working-goal-radio": {

@@ -130,56 +130,56 @@ describe('EditGoalController', () => {
         })
       })
 
-      describe('other-area-of-need-radio', () => {
+      describe('related-area-of-need-radio', () => {
         it('should add error if not provided', () => {
           const body = plainToInstance(EditGoalPostModel, req.body)
           const errors = getValidationErrors(body)
 
           expect(errors).toMatchObject({
-            'other-area-of-need-radio': { isNotEmpty: true },
+            'related-area-of-need-radio': { isNotEmpty: true },
           })
         })
 
         it('should not add error if provided', () => {
-          req.body['other-area-of-need-radio'] = 'yes'
+          req.body['related-area-of-need-radio'] = 'yes'
           const body = plainToInstance(EditGoalPostModel, req.body)
           const errors = getValidationErrors(body)
 
           expect(errors).not.toMatchObject({
-            'other-area-of-need-radio': { isNotEmpty: true },
+            'related-area-of-need-radio': { isNotEmpty: true },
           })
         })
       })
 
-      describe('other-area-of-need', () => {
-        it('should add error if "other-area-of-need-radio" is "yes" and "other-area-of-need" is not provided', () => {
-          req.body['other-area-of-need-radio'] = 'yes'
+      describe('related-area-of-need', () => {
+        it('should add error if "related-area-of-need-radio" is "yes" and "related-area-of-need" is not provided', () => {
+          req.body['related-area-of-need-radio'] = 'yes'
           const body = plainToInstance(EditGoalPostModel, req.body)
           const errors = getValidationErrors(body)
 
           expect(errors).toMatchObject({
-            'other-area-of-need': { isNotEmpty: true },
+            'related-area-of-need': { isNotEmpty: true },
           })
         })
 
-        it('should not add error if "other-area-of-need-radio" is "yes" and "other-area-of-need" is provided', () => {
-          req.body['other-area-of-need-radio'] = 'yes'
-          req.body['other-area-of-need'] = 'Accommodation'
+        it('should not add error if "related-area-of-need-radio" is "yes" and "related-area-of-need" is provided', () => {
+          req.body['related-area-of-need-radio'] = 'yes'
+          req.body['related-area-of-need'] = 'Accommodation'
           const body = plainToInstance(EditGoalPostModel, req.body)
           const errors = getValidationErrors(body)
 
           expect(errors).not.toMatchObject({
-            'other-area-of-need': { isNotEmpty: true },
+            'related-area-of-need': { isNotEmpty: true },
           })
         })
 
-        it('should not add error if "other-area-of-need-radio" is not "yes"', () => {
-          req.body['other-area-of-need-radio'] = 'no'
+        it('should not add error if "related-area-of-need-radio" is not "yes"', () => {
+          req.body['related-area-of-need-radio'] = 'no'
           const body = plainToInstance(EditGoalPostModel, req.body)
           const errors = getValidationErrors(body)
 
           expect(errors).not.toMatchObject({
-            'other-area-of-need': { isNotEmpty: true },
+            'related-area-of-need': { isNotEmpty: true },
           })
         })
       })
@@ -262,7 +262,7 @@ describe('EditGoalController', () => {
       req.body = {
         'goal-input-autocomplete': updatedGoal.title,
         'area-of-need': updatedGoal.areaOfNeed,
-        'other-area-of-need-radio': 'no',
+        'related-area-of-need-radio': 'no',
         'start-working-goal-radio': 'yes',
         'date-selection-radio': updatedGoal.targetDate,
       }
@@ -306,7 +306,7 @@ describe('EditGoalController', () => {
       req.body = {
         'goal-input-autocomplete': updatedGoal.title,
         'area-of-need': updatedGoal.areaOfNeed,
-        'other-area-of-need-radio': 'no',
+        'related-area-of-need-radio': 'no',
         'start-working-goal-radio': 'yes',
         'date-selection-radio': updatedGoal.targetDate,
       }

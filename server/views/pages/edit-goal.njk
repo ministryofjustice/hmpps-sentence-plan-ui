@@ -35,7 +35,7 @@
 {% set additionalAreaOfNeedCheckboxes = [] %}
 {% for areaOfNeed in data.sortedAreasOfNeed %}
     {% if areaOfNeed.name != data.areaOfNeed %}
-        {% set isChecked = data.form['other-area-of-need'] and (areaOfNeed.name in data.form['other-area-of-need']) %}
+        {% set isChecked = data.form['related-area-of-need'] and (areaOfNeed.name in data.form['related-area-of-need']) %}
         {% set additionalAreaOfNeedCheckboxes = additionalAreaOfNeedCheckboxes.concat({
             value: areaOfNeed.name,
             text: areaOfNeed.name,
@@ -47,11 +47,11 @@
 
 {% set areasOfNeedHtml %}
     {{ govukCheckboxes({
-        name: "other-area-of-need",
+        name: "related-area-of-need",
         hint: {
           text: locale.relatedAreaOfNeed.hint
         },
-        errorMessage: getFormattedError(errors, locale, "other-area-of-need"),
+        errorMessage: getFormattedError(errors, locale, "related-area-of-need"),
         items: additionalAreaOfNeedCheckboxes
     }) }}
 {% endset -%}
@@ -160,19 +160,19 @@
                 }) }}
 
                 {{ govukRadios({
-                    name: "other-area-of-need-radio",
+                    name: "related-area-of-need-radio",
                     fieldset: {
                         legend: {
                             text: locale.relatedAreaOfNeed.label,
                             classes: "govuk-fieldset__legend--m"
                         }
                     },
-                    errorMessage: getFormattedError(errors, locale, 'other-area-of-need-radio'),
+                    errorMessage: getFormattedError(errors, locale, 'related-area-of-need-radio'),
                     items: [
                         {
                             text: locale.relatedAreaOfNeed.options.yes,
                             value: "yes",
-                            checked: data.form['other-area-of-need-radio'] == 'yes',
+                            checked: data.form['related-area-of-need-radio'] == 'yes',
                             conditional: {
                                 html: areasOfNeedHtml
                             }
@@ -180,7 +180,7 @@
                         {
                             text: locale.relatedAreaOfNeed.options.no,
                             value: "no",
-                            checked: data.form['other-area-of-need-radio'] == 'no'
+                            checked: data.form['related-area-of-need-radio'] == 'no'
                         }
                     ]
                 }) }}
