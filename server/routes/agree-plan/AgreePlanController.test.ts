@@ -1,17 +1,19 @@
 import { NextFunction, Request, Response } from 'express'
 import { plainToInstance } from 'class-transformer'
-import handoverData from '../../testutils/data/handoverData'
 import testPlan from '../../testutils/data/planData'
 import AgreePlanController from './AgreePlanController'
 import PlanService from '../../services/sentence-plan/planService'
 import mockReq from '../../testutils/preMadeMocks/mockReq'
 import mockRes from '../../testutils/preMadeMocks/mockRes'
 import { getValidationErrors } from '../../middleware/validationMiddleware'
-import { getValidationErrors } from '../../middleware/validationMiddleware'
 import locale from './locale.json'
 import runMiddlewareChain from '../../testutils/runMiddlewareChain'
 import AgreePlanPostModel from './models/AgreePlanPostModel'
-import runMiddlewareChain from '../../testutils/runMiddlewareChain'
+import URLs from '../URLs'
+import { PlanAgreementStatus, PlanType } from '../../@types/PlanType'
+import PlanModel from '../shared-models/PlanModel'
+import { testGoal } from '../../testutils/data/goalData'
+import testHandoverContext from '../../testutils/data/handoverData'
 
 jest.mock('../../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
@@ -128,7 +130,7 @@ describe('AgreePlanController', () => {
           const errors = getValidationErrors(body)
 
           expect(errors).toMatchObject({
-            'agree-plan-radio': { isNotEmpty: true },
+            'agree-plan-radio': { isIn: true },
           })
         })
 
@@ -152,26 +154,6 @@ describe('AgreePlanController', () => {
           })
         })
       })
-    })
-
-    it('should render the form again if there are validation errors', async () => {
-      const errors = {
-        body: { 'agree-plan-radio': { isNotEmpty: true } },
-        params: {},
-        query: {},
-      }
-      req.errors = errors
-      const expectedViewData = {
-        ...viewData,
-        errors,
-      }
-
-      await runMiddlewareChain(controller.post, req, res, next)
-
-      expect(res.render).toHaveBeenCalledWith('pages/agree-plan', expectedViewData)
-      expect(mockPlanService.agreePlan).not.toHaveBeenCalled()
-      expect(res.redirect).not.toHaveBeenCalled()
-      expect(next).not.toHaveBeenCalled()
     })
 
     it('should render the form again if there are validation errors', async () => {

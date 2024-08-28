@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
 import { plainToInstance } from 'class-transformer'
-import { plainToInstance } from 'class-transformer'
 import { AreaOfNeed } from '../../testutils/data/referenceData'
 import ReferentialDataService from '../../services/sentence-plan/referentialDataService'
 import EditGoalController from './EditGoalController'
@@ -10,11 +9,9 @@ import mockRes from '../../testutils/preMadeMocks/mockRes'
 import { testGoal } from '../../testutils/data/goalData'
 import locale from './locale.json'
 import { getValidationErrors } from '../../middleware/validationMiddleware'
-import { getValidationErrors } from '../../middleware/validationMiddleware'
 import EditGoalPostModel from './models/EditGoalPostModel'
 import URLs from '../URLs'
 import { NewGoal } from '../../@types/NewGoalType'
-import runMiddlewareChain from '../../testutils/runMiddlewareChain'
 import runMiddlewareChain from '../../testutils/runMiddlewareChain'
 
 jest.mock('../../services/sentence-plan/referentialDataService', () => {
@@ -108,10 +105,7 @@ describe('EditGoalController', () => {
         it('should add error if not provided', () => {
           const body = plainToInstance(EditGoalPostModel, req.body)
           const errors = getValidationErrors(body)
-          const body = plainToInstance(EditGoalPostModel, req.body)
-          const errors = getValidationErrors(body)
 
-          expect(errors).toMatchObject({
           expect(errors).toMatchObject({
             'goal-input-autocomplete': { isNotEmpty: true },
           })
@@ -121,10 +115,7 @@ describe('EditGoalController', () => {
           req.body['goal-input-autocomplete'] = 'Title of a goal'
           const body = plainToInstance(EditGoalPostModel, req.body)
           const errors = getValidationErrors(body)
-          const body = plainToInstance(EditGoalPostModel, req.body)
-          const errors = getValidationErrors(body)
 
-          expect(errors).not.toMatchObject({
           expect(errors).not.toMatchObject({
             'goal-input-autocomplete': { isNotEmpty: true },
           })
@@ -135,54 +126,52 @@ describe('EditGoalController', () => {
         it('should add error if not provided', () => {
           const body = plainToInstance(EditGoalPostModel, req.body)
           const errors = getValidationErrors(body)
-          const body = plainToInstance(EditGoalPostModel, req.body)
-          const errors = getValidationErrors(body)
 
           expect(errors).toMatchObject({
-            'other-area-of-need-radio': { isNotEmpty: true },
+            'related-area-of-need-radio': { isNotEmpty: true },
           })
         })
 
         it('should not add error if provided', () => {
-          req.body['other-area-of-need-radio'] = 'yes'
+          req.body['related-area-of-need-radio'] = 'yes'
           const body = plainToInstance(EditGoalPostModel, req.body)
           const errors = getValidationErrors(body)
 
           expect(errors).not.toMatchObject({
-            'other-area-of-need-radio': { isNotEmpty: true },
+            'related-area-of-need-radio': { isNotEmpty: true },
           })
         })
       })
 
-      describe('other-area-of-need', () => {
-        it('should add error if "other-area-of-need-radio" is "yes" and "other-area-of-need" is not provided', () => {
-          req.body['other-area-of-need-radio'] = 'yes'
+      describe('related-area-of-need', () => {
+        it('should add error if "related-area-of-need-radio" is "yes" and "related-area-of-need" is not provided', () => {
+          req.body['related-area-of-need-radio'] = 'yes'
           const body = plainToInstance(EditGoalPostModel, req.body)
           const errors = getValidationErrors(body)
 
           expect(errors).toMatchObject({
-            'other-area-of-need': { isNotEmpty: true },
+            'related-area-of-need': { isNotEmpty: true },
           })
         })
 
-        it('should not add error if "other-area-of-need-radio" is "yes" and "other-area-of-need" is provided', () => {
-          req.body['other-area-of-need-radio'] = 'yes'
-          req.body['other-area-of-need'] = 'Accommodation'
+        it('should not add error if "related-area-of-need-radio" is "yes" and "related-area-of-need" is provided', () => {
+          req.body['related-area-of-need-radio'] = 'yes'
+          req.body['related-area-of-need'] = 'Accommodation'
           const body = plainToInstance(EditGoalPostModel, req.body)
           const errors = getValidationErrors(body)
 
           expect(errors).not.toMatchObject({
-            'other-area-of-need': { isNotEmpty: true },
+            'related-area-of-need': { isNotEmpty: true },
           })
         })
 
-        it('should not add error if "other-area-of-need-radio" is not "yes"', () => {
-          req.body['other-area-of-need-radio'] = 'no'
+        it('should not add error if "related-area-of-need-radio" is not "yes"', () => {
+          req.body['related-area-of-need-radio'] = 'no'
           const body = plainToInstance(EditGoalPostModel, req.body)
           const errors = getValidationErrors(body)
 
           expect(errors).not.toMatchObject({
-            'other-area-of-need': { isNotEmpty: true },
+            'related-area-of-need': { isNotEmpty: true },
           })
         })
       })
@@ -191,10 +180,7 @@ describe('EditGoalController', () => {
         it('should add error if "start-working-goal-radio" is not provided', () => {
           const body = plainToInstance(EditGoalPostModel, req.body)
           const errors = getValidationErrors(body)
-          const body = plainToInstance(EditGoalPostModel, req.body)
-          const errors = getValidationErrors(body)
 
-          expect(errors).toMatchObject({
           expect(errors).toMatchObject({
             'start-working-goal-radio': { isNotEmpty: true },
           })
@@ -204,10 +190,7 @@ describe('EditGoalController', () => {
           req.body['start-working-goal-radio'] = 'yes'
           const body = plainToInstance(EditGoalPostModel, req.body)
           const errors = getValidationErrors(body)
-          const body = plainToInstance(EditGoalPostModel, req.body)
-          const errors = getValidationErrors(body)
 
-          expect(errors).not.toMatchObject({
           expect(errors).not.toMatchObject({
             'start-working-goal-radio': { isNotEmpty: true },
           })
@@ -219,10 +202,7 @@ describe('EditGoalController', () => {
           req.body['start-working-goal-radio'] = 'yes'
           const body = plainToInstance(EditGoalPostModel, req.body)
           const errors = getValidationErrors(body)
-          const body = plainToInstance(EditGoalPostModel, req.body)
-          const errors = getValidationErrors(body)
 
-          expect(errors).toMatchObject({
           expect(errors).toMatchObject({
             'date-selection-radio': { isNotEmpty: true },
           })
@@ -233,10 +213,7 @@ describe('EditGoalController', () => {
           req.body['date-selection-radio'] = 'custom'
           const body = plainToInstance(EditGoalPostModel, req.body)
           const errors = getValidationErrors(body)
-          const body = plainToInstance(EditGoalPostModel, req.body)
-          const errors = getValidationErrors(body)
 
-          expect(errors).not.toMatchObject({
           expect(errors).not.toMatchObject({
             'date-selection-radio': { isNotEmpty: true },
           })
@@ -247,10 +224,7 @@ describe('EditGoalController', () => {
           req.body['date-selection-radio'] = 'custom'
           const body = plainToInstance(EditGoalPostModel, req.body)
           const errors = getValidationErrors(body)
-          const body = plainToInstance(EditGoalPostModel, req.body)
-          const errors = getValidationErrors(body)
 
-          expect(errors).toMatchObject({
           expect(errors).toMatchObject({
             'date-selection-custom': { isNotEmpty: true },
           })
@@ -262,10 +236,7 @@ describe('EditGoalController', () => {
           req.body['date-selection-custom'] = new Date()
           const body = plainToInstance(EditGoalPostModel, req.body)
           const errors = getValidationErrors(body)
-          const body = plainToInstance(EditGoalPostModel, req.body)
-          const errors = getValidationErrors(body)
 
-          expect(errors).not.toMatchObject({
           expect(errors).not.toMatchObject({
             'date-selection-custom': { isNotEmpty: true },
           })
@@ -293,7 +264,6 @@ describe('EditGoalController', () => {
       req.params.uuid = testGoal.uuid
 
       await runMiddlewareChain(controller.post, req, res, next)
-      await runMiddlewareChain(controller.post, req, res, next)
 
       expect(mockGoalService.updateGoal).toHaveBeenCalledWith(updatedGoal, testGoal.uuid)
       expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_SUMMARY}?status=updated&type=current`)
@@ -313,7 +283,6 @@ describe('EditGoalController', () => {
         errors,
       }
 
-      await runMiddlewareChain(controller.post, req, res, next)
       await runMiddlewareChain(controller.post, req, res, next)
 
       expect(res.render).toHaveBeenCalledWith('pages/edit-goal', expectedViewData)
@@ -338,7 +307,6 @@ describe('EditGoalController', () => {
       }
       const error = new Error('This is a test error')
       mockGoalService.updateGoal = jest.fn().mockRejectedValue(error)
-      await runMiddlewareChain(controller.post, req, res, next)
       await runMiddlewareChain(controller.post, req, res, next)
 
       expect(next).toHaveBeenCalledWith(error)

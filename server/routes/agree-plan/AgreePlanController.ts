@@ -3,9 +3,12 @@ import { plainToInstance } from 'class-transformer'
 import locale from './locale.json'
 import URLs from '../URLs'
 import PlanService from '../../services/sentence-plan/planService'
+import validateRequest, { getValidationErrors } from '../../middleware/validationMiddleware'
+import PlanModel from '../shared-models/PlanModel'
 import transformRequest from '../../middleware/transformMiddleware'
 import AgreePlanPostModel from './models/AgreePlanPostModel'
-import validateRequest from '../../middleware/validationMiddleware'
+import { PlanAgreementStatus } from '../../@types/PlanType'
+import { PlanAgreement } from '../../@types/PlanAgreement'
 
 export default class AgreePlanController {
   constructor(private readonly planService: PlanService) {}
@@ -57,21 +60,53 @@ export default class AgreePlanController {
     }
   }
 
-  private handleValidationErrors = (req: Request, res: Response, next: NextFunction) => {
-    if (Object.keys(req.errors.body).length) {
-      return this.render(req, res, next)
+  private validatePlanForAgreement = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      req.errors = { ...req.errors }
+
+      const planUuid = req.services.sessionService.getPlanUUID()
+      const plan = await this.planService.getPlanByUuid(planUuid)
+      const domainErrors = getValidationErrors(plainToInstance(PlanModel, plan))
+
+      if (Object.keys(domainErrors).length || plan.agreementStatus !== PlanAgreementStatus.DRAFT) {
+        req.errors.domain = domainErrors
+      }
+
+      if (plan.agreementStatus !== PlanAgreementStatus.DRAFT) {
+        req.errors.domain.plan = {
+          alreadyAgreed: true,
+        }
+      }
+
+      return next()
+    } catch (e) {
+      return next(e)
     }
+  }
+
+  private handleValidationErrors = (req: Request, res: Response, next: NextFunction) => {
+    const hasErrors = Object.values(req.errors).some(errorCategory => Object.keys(errorCategory).length > 0)
+
+    if (hasErrors) {
+      if (req.method === 'POST') {
+        return this.render(req, res)
+      }
+
+      return res.redirect(URLs.PLAN_SUMMARY)
+    }
+
     return next()
   }
 
-  get = this.render
+  get = [this.validatePlanForAgreement, this.handleValidationErrors, this.render]
 
   post = [
     transformRequest({
       body: AgreePlanPostModel,
     }),
     validateRequest(),
+    this.validatePlanForAgreement,
     this.handleValidationErrors,
-    this.saveAndRedirect,
+    this.agreePlanAndRedirect,
   ]
 }

@@ -23,7 +23,7 @@ export default class AddStepsController {
 
       if (!req.body.steps || req.body.steps.length === 0) {
         req.body.steps = steps.map(step => ({
-          actor: step.actors[0].actor,
+          actor: step.actor,
           description: step.description,
         }))
       }
@@ -48,12 +48,7 @@ export default class AddStepsController {
     await this.stepService.saveSteps(
       req.body.steps.map((step: StepModel) => ({
         description: step.description,
-        actor: [
-          {
-            actor: step.actor,
-            actorOptionId: 0,
-          },
-        ],
+        actor: step.actor,
         status: 'in-progress',
       })),
       goalUuid,

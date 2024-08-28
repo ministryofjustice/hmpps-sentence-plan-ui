@@ -17,12 +17,7 @@ jest.mock('../../services/sentence-plan/stepsService', () => {
     getSteps: jest.fn().mockResolvedValue([
       {
         description: 'A test step',
-        actors: [
-          {
-            actor: 'Test actor',
-            actorOptionId: 1,
-          },
-        ],
+        actor: 'Test actor',
         status: 'PENDING',
       },
     ]),
@@ -61,7 +56,7 @@ describe('AddStepsController', () => {
         steps: [
           {
             description: testStep.description,
-            actor: testStep.actors[0].actor,
+            actor: testStep.actor,
           },
         ],
       },
@@ -194,22 +189,12 @@ describe('AddStepsController', () => {
         {
           description: 'a test step',
           status: 'in-progress',
-          actor: [
-            {
-              actor: 'Test actor',
-              actorOptionId: 0,
-            },
-          ],
+          actor: 'Test actor',
         },
         {
           description: 'test',
           status: 'in-progress',
-          actor: [
-            {
-              actor: 'Batman',
-              actorOptionId: 0,
-            },
-          ],
+          actor: 'Batman',
         },
       ]
 
