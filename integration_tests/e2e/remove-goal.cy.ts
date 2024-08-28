@@ -61,9 +61,9 @@ describe('Remove a goal', () => {
       // Check steps data is rendered correctly
       cy.get('.goal-summary-card__steps')
         .should('contain', stepData[0].description)
-        .and('contain', stepData[0].actor[0].actor)
+        .and('contain', stepData[0].actor)
         .and('contain', stepData[1].description)
-        .and('contain', stepData[1].actor[0].actor)
+        .and('contain', stepData[1].actor)
     })
   })
 
