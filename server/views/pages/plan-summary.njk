@@ -63,119 +63,119 @@
 {% endblock %}
 
 {% block content %}
-<div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
 
-        {% if errors.domain %}
-            {{ govukErrorSummary({
-                titleText: "There is a problem",
-                errorList: [
-                    {
-                        text: locale.errors['goal-summary-card'].arrayNotEmpty,
-                        href: "#goal-list"
-                    }
-                ]
-            }) }}
-        {% endif %}
-
-        {% if data.status == 'success' %}
-            {{ mojBanner({
-                type: 'success',
-                text: locale.notificationBanner.addedGoal,
-                iconFallbackText: 'Success'
-            }) }}
-        {% elseif data.status == 'removed' %}
-            {{ mojBanner({
-                type: 'success',
-                text: locale.notificationBanner.removedGoal,
-                iconFallbackText: 'Success'
-            }) }}
-        {% elseif data.status == 'updated' %}
-            {{ mojBanner({
-                type: 'success',
-                text: locale.notificationBanner.changedGoal,
-                iconFallbackText: 'Success'
-            }) }}
-        {% endif %}
-
-        <p class="govuk-body">{{ locale.addStepSuggestion }}</p>
-
-        {{ mojSubNavigation({
-          label: 'Sub navigation',
-          items: [{
-            text: locale.subNavigation.currentGoals,
-            href: '/plan-summary?type=current',
-            active: data.type != 'future'
-          }, {
-            text: locale.subNavigation.futureGoals,
-            href: '/plan-summary?type=future',
-            active: data.type == 'future'
-          }]
-        }) }}
-
-        <ol id="goal-list" class="goal-list govuk-list govuk-list--number">
-            {% if data.type == 'future' %}
-                {% set goals = futureGoals %}
-                {% set goalType = 'future' %}
-            {% else %}
-                {% set goals = currentGoals %}
-                {% set goalType = 'current' %}
+            {% if errors.domain %}
+                {{ govukErrorSummary({
+                    titleText: "There is a problem",
+                    errorList: [
+                        {
+                            text: locale.errors['goal-summary-card'].arrayNotEmpty,
+                            href: "#goal-list"
+                        }
+                    ]
+                }) }}
             {% endif %}
 
-            {% for item in goals %}
-                {% set goal = item.goal %}
-                {% set buttons = [] %}
+            {% if data.status == 'success' %}
+                {{ mojBanner({
+                    type: 'success',
+                    text: locale.notificationBanner.addedGoal,
+                    iconFallbackText: 'Success'
+                }) }}
+            {% elseif data.status == 'removed' %}
+                {{ mojBanner({
+                    type: 'success',
+                    text: locale.notificationBanner.removedGoal,
+                    iconFallbackText: 'Success'
+                }) }}
+            {% elseif data.status == 'updated' %}
+                {{ mojBanner({
+                    type: 'success',
+                    text: locale.notificationBanner.changedGoal,
+                    iconFallbackText: 'Success'
+                }) }}
+            {% endif %}
 
-                {% if not loop.first %}
-                    {% set buttons = buttons.concat({
-                        text: locale.goalSummaryCard.buttons.moveUpButton,
-                        href: "/goals/" + goalType + "/" + goal.uuid + "/up",
-                        classes: "govuk-button--secondary"
-                    }) %}
+            <p class="govuk-body">{{ locale.addStepSuggestion }}</p>
+
+            {{ mojSubNavigation({
+                label: 'Sub navigation',
+                items: [{
+                    text: locale.subNavigation.currentGoals,
+                    href: '/plan-summary?type=current',
+                    active: data.type != 'future'
+                }, {
+                    text: locale.subNavigation.futureGoals,
+                    href: '/plan-summary?type=future',
+                    active: data.type == 'future'
+                }]
+            }) }}
+
+            <ol id="goal-list" class="goal-list govuk-list govuk-list--number">
+                {% if data.type == 'future' %}
+                    {% set goals = futureGoals %}
+                    {% set goalType = 'future' %}
+                {% else %}
+                    {% set goals = currentGoals %}
+                    {% set goalType = 'current' %}
                 {% endif %}
 
-                {% if not loop.last %}
-                    {% set buttons = buttons.concat({
-                        text: locale.goalSummaryCard.buttons.moveDownButton,
-                        href: "/goals/" + goalType + "/" + goal.uuid + "/down",
-                        classes: "govuk-button--secondary"
-                    }) %}
-                {% endif %}
+                {% for item in goals %}
+                    {% set goal = item.goal %}
+                    {% set buttons = [] %}
 
-                {% set errorMessage = false %}
-                {% if errors.domain['goals.' + item.index + '.steps'].arrayNotEmpty %}
-                    {% set errorMessage = {
-                        id: 'goal-summary-card-' + item.index,
-                        text: locale.errors['goal-summary-card'].arrayNotEmpty,
-                        state: locale.goalSummaryCard.state.incomplete
-                    } %}
-                {% endif %}
+                    {% if not loop.first %}
+                        {% set buttons = buttons.concat({
+                            text: locale.goalSummaryCard.buttons.moveUpButton,
+                            href: "/goals/" + goalType + "/" + goal.uuid + "/up",
+                            classes: "govuk-button--secondary"
+                        }) %}
+                    {% endif %}
 
-                <li>
-                    {{ goalSummaryCard({
-                        goal: goal,
-                        buttons: buttons,
-                        actions: [
-                            {
-                                href: "/edit-goal/" + goal.uuid,
-                                text: locale.goalSummaryCard.actions.changeGoal
-                            },
-                            {
-                                href: "/add-change-steps",
-                                text: locale.goalSummaryCard.actions.addOrChangeSteps
-                            },
-                            {
-                                href: "/remove-goal/" + goal.uuid + "?type=current",
-                                text: locale.goalSummaryCard.actions.removeGoal
-                            }
-                        ],
-                        errorMessage: errorMessage
-                    }) }}
-                </li>
-            {% endfor %}
-        </ol>
+                    {% if not loop.last %}
+                        {% set buttons = buttons.concat({
+                            text: locale.goalSummaryCard.buttons.moveDownButton,
+                            href: "/goals/" + goalType + "/" + goal.uuid + "/down",
+                            classes: "govuk-button--secondary"
+                        }) %}
+                    {% endif %}
 
-        {% include "../partials/back-to-top-link.njk" %}
-      </div>
-</div>
+                    {% set errorMessage = false %}
+                    {% if errors.domain['goals.' + item.index + '.steps'].arrayNotEmpty %}
+                        {% set errorMessage = {
+                            id: 'goal-summary-card-' + item.index,
+                            text: locale.errors['goal-summary-card'].arrayNotEmpty,
+                            state: locale.goalSummaryCard.state.incomplete
+                        } %}
+                    {% endif %}
+
+                    <li>
+                        {{ goalSummaryCard({
+                            goal: goal,
+                            buttons: buttons,
+                            actions: [
+                                {
+                                    href: "/edit-goal/" + goal.uuid,
+                                    text: locale.goalSummaryCard.actions.changeGoal
+                                },
+                                {
+                                    href: "/goal/" + goal.uuid + '/add-steps',
+                                    text: locale.goalSummaryCard.actions.addOrChangeSteps
+                                },
+                                {
+                                    href: "/remove-goal/" + goal.uuid + "?type=current",
+                                    text: locale.goalSummaryCard.actions.removeGoal
+                                }
+                            ],
+                            errorMessage: errorMessage
+                        }) }}
+                    </li>
+                {% endfor %}
+            </ol>
+
+            {% include "../partials/back-to-top-link.njk" %}
+        </div>
+    </div>
 {% endblock %}

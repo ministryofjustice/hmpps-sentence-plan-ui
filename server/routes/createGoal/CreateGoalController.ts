@@ -35,7 +35,7 @@ export default class CreateGoalController {
       })
 
       if (req.body.action === 'addStep') {
-        return res.redirect(URLs.CREATE_STEP)
+        return res.redirect(URLs.ADD_STEPS.replace(':uuid', uuid))
       }
       return res.redirect(`${URLs.PLAN_SUMMARY}?status=success`)
     } catch (e) {

@@ -22,9 +22,9 @@ describe('Create a new Goal', () => {
     createGoalPage.selectAchievementDate('In 6 months')
     createGoalPage.clickButton('Add steps')
 
-    cy.url().should('include', '/steps/create')
+    cy.url().should('include', '/add-steps')
     addStep.addStepAutocompleteText('This is the first step')
-    addStep.selectStepActors(['Sam', 'Probation practitioner'])
+    addStep.selectStepActor('Sam')
     addStep.saveAndContinue()
 
     cy.url().should('include', '/plan-summary')
