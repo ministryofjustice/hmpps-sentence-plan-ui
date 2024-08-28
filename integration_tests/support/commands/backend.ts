@@ -1,5 +1,5 @@
 import { NewGoal } from '../../../server/@types/NewGoalType'
-import { NewStep } from '../../../server/@types/NewStepType'
+import { NewStep } from '../../../server/@types/StepType'
 
 const getApiToken = () => {
   const apiToken = Cypress.env('API_TOKEN')
