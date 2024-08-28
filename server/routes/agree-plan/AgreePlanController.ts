@@ -33,7 +33,7 @@ export default class AgreePlanController {
       practitionerName: principalDetails.displayName,
       personName: `${subjectDetails.givenName} ${subjectDetails.familyName}`,
       optionalNote: (req.body as AgreePlanPostModel).notes,
-      agreementStatusNote: ''
+      agreementStatusNote: '',
     }
 
     switch (req.body['agree-plan-radio']) {

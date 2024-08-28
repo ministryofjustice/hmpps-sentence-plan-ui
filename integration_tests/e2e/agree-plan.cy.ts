@@ -1,5 +1,5 @@
-import DataGenerator from "../support/DataGenerator";
-import {PlanType} from "../../server/@types/PlanType";
+import DataGenerator from '../support/DataGenerator'
+import { PlanType } from '../../server/@types/PlanType'
 
 describe('Agree plan', () => {
   beforeEach(() => {
@@ -44,7 +44,7 @@ describe('Agree plan', () => {
       it('Do not allow access to agree-plan for plan with current goals missing steps', () => {
         const futureGoal = {
           ...DataGenerator.generateGoal(),
-          targetDate: undefined
+          targetDate: undefined,
         }
 
         cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
@@ -71,12 +71,12 @@ describe('Agree plan', () => {
       it('Allow access to agree-plan for plan with future goals missing steps', () => {
         const futureGoal = {
           ...DataGenerator.generateGoal(),
-          targetDate: undefined
+          targetDate: undefined,
         }
 
         cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
           cy.addGoalToPlan(plan.uuid, futureGoal)
-          cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal()).then((goal) => {
+          cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal()).then(goal => {
             cy.addStepToGoal(goal.uuid, DataGenerator.generateStep())
           })
 
