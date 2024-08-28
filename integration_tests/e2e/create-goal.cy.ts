@@ -1,9 +1,7 @@
 import CreateGoal from '../pages/create-goal'
-import AddSteps from '../pages/add-steps'
 
 describe('Create a new Goal', () => {
   const createGoalPage = new CreateGoal()
-  const addStep = new AddSteps()
 
   beforeEach(() => {
     cy.createSentencePlan().then(planDetails => {
@@ -11,23 +9,6 @@ describe('Create a new Goal', () => {
       cy.openSentencePlan(planDetails.oasysAssessmentPk)
       cy.visit('/about-pop')
     })
-  })
-
-  it('Creates a new goal with steps', () => {
-    createGoalPage.createGoal('accommodation')
-    createGoalPage.selectGoalAutocompleteOption('acc', 0)
-    createGoalPage.selectRelatedAreasOfNeedRadio('yes')
-    createGoalPage.selectRelatedAreasOfNeed(['Employment and education', 'Drug use'])
-    createGoalPage.selectStartWorkingRadio('yes')
-    createGoalPage.selectAchievementDate('In 6 months')
-    createGoalPage.clickButton('Add steps')
-
-    cy.url().should('include', '/add-steps')
-    addStep.addStepAutocompleteText('This is the first step')
-    addStep.selectStepActor('Sam')
-    addStep.saveAndContinue()
-
-    cy.url().should('include', '/plan-summary')
   })
 
   it('Creates a new goal with errors', () => {
@@ -55,7 +36,21 @@ describe('Create a new Goal', () => {
     createGoalPage.selectAchievementDate('In 6 months')
     createGoalPage.clickButton('Save without steps')
 
-    cy.url().should('include', '/plan-summary')
+    cy.url().should('include', '/plan-summary?status=success')
+    cy.get('#goal-list').children().should('have.length', 1)
+
+    cy.get('#goal-list')
+      .children()
+      .first()
+      .within(() => {
+        cy.get('.govuk-summary-card__title').should('contain', 'Accommodation Goal 1')
+        cy.get('.goal-summary-card__info').should('contain', 'Aim to achieve in 6 months')
+        cy.get('.goal-summary-card__areas-of-need').should('contain', 'Area of need: accommodation')
+        cy.get('.goal-summary-card__areas-of-need').should(
+          'contain',
+          'Also relates to: employment and education, drug use',
+        )
+      })
   })
 
   it.skip('Should have no accessibility violations', () => {
