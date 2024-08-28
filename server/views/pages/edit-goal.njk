@@ -19,13 +19,13 @@
     }
 }) %}
 
-{% set pageTitle %}
-    {% if errors %}
-        {{ locale.page.errorTitle }}
-    {% else %}
+{% block pageTitle %}
+    {% if not errors %}
         {{ locale.page.title }}
+    {% else %}
+        {{ locale.page.errorTitle }}
     {% endif %}
-{% endset -%}
+{% endblock %}
 
 {% set mainClasses = "app-container govuk-body" %}
 

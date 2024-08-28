@@ -2,20 +2,13 @@
 {% from "../components/summary-card/goal-summary-card.njk" import goalSummaryCard %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
-{% set locale = interpolate(locale, {
-    applicationName: applicationName,
-    subject: merge(data.popData, {
-        possessiveName: data.popData.givenName | possessive
-    })
-}) %}
-
-{% set pageTitle %}
-    {% if errors %}
-        {{ locale.page.errorTitle }}
-    {% else %}
+{% block pageTitle %}
+    {% if not errors %}
         {{ locale.page.title }}
+    {% else %}
+        {{ locale.page.errorTitle }}
     {% endif %}
-{% endset -%}
+{% endblock %}
 
 {% set mainClasses = "app-container govuk-body" %}
 
