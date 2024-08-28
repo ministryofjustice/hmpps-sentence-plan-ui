@@ -34,7 +34,6 @@ export default class GoalModel {
   goalOrder: number
 
   @ValidateIf(o => o.targetDate != null)
-  @IsArray()
   @ValidateNested()
   @Type(() => StepModel)
   @ArrayNotEmpty()

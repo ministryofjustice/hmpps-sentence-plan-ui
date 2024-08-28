@@ -1,16 +1,13 @@
-import { ArrayNotEmpty, IsArray, IsDateString, IsEnum, ValidateNested } from 'class-validator'
+import { ArrayNotEmpty, IsDateString, IsEnum, ValidateNested } from 'class-validator'
 import { Type } from 'class-transformer'
 import GoalModel from './GoalModel'
+import { PlanStatus } from '../../@types/PlanType'
 
 export default class PlanModel {
   uuid: string
 
-  @IsEnum({
-    INCOMPLETE: 'INCOMPLETE',
-    COMPLETE: 'COMPLETE',
-    IN_PROGRESS: 'IN_PROGRESS',
-  })
-  status: string
+  @IsEnum(PlanStatus)
+  status: PlanStatus
 
   @IsDateString()
   creationDate: string
@@ -18,7 +15,6 @@ export default class PlanModel {
   @IsDateString()
   updatedDate: string
 
-  @IsArray()
   @ArrayNotEmpty()
   @ValidateNested()
   @Type(() => GoalModel)

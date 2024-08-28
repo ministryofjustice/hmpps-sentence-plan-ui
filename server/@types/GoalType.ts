@@ -7,7 +7,7 @@ export type Goal = {
   relatedAreasOfNeed: AreaOfNeed[]
   creationDate: string
   completedDate?: string
-  targetDate: string
+  targetDate?: string
   goalOrder: number
   steps: Step[]
 }
