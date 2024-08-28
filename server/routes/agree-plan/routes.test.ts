@@ -44,7 +44,7 @@ afterEach(() => {
 describe(`GET ${URLs.AGREE_PLAN}`, () => {
   it('should render agree plan page', () => {
     return request(app)
-      .get(URLs.AGREE_PLAN.replace(':uuid', testPlan.uuid))
+      .get(URLs.AGREE_PLAN)
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain(

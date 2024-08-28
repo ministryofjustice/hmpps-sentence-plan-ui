@@ -76,8 +76,7 @@ export default class PlanSummaryController {
   }
 
   private handleSuccessRedirect = (req: Request, res: Response) => {
-    const planUuid = req.services.sessionService.getPlanUUID()
-    return res.redirect(`/plan/${planUuid}/agree`)
+    return res.redirect(URLs.AGREE_PLAN)
   }
 
   get = this.render

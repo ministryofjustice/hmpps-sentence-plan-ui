@@ -16,7 +16,7 @@ describe('Agree plan', () => {
           cy.addStepToGoal(goal.uuid, DataGenerator.generateStep())
         })
 
-        cy.visit(`/plan/${plan.uuid}/agree`)
+        cy.visit(`/agree-plan`)
       })
     })
 
@@ -34,9 +34,7 @@ describe('Agree plan', () => {
   describe('Validation behaviour', () => {
     describe('Invalid plan', () => {
       it('Do not allow access to agree-plan for plan with no goals', () => {
-        cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
-          cy.visit(`/plan/${plan.uuid}/agree`)
-        })
+        cy.visit(`/agree-plan`)
 
         cy.url().should('include', '/plan-summary')
       })
@@ -50,7 +48,7 @@ describe('Agree plan', () => {
         cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
           cy.addGoalToPlan(plan.uuid, futureGoal)
           cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal())
-          cy.visit(`/plan/${plan.uuid}/agree`)
+          cy.visit(`/agree-plan`)
         })
 
         cy.url().should('include', '/plan-summary')
@@ -64,7 +62,7 @@ describe('Agree plan', () => {
             cy.addStepToGoal(goal.uuid, DataGenerator.generateStep())
           })
 
-          cy.visit(`/plan/${plan.uuid}/agree`)
+          cy.visit(`/agree-plan`)
         })
       })
 
@@ -80,8 +78,8 @@ describe('Agree plan', () => {
             cy.addStepToGoal(goal.uuid, DataGenerator.generateStep())
           })
 
-          cy.visit(`/plan/${plan.uuid}/agree`)
-          cy.url().should('include', `/plan/${plan.uuid}/agree`)
+          cy.visit(`/agree-plan`)
+          cy.url().should('include', `/agree-plan`)
         })
       })
 
@@ -115,7 +113,7 @@ describe('Agree plan', () => {
           cy.addStepToGoal(goal.uuid, DataGenerator.generateStep())
         })
 
-        cy.visit(`/plan/${plan.uuid}/agree`)
+        cy.visit(`/agree-plan`)
       })
     })
 
