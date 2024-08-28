@@ -1,101 +1,195 @@
 /* eslint-disable max-classes-per-file */
-import { Request, Response, NextFunction } from 'express'
-import 'reflect-metadata'
-import { Type } from 'class-transformer'
+import { IsInt, IsNotEmpty, Min, MinLength, ValidateNested } from 'class-validator'
+import { Expose, plainToInstance, Transform } from 'class-transformer'
+import validateRequest, { getValidationErrors } from './validationMiddleware'
 import mockReq from '../testutils/preMadeMocks/mockReq'
 import mockRes from '../testutils/preMadeMocks/mockRes'
-import RequestDataSources from '../@types/RequestDataSources'
-import transformRequest from './transformMiddleware'
 
-class BodyClass {
-  field: string
-}
+describe('validation', () => {
+  describe('getValidationErrors', () => {
+    describe('nested validation', () => {
+      class TestNestedModel {
+        @IsNotEmpty()
+        foo: string
 
-class ParamsClass {
-  @Type(() => Number)
-  id: number
-}
+        @IsNotEmpty()
+        bar: string
+      }
 
-class QueryClass {
-  search: string
-}
+      class TestModel {
+        @IsNotEmpty()
+        title: string
 
-describe('transformMiddleware', () => {
-  describe('transformRequest', () => {
-    let req: Partial<Request>
-    let res: Partial<Response>
-    let next: NextFunction
+        @Expose()
+        @ValidateNested()
+        @Transform(({ obj }) => {
+          return Object.keys(obj)
+            .filter(key => key.startsWith('nested-foo-'))
+            .map(key => key.slice(-1))
+            .map(row =>
+              plainToInstance(TestNestedModel, {
+                foo: obj[`nested-foo-${row}`],
+                bar: obj[`nested-bar-${row}`],
+              }),
+            )
+        })
+        nested: TestNestedModel[]
+      }
 
-    beforeEach(() => {
-      req = mockReq({
-        body: { field: 'value' },
-        params: { id: '123' },
-        query: { search: 'term' },
+      it('should return no errors when nested validation passes', () => {
+        const data = {
+          title: 'a test title',
+          'nested-foo-1': 'Foo 1',
+          'nested-bar-1': 'Bar 1',
+          'nested-foo-2': 'Foo 2',
+          'nested-bar-2': 'bar 2',
+        }
+
+        const dataInstance = plainToInstance(TestModel, data)
+        const errors = getValidationErrors(dataInstance)
+        expect(errors).toEqual({})
       })
-      res = mockRes()
-      next = jest.fn()
+
+      it('should return errors when nested validation fails', () => {
+        const data = {
+          title: 'a test title',
+          'nested-foo-1': 'Foo 1',
+          'nested-foo-2': 'Foo 2',
+          'nested-bar-2': 'bar 2',
+        }
+
+        const dataInstance = plainToInstance(TestModel, data)
+        const errors = getValidationErrors(dataInstance)
+        expect(errors).toEqual({
+          'nested.0.bar': {
+            isNotEmpty: true,
+          },
+        })
+      })
     })
 
-    it('should transform req.body using the specified class', () => {
-      const middleware = transformRequest({
-        [RequestDataSources.BODY]: BodyClass,
+    describe('field validation', () => {
+      class TestModel {
+        @IsNotEmpty()
+        title: string
+
+        @IsNotEmpty()
+        anotherString: string
+
+        @IsInt()
+        selectedNumber: string
+      }
+
+      it('should return no errors when field validation passes', () => {
+        const data = {
+          title: 'a test title',
+          anotherString: 'another test string',
+          selectedNumber: 4,
+        }
+
+        const dataInstance = plainToInstance(TestModel, data)
+        const errors = getValidationErrors(dataInstance)
+        expect(errors).toEqual({})
       })
 
-      middleware(req as Request, res as Response, next)
+      it('should return no errors when field validation passes', () => {
+        const data = {
+          title: 'a test title',
+          selectedNumber: 'should be a number',
+        }
 
-      expect(req.body).toBeInstanceOf(BodyClass)
-      expect(req.body.field).toBe('value')
+        const dataInstance = plainToInstance(TestModel, data)
+        const errors = getValidationErrors(dataInstance)
+        expect(errors).toEqual({
+          anotherString: {
+            isNotEmpty: true,
+          },
+          selectedNumber: {
+            isInt: true,
+          },
+        })
+      })
+    })
+  })
+
+  describe('validateRequest', () => {
+    class BodyDTO {
+      @IsNotEmpty()
+      name: string
+    }
+
+    class ParamsDTO {
+      @IsInt()
+      @Min(3)
+      id: number
+    }
+
+    class QueryDTO {
+      @MinLength(9)
+      search: string
+    }
+
+    it('should attach errors to req and call next', () => {
+      const req = mockReq({
+        body: plainToInstance(BodyDTO, { name: '' }),
+        params: plainToInstance(ParamsDTO, { id: 'abc' }),
+        query: plainToInstance(QueryDTO, { search: 'tooShort' }),
+      })
+      const res = mockRes()
+      const next = jest.fn()
+
+      const middleware = validateRequest()
+
+      middleware(req, res, next)
+
+      expect(next).toHaveBeenCalled()
+      expect(req.errors).toEqual({
+        body: { name: { isNotEmpty: true } },
+        params: { id: { isInt: true, min: true } },
+        query: { search: { minLength: true } },
+      })
+    })
+
+    it('should ensure req.body is a class instance and not a plain object', () => {
+      const req = mockReq({
+        body: { name: '' },
+        params: plainToInstance(ParamsDTO, { id: 'abc' }),
+        query: plainToInstance(QueryDTO, { search: 'justLongEnough' }),
+      })
+      const res = mockRes()
+      const next = jest.fn()
+
+      const middleware = validateRequest()
+
+      middleware(req, res, next)
+
+      expect(req.errors).toEqual({
+        body: {},
+        params: { id: { isInt: true, min: true } },
+        query: {},
+      })
       expect(next).toHaveBeenCalled()
     })
 
-    it('should transform req.params using the specified class', () => {
-      const middleware = transformRequest({
-        [RequestDataSources.PARAMS]: ParamsClass,
+    it('should pass validation with no errors and call next', () => {
+      const req = mockReq({
+        body: plainToInstance(BodyDTO, { name: 'Mr. Egg' }),
+        params: plainToInstance(ParamsDTO, { id: 3 }),
+        query: plainToInstance(QueryDTO, { search: 'justLongEnough' }),
       })
+      const res = mockRes()
+      const next = jest.fn()
 
-      middleware(req as Request, res as Response, next)
+      const middleware = validateRequest()
 
-      expect(req.params).toBeInstanceOf(ParamsClass)
-      expect(req.params.id).toBe(123)
+      middleware(req, res, next)
+
       expect(next).toHaveBeenCalled()
-    })
-
-    it('should transform req.query using the specified class', () => {
-      const middleware = transformRequest({
-        [RequestDataSources.QUERY]: QueryClass,
+      expect(req.errors).toEqual({
+        body: {},
+        params: {},
+        query: {},
       })
-
-      middleware(req as Request, res as Response, next)
-
-      expect(req.query).toBeInstanceOf(QueryClass)
-      expect(req.query.search).toBe('term')
-      expect(next).toHaveBeenCalled()
-    })
-
-    it('should handle multiple transformations', () => {
-      const middleware = transformRequest({
-        [RequestDataSources.BODY]: BodyClass,
-        [RequestDataSources.PARAMS]: ParamsClass,
-        [RequestDataSources.QUERY]: QueryClass,
-      })
-
-      middleware(req as Request, res as Response, next)
-
-      expect(req.body).toBeInstanceOf(BodyClass)
-      expect(req.params).toBeInstanceOf(ParamsClass)
-      expect(req.query).toBeInstanceOf(QueryClass)
-      expect(next).toHaveBeenCalled()
-    })
-
-    it('should not transform if the class is not specified', () => {
-      const middleware = transformRequest({})
-
-      middleware(req as Request, res as Response, next)
-
-      expect(req.body).not.toBeInstanceOf(BodyClass)
-      expect(req.params).not.toBeInstanceOf(ParamsClass)
-      expect(req.query).not.toBeInstanceOf(QueryClass)
-      expect(next).toHaveBeenCalled()
     })
   })
 })
