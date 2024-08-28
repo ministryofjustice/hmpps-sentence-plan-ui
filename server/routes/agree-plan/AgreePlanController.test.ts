@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
 import { plainToInstance } from 'class-transformer'
-import handoverData from '../../testutils/data/handoverData'
 import testPlan from '../../testutils/data/planData'
 import AgreePlanController from './AgreePlanController'
 import PlanService from '../../services/sentence-plan/planService'
@@ -8,19 +7,26 @@ import mockReq from '../../testutils/preMadeMocks/mockReq'
 import mockRes from '../../testutils/preMadeMocks/mockRes'
 import { getValidationErrors } from '../../middleware/validationMiddleware'
 import locale from './locale.json'
-import AgreePlanPostModel from './models/AgreePlanPostModel'
 import runMiddlewareChain from '../../testutils/runMiddlewareChain'
+import AgreePlanPostModel from './models/AgreePlanPostModel'
+import URLs from '../URLs'
+import { PlanAgreementStatus, PlanType } from '../../@types/PlanType'
+import PlanModel from '../shared-models/PlanModel'
+import { testGoal } from '../../testutils/data/goalData'
+import testHandoverContext from '../../testutils/data/handoverData'
 
 jest.mock('../../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
-    getSubjectDetails: jest.fn().mockReturnValue(handoverData.subject),
-    getPlanUUID: jest.fn().mockReturnValue('9506fba0-d2c7-4978-b3fc-aefd86821844'),
+    getPlanUUID: jest.fn().mockReturnValue(testPlan.uuid),
+    getPrincipalDetails: jest.fn().mockReturnValue(testHandoverContext.principal),
+    getSubjectDetails: jest.fn().mockReturnValue(testHandoverContext.subject),
   }))
 })
 
 jest.mock('../../services/sentence-plan/planService', () => {
   return jest.fn().mockImplementation(() => ({
     agreePlan: jest.fn().mockResolvedValue(testPlan),
+    getPlanByUuid: jest.fn().mockResolvedValue(testPlan),
   }))
 })
 
@@ -32,8 +38,6 @@ describe('AgreePlanController', () => {
   let next: NextFunction
   const viewData = {
     data: {
-      planUuid: '9506fba0-d2c7-4978-b3fc-aefd86821844',
-      popData: handoverData.subject,
       form: {},
     },
     errors: {},
@@ -50,26 +54,71 @@ describe('AgreePlanController', () => {
   })
 
   describe('get', () => {
+    describe('validation', () => {
+      describe('goals', () => {
+        it('should add error if no goals', () => {
+          const badPlanData: PlanType = { ...testPlan, goals: [] }
+
+          const dataToBeValidated = plainToInstance(PlanModel, badPlanData)
+          const errors = getValidationErrors(dataToBeValidated)
+
+          expect(errors).toMatchObject({
+            goals: { arrayNotEmpty: true },
+          })
+        })
+      })
+
+      describe('steps', () => {
+        it('should add error if current goal has no steps', () => {
+          const badPlanData: Partial<PlanType> = {
+            ...testPlan,
+            goals: [{ ...testGoal, steps: [] }],
+          }
+
+          const dataToBeValidated = plainToInstance(PlanModel, badPlanData)
+          const errors = getValidationErrors(dataToBeValidated)
+
+          expect(errors).toMatchObject({
+            'goals.0.steps': { arrayNotEmpty: true },
+          })
+        })
+      })
+    })
+
     it('should render without validation errors', async () => {
-      await controller.get(req, res, next)
+      await runMiddlewareChain(controller.get, req, res, next)
+
+      expect(mockPlanService.agreePlan).not.toHaveBeenCalled()
       expect(res.render).toHaveBeenCalledWith('pages/agree-plan', viewData)
     })
 
-    it('should render with validation errors', async () => {
-      const errors = {
-        body: { 'agree-plan-radio': { isNotEmpty: true } },
-        params: {},
-        query: {},
-      }
-      req.errors = errors
-      const expectedViewData = {
-        ...viewData,
-        errors,
-      }
+    it('should redirect if plan has validation errors', async () => {
+      const badPlanData: PlanType = { ...testPlan, goals: [] }
 
-      await controller.get(req, res, next)
+      mockPlanService.getPlanByUuid = jest.fn().mockResolvedValue(badPlanData)
+      await runMiddlewareChain(controller.get, req, res, next)
 
-      expect(res.render).toHaveBeenCalledWith('pages/agree-plan', expectedViewData)
+      expect(mockPlanService.agreePlan).not.toHaveBeenCalled()
+      expect(res.redirect).toHaveBeenCalledWith(URLs.PLAN_SUMMARY)
+    })
+
+    it('should redirect if plan is not in draft', async () => {
+      const badPlanData: PlanType = { ...testPlan, agreementStatus: PlanAgreementStatus.AGREED }
+
+      mockPlanService.getPlanByUuid = jest.fn().mockResolvedValue(badPlanData)
+      await runMiddlewareChain(controller.get, req, res, next)
+
+      expect(mockPlanService.agreePlan).not.toHaveBeenCalled()
+      expect(res.redirect).toHaveBeenCalledWith(URLs.PLAN_SUMMARY)
+    })
+
+    it('should call next if error', async () => {
+      const error = new Error('fail')
+      mockPlanService.getPlanByUuid = jest.fn().mockRejectedValue(error)
+      await runMiddlewareChain(controller.get, req, res, next)
+
+      expect(mockPlanService.agreePlan).not.toHaveBeenCalled()
+      expect(next).toHaveBeenCalledWith(error)
     })
   })
 
@@ -81,7 +130,7 @@ describe('AgreePlanController', () => {
           const errors = getValidationErrors(body)
 
           expect(errors).toMatchObject({
-            'agree-plan-radio': { isNotEmpty: true },
+            'agree-plan-radio': { isIn: true },
           })
         })
 
@@ -108,15 +157,26 @@ describe('AgreePlanController', () => {
     })
 
     it('should render the form again if there are validation errors', async () => {
-      const errors = {
-        body: { 'agree-plan-radio': { isNotEmpty: true } },
-        params: {},
-        query: {},
+      req.body = {
+        'agree-plan-radio': 'no',
       }
-      req.errors = errors
+      req.method = 'POST'
       const expectedViewData = {
         ...viewData,
-        errors,
+        data: {
+          form: {
+            'agree-plan-radio': 'no',
+          },
+        },
+        errors: {
+          body: {
+            'does-not-agree-details': {
+              isNotEmpty: true,
+            },
+          },
+          params: {},
+          query: {},
+        },
       }
 
       await runMiddlewareChain(controller.post, req, res, next)
@@ -127,14 +187,62 @@ describe('AgreePlanController', () => {
       expect(next).not.toHaveBeenCalled()
     })
 
-    describe('save and redirect', () => {
-      it('should save and redirect when there are no validation errors', async () => {
-        // TODO
-      })
+    it('should agree plan and redirect if no validation errors', async () => {
+      req.body = {
+        notes: 'test note',
+        'agree-plan-radio': 'yes',
+      }
+      req.method = 'POST'
+      const expectedAgreementData = {
+        agreementStatus: PlanAgreementStatus.AGREED,
+        agreementStatusNote: '',
+        optionalNote: 'test note',
+        personName: `${testHandoverContext.subject.givenName} ${testHandoverContext.subject.familyName}`,
+        practitionerName: testHandoverContext.principal.displayName,
+      }
 
-      it('should should return error page if there is an error saving the goal', async () => {
-        // TODO
-      })
+      await runMiddlewareChain(controller.post, req, res, next)
+
+      expect(mockPlanService.agreePlan).toHaveBeenCalledWith(testPlan.uuid, expectedAgreementData)
+      expect(res.redirect).toHaveBeenCalledWith(URLs.PLAN_SUMMARY)
+      expect(next).not.toHaveBeenCalled()
+    })
+
+    it('should agree plan with conditional agreement note details', async () => {
+      req.body = {
+        notes: 'test note',
+        'agree-plan-radio': 'no',
+        'does-not-agree-details': 'test agreement detail note',
+      }
+      req.method = 'POST'
+      const expectedAgreementData = {
+        agreementStatus: PlanAgreementStatus.DO_NOT_AGREE,
+        agreementStatusNote: 'test agreement detail note',
+        optionalNote: 'test note',
+        personName: `${testHandoverContext.subject.givenName} ${testHandoverContext.subject.familyName}`,
+        practitionerName: testHandoverContext.principal.displayName,
+      }
+
+      await runMiddlewareChain(controller.post, req, res, next)
+
+      expect(mockPlanService.agreePlan).toHaveBeenCalledWith(testPlan.uuid, expectedAgreementData)
+      expect(res.redirect).toHaveBeenCalledWith(URLs.PLAN_SUMMARY)
+      expect(next).not.toHaveBeenCalled()
+    })
+
+    it('should call next if errors', async () => {
+      const error = new Error('fail')
+      mockPlanService.agreePlan = jest.fn().mockRejectedValue(error)
+
+      req.body = {
+        'agree-plan-radio': 'yes',
+      }
+      req.method = 'POST'
+
+      await runMiddlewareChain(controller.post, req, res, next)
+
+      expect(mockPlanService.agreePlan).toHaveBeenCalled()
+      expect(next).toHaveBeenCalled()
     })
   })
 })

@@ -1,35 +1,48 @@
 {
   "en": {
-    "title": "Create a goal with {POP_NAME}",
-    "section": "{AREA_OF_NEED} goal",
-    "notes": {
-      "title": "Notes from {POP_NAME}'s assessment",
-      "attribution": "Created on {NOTE_CREATION_DATE} by {NOTE_AUTHOR}."
+    "page": {
+      "title": "Create a goal - {{ applicationName }}",
+      "errorTitle": "Error: Create a goal - {{ applicationName }}"
+    },
+    "mainHeading": {
+      "title": "Create a goal with {{ subject.givenName }}",
+      "caption": "{{ areaOfNeed }}"
     },
     "goalSelection": {
-      "label": "What goal is {POP_NAME} trying to achieve?",
-      "hint": "Select one option",
-      "customRadioOptionText": "Something else",
-      "customOptionLabel": "Enter a custom goal"
+      "label": "What goal should {{ subject.givenName }} try to achieve?",
+      "hint": "Search for a suggested goal or enter your own. Add one goal at a time."
     },
-    "startWorking": {
-      "label": "Can {POP_NAME} start working on this goal now?"
-    },
-    "dateSelection": {
-      "label": "When should {POP_NAME} achieve this?",
-      "hint": "Select one option",
-      "customRadioOptionText": "Something else",
-      "customOptionLabel": "Enter a custom date",
-      "customOptionHint": "For example, 27 3 2007",
+    "relatedAreaOfNeed": {
+      "label": "Is this goal related to any other area of need?",
+      "hint": "Select all that apply.",
       "options": {
-        "nextMeeting": "At our next meeting (by {NEXT_MEETING})",
-        "threeMonths": "In 3 months (by {3_MONTHS_DATE})",
-        "sixMonths": "In 6 months (by {6_MONTHS_DATE})",
-        "twelveMonths": "In 12 months (by {12_MONTHS_DATE})",
-        "twentyFourMonths": "At the end of {POP_NAME}'s sentence (by {24_MONTHS_DATE})"
+        "yes": "Yes",
+        "no": "No"
       }
     },
-    "saveButtonText": "Save and continue",
+    "startWorking": {
+      "label": "Can {{ subject.givenName }} start working on this goal now?",
+      "options": {
+        "yes": "Yes",
+        "no": "No, it is a future goal"
+      }
+    },
+    "dateSelection": {
+      "label": "When should {{ subject.givenName }} achieve this?",
+      "hint": "Select one option.",
+      "options": {
+        "nextMeeting": "At our next meeting (by {{ dateOptions.nextMeeting }})",
+        "threeMonths": "In 3 months (by {{ dateOptions.threeMonths }})",
+        "sixMonths": "In 6 months (by {{ dateOptions.sixMonths }})",
+        "twelveMonths": "In 12 months (by {{ dateOptions.twelveMonths }})",
+        "twentyFourMonths": "At the end of {{ subject.possessiveName }} sentence (by {{ dateOptions.endOfSentence }})",
+        "custom": "Set another date"
+      }
+    },
+    "datePicker": {
+      "label": "Select a date",
+      "hint": "For example, 31/3/2023."
+    },
     "addStepsButton": "Add steps",
     "saveWithoutStepsButton": "Save without steps",
     "errors": {

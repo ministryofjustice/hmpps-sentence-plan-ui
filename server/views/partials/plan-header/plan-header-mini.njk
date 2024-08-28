@@ -1,27 +1,21 @@
 
 
 {% if data.popData %}
-    {% if data.popData.givenName.endsWith('s') %}
-        {% set possessiveName = data.popData.givenName + "'" %}
-    {% else %}
-        {% set possessiveName = data.popData.givenName + "'s" %}
-    {% endif %}
-
     <header class="plan-header">
         <div class="plan-header__subject-details">
-            <p class="plan-header__subject-details__title">{{data.popData.givenName}} {{data.popData.familyName}}</p>
+            <p class="plan-header__subject-details__title">{{ locale.common.planHeader.mini.title }}</p>
             <dl class="plan-header__subject-details__identifiers">
                 <div>
-                    <dt>CRN:</dt>
-                    <dd>{{data.popData.crn}} </dd>
+                    <dt>{{ locale.common.planHeader.mini.crnLabel }}</dt>
+                    <dd>{{ data.popData.crn }} </dd>
                 </div>
                 <div>
-                    <dt>PNC:</dt>
-                    <dd>{{data.popData.pnc}} </dd>
+                    <dt>{{ locale.common.planHeader.mini.pncLabel }}</dt>
+                    <dd>{{ data.popData.pnc }} </dd>
                 </div>
                 <div>
-                    <dt>Date of birth:</dt>
-                    <dd>{{data.popData.dateOfBirth}} </dd>
+                    <dt>{{ locale.common.planHeader.mini.dateOfBirthLabel }}</dt>
+                    <dd>{{ data.popData.dateOfBirth }} </dd>
                 </div>
             </dl>
         </div>

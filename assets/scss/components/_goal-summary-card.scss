@@ -1,4 +1,13 @@
 .goal-summary-card {
+  &__state-tag {
+    margin-bottom: govuk-spacing(2);
+  }
+
+  &__info {
+    display: flex;
+    justify-content: space-between;
+  }
+
   &__steps {
     table-layout: fixed;
     margin-bottom: govuk-spacing(2);
@@ -25,5 +34,10 @@
       padding-bottom: govuk-spacing(2);
       box-shadow: inset 0 -1px $govuk-border-colour;
     }
+  }
+
+  &--error {
+    padding-left: govuk-spacing(3);
+    border-left: $govuk-border-width-form-group-error solid $govuk-error-colour;
   }
 }

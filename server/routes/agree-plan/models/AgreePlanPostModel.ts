@@ -1,14 +1,18 @@
-import { IsNotEmpty, ValidateIf } from 'class-validator'
+import { IsIn, IsNotEmpty, IsOptional, IsString, ValidateIf } from 'class-validator'
 
 export default class AgreePlanPostModel {
-  @IsNotEmpty()
+  @IsIn(['yes', 'no', 'couldNotAnswer'])
   'agree-plan-radio': string
 
-  @ValidateIf(o => o['agree-plan-radio'] === 'no')
   @IsNotEmpty()
+  @ValidateIf((obj: AgreePlanPostModel) => obj['agree-plan-radio'] === 'no')
   'does-not-agree-details': string
 
-  @ValidateIf(o => o['agree-plan-radio'] === 'couldNotAnswer')
   @IsNotEmpty()
+  @ValidateIf((obj: AgreePlanPostModel) => obj['agree-plan-radio'] === 'couldNotAnswer')
   'could-not-answer-details': string
+
+  @IsString()
+  @IsOptional()
+  notes?: string
 }
