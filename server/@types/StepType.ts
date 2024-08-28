@@ -3,7 +3,7 @@ export type Step = {
   description: string
   status?: string
   creationDate?: string
-  actors: Actor[]
+  actor: Actor[]
 }
 
 type Actor = {
