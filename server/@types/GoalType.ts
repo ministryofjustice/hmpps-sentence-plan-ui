@@ -1,3 +1,5 @@
+import { Step } from './StepType'
+
 export type Goal = {
   uuid: string
   title: string
@@ -5,8 +7,9 @@ export type Goal = {
   relatedAreasOfNeed: AreaOfNeed[]
   creationDate: string
   completedDate?: string
-  targetDate: string
+  targetDate?: string
   goalOrder: number
+  steps: Step[]
 }
 
 type AreaOfNeed = {

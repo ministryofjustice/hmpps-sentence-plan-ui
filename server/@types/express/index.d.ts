@@ -31,6 +31,7 @@ export declare global {
         body?: any
         params?: any
         query?: any
+        domain?: any
       }
       services: RequestServices
     }

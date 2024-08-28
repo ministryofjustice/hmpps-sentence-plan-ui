@@ -20,7 +20,7 @@
     "agreePlanButton": "Agree plan with {{ subject.givenName }}",
     "errors": {
       "agree-plan-radio": {
-        "isNotEmpty": "Select if they agree to the plan"
+        "isIn": "Select if they agree to the plan"
       },
       "does-not-agree-details": {
         "isNotEmpty": "Enter details about why they do not agree"

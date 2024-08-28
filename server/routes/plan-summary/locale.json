@@ -27,6 +27,14 @@
       "buttons": {
         "moveUpButton": "Move goal up",
         "moveDownButton": "Move goal down"
+      },
+      "state": {
+        "incomplete": "Incomplete"
+      }
+    },
+    "errors": {
+      "goal-summary-card": {
+        "arrayNotEmpty": "Add steps to agree the plan"
       }
     }
   }
