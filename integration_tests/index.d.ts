@@ -1,6 +1,5 @@
 declare namespace Cypress {
-  import { NewStep } from '../server/@types/NewStepType'
-  import { Step } from '../server/@types/StepType'
+  import { NewStep, Step } from '../server/@types/StepType'
   import { NewGoal } from '../server/@types/NewGoalType'
   import { Goal } from '../server/@types/GoalType'
 

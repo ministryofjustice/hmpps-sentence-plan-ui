@@ -1,15 +1,18 @@
 import type { Express } from 'express'
 import request from 'supertest'
 import { appWithAllRoutes } from './routes/testutils/appSetup'
+import handoverData from './testutils/data/handoverData'
 
 let app: Express
 
-beforeEach(() => {
-  app = appWithAllRoutes({})
+jest.mock('./services/sessionService', () => {
+  return jest.fn().mockImplementation(() => ({
+    getSubjectDetails: jest.fn().mockReturnValue(handoverData.subject),
+  }))
 })
 
-afterEach(() => {
-  jest.resetAllMocks()
+beforeEach(() => {
+  app = appWithAllRoutes({})
 })
 
 describe('GET 404', () => {

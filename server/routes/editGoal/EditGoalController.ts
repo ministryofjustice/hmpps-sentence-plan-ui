@@ -20,12 +20,11 @@ export default class EditGoalController {
     const { uuid } = req.params
     const { errors } = req
 
-    const areasOfNeed = this.referentialDataService.getAreasOfNeed()
-    const popData = req.services.sessionService.getSubjectDetails()
+    const sortedAreasOfNeed = this.referentialDataService.getSortedAreasOfNeed()
     const goal = await this.goalService.getGoal(uuid)
 
     const dateOptions = this.getDateOptions()
-    const selectedAreaOfNeed = areasOfNeed.find(areaOfNeed => areaOfNeed.name === goal.areaOfNeed.name)
+    const selectedAreaOfNeed = sortedAreasOfNeed.find(areaOfNeed => areaOfNeed.name === goal.areaOfNeed.name)
     const minimumDatePickerDate = formatDateWithStyle(new Date().toISOString(), 'short')
     const form = errors ? req.body : this.mapGoalToForm(goal)
 
@@ -33,9 +32,8 @@ export default class EditGoalController {
       locale: locale.en,
       data: {
         minimumDatePickerDate,
-        areasOfNeed,
+        sortedAreasOfNeed,
         selectedAreaOfNeed,
-        popData,
         dateOptions,
         form,
       },
@@ -44,9 +42,10 @@ export default class EditGoalController {
   }
 
   private saveAndRedirect = async (req: Request, res: Response, next: NextFunction) => {
-    const type = req.query?.type
     const goalUuid = req.params.uuid
     const processedData: NewGoal = this.processGoalData(req.body)
+
+    const type = processedData.targetDate === null ? 'future' : 'current'
 
     try {
       await this.goalService.updateGoal(processedData, goalUuid)
@@ -80,8 +79,8 @@ export default class EditGoalController {
     return {
       'goal-input-autocomplete': goal.title,
       'area-of-need': goal.areaOfNeed.name,
-      'other-area-of-need-radio': goal.relatedAreasOfNeed.length ? 'yes' : 'no',
-      'other-area-of-need': goal.relatedAreasOfNeed.map(areaOfNeed => areaOfNeed.name),
+      'related-area-of-need-radio': goal.relatedAreasOfNeed.length ? 'yes' : 'no',
+      'related-area-of-need': goal.relatedAreasOfNeed.map(areaOfNeed => areaOfNeed.name),
       'start-working-goal-radio': goal.targetDate ? 'yes' : 'no',
       'date-selection-radio': isCustomTargetDate ? 'custom' : formattedTargetDate,
       'date-selection-custom': isCustomTargetDate ? formattedTargetDate : undefined,
@@ -98,7 +97,7 @@ export default class EditGoalController {
           : body['date-selection-radio']
         : null
     const areaOfNeed = body['area-of-need']
-    const relatedAreasOfNeed = body['other-area-of-need-radio'] === 'yes' ? body['other-area-of-need'] : undefined
+    const relatedAreasOfNeed = body['related-area-of-need-radio'] === 'yes' ? body['related-area-of-need'] : undefined
 
     return {
       title,

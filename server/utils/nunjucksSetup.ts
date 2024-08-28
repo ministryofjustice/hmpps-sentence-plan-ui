@@ -2,9 +2,10 @@
 import path from 'path'
 import nunjucks from 'nunjucks'
 import express from 'express'
-import { initialiseName } from './utils'
 import { ApplicationInfo } from '../applicationInfo'
 import config from '../config'
+import { initialiseName, mergeDeep } from './utils'
+import commonLocale from './commonLocale.json'
 
 const production = process.env.NODE_ENV === 'production'
 
@@ -43,12 +44,18 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
     },
   )
 
-  njkEnv.addGlobal('merge', (obj1: object, obj2: object) => {
-    if (typeof obj1 !== 'object' || typeof obj2 !== 'object') {
-      throw new Error('Both arguments must be objects')
+  njkEnv.addGlobal('merge', (...args: object[]): object => {
+    if (args.length === 0) {
+      throw new Error('At least one argument must be provided')
     }
 
-    return { ...obj1, ...obj2 }
+    args.forEach((arg, index) => {
+      if (typeof arg !== 'object' || arg === null || Array.isArray(arg)) {
+        throw new Error(`Argument ${index + 1} must be a non-null object`)
+      }
+    })
+
+    return mergeDeep(...args)
   })
 
   njkEnv.addFilter('possessive', (value: string) => {
@@ -99,11 +106,6 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
     return false
   })
 
-  // Filter to format actors
-  njkEnv.addFilter('getActors', actors => {
-    return actors.map((item: any) => item.actor)
-  })
-
   // Filter to format related area of need
   njkEnv.addFilter('getRelatedAreaOfNeed', relatedAreaOfNeed => {
     return relatedAreaOfNeed.map((item: any) => item.name)
@@ -149,5 +151,31 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
     }
 
     return interpolateObject(locale)
+  })
+
+  app.use((req, res, next) => {
+    res.render = new Proxy(res.render, {
+      apply(target, thisArg, [view, options, callback]) {
+        const popData = req.services.sessionService.getSubjectDetails()
+
+        return target.apply(thisArg, [
+          view,
+          mergeDeep(options, {
+            locale: {
+              common: commonLocale.en,
+            },
+            data: {
+              popData: {
+                ...popData,
+                possessiveName: popData.givenName.endsWith('s') ? `${popData.givenName}'` : `${popData.givenName}'s`,
+              },
+            },
+          }),
+          callback,
+        ])
+      },
+    })
+
+    next()
   })
 }

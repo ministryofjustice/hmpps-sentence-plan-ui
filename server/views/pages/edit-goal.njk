@@ -8,19 +8,8 @@
 {% from "hmpps/components/date-picker/macro.njk" import hmppsDatePicker %}
 {% from "moj/components/side-navigation/macro.njk" import mojSideNavigation %}
 
-{% set pageTitle %}
-    {% if errors %}
-        Error: {{ applicationName }} - Change a goal with {{ data.popData.givenName }}
-    {% else %}
-       {{ applicationName }} - Change a goal with {{ data.popData.givenName }}
-    {% endif %}
-{% endset -%}
-
-{% set mainClasses = "app-container govuk-body" %}
 {% set locale = interpolate(locale, {
-    subject: merge(data.popData, {
-        possessiveName: data.popData.givenName | possessive
-    }),
+    areaOfNeed: data.selectedAreaOfNeed.name,
     dateOptions: {
         threeMonths: data.dateOptions[0] | formatSimpleDate,
         sixMonths: data.dateOptions[1] | formatSimpleDate,
@@ -30,11 +19,21 @@
     }
 }) %}
 
+{% set pageTitle %}
+    {% if errors %}
+        {{ locale.page.errorTitle }}
+    {% else %}
+        {{ locale.page.title }}
+    {% endif %}
+{% endset -%}
+
+{% set mainClasses = "app-container govuk-body" %}
+
 {# Setup arrays and custom HTML #}
 {% set additionalAreaOfNeedCheckboxes = [] %}
-{% for areaOfNeed in data.areasOfNeed %}
+{% for areaOfNeed in data.sortedAreasOfNeed %}
     {% if areaOfNeed.name != data.areaOfNeed %}
-        {% set isChecked = data.form['other-area-of-need'] and (areaOfNeed.name in data.form['other-area-of-need']) %}
+        {% set isChecked = data.form['related-area-of-need'] and (areaOfNeed.name in data.form['related-area-of-need']) %}
         {% set additionalAreaOfNeedCheckboxes = additionalAreaOfNeedCheckboxes.concat({
             value: areaOfNeed.name,
             text: areaOfNeed.name,
@@ -46,11 +45,11 @@
 
 {% set areasOfNeedHtml %}
     {{ govukCheckboxes({
-        name: "other-area-of-need",
+        name: "related-area-of-need",
         hint: {
-          text: "Select all that apply."
+          text: locale.relatedAreaOfNeed.hint
         },
-        errorMessage: getFormattedError(errors, locale, "other-area-of-need"),
+        errorMessage: getFormattedError(errors, locale, "related-area-of-need"),
         items: additionalAreaOfNeedCheckboxes
     }) }}
 {% endset -%}
@@ -115,7 +114,7 @@
             },
             {
                 value: "custom",
-                text: locale.dateSelection.customRadioOptionText,
+                text: locale.dateSelection.options.custom,
                 conditional: {
                     html: customDateHtml
                 }
@@ -132,8 +131,8 @@
                 errors: errors,
                 locale: locale
             }) }}
-            <span class="govuk-caption-l">{{ data.areaOfNeed }}</span>
-            <h1 class="govuk-heading-l">{{ locale.title }}</h1>
+            <span class="govuk-caption-l">{{ locale.mainHeading.caption }}</span>
+            <h1 class="govuk-heading-l">{{ locale.mainHeading.title }}</h1>
 
             <form id="edit-goal-form" method="POST">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}">
@@ -144,8 +143,7 @@
                 {{ govukInput({
                     label: {
                         text: locale.goalSelection.label,
-                        classes: "govuk-label--m",
-                        isPageHeading: false
+                        classes: "govuk-label--m"
                     },
                     hint: {
                         text: locale.goalSelection.hint
@@ -160,28 +158,27 @@
                 }) }}
 
                 {{ govukRadios({
-                    name: "other-area-of-need-radio",
+                    name: "related-area-of-need-radio",
                     fieldset: {
                         legend: {
-                            text: "Is this goal related to any other area of need?",
-                            isPageHeading: false,
+                            text: locale.relatedAreaOfNeed.label,
                             classes: "govuk-fieldset__legend--m"
                         }
                     },
-                    errorMessage: getFormattedError(errors, locale, 'other-area-of-need-radio'),
+                    errorMessage: getFormattedError(errors, locale, 'related-area-of-need-radio'),
                     items: [
                         {
+                            text: locale.relatedAreaOfNeed.options.yes,
                             value: "yes",
-                            text: "Yes",
-                            checked: data.form['other-area-of-need-radio'] == 'yes',
+                            checked: data.form['related-area-of-need-radio'] == 'yes',
                             conditional: {
-                            html: areasOfNeedHtml
-                        }
+                                html: areasOfNeedHtml
+                            }
                         },
                         {
-                          value: "no",
-                          text: "No",
-                          checked: data.form['other-area-of-need-radio'] == 'no'
+                            text: locale.relatedAreaOfNeed.options.no,
+                            value: "no",
+                            checked: data.form['related-area-of-need-radio'] == 'no'
                         }
                     ]
                 }) }}
@@ -198,16 +195,16 @@
                     errorMessage: getFormattedError(errors, locale, 'start-working-goal-radio'),
                     items: [
                         {
+                            text: locale.startWorking.options.yes,
                             value: "yes",
-                            text: "Yes",
                             checked: data.form['start-working-goal-radio'] == 'yes',
                             conditional: {
                                 html: customDateRadioHtml
                             }
                         },
                         {
+                            text: locale.startWorking.options.no,
                             value: "no",
-                            text: "No, it is a future goal",
                             checked: data.form['start-working-goal-radio'] == 'no'
                         }
                     ]

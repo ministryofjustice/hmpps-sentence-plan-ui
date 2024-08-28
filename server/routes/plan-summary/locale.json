@@ -1,18 +1,41 @@
 {
   "en": {
-    "title": "About {POP_NAME}",
-    "goalsToAchieve": {
-      "title": "Goals to achieve",
-      "areaOfNeedHeading": "Area of need",
-      "goalHeading": "Goal",
-      "createGoalLink": "Create goal",
-      "viewPreviousGoalsLink": "View previous goals",
-      "noPreviousGoals": "No previous goals"
+    "page": {
+      "title": "Plan - {{ applicationName }}",
+      "errorTitle": "Error: Plan - {{ applicationName }}"
     },
-    "subNav": {
-      "goals": "Goals",
-      "about": "About",
-      "summary": "Plan summary"
+    "header": {
+      "createGoalButton": "Create goal",
+      "agreePlanButton": "Agree plan"
+    },
+    "notificationBanner": {
+      "addedGoal": "You added a goal to {{ subject.possessiveName }} plan.",
+      "changedGoal": "You changed a goal in {{ subject.possessiveName }} plan.",
+      "removedGoal": "You removed a goal from {{ subject.possessiveName }} plan."
+    },
+    "addStepSuggestion": "Add steps to the goals {{ subject.givenName }} is working on now. You can then agree the plan with {{ subject.givenName }}.",
+    "subNavigation": {
+      "currentGoals": "Goals to work on now ({{ goalCounts.currentGoals }})",
+      "futureGoals": "Future goals ({{ goalCounts.futureGoals }})"
+    },
+    "goalSummaryCard": {
+      "actions": {
+        "changeGoal": "Change goal",
+        "addOrChangeSteps": "Add or change steps",
+        "removeGoal": "Remove goal"
+      },
+      "buttons": {
+        "moveUpButton": "Move goal up",
+        "moveDownButton": "Move goal down"
+      },
+      "state": {
+        "incomplete": "Incomplete"
+      }
+    },
+    "errors": {
+      "goal-summary-card": {
+        "arrayNotEmpty": "Add steps to agree the plan"
+      }
     }
   }
 }
