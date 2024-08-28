@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker'
 import { NewGoal } from '../../server/@types/NewGoalType'
-import { NewStep } from '../../server/@types/NewStepType'
 import { AreaOfNeed } from '../../server/testutils/data/referenceData'
+import { NewStep, StepStatus } from '../../server/@types/StepType'
 
 export default class DataGenerator {
   static generateGoal = (): NewGoal => ({
@@ -20,13 +20,8 @@ export default class DataGenerator {
 
   static generateStep = (): NewStep => ({
     description: faker.lorem.lines(1),
-    status: faker.helpers.arrayElement(['INACTIVE', 'ACTIVE', 'COMPLETED']),
-    actor: [
-      {
-        actor: 'Probation practitioner',
-        actorOptionId: 2,
-      },
-    ],
+    status: faker.helpers.arrayElement([StepStatus.NOT_STARTED, StepStatus.IN_PROGRESS, StepStatus.COMPLETED]),
+    actor: 'Probation practitioner',
   })
 
   private static getRandomAreaOfNeed = () => {

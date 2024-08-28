@@ -106,11 +106,6 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
     return false
   })
 
-  // Filter to format actors
-  njkEnv.addFilter('getActors', actors => {
-    return actors.map((item: any) => item.actor)
-  })
-
   // Filter to format related area of need
   njkEnv.addFilter('getRelatedAreaOfNeed', relatedAreaOfNeed => {
     return relatedAreaOfNeed.map((item: any) => item.name)

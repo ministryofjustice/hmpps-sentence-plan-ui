@@ -34,31 +34,31 @@
                 {% endif %}
             </div>
 
-            {% if params.goal.steps and params.goal.steps.length > 0 %}
-                <table class="govuk-table goal-summary-card__steps">
-                    <thead class="govuk-table__head">
+        {% if params.goal.steps and params.goal.steps.length > 0 %}
+            <table class="govuk-table goal-summary-card__steps">
+                <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                    <th scope="col" class="govuk-table__header">Step</th>
+                    <th scope="col" class="govuk-table__header">Who will do this</th>
+                </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                {% for step in params.goal.steps %}
                     <tr class="govuk-table__row">
-                        <th scope="col" class="govuk-table__header">Step</th>
-                        <th scope="col" class="govuk-table__header">Who will do this</th>
+                        <td class="govuk-table__cell">{{ step.description }}</td>
+                        <td class="govuk-table__cell">{{ step.actor }}</td>
                     </tr>
-                    </thead>
-                    <tbody class="govuk-table__body">
-                    {% for step in params.goal.steps %}
-                        <tr class="govuk-table__row">
-                            <td class="govuk-table__cell">{{ step.description }}</td>
-                            <td class="govuk-table__cell">{{ step.actors | getActors | join(', ') }}</td>
-                        </tr>
-                    {% endfor %}
-                    </tbody>
-                </table>
-            {% else %}
-                <div class="goal-summary-card__steps--empty">
-                    <strong>No steps added</strong>
-                    {% if params.actions.length > 0 %}
-                        <a href="/goals/{{ params.goal.uuid }}/steps">Add steps</a>
-                    {% endif %}
-                </div>
-            {% endif %}
+                {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="goal-summary-card__steps--empty">
+                <strong>No steps added</strong>
+                {% if params.actions.length > 0 %}
+                    <a href="/goals/{{ params.goal.uuid }}/steps">Add steps</a>
+                {% endif %}
+            </div>
+        {% endif %}
 
             <p class="goal-summary-card__areas-of-need">
                 Area of need: {{ params.goal.areaOfNeed.name | lower }}<br>

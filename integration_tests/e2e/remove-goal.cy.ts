@@ -1,8 +1,8 @@
 import { NewGoal } from '../../server/@types/NewGoalType'
-import { NewStep } from '../../server/@types/NewStepType'
 import { Goal } from '../../server/@types/GoalType'
 import DataGenerator from '../support/DataGenerator'
 import { PlanType } from '../../server/@types/PlanType'
+import { NewStep } from '../../server/@types/StepType'
 
 describe('Remove a goal', () => {
   beforeEach(() => {
@@ -61,9 +61,9 @@ describe('Remove a goal', () => {
       // Check steps data is rendered correctly
       cy.get('.goal-summary-card__steps')
         .should('contain', stepData[0].description)
-        .and('contain', stepData[0].actor[0].actor)
+        .and('contain', stepData[0].actor)
         .and('contain', stepData[1].description)
-        .and('contain', stepData[1].actor[0].actor)
+        .and('contain', stepData[1].actor)
     })
   })
 
