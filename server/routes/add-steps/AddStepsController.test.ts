@@ -22,7 +22,7 @@ jest.mock('../../services/sentence-plan/stepsService', () => {
         status: 'PENDING',
       },
     ]),
-    saveSteps: jest.fn().mockResolvedValue(null),
+    saveAllSteps: jest.fn().mockResolvedValue(null),
   }))
 })
 
@@ -201,7 +201,7 @@ describe('AddStepsController', () => {
 
       await runMiddlewareChain(controller.post, req, res, next)
 
-      expect(mockStepService.saveSteps).toHaveBeenCalledWith(expectedData, 'some-goal-uuid')
+      expect(mockStepService.saveAllSteps).toHaveBeenCalledWith(expectedData, 'some-goal-uuid')
       expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_SUMMARY}?status=success`)
       expect(next).not.toHaveBeenCalled()
     })
@@ -214,7 +214,6 @@ describe('AddStepsController', () => {
       }
       req.params = { uuid: 'some-goal-uuid' }
 
-      // Prepare the expected data for rendering
       const expectedViewData = {
         locale: locale.en,
         data: {
@@ -242,8 +241,7 @@ describe('AddStepsController', () => {
       expect(next).not.toHaveBeenCalled()
     })
 
-    it('should call next with an error if saveSteps fails', async () => {
-      // Set up the request body as needed for the test
+    it('should call next with an error if saveAllSteps fails', async () => {
       req.body = {
         action: 'save',
         'step-actor-1': 'Batman',
@@ -251,17 +249,13 @@ describe('AddStepsController', () => {
       }
       req.params = { uuid: 'some-goal-uuid' }
 
-      // Mock saveSteps to throw an error
       const saveError = new Error('Save failed')
-      mockStepService.saveSteps = jest.fn().mockRejectedValue(saveError)
+      mockStepService.saveAllSteps = jest.fn().mockRejectedValue(saveError)
 
-      // Call the controller's post method, which should trigger saveAndRedirect
       await runMiddlewareChain(controller.post, req, res, next)
 
-      // Expect that the next function was called with the error
       expect(next).toHaveBeenCalledWith(saveError)
 
-      // Ensure res.render was not called since an error occurred
       expect(res.render).not.toHaveBeenCalled()
     })
   })
