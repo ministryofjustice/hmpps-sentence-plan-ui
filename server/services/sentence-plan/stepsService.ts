@@ -10,7 +10,7 @@ export default class StepService {
   }
 
   async saveAllSteps(steps: NewStep[], parentGoalId: string) {
-    const restClient = await this.sentencePlanApiClient.restClient('Saving multiple steps')
+    const restClient = await this.sentencePlanApiClient.restClient('Replacing all steps')
     return restClient.put<Step[]>({ path: `/goals/${parentGoalId}/steps`, data: steps })
   }
 
