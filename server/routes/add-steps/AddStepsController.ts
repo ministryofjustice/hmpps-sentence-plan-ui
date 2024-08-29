@@ -46,7 +46,7 @@ export default class AddStepsController {
 
   private saveAndRedirect = async (req: Request, res: Response, next: NextFunction) => {
     const goalUuid = req.params.uuid
-    await this.stepService.saveSteps(
+    await this.stepService.saveAllSteps(
       req.body.steps.map((step: StepModel) => ({
         description: step.description,
         actor: step.actor,
