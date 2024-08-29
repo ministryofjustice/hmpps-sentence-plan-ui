@@ -13,7 +13,7 @@ describe('Create a new Goal', () => {
 
   it('Creates a new goal with errors', () => {
     createGoalPage.createGoal('accommodation')
-    createGoalPage.selectGoalAutocompleteOption('acc', 0)
+    createGoalPage.selectGoalAutocompleteOption('acc', 'Accommodation Goal 1')
     createGoalPage.selectStartWorkingRadio('yes')
     createGoalPage.selectAchievementDateSomethingElse('{backspace}')
     createGoalPage.clickButton('Add steps')
@@ -29,7 +29,7 @@ describe('Create a new Goal', () => {
 
   it('Creates a new goal without steps', () => {
     createGoalPage.createGoal('accommodation')
-    createGoalPage.selectGoalAutocompleteOption('acc', 0)
+    createGoalPage.selectGoalAutocompleteOption('acc', 'Accommodation Goal 1')
     createGoalPage.selectRelatedAreasOfNeedRadio('yes')
     createGoalPage.selectRelatedAreasOfNeed(['Employment and education', 'Drug use'])
     createGoalPage.selectStartWorkingRadio('yes')
