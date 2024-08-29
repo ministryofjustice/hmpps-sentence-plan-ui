@@ -7,6 +7,7 @@ import { toKebabCase } from '../../utils/utils'
 import validateRequest from '../../middleware/validationMiddleware'
 import AddStepsPostModel, { StepModel } from './models/AddStepsPostModel'
 import transformRequest from '../../middleware/transformMiddleware'
+import { StepStatus } from '../../@types/StepType'
 
 export default class AddStepsController {
   constructor(
@@ -49,7 +50,7 @@ export default class AddStepsController {
       req.body.steps.map((step: StepModel) => ({
         description: step.description,
         actor: step.actor,
-        status: 'in-progress',
+        status: StepStatus.NOT_STARTED,
       })),
       goalUuid,
     )
