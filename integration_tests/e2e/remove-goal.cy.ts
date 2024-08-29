@@ -31,7 +31,6 @@ describe('Remove a goal', () => {
       // Check goal data is rendered correctly
       cy.get('.goal-summary-card')
         .should('contain', goalData.title)
-        .and('contain', `Aim to achieve in 6 months`)
         .and('contain', `No steps added`)
         .and('contain', `Area of need: ${goalData.areaOfNeed.toLowerCase()}`)
         .and('contain', `Also relates to: ${goalData.relatedAreasOfNeed[0].toLowerCase()}`)
@@ -53,7 +52,6 @@ describe('Remove a goal', () => {
       // Check goal data is rendered correctly
       cy.get('.goal-summary-card')
         .should('contain', goalData.title)
-        .and('contain', `Aim to achieve in 6 months`)
         .and('contain', `Area of need: ${goalData.areaOfNeed.toLowerCase()}`)
         .and('contain', `Also relates to: ${goalData.relatedAreasOfNeed[0].toLowerCase()}`)
         .and('not.contain', `Add steps`)

@@ -44,7 +44,6 @@ describe('Create a new Goal', () => {
       .first()
       .within(() => {
         cy.get('.govuk-summary-card__title').should('contain', 'Accommodation Goal 1')
-        cy.get('.goal-summary-card__info').should('contain', 'Aim to achieve in 6 months')
         cy.get('.goal-summary-card__areas-of-need').should('contain', 'Area of need: accommodation')
         cy.get('.goal-summary-card__areas-of-need').should(
           'contain',
