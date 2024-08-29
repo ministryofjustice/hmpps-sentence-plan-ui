@@ -3,7 +3,14 @@
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "../components/rosh/macro.njk" import roshWidget %}
 
-{% set pageTitle = locale.page.title %}
+{% block pageTitle %}
+    {% if not errors %}
+        {{ locale.page.title }}
+    {% else %}
+        {{ locale.page.errorTitle }}
+    {% endif %}
+{% endblock %}
+
 {% set mainClasses = "app-container govuk-body" %}
 
 {# TODO: Probably could just make this whole widget a macro considering how big it is#}

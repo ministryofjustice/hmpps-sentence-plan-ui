@@ -10,38 +10,34 @@
 {% from "../components/error-summary/error-summary.njk" import errorSummary %}
 
 {% set locale = interpolate(locale, {
-    applicationName: applicationName,
-    subject: merge(data.popData, {
-        possessiveName: data.popData.givenName | possessive
-    }),
     goal: data.goal
 }) %}
 
-{% set pageTitle %}
-    {% if errors %}
-        {{ locale.page.errorTitle }}
-    {% else %}
+{% block pageTitle %}
+    {% if not errors %}
         {{ locale.page.title }}
+    {% else %}
+        {{ locale.page.errorTitle }}
     {% endif %}
-{% endset -%}
-
-{% set summaryContentHtml %}
-    <h3 class="govuk-heading-s">{{ locale.detail.header1 }}</h3>
-    <p class="govuk-body">{{ locale.detail.detail1 }}</p>
-    <h3 class="govuk-heading-s">{{ locale.detail.header2 }}</h3>
-    <p class="govuk-body">{{ locale.detail.detail2 }}</p>
-    <h3 class="govuk-heading-s">{{ locale.detail.header3 }}</h3>
-    <p class="govuk-body">{{ locale.detail.detail3 }}</p>
-    <h3 class="govuk-heading-s">{{ locale.detail.header4 }}</h3>
-    <p class="govuk-body">{{ locale.detail.detail4 }}</p>
-{% endset %}
+{% endblock %}
 
 {% block content %}
-<a href="#" class="govuk-back-link">Back</a>
+<a class="govuk-back-link" href="{{ data.backLinkUrl }}">{{ locale.common.backLink.text }}</a>
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
         <span class="govuk-caption-l">{{ locale.mainHeading.caption }}</span>
         <h1 class="govuk-heading-l">{{ locale.mainHeading.title }}</h1>
+
+        {% set summaryContentHtml %}
+            <h3 class="govuk-heading-s">{{ locale.detail.header1 }}</h3>
+            <p class="govuk-body">{{ locale.detail.detail1 }}</p>
+            <h3 class="govuk-heading-s">{{ locale.detail.header2 }}</h3>
+            <p class="govuk-body">{{ locale.detail.detail2 }}</p>
+            <h3 class="govuk-heading-s">{{ locale.detail.header3 }}</h3>
+            <p class="govuk-body">{{ locale.detail.detail3 }}</p>
+            <h3 class="govuk-heading-s">{{ locale.detail.header4 }}</h3>
+            <p class="govuk-body">{{ locale.detail.detail4 }}</p>
+        {% endset %}
 
         {{ govukDetails({
             summaryText: locale.detail.heading,
@@ -116,7 +112,7 @@
                                     classes: 'govuk-visually-hidden--desktop'
                                 },
                                 errorMessage: errorMessage,
-                                id: "step-description-" + loop.index + "-autocomplete",
+                                id: "step-description-" + loop.index,
                                 name: "step-description-" + loop.index,
                                 value: step.description
                             }) }}
