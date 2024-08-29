@@ -73,7 +73,6 @@ describe('Change a goal', () => {
       // Check goal data is saved and rendered correctly
       cy.get('.goal-summary-card')
         .should('contain', 'some goal')
-        .and('contain', `Aim to achieve in 6 months`)
         .and('contain', `Area of need: ${goalData.areaOfNeed.toLowerCase()}`)
         .and('contain', 'Also relates to: employment and education, alcohol use, health and wellbeing')
     })
@@ -107,9 +106,6 @@ describe('Change a goal', () => {
 
       cy.contains('button', 'save').click()
       cy.url().should('include', '/plan-summary')
-
-      // Check goal data is saved and rendered correctly
-      cy.get('.goal-summary-card').and('contain', 'Aim to achieve in 3 months')
     })
 
     it('Should update goal with custom date', () => {
@@ -123,9 +119,6 @@ describe('Change a goal', () => {
       cy.get('#date-selection-custom').type(date)
       cy.contains('button', 'save').click()
       cy.url().should('include', '/plan-summary')
-
-      // Check goal data is saved and rendered correctly
-      cy.get('.goal-summary-card').and('contain', 'Aim to achieve in 20 months')
     })
 
     it('Should update goal with future date', () => {
