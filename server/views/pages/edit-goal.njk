@@ -29,100 +29,6 @@
 
 {% set mainClasses = "app-container govuk-body" %}
 
-{# Setup arrays and custom HTML #}
-{% set additionalAreaOfNeedCheckboxes = [] %}
-{% for areaOfNeed in data.sortedAreasOfNeed %}
-    {% if areaOfNeed.name != data.areaOfNeed %}
-        {% set isChecked = data.form['related-area-of-need'] and (areaOfNeed.name in data.form['related-area-of-need']) %}
-        {% set additionalAreaOfNeedCheckboxes = additionalAreaOfNeedCheckboxes.concat({
-            value: areaOfNeed.name,
-            text: areaOfNeed.name,
-            checked: isChecked
-        }) %}
-    {% endif %}
-{% endfor %}
-
-
-{% set areasOfNeedHtml %}
-    {{ govukCheckboxes({
-        name: "related-area-of-need",
-        hint: {
-          text: locale.relatedAreaOfNeed.hint
-        },
-        errorMessage: getFormattedError(errors, locale, "related-area-of-need"),
-        items: additionalAreaOfNeedCheckboxes
-    }) }}
-{% endset -%}
-
-{% set customDateHtml %}
-    {{ hmppsDatePicker({
-        id: "date-selection-custom",
-        name: "date-selection-custom",
-        errorMessage: getFormattedError(errors, locale, 'date-selection-custom'),
-        classes: "govuk-input--width-10",
-        hint: {
-            text: locale.datePicker.hint
-        },
-        label: {
-            text: locale.datePicker.label,
-            classes: "govuk-fieldset__legend--s"
-        },
-        value: data.form['date-selection-custom'],
-        minDate: data.minimumDatePickerDate
-    }) }}
-{% endset -%}
-
-{% set customDateRadioHtml %}
-    {{ govukRadios({
-        name: "date-selection-radio",
-        fieldset: {
-            legend: {
-                text: locale.dateSelection.label,
-                isPageHeading: false,
-                classes: "govuk-fieldset__legend--m"
-            }
-        },
-        hint: {
-            text: locale.dateSelection.hint
-        },
-        errorMessage: getFormattedError(errors, locale, 'date-selection-radio'),
-        value: data.form['date-selection-radio'],
-        items: [
-            {
-                value: data.dateOptions[4] | formatISODate,
-                text: locale.dateSelection.options.nextMeeting,
-                checked: data.form['date-selection-radio'] == data.dateOptions[4] | formatISODate
-            },
-            {
-                value: data.dateOptions[0] | formatISODate,
-                text: locale.dateSelection.options.threeMonths
-            },
-            {
-                value: data.dateOptions[1] | formatISODate,
-                text: locale.dateSelection.options.sixMonths
-            },
-            {
-                value: data.dateOptions[2] | formatISODate,
-                text: locale.dateSelection.options.twelveMonths
-            },
-            {
-                value: data.dateOptions[3] | formatISODate,
-                text: locale.dateSelection.options.twentyFourMonths
-            },
-            {
-                divider: "or"
-            },
-            {
-                value: "custom",
-                text: locale.dateSelection.options.custom,
-                conditional: {
-                    html: customDateHtml
-                }
-            }
-        ]
-    }) }}
-{% endset -%}
-
 {% block content %}
     <a href="#" class="govuk-back-link">Back</a>
     <div class="govuk-grid-row">
@@ -157,6 +63,30 @@
                     value: data.form['goal-input-autocomplete']
                 }) }}
 
+                {% set additionalAreaOfNeedCheckboxes = [] %}
+                {% for areaOfNeed in data.sortedAreasOfNeed %}
+                    {% if areaOfNeed.name != data.areaOfNeed %}
+                        {% set isChecked = data.form['related-area-of-need'] and (areaOfNeed.name in data.form['related-area-of-need']) %}
+                        {% set additionalAreaOfNeedCheckboxes = additionalAreaOfNeedCheckboxes.concat({
+                            value: areaOfNeed.name,
+                            text: areaOfNeed.name,
+                            checked: isChecked
+                        }) %}
+                    {% endif %}
+                {% endfor %}
+
+
+                {% set areasOfNeedHtml %}
+                    {{ govukCheckboxes({
+                        name: "related-area-of-need",
+                        hint: {
+                            text: locale.relatedAreaOfNeed.hint
+                        },
+                        errorMessage: getFormattedError(errors, locale, "related-area-of-need"),
+                        items: additionalAreaOfNeedCheckboxes
+                    }) }}
+                {% endset -%}
+
                 {{ govukRadios({
                     name: "related-area-of-need-radio",
                     fieldset: {
@@ -182,6 +112,75 @@
                         }
                     ]
                 }) }}
+
+                {% set customDateHtml %}
+                    {{ hmppsDatePicker({
+                        id: "date-selection-custom",
+                        name: "date-selection-custom",
+                        errorMessage: getFormattedError(errors, locale, 'date-selection-custom'),
+                        classes: "govuk-input--width-10",
+                        hint: {
+                            text: locale.datePicker.hint
+                        },
+                        label: {
+                            text: locale.datePicker.label,
+                            classes: "govuk-fieldset__legend--s"
+                        },
+                        value: data.form['date-selection-custom'],
+                        minDate: data.minimumDatePickerDate
+                    }) }}
+                {% endset -%}
+
+                {% set customDateRadioHtml %}
+                    {{ govukRadios({
+                        name: "date-selection-radio",
+                        fieldset: {
+                            legend: {
+                                text: locale.dateSelection.label,
+                                isPageHeading: false,
+                                classes: "govuk-fieldset__legend--m"
+                            }
+                        },
+                        hint: {
+                            text: locale.dateSelection.hint
+                        },
+                        errorMessage: getFormattedError(errors, locale, 'date-selection-radio'),
+                        value: data.form['date-selection-radio'],
+                        items: [
+                            {
+                                value: data.dateOptions[4] | formatISODate,
+                                text: locale.dateSelection.options.nextMeeting,
+                                checked: data.form['date-selection-radio'] == data.dateOptions[4] | formatISODate
+                            },
+                            {
+                                value: data.dateOptions[0] | formatISODate,
+                                text: locale.dateSelection.options.threeMonths
+                            },
+                            {
+                                value: data.dateOptions[1] | formatISODate,
+                                text: locale.dateSelection.options.sixMonths
+                            },
+                            {
+                                value: data.dateOptions[2] | formatISODate,
+                                text: locale.dateSelection.options.twelveMonths
+                            },
+                            {
+                                value: data.dateOptions[3] | formatISODate,
+                                text: locale.dateSelection.options.twentyFourMonths
+                            },
+                            {
+                                divider: "or"
+                            },
+                            {
+                                value: "custom",
+                                text: locale.dateSelection.options.custom,
+                                conditional: {
+                                html: customDateHtml
+                            }
+                            }
+                        ]
+                    }) }}
+                {% endset -%}
 
                 {{ govukRadios({
                     name: "start-working-goal-radio",
