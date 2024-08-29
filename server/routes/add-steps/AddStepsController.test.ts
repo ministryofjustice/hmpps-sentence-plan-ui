@@ -11,6 +11,7 @@ import { testStep } from '../../testutils/data/stepData'
 import runMiddlewareChain from '../../testutils/runMiddlewareChain'
 import { toKebabCase } from '../../utils/utils'
 import URLs from '../URLs'
+import { StepStatus } from '../../@types/StepType'
 
 jest.mock('../../services/sentence-plan/stepsService', () => {
   return jest.fn().mockImplementation(() => ({
@@ -188,12 +189,12 @@ describe('AddStepsController', () => {
       const expectedData = [
         {
           description: 'a test step',
-          status: 'in-progress',
+          status: StepStatus.NOT_STARTED,
           actor: 'Test actor',
         },
         {
           description: 'test',
-          status: 'in-progress',
+          status: StepStatus.NOT_STARTED,
           actor: 'Batman',
         },
       ]
