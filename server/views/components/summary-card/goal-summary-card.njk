@@ -14,8 +14,8 @@
         goal: goal,
         areaOfNeed: params.goal.areaOfNeed.name | lower,
         relatedAreasOfNeed: relatedAreasOfNeed | join(', ') | lower,
-        targetDate: params.goal.targetDate | formatSimpleDate,
-        monthsDifference: getMonthsDifference(params.goal.creationDate, params.goal.targetDate)
+        targetDate: (params.goal.targetDate | formatSimpleDate) if params.goal.targetDate,
+        monthsDifference: (getMonthsDifference(params.goal.creationDate, params.goal.targetDate)) if params.goal.targetDate
     }) %}
 
     <div class="goal-summary-card {%- if params.errorMessage %} goal-summary-card--error {% endif %}">
