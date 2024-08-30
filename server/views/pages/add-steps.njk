@@ -13,6 +13,15 @@
     goal: data.goal
 }) %}
 
+{% block head %}
+    {{ super() }}
+    <style nonce="{{ cspNonce }}">
+        :root {
+            --autocomplete-menu-content: "{{ locale.step.description.autocompleteHint }}";
+        }
+    </style>
+{% endblock %}
+
 {% block pageTitle %}
     {% if not errors %}
         {{ locale.page.title }}

@@ -29,6 +29,15 @@
 
 {% set mainClasses = "app-container govuk-body" %}
 
+{% block head %}
+    {{ super() }}
+    <style nonce="{{ cspNonce }}">
+        :root {
+            --autocomplete-menu-content: "{{ locale.goalSelection.autocompleteHint }}";
+        }
+    </style>
+{% endblock %}
+
 {% block content %}
     <a href="#" class="govuk-back-link">{{ locale.common.backLink.text }}</a>
     <div class="govuk-grid-row">
