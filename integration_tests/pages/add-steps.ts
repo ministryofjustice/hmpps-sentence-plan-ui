@@ -1,13 +1,21 @@
 export default class AddSteps {
-  addStepAutocompleteText = (text: string) => {
-    cy.get('#step-description-1-autocomplete').type(text)
+  addStepAutocompleteText = (position: number, text: string) => {
+    cy.get(`#step-description-${position}-autocomplete`).type(text)
   }
 
-  selectStepActor = (text: string) => {
-    cy.get('#step-actor-1').select(text)
+  selectStepActor = (position: number, text: string) => {
+    cy.get(`#step-actor-${position}`).select(text)
+  }
+
+  addAnotherStepButton = () => {
+    cy.get('button').contains('Add another step').click()
   }
 
   saveAndContinue = () => {
     cy.get('button').contains('Save and continue').click()
+  }
+
+  removeStep(position: number) {
+    cy.get(`button[value="remove-step-${position}"]`).click()
   }
 }
