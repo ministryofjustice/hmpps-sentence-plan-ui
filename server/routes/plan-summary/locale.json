@@ -37,7 +37,7 @@
     },
     "errors": {
       "goal-summary-card": {
-        "arrayNotEmpty": "Add steps to agree the plan"
+        "arrayNotEmpty": "You must add steps to the goals {{ subject.givenName }} is working on now"
       }
     }
   }
