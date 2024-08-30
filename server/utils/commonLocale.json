@@ -22,6 +22,22 @@
         "agreePlanButton": "Agree plan"
       }
     },
+    "goalSummaryCard": {
+      "info": {
+        "aimToAchieve": "Aim to achieve in {{ monthsDifference }} months ({{ targetDate }})"
+      },
+      "stepsList": {
+        "whoHeader": "Who will do this",
+        "whatHeader": "Step",
+        "statusHeader": "Status",
+        "noStepsAdded": "No steps added",
+        "addSteps": "Add steps"
+      },
+      "areaOfNeed": {
+        "mainAreaOfNeed": "Area of need: {{ areaOfNeed }}",
+        "relatedAreasOfNeed": "Also relates to: {{ relatedAreasOfNeed }}"
+      }
+    },
     "backLink": {
       "text": "Back"
     },
