@@ -51,15 +51,15 @@
             <table class="govuk-table goal-summary-card__steps">
                 <thead class="govuk-table__head">
                 <tr class="govuk-table__row">
-                    <th scope="col" class="govuk-table__header">{{ locale.stepsList.whoHeader }}</th>
                     <th scope="col" class="govuk-table__header">{{ locale.stepsList.whatHeader }}</th>
+                    <th scope="col" class="govuk-table__header">{{ locale.stepsList.whoHeader }}</th>
                 </tr>
                 </thead>
                 <tbody class="govuk-table__body">
                 {% for step in params.goal.steps %}
                     <tr class="govuk-table__row">
-                        <td class="govuk-table__cell">{{ step.actor }}</td>
                         <td class="govuk-table__cell">{{ step.description }}</td>
+                        <td class="govuk-table__cell">{{ step.actor }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
