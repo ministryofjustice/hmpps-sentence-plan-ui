@@ -27,6 +27,11 @@
     goalCounts: {
         currentGoals: currentGoals.length,
         futureGoals: futureGoals.length
+    },
+    plan: {
+        agreementDate: data.plan.agreementDate | formatSimpleDate,
+        creationDate: data.plan.creationDate | formatSimpleDate,
+        updatedDate: data.plan.updatedDate | formatSimpleDate
     }
 }) %}
 
@@ -97,8 +102,15 @@
                     iconFallbackText: 'Success'
                 }) }}
             {% endif %}
-
-            <p class="govuk-body">{{ locale.addStepSuggestion }}</p>
+            {% if data.plan.agreementStatus === 'AGREED' %}
+                <p class="govuk-body">{{ locale.agreePlan }}</p>
+            {% elseif data.plan.agreementStatus === 'DO_NOT_AGREE' %}
+                <p class="govuk-body">{{ locale.notAgreePlan }}</p>
+            {% elseif data.plan.agreementStatus === 'DRAFT' %}
+                <p class="govuk-body">{{ locale.addStepSuggestion }}</p>
+            {% else %}
+                <p class="govuk-body">{{ locale.lastUpdatedPlan }}</p>
+            {% endif %}
 
             {{ mojSubNavigation({
                 label: 'Sub navigation',
