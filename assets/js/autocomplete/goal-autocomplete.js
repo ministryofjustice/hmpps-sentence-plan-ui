@@ -27,7 +27,8 @@ async function initializeGoalInputAutocomplete() {
     id: `${GOAL_INPUT_ID}-autocomplete`,
     name: `${GOAL_INPUT_ID}-autocomplete`,
     source,
-    minLength: 3,
+    minLength: 2,
+    showNoOptionsFound: false,
     defaultValue,
   })
 }

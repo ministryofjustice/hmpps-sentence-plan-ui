@@ -3,10 +3,9 @@ import accessibleAutocomplete from 'accessible-autocomplete'
 const AREA_OF_NEED_INPUT_ID = '_areaOfNeed'
 
 document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('input[id^="step-description-"]')
-    .forEach((element) => {
-      initializeStepInputAutocomplete(element)
-    });
+  document.querySelectorAll('input[id^="step-description-"]').forEach(element => {
+    initializeStepInputAutocomplete(element)
+  })
 })
 
 async function getStepOptionsByAreaOfNeed(areaOfNeed) {
@@ -28,7 +27,8 @@ async function initializeStepInputAutocomplete(inputElement) {
     id: `step-description-${row}-autocomplete`,
     source,
     displayMenu: 'overlay',
-    minLength: 3,
+    minLength: 2,
+    showNoOptionsFound: false,
     defaultValue: value ?? '',
   })
 }
