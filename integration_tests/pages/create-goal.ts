@@ -1,7 +1,7 @@
 export default class CreateGoal {
-  selectGoalAutocompleteOption = (text: string, option: number) => {
+  selectGoalAutocompleteOption = (text: string, option: string) => {
     this.addGoalAutoCompletionText(text)
-    cy.get(`#goal-input-autocomplete__option--${option}`).click()
+    cy.get('#goal-input-autocomplete__listbox').contains('li', option).click()
   }
 
   addGoalAutoCompletionText = (text: string) => {
