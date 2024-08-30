@@ -24,14 +24,21 @@
     },
     "goalSummaryCard": {
       "info": {
-        "aimToAchieve": "Aim to achieve in {{ monthsDifference }} months ({{ targetDate }})"
+        "aimToAchieveDate": "Aim to achieve this by {{ targetDate }}.",
+        "aimToAchieveSentence": "Aim to achieve this by the end of {{ subject.possessiveName }} sentence."
       },
       "stepsList": {
         "whoHeader": "Who will do this",
         "whatHeader": "Step",
         "statusHeader": "Status",
         "noStepsAdded": "No steps added",
-        "addSteps": "Add steps"
+        "addSteps": "Add steps",
+        "status": {
+          "notStarted": "Not started",
+          "inProgress": "In progress",
+          "completed": "Completed",
+          "cannotBeDoneYet": "Cannot be done yet"
+        }
       },
       "areaOfNeed": {
         "mainAreaOfNeed": "Area of need: {{ areaOfNeed }}",
