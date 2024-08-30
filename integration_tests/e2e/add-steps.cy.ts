@@ -3,11 +3,11 @@ import { PlanType } from '../../server/@types/PlanType'
 import DataGenerator from '../support/DataGenerator'
 
 const selectStepDescriptionByIndex = (index: number) => {
-  return cy.get(`table.goal-summary-card__steps .govuk-table__body > :nth-child(${index}) > :nth-child(1)`)
+  return cy.get(`table.goal-summary-card__steps .govuk-table__body > :nth-child(${index}) > :nth-child(2)`)
 }
 
 const selectStepActorByIndex = (index: number) => {
-  return cy.get(`table.goal-summary-card__steps .govuk-table__body > :nth-child(${index}) > :nth-child(2)`)
+  return cy.get(`table.goal-summary-card__steps .govuk-table__body > :nth-child(${index}) > :nth-child(1)`)
 }
 
 describe('Add Steps', () => {
