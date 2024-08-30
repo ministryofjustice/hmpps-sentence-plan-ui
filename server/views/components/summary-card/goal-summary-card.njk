@@ -5,6 +5,19 @@
 {% from "govuk/components/error-message/macro.njk" import govukErrorMessage %}
 
 {% macro goalSummaryCard(params) %}
+    {% set relatedAreasOfNeed = [] %}
+    {% for areaOfNeed in params.goal.relatedAreasOfNeed %}
+        {% set relatedAreasOfNeed = relatedAreasOfNeed.concat(areaOfNeed.name) %}
+    {% endfor %}
+
+    {% set locale = interpolate(params.locale.common.goalSummaryCard, {
+        goal: goal,
+        areaOfNeed: params.goal.areaOfNeed.name | lower,
+        relatedAreasOfNeed: relatedAreasOfNeed | join(', ') | lower,
+        targetDate: params.goal.targetDate | formatSimpleDate,
+        monthsDifference: getMonthsDifference(params.goal.creationDate, params.goal.targetDate)
+    }) %}
+
     <div class="goal-summary-card {%- if params.errorMessage %} goal-summary-card--error {% endif %}">
         {% if params.errorMessage %}
             {{govukTag({
@@ -24,7 +37,7 @@
             <div class="goal-summary-card__info">
                 {% if params.goal.targetDate %}
                     <p>
-                        Aim to achieve in {{ getMonthsDifference(params.goal.creationDate, params.goal.targetDate) }} months ({{ params.goal.targetDate | formatSimpleDate }})
+                        {{ locale.info.aimToAchieve }}
                     </p>
                 {% endif %}
                 {% if params.errorMessage %}
@@ -38,32 +51,32 @@
             <table class="govuk-table goal-summary-card__steps">
                 <thead class="govuk-table__head">
                 <tr class="govuk-table__row">
-                    <th scope="col" class="govuk-table__header">Step</th>
-                    <th scope="col" class="govuk-table__header">Who will do this</th>
+                    <th scope="col" class="govuk-table__header">{{ locale.stepsList.whoHeader }}</th>
+                    <th scope="col" class="govuk-table__header">{{ locale.stepsList.whatHeader }}</th>
                 </tr>
                 </thead>
                 <tbody class="govuk-table__body">
                 {% for step in params.goal.steps %}
                     <tr class="govuk-table__row">
-                        <td class="govuk-table__cell">{{ step.description }}</td>
                         <td class="govuk-table__cell">{{ step.actor }}</td>
+                        <td class="govuk-table__cell">{{ step.description }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
             </table>
         {% else %}
             <div class="goal-summary-card__steps--empty">
-                <strong>No steps added</strong>
+                <strong>{{ locale.stepsList.noStepsAdded }}</strong>
                 {% if params.actions.length > 0 %}
-                    <a href="/goal/{{ params.goal.uuid }}/add-steps">Add steps</a>
+                    <a href="/goal/{{ params.goal.uuid }}/add-steps">{{ locale.stepsList.addSteps }}</a>
                 {% endif %}
             </div>
         {% endif %}
 
             <p class="goal-summary-card__areas-of-need">
-                Area of need: {{ params.goal.areaOfNeed.name | lower }}<br>
+                {{ locale.areaOfNeed.mainAreaOfNeed }}<br>
                 {% if params.goal.relatedAreasOfNeed.length > 0 %}
-                    Also relates to: {{ params.goal.relatedAreasOfNeed | getRelatedAreaOfNeed | join(', ') | lower }}
+                    {{ locale.areaOfNeed.relatedAreasOfNeed }}
                 {% endif %}
             </p>
 

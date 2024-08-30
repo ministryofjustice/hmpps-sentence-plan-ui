@@ -106,11 +106,6 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
     return false
   })
 
-  // Filter to format related area of need
-  njkEnv.addFilter('getRelatedAreaOfNeed', relatedAreaOfNeed => {
-    return relatedAreaOfNeed.map((item: any) => item.name)
-  })
-
   // get months difference
   njkEnv.addGlobal('getMonthsDifference', (creationDate: string, targetDate: string) => {
     const [creationYear, creationMonth] = creationDate.split('-').map(Number)

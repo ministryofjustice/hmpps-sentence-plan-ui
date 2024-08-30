@@ -20,7 +20,8 @@
         <h1 class="govuk-heading-l">{{ locale.mainHeading.title }}</h1>
 
         {{ goalSummaryCard({
-            goal: data.goal
+            goal: data.goal,
+            locale: locale
         }) }}
 
         <form id="remove-goal-form" method="POST">
