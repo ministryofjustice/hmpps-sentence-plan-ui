@@ -13,6 +13,9 @@
       "changedGoal": "You changed a goal in {{ subject.possessiveName }} plan.",
       "removedGoal": "You removed a goal from {{ subject.possessiveName }} plan."
     },
+    "agreePlan": "{{ subject.givenName }} agreed to their plan on {{ plan.agreementDate }}",
+    "notAgreePlan": "Plan created on {{ plan.creationDate }}",
+    "lastUpdatedPlan": "Last updated on {{ plan.updatedDate }} by ---",
     "addStepSuggestion": "Add steps to the goals {{ subject.givenName }} is working on now. You can then agree the plan with {{ subject.givenName }}.",
     "subNavigation": {
       "currentGoals": "Goals to work on now ({{ goalCounts.currentGoals }})",
@@ -34,7 +37,7 @@
     },
     "errors": {
       "goal-summary-card": {
-        "arrayNotEmpty": "Add steps to agree the plan"
+        "arrayNotEmpty": "You must add steps to the goals {{ subject.givenName }} is working on now"
       }
     }
   }
