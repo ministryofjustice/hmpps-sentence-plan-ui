@@ -62,20 +62,18 @@ export default class AgreePlanController {
 
   private validatePlanForAgreement = async (req: Request, res: Response, next: NextFunction) => {
     try {
-      req.errors = { ...req.errors }
-
       const planUuid = req.services.sessionService.getPlanUUID()
       const plan = await this.planService.getPlanByUuid(planUuid)
-      const domainErrors = getValidationErrors(plainToInstance(PlanModel, plan))
-
-      if (Object.keys(domainErrors).length || plan.agreementStatus !== PlanAgreementStatus.DRAFT) {
-        req.errors.domain = domainErrors
-      }
+      const domainErrors = getValidationErrors(plainToInstance(PlanModel, plan)) ?? {}
 
       if (plan.agreementStatus !== PlanAgreementStatus.DRAFT) {
-        req.errors.domain.plan = {
+        domainErrors.plan = {
           alreadyAgreed: true,
         }
+      }
+
+      if (Object.keys(domainErrors).length) {
+        req.errors = { ...req.errors, domain: domainErrors }
       }
 
       return next()
@@ -85,7 +83,7 @@ export default class AgreePlanController {
   }
 
   private handleValidationErrors = (req: Request, res: Response, next: NextFunction) => {
-    const hasErrors = Object.values(req.errors).some(errorCategory => Object.keys(errorCategory).length > 0)
+    const hasErrors = Object.values(req.errors ?? {}).some(errorCategory => Object.keys(errorCategory).length > 0)
 
     if (hasErrors) {
       if (req.method === 'POST') {
