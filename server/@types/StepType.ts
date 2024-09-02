@@ -2,7 +2,7 @@ export enum StepStatus {
   NOT_STARTED = 'NOT_STARTED',
   IN_PROGRESS = 'IN_PROGRESS',
   COMPLETED = 'COMPLETED',
-  CANNOT_BE_DONE_YET = 'CANNOT_BE_STARTED_YET',
+  CANNOT_BE_DONE_YET = 'CANNOT_BE_DONE_YET',
 }
 
 export type NewStep = {
