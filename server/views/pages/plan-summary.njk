@@ -57,7 +57,12 @@
             text: locale.header.agreePlanButton,
             type: 'submit',
             value: 'agree-plan'
-        } if data.plan.agreementStatus === 'DRAFT'
+        } if data.plan.agreementStatus === 'DRAFT',
+        {
+            text: locale.header.recordProgressButton,
+            type: 'submit',
+            value: '#'
+        } if data.plan.agreementStatus !== 'DRAFT'
     ]
 } %}
 
@@ -137,6 +142,7 @@
                 {% for item in goals %}
                     {% set goal = item.goal %}
                     {% set buttons = [] %}
+                    {% set actions = [] %}
 
                     {% if not loop.first %}
                         {% set buttons = buttons.concat({
@@ -163,24 +169,63 @@
                         } %}
                     {% endif %}
 
+                    {% if data.plan.agreementStatus === 'DRAFT' %}
+                        {% set actions = [
+                            {
+                                href: "/edit-goal/" + goal.uuid,
+                                text: locale.goalSummaryCard.actions.draft.changeGoal
+                            },
+                            {
+                                href: "/goal/" + goal.uuid + '/add-steps',
+                                text: locale.goalSummaryCard.actions.draft.addOrChangeSteps
+                            },
+                            {
+                                href: "/remove-goal/" + goal.uuid + "?type=current",
+                                text: locale.goalSummaryCard.actions.draft.removeGoal
+                            }
+                        ] %}
+                    {% else %}
+                        {% if goal.status === 'ACTIVE' or goal.status === 'FUTURE' %}
+                            {% set actions = [
+                                {
+                                    href: '#',
+                                    text: locale.goalSummaryCard.actions.active.update
+                                },
+                                {
+                                    href: '#',
+                                    text: locale.goalSummaryCard.actions.active.markAsAchieved
+                                },
+                                {
+                                    href: "/remove-goal/" + goal.uuid + "?type=current",
+                                    text: locale.goalSummaryCard.actions.active.remove
+                                }
+                            ] %}
+                        {% elseif goal.status === 'COMPLETED' %}
+                            {% set actions = [
+                                {
+                                    href: '#',
+                                    text: locale.goalSummaryCard.actions.completed.viewDetails
+                                }
+                            ] %}
+                        {% elseif goal.status === 'REMOVED' %}
+                            {% set actions = [
+                                {
+                                    href: '#',
+                                    text: locale.goalSummaryCard.actions.removed.viewDetails
+                                },
+                                {
+                                    href: '#',
+                                    text: locale.goalSummaryCard.actions.removed.addToPlan
+                                }
+                            ] %}
+                        {% endif %}
+                    {% endif %}
+
                     <li>
                         {{ goalSummaryCard({
                             goal: goal,
                             buttons: buttons,
-                            actions: [
-                                {
-                                    href: "/edit-goal/" + goal.uuid,
-                                    text: locale.goalSummaryCard.actions.changeGoal
-                                },
-                                {
-                                    href: "/goal/" + goal.uuid + '/add-steps',
-                                    text: locale.goalSummaryCard.actions.addOrChangeSteps
-                                },
-                                {
-                                    href: "/remove-goal/" + goal.uuid + "?type=current",
-                                    text: locale.goalSummaryCard.actions.removeGoal
-                                }
-                            ],
+                            actions: actions,
                             errorMessage: errorMessage,
                             locale: locale
                         }) }}
