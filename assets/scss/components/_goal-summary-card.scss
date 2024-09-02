@@ -16,6 +16,20 @@
       word-wrap: break-word
     }
 
+    th {
+      &:nth-child(1) {
+        width: 20%;
+      }
+
+      &:nth-child(2) {
+        width: 62.5%;
+      }
+
+      &:nth-child(3) {
+        width: 17.5%;
+      }
+    }
+
     &--empty {
       display: flex;
       justify-content: space-between;
