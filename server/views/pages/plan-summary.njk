@@ -134,7 +134,7 @@
                 items: [{
                     text: locale.subNavigation.currentGoals,
                     href: '/plan-summary?type=current',
-                    active: data.type === 'current'
+                    active: data.type === 'current' or data.type === undefined
                 },
                 {
                     text: locale.subNavigation.futureGoals,
@@ -154,10 +154,7 @@
             }) }}
 
             <ol id="goal-list" class="goal-list govuk-list govuk-list--number">
-                {% if data.type == 'current' %}
-                    {% set goals = currentGoals %}
-                    {% set goalType = 'future' %}
-                {% elseif data.type == 'future' %}
+                {% if data.type == 'future' %}
                     {% set goals = futureGoals %}
                     {% set goalType = 'future' %}
                 {% elseif data.type == 'completed' %}
@@ -166,6 +163,9 @@
                 {% elseif data.type == 'removed' %}
                     {% set goals = removedGoals %}
                     {% set goalType = 'removed' %}
+                {% else %}
+                    {% set goals = currentGoals %}
+                    {% set goalType = 'current' %}
                 {% endif %}
 
                 {% for item in goals %}
