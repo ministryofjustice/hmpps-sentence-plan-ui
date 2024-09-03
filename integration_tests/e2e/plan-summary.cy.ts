@@ -12,6 +12,71 @@ describe('View Plan Summary', () => {
     })
   })
 
+  it('Should have a Create goal button and it should take to create goal', () => {
+    cy.visit('/plan-summary')
+    cy.contains('a', 'Create goal').click()
+    cy.url().should('include', '/create-goal/')
+  })
+
+  it('Should result in error when agree plan without goals', () => {
+    cy.visit('/plan-summary')
+    cy.get('button').contains('Agree plan').click()
+    cy.title().should('contain', 'Error:')
+    cy.get('.govuk-error-summary').should('contain', 'You must add steps to the goals Sam is working on now')
+  })
+
+  it('Plan with goals and no steps should result into error when Agree plan', () => {
+    cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
+      cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoalWithTitle('Test Accommodation'))
+      cy.visit('/plan-summary?source=nav')
+    })
+
+    cy.get('button').contains('Agree plan').click()
+    cy.title().should('contain', 'Error:')
+    cy.get('.govuk-error-summary').should('contain', 'You must add steps to the goals Sam is working on now')
+  })
+
+  it('Plan with goals and no steps should have Add steps link and takes to takes to add-steps page', () => {
+    cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
+      cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoalWithTitle('Test Accommodation'))
+      cy.visit('/plan-summary?source=nav')
+    })
+    cy.contains('a', 'Add steps').click()
+    cy.url().should('include', '/add-steps')
+  })
+
+  it('Plan with goals and steps should have required links and status as not started', () => {
+    cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
+      cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoalWithTitle('Test Accommodation'))
+      cy.visit('/plan-summary?source=nav')
+    })
+    cy.contains('a', 'Add steps').click()
+    cy.get(`#step-description-1-autocomplete`).type('Accommodation')
+
+    cy.get('button').contains('Save and continue').click()
+    cy.url().should('include', '/plan-summary?status=success')
+    cy.get('.goal-summary-card')
+    cy.contains('.goal-summary-card', 'Test Accommodation').within(() => {
+      cy.contains('a', 'Change goal')
+      cy.contains('a', 'Add or change steps')
+      cy.contains('a', 'Remove goal')
+      cy.get('.govuk-tag').contains('Not started')
+    })
+  })
+
+  it('Plan with valid goals and steps should go to agree-plan', () => {
+    cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
+      cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoalWithTitle('Test Accommodation'))
+      cy.visit('/plan-summary?source=nav')
+    })
+    cy.contains('a', 'Add steps').click()
+    cy.get(`#step-description-1-autocomplete`).type('Accommodation')
+
+    cy.get('button').contains('Save and continue').click()
+    cy.get('button').contains('Agree plan').click()
+    cy.url().should('include', '/agree-plan')
+  })
+
   it('Creates three new goals, and moves the middle goal up', () => {
     cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
       ;[1, 2, 3].forEach(i => {
