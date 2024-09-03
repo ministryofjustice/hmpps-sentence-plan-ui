@@ -6,7 +6,8 @@
     },
     "header": {
       "createGoalButton": "Create goal",
-      "agreePlanButton": "Agree plan"
+      "agreePlanButton": "Agree plan",
+      "recordProgressButton": "Record progress"
     },
     "notificationBanner": {
       "addedGoal": "You added a goal to {{ subject.possessiveName }} plan.",
@@ -23,9 +24,23 @@
     },
     "goalSummaryCard": {
       "actions": {
-        "changeGoal": "Change goal",
-        "addOrChangeSteps": "Add or change steps",
-        "removeGoal": "Remove goal"
+        "draft": {
+          "changeGoal": "Change goal",
+          "addOrChangeSteps": "Add or change steps",
+          "removeGoal": "Remove goal"
+        },
+        "active": {
+          "update": "Update",
+          "markAsAchieved": "Mark as achieved",
+          "remove": "Remove"
+        },
+        "completed": {
+          "viewDetails": "View details"
+        },
+        "removed": {
+          "viewDetails": "View details",
+          "addToPlan": "Add to plan"
+        }
       },
       "buttons": {
         "moveUpButton": "Move goal up",
