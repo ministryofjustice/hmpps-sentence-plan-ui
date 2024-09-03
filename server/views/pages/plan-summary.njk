@@ -8,15 +8,27 @@
 
 {% set currentGoals = [] %}
 {% set futureGoals = [] %}
+{% set completedGoals = [] %}
+{% set removedGoals = [] %}
 
 {% for goal in data.plan.goals %}
-    {% if goal.targetDate %}
+    {% if goal.status === 'ACTIVE' %}
         {% set currentGoals = currentGoals.concat({
             index: loop.index0,
             goal: goal
         }) %}
-    {% else %}
+    {% elseif goal.status === 'FUTURE' %}
         {% set futureGoals = futureGoals.concat({
+            index: loop.index0,
+            goal: goal
+        }) %}
+    {% elseif goal.status === 'COMPLETED' %}
+        {% set completedGoals = completedGoals.concat({
+            index: loop.index0,
+            goal: goal
+        }) %}
+    {% elseif goal.status === 'REMOVED' %}
+        {% set removedGoals = removedGoals.concat({
             index: loop.index0,
             goal: goal
         }) %}
@@ -122,21 +134,38 @@
                 items: [{
                     text: locale.subNavigation.currentGoals,
                     href: '/plan-summary?type=current',
-                    active: data.type != 'future'
-                }, {
+                    active: data.type === 'current'
+                },
+                {
                     text: locale.subNavigation.futureGoals,
                     href: '/plan-summary?type=future',
-                    active: data.type == 'future'
+                    active: data.type === 'future'
+                },
+                {
+                    text: locale.subNavigation.completedGoals,
+                    href: '/plan-summary?type=completed',
+                    active: data.type === 'completed'
+                },
+                {
+                    text: locale.subNavigation.removedGoals,
+                    href: '/plan-summary?type=removed',
+                    active: data.type === 'removed'
                 }]
             }) }}
 
             <ol id="goal-list" class="goal-list govuk-list govuk-list--number">
-                {% if data.type == 'future' %}
+                {% if data.type == 'current' %}
+                    {% set goals = currentGoals %}
+                    {% set goalType = 'future' %}
+                {% elseif data.type == 'future' %}
                     {% set goals = futureGoals %}
                     {% set goalType = 'future' %}
-                {% else %}
-                    {% set goals = currentGoals %}
-                    {% set goalType = 'current' %}
+                {% elseif data.type == 'completed' %}
+                    {% set goals = completedGoals %}
+                    {% set goalType = 'completed' %}
+                {% elseif data.type == 'removed' %}
+                    {% set goals = removedGoals %}
+                    {% set goalType = 'removed' %}
                 {% endif %}
 
                 {% for item in goals %}
