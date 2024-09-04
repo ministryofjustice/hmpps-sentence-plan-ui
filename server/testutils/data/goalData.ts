@@ -1,5 +1,5 @@
 import { NewGoal } from '../../@types/NewGoalType'
-import { Goal } from '../../@types/GoalType'
+import { Goal, GoalStatus } from '../../@types/GoalType'
 import { testStep } from './stepData'
 
 const oneWeekInMs = 1000 * 60 * 60 * 24 * 7
@@ -14,6 +14,7 @@ export const testGoal: Goal = {
   ...testNewGoal,
   uuid: 'a-un1qu3-t3st-Uu1d',
   creationDate: new Date().toISOString().substring(0, 10),
+  status: GoalStatus.ACTIVE,
   goalOrder: 1,
   areaOfNeed: {
     name: testNewGoal.areaOfNeed,
