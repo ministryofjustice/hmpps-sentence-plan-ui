@@ -11,17 +11,14 @@ import EditGoalPostModel from './models/EditGoalPostModel'
 import validateRequest from '../../middleware/validationMiddleware'
 
 export default class EditGoalController {
-  constructor(
-    private readonly referentialDataService: ReferentialDataService,
-    private readonly goalService: GoalService,
-  ) {}
+  constructor(private readonly referentialDataService: ReferentialDataService) {}
 
   private render = async (req: Request, res: Response, next: NextFunction) => {
     const { uuid } = req.params
     const { errors } = req
 
     const sortedAreasOfNeed = this.referentialDataService.getSortedAreasOfNeed()
-    const goal = await this.goalService.getGoal(uuid)
+    const goal = await req.services.goalService.getGoal(uuid)
 
     const dateOptions = this.getDateOptions()
     const selectedAreaOfNeed = sortedAreasOfNeed.find(areaOfNeed => areaOfNeed.name === goal.areaOfNeed.name)
@@ -48,7 +45,7 @@ export default class EditGoalController {
     const type = processedData.targetDate === null ? 'future' : 'current'
 
     try {
-      await this.goalService.updateGoal(processedData, goalUuid)
+      await req.services.goalService.updateGoal(processedData, goalUuid)
       return res.redirect(`${URLs.PLAN_SUMMARY}?status=updated&type=${type}`)
     } catch (e) {
       return next(e)
