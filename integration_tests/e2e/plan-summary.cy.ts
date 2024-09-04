@@ -27,7 +27,7 @@ describe('View Plan Summary', () => {
 
   it('Plan with goals and no steps should result into error when Agree plan', () => {
     cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
-      cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal('Test Accommodation'))
+      cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal({ title: 'Test Accommodation' }))
       cy.visit('/plan-summary?source=nav')
     })
 
@@ -38,7 +38,7 @@ describe('View Plan Summary', () => {
 
   it('Plan with goals and no steps should have Add steps link and takes to takes to add-steps page', () => {
     cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
-      cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal('Test Accommodation'))
+      cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal({ title: 'Test Accommodation' }))
       cy.visit('/plan-summary?source=nav')
     })
     cy.contains('a', 'Add steps').click()
@@ -47,7 +47,7 @@ describe('View Plan Summary', () => {
 
   it('Plan with goals and steps should have required links and status as not started', () => {
     cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
-      cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal('Test Accommodation'))
+      cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal({ title: 'Test Accommodation' }))
       cy.visit('/plan-summary?source=nav')
     })
     cy.contains('a', 'Add steps').click()
@@ -66,7 +66,7 @@ describe('View Plan Summary', () => {
 
   it('Plan with valid goals and steps should go to agree-plan', () => {
     cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
-      cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal('Test Accommodation'))
+      cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal({ title: 'Test Accommodation' }))
       cy.visit('/plan-summary?source=nav')
     })
     cy.contains('a', 'Add steps').click()
