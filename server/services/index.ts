@@ -1,5 +1,5 @@
-import { Request } from 'express'
-import { dataAccess } from '../data'
+import { NextFunction, Request } from 'express'
+import { dataAccess, HmppsAuthClient, SentencePlanApiClient } from '../data'
 import AuditService from './auditService'
 import ReferentialDataService from './sentence-plan/referentialDataService'
 import InfoService from './sentence-plan/infoService'
@@ -16,11 +16,6 @@ export const services = () => {
 
   const auditService = new AuditService(hmppsAuditClient)
   const referentialDataService = new ReferentialDataService()
-  const infoService = new InfoService(sentencePlanApiClient)
-  const noteService = new NoteService(sentencePlanApiClient)
-  const goalService = new GoalService(sentencePlanApiClient)
-  const stepService = new StepService(sentencePlanApiClient)
-  const planService = new PlanService(sentencePlanApiClient)
   const handoverContextService = new HandoverContextService(handoverApiClient)
 
   return {
@@ -28,19 +23,23 @@ export const services = () => {
     auditService,
     referentialDataService,
     handoverContextService,
-    infoService,
-    noteService,
-    goalService,
-    stepService,
-    planService,
   }
 }
 
-export const requestServices = (appServices: Services) => ({
-  formStorageService: (req: Request) => new FormStorageService(req),
-  sessionService: (req: Request) =>
-    new SessionService(req, appServices.handoverContextService, appServices.planService),
-})
+export const requestServices = (appServices: Services) => {
+  const sentencePlanApi = dataAccess().sentencePlanApiClient
+  const planService = new PlanService(sentencePlanApi)
+
+  return {
+    formStorageService: (req: Request) => new FormStorageService(req),
+    planService: (req: Request) => planService,
+    goalService: (req: Request) => new GoalService(sentencePlanApi),
+    stepService: (req: Request) => new StepService(sentencePlanApi),
+    noteService: (req: Request) => new NoteService(sentencePlanApi),
+    infoService: (req: Request) => new InfoService(sentencePlanApi),
+    sessionService: (req: Request) => new SessionService(req, appServices.handoverContextService, planService),
+  }
+}
 
 export type RequestServices = {
   [K in keyof ReturnType<typeof requestServices>]: ReturnType<ReturnType<typeof requestServices>[K]>

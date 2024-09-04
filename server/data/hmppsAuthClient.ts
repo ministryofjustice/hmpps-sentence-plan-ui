@@ -8,6 +8,8 @@ import config from '../config'
 import generateOauthClientToken from '../authentication/clientCredentials'
 import RestClient from './restClient'
 
+// scope api client and each service, auth client
+
 const timeoutSpec = config.apis.hmppsAuth.timeout
 const hmppsAuthUrl = config.apis.hmppsAuth.url
 
@@ -19,7 +21,7 @@ function getSystemClientTokenFromHmppsAuth(username?: string): Promise<superagen
 
   const grantRequest = new URLSearchParams({
     grant_type: 'client_credentials',
-    ...(username && { username }),
+    username: 'phil-is-cool', // todo
   }).toString()
 
   logger.info(`${grantRequest} HMPPS Auth request for client id '${config.apis.hmppsAuth.systemClientId}''`)

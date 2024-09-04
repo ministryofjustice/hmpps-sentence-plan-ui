@@ -9,17 +9,12 @@ import PlanService from '../../services/sentence-plan/planService'
 import PlanModel from '../shared-models/PlanModel'
 
 export default class PlanSummaryController {
-  constructor(
-    private readonly planService: PlanService,
-    private readonly goalService: GoalService,
-  ) {}
-
   private render = async (req: Request, res: Response, next: NextFunction) => {
     const { errors } = req
 
     try {
       const planUuid = req.services.sessionService.getPlanUUID()
-      const plan = await this.planService.getPlanByUuid(planUuid)
+      const plan = await req.services.planService.getPlanByUuid(planUuid)
       const status = req.query?.status
       const type = req.query?.type
 
@@ -40,11 +35,11 @@ export default class PlanSummaryController {
   reorderGoals = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const planUuid = req.services.sessionService.getPlanUUID()
-      const goals = await this.goalService.getGoals(planUuid)
+      const goals = await req.services.goalService.getGoals(planUuid)
       const { uuid, type, operation } = req.params
       const goalList = type === 'current' ? goals.now : goals.future
       const reorderedList = moveGoal(goalList, uuid, operation)
-      await this.goalService.changeGoalOrder(reorderedList)
+      await req.services.goalService.changeGoalOrder(reorderedList)
       return res.redirect(`${URLs.PLAN_SUMMARY}?type=${type}`)
     } catch (e) {
       return next(e)
@@ -54,7 +49,7 @@ export default class PlanSummaryController {
   private validatePlanForAgreement = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const planUuid = req.services.sessionService.getPlanUUID()
-      const plan = await this.planService.getPlanByUuid(planUuid)
+      const plan = await req.services.planService.getPlanByUuid(planUuid)
       req.errors = { ...req.errors }
 
       req.errors.domain = getValidationErrors(plainToInstance(PlanModel, plan))

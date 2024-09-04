@@ -10,17 +10,12 @@ import transformRequest from '../../middleware/transformMiddleware'
 import { StepStatus } from '../../@types/StepType'
 
 export default class AddStepsController {
-  constructor(
-    private readonly stepService: StepService,
-    private readonly goalService: GoalService,
-  ) {}
-
   private render = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { errors } = req
       const popData = await req.services.sessionService.getSubjectDetails()
-      const goal = await this.goalService.getGoal(req.params.uuid)
-      const steps = await this.stepService.getSteps(req.params.uuid)
+      const goal = await req.services.goalService.getGoal(req.params.uuid)
+      const steps = await req.services.stepService.getSteps(req.params.uuid)
 
       if (!req.body.steps || req.body.steps.length === 0) {
         req.body.steps = steps.map(step => ({
@@ -46,7 +41,7 @@ export default class AddStepsController {
 
   private saveAndRedirect = async (req: Request, res: Response, next: NextFunction) => {
     const goalUuid = req.params.uuid
-    await this.stepService.saveAllSteps(
+    await req.services.stepService.saveAllSteps(
       req.body.steps.map((step: StepModel) => ({
         description: step.description,
         actor: step.actor,
