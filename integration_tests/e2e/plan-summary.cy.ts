@@ -80,7 +80,7 @@ describe('View Plan Summary', () => {
   it('Creates three new goals, and moves the middle goal up', () => {
     cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
       ;[1, 2, 3].forEach(i => {
-        cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoalWithTitle(`Test Accommodation ${i}`))
+        cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal({ title: `Test Accommodation ${i}` }))
       })
       cy.visit('/plan-summary?source=nav')
     })
@@ -102,7 +102,7 @@ describe('View Plan Summary', () => {
   it('Creates three new goals, and moves the middle goal down', () => {
     cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
       ;[1, 2, 3].forEach(i => {
-        cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoalWithTitle(`Test Accommodation ${i}`))
+        cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal({ title: `Test Accommodation ${i}` }))
       })
       cy.visit('/plan-summary?source=nav')
     })
