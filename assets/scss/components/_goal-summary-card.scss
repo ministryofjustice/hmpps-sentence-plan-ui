@@ -42,7 +42,9 @@
   &__areas-of-need {
     margin-bottom: 0;
     @include govuk-font($size: 16, $weight: 'normal');
-    color: $govuk-secondary-text-colour;
+    & {
+      color: $govuk-secondary-text-colour;
+    }
 
     &:not(:last-child) {
       padding-bottom: govuk-spacing(2);

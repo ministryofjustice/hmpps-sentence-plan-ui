@@ -1,9 +1,12 @@
 .plan-header {
   @include govuk-width-container;
-  box-shadow: inset 0 -1px 0 $govuk-border-colour;
-  padding-bottom: govuk-spacing(3);
-  margin-top: govuk-spacing(4);
-  margin-bottom: govuk-spacing(-6);
+
+  & {
+    box-shadow: inset 0 -1px 0 $govuk-border-colour;
+    padding-bottom: govuk-spacing(3);
+    margin-top: govuk-spacing(4);
+    margin-bottom: govuk-spacing(-6);
+  }
 
   &__subject-details {
     * {
@@ -21,8 +24,8 @@
     }
 
     &__identifiers {
-      @include govuk-font($size: 19, $weight: 'normal');
       margin: 0;
+      @include govuk-font($size: 19, $weight: 'normal');
 
       dd {
         margin-left: govuk-spacing(1);
