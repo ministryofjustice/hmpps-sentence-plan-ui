@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import * as superagent from 'superagent'
 import locale from './locale.json'
-import GoalService from '../../services/sentence-plan/goalService'
 import URLs from '../URLs'
 
 export default class RemoveGoalController {

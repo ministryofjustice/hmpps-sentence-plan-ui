@@ -1,7 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
-import StepService from '../../services/sentence-plan/stepsService'
 import locale from './locale.json'
-import GoalService from '../../services/sentence-plan/goalService'
 import URLs from '../URLs'
 import { toKebabCase } from '../../utils/utils'
 import validateRequest from '../../middleware/validationMiddleware'

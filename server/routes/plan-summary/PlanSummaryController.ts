@@ -1,11 +1,9 @@
 import { NextFunction, Request, Response } from 'express'
 import { plainToInstance } from 'class-transformer'
 import locale from './locale.json'
-import GoalService from '../../services/sentence-plan/goalService'
 import { moveGoal } from '../../utils/utils'
 import URLs from '../URLs'
 import { getValidationErrors } from '../../middleware/validationMiddleware'
-import PlanService from '../../services/sentence-plan/planService'
 import PlanModel from '../shared-models/PlanModel'
 
 export default class PlanSummaryController {

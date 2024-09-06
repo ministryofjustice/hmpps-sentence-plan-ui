@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
 import locale from './locale.json'
-import GoalService from '../../services/sentence-plan/goalService'
 import URLs from '../URLs'
 import ReferentialDataService from '../../services/sentence-plan/referentialDataService'
 import { dateToISOFormat, formatDateWithStyle, getAchieveDateOptions } from '../../utils/utils'
