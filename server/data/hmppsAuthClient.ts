@@ -50,12 +50,12 @@ export default class HmppsAuthClient {
     return new RestClient('HMPPS Auth Client', config.apis.hmppsAuth, token)
   }
 
-  async getSystemClientToken(username?: string): Promise<string> {
+  async getSystemClientToken(username?: string): Promise<Records<string, string>> {
     // todo does this still need to handle 'anonymous' lookups?
     if (username) {
       const token = await this.tokenStore.getToken(username)
       if (token) {
-        return token
+        return { username, token }
       }
     }
 
@@ -64,8 +64,8 @@ export default class HmppsAuthClient {
     )
 
     // set TTL slightly less than expiry of token. Async but no need to wait
-    await this.tokenStore.setToken(username, newToken.body.access_token, newToken.body.expires_in - 60)
+    await this.tokenStore.setToken(newToken.body.user_name, newToken.body.access_token, newToken.body.expires_in - 60)
 
-    return newToken.body
+    return { username: newToken.body.user_name, accessToken: newToken.body.access_token }
   }
 }
