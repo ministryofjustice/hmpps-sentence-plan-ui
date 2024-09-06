@@ -1,5 +1,5 @@
 import { NextFunction, Request } from 'express'
-import { dataAccess, HmppsAuthClient, SentencePlanApiClient } from '../data'
+import { dataAccess } from '../data'
 import AuditService from './auditService'
 import ReferentialDataService from './sentence-plan/referentialDataService'
 import InfoService from './sentence-plan/infoService'
@@ -10,9 +10,11 @@ import FormStorageService from './formStorageService'
 import HandoverContextService from './handover/handoverContextService'
 import PlanService from './sentence-plan/planService'
 import SessionService from './sessionService'
+import HmppsAuthClient from '../data/hmppsAuthClient'
+import SentencePlanApiClient from '../data/sentencePlanApiClient'
 
 export const services = () => {
-  const { applicationInfo, sentencePlanApiClient, handoverApiClient, hmppsAuditClient } = dataAccess()
+  const { applicationInfo, handoverApiClient, hmppsAuditClient } = dataAccess()
 
   const auditService = new AuditService(hmppsAuditClient)
   const referentialDataService = new ReferentialDataService()
@@ -26,20 +28,17 @@ export const services = () => {
   }
 }
 
-export const requestServices = (appServices: Services) => {
-  const sentencePlanApi = dataAccess().sentencePlanApiClient
-  const planService = new PlanService(sentencePlanApi)
-
-  return {
-    formStorageService: (req: Request) => new FormStorageService(req),
-    planService: (req: Request) => planService,
-    goalService: (req: Request) => new GoalService(sentencePlanApi),
-    stepService: (req: Request) => new StepService(sentencePlanApi),
-    noteService: (req: Request) => new NoteService(sentencePlanApi),
-    infoService: (req: Request) => new InfoService(sentencePlanApi),
-    sessionService: (req: Request) => new SessionService(req, appServices.handoverContextService, planService),
-  }
-}
+export const requestServices = (appServices: Services) => ({
+  sentencePlanApiClient: (req: Request) => new SentencePlanApiClient(new HmppsAuthClient(req)),
+  formStorageService: (req: Request) => new FormStorageService(req),
+  planService: (req: Request) => new PlanService(req.services.sentencePlanApiClient),
+  goalService: (req: Request) => new GoalService(req.services.sentencePlanApiClient),
+  stepService: (req: Request) => new StepService(req.services.sentencePlanApiClient),
+  noteService: (req: Request) => new NoteService(req.services.sentencePlanApiClient),
+  infoService: (req: Request) => new InfoService(req.services.sentencePlanApiClient),
+  sessionService: (req: Request) =>
+    new SessionService(req, appServices.handoverContextService, req.services.planService),
+})
 
 export type RequestServices = {
   [K in keyof ReturnType<typeof requestServices>]: ReturnType<ReturnType<typeof requestServices>[K]>

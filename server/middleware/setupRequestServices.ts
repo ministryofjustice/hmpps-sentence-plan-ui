@@ -1,14 +1,13 @@
 import { Request, Response, NextFunction } from 'express'
+import { RequestServices } from '../services'
 
 export default function setupRequestServices(services: Record<string, any>) {
   return (req: Request, res: Response, next: NextFunction) => {
-    const servicesObject: any = {}
+    req.services = {} as RequestServices
 
     Object.entries(services).forEach(([name, service]) => {
-      servicesObject[name] = service(req)
+      req.services[name] = service(req)
     })
-
-    req.services = servicesObject
 
     return next()
   }
