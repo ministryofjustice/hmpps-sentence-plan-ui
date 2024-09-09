@@ -45,12 +45,11 @@ describe('AgreePlanController', () => {
   }
 
   beforeEach(() => {
-    mockPlanService = new PlanService(null) as jest.Mocked<PlanService>
     req = mockReq()
     res = mockRes()
     next = jest.fn()
 
-    controller = new AgreePlanController(mockPlanService)
+    controller = new AgreePlanController()
   })
 
   describe('get', () => {

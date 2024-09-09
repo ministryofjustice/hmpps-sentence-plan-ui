@@ -29,12 +29,10 @@ jest.mock('../../services/sessionService', () => {
 describe('AboutPopController', () => {
   let controller: AboutPopController
   let mockReferentialDataService: jest.Mocked<ReferentialDataService>
-  let mockInfoService: jest.Mocked<InfoService>
   beforeEach(() => {
     mockReferentialDataService = new ReferentialDataService() as jest.Mocked<ReferentialDataService>
-    mockInfoService = new InfoService(null) as jest.Mocked<InfoService>
 
-    controller = new AboutPopController(mockReferentialDataService, mockInfoService)
+    controller = new AboutPopController(mockReferentialDataService)
   })
 
   describe('get', () => {

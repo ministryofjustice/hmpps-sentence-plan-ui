@@ -50,7 +50,7 @@ export default class HmppsAuthClient {
     return new RestClient('HMPPS Auth Client', config.apis.hmppsAuth, token)
   }
 
-  async getSystemClientToken(username?: string): Promise<Records<string, string>> {
+  async getSystemClientToken(username?: string): Promise<Record<string, string>> {
     // todo does this still need to handle 'anonymous' lookups?
     if (username) {
       const token = await this.tokenStore.getToken(username)
