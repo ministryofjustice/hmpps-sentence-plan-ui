@@ -26,11 +26,11 @@ export default function routes(services: Services): Router {
 
   setupAboutPopRoutes(router, services)
   setupCreateGoalRoutes(router, services)
-  setupRemoveGoalRoutes(router, services)
+  setupRemoveGoalRoutes(router)
   setupEditGoalRoutes(router, services)
-  setupAddStepsRoutes(router, services)
+  setupAddStepsRoutes(router)
   setupReferenceDataRoutes(router, services)
-  setupPlanSummaryRoutes(router, services)
-  setupAgreePlanRoutes(router, services)
+  setupPlanSummaryRoutes(router)
+  setupAgreePlanRoutes(router)
   return router
 }
