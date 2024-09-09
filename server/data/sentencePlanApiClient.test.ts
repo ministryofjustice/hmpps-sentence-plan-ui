@@ -19,6 +19,9 @@ jest.mock('../config', () => ({
       },
     },
   },
+  redis: {
+    tls_enabled: false,
+  },
 }))
 jest.mock('../../logger', () => ({
   info: jest.fn(),
@@ -30,7 +33,7 @@ describe('SentencePlanApiClient', () => {
 
   beforeEach(() => {
     mockHmppsAuthClient = new HmppsAuthClient(null) as jest.Mocked<HmppsAuthClient>
-    mockHmppsAuthClient.getSystemClientToken = jest.fn().mockResolvedValue('mock-token')
+    mockHmppsAuthClient.getSystemClientToken = jest.fn().mockResolvedValue({ username: 'Bob', accessToken: 'mock-token' })
     sentencePlanApiClient = new SentencePlanApiClient(mockHmppsAuthClient)
   })
 
