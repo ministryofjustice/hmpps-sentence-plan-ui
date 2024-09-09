@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from 'express'
 import { plainToInstance } from 'class-transformer'
 import testPlan from '../../testutils/data/planData'
 import AgreePlanController from './AgreePlanController'
-import PlanService from '../../services/sentence-plan/planService'
 import mockReq from '../../testutils/preMadeMocks/mockReq'
 import mockRes from '../../testutils/preMadeMocks/mockRes'
 import { getValidationErrors } from '../../middleware/validationMiddleware'
@@ -32,7 +31,6 @@ jest.mock('../../services/sentence-plan/planService', () => {
 
 describe('AgreePlanController', () => {
   let controller: AgreePlanController
-  let mockPlanService: jest.Mocked<PlanService>
   let req: Request
   let res: Response
   let next: NextFunction
@@ -87,36 +85,36 @@ describe('AgreePlanController', () => {
     it('should render without validation errors', async () => {
       await runMiddlewareChain(controller.get, req, res, next)
 
-      expect(mockPlanService.agreePlan).not.toHaveBeenCalled()
+      expect(req.services.planService.agreePlan).not.toHaveBeenCalled()
       expect(res.render).toHaveBeenCalledWith('pages/agree-plan', viewData)
     })
 
     it('should redirect if plan has validation errors', async () => {
       const badPlanData: PlanType = { ...testPlan, goals: [] }
 
-      mockPlanService.getPlanByUuid = jest.fn().mockResolvedValue(badPlanData)
+      req.services.planService.getPlanByUuid = jest.fn().mockResolvedValue(badPlanData)
       await runMiddlewareChain(controller.get, req, res, next)
 
-      expect(mockPlanService.agreePlan).not.toHaveBeenCalled()
+      expect(req.services.planService.agreePlan).not.toHaveBeenCalled()
       expect(res.redirect).toHaveBeenCalledWith(URLs.PLAN_SUMMARY)
     })
 
     it('should redirect if plan is not in draft', async () => {
       const badPlanData: PlanType = { ...testPlan, agreementStatus: PlanAgreementStatus.AGREED }
 
-      mockPlanService.getPlanByUuid = jest.fn().mockResolvedValue(badPlanData)
+      req.services.planService.getPlanByUuid = jest.fn().mockResolvedValue(badPlanData)
       await runMiddlewareChain(controller.get, req, res, next)
 
-      expect(mockPlanService.agreePlan).not.toHaveBeenCalled()
+      expect(req.services.planService.agreePlan).not.toHaveBeenCalled()
       expect(res.redirect).toHaveBeenCalledWith(URLs.PLAN_SUMMARY)
     })
 
     it('should call next if error', async () => {
       const error = new Error('fail')
-      mockPlanService.getPlanByUuid = jest.fn().mockRejectedValue(error)
+      req.services.planService.getPlanByUuid = jest.fn().mockRejectedValue(error)
       await runMiddlewareChain(controller.get, req, res, next)
 
-      expect(mockPlanService.agreePlan).not.toHaveBeenCalled()
+      expect(req.services.planService.agreePlan).not.toHaveBeenCalled()
       expect(next).toHaveBeenCalledWith(error)
     })
   })
@@ -181,7 +179,7 @@ describe('AgreePlanController', () => {
       await runMiddlewareChain(controller.post, req, res, next)
 
       expect(res.render).toHaveBeenCalledWith('pages/agree-plan', expectedViewData)
-      expect(mockPlanService.agreePlan).not.toHaveBeenCalled()
+      expect(req.services.planService.agreePlan).not.toHaveBeenCalled()
       expect(res.redirect).not.toHaveBeenCalled()
       expect(next).not.toHaveBeenCalled()
     })
@@ -202,7 +200,7 @@ describe('AgreePlanController', () => {
 
       await runMiddlewareChain(controller.post, req, res, next)
 
-      expect(mockPlanService.agreePlan).toHaveBeenCalledWith(testPlan.uuid, expectedAgreementData)
+      expect(req.services.planService.agreePlan).toHaveBeenCalledWith(testPlan.uuid, expectedAgreementData)
       expect(res.redirect).toHaveBeenCalledWith(URLs.PLAN_SUMMARY)
       expect(next).not.toHaveBeenCalled()
     })
@@ -224,14 +222,14 @@ describe('AgreePlanController', () => {
 
       await runMiddlewareChain(controller.post, req, res, next)
 
-      expect(mockPlanService.agreePlan).toHaveBeenCalledWith(testPlan.uuid, expectedAgreementData)
+      expect(req.services.planService.agreePlan).toHaveBeenCalledWith(testPlan.uuid, expectedAgreementData)
       expect(res.redirect).toHaveBeenCalledWith(URLs.PLAN_SUMMARY)
       expect(next).not.toHaveBeenCalled()
     })
 
     it('should call next if errors', async () => {
       const error = new Error('fail')
-      mockPlanService.agreePlan = jest.fn().mockRejectedValue(error)
+      req.services.planService.agreePlan = jest.fn().mockRejectedValue(error)
 
       req.body = {
         'agree-plan-radio': 'yes',
@@ -240,7 +238,7 @@ describe('AgreePlanController', () => {
 
       await runMiddlewareChain(controller.post, req, res, next)
 
-      expect(mockPlanService.agreePlan).toHaveBeenCalled()
+      expect(req.services.planService.agreePlan).toHaveBeenCalled()
       expect(next).toHaveBeenCalled()
     })
   })

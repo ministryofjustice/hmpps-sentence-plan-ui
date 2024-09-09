@@ -1,3 +1,4 @@
+import { Request } from 'express'
 import { dataAccess } from '../data'
 import AuditService from './auditService'
 import ReferentialDataService from './sentence-plan/referentialDataService'

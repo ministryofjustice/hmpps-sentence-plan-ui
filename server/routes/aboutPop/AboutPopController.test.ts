@@ -1,5 +1,4 @@
 import ReferentialDataService from '../../services/sentence-plan/referentialDataService'
-import InfoService from '../../services/sentence-plan/infoService'
 import mockRes from '../../testutils/preMadeMocks/mockRes'
 import mockReq from '../../testutils/preMadeMocks/mockReq'
 import AboutPopController from './AboutPopController'
