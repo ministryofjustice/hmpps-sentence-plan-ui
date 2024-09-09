@@ -52,20 +52,28 @@ export default class HmppsAuthClient {
 
   async getSystemClientToken(username?: string): Promise<Record<string, string>> {
     // todo does this still need to handle 'anonymous' lookups?
-    if (username) {
-      const token = await this.tokenStore.getToken(username)
-      if (token) {
-        return { username, token }
+
+    let newToken
+
+    try {
+      if (username) {
+        const token = await this.tokenStore.getToken(username)
+        if (token) {
+          return { username, accessToken: token }
+        }
       }
+
+      newToken = await getSystemClientTokenFromHmppsAuth(
+        this.req.services.sessionService.getPrincipalDetails().displayName,
+      )
+
+      // put this into the session
+
+      // set TTL slightly less than expiry of token. Async but no need to wait
+      await this.tokenStore.setToken(newToken.body.user_name, newToken.body.access_token, newToken.body.expires_in - 60)
+    } catch (e) {
+      console.log(e)
     }
-
-    const newToken = await getSystemClientTokenFromHmppsAuth(
-      this.req.services.sessionService.getPrincipalDetails().displayName,
-    )
-
-    // set TTL slightly less than expiry of token. Async but no need to wait
-    await this.tokenStore.setToken(newToken.body.user_name, newToken.body.access_token, newToken.body.expires_in - 60)
-
     return { username: newToken.body.user_name, accessToken: newToken.body.access_token }
   }
 }
