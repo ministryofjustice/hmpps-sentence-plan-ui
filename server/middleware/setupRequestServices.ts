@@ -6,7 +6,7 @@ export default function setupRequestServices(services: Record<string, any>) {
     req.services = {} as RequestServices
 
     Object.entries(services).forEach(([name, service]) => {
-      req.services[name] = service(req)
+      req.services[name as keyof RequestServices] = service(req)
     })
 
     return next()

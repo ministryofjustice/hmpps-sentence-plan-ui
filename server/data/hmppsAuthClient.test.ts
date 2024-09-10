@@ -2,22 +2,15 @@ import nock from 'nock'
 
 import config from '../config'
 import HmppsAuthClient from './hmppsAuthClient'
-import TokenStore from './tokenStore/redisTokenStore'
 import handoverData from '../testutils/data/handoverData'
 import mockReq from '../testutils/preMadeMocks/mockReq'
 
 jest.mock('./tokenStore/redisTokenStore')
 
-const tokenStore = new TokenStore(null) as jest.Mocked<TokenStore>
-
 const username = 'Dr.+Benjamin+Runolfsdottir'
-const token = { user_name: username, access_token: 'token-1', expires_in: 300 }
-
-jest.mock('../services/sessionService', () => {
-  return jest.fn().mockImplementation(() => ({
-    getPrincipalDetails: jest.fn().mockReturnValue(handoverData.principal),
-  }))
-})
+const token = { token: 'token-1', expiresAt: Date.now() - 30 * 1000 }
+const expiredToken = { token: 'token-1', expiresAt: Date.now() + 30 * 1000 }
+const tokenFromHmppsAuth = { user_name: 'Bob', access_token: 'token-2', expires_in: '300' }
 
 describe('hmppsAuthClient', () => {
   let fakeHmppsAuthApi: nock.Scope
@@ -25,7 +18,7 @@ describe('hmppsAuthClient', () => {
 
   beforeEach(() => {
     fakeHmppsAuthApi = nock(config.apis.hmppsAuth.url)
-    hmppsAuthClient = new HmppsAuthClient(mockReq())
+    hmppsAuthClient = new HmppsAuthClient(mockReq().services.sessionService)
   })
 
   afterEach(() => {
@@ -34,35 +27,30 @@ describe('hmppsAuthClient', () => {
   })
 
   describe('getSystemClientToken', () => {
-    it('should instantiate the redis client', async () => {
-      tokenStore.getToken.mockResolvedValue(token.access_token)
-      await hmppsAuthClient.getSystemClientToken(username)
+    it('should return existing token from session if a valid one exists', async () => {
+      hmppsAuthClient.sessionService.getToken = jest.fn().mockReturnValue(token)
+
+      const output = await hmppsAuthClient.getSystemClientToken()
+      expect(output).toEqual(token.token)
     })
 
-    it('should return token from redis if one exists', async () => {
-      tokenStore.getToken.mockResolvedValue(token.access_token)
-      hmppsAuthClient.tokenStore = tokenStore
-      const output = await hmppsAuthClient.getSystemClientToken(username)
-      expect(output).toEqual({ username, token: token.access_token })
-    })
-
-    it('should return token from HMPPS Auth with username', async () => {
-      tokenStore.getToken.mockResolvedValue(null)
+    it('should return new token from HMPPS Auth if session token expiry date has passed', async () => {
+      hmppsAuthClient.sessionService.getToken = jest.fn().mockReturnValue(expiredToken)
+      hmppsAuthClient.sessionService.getPrincipalDetails = jest.fn().mockReturnValue(handoverData.principal)
+      hmppsAuthClient.sessionService.setToken = jest.fn()
 
       fakeHmppsAuthApi
         .post('/oauth/token', `grant_type=client_credentials&username=${username}`)
         .basicAuth({ user: config.apis.hmppsAuth.systemClientId, pass: config.apis.hmppsAuth.systemClientSecret })
         .matchHeader('Content-Type', 'application/x-www-form-urlencoded')
-        .reply(200, token)
+        .reply(200, tokenFromHmppsAuth)
 
-      const output = await hmppsAuthClient.getSystemClientToken(username)
-
-      expect(output).toEqual({ username, accessToken: token.access_token })
-      expect(tokenStore.setToken).toBeCalledWith(token.user_name, token.access_token, 240)
+      const output = await hmppsAuthClient.getSystemClientToken()
+      expect(output).toEqual(tokenFromHmppsAuth.access_token)
     })
 
     it('should return token from HMPPS Auth without username', async () => {
-      tokenStore.getToken.mockResolvedValue(null)
+      hmppsAuthClient.sessionService.getToken = jest.fn().mockReturnValue(token)
 
       fakeHmppsAuthApi
         .post('/oauth/token', 'grant_type=client_credentials')
@@ -72,8 +60,7 @@ describe('hmppsAuthClient', () => {
 
       const output = await hmppsAuthClient.getSystemClientToken()
 
-      expect(output).toEqual(token.access_token)
-      expect(tokenStore.setToken).toBeCalledWith('%ANONYMOUS%', token.access_token, 240)
+      expect(output).toEqual(token.token)
     })
   })
 })
