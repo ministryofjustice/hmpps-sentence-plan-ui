@@ -21,8 +21,8 @@
     "subNavigation": {
       "currentGoals": "Goals to work on now ({{ goalCounts.currentGoals }})",
       "futureGoals": "Future goals ({{ goalCounts.futureGoals }})",
-      "completedGoals": "Completed goals ({{ goalCounts.futureGoals }})",
-      "removedGoals": "Removed goals ({{ goalCounts.futureGoals }})"
+      "completedGoals": "Completed goals ({{ goalCounts.completedGoals }})",
+      "removedGoals": "Removed goals ({{ goalCounts.removedGoals }})"
     },
     "goalSummaryCard": {
       "actions": {
