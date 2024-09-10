@@ -5,7 +5,6 @@ import superagent from 'superagent'
 import logger from '../../logger'
 import config from '../config'
 import generateOauthClientToken from '../authentication/clientCredentials'
-import SessionService from '../services/sessionService'
 
 const timeoutSpec = config.apis.hmppsAuth.timeout
 const hmppsAuthUrl = config.apis.hmppsAuth.url
@@ -32,16 +31,18 @@ function getSystemClientTokenFromHmppsAuth(username?: string): Promise<superagen
 }
 
 export default class HmppsAuthClient {
-  constructor(readonly sessionService: SessionService) {}
+  constructor(readonly req: Express.Request) {}
 
   async getSystemClientToken(): Promise<string> {
-    if (this.sessionService.getToken()?.expiresAt < Date.now()) {
-      return this.sessionService.getToken().token
+    if (this.req.services.sessionService.getToken()?.expiresAt < Date.now()) {
+      return this.req.services.sessionService.getToken().token
     }
 
-    const newToken = await getSystemClientTokenFromHmppsAuth(this.sessionService.getPrincipalDetails().displayName)
+    const newToken = await getSystemClientTokenFromHmppsAuth(
+      this.req.services.sessionService.getPrincipalDetails().displayName,
+    )
 
-    await this.sessionService.setToken({
+    await this.req.services.sessionService.setToken({
       token: newToken.body.access_token,
       expiresAt: Date.now() + newToken.body.expires_in * 1000,
     })
