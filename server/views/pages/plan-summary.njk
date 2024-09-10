@@ -38,7 +38,9 @@
 {% set locale = interpolate(locale, {
     goalCounts: {
         currentGoals: currentGoals.length,
-        futureGoals: futureGoals.length
+        futureGoals: futureGoals.length,
+        completedGoals: completedGoals.length,
+        removedGoals: removedGoals.length
     },
     plan: {
         agreementDate: data.plan.agreementDate | formatSimpleDate,
@@ -131,6 +133,7 @@
 
             {{ mojSubNavigation({
                 label: 'Sub navigation',
+                classes: 'plan-navigation',
                 items: [{
                     text: locale.subNavigation.currentGoals,
                     href: '/plan-summary?type=current',
@@ -145,12 +148,12 @@
                     text: locale.subNavigation.completedGoals,
                     href: '/plan-summary?type=completed',
                     active: data.type === 'completed'
-                },
+                } if completedGoals.length > 0,
                 {
                     text: locale.subNavigation.removedGoals,
                     href: '/plan-summary?type=removed',
                     active: data.type === 'removed'
-                }]
+                } if removedGoals.length > 0]
             }) }}
 
             <ol id="goal-list" class="goal-list govuk-list govuk-list--number">
