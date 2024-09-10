@@ -28,3 +28,11 @@
 .govuk-tag {
   max-width: unset;
 }
+
+.plan-navigation {
+  .moj-sub-navigation__list {
+    & > *:last-child {
+      float: right;
+    }
+  }
+}
