@@ -28,18 +28,21 @@ describe('hmppsAuthClient', () => {
 
   describe('getSystemClientToken', () => {
     it('should return existing token from session if a valid one exists', async () => {
-      hmppsAuthClient.req.services.sessionService.getToken = jest.fn().mockReturnValue(token)
+      const spyGetToken = jest.spyOn(HmppsAuthClient.prototype as any, 'getToken')
+      spyGetToken.mockReturnValue(token)
 
       const output = await hmppsAuthClient.getSystemClientToken()
       expect(output).toEqual(token.token)
     })
 
     it('should return new token from HMPPS Auth if session token expiry date has passed', async () => {
-      hmppsAuthClient.req.services.sessionService.getToken = jest.fn().mockReturnValue(expiredToken)
+      const spyGetToken = jest.spyOn(HmppsAuthClient.prototype as any, 'getToken')
+      const spySetToken = jest.spyOn(HmppsAuthClient.prototype as any, 'setToken')
+      spyGetToken.mockReturnValue(expiredToken)
+
       hmppsAuthClient.req.services.sessionService.getPrincipalDetails = jest
         .fn()
         .mockReturnValue(handoverData.principal)
-      hmppsAuthClient.req.services.sessionService.setToken = jest.fn()
 
       fakeHmppsAuthApi
         .post('/oauth/token', `grant_type=client_credentials&username=${username}`)
@@ -48,11 +51,13 @@ describe('hmppsAuthClient', () => {
         .reply(200, tokenFromHmppsAuth)
 
       const output = await hmppsAuthClient.getSystemClientToken()
+      expect(spySetToken).toHaveBeenCalled()
       expect(output).toEqual(tokenFromHmppsAuth.access_token)
     })
 
     it('should return token from HMPPS Auth without username', async () => {
-      hmppsAuthClient.req.services.sessionService.getToken = jest.fn().mockReturnValue(token)
+      const spyGetToken = jest.spyOn(HmppsAuthClient.prototype as any, 'getToken')
+      spyGetToken.mockReturnValue(token)
 
       fakeHmppsAuthApi
         .post('/oauth/token', 'grant_type=client_credentials')

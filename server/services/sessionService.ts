@@ -1,7 +1,6 @@
 import HandoverContextService from './handover/handoverContextService'
 import PlanService from './sentence-plan/planService'
 import Logger from '../../logger'
-import { Token } from '../@types/Token'
 
 export default class SessionService {
   constructor(
@@ -18,12 +17,6 @@ export default class SessionService {
       Logger.error('Failed to setup session:', e)
       throw Error(e)
     }
-  }
-
-  getToken = () => this.request.session.token
-
-  setToken = (token: Token) => {
-    this.request.session.token = token
   }
 
   getOasysAssessmentPk = () => this.request.session.handover?.sentencePlanContext?.oasysAssessmentPk
