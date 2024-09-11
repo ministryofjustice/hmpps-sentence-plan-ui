@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
 import RemoveGoalController from './RemoveGoalController'
-import GoalService from '../../services/sentence-plan/goalService'
 import mockReq from '../../testutils/preMadeMocks/mockReq'
 import mockRes from '../../testutils/preMadeMocks/mockRes'
 import { testGoal } from '../../testutils/data/goalData'
@@ -17,7 +16,6 @@ jest.mock('../../services/sentence-plan/goalService', () => {
 
 describe('RemoveGoalController', () => {
   let controller: RemoveGoalController
-  let mockGoalService: jest.Mocked<GoalService>
   let req: Request
   let res: Response
   let next: NextFunction
@@ -31,12 +29,11 @@ describe('RemoveGoalController', () => {
   }
 
   beforeEach(() => {
-    mockGoalService = new GoalService(null) as jest.Mocked<GoalService>
     req = mockReq()
     res = mockRes()
     next = jest.fn()
     req.query.type = 'some-type'
-    controller = new RemoveGoalController(mockGoalService)
+    controller = new RemoveGoalController()
   })
 
   describe('get', () => {
@@ -48,16 +45,16 @@ describe('RemoveGoalController', () => {
 
   describe('post', () => {
     it('should return to plan-summary without removing goal if cancel removal', async () => {
-      req = { body: { type: 'some-type', action: 'cancelRemove' } } as Request
+      req.body = { type: 'some-type', action: 'cancelRemove' }
       await controller.post(req as Request, res as Response, next)
-      expect(mockGoalService.removeGoal).not.toHaveBeenCalled()
+      expect(req.services.goalService.removeGoal).not.toHaveBeenCalled()
       expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_SUMMARY}?type=some-type`)
     })
 
     it('should return to plan-summary after removing goal if remove goal is selected', async () => {
-      req = { body: { type: 'some-type', action: 'remove', goalUuid: 'xyz' } } as Request
+      req.body = { type: 'some-type', action: 'remove', goalUuid: 'xyz' }
       await controller.post(req as Request, res as Response, next)
-      expect(mockGoalService.removeGoal).toHaveBeenCalled()
+      expect(req.services.goalService.removeGoal).toHaveBeenCalled()
       expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_SUMMARY}?type=some-type&status=removed`)
     })
   })

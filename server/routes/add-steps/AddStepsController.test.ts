@@ -1,7 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
 import AddStepsController from './AddStepsController'
-import StepService from '../../services/sentence-plan/stepsService'
-import GoalService from '../../services/sentence-plan/goalService'
 import mockReq from '../../testutils/preMadeMocks/mockReq'
 import mockRes from '../../testutils/preMadeMocks/mockRes'
 import locale from './locale.json'
@@ -41,8 +39,6 @@ jest.mock('../../services/sentence-plan/goalService', () => {
 
 describe('AddStepsController', () => {
   let controller: AddStepsController
-  let mockStepService: jest.Mocked<StepService>
-  let mockGoalService: jest.Mocked<GoalService>
   let req: Request
   let res: Response
   let next: NextFunction
@@ -66,13 +62,11 @@ describe('AddStepsController', () => {
   }
 
   beforeEach(() => {
-    mockStepService = new StepService(null) as jest.Mocked<StepService>
-    mockGoalService = new GoalService(null) as jest.Mocked<GoalService>
     req = mockReq()
     res = mockRes()
     next = jest.fn()
 
-    controller = new AddStepsController(mockStepService, mockGoalService)
+    controller = new AddStepsController()
   })
 
   describe('get', () => {
@@ -101,7 +95,7 @@ describe('AddStepsController', () => {
 
     it('should call next if getting data fails', async () => {
       const error = new Error('no goal')
-      mockGoalService.getGoal = jest.fn().mockRejectedValue(error)
+      req.services.goalService.getGoal = jest.fn().mockRejectedValue(error)
 
       await controller.get(req as Request, res as Response, next)
 
@@ -201,7 +195,7 @@ describe('AddStepsController', () => {
 
       await runMiddlewareChain(controller.post, req, res, next)
 
-      expect(mockStepService.saveAllSteps).toHaveBeenCalledWith(expectedData, 'some-goal-uuid')
+      expect(req.services.stepService.saveAllSteps).toHaveBeenCalledWith(expectedData, 'some-goal-uuid')
       expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_SUMMARY}?status=success`)
       expect(next).not.toHaveBeenCalled()
     })
@@ -250,7 +244,7 @@ describe('AddStepsController', () => {
       req.params = { uuid: 'some-goal-uuid' }
 
       const saveError = new Error('Save failed')
-      mockStepService.saveAllSteps = jest.fn().mockRejectedValue(saveError)
+      req.services.stepService.saveAllSteps = jest.fn().mockRejectedValue(saveError)
 
       await runMiddlewareChain(controller.post, req, res, next)
 

@@ -7,7 +7,6 @@ import testPopData from '../../testutils/data/popData'
 import ReferentialDataService from '../../services/sentence-plan/referentialDataService'
 import testPlan from '../../testutils/data/planData'
 import testHandoverContext from '../../testutils/data/handoverData'
-import PlanService from '../../services/sentence-plan/planService'
 
 jest.mock('../../services/sentence-plan/planService', () => {
   return jest.fn().mockImplementation(() => ({
@@ -26,13 +25,11 @@ jest.mock('../../services/sessionService', () => {
 
 let app: Express
 const referentialDataService = new ReferentialDataService() as jest.Mocked<ReferentialDataService>
-const planService = new PlanService(null) as jest.Mocked<PlanService>
 
 beforeEach(() => {
   app = appWithAllRoutes({
     services: {
       referentialDataService,
-      planService,
     },
   })
 })

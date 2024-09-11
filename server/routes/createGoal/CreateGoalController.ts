@@ -3,18 +3,14 @@ import ReferentialDataService from '../../services/sentence-plan/referentialData
 import locale from './locale.json'
 import URLs from '../URLs'
 import { FORMS } from '../../services/formStorageService'
-import GoalService from '../../services/sentence-plan/goalService'
 import { NewGoal } from '../../@types/NewGoalType'
-import { formatDateWithStyle, dateToISOFormat, getAchieveDateOptions } from '../../utils/utils'
+import { dateToISOFormat, formatDateWithStyle, getAchieveDateOptions } from '../../utils/utils'
 import transformRequest from '../../middleware/transformMiddleware'
 import CreateGoalPostModel from './models/CreateGoalPostModel'
 import validateRequest from '../../middleware/validationMiddleware'
 
 export default class CreateGoalController {
-  constructor(
-    private readonly referentialDataService: ReferentialDataService,
-    private readonly goalService: GoalService,
-  ) {}
+  constructor(private readonly referentialDataService: ReferentialDataService) {}
 
   private saveAndRedirect = async (req: Request, res: Response, next: NextFunction) => {
     // TODO: Delete this saved form data when the new steps controller/logic is in
@@ -26,7 +22,7 @@ export default class CreateGoalController {
     const processedData: NewGoal = this.processGoalData(req.body)
     const planUuid = req.services.sessionService.getPlanUUID()
     try {
-      const { uuid } = await this.goalService.saveGoal(processedData, planUuid)
+      const { uuid } = await req.services.goalService.saveGoal(processedData, planUuid)
 
       // TODO: Delete this saved form data when the new steps controller/logic is in
       req.services.formStorageService.saveFormData('currentGoal', {

@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from 'express'
 import { plainToInstance } from 'class-transformer'
 import locale from './locale.json'
 import URLs from '../URLs'
-import PlanService from '../../services/sentence-plan/planService'
 import validateRequest, { getValidationErrors } from '../../middleware/validationMiddleware'
 import PlanModel from '../shared-models/PlanModel'
 import transformRequest from '../../middleware/transformMiddleware'
@@ -11,8 +10,6 @@ import { PlanAgreementStatus } from '../../@types/PlanType'
 import { PlanAgreement } from '../../@types/PlanAgreement'
 
 export default class AgreePlanController {
-  constructor(private readonly planService: PlanService) {}
-
   private render = async (req: Request, res: Response) => {
     const { errors } = req
 
@@ -52,7 +49,7 @@ export default class AgreePlanController {
 
     try {
       const planUuid = req.services.sessionService.getPlanUUID()
-      await this.planService.agreePlan(planUuid, agreement as PlanAgreement)
+      await req.services.planService.agreePlan(planUuid, agreement as PlanAgreement)
 
       return res.redirect(`${URLs.PLAN_SUMMARY}`)
     } catch (e) {
@@ -63,7 +60,7 @@ export default class AgreePlanController {
   private validatePlanForAgreement = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const planUuid = req.services.sessionService.getPlanUUID()
-      const plan = await this.planService.getPlanByUuid(planUuid)
+      const plan = await req.services.planService.getPlanByUuid(planUuid)
       const domainErrors = getValidationErrors(plainToInstance(PlanModel, plan)) ?? {}
 
       if (plan.agreementStatus !== PlanAgreementStatus.DRAFT) {

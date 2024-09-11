@@ -3,7 +3,6 @@ import { plainToInstance } from 'class-transformer'
 import { AreaOfNeed } from '../../testutils/data/referenceData'
 import ReferentialDataService from '../../services/sentence-plan/referentialDataService'
 import EditGoalController from './EditGoalController'
-import GoalService from '../../services/sentence-plan/goalService'
 import mockReq from '../../testutils/preMadeMocks/mockReq'
 import mockRes from '../../testutils/preMadeMocks/mockRes'
 import { testGoal } from '../../testutils/data/goalData'
@@ -30,7 +29,6 @@ jest.mock('../../services/sentence-plan/goalService', () => {
 describe('EditGoalController', () => {
   let controller: EditGoalController
   let mockReferentialDataService: jest.Mocked<ReferentialDataService>
-  let mockGoalService: jest.Mocked<GoalService>
   let req: Request
   let res: Response
   let next: NextFunction
@@ -62,12 +60,11 @@ describe('EditGoalController', () => {
 
   beforeEach(() => {
     mockReferentialDataService = new ReferentialDataService() as jest.Mocked<ReferentialDataService>
-    mockGoalService = new GoalService(null) as jest.Mocked<GoalService>
     req = mockReq()
     res = mockRes()
     next = jest.fn()
 
-    controller = new EditGoalController(mockReferentialDataService, mockGoalService)
+    controller = new EditGoalController(mockReferentialDataService)
   })
 
   describe('get', () => {
@@ -265,7 +262,7 @@ describe('EditGoalController', () => {
 
       await runMiddlewareChain(controller.post, req, res, next)
 
-      expect(mockGoalService.updateGoal).toHaveBeenCalledWith(updatedGoal, testGoal.uuid)
+      expect(req.services.goalService.updateGoal).toHaveBeenCalledWith(updatedGoal, testGoal.uuid)
       expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_SUMMARY}?status=updated&type=current`)
       expect(res.render).not.toHaveBeenCalled()
       expect(next).not.toHaveBeenCalled()
@@ -306,7 +303,7 @@ describe('EditGoalController', () => {
         body: {},
       }
       const error = new Error('This is a test error')
-      mockGoalService.updateGoal = jest.fn().mockRejectedValue(error)
+      req.services.goalService.updateGoal = jest.fn().mockRejectedValue(error)
       await runMiddlewareChain(controller.post, req, res, next)
 
       expect(next).toHaveBeenCalledWith(error)

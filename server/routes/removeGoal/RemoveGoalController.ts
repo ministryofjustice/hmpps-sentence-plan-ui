@@ -1,12 +1,9 @@
 import { NextFunction, Request, Response } from 'express'
 import * as superagent from 'superagent'
 import locale from './locale.json'
-import GoalService from '../../services/sentence-plan/goalService'
 import URLs from '../URLs'
 
 export default class RemoveGoalController {
-  constructor(private readonly goalService: GoalService) {}
-
   render = async (req: Request, res: Response, next: NextFunction) => {
     const { errors } = req
 
@@ -14,7 +11,7 @@ export default class RemoveGoalController {
       const type = req.query?.type
       const { uuid } = req.params
       // TODO rather than fetch the goal again we should be able to retrieve it from a local store since the previous page must have retrieved it already
-      const goal = await this.goalService.getGoal(uuid)
+      const goal = await req.services.goalService.getGoal(uuid)
 
       return res.render('pages/remove-goal', {
         locale: locale.en,
@@ -35,7 +32,7 @@ export default class RemoveGoalController {
     try {
       if (req.body.action === 'remove') {
         const { goalUuid } = req.body
-        const response: superagent.Response = <superagent.Response>await this.goalService.removeGoal(goalUuid)
+        const response: superagent.Response = <superagent.Response>await req.services.goalService.removeGoal(goalUuid)
         if (response.status === 204) {
           return res.redirect(`${URLs.PLAN_SUMMARY}?type=${type}&status=removed`)
         }

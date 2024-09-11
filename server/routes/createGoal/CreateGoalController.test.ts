@@ -3,7 +3,6 @@ import { plainToInstance } from 'class-transformer'
 import { AreaOfNeed } from '../../testutils/data/referenceData'
 import ReferentialDataService from '../../services/sentence-plan/referentialDataService'
 import CreateGoalController from './CreateGoalController'
-import GoalService from '../../services/sentence-plan/goalService'
 import mockReq from '../../testutils/preMadeMocks/mockReq'
 import mockRes from '../../testutils/preMadeMocks/mockRes'
 import locale from './locale.json'
@@ -35,7 +34,6 @@ jest.mock('../../services/sentence-plan/goalService', () => {
 describe('CreateGoalController', () => {
   let controller: CreateGoalController
   let mockReferentialDataService: jest.Mocked<ReferentialDataService>
-  let mockGoalService: jest.Mocked<GoalService>
   let req: Request
   let res: Response
   let next: NextFunction
@@ -68,12 +66,11 @@ describe('CreateGoalController', () => {
 
   beforeEach(() => {
     mockReferentialDataService = new ReferentialDataService() as jest.Mocked<ReferentialDataService>
-    mockGoalService = new GoalService(null) as jest.Mocked<GoalService>
     req = mockReq()
     res = mockRes()
     next = jest.fn()
 
-    controller = new CreateGoalController(mockReferentialDataService, mockGoalService)
+    controller = new CreateGoalController(mockReferentialDataService)
   })
 
   describe('get', () => {
@@ -264,7 +261,7 @@ describe('CreateGoalController', () => {
 
       await runMiddlewareChain(controller.post, req, res, next)
 
-      expect(mockGoalService.saveGoal).toHaveBeenCalledWith(testNewGoal, 'some-plan-uuid')
+      expect(req.services.goalService.saveGoal).toHaveBeenCalledWith(testNewGoal, 'some-plan-uuid')
       expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_SUMMARY}?status=success`)
       expect(res.render).not.toHaveBeenCalled()
       expect(next).not.toHaveBeenCalled()
@@ -284,7 +281,7 @@ describe('CreateGoalController', () => {
 
       await runMiddlewareChain(controller.post, req, res, next)
 
-      expect(mockGoalService.saveGoal).toHaveBeenCalledWith(testNewGoal, 'some-plan-uuid')
+      expect(req.services.goalService.saveGoal).toHaveBeenCalledWith(testNewGoal, 'some-plan-uuid')
       expect(res.redirect).toHaveBeenCalledWith(URLs.ADD_STEPS.replace(':uuid', 'new-goal-uuid'))
       expect(res.render).not.toHaveBeenCalled()
       expect(next).not.toHaveBeenCalled()
@@ -305,7 +302,7 @@ describe('CreateGoalController', () => {
       await runMiddlewareChain(controller.post, req, res, next)
 
       expect(res.render).toHaveBeenCalledWith('pages/create-goal', expectedViewData)
-      expect(mockGoalService.saveGoal).not.toHaveBeenCalled()
+      expect(req.services.goalService.saveGoal).not.toHaveBeenCalled()
       expect(res.redirect).not.toHaveBeenCalled()
       expect(next).not.toHaveBeenCalled()
     })
@@ -323,7 +320,7 @@ describe('CreateGoalController', () => {
       req.errors = { body: {} }
 
       const error = new Error('This is a test error')
-      mockGoalService.saveGoal = jest.fn().mockRejectedValue(error)
+      req.services.goalService.saveGoal = jest.fn().mockRejectedValue(error)
 
       await runMiddlewareChain(controller.post, req, res, next)
 

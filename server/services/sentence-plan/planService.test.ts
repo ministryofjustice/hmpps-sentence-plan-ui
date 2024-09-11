@@ -1,4 +1,4 @@
-import { SentencePlanApiClient } from '../../data'
+import SentencePlanApiClient from '../../data/sentencePlanApiClient'
 import PlanService from './planService'
 
 jest.mock('../../data/sentencePlanApiClient')

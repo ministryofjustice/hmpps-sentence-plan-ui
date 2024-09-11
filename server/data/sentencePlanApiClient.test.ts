@@ -19,6 +19,9 @@ jest.mock('../config', () => ({
       },
     },
   },
+  redis: {
+    tls_enabled: false,
+  },
 }))
 jest.mock('../../logger', () => ({
   info: jest.fn(),

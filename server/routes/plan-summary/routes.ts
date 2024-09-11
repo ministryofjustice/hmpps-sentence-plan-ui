@@ -1,10 +1,9 @@
 import { Router } from 'express'
-import type { Services } from '../../services'
 import URLs from '../URLs'
 import PlanSummaryController from './PlanSummaryController'
 
-export default function setupPlanSummaryRoutes(router: Router, { planService, goalService }: Services) {
-  const controller = new PlanSummaryController(planService, goalService)
+export default function setupPlanSummaryRoutes(router: Router) {
+  const controller = new PlanSummaryController()
 
   router.get(URLs.PLAN_SUMMARY, controller.get)
   router.post(URLs.PLAN_SUMMARY, controller.post)
