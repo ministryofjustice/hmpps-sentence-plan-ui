@@ -65,13 +65,13 @@ export default class CreateGoalController {
 
   private processGoalData(body: any) {
     const title = body['goal-input-autocomplete']
-    const targetDate =
-      // eslint-disable-next-line no-nested-ternary
-      body['start-working-goal-radio'] === 'no'
-        ? null
-        : body['date-selection-radio'] === 'custom'
-          ? dateToISOFormat(body['date-selection-custom'])
-          : body['date-selection-radio']
+    let targetDate =
+      body['date-selection-radio'] === 'custom' && body['start-working-goal-radio'] === 'yes'
+        ? dateToISOFormat(body['date-selection-custom'])
+        : body['date-selection-radio']
+    if (body['start-working-goal-radio'] === 'no') {
+      targetDate = null
+    }
     const areaOfNeed = body['area-of-need']
     const relatedAreasOfNeed = body['related-area-of-need-radio'] === 'yes' ? body['related-area-of-need'] : undefined
 
