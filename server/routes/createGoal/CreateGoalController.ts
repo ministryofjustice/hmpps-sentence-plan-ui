@@ -20,6 +20,7 @@ export default class CreateGoalController {
     })
 
     const processedData: NewGoal = this.processGoalData(req.body)
+    const type: string = processedData.targetDate == null ? 'future' : 'current'
     const planUuid = req.services.sessionService.getPlanUUID()
     try {
       const { uuid } = await req.services.goalService.saveGoal(processedData, planUuid)
@@ -33,7 +34,7 @@ export default class CreateGoalController {
       if (req.body.action === 'addStep') {
         return res.redirect(URLs.ADD_STEPS.replace(':uuid', uuid))
       }
-      return res.redirect(`${URLs.PLAN_SUMMARY}?status=success`)
+      return res.redirect(`${URLs.PLAN_SUMMARY}?status=success&type=${type}`)
     } catch (e) {
       return next(e)
     }

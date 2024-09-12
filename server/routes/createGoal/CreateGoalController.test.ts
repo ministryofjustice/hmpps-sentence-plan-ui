@@ -262,7 +262,7 @@ describe('CreateGoalController', () => {
       await runMiddlewareChain(controller.post, req, res, next)
 
       expect(req.services.goalService.saveGoal).toHaveBeenCalledWith(testNewGoal, 'some-plan-uuid')
-      expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_SUMMARY}?status=success`)
+      expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_SUMMARY}?status=success&type=current`)
       expect(res.render).not.toHaveBeenCalled()
       expect(next).not.toHaveBeenCalled()
     })
