@@ -4,7 +4,7 @@ export enum GoalStatus {
   ACTIVE = 'ACTIVE',
   FUTURE = 'FUTURE',
   REMOVED = 'REMOVED',
-  COMPLETED = 'COMPLETED',
+  ACHIEVED = 'ACHIEVED',
 }
 
 export type Goal = {
