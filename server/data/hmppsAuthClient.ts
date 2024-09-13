@@ -10,7 +10,7 @@ import { Token } from '../@types/Token'
 const timeoutSpec = config.apis.hmppsAuth.timeout
 const hmppsAuthUrl = config.apis.hmppsAuth.url
 
-function getSystemClientTokenFromHmppsAuth(username?: string): Promise<superagent.Response> {
+function getSystemClientTokenFromHmppsAuth(identifier: string, username?: string): Promise<superagent.Response> {
   const clientToken = generateOauthClientToken(
     config.apis.hmppsAuth.systemClientId,
     config.apis.hmppsAuth.systemClientSecret,
@@ -18,7 +18,7 @@ function getSystemClientTokenFromHmppsAuth(username?: string): Promise<superagen
 
   const grantRequest = new URLSearchParams({
     grant_type: 'client_credentials',
-    username, // todo
+    username: `${identifier}|${username}`,
   }).toString()
 
   logger.info(`${grantRequest} HMPPS Auth request for client id. '${config.apis.hmppsAuth.systemClientId}'`)
@@ -48,6 +48,7 @@ export default class HmppsAuthClient {
     }
 
     const newToken = await getSystemClientTokenFromHmppsAuth(
+      this.req.services.sessionService.getPrincipalDetails().identifier,
       this.req.services.sessionService.getPrincipalDetails().displayName,
     )
 
