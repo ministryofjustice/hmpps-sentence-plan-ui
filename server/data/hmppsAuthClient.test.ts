@@ -7,7 +7,7 @@ import mockReq from '../testutils/preMadeMocks/mockReq'
 
 jest.mock('./tokenStore/redisTokenStore')
 
-const username = 'Dr.+Benjamin+Runolfsdottir'
+const username = 'a23ccacf-7160-4431-9b4d-c560be9c9f5c%7CDr.+Benjamin+Runolfsdottir'
 const token = { token: 'token-1', expiresAt: Date.now() - 30 * 1000 }
 const expiredToken = { token: 'token-1', expiresAt: Date.now() + 30 * 1000 }
 const tokenFromHmppsAuth = { user_name: 'Bob', access_token: 'token-2', expires_in: '300' }
