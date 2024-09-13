@@ -8,7 +8,7 @@
 
 {% set currentGoals = [] %}
 {% set futureGoals = [] %}
-{% set completedGoals = [] %}
+{% set achievedGoals = [] %}
 {% set removedGoals = [] %}
 
 {% for goal in data.plan.goals %}
@@ -22,8 +22,8 @@
             index: loop.index0,
             goal: goal
         }) %}
-    {% elseif goal.status === 'COMPLETED' %}
-        {% set completedGoals = completedGoals.concat({
+    {% elseif goal.status === 'ACHIEVED' %}
+        {% set achievedGoals = achievedGoals.concat({
             index: loop.index0,
             goal: goal
         }) %}
@@ -39,7 +39,7 @@
     goalCounts: {
         currentGoals: currentGoals.length,
         futureGoals: futureGoals.length,
-        completedGoals: completedGoals.length,
+        achievedGoals: achievedGoals.length,
         removedGoals: removedGoals.length
     },
     plan: {
@@ -145,10 +145,10 @@
                     active: data.type === 'future'
                 },
                 {
-                    text: locale.subNavigation.completedGoals,
-                    href: '/plan-summary?type=completed',
-                    active: data.type === 'completed'
-                } if completedGoals.length > 0,
+                    text: locale.subNavigation.achievedGoals,
+                    href: '/plan-summary?type=achieved',
+                    active: data.type === 'achieved'
+                } if achievedGoals.length > 0,
                 {
                     text: locale.subNavigation.removedGoals,
                     href: '/plan-summary?type=removed',
@@ -160,9 +160,9 @@
                 {% if data.type == 'future' %}
                     {% set goals = futureGoals %}
                     {% set goalType = 'future' %}
-                {% elseif data.type == 'completed' %}
-                    {% set goals = completedGoals %}
-                    {% set goalType = 'completed' %}
+                {% elseif data.type == 'achieved' %}
+                    {% set goals = achievedGoals %}
+                    {% set goalType = 'achieved' %}
                 {% elseif data.type == 'removed' %}
                     {% set goals = removedGoals %}
                     {% set goalType = 'removed' %}
@@ -232,11 +232,11 @@
                                     text: locale.goalSummaryCard.actions.active.remove
                                 }
                             ] %}
-                        {% elseif goal.status === 'COMPLETED' %}
+                        {% elseif goal.status === 'ACHIEVED' %}
                             {% set actions = [
                                 {
                                     href: '#',
-                                    text: locale.goalSummaryCard.actions.completed.viewDetails
+                                    text: locale.goalSummaryCard.actions.achieved.viewDetails
                                 }
                             ] %}
                         {% elseif goal.status === 'REMOVED' %}
