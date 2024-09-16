@@ -21,7 +21,7 @@
     "subNavigation": {
       "currentGoals": "Goals to work on now ({{ goalCounts.currentGoals }})",
       "futureGoals": "Future goals ({{ goalCounts.futureGoals }})",
-      "achievedGoals": "Achieved goals ({{ goalCounts.achievedGoals }})",
+      "completedGoals": "Completed goals ({{ goalCounts.completedGoals }})",
       "removedGoals": "Removed goals ({{ goalCounts.removedGoals }})"
     },
     "goalSummaryCard": {
@@ -36,7 +36,7 @@
           "markAsAchieved": "Mark as achieved",
           "remove": "Remove"
         },
-        "achieved": {
+        "completed": {
           "viewDetails": "View details"
         },
         "removed": {
