@@ -246,6 +246,8 @@ describe('EditGoalController', () => {
         title: 'A new title for the test goal',
         areaOfNeed: testGoal.areaOfNeed.name,
         targetDate: viewData.data.dateOptions[1].toISOString(),
+        relatedAreasOfNeed: undefined,
+        status: undefined,
       }
 
       req.body = {
