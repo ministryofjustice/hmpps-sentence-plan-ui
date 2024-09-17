@@ -31,7 +31,6 @@ export default class AchieveGoalController {
 
   private saveAndRedirect = async (req: Request, res: Response, next: NextFunction) => {
     const goalUuid = req.params.uuid
-    const { errors } = req
 
     const goalData: NewGoal = {
       status: GoalStatus.ACHIEVED,
