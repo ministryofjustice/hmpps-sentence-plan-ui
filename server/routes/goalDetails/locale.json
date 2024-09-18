@@ -1,0 +1,11 @@
+{
+  "en": {
+    "page": {
+      "title": "Goal Details - {{ applicationName }}",
+      "errorTitle": "Error: Goal Details - {{ applicationName }}"
+    },
+    "mainHeading": {
+      "title": "Goal details"
+    }
+  }
+}

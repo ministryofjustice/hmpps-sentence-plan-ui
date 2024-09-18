@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from 'express'
-import URLs from '../URLs'
 import { NewGoal } from '../../@types/NewGoalType'
 import { GoalStatus } from '../../@types/GoalType'
 import locale from './locale.json'
@@ -38,7 +37,7 @@ export default class AchieveGoalController {
 
     try {
       await req.services.goalService.updateGoal(goalData, goalUuid)
-      return res.redirect(`${URLs.PLAN_SUMMARY}?status=updated&type=achieved`) // todo redirect back to the static view of the achieved goal page
+      return res.redirect(`/view-achieved-goal/${goalUuid}`)
     } catch (e) {
       return next(e)
     }

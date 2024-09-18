@@ -235,7 +235,7 @@
                         {% elseif goal.status === 'ACHIEVED' %}
                             {% set actions = [
                                 {
-                                    href: '#',
+                                    href: '/view-achieved-goal/' + goal.uuid,
                                     text: locale.goalSummaryCard.actions.achieved.viewDetails
                                 }
                             ] %}

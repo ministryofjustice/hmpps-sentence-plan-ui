@@ -3,7 +3,7 @@ export default {
   CREATE_GOAL: '/create-goal/:areaOfNeed',
   ADD_STEPS: '/goal/:uuid/add-steps',
   PLAN_SUMMARY: '/plan-summary',
-  GOAL_DETAIL: '/goal/:uuid',
+  VIEW_ACHIEVED_GOAL: '/view-achieved-goal/:uuid',
   GOALS: '/goals',
   GOALS_ORDER: '/goals/:type/:uuid/:operation',
   REMOVE_GOAL: '/remove-goal/:uuid',
