@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express'
 import locale from './locale.json'
 import { GoalStatus } from '../../@types/GoalType'
 
-export default class GoalDetailsController {
+export default class ViewAchievedGoalController {
   private render = async (req: Request, res: Response, next: NextFunction) => {
     const { errors } = req
 
