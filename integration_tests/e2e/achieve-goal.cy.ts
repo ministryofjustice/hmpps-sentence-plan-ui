@@ -1,6 +1,7 @@
 import DataGenerator from '../support/DataGenerator'
 import { PlanType } from '../../server/@types/PlanType'
 import PlanSummary from '../pages/plan-summary'
+import { NewGoal } from '../../server/@types/NewGoalType'
 
 describe('Achieve goal', () => {
   const planSummary = new PlanSummary()
@@ -16,6 +17,7 @@ describe('Achieve goal', () => {
     beforeEach(() => {
       cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
         cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal()).then(goal => {
+          cy.wrap(goal).as('newGoal')
           cy.addStepToGoal(goal.uuid, DataGenerator.generateStep())
         })
 
@@ -24,50 +26,50 @@ describe('Achieve goal', () => {
       })
     })
 
-    it('Display agree plan page correctly on load', () => {
+    it('Display agree plan page correctly on load', function () {
+      console.log(this.newGoal)
       cy.get('h1').contains('has achieved this goal')
-      // cy.get('.govuk-label').contains('Yes')
-      // cy.get('.govuk-label').contains('No')
-      // cy.get('.govuk-label').contains('could not answer this question')
-      // cy.get('.govuk-label').contains('Add any notes (optional)')
-      // cy.get('.govuk-button').contains('Agree plan with')
+      cy.get('.govuk-summary-card__title').should('contain', this.newGoal.title)
     })
   })
 
-  // describe('Submission behaviour', () => {
-  //   beforeEach(() => {
-  //     cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
-  //       cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal()).then(goal => {
-  //         cy.addStepToGoal(goal.uuid, DataGenerator.generateStep())
-  //       })
-  //
-  //       cy.visit(`/agree-plan`)
-  //     })
-  //   })
-  //
-  //   it('Submit successfully when Yes is selected and additional notes provided', () => {
-  //     cy.get('#agree-plan-radio').click()
-  //     cy.get('#notes').type('abc')
-  //
-  //     cy.get('.govuk-button').click()
-  //
-  //     cy.url().should('include', '/plan-summary')
-  //   })
-  //   it('Submit successfully when No is selected and additional information provided', () => {
-  //     cy.get('#agree-plan-radio-2').click()
-  //     cy.get('#does-not-agree-details').type('abc')
-  //
-  //     cy.get('.govuk-button').click()
-  //
-  //     cy.url().should('include', '/plan-summary')
-  //   })
-  //   it('Submit successfully when "Could not answer this question" is selected and additional information provided', () => {
-  //     cy.get('#agree-plan-radio-3').click()
-  //     cy.get('#could-not-answer-details').type('abc')
-  //
-  //     cy.get('.govuk-button').click()
-  //
-  //     cy.url().should('include', '/plan-summary')
-  //   })
-  // })
+  describe('Submission behaviour', () => {
+    beforeEach(() => {
+      cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
+        cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal()).then(goal => {
+          cy.wrap(goal).as('newGoal')
+          cy.addStepToGoal(goal.uuid, DataGenerator.generateStep())
+        })
+
+        planSummary.agreePlan()
+        cy.get('a').contains('Mark as achieved').click()
+      })
+    })
+
+    it('Confirm goal achieved successfully without optional note', () => {
+      cy.get('button').contains('Confirm').click()
+      cy.url().should('include', '/view-achieved-goal')
+      cy.get('.govuk-body-s').should('contain', 'Marked as achieved on')
+
+      cy.visit('/plan-summary')
+      cy.get(':nth-child(3) > .moj-sub-navigation__link')
+      cy.get('.moj-sub-navigation__link').eq(2).should('contain', 'Achieved goals (1)')
+    })
+
+    it('Confirm goal achieved successfully with optional note', () => {
+      cy.get('#goal-achievement-helped').type('Some optional text in the achievement note field')
+      cy.get('button').contains('Confirm').click()
+      cy.url().should('include', '/view-achieved-goal')
+
+      cy.visit('/plan-summary')
+      cy.get(':nth-child(3) > .moj-sub-navigation__link')
+      cy.get('.moj-sub-navigation__link').eq(2).should('contain', 'Achieved goals (1)')
+    })
+
+    it('Cancel goal achieved and redirect successfully', () => {
+      cy.get('a').contains('Do not mark as achieved').click()
+      cy.url().should('include', '/plan-summary')
+      planSummary.getSummaryCard(0).get('a').contains('Mark as achieved')
+    })
+  })
 })
