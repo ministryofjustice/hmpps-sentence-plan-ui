@@ -19,6 +19,7 @@ export default class AddStepsController {
         req.body.steps = steps.map(step => ({
           actor: step.actor,
           description: step.description,
+          status: step.status
         }))
       }
 
@@ -43,7 +44,7 @@ export default class AddStepsController {
       req.body.steps.map((step: StepModel) => ({
         description: step.description,
         actor: step.actor,
-        status: StepStatus.NOT_STARTED,
+        status: step.status,
       })),
       goalUuid,
     )
@@ -59,6 +60,7 @@ export default class AddStepsController {
         delete req.body.action
         delete req.body[`step-actor-${index + 1}`]
         delete req.body[`step-description-${index + 1}`]
+        delete req.body[`step-status-${index + 1}`]
         req.body.steps.splice(index, 1)
 
         return this.render(req, res, next)
@@ -76,6 +78,7 @@ export default class AddStepsController {
       req.body.steps.push({
         actor: req.services.sessionService.getSubjectDetails().givenName,
         description: '',
+        status: StepStatus.NOT_STARTED
       })
 
       return this.render(req, res, next)

@@ -37,8 +37,6 @@ describe('Add Steps', () => {
       addStep.addStepAutocompleteText(1, step.description)
       addStep.selectStepActor(1, step.actor)
 
-      cy.contains('button', 'Remove').should('not.exist')
-
       addStep.saveAndContinue()
 
       cy.get('table.goal-summary-card__steps .govuk-table__body').children().should('have.length', 1)
@@ -93,7 +91,7 @@ describe('Add Steps', () => {
       addStep.addStepAutocompleteText(3, thirdStep.description)
       addStep.selectStepActor(3, thirdStep.actor)
 
-      cy.get('button[value^="remove-step-"]').should('have.length', 2)
+      cy.get('button[value^="remove-step-"]').should('have.length', 3)
 
       addStep.removeStep(3)
 

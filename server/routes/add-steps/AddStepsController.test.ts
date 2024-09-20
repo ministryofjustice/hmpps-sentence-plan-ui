@@ -17,7 +17,7 @@ jest.mock('../../services/sentence-plan/stepsService', () => {
       {
         description: 'A test step',
         actor: 'Test actor',
-        status: 'PENDING',
+        status: StepStatus.NOT_STARTED,
       },
     ]),
     saveAllSteps: jest.fn().mockResolvedValue(null),
@@ -54,6 +54,7 @@ describe('AddStepsController', () => {
           {
             description: testStep.description,
             actor: testStep.actor,
+            status: testStep.status
           },
         ],
       },
@@ -138,28 +139,35 @@ describe('AddStepsController', () => {
         action: 'add-step',
         'step-actor-1': 'Test actor',
         'step-description-1': 'a test step',
+        'step-status-1': StepStatus.NOT_STARTED,
         'step-actor-2': 'Batman',
         'step-description-2': 'test',
+        'step-status-2': StepStatus.IN_PROGRESS,
       }
 
       const expectedData = { ...viewData }
       expectedData.data.form = {
         'step-actor-1': 'Test actor',
         'step-description-1': 'a test step',
+        'step-status-1': StepStatus.NOT_STARTED,
         'step-actor-2': 'Batman',
         'step-description-2': 'test',
+        'step-status-2': StepStatus.IN_PROGRESS,
         steps: [
           {
             actor: 'Test actor',
             description: 'a test step',
+            status: StepStatus.NOT_STARTED
           },
           {
             actor: 'Batman',
             description: 'test',
+            status: StepStatus.IN_PROGRESS
           },
           {
             actor: 'Buster',
             description: '',
+            status: StepStatus.NOT_STARTED
           },
         ],
       } as any
@@ -175,8 +183,10 @@ describe('AddStepsController', () => {
         action: 'save',
         'step-actor-1': 'Test actor',
         'step-description-1': 'a test step',
+        'step-status-1': StepStatus.NOT_STARTED,
         'step-actor-2': 'Batman',
         'step-description-2': 'test',
+        'step-status-2': StepStatus.IN_PROGRESS,
       }
       req.params = { uuid: 'some-goal-uuid' }
 
@@ -188,7 +198,7 @@ describe('AddStepsController', () => {
         },
         {
           description: 'test',
-          status: StepStatus.NOT_STARTED,
+          status: StepStatus.IN_PROGRESS,
           actor: 'Batman',
         },
       ]
@@ -240,6 +250,7 @@ describe('AddStepsController', () => {
         action: 'save',
         'step-actor-1': 'Batman',
         'step-description-1': 'a test step',
+        'step-status-1': StepStatus.NOT_STARTED
       }
       req.params = { uuid: 'some-goal-uuid' }
 

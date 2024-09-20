@@ -100,6 +100,11 @@
                             }) }}
                         </dt>
                         <dt class="govuk-summary-list__value">
+                            <input type="hidden"
+                                   id="step-status-{{ loop.index }}",
+                                   name="step-status-{{ loop.index }}",
+                                   value="{{ step.status | default('NOT_STARTED') }}"/>
+
                             {% set errorMessage = false %}
 
                             {% if errors.body['steps.' + loop.index0 + '.description' ].isNotEmpty %}
@@ -127,11 +132,9 @@
                             }) }}
                         </dt>
                         <dt class="govuk-summary-list__value">
-                            {% if not loop.first %}
-                                <button value="remove-step-{{ loop.index }}" type="submit" name="action" class="govuk-link govuk-!-margin-bottom-0" data-module="govuk-button">
-                                    {{ locale.removeStepLinkButton }}
-                                </button>
-                            {% endif %}
+                            <button value="remove-step-{{ loop.index }}" type="submit" name="action" class="govuk-link govuk-!-margin-bottom-0" data-module="govuk-button">
+                                {{ locale.removeStepLinkButton }}
+                            </button>
                         </dt>
                     </div>
                 {% endfor %}

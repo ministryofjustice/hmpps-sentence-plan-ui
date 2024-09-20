@@ -1,6 +1,7 @@
 /* eslint-disable max-classes-per-file */
-import { IsNotEmpty, ValidateNested } from 'class-validator'
+import {IsEnum, IsNotEmpty, ValidateNested} from 'class-validator'
 import { Expose, plainToInstance, Transform } from 'class-transformer'
+import {StepStatus} from "../../../@types/StepType";
 
 export class StepModel {
   @IsNotEmpty()
@@ -8,6 +9,9 @@ export class StepModel {
 
   @IsNotEmpty()
   description: string
+
+  @IsEnum(StepStatus)
+  status: string
 }
 
 export default class AddStepsPostModel {
@@ -21,6 +25,7 @@ export default class AddStepsPostModel {
         return plainToInstance(StepModel, {
           actor: obj[`step-actor-${row}`],
           description: obj[`step-description-${row}`],
+          status: obj[`step-status-${row}`],
         })
       })
   })
