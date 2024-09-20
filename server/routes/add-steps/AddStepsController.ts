@@ -19,7 +19,7 @@ export default class AddStepsController {
         req.body.steps = steps.map(step => ({
           actor: step.actor,
           description: step.description,
-          status: step.status
+          status: step.status,
         }))
       }
 
@@ -78,7 +78,7 @@ export default class AddStepsController {
       req.body.steps.push({
         actor: req.services.sessionService.getSubjectDetails().givenName,
         description: '',
-        status: StepStatus.NOT_STARTED
+        status: StepStatus.NOT_STARTED,
       })
 
       return this.render(req, res, next)

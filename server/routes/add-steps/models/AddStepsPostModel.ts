@@ -1,7 +1,7 @@
 /* eslint-disable max-classes-per-file */
-import {IsEnum, IsNotEmpty, ValidateNested} from 'class-validator'
+import { IsEnum, IsNotEmpty, ValidateNested } from 'class-validator'
 import { Expose, plainToInstance, Transform } from 'class-transformer'
-import {StepStatus} from "../../../@types/StepType";
+import { StepStatus } from '../../../@types/StepType'
 
 export class StepModel {
   @IsNotEmpty()

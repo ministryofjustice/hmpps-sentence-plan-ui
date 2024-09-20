@@ -54,7 +54,7 @@ describe('AddStepsController', () => {
           {
             description: testStep.description,
             actor: testStep.actor,
-            status: testStep.status
+            status: testStep.status,
           },
         ],
       },
@@ -157,17 +157,17 @@ describe('AddStepsController', () => {
           {
             actor: 'Test actor',
             description: 'a test step',
-            status: StepStatus.NOT_STARTED
+            status: StepStatus.NOT_STARTED,
           },
           {
             actor: 'Batman',
             description: 'test',
-            status: StepStatus.IN_PROGRESS
+            status: StepStatus.IN_PROGRESS,
           },
           {
             actor: 'Buster',
             description: '',
-            status: StepStatus.NOT_STARTED
+            status: StepStatus.NOT_STARTED,
           },
         ],
       } as any
@@ -250,7 +250,7 @@ describe('AddStepsController', () => {
         action: 'save',
         'step-actor-1': 'Batman',
         'step-description-1': 'a test step',
-        'step-status-1': StepStatus.NOT_STARTED
+        'step-status-1': StepStatus.NOT_STARTED,
       }
       req.params = { uuid: 'some-goal-uuid' }
 
