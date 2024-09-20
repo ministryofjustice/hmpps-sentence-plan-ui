@@ -1,7 +1,6 @@
 import DataGenerator from '../support/DataGenerator'
 import { PlanType } from '../../server/@types/PlanType'
 import PlanSummary from '../pages/plan-summary'
-import { NewGoal } from '../../server/@types/NewGoalType'
 
 describe('Achieve goal', () => {
   const planSummary = new PlanSummary()
@@ -26,8 +25,9 @@ describe('Achieve goal', () => {
       })
     })
 
+    /* eslint-disable func-names */
+    // using function is the only way to access the wrapped newGoal - not available via arrow functions
     it('Display agree plan page correctly on load', function () {
-      console.log(this.newGoal)
       cy.get('h1').contains('has achieved this goal')
       cy.get('.govuk-summary-card__title').should('contain', this.newGoal.title)
     })
