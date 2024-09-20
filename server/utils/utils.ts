@@ -72,15 +72,16 @@ export function moveGoal(goals: Array<any>, gUuid: string, operation: string) {
     up: (i: number) => i - 1,
     down: (i: number) => i + 1,
   }
-  const targetIndex = valueSetter[operation](index)
 
-  if (targetIndex < 0 || targetIndex >= orderedGoals.length) {
-    return orderedGoals
+  const targetGoalOrder = valueSetter[operation](orderedGoals[index].goalOrder)
+  if (targetGoalOrder > 0) {
+    const indexOfTargetGoalOrder = orderedGoals.findIndex(goal => goal.goalOrder === targetGoalOrder)
+    if (indexOfTargetGoalOrder > -1) {
+      orderedGoals[indexOfTargetGoalOrder].goalOrder = orderedGoals[index].goalOrder
+    }
+
+    orderedGoals[index].goalOrder = targetGoalOrder
   }
-
-  ;[orderedGoals[index], orderedGoals[targetIndex]] = [orderedGoals[targetIndex], orderedGoals[index]]
-  orderedGoals[index].goalOrder = index
-  orderedGoals[targetIndex].goalOrder = targetIndex
   return orderedGoals.map(({ uuid: goalUuid, goalOrder }) => ({ goalUuid, goalOrder }))
 }
 

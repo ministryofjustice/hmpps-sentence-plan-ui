@@ -1,0 +1,67 @@
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% extends "../partials/layout.njk" %}
+
+{% block pageTitle %}
+    {% if not errors %}
+        {{ locale.page.title }}
+    {% else %}
+        {{ locale.page.errorTitle }}
+    {% endif %}
+{% endblock %}
+
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block content %}
+    <a href="#" class="govuk-back-link">Back</a>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <span class="govuk-caption-l">{{ data.goal.areaOfNeed.name }}
+                {% if data.goal.relatedAreasOfNeed.length > 0 %}
+                    (and {% for aon in data.goal.relatedAreasOfNeed %}{{ aon.name | lower }}{% if loop.index < data.goal.relatedAreasOfNeed.length %}, {% endif %}{% endfor %})
+                {% endif %}
+            </span>
+            <h1 class="govuk-heading-l govuk-!-margin-bottom-2">{{ data.goal.title }}</h1>
+            <p class="govuk-body-s">Marked as achieved on {{ data.goal.statusDate | formatSimpleDate }}</p>
+
+            <table class="govuk-table goal-summary-card__steps">
+                <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                    <th scope="col" class="govuk-table__header">{{ locale.common.goalSummaryCard.stepsList.whoHeader }}</th>
+                    <th scope="col" class="govuk-table__header">{{ locale.common.goalSummaryCard.stepsList.whatHeader }}</th>
+                    <th scope="col" class="govuk-table__header">{{ locale.common.goalSummaryCard.stepsList.statusHeader }}</th>
+                </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                {% for step in data.goal.steps %}
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">{{ step.actor }}</td>
+                        <td class="govuk-table__cell">{{ step.description }}</td>
+                        <td class="govuk-table__cell">
+                            {% if step.status =='NOT_STARTED' %}
+                                <strong class="govuk-tag govuk-tag--grey">{{ locale.common.goalSummaryCard.stepsList.status.notStarted }}</strong>
+                            {% elseif step.status == 'IN_PROGRESS' %}
+                                <strong class="govuk-tag govuk-tag">{{ locale.common.goalSummaryCard.stepsList.status.inProgress }}</strong>
+                            {% elseif step.status == 'COMPLETED' %}
+                                <strong class="govuk-tag govuk-tag--green">{{ locale.common.goalSummaryCard.stepsList.status.completed }}</strong>
+                            {% elseif step.status == 'CANNOT_BE_DONE_YET' %}
+                                <strong class="govuk-tag govuk-tag--purple">{{ locale.common.goalSummaryCard.stepsList.status.cannotBeDoneYet }}</strong>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            <div id="achieved-goal-notes" class="govuk-!-margin-top-8">
+            {{ govukDetails({
+                summaryText: "View all notes",
+                html: '<h4>[DD Month YYYY] by [Practitioner]</h4>
+                <p class="govuk-body">Goal marked as achieved on [date]</p>
+                <p>Answer from "How has achieving this goal helped?"</p>'
+            }) }}
+            </div>
+
+
+        </div>
+    </div>
+{% endblock %}

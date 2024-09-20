@@ -10,7 +10,7 @@ const getApiToken = () => {
 
   return cy
     .request({
-      url: `${Cypress.env('HMPPS_AUTH_URL')}/auth/oauth/token?grant_type=client_credentials`,
+      url: `${Cypress.env('HMPPS_AUTH_URL')}/auth/oauth/token?grant_type=client_credentials&username=SYSTEM|e2eTests`,
       method: 'POST',
       form: true,
       auth: {

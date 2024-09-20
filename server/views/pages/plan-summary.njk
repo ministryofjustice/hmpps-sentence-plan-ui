@@ -224,7 +224,7 @@
                                     text: locale.goalSummaryCard.actions.active.update
                                 },
                                 {
-                                    href: '#',
+                                    href: "/confirm-achieved-goal/" + goal.uuid + "?type=current",
                                     text: locale.goalSummaryCard.actions.active.markAsAchieved
                                 },
                                 {
@@ -235,7 +235,7 @@
                         {% elseif goal.status === 'ACHIEVED' %}
                             {% set actions = [
                                 {
-                                    href: '#',
+                                    href: '/view-achieved-goal/' + goal.uuid,
                                     text: locale.goalSummaryCard.actions.achieved.viewDetails
                                 }
                             ] %}

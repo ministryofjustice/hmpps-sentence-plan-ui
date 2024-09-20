@@ -4,7 +4,7 @@ import URLs from '../URLs'
 import ReferentialDataService from '../../services/sentence-plan/referentialDataService'
 import { dateToISOFormat, formatDateWithStyle, getAchieveDateOptions } from '../../utils/utils'
 import { NewGoal } from '../../@types/NewGoalType'
-import { Goal } from '../../@types/GoalType'
+import { Goal, GoalStatus } from '../../@types/GoalType'
 import transformRequest from '../../middleware/transformMiddleware'
 import EditGoalPostModel from './models/EditGoalPostModel'
 import validateRequest from '../../middleware/validationMiddleware'
@@ -94,12 +94,14 @@ export default class EditGoalController {
         : null
     const areaOfNeed = body['area-of-need']
     const relatedAreasOfNeed = body['related-area-of-need-radio'] === 'yes' ? body['related-area-of-need'] : undefined
+    const status = targetDate === null ? GoalStatus.FUTURE : undefined
 
     return {
       title,
       areaOfNeed,
       targetDate,
       relatedAreasOfNeed,
+      status,
     }
   }
 
