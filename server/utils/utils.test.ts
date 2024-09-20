@@ -1,6 +1,6 @@
 import { RoshData } from '../@types/Rosh'
 import { parsedRoshData, roSHData, unComplitedRoSH } from '../testutils/data/roshData'
-import { convertToTitleCase, formatDate, formatRoSHData, initialiseName, toKebabCase } from './utils'
+import { convertToTitleCase, formatDate, formatRoSHData, initialiseName, moveGoal, toKebabCase } from './utils'
 
 describe('convert to title case', () => {
   it.each([
@@ -55,4 +55,57 @@ describe('to return uncompleted ', () => {
 })
 describe('to return formated date ', () => {
   expect(formatDate('2000-05-09')).toEqual('9 May 2000')
+})
+
+describe('to reorder goals correctly', () => {
+  let firstGoal: any
+  let secondGoal: any
+  let thirdGoal: any
+
+  beforeEach(() => {
+    firstGoal = {
+      uuid: '1111',
+      goalOrder: 1,
+    }
+
+    secondGoal = {
+      uuid: '2222',
+      goalOrder: 2,
+    }
+
+    thirdGoal = {
+      uuid: '3333',
+      goalOrder: 3,
+    }
+  })
+
+  test('should move a goal down', () => {
+    const reorderedGoals = moveGoal([firstGoal, secondGoal, thirdGoal], '2222', 'down')
+
+    expect(reorderedGoals).toEqual([
+      { goalUuid: '1111', goalOrder: 1 },
+      { goalUuid: '2222', goalOrder: 3 },
+      { goalUuid: '3333', goalOrder: 2 },
+    ])
+  })
+
+  test('should move a goal up', () => {
+    const reorderedGoals = moveGoal([firstGoal, secondGoal, thirdGoal], '3333', 'up')
+
+    expect(reorderedGoals).toEqual([
+      { goalUuid: '1111', goalOrder: 1 },
+      { goalUuid: '2222', goalOrder: 3 },
+      { goalUuid: '3333', goalOrder: 2 },
+    ])
+  })
+
+  test('should not move the first goal up', () => {
+    const reorderedGoals = moveGoal([firstGoal, secondGoal, thirdGoal], '1111', 'up')
+
+    expect(reorderedGoals).toEqual([
+      { goalUuid: '1111', goalOrder: 1 },
+      { goalUuid: '2222', goalOrder: 2 },
+      { goalUuid: '3333', goalOrder: 3 },
+    ])
+  })
 })
