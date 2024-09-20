@@ -61,6 +61,7 @@ describe('Change a goal', () => {
         })
       })
     })
+
     it('Should update goal title, related areas of need', () => {
       // Modify data
       cy.get('#goal-input-autocomplete').type('some goal')
@@ -123,7 +124,7 @@ describe('Change a goal', () => {
 
     it('Should update goal with future date', () => {
       // Modify data
-      cy.get('#start-working-goal-radio-2').check()
+      cy.get('label[for="start-working-goal-radio-2"]').should('contain', 'No, it is a future goal').click()
 
       cy.contains('button', 'save').click()
       cy.url().should('include', '/plan-summary')

@@ -11,7 +11,8 @@ export const testNewGoal: NewGoal = {
   relatedAreasOfNeed: ['Drug use'],
 }
 export const testGoal: Goal = {
-  ...testNewGoal,
+  title: 'Test goal',
+  targetDate: new Date(Date.now() + oneWeekInMs).toISOString().substring(0, 10),
   uuid: 'a-un1qu3-t3st-Uu1d',
   creationDate: new Date().toISOString().substring(0, 10),
   status: GoalStatus.ACTIVE,
