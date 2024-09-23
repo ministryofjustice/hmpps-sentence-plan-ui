@@ -8,7 +8,7 @@ describe('Achieve goal', () => {
 
   beforeEach(() => {
     cy.createSentencePlan().then(planDetails => {
-      cy.wrap(planDetails).as('plan')
+      cy.wrap(planDetails.plan).as('plan')
       cy.openSentencePlan(planDetails.oasysAssessmentPk)
     })
   })
