@@ -1,6 +1,10 @@
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% extends "../partials/layout.njk" %}
 
+{% set locale = interpolate(locale, {
+    achievedOn: data.goal.statusDate | formatSimpleDate
+}) %}
+
 {% block pageTitle %}
     {% if not errors %}
         {{ locale.page.title }}
@@ -14,14 +18,14 @@
 {% block content %}
     <a href="#" class="govuk-back-link">Back</a>
     <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
+        <div class="govuk-!-width-full">
             <span class="govuk-caption-l">{{ data.goal.areaOfNeed.name }}
                 {% if data.goal.relatedAreasOfNeed.length > 0 %}
                     (and {% for aon in data.goal.relatedAreasOfNeed %}{{ aon.name | lower }}{% if loop.index < data.goal.relatedAreasOfNeed.length %}, {% endif %}{% endfor %})
                 {% endif %}
             </span>
             <h1 class="govuk-heading-l govuk-!-margin-bottom-2">{{ data.goal.title }}</h1>
-            <p class="govuk-body-s">Marked as achieved on {{ data.goal.statusDate | formatSimpleDate }}</p>
+            <p class="govuk-body">{{ locale.markedAsAchieved }}</p>
 
             <table class="govuk-table goal-summary-card__steps">
                 <thead class="govuk-table__head">
