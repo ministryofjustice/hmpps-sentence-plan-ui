@@ -6,6 +6,15 @@ services:
     environment:
       ALLOW_EMPTY_PASSWORD: yes
 
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    depends_on:
+      - redis
+    environment:
+      - REDIS_HOSTS=redis
+    ports:
+      - "8081:8081"
+
   postgres:
     image: postgres:16
     restart: always
@@ -112,6 +121,7 @@ services:
         GIT_BRANCH: main
     depends_on:
       - redis
+      - redis-commander
       - hmpps-auth
       - forward-proxy
       - oastub
