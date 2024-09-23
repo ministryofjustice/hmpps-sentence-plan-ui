@@ -39,7 +39,7 @@ describe('AddStepsController', () => {
     data: {
       goal: testGoal,
       popData: handoverData.subject,
-      areaOfNeed: AreaOfNeed.find(x => x.name === testGoal.areaOfNeed.name),
+      mainAreaOfNeed: AreaOfNeed.find(x => x.name === testGoal.areaOfNeed.name),
       relatedAreasOfNeed: testGoal.relatedAreasOfNeed.map(x => x.name),
     },
     errors: {},
