@@ -12,7 +12,8 @@
     "notificationBanner": {
       "addedGoal": "You added a goal to {{ subject.possessiveName }} plan.",
       "changedGoal": "You changed a goal in {{ subject.possessiveName }} plan.",
-      "removedGoal": "You removed a goal from {{ subject.possessiveName }} plan."
+      "removedGoal": "You removed a goal from {{ subject.possessiveName }} plan.",
+      "achievedGoal": "Congratulations on achieving a goal, {{ subject.givenName }}"
     },
     "agreePlan": "{{ subject.givenName }} agreed to their plan on {{ plan.agreementDate }}",
     "notAgreePlan": "Plan created on {{ plan.creationDate }}",
