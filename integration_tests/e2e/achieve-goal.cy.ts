@@ -46,7 +46,7 @@ describe('Achieve goal', () => {
       })
     })
 
-    it('Confirm goal achieved successfully without optional note', () => {
+    it('Confirm goal achieved successfully without optional note', function () {
       cy.get('button').contains('Confirm').click()
       cy.url().should('include', '/plan-summary')
       cy.get(':nth-child(3) > .moj-sub-navigation__link')
