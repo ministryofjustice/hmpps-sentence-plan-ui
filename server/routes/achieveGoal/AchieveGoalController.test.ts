@@ -75,7 +75,7 @@ describe('AchieveGoalController', () => {
       await controller.post(req, res, next)
 
       expect(req.services.goalService.updateGoal).toHaveBeenCalledWith(expectedPartialNewGoal, 'some-uuid')
-      expect(res.redirect).toHaveBeenCalledWith('/view-achieved-goal/some-uuid')
+      expect(res.redirect).toHaveBeenCalledWith('/plan-summary?type=achieved&status=achieved')
       expect(next).not.toHaveBeenCalled()
     })
   })
