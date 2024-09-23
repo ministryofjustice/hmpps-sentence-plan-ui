@@ -48,20 +48,18 @@ describe('Achieve goal', () => {
 
     it('Confirm goal achieved successfully without optional note', () => {
       cy.get('button').contains('Confirm').click()
-      cy.url().should('include', '/view-achieved-goal')
-      cy.get('.govuk-body-s').should('contain', 'Marked as achieved on')
-
-      cy.visit('/plan-summary')
+      cy.url().should('include', '/plan-summary')
       cy.get(':nth-child(3) > .moj-sub-navigation__link')
       cy.get('.moj-sub-navigation__link').eq(2).should('contain', 'Achieved goals (1)')
+
+      cy.visit(`/view-achieved-goal/${this.newGoal.uuid}`)
+      cy.get('.govuk-body').should('contain', 'Marked as achieved on')
     })
 
     it('Confirm goal achieved successfully with optional note', () => {
       cy.get('#goal-achievement-helped').type('Some optional text in the achievement note field')
       cy.get('button').contains('Confirm').click()
-      cy.url().should('include', '/view-achieved-goal')
-
-      cy.visit('/plan-summary')
+      cy.url().should('include', '/plan-summary')
       cy.get(':nth-child(3) > .moj-sub-navigation__link')
       cy.get('.moj-sub-navigation__link').eq(2).should('contain', 'Achieved goals (1)')
     })
