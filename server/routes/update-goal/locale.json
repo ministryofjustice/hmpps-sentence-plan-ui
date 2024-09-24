@@ -11,6 +11,7 @@
     "optionalProgressNotes": "Add notes about progress (optional)",
     "viewAllNotes": "View all notes",
     "saveGoalAndSteps": "Save goal and steps",
-    "removeGoalFromPlan": "Remove goal from plan"
+    "removeGoalFromPlan": "Remove goal from plan",
+    "reviewSteps": "Review steps"
   }
 }

@@ -48,7 +48,12 @@ export default class UpdateGoalController {
     return res.redirect(`${URLs.PLAN_SUMMARY}?status=success`)
   }
 
+  private consoleLog = async (req: Request, res: Response, next: NextFunction) => {
+    console.log(req.body)
+    next()
+  }
+
   get = this.render
 
-  post = [transformRequest({ body: UpdateGoalPostModel }), this.saveAndRedirect]
+  post = [this.consoleLog, transformRequest({ body: UpdateGoalPostModel }), this.saveAndRedirect]
 }

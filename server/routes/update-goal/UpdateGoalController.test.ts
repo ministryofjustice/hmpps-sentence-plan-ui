@@ -7,6 +7,10 @@ import ReferentialDataService from '../../services/sentence-plan/referentialData
 import locale from './locale.json'
 import handoverData from '../../testutils/data/handoverData'
 import { testGoal } from '../../testutils/data/goalData'
+import runMiddlewareChain from '../../testutils/runMiddlewareChain'
+import URLs from '../URLs'
+import { testStep } from '../../testutils/data/stepData'
+import { StepStatus } from '../../@types/StepType'
 
 jest.mock('../../services/sentence-plan/referentialDataService', () => {
   return jest.fn().mockImplementation(() => ({
@@ -23,6 +27,12 @@ jest.mock('../../services/sentence-plan/goalService', () => {
 jest.mock('../../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
     getSubjectDetails: jest.fn().mockReturnValue(handoverData.subject),
+  }))
+})
+
+jest.mock('../../services/sentence-plan/stepsService', () => {
+  return jest.fn().mockImplementation(() => ({
+    saveAllSteps: jest.fn().mockResolvedValue(testGoal),
   }))
 })
 
@@ -64,5 +74,19 @@ describe('AddStepsController', () => {
     })
   })
 
-  describe('post', () => {})
+  describe('post', () => {
+    it('should submit the updated fields and redirect to the summary page', async () => {
+      req.body = {
+        'step-status-1': StepStatus.IN_PROGRESS,
+        'step-uuid-1': testStep.uuid,
+      }
+
+      await runMiddlewareChain(controller.post, req, res, next)
+
+      expect(req.services.stepService.saveAllSteps).toHaveBeenCalled()
+      expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_SUMMARY}?status=success`)
+      expect(res.render).not.toHaveBeenCalled()
+      expect(next).not.toHaveBeenCalled()
+    })
+  })
 })

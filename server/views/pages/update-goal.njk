@@ -25,8 +25,8 @@
         text: locale.common.goalSummaryCard.stepsList.status.cannotBeDoneYet
     },
     {
-        value: "NO_LONGER_REQUIRED",
-        text: locale.common.goalSummaryCard.stepsList.status.noLongerRequired
+        value: "NO_LONGER_NEEDED",
+        text: locale.common.goalSummaryCard.stepsList.status.noLongerNeeded
     },
     {
         value: "COMPLETED",
@@ -67,21 +67,22 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
 
-    <span class="govuk-caption-l flex-width">{{ data.areaOfNeed.name }}
+    <span class="govuk-caption-l flex-width">{{ data.mainAreaOfNeed.name }}
     {% if data.relatedAreasOfNeed | length %}
         (and {{ data.relatedAreasOfNeed | join(", ") }}){% endif %}</span>
 
     <div class="goal-summary-card__info">
         <h1 class="govuk-heading-l flex-width">{{ data.goal.title }}</h1>
-        <a href="#" class="govuk-link govuk-link--no-visited-state">
-            <button type="button" class="govuk-button govuk-button--secondary govuk-!-margin-bottom-0" data-module="govuk-button">Mark as achieved</button>
-        </a>
     </div>
 
     <p>
         {% if data.goal.targetDate %}{{ locale.aimToAchieveBy }}{% endif %}
         <a href="#" class="govuk-link govuk-link--no-visited-state">{{ locale.updateGoalDetails }}</a>
     </p>
+
+    <label class="govuk-label govuk-label--m">
+        {{ locale.reviewSteps }}
+    </label>
 
     <form id="update-goal-form" method="POST">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
@@ -104,7 +105,10 @@
                             id: "step-status-" + loop.index,
                             name: "step-status-" + loop.index,
                             items: items,
-                            value: step.status
+                            value: step.status,
+                            formGroup: {
+                                classes: "govuk-!-margin-bottom-0"
+                            }
                         }) }}
                         <input name="step-uuid-{{ loop.index }}" type="hidden" value="{{ step.uuid }}"/>
                     </td>
@@ -147,10 +151,13 @@
                     <button type="submit" class="govuk-button" data-module="govuk-button">
                         {{ locale.saveGoalAndSteps }}
                     </button>
-                    <p>
-                        <a href="/remove-goal/{{ data.goal.uuid }}" class="govuk-link govuk-link--no-visited-state">{{ locale.removeGoalFromPlan }}</a>
-                    </p>
+                    <button type="button" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+                        Mark as achieved
+                    </button>
                   </div>
+                  <p>
+                    <a href="/remove-goal/{{ data.goal.uuid }}" class="govuk-link govuk-link--no-visited-state">{{ locale.removeGoalFromPlan }}</a>
+                  </p>
                 </div>
             </div>
         </div>
