@@ -16,9 +16,9 @@
 {% set mainClasses = "app-container govuk-body" %}
 
 {% block content %}
-    <a href="#" class="govuk-back-link">Back</a>
     <div class="govuk-grid-row">
-        <div class="govuk-!-width-full">
+        <div class="govuk-grid-column-full">
+            <a href="#" class="govuk-back-link">Back</a>
             <span class="govuk-caption-l">{{ data.goal.areaOfNeed.name }}
                 {% if data.goal.relatedAreasOfNeed.length > 0 %}
                     (and {% for aon in data.goal.relatedAreasOfNeed %}{{ aon.name | lower }}{% if loop.index < data.goal.relatedAreasOfNeed.length %}, {% endif %}{% endfor %})
