@@ -25,7 +25,8 @@
     "goalSummaryCard": {
       "info": {
         "aimToAchieveDate": "Aim to achieve this by {{ targetDate }}.",
-        "aimToAchieveSentence": "Aim to achieve this by the end of {{ subject.possessiveName }} sentence."
+        "aimToAchieveSentence": "Aim to achieve this by the end of {{ subject.possessiveName }} sentence.",
+        "goalAchievedDate": "Marked as achieved on {{ achievedDate }}."
       },
       "stepsList": {
         "whoHeader": "Who will do this",

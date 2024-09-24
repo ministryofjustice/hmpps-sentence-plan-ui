@@ -245,6 +245,7 @@
                                     text: locale.goalSummaryCard.actions.achieved.viewDetails
                                 }
                             ] %}
+                            {% set buttons = [] %}
                         {% elseif goal.status === 'REMOVED' %}
                             {% set actions = [
                                 {
