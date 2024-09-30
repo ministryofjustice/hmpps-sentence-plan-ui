@@ -1,11 +1,12 @@
 {
   "en": {
     "page": {
-      "title": "Goal Details - {{ applicationName }}",
-      "errorTitle": "Error: Goal Details - {{ applicationName }}"
+      "title": "View achieved goal - {{ applicationName }}",
+      "errorTitle": "Error: View achieved goal - {{ applicationName }}"
     },
     "mainHeading": {
       "title": "Goal details"
-    }
+    },
+    "markedAsAchieved": "Marked as achieved on {{ achievedOn }}."
   }
 }

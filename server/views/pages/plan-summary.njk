@@ -120,6 +120,12 @@
                     text: locale.notificationBanner.changedGoal,
                     iconFallbackText: 'Success'
                 }) }}
+            {% elseif data.status == 'achieved' %}
+                {{ mojBanner({
+                    type: 'success',
+                    text: locale.notificationBanner.achievedGoal,
+                    iconFallbackText: 'Success'
+                }) }}
             {% endif %}
             {% if data.plan.agreementStatus === 'AGREED' %}
                 <p class="govuk-body">{{ locale.agreePlan }}</p>
@@ -239,6 +245,7 @@
                                     text: locale.goalSummaryCard.actions.achieved.viewDetails
                                 }
                             ] %}
+                            {% set buttons = [] %}
                         {% elseif goal.status === 'REMOVED' %}
                             {% set actions = [
                                 {
