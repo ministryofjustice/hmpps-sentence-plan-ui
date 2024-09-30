@@ -16,7 +16,7 @@
       "achievedGoal": "Congratulations on achieving a goal, {{ subject.givenName }}"
     },
     "agreePlan": "{{ subject.givenName }} agreed to their plan on {{ plan.agreementDate }}",
-    "notAgreePlan": "Plan created on {{ plan.creationDate }}",
+    "notAgreePlan": "Plan created on {{ plan.createdDate }}",
     "lastUpdatedPlan": "Last updated on {{ plan.updatedDate }} by ---",
     "addStepSuggestion": "Add steps to the goals {{ subject.givenName }} is working on now. You can then agree the plan with {{ subject.givenName }}.",
     "subNavigation": {

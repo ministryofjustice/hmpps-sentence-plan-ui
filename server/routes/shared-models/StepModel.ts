@@ -12,7 +12,7 @@ export default class StepModel {
   status: StepStatus
 
   @IsDateString()
-  creationDate: string
+  createdDate: string
 
   actor: string
 }

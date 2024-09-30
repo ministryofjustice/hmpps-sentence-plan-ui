@@ -10,7 +10,7 @@ export default class PlanModel {
   status: PlanStatus
 
   @IsDateString()
-  creationDate: string
+  createdDate: string
 
   @IsDateString()
   updatedDate: string
