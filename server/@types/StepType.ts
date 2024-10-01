@@ -13,7 +13,7 @@ export type NewStep = {
 
 export type Step = {
   uuid: string
-  creationDate: string
+  createdDate: string
   description: string
   status: StepStatus
   actor: string
