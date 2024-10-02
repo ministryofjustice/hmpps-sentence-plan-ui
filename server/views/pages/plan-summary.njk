@@ -132,7 +132,6 @@
             {% elseif data.plan.agreementStatus === 'DO_NOT_AGREE' %}
                 <p class="govuk-body">{{ locale.notAgreePlan }}</p>
             {% elseif data.plan.agreementStatus === 'DRAFT' %}
-                <p class="govuk-body">{{ locale.addStepSuggestion }}</p>
             {% else %}
                 <p class="govuk-body">{{ locale.lastUpdatedPlan }}</p>
             {% endif %}
@@ -175,6 +174,14 @@
                 {% else %}
                     {% set goals = currentGoals %}
                     {% set goalType = 'current' %}
+                {% endif %}
+
+                {% if goalType == 'current' and goals.length == 0 %}
+                    <p>{{ locale.ifNoCurrentGoals.text }}</p>
+                    <ul>
+                        <li><a href="/create-goal/accommodation">{{ locale.ifNoCurrentGoals.action1 }}</a></li>
+                        <li><a href="/about-pop">{{ locale.ifNoCurrentGoals.action2 }}</a></li>
+                    </ul>
                 {% endif %}
 
                 {% for item in goals %}
