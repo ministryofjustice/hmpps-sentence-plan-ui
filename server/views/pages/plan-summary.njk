@@ -184,6 +184,10 @@
                     </ul>
                 {% endif %}
 
+                {% if goalType == 'future' and goals.length == 0 %}
+                    <p>{{ locale.ifNoFutureGoals.text }}</p>
+                {% endif %}
+
                 {% for item in goals %}
                     {% set goal = item.goal %}
                     {% set buttons = [] %}
