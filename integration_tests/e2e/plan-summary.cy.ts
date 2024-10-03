@@ -18,6 +18,17 @@ describe('View Plan Summary', () => {
     cy.url().should('include', '/create-goal/')
   })
 
+  it('Should have text saying no goals to work on now', () => {
+    cy.visit('/plan-summary')
+    cy.get('.govuk-grid-column-full').should('contain', 'does not have any goals to work on now. You can either:')
+  })
+
+  it('Should have text saying no future goals present', () => {
+    cy.visit('/plan-summary')
+    cy.get('.moj-sub-navigation__link').contains('Future goals').click()
+    cy.get('.govuk-grid-column-full').should('contain', 'does not have any future goals in their plan')
+  })
+
   it('Should result in error when agree plan without goals', () => {
     cy.visit('/plan-summary')
     cy.get('button').contains('Agree plan').click()
