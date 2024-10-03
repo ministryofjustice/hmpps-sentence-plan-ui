@@ -160,21 +160,22 @@
                 } if removedGoals.length > 0]
             }) }}
 
-            <ol id="goal-list" class="goal-list govuk-list govuk-list--number">
-                {% if data.type == 'future' %}
-                    {% set goals = futureGoals %}
-                    {% set goalType = 'future' %}
-                {% elseif data.type == 'achieved' %}
-                    {% set goals = achievedGoals %}
-                    {% set goalType = 'achieved' %}
-                {% elseif data.type == 'removed' %}
-                    {% set goals = removedGoals %}
-                    {% set goalType = 'removed' %}
-                {% else %}
-                    {% set goals = currentGoals %}
-                    {% set goalType = 'current' %}
-                {% endif %}
+            {% if data.type == 'future' %}
+                {% set goals = futureGoals %}
+                {% set goalType = 'future' %}
+            {% elseif data.type == 'achieved' %}
+                {% set goals = achievedGoals %}
+                {% set goalType = 'achieved' %}
+            {% elseif data.type == 'removed' %}
+                {% set goals = removedGoals %}
+                {% set goalType = 'removed' %}
+            {% else %}
+                {% set goals = currentGoals %}
+                {% set goalType = 'current' %}
+            {% endif %}
 
+            {% if goals.length > 0 %}
+            <ol id="goal-list" class="goal-list govuk-list govuk-list--number">
                 {% for item in goals %}
                     {% set goal = item.goal %}
                     {% set buttons = [] %}
@@ -269,6 +270,7 @@
                     </li>
                 {% endfor %}
             </ol>
+            {% endif %}
 
             {% if goalType == 'current' and goals.length == 0 %}
                 <p>{{ locale.ifNoCurrentGoals.text }}</p>
