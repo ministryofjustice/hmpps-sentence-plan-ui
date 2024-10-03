@@ -33,8 +33,7 @@ generic-service:
     capita-developers-vms-four: 85.115.53.200/29
     capita-developers-vms-five: 85.115.54.180/32
     capita-developers-vms-six: 85.115.54.200/29
-    joel-app-sec-1: 100.64.10.206/32
-    joel-app-sec-2: 86.134.133.78/32
+    krupal-app-sec: 80.195.27.199/32
     
     groups:
       - circleci
