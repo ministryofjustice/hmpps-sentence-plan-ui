@@ -29,12 +29,13 @@ export default defineConfig({
     specPattern: 'integration_tests/e2e/**/*.{cy,spec}.{js,jsx,ts,tsx}',
     supportFile: 'integration_tests/support/index.ts',
     env: {
-      CLIENT_ID: 'sentence-plan-api-client',
-      CLIENT_SECRET: 'sentence-plan-api-client',
+      CLIENT_ID: 'hmpps-assess-risks-and-needs-oastub-ui',
+      CLIENT_SECRET: 'clientsecret',
       HMPPS_AUTH_URL: 'http://localhost:9091',
       ARNS_HANDOVER_URL: 'http://localhost:7070',
       ARNS_HANDOVER_CLIENT_ID: 'sentence-plan',
       SP_API_URL: 'http://localhost:8080',
+      COORDINATOR_API_URL: 'http://localhost:6060'
     },
   },
 })
