@@ -73,16 +73,15 @@ export const createSentencePlan = () => {
         method: 'POST',
         auth: { bearer: apiToken },
         body: {
-          planType: "INITIAL",
+          planType: 'INITIAL',
           userDetails: {
-            id: "12345",
-            name: "Cypress",
+            id: '12345',
+            name: 'Cypress',
           },
-          oasysAssessmentPk
+          oasysAssessmentPk,
         },
       })
-      .then(createResponse => (
-        {
+      .then(createResponse => ({
         plan: {
           uuid: createResponse.body.sentencePlanId,
         },
