@@ -75,7 +75,7 @@ describe('Change a goal', () => {
       cy.get('.goal-summary-card')
         .should('contain', 'some goal')
         .and('contain', `Area of need: ${goalData.areaOfNeed.toLowerCase()}`)
-        .and('contain', 'Also relates to: employment and education, alcohol use, health and wellbeing')
+        .and('contain', 'Also relates to: alcohol use, employment and education, health and wellbeing')
     })
 
     it('Should update goal with NO related areas of need', () => {

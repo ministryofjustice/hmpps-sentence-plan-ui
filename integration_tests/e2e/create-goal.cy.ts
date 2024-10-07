@@ -47,7 +47,7 @@ describe('Create a new Goal', () => {
         cy.get('.goal-summary-card__areas-of-need').should('contain', 'Area of need: accommodation')
         cy.get('.goal-summary-card__areas-of-need').should(
           'contain',
-          'Also relates to: employment and education, drug use',
+          'Also relates to: drug use, employment and education',
         )
       })
   })

@@ -13,7 +13,7 @@
     {% set locale = interpolate(params.locale.common.goalSummaryCard, {
         goal: goal,
         areaOfNeed: params.goal.areaOfNeed.name | lower,
-        relatedAreasOfNeed: relatedAreasOfNeed | join(', ') | lower,
+        relatedAreasOfNeed: relatedAreasOfNeed | sort | join(', ') | lower,
         targetDate: (params.goal.targetDate | formatSimpleDate) if params.goal.targetDate,
         achievedDate: (params.goal.statusDate | formatSimpleDate) if params.goal.statusDate
     }) %}
