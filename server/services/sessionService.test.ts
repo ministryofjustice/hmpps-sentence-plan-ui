@@ -7,7 +7,7 @@ import HandoverContextService from './handover/handoverContextService'
 
 jest.mock('./sentence-plan/planService', () => {
   return jest.fn().mockImplementation(() => ({
-    getPlanByOasysAssessmentPk: jest.fn(),
+    getPlanByUuid: jest.fn(),
   }))
 })
 jest.mock('./handover/handoverContextService', () => {
@@ -32,7 +32,7 @@ describe('SessionService', () => {
   describe('setupSession', () => {
     it('should set up session with handover and plan', async () => {
       handoverContextServiceMock.getContext.mockResolvedValue(testHandoverContext)
-      planServiceMock.getPlanByOasysAssessmentPk.mockResolvedValue(testPlan)
+      planServiceMock.getPlanByUuid.mockResolvedValue(testPlan)
 
       await sessionService.setupSession()
 
@@ -42,7 +42,7 @@ describe('SessionService', () => {
 
     it('should throw if either getContext or getPlanByOasysAssessmentPk fails', async () => {
       handoverContextServiceMock.getContext.mockRejectedValue('getContext')
-      planServiceMock.getPlanByOasysAssessmentPk.mockRejectedValue('getPlanByOasysAssessmentPk')
+      planServiceMock.getPlanByUuid.mockRejectedValue('getPlanByOasysAssessmentPk')
 
       await expect(sessionService.setupSession()).rejects.toThrow('getContext')
 
@@ -52,23 +52,13 @@ describe('SessionService', () => {
     })
   })
 
-  describe('getOasysAssessmentPk', () => {
-    it('should get OASys assessment PK from session', async () => {
+  describe('getPlanUUID', () => {
+    it('should get plan UUID from session', async () => {
       requestMock.session = {
         handover: testHandoverContext,
       }
 
-      expect(sessionService.getOasysAssessmentPk()).toBe(testHandoverContext.sentencePlanContext.oasysAssessmentPk)
-    })
-  })
-
-  describe('getPlanUUID', () => {
-    it('should get plan UUID from session', async () => {
-      requestMock.session = {
-        plan: testPlan,
-      }
-
-      expect(sessionService.getPlanUUID()).toBe(testPlan.uuid)
+      expect(sessionService.getPlanUUID()).toBe(testHandoverContext.sentencePlanContext.planId)
     })
   })
 

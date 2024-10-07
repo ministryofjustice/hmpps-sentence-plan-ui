@@ -20,7 +20,11 @@ const testHandoverContext: HandoverContextData = {
     sexuallyMotivatedOffenceHistory: 'YES',
   },
   assessmentContext: { oasysAssessmentPk: '306708', assessmentVersion: 0 },
-  sentencePlanContext: { oasysAssessmentPk: '306708', planVersion: 0 },
+  sentencePlanContext: {
+    oasysAssessmentPk: '306708',
+    planId: 'affo3cacf-7160-4431-9b4d-c560be9c9f5c',
+    planVersion: 0,
+  },
 }
 
 export default testHandoverContext
