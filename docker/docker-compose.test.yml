@@ -17,6 +17,7 @@ services:
       CYPRESS_ARNS_HANDOVER_URL: http://arns-handover:7070
       CYPRESS_HMPPS_AUTH_URL: http://hmpps-auth:9090
       CYPRESS_SP_API_URL: http://api:8080
+      CYPRESS_COORDINATOR_API_URL: http://coordinator-api:8080
     volumes:
       - ../:/integration_tests
     working_dir: /integration_tests
