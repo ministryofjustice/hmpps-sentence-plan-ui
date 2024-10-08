@@ -5,6 +5,7 @@
       "errorTitle": "Error: Plan - {{ applicationName }}"
     },
     "header": {
+      "returnToOasysButton": "Return to OASys",
       "createGoalButton": "Create goal",
       "agreePlanButton": "Agree plan",
       "recordProgressButton": "Record progress"
