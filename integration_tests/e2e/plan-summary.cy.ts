@@ -18,6 +18,10 @@ describe('View Plan Summary', () => {
     cy.url().should('include', '/create-goal/')
   })
 
+  it('Should have a `Return to OASys` button and it should return the user to the OASys return URL', () => {
+    cy.contains('a', 'Return to OASys').should('have.attr', 'href').and('include', 'https://oasys-url')
+  })
+
   it('Should have text saying no goals to work on now', () => {
     cy.visit('/plan-summary')
     cy.get('.govuk-grid-column-full').should('contain', 'does not have any goals to work on now. You can either:')
