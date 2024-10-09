@@ -24,4 +24,6 @@ export default class SessionService {
   getPrincipalDetails = () => this.request.session.handover?.principal
 
   getSubjectDetails = () => this.request.session.handover?.subject
+
+  getOasysReturnUrl = () => this.request.session.handover?.principal.returnUrl
 }

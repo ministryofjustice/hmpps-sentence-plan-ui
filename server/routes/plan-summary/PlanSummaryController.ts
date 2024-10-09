@@ -13,6 +13,7 @@ export default class PlanSummaryController {
     try {
       const planUuid = req.services.sessionService.getPlanUUID()
       const plan = await req.services.planService.getPlanByUuid(planUuid)
+      const oasysReturnUrl = req.services.sessionService.getOasysReturnUrl()
       const status = req.query?.status
       const type = req.query?.type
 
@@ -22,6 +23,7 @@ export default class PlanSummaryController {
           plan,
           type,
           status,
+          oasysReturnUrl,
         },
         errors,
       })
