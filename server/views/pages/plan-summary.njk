@@ -129,11 +129,12 @@
             {% endif %}
             {% if data.plan.agreementStatus === 'AGREED' %}
                 <p class="govuk-body">{{ locale.agreePlan }}</p>
-                {% if data.plan.agreementDate > data.plan.lastUpdated %}
-                    <p class="govuk-body">{{ locale.lastUpdatedPlan }}</p>
-                {% endif %}
             {% elseif data.plan.agreementStatus === 'DO_NOT_AGREE' %}
                 <p class="govuk-body">{{ locale.notAgreePlan }}</p>
+            {% elseif data.plan.agreementStatus === 'DRAFT' %}
+                <p class="govuk-body">{{ locale.addStepSuggestion }}</p>
+            {% else %}
+                <p class="govuk-body">{{ locale.lastUpdatedPlan }}</p>
             {% endif %}
 
             {{ mojSubNavigation({
