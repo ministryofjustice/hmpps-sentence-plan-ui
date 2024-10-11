@@ -8,7 +8,7 @@ import URLs from '../URLs'
 
 jest.mock('../../services/sentence-plan/goalService', () => {
   return jest.fn().mockImplementation(() => ({
-    removeGoal: jest.fn().mockReturnValue({ status: 204 }),
+    deleteGoal: jest.fn().mockReturnValue({ status: 204 }),
     getGoal: jest.fn().mockReturnValue(testGoal),
     updateGoal: jest.fn().mockReturnValue(testGoal),
   }))
@@ -46,15 +46,8 @@ describe('Test Deleting Goal', () => {
   })
 
   describe('post', () => {
-    it('should return to plan-summary without removing goal if cancel removal', async () => {
-      req.body = { type: 'some-type', action: 'cancelRemove' }
-      await controller.post(req as Request, res as Response, next)
-      expect(req.services.goalService.deleteGoal).not.toHaveBeenCalled()
-      expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_SUMMARY}?type=some-type`)
-    })
-
-    it('should return to plan-summary after removing goal if remove goal is selected', async () => {
-      req.body = { type: 'some-type', action: 'remove', goalUuid: 'xyz' }
+    it('should return to plan-summary after deleting goal if delete goal is selected', async () => {
+      req.body = { type: 'some-type', action: 'delete', goalUuid: 'xyz' }
       await controller.post(req as Request, res as Response, next)
       expect(req.services.goalService.deleteGoal).toHaveBeenCalled()
       expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_SUMMARY}?type=some-type&status=removed`)
