@@ -11,7 +11,7 @@ export default class NoteService {
     return {
       author: 'Joe Bloggs',
       source: 'assessment',
-      creationDate: new Date(),
+      createdDate: new Date(),
       content:
         'Joan may be required to seek independent accommodation and there needs ot be consideration made of the victim of her index offence, the need to protect her partner and their child and to minimise / prevent opportunities to frequent pro-offending peers.',
     }

@@ -7,6 +7,6 @@ export const testNewStep: NewStep = {
 }
 export const testStep: Step = {
   uuid: 'a-un1qu3-t3st-Uu1d',
-  creationDate: new Date().toISOString().substring(0, 10),
+  createdDate: new Date().toISOString().substring(0, 10),
   ...testNewStep,
 } as Step

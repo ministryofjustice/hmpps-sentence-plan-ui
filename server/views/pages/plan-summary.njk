@@ -44,7 +44,7 @@
     },
     plan: {
         agreementDate: data.plan.agreementDate | formatSimpleDate,
-        creationDate: data.plan.creationDate | formatSimpleDate,
+        createdDate: data.plan.createdDate | formatSimpleDate,
         updatedDate: data.plan.updatedDate | formatSimpleDate
     }
 }) %}
@@ -61,6 +61,12 @@
 {% set header = {
     type: "extended",
     items: [
+        {
+            text: locale.header.returnToOasysButton,
+            href: data.oasysReturnUrl,
+            classes: "govuk-button--secondary",
+            type: 'button'
+        },
         {
             text: locale.header.createGoalButton,
             href: "/create-goal/accommodation",
@@ -120,6 +126,12 @@
                     text: locale.notificationBanner.changedGoal,
                     iconFallbackText: 'Success'
                 }) }}
+            {% elseif data.status == 'achieved' %}
+                {{ mojBanner({
+                    type: 'success',
+                    text: locale.notificationBanner.achievedGoal,
+                    iconFallbackText: 'Success'
+                }) }}
             {% endif %}
             {% if data.plan.agreementStatus === 'AGREED' %}
                 <p class="govuk-body">{{ locale.agreePlan }}</p>
@@ -156,21 +168,22 @@
                 } if removedGoals.length > 0]
             }) }}
 
-            <ol id="goal-list" class="goal-list govuk-list govuk-list--number">
-                {% if data.type == 'future' %}
-                    {% set goals = futureGoals %}
-                    {% set goalType = 'future' %}
-                {% elseif data.type == 'achieved' %}
-                    {% set goals = achievedGoals %}
-                    {% set goalType = 'achieved' %}
-                {% elseif data.type == 'removed' %}
-                    {% set goals = removedGoals %}
-                    {% set goalType = 'removed' %}
-                {% else %}
-                    {% set goals = currentGoals %}
-                    {% set goalType = 'current' %}
-                {% endif %}
+            {% if data.type == 'future' %}
+                {% set goals = futureGoals %}
+                {% set goalType = 'future' %}
+            {% elseif data.type == 'achieved' %}
+                {% set goals = achievedGoals %}
+                {% set goalType = 'achieved' %}
+            {% elseif data.type == 'removed' %}
+                {% set goals = removedGoals %}
+                {% set goalType = 'removed' %}
+            {% else %}
+                {% set goals = currentGoals %}
+                {% set goalType = 'current' %}
+            {% endif %}
 
+            {% if goals.length > 0 %}
+            <ol id="goal-list" class="goal-list govuk-list govuk-list--number">
                 {% for item in goals %}
                     {% set goal = item.goal %}
                     {% set buttons = [] %}
@@ -239,6 +252,7 @@
                                     text: locale.goalSummaryCard.actions.achieved.viewDetails
                                 }
                             ] %}
+                            {% set buttons = [] %}
                         {% elseif goal.status === 'REMOVED' %}
                             {% set actions = [
                                 {
@@ -264,6 +278,17 @@
                     </li>
                 {% endfor %}
             </ol>
+            {% endif %}
+
+            {% if goalType == 'current' and goals.length == 0 %}
+                <p>{{ locale.ifNoCurrentGoals.text }}</p>
+                <ul>
+                    <li><a href="/create-goal/accommodation" class="govuk-link govuk-link--no-visited-state">{{ locale.ifNoCurrentGoals.action1 }}</a></li>
+                    <li><a href="/about-pop" class="govuk-link govuk-link--no-visited-state">{{ locale.ifNoCurrentGoals.action2 }}</a></li>
+                </ul>
+            {% elseif goalType == 'future' and goals.length == 0 %}
+                <p>{{ locale.ifNoFutureGoals.text }}</p>
+            {% endif %}
 
             {% include "../partials/back-to-top-link.njk" %}
         </div>

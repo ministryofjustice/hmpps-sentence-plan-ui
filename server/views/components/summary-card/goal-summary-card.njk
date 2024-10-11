@@ -13,9 +13,9 @@
     {% set locale = interpolate(params.locale.common.goalSummaryCard, {
         goal: goal,
         areaOfNeed: params.goal.areaOfNeed.name | lower,
-        relatedAreasOfNeed: relatedAreasOfNeed | join(', ') | lower,
+        relatedAreasOfNeed: relatedAreasOfNeed | sort | join(', ') | lower,
         targetDate: (params.goal.targetDate | formatSimpleDate) if params.goal.targetDate,
-        monthsDifference: (getMonthsDifference(params.goal.creationDate, params.goal.targetDate)) if params.goal.targetDate
+        achievedDate: (params.goal.statusDate | formatSimpleDate) if params.goal.statusDate
     }) %}
 
     <div class="goal-summary-card {%- if params.errorMessage %} goal-summary-card--error {% endif %}">
@@ -35,8 +35,11 @@
             }
         }) %}
         <div class="goal-summary-card__info">
-            {% if params.goal.targetDate %}
+            {% if params.goal.targetDate and params.goal.status != "ACHIEVED" %}
                 <p>{{ locale.info.aimToAchieveDate }}</p>
+            {% endif %}
+            {% if params.goal.status == "ACHIEVED" %}
+                <p>{{ locale.info.goalAchievedDate }}</p>
             {% endif %}
             {% if params.errorMessage %}
                 {{ govukErrorMessage({

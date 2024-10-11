@@ -27,7 +27,7 @@ export default class GoalModel {
   targetDate: string
 
   @IsDateString()
-  creationDate: string
+  createdDate: string
 
   @IsInt()
   @Min(0)

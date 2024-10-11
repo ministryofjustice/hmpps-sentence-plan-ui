@@ -13,7 +13,7 @@ export type Goal = {
   status: GoalStatus
   areaOfNeed: AreaOfNeed
   relatedAreasOfNeed: AreaOfNeed[]
-  creationDate: string
+  createdDate: string
   targetDate?: string
   statusDate?: string
   goalOrder: number

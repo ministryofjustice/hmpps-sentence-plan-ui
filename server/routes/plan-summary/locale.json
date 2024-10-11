@@ -5,6 +5,7 @@
       "errorTitle": "Error: Plan - {{ applicationName }}"
     },
     "header": {
+      "returnToOasysButton": "Return to OASys",
       "createGoalButton": "Create goal",
       "agreePlanButton": "Agree plan",
       "recordProgressButton": "Record progress"
@@ -12,17 +13,25 @@
     "notificationBanner": {
       "addedGoal": "You added a goal to {{ subject.possessiveName }} plan.",
       "changedGoal": "You changed a goal in {{ subject.possessiveName }} plan.",
-      "removedGoal": "You removed a goal from {{ subject.possessiveName }} plan."
+      "removedGoal": "You removed a goal from {{ subject.possessiveName }} plan.",
+      "achievedGoal": "Congratulations on achieving a goal, {{ subject.givenName }}"
     },
     "agreePlan": "{{ subject.givenName }} agreed to their plan on {{ plan.agreementDate }}",
-    "notAgreePlan": "Plan created on {{ plan.creationDate }}",
+    "notAgreePlan": "Plan created on {{ plan.createdDate }}",
     "lastUpdatedPlan": "Last updated on {{ plan.updatedDate }} by ---",
-    "addStepSuggestion": "Add steps to the goals {{ subject.givenName }} is working on now. You can then agree the plan with {{ subject.givenName }}.",
     "subNavigation": {
       "currentGoals": "Goals to work on now ({{ goalCounts.currentGoals }})",
       "futureGoals": "Future goals ({{ goalCounts.futureGoals }})",
       "achievedGoals": "Achieved goals ({{ goalCounts.achievedGoals }})",
       "removedGoals": "Removed goals ({{ goalCounts.removedGoals }})"
+    },
+    "ifNoCurrentGoals": {
+      "text": "{{ subject.givenName }} does not have any goals to work on now. You can either:",
+      "action1": "create a goal with {{ subject.givenName }}",
+      "action2": "view information from {{ subject.possessiveName }} assessment"
+    },
+    "ifNoFutureGoals": {
+      "text": "{{ subject.givenName }} does not have any future goals in their plan."
     },
     "goalSummaryCard": {
       "actions": {

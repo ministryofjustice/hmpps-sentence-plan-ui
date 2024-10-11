@@ -41,6 +41,7 @@ export const openSentencePlan = oasysAssessmentPk => {
               identifier: 123,
               displayName: 'Cypress User',
               accessMode: 'READ_WRITE',
+              returnUrl: 'https://oasys-url',
             },
             subjectDetails: {
               crn: 'X123456',
@@ -64,18 +65,27 @@ export const openSentencePlan = oasysAssessmentPk => {
 }
 
 export const createSentencePlan = () => {
-  const oasysAssessmentPk = Math.random().toString().substring(2, 9)
+  const oasysAssessmentPk = Math.random().toString(36).substring(2, 9)
 
   return getApiToken().then(apiToken =>
     cy
       .request({
-        url: `${Cypress.env('SP_API_URL')}/oasys/plans`,
+        url: `${Cypress.env('COORDINATOR_API_URL')}/oasys/create`,
         method: 'POST',
         auth: { bearer: apiToken },
-        body: { oasysAssessmentPk },
+        body: {
+          planType: 'INITIAL',
+          userDetails: {
+            id: '12345',
+            name: 'Cypress',
+          },
+          oasysAssessmentPk,
+        },
       })
       .then(createResponse => ({
-        plan: createResponse.body,
+        plan: {
+          uuid: createResponse.body.sentencePlanId,
+        },
         oasysAssessmentPk,
       })),
   )

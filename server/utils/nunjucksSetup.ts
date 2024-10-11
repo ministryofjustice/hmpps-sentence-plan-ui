@@ -106,13 +106,6 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
     return false
   })
 
-  // get months difference
-  njkEnv.addGlobal('getMonthsDifference', (creationDate: string, targetDate: string) => {
-    const [creationYear, creationMonth] = creationDate.split('-').map(Number)
-    const [targetYear, targetMonth] = targetDate.split('-').map(Number)
-    return (targetYear - creationYear) * 12 + (targetMonth - creationMonth)
-  })
-
   njkEnv.addGlobal('interpolate', (locale: object, replacements: Record<string, any>) => {
     const interpolateString = (str: string): string => {
       return str.replace(/\{\{\s*([^}]+)\s*}}/g, (match: string, expression: string) => {

@@ -3,9 +3,9 @@ import { testGoal } from './goalData'
 
 const testPlan: PlanType = {
   uuid: '51c9f87b-fdb0-4bfb-9350-032672eedca9',
-  status: PlanStatus.INCOMPLETE,
+  status: PlanStatus.UNSIGNED,
   agreementStatus: PlanAgreementStatus.DRAFT,
-  creationDate: new Date(Date.now() - 1000 * 60 * 60).toISOString(),
+  createdDate: new Date(Date.now() - 1000 * 60 * 60).toISOString(),
   updatedDate: new Date().toISOString(),
   goals: [testGoal],
 }

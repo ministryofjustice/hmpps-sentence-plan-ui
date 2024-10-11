@@ -8,17 +8,22 @@ export enum PlanAgreementStatus {
 }
 
 export enum PlanStatus {
-  INCOMPLETE = 'INCOMPLETE',
-  COMPLETE = 'COMPLETE',
-  LOCKED = 'LOCKED',
-  SIGNED = 'SIGNED',
+  AWAITING_COUNTERSIGN = 'AWAITING_COUNTERSIGN',
+  AWAITING_DOUBLE_COUNTERSIGN = 'AWAITING_DOUBLE_COUNTERSIGN',
+  COUNTERSIGNED = 'COUNTERSIGNED',
+  DOUBLE_COUNTERSIGNED = 'DOUBLE_COUNTERSIGNED',
+  LOCKED_INCOMPLETE = 'LOCKED_INCOMPLETE',
+  REJECTED = 'REJECTED',
+  ROLLED_BACK = 'ROLLED_BACK',
+  SELF_SIGNED = 'SELF_SIGNED',
+  UNSIGNED = 'UNSIGNED',
 }
 
 export type PlanType = {
   uuid: string
   status: PlanStatus
   agreementStatus: PlanAgreementStatus
-  creationDate: string
+  createdDate: string
   updatedDate: string
   goals: Goal[]
 }
