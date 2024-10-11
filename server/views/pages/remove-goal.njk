@@ -2,6 +2,10 @@
 {% from "../components/summary-card/goal-summary-card.njk" import goalSummaryCard %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
+{% set locale = interpolate(locale, {
+    goalUuid: data.goal.uuid
+}) %}
+
 {% block pageTitle %}
     {% if not errors %}
         {{ locale.page.title }}
