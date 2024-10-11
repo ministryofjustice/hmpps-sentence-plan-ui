@@ -12,7 +12,7 @@ describe('Remove a goal', () => {
     })
   })
 
-  describe('Rendering', () => {
+  describe('Rendering delete goal', () => {
     const goalData: NewGoal = {
       title: 'Test goal',
       areaOfNeed: 'Drug use',
@@ -24,7 +24,7 @@ describe('Remove a goal', () => {
       // Add goal and access remove page
       cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
         cy.addGoalToPlan(plan.uuid, goalData).then(goal => {
-          cy.visit(`/remove-goal/${goal.uuid}`)
+          cy.visit(`/confirm-delete-goal/${goal.uuid}`)
         })
       })
 
@@ -45,7 +45,7 @@ describe('Remove a goal', () => {
         cy.addGoalToPlan(plan.uuid, goalData).then(goal => {
           cy.addStepToGoal(goal.uuid, stepData[0])
           cy.addStepToGoal(goal.uuid, stepData[1])
-          cy.visit(`/remove-goal/${goal.uuid}`)
+          cy.visit(`/confirm-delete-goal/${goal.uuid}`)
         })
       })
 
@@ -77,52 +77,28 @@ describe('Remove a goal', () => {
       })
     })
 
-    it('When confirmed, goal is removed', () => {
+    it('When confirmed, goal is deleted', () => {
       // Go to plan-summary page, check goal appears
       cy.visit(`/plan-summary`)
       cy.get('.goal-list .goal-summary-card').should('have.length', 3).and('contain', goalData.title)
 
       // Click remove goal
       cy.contains('.goal-summary-card', goalData.title).within(() => {
-        cy.contains('a', 'Remove goal').click()
+        cy.contains('a', 'Delete goal').click()
       })
 
       // Check we've landed on confirm goal deletion page
       cy.get<Goal>('@goal').then(goal => {
-        cy.url().should('contain', `/remove-goal/${goal.uuid}`)
+        cy.url().should('contain', `/confirm-delete-goal/${goal.uuid}`)
       })
       cy.get('.goal-summary-card').should('contain', goalData.title)
 
       // Confirm delete
-      cy.contains('button', 'Yes, remove goal').click()
+      cy.contains('button', 'Confirm').click()
 
       // Check goal has been deleted
       cy.url().should('contain', '/plan-summary?type=current&status=removed')
       cy.get('.goal-list .goal-summary-card').should('have.length', 2).and('not.contain', goalData.title)
-    })
-
-    it('When cancelled, goal is not removed', () => {
-      // Go to plan-summary page, check goal appears
-      cy.visit(`/plan-summary`)
-      cy.get('.goal-list .goal-summary-card').should('have.length', 3).and('contain', goalData.title)
-
-      // Click remove goal
-      cy.contains('.goal-summary-card', goalData.title).within(() => {
-        cy.contains('a', 'Remove goal').click()
-      })
-
-      // Check we've landed on confirm goal deletion page
-      cy.get<Goal>('@goal').then(goal => {
-        cy.url().should('contain', `/remove-goal/${goal.uuid}`)
-      })
-      cy.get('.goal-summary-card').should('contain', goalData.title)
-
-      // Confirm delete
-      cy.contains('button', 'No, do not remove goal').click()
-
-      // Check goal has been deleted
-      cy.url().should('contain', '/plan-summary')
-      cy.get('.goal-list .goal-summary-card').should('have.length', 3).and('contain', goalData.title)
     })
   })
 })
