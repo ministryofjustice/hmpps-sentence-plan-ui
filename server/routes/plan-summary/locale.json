@@ -38,6 +38,7 @@
         "draft": {
           "changeGoal": "Change goal",
           "addOrChangeSteps": "Add or change steps",
+          "deleteGoal": "Delete goal",
           "removeGoal": "Remove goal"
         },
         "active": {
