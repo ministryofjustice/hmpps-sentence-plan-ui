@@ -1,10 +1,10 @@
 import DataGenerator from '../support/DataGenerator'
 import { PlanType } from '../../server/@types/PlanType'
 import { Goal } from '../../server/@types/GoalType'
-import Plan from '../pages/plan-overview'
+import PlanOverview from '../pages/plan-overview'
 
 describe('Achieve goal', () => {
-  const planOverview = new Plan()
+  const planOverview = new PlanOverview()
 
   beforeEach(() => {
     cy.createSentencePlan().then(planDetails => {

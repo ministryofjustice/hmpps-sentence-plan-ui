@@ -1,9 +1,9 @@
-import Plan from '../pages/plan-overview'
+import PlanOverview from '../pages/plan-overview'
 import { PlanType } from '../../server/@types/PlanType'
 import DataGenerator from '../support/DataGenerator'
 
 describe('View Plan Overview', () => {
-  const planOverview = new Plan()
+  const planOverview = new PlanOverview()
 
   beforeEach(() => {
     cy.createSentencePlan().then(planDetails => {
