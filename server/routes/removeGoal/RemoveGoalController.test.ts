@@ -14,7 +14,7 @@ jest.mock('../../services/sentence-plan/goalService', () => {
   }))
 })
 
-describe('RemoveGoalController', () => {
+describe('Test Deleting Goal', () => {
   let controller: RemoveGoalController
   let req: Request
   let res: Response
@@ -23,9 +23,10 @@ describe('RemoveGoalController', () => {
     data: {
       type: 'some-type',
       goal: testGoal,
+      actionType: 'delete',
     },
     errors: {},
-    locale: locale.en,
+    locale: locale.en.delete,
   }
 
   beforeEach(() => {
@@ -33,6 +34,7 @@ describe('RemoveGoalController', () => {
     res = mockRes()
     next = jest.fn()
     req.query.type = 'some-type'
+    req.url = '/confirm-delete-goal'
     controller = new RemoveGoalController()
   })
 
