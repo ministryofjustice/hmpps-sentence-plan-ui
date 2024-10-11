@@ -36,7 +36,7 @@ jest.mock('../../services/sentence-plan/stepsService', () => {
   }))
 })
 
-describe('AddStepsController', () => {
+describe('UpdateGoalController', () => {
   let controller: UpdateGoalController
   let mockReferentialDataService: jest.Mocked<ReferentialDataService>
 
