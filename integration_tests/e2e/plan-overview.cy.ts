@@ -1,8 +1,8 @@
-import Plan from '../pages/plan'
+import Plan from '../pages/plan-overview'
 import { PlanType } from '../../server/@types/PlanType'
 import DataGenerator from '../support/DataGenerator'
 
-describe('View Plan Summary', () => {
+describe('View Plan Overview', () => {
   const planOverview = new Plan()
 
   beforeEach(() => {
