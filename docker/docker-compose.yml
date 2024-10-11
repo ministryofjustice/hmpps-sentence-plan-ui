@@ -71,7 +71,7 @@ services:
       - "7072:3005"
     environment:
       ENVIRONMENT_NAME: DEV
-      INGRESS_URL: http://localhost:3000
+      INGRESS_URL: http://localhost:7072
       PRODUCT_ID: ARNS
       AUDIT_ENABLED: "false"
       REDIS_ENABLED: false
