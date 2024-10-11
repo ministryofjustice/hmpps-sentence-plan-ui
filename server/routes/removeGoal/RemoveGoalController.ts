@@ -2,6 +2,8 @@ import { NextFunction, Request, Response } from 'express'
 import * as superagent from 'superagent'
 import locale from './locale.json'
 import URLs from '../URLs'
+import { NewGoal } from '../../@types/NewGoalType'
+import { GoalStatus } from '../../@types/GoalType'
 
 export default class RemoveGoalController {
   render = async (req: Request, res: Response, next: NextFunction) => {
@@ -10,14 +12,22 @@ export default class RemoveGoalController {
     try {
       const type = req.query?.type
       const { uuid } = req.params
-      // TODO rather than fetch the goal again we should be able to retrieve it from a local store since the previous page must have retrieved it already
+
       const goal = await req.services.goalService.getGoal(uuid)
+      let actionType = 'remove'
+      let localeType = locale.en.remove
+
+      if (req.url.startsWith('/confirm-delete-goal')) {
+        actionType = 'delete'
+        localeType = locale.en.delete
+      }
 
       return res.render('pages/remove-goal', {
-        locale: locale.en,
+        locale: localeType,
         data: {
           type,
           goal,
+          actionType,
         },
         errors,
       })
@@ -28,13 +38,24 @@ export default class RemoveGoalController {
 
   remove = async (req: Request, res: Response, next: NextFunction) => {
     const { type } = req.body
+    const { goalUuid } = req.body
 
     try {
-      if (req.body.action === 'remove') {
-        const { goalUuid } = req.body
-        const response: superagent.Response = <superagent.Response>await req.services.goalService.removeGoal(goalUuid)
+      if (req.body.action === 'delete') {
+        const response: superagent.Response = <superagent.Response>await req.services.goalService.deleteGoal(goalUuid)
         if (response.status === 204) {
           return res.redirect(`${URLs.PLAN_OVERVIEW}?type=${type}&status=removed`)
+        }
+      } else if (req.body.action === 'remove') {
+        const goalData: Partial<NewGoal> = {
+          status: GoalStatus.REMOVED,
+        }
+
+        try {
+          await req.services.goalService.updateGoal(goalData, goalUuid)
+          return res.redirect(`${URLs.PLAN_SUMMARY}?type=${type}&status=removed`)
+        } catch (e) {
+          return next(e)
         }
       }
 
