@@ -23,7 +23,7 @@ export default function routes(services: Services): Router {
       who: res.locals.user?.username,
       correlationId: req.id,
     })
-    res.redirect(URLs.PLAN_SUMMARY)
+    res.redirect(URLs.PLAN_OVERVIEW)
   })
 
   setupAboutPopRoutes(router, services)

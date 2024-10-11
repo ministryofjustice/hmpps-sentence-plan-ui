@@ -38,7 +38,7 @@ export default class PlanSummaryController {
       const goalList = type === 'current' ? goals.now : goals.future
       const reorderedList = moveGoal(goalList, uuid, operation)
       await req.services.goalService.changeGoalOrder(reorderedList)
-      return res.redirect(`${URLs.PLAN_SUMMARY}?type=${type}`)
+      return res.redirect(`${URLs.PLAN_OVERVIEW}?type=${type}`)
     } catch (e) {
       return next(e)
     }

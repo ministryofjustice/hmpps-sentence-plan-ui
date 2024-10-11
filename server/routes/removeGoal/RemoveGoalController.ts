@@ -34,11 +34,11 @@ export default class RemoveGoalController {
         const { goalUuid } = req.body
         const response: superagent.Response = <superagent.Response>await req.services.goalService.removeGoal(goalUuid)
         if (response.status === 204) {
-          return res.redirect(`${URLs.PLAN_SUMMARY}?type=${type}&status=removed`)
+          return res.redirect(`${URLs.PLAN_OVERVIEW}?type=${type}&status=removed`)
         }
       }
 
-      return res.redirect(`${URLs.PLAN_SUMMARY}?type=${type}`)
+      return res.redirect(`${URLs.PLAN_OVERVIEW}?type=${type}`)
     } catch (e) {
       return next(e)
     }
