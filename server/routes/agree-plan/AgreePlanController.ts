@@ -51,7 +51,7 @@ export default class AgreePlanController {
       const planUuid = req.services.sessionService.getPlanUUID()
       await req.services.planService.agreePlan(planUuid, agreement as PlanAgreement)
 
-      return res.redirect(`${URLs.PLAN_SUMMARY}`)
+      return res.redirect(`${URLs.PLAN_OVERVIEW}`)
     } catch (e) {
       return next(e)
     }
@@ -87,7 +87,7 @@ export default class AgreePlanController {
         return this.render(req, res)
       }
 
-      return res.redirect(URLs.PLAN_SUMMARY)
+      return res.redirect(URLs.PLAN_OVERVIEW)
     }
 
     return next()

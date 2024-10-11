@@ -13,7 +13,7 @@ export default class ViewAchievedGoalController {
       const goal = await req.services.goalService.getGoal(uuid)
 
       if (goal.status !== GoalStatus.ACHIEVED) {
-        res.redirect(`/plan-summary?type=${type}`)
+        res.redirect(`/plan?type=${type}`)
       }
 
       return res.render('pages/view-achieved-goal', {
