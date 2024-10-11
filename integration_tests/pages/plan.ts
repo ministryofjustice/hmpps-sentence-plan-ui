@@ -1,4 +1,4 @@
-export default class PlanSummary {
+export default class Plan {
   getSummaryCard = (value: number) => {
     return cy.get('.govuk-summary-card').eq(value)
   }

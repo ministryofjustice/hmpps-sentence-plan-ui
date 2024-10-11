@@ -44,14 +44,14 @@ describe('RemoveGoalController', () => {
   })
 
   describe('post', () => {
-    it('should return to plan-summary without removing goal if cancel removal', async () => {
+    it('should return to plan without removing goal if cancel removal', async () => {
       req.body = { type: 'some-type', action: 'cancelRemove' }
       await controller.post(req as Request, res as Response, next)
       expect(req.services.goalService.removeGoal).not.toHaveBeenCalled()
       expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_OVERVIEW}?type=some-type`)
     })
 
-    it('should return to plan-summary after removing goal if remove goal is selected', async () => {
+    it('should return to plan after removing goal if remove goal is selected', async () => {
       req.body = { type: 'some-type', action: 'remove', goalUuid: 'xyz' }
       await controller.post(req as Request, res as Response, next)
       expect(req.services.goalService.removeGoal).toHaveBeenCalled()

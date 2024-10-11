@@ -140,22 +140,22 @@
                 classes: 'plan-navigation',
                 items: [{
                     text: locale.subNavigation.currentGoals,
-                    href: '/plan-summary?type=current',
+                    href: '/plan?type=current',
                     active: data.type === 'current' or data.type === undefined
                 },
                 {
                     text: locale.subNavigation.futureGoals,
-                    href: '/plan-summary?type=future',
+                    href: '/plan?type=future',
                     active: data.type === 'future'
                 },
                 {
                     text: locale.subNavigation.achievedGoals,
-                    href: '/plan-summary?type=achieved',
+                    href: '/plan?type=achieved',
                     active: data.type === 'achieved'
                 } if achievedGoals.length > 0,
                 {
                     text: locale.subNavigation.removedGoals,
-                    href: '/plan-summary?type=removed',
+                    href: '/plan?type=removed',
                     active: data.type === 'removed'
                 } if removedGoals.length > 0]
             }) }}

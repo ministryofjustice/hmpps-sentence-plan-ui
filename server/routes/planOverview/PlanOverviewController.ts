@@ -6,7 +6,7 @@ import URLs from '../URLs'
 import { getValidationErrors } from '../../middleware/validationMiddleware'
 import PlanModel from '../shared-models/PlanModel'
 
-export default class PlanSummaryController {
+export default class PlanOverviewController {
   private render = async (req: Request, res: Response, next: NextFunction) => {
     const { errors } = req
 
@@ -16,7 +16,7 @@ export default class PlanSummaryController {
       const status = req.query?.status
       const type = req.query?.type
 
-      return res.render('pages/plan-summary', {
+      return res.render('pages/plan', {
         locale: locale.en,
         data: {
           plan,
