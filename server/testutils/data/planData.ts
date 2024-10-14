@@ -2,7 +2,7 @@ import { PlanAgreementStatus, PlanStatus, PlanType } from '../../@types/PlanType
 import { testGoal } from './goalData'
 
 const testPlan: PlanType = {
-  uuid: '51c9f87b-fdb0-4bfb-9350-032672eedca9',
+  uuid: 'draft-plan-uuid',
   status: PlanStatus.UNSIGNED,
   agreementStatus: PlanAgreementStatus.DRAFT,
   createdDate: new Date(Date.now() - 1000 * 60 * 60).toISOString(),
@@ -10,4 +10,14 @@ const testPlan: PlanType = {
   goals: [testGoal],
 }
 
+const agreedTestPlan: PlanType = {
+  uuid: 'agreed-plan-uuid',
+  status: PlanStatus.UNSIGNED,
+  agreementStatus: PlanAgreementStatus.AGREED,
+  createdDate: new Date(Date.now() - 1000 * 60 * 60).toISOString(),
+  updatedDate: new Date().toISOString(),
+  goals: [testGoal],
+}
+
 export default testPlan
+export { agreedTestPlan }

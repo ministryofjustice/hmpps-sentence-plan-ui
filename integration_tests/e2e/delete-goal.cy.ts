@@ -3,9 +3,8 @@ import { Goal } from '../../server/@types/GoalType'
 import DataGenerator from '../support/DataGenerator'
 import { PlanType } from '../../server/@types/PlanType'
 import { NewStep } from '../../server/@types/StepType'
-import PlanOverview from '../pages/plan-overview'
 
-describe('Remove a goal from a Plan after it has been agreed', () => {
+describe('Delete a goal from a Plan before it has been agreed', () => {
   beforeEach(() => {
     cy.createSentencePlan().then(planDetails => {
       cy.wrap(planDetails).as('plan')
@@ -13,7 +12,7 @@ describe('Remove a goal from a Plan after it has been agreed', () => {
     })
   })
 
-  describe('Rendering remove goal', () => {
+  describe('Rendering delete goal', () => {
     const goalData: NewGoal = {
       title: 'Test goal',
       areaOfNeed: 'Drug use',
@@ -22,10 +21,10 @@ describe('Remove a goal from a Plan after it has been agreed', () => {
     }
 
     it('Goal with no steps renders correctly', () => {
-      // Add goal and access remove page
+      // Add goal and access delete page
       cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
         cy.addGoalToPlan(plan.uuid, goalData).then(goal => {
-          cy.visit(`/remove-goal/${goal.uuid}`)
+          cy.visit(`/confirm-delete-goal/${goal.uuid}`)
         })
       })
 
@@ -70,43 +69,32 @@ describe('Remove a goal from a Plan after it has been agreed', () => {
     let goalData
 
     beforeEach(() => {
-      const planOverview = new PlanOverview()
+      goalData = DataGenerator.generateGoal()
       cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
-        goalData = DataGenerator.generateGoal()
-        cy.addGoalToPlan(plan.uuid, goalData)
-          .as('goal')
-          .then(goal => {
-            cy.addStepToGoal(goal.uuid, DataGenerator.generateStep({}))
-          })
-        cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal()).then(goal => {
-          cy.addStepToGoal(goal.uuid, DataGenerator.generateStep({}))
-        })
-        cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal()).then(goal => {
-          cy.addStepToGoal(goal.uuid, DataGenerator.generateStep({}))
-        })
+        cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal())
+        cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal())
+        cy.addGoalToPlan(plan.uuid, goalData).as('goal')
       })
-
-      planOverview.agreePlan()
     })
 
-    it('When confirmed, goal is removed', () => {
-      // Go to plan overview page, check goal appears
+    it('When confirmed, goal is deleted', () => {
+      // Go to plan-summary page, check goal appears
       cy.visit(`/plan`)
       cy.get('.goal-list .goal-summary-card').should('have.length', 3).and('contain', goalData.title)
 
       // Click remove goal
       cy.contains('.goal-summary-card', goalData.title).within(() => {
-        cy.contains('a', 'Remove').click()
+        cy.contains('a', 'Delete goal').click()
       })
 
-      // Check we've landed on confirm goal removeal page
+      // Check we've landed on confirm goal deletion page
       cy.get<Goal>('@goal').then(goal => {
-        cy.url().should('contain', `/remove-goal/${goal.uuid}`)
+        cy.url().should('contain', `/confirm-delete-goal/${goal.uuid}`)
       })
       cy.get('.goal-summary-card').should('contain', goalData.title)
 
       // Confirm delete
-      cy.contains('button', 'Yes, remove goal').click()
+      cy.contains('button', 'Confirm').click()
 
       // Check goal has been deleted
       cy.url().should('contain', '/plan?type=current&status=removed')

@@ -256,7 +256,7 @@
                         {% elseif goal.status === 'REMOVED' %}
                             {% set actions = [
                                 {
-                                    href: '#',
+                                    href: '/view-achieved-goal/' + goal.uuid,
                                     text: locale.goalSummaryCard.actions.removed.viewDetails
                                 },
                                 {

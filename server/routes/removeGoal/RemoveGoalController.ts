@@ -4,6 +4,7 @@ import locale from './locale.json'
 import URLs from '../URLs'
 import { NewGoal } from '../../@types/NewGoalType'
 import { GoalStatus } from '../../@types/GoalType'
+import { PlanAgreementStatus } from '../../@types/PlanType'
 
 export default class RemoveGoalController {
   render = async (req: Request, res: Response, next: NextFunction) => {
@@ -17,7 +18,10 @@ export default class RemoveGoalController {
       let actionType = 'remove'
       let localeType = locale.en.remove
 
-      if (req.url.startsWith('/confirm-delete-goal')) {
+      const planUuid = req.services.sessionService.getPlanUUID()
+      const plan = await req.services.planService.getPlanByUuid(planUuid)
+
+      if (plan.agreementStatus === PlanAgreementStatus.DRAFT) {
         actionType = 'delete'
         localeType = locale.en.delete
       }
@@ -53,7 +57,7 @@ export default class RemoveGoalController {
 
         try {
           await req.services.goalService.updateGoal(goalData, goalUuid)
-          return res.redirect(`${URLs.PLAN_SUMMARY}?type=${type}&status=removed`)
+          return res.redirect(`${URLs.PLAN_OVERVIEW}?type=${type}&status=removed`)
         } catch (e) {
           return next(e)
         }

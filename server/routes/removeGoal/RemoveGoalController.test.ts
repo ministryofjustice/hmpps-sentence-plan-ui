@@ -5,6 +5,27 @@ import mockRes from '../../testutils/preMadeMocks/mockRes'
 import { testGoal } from '../../testutils/data/goalData'
 import locale from './locale.json'
 import URLs from '../URLs'
+import testPlan, { agreedTestPlan } from '../../testutils/data/planData'
+
+const mockGetPlanUUID = jest.fn().mockReturnValue(testPlan.uuid)
+const mockSessionService = jest.fn().mockImplementation(() => ({
+  getPlanUUID: mockGetPlanUUID,
+}))
+
+jest.mock('../../services/sessionService', () => {
+  return jest.fn().mockImplementation(() => mockSessionService())
+})
+
+jest.mock('../../services/sentence-plan/planService', () => {
+  return jest.fn().mockImplementation(() => ({
+    getPlanByUuid: jest.fn().mockImplementation(planUuid => {
+      if (planUuid === 'agreed-plan-uuid') {
+        return agreedTestPlan
+      }
+      return testPlan
+    }),
+  }))
+})
 
 jest.mock('../../services/sentence-plan/goalService', () => {
   return jest.fn().mockImplementation(() => ({
@@ -51,7 +72,7 @@ describe('Test Deleting Goal', () => {
       req.body = { type: 'some-type', action: 'delete', goalUuid: 'xyz' }
       await controller.post(req as Request, res as Response, next)
       expect(req.services.goalService.deleteGoal).toHaveBeenCalled()
-      expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_SUMMARY}?type=some-type&status=removed`)
+      expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_OVERVIEW}?type=some-type&status=removed`)
     })
   })
 })
@@ -81,7 +102,10 @@ describe('Test Removing Goal', () => {
   })
 
   describe('get', () => {
+    mockSessionService().getPlanUUID.mockReset()
+
     it('should render without validation errors', async () => {
+      mockGetPlanUUID.mockImplementation(() => 'agreed-plan-uuid')
       await controller.get(req, res, next)
       expect(res.render).toHaveBeenCalledWith('pages/remove-goal', viewData)
     })
@@ -92,7 +116,7 @@ describe('Test Removing Goal', () => {
       req.body = { type: 'some-type', action: 'remove', goalUuid: 'xyz' }
       await controller.post(req as Request, res as Response, next)
       expect(req.services.goalService.updateGoal).toHaveBeenCalled()
-      expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_SUMMARY}?type=some-type&status=removed`)
+      expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_OVERVIEW}?type=some-type&status=removed`)
     })
   })
 })
