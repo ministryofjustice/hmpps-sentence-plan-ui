@@ -72,7 +72,7 @@ describe('Test Deleting Goal', () => {
       req.body = { type: 'some-type', action: 'delete', goalUuid: 'xyz' }
       await controller.post(req as Request, res as Response, next)
       expect(req.services.goalService.deleteGoal).toHaveBeenCalled()
-      expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_OVERVIEW}?type=some-type&status=removed`)
+      expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_OVERVIEW}?type=some-type&status=deleted`)
     })
   })
 })
@@ -112,7 +112,7 @@ describe('Test Removing Goal', () => {
   })
 
   describe('post', () => {
-    it('should return to plan-summary after removing goal if remove goal is selected', async () => {
+    it('should return to plan overview after removing goal if remove goal is selected', async () => {
       req.body = { type: 'some-type', action: 'remove', goalUuid: 'xyz' }
       await controller.post(req as Request, res as Response, next)
       expect(req.services.goalService.updateGoal).toHaveBeenCalled()
