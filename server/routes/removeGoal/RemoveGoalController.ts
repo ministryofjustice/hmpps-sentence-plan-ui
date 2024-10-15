@@ -48,7 +48,7 @@ export default class RemoveGoalController {
       if (req.body.action === 'delete') {
         const response: superagent.Response = <superagent.Response>await req.services.goalService.deleteGoal(goalUuid)
         if (response.status === 204) {
-          return res.redirect(`${URLs.PLAN_OVERVIEW}?type=${type}&status=removed`)
+          return res.redirect(`${URLs.PLAN_OVERVIEW}?type=${type}&status=deleted`)
         }
       } else if (req.body.action === 'remove') {
         const goalData: Partial<NewGoal> = {

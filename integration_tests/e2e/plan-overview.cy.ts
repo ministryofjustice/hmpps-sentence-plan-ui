@@ -74,7 +74,7 @@ describe('View Plan Overview', () => {
     cy.contains('.goal-summary-card', 'Accommodation').within(() => {
       cy.contains('a', 'Change goal')
       cy.contains('a', 'Add or change steps')
-      cy.contains('a', 'Delete goal')
+      cy.contains('a', 'Delete')
       cy.get('.govuk-tag').contains('Not started')
     })
   })

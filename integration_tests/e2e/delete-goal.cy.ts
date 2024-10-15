@@ -78,13 +78,13 @@ describe('Delete a goal from a Plan before it has been agreed', () => {
     })
 
     it('When confirmed, goal is deleted', () => {
-      // Go to plan-summary page, check goal appears
+      // Go to plan overview page, check goal appears
       cy.visit(`/plan`)
       cy.get('.goal-list .goal-summary-card').should('have.length', 3).and('contain', goalData.title)
 
       // Click remove goal
       cy.contains('.goal-summary-card', goalData.title).within(() => {
-        cy.contains('a', 'Delete goal').click()
+        cy.contains('a', 'Delete').click()
       })
 
       // Check we've landed on confirm goal deletion page
@@ -97,7 +97,7 @@ describe('Delete a goal from a Plan before it has been agreed', () => {
       cy.contains('button', 'Confirm').click()
 
       // Check goal has been deleted
-      cy.url().should('contain', '/plan?type=current&status=removed')
+      cy.url().should('contain', '/plan?type=current&status=deleted')
       cy.get('.goal-list .goal-summary-card').should('have.length', 2).and('not.contain', goalData.title)
     })
   })

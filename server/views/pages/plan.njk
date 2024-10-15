@@ -108,31 +108,14 @@
                 }) }}
             {% endif %}
 
-            {% if data.status == 'success' %}
+            {% if data.status and data.status in ['added', 'changed', 'removed', 'deleted', 'achieved'] %}
                 {{ mojBanner({
                     type: 'success',
-                    text: locale.notificationBanner.addedGoal,
-                    iconFallbackText: 'Success'
-                }) }}
-            {% elseif data.status == 'removed' %}
-                {{ mojBanner({
-                    type: 'success',
-                    text: locale.notificationBanner.removedGoal,
-                    iconFallbackText: 'Success'
-                }) }}
-            {% elseif data.status == 'updated' %}
-                {{ mojBanner({
-                    type: 'success',
-                    text: locale.notificationBanner.changedGoal,
-                    iconFallbackText: 'Success'
-                }) }}
-            {% elseif data.status == 'achieved' %}
-                {{ mojBanner({
-                    type: 'success',
-                    text: locale.notificationBanner.achievedGoal,
+                    text: locale.notificationBanner[data.status+'Goal'],
                     iconFallbackText: 'Success'
                 }) }}
             {% endif %}
+
             {% if data.plan.agreementStatus === 'AGREED' %}
                 <p class="govuk-body">{{ locale.agreePlan }}</p>
             {% elseif data.plan.agreementStatus === 'DO_NOT_AGREE' %}
@@ -242,7 +225,7 @@
                                 },
                                 {
                                     href: "/remove-goal/" + goal.uuid + "?type=current",
-                                    text: locale.goalSummaryCard.actions.active.remove
+                                    text: locale.goalSummaryCard.actions.active.removeGoal
                                 }
                             ] %}
                         {% elseif goal.status === 'ACHIEVED' %}
