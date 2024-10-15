@@ -225,8 +225,8 @@
                                 text: locale.goalSummaryCard.actions.draft.addOrChangeSteps
                             },
                             {
-                                href: "/remove-goal/" + goal.uuid + "?type=current",
-                                text: locale.goalSummaryCard.actions.draft.removeGoal
+                                href: "/confirm-delete-goal/" + goal.uuid + "?type=current",
+                                text: locale.goalSummaryCard.actions.draft.deleteGoal
                             }
                         ] %}
                     {% else %}
@@ -256,7 +256,7 @@
                         {% elseif goal.status === 'REMOVED' %}
                             {% set actions = [
                                 {
-                                    href: '#',
+                                    href: '/view-achieved-goal/' + goal.uuid,
                                     text: locale.goalSummaryCard.actions.removed.viewDetails
                                 },
                                 {
