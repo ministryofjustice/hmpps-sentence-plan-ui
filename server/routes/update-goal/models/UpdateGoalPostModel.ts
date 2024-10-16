@@ -1,12 +1,15 @@
 /* eslint-disable max-classes-per-file */
 import { Expose, plainToInstance, Transform } from 'class-transformer'
+import { StepStatus } from '../../../@types/StepType'
 
 export class StepModel {
   description: string
 
   actor: string
 
-  status: string
+  status: StepStatus
+
+  uuid: string
 }
 
 export default class UpdateGoalPostModel {
@@ -19,6 +22,7 @@ export default class UpdateGoalPostModel {
         return plainToInstance(StepModel, {
           key: `step-status-${row}`,
           status: obj[`step-status-${row}`],
+          uuid: obj[`step-uuid-${row}`],
         })
       })
   })

@@ -4,7 +4,6 @@ import ReferentialDataService from '../../services/sentence-plan/referentialData
 import URLs from '../URLs'
 import transformRequest from '../../middleware/transformMiddleware'
 import UpdateGoalPostModel from './models/UpdateGoalPostModel'
-import { StepModel } from '../add-steps/models/AddStepsPostModel'
 
 export default class UpdateGoalController {
   constructor(private readonly referentialDataService: ReferentialDataService) {}
@@ -33,27 +32,28 @@ export default class UpdateGoalController {
 
   private saveAndRedirect = async (req: Request, res: Response, next: NextFunction) => {
     const { uuid } = req.params
+    const { steps } = req.body
+
     const goal = await req.services.goalService.getGoal(uuid)
-    const updated: StepModel[] = goal.steps
-    const map = updated.map((value, index) => {
+
+    const updated = goal.steps.map((value, index) => {
+      // if (value.uuid != steps[index].uuid) {
+      //   throw new Error("Mismatch")
+      // }
+
       return {
         description: value.description,
         actor: value.actor,
-        status: req.body[`step-status-${index + 1}`],
+        status: steps[index].status,
       }
     })
 
-    await req.services.stepService.saveAllSteps(map, uuid)
+    await req.services.stepService.saveAllSteps(updated, uuid)
 
-    return res.redirect(`${URLs.PLAN_SUMMARY}?status=success`)
-  }
-
-  private consoleLog = async (req: Request, res: Response, next: NextFunction) => {
-    console.log(req.body)
-    next()
+    return res.redirect(`${URLs.PLAN_SUMMARY}`)
   }
 
   get = this.render
 
-  post = [this.consoleLog, transformRequest({ body: UpdateGoalPostModel }), this.saveAndRedirect]
+  post = [transformRequest({ body: UpdateGoalPostModel }), this.saveAndRedirect]
 }

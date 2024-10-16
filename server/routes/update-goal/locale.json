@@ -12,6 +12,8 @@
     "viewAllNotes": "View all notes",
     "saveGoalAndSteps": "Save goal and steps",
     "removeGoalFromPlan": "Remove goal from plan",
-    "reviewSteps": "Review steps"
+    "reviewSteps": "Review steps",
+    "noGoalNotes": "There are no notes on this goal yet.",
+    "markAsAchieved": "Mark as achieved"
   }
 }

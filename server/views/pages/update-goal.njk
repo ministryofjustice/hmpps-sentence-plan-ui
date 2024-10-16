@@ -51,9 +51,6 @@
         .flex-width {
             width: 66%
         }
-        .govuk-select {
-            min-width: auto;
-        }
     </style>
 {% endblock %}
 
@@ -144,7 +141,7 @@
 
                   {{ govukDetails({
                     summaryText: locale.viewAllNotes,
-                    text: "We will retrieve the notes."
+                    text: locale.noGoalNotes
                   }) }}
 
                   <div class="govuk-button-group">
@@ -152,7 +149,7 @@
                         {{ locale.saveGoalAndSteps }}
                     </button>
                     <button type="button" class="govuk-button govuk-button--secondary" data-module="govuk-button">
-                        Mark as achieved
+                        {{ locale.markAsAchieved }}
                     </button>
                   </div>
                   <p>
