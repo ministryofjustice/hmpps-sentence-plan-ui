@@ -84,7 +84,7 @@ describe('UpdateGoalController', () => {
       await runMiddlewareChain(controller.post, req, res, next)
 
       expect(req.services.stepService.saveAllSteps).toHaveBeenCalled()
-      expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_SUMMARY}`)
+      expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_OVERVIEW}`)
       expect(res.render).not.toHaveBeenCalled()
       expect(next).not.toHaveBeenCalled()
     })

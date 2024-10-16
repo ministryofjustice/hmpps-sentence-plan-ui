@@ -101,31 +101,14 @@
                 }) }}
             {% endif %}
 
-            {% if data.status == 'success' %}
+            {% if data.status and data.status in ['added', 'changed', 'removed', 'deleted', 'achieved'] %}
                 {{ mojBanner({
                     type: 'success',
-                    text: locale.notificationBanner.addedGoal,
-                    iconFallbackText: 'Success'
-                }) }}
-            {% elseif data.status == 'removed' %}
-                {{ mojBanner({
-                    type: 'success',
-                    text: locale.notificationBanner.removedGoal,
-                    iconFallbackText: 'Success'
-                }) }}
-            {% elseif data.status == 'updated' %}
-                {{ mojBanner({
-                    type: 'success',
-                    text: locale.notificationBanner.changedGoal,
-                    iconFallbackText: 'Success'
-                }) }}
-            {% elseif data.status == 'achieved' %}
-                {{ mojBanner({
-                    type: 'success',
-                    text: locale.notificationBanner.achievedGoal,
+                    text: locale.notificationBanner[data.status+'Goal'],
                     iconFallbackText: 'Success'
                 }) }}
             {% endif %}
+
             {% if data.plan.agreementStatus === 'AGREED' %}
                 <p class="govuk-body">{{ locale.agreePlan }}</p>
             {% elseif data.plan.agreementStatus === 'DO_NOT_AGREE' %}
@@ -141,22 +124,22 @@
                 classes: 'plan-navigation',
                 items: [{
                     text: locale.subNavigation.currentGoals,
-                    href: '/plan-summary?type=current',
+                    href: '/plan?type=current',
                     active: data.type === 'current' or data.type === undefined
                 },
                 {
                     text: locale.subNavigation.futureGoals,
-                    href: '/plan-summary?type=future',
+                    href: '/plan?type=future',
                     active: data.type === 'future'
                 },
                 {
                     text: locale.subNavigation.achievedGoals,
-                    href: '/plan-summary?type=achieved',
+                    href: '/plan?type=achieved',
                     active: data.type === 'achieved'
                 } if achievedGoals.length > 0,
                 {
                     text: locale.subNavigation.removedGoals,
-                    href: '/plan-summary?type=removed',
+                    href: '/plan?type=removed',
                     active: data.type === 'removed'
                 } if removedGoals.length > 0]
             }) }}
@@ -218,8 +201,8 @@
                                 text: locale.goalSummaryCard.actions.draft.addOrChangeSteps
                             },
                             {
-                                href: "/remove-goal/" + goal.uuid + "?type=current",
-                                text: locale.goalSummaryCard.actions.draft.removeGoal
+                                href: "/confirm-delete-goal/" + goal.uuid + "?type=current",
+                                text: locale.goalSummaryCard.actions.draft.deleteGoal
                             }
                         ] %}
                     {% else %}
@@ -235,7 +218,7 @@
                                 },
                                 {
                                     href: "/remove-goal/" + goal.uuid + "?type=current",
-                                    text: locale.goalSummaryCard.actions.active.remove
+                                    text: locale.goalSummaryCard.actions.active.removeGoal
                                 }
                             ] %}
                         {% elseif goal.status === 'ACHIEVED' %}
@@ -249,7 +232,7 @@
                         {% elseif goal.status === 'REMOVED' %}
                             {% set actions = [
                                 {
-                                    href: '#',
+                                    href: '/view-achieved-goal/' + goal.uuid,
                                     text: locale.goalSummaryCard.actions.removed.viewDetails
                                 },
                                 {

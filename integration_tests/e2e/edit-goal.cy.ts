@@ -69,7 +69,7 @@ describe('Change a goal', () => {
       cy.get('input[value="Alcohol use"]').check()
 
       cy.contains('button', 'save').click()
-      cy.url().should('include', '/plan-summary')
+      cy.url().should('include', '/plan')
 
       // Check goal data is saved and rendered correctly
       cy.get('.goal-summary-card')
@@ -83,7 +83,7 @@ describe('Change a goal', () => {
       cy.get('#related-area-of-need-radio-2').check()
 
       cy.contains('button', 'save').click()
-      cy.url().should('include', '/plan-summary')
+      cy.url().should('include', '/plan')
 
       // Check goal data is saved and rendered correctly
       cy.get('.goal-summary-card').and('not.contain', 'Also relates to:')
@@ -95,7 +95,7 @@ describe('Change a goal', () => {
       cy.get('input[value="Health and wellbeing"]').uncheck()
 
       cy.contains('button', 'save').click()
-      cy.url().should('include', '/plan-summary')
+      cy.url().should('include', '/plan')
 
       // Check goal data is saved and rendered correctly
       cy.get('.goal-summary-card').and('contain', 'Also relates to: employment and education')
@@ -106,7 +106,7 @@ describe('Change a goal', () => {
       cy.get('#date-selection-radio-2').check()
 
       cy.contains('button', 'save').click()
-      cy.url().should('include', '/plan-summary')
+      cy.url().should('include', '/plan')
     })
 
     it('Should update goal with custom date', () => {
@@ -119,7 +119,7 @@ describe('Change a goal', () => {
       cy.get('#date-selection-radio-7').check()
       cy.get('#date-selection-custom').type(date)
       cy.contains('button', 'save').click()
-      cy.url().should('include', '/plan-summary')
+      cy.url().should('include', '/plan')
     })
 
     it('Should update goal with future date', () => {
@@ -127,7 +127,7 @@ describe('Change a goal', () => {
       cy.get('label[for="start-working-goal-radio-2"]').should('contain', 'No, it is a future goal').click()
 
       cy.contains('button', 'save').click()
-      cy.url().should('include', '/plan-summary')
+      cy.url().should('include', '/plan')
 
       // Check goal data is saved and rendered correctly
       cy.get('.moj-sub-navigation').and('contain', 'Future goals (1)')

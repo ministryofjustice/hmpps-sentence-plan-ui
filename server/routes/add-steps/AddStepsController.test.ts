@@ -206,7 +206,7 @@ describe('AddStepsController', () => {
       await runMiddlewareChain(controller.post, req, res, next)
 
       expect(req.services.stepService.saveAllSteps).toHaveBeenCalledWith(expectedData, 'some-goal-uuid')
-      expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_SUMMARY}?status=success`)
+      expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_OVERVIEW}?status=success`)
       expect(next).not.toHaveBeenCalled()
     })
 

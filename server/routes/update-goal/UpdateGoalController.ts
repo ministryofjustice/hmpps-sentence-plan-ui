@@ -50,7 +50,7 @@ export default class UpdateGoalController {
 
     await req.services.stepService.saveAllSteps(updated, uuid)
 
-    return res.redirect(`${URLs.PLAN_SUMMARY}`)
+    return res.redirect(`${URLs.PLAN_OVERVIEW}`)
   }
 
   get = this.render

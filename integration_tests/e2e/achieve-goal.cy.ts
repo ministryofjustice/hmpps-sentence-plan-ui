@@ -1,10 +1,10 @@
 import DataGenerator from '../support/DataGenerator'
 import { PlanType } from '../../server/@types/PlanType'
 import { Goal } from '../../server/@types/GoalType'
-import PlanSummary from '../pages/plan-summary'
+import PlanOverview from '../pages/plan-overview'
 
 describe('Achieve goal', () => {
-  const planSummary = new PlanSummary()
+  const planOverview = new PlanOverview()
 
   beforeEach(() => {
     cy.createSentencePlan().then(planDetails => {
@@ -21,7 +21,7 @@ describe('Achieve goal', () => {
           cy.addStepToGoal(goal.uuid, DataGenerator.generateStep({}))
         })
 
-        planSummary.agreePlan()
+        planOverview.agreePlan()
         cy.get('a').contains('Mark as achieved').click()
       })
     })
@@ -42,14 +42,14 @@ describe('Achieve goal', () => {
           cy.addStepToGoal(goal.uuid, DataGenerator.generateStep({}))
         })
 
-        planSummary.agreePlan()
+        planOverview.agreePlan()
         cy.get('a').contains('Mark as achieved').click()
       })
     })
 
     it('Confirm goal achieved successfully without optional note', () => {
       cy.get('button').contains('Confirm').click()
-      cy.url().should('include', '/plan-summary')
+      cy.url().should('include', '/plan')
       cy.get(':nth-child(3) > .moj-sub-navigation__link')
       cy.get('.moj-sub-navigation__link').eq(2).should('contain', 'Achieved goals (1)')
 
@@ -62,15 +62,15 @@ describe('Achieve goal', () => {
     it('Confirm goal achieved successfully with optional note', () => {
       cy.get('#goal-achievement-helped').type('Some optional text in the achievement note field')
       cy.get('button').contains('Confirm').click()
-      cy.url().should('include', '/plan-summary')
+      cy.url().should('include', '/plan')
       cy.get(':nth-child(3) > .moj-sub-navigation__link')
       cy.get('.moj-sub-navigation__link').eq(2).should('contain', 'Achieved goals (1)')
     })
 
     it('Cancel goal achieved and redirect successfully', () => {
       cy.get('a').contains('Do not mark as achieved').click()
-      cy.url().should('include', '/plan-summary')
-      planSummary.getSummaryCard(0).get('a').contains('Mark as achieved')
+      cy.url().should('include', '/plan')
+      planOverview.getSummaryCard(0).get('a').contains('Mark as achieved')
     })
   })
 })
