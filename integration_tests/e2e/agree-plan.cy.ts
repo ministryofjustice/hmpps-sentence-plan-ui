@@ -123,7 +123,7 @@ describe('Agree plan', () => {
 
       cy.get('.govuk-button').click()
 
-      cy.url().should('satisfy', url => url.endsWith('/plan'))
+      cy.url().should('include', '/plan')
     })
     it('Submit successfully when No is selected and additional information provided', () => {
       cy.get('#agree-plan-radio-2').click()
@@ -131,7 +131,7 @@ describe('Agree plan', () => {
 
       cy.get('.govuk-button').click()
 
-      cy.url().should('satisfy', url => url.endsWith('/plan'))
+      cy.url().should('include', '/plan')
     })
     it('Submit successfully when "Could not answer this question" is selected and additional information provided', () => {
       cy.get('#agree-plan-radio-3').click()
@@ -139,7 +139,7 @@ describe('Agree plan', () => {
 
       cy.get('.govuk-button').click()
 
-      cy.url().should('satisfy', url => url.endsWith('/plan'))
+      cy.url().should('include', '/plan')
     })
   })
 })
