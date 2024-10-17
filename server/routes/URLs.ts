@@ -8,6 +8,7 @@ export default {
   GOALS_ORDER: '/goals/:type/:uuid/:operation',
   REMOVE_GOAL: '/remove-goal/:uuid',
   DELETE_GOAL: '/confirm-delete-goal/:uuid',
+  UPDATE_GOAL: '/update-goal/:uuid',
   EDIT_GOAL: '/edit-goal/:uuid',
   ACHIEVE_GOAL: '/confirm-achieved-goal/:uuid',
   AGREE_PLAN: '/agree-plan',

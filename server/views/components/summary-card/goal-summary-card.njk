@@ -71,6 +71,8 @@
                                 <strong class="govuk-tag govuk-tag--green">{{ locale.stepsList.status.completed }}</strong>
                             {% elseif step.status == 'CANNOT_BE_DONE_YET' %}
                                 <strong class="govuk-tag govuk-tag--purple">{{ locale.stepsList.status.cannotBeDoneYet }}</strong>
+                            {% elseif step.status == 'NO_LONGER_NEEDED' %}
+                                <strong class="govuk-tag govuk-tag--yellow">{{ locale.stepsList.status.noLongerNeeded }}</strong>
                             {% endif %}
                         </td>
                     </tr>
