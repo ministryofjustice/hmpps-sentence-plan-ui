@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
+import createError from 'http-errors'
 import locale from './locale.json'
 import ReferentialDataService from '../../services/sentence-plan/referentialDataService'
 import URLs from '../URLs'
@@ -36,17 +37,12 @@ export default class UpdateGoalController {
   private saveAndRedirect = async (req: Request, res: Response, next: NextFunction) => {
     const { uuid } = req.params
     const { steps } = req.body
-    let error
 
     const goal = await req.services.goalService.getGoal(uuid)
 
-    goal.steps.forEach((step: StepModel, index) => {
-      if (step.uuid !== steps[index].uuid) {
-        error = new Error('different steps were submitted')
-      }
-    })
-
-    if (error) return next(error)
+    if (goal.steps.some((step: StepModel, index) => step.uuid !== steps[index].uuid)) {
+      return next(createError(400, 'different steps were submitted'))
+    }
 
     const updated: NewStep[] = goal.steps.map((value, index) => {
       return {
