@@ -49,7 +49,7 @@ describe('Achieve goal', () => {
 
     it('Confirm goal achieved successfully without optional note', () => {
       cy.get('button').contains('Confirm').click()
-      cy.url().should('include', '/plan')
+      cy.url().should('include', 'plan?type=achieved&status=achieved')
       cy.get(':nth-child(3) > .moj-sub-navigation__link')
       cy.get('.moj-sub-navigation__link').eq(2).should('contain', 'Achieved goals (1)')
 
@@ -62,14 +62,14 @@ describe('Achieve goal', () => {
     it('Confirm goal achieved successfully with optional note', () => {
       cy.get('#goal-achievement-helped').type('Some optional text in the achievement note field')
       cy.get('button').contains('Confirm').click()
-      cy.url().should('include', '/plan')
+      cy.url().should('include', 'plan?type=achieved&status=achieved')
       cy.get(':nth-child(3) > .moj-sub-navigation__link')
       cy.get('.moj-sub-navigation__link').eq(2).should('contain', 'Achieved goals (1)')
     })
 
     it('Cancel goal achieved and redirect successfully', () => {
       cy.get('a').contains('Do not mark as achieved').click()
-      cy.url().should('include', '/plan')
+      cy.url().should('include', 'plan?type=current')
       planOverview.getSummaryCard(0).get('a').contains('Mark as achieved')
     })
   })
