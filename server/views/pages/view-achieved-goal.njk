@@ -57,12 +57,20 @@
             </table>
 
             <div id="achieved-goal-notes" class="govuk-!-margin-top-8">
-            {{ govukDetails({
-                summaryText: "View all notes",
-                html: '<h4>[DD Month YYYY] by [Practitioner]</h4>
-                <p class="govuk-body">Goal marked as achieved on [date]</p>
-                <p>Answer from "How has achieving this goal helped?"</p>'
-            }) }}
+                <details class="govuk-details">
+                    <summary class="govuk-details__summary">
+                        <span class="govuk-details__summary-text">
+                          View all notes
+                        </span>
+                    </summary>
+                    <div class="govuk-details__text">
+                        {% for note in data.goal.notes %}
+                            <h4>{{ note.createdDate | formatSimpleDate }} by {{ note.createdBy | convertToTitleCase }}</h4>
+                            <p>Goal marked as {{ note.type | lower }} on {{ note.createdDate | formatSimpleDate }}</p>
+                            <p>{{ note.note }}</p>
+                        {% endfor %}
+                    </div>
+                </details>
             </div>
 
 

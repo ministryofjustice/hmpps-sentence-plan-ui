@@ -4,7 +4,7 @@ import nunjucks from 'nunjucks'
 import express from 'express'
 import { ApplicationInfo } from '../applicationInfo'
 import config from '../config'
-import { initialiseName, mergeDeep } from './utils'
+import { initialiseName, mergeDeep, convertToTitleCase } from './utils'
 import commonLocale from './commonLocale.json'
 
 const production = process.env.NODE_ENV === 'production'
@@ -64,6 +64,7 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
   })
 
   njkEnv.addFilter('initialiseName', initialiseName)
+  njkEnv.addFilter('convertToTitleCase', convertToTitleCase)
 
   // Filter to format date as 'Month YYYY'
   njkEnv.addFilter('formatMonthYear', date => {

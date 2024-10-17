@@ -65,6 +65,10 @@ describe('Achieve goal', () => {
       cy.url().should('include', 'plan?type=achieved&status=achieved')
       cy.get(':nth-child(3) > .moj-sub-navigation__link')
       cy.get('.moj-sub-navigation__link').eq(2).should('contain', 'Achieved goals (1)')
+
+      cy.get('.moj-sub-navigation__link').eq(2).click()
+      planOverview.getSummaryCard(0).get('a').contains('View details').click()
+      cy.get('.govuk-details__text').should('contain', 'Some optional text in the achievement note field')
     })
 
     it('Cancel goal achieved and redirect successfully', () => {
