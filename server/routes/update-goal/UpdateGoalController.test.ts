@@ -114,5 +114,17 @@ describe('UpdateGoalController', () => {
 
       expect(next).toHaveBeenCalledWith(new Error('different steps were submitted'))
     })
+
+    it('should redirect to the same page when validation errors occur', async () => {
+      req.body = {
+        'step-status-1': 'NOT_A_REAL_STATUS',
+        'step-uuid-1': testStep.uuid,
+      }
+
+      await runMiddlewareChain(controller.post, req, res, next)
+
+      expect(res.render).toHaveBeenCalled()
+      expect(next).not.toHaveBeenCalled()
+    })
   })
 })

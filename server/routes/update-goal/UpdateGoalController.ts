@@ -36,14 +36,17 @@ export default class UpdateGoalController {
   private saveAndRedirect = async (req: Request, res: Response, next: NextFunction) => {
     const { uuid } = req.params
     const { steps } = req.body
+    let error
 
     const goal = await req.services.goalService.getGoal(uuid)
 
     goal.steps.forEach((step: StepModel, index) => {
       if (step.uuid !== steps[index].uuid) {
-        next(new Error('different steps were submitted'))
+        error = new Error('different steps were submitted')
       }
     })
+
+    if (error) return next(error)
 
     const updated: NewStep[] = goal.steps.map((value, index) => {
       return {

@@ -44,7 +44,7 @@ afterEach(() => {
 })
 
 describe(`GET ${URLs.UPDATE_GOAL}`, () => {
-  it('should render remove goal page', () => {
+  it('should render update goal page', () => {
     return request(app)
       .get(URLs.UPDATE_GOAL)
       .expect('Content-Type', /html/)
