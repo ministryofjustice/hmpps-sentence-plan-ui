@@ -4,6 +4,9 @@ import ReferentialDataService from '../../services/sentence-plan/referentialData
 import URLs from '../URLs'
 import transformRequest from '../../middleware/transformMiddleware'
 import UpdateGoalPostModel from './models/UpdateGoalPostModel'
+import StepModel from '../shared-models/StepModel'
+import validateRequest from '../../middleware/validationMiddleware'
+import { NewStep } from '../../@types/StepType'
 
 export default class UpdateGoalController {
   constructor(private readonly referentialDataService: ReferentialDataService) {}
@@ -36,11 +39,13 @@ export default class UpdateGoalController {
 
     const goal = await req.services.goalService.getGoal(uuid)
 
-    const updated = goal.steps.map((value, index) => {
-      // if (value.uuid != steps[index].uuid) {
-      //   throw new Error("Mismatch")
-      // }
+    goal.steps.forEach((step: StepModel, index) => {
+      if (step.uuid !== steps[index].uuid) {
+        next(new Error('different steps were submitted'))
+      }
+    })
 
+    const updated: NewStep[] = goal.steps.map((value, index) => {
       return {
         description: value.description,
         actor: value.actor,
@@ -53,7 +58,19 @@ export default class UpdateGoalController {
     return res.redirect(`${URLs.PLAN_OVERVIEW}`)
   }
 
+  private handleValidationErrors = (req: Request, res: Response, next: NextFunction) => {
+    if (Object.keys(req.errors.body).length) {
+      return this.render(req, res, next)
+    }
+    return next()
+  }
+
   get = this.render
 
-  post = [transformRequest({ body: UpdateGoalPostModel }), this.saveAndRedirect]
+  post = [
+    transformRequest({ body: UpdateGoalPostModel }),
+    validateRequest(),
+    this.handleValidationErrors,
+    this.saveAndRedirect,
+  ]
 }

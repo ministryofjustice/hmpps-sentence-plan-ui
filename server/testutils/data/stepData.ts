@@ -6,7 +6,7 @@ export const testNewStep: NewStep = {
   status: StepStatus.NOT_STARTED,
 }
 export const testStep: Step = {
-  uuid: 'a-un1qu3-t3st-Uu1d',
+  uuid: 'a-un1qu3-t3st-Uu1da-un1qu3-t3st-Uu1d',
   createdDate: new Date().toISOString().substring(0, 10),
   ...testNewStep,
 } as Step

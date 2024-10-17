@@ -1,19 +1,22 @@
 /* eslint-disable max-classes-per-file */
 import { Expose, plainToInstance, Transform } from 'class-transformer'
+import { IsEnum, IsNotEmpty, Length, ValidateNested } from 'class-validator'
 import { StepStatus } from '../../../@types/StepType'
 
 export class StepModel {
-  description: string
+  key: string
 
-  actor: string
-
+  @IsEnum(StepStatus)
   status: StepStatus
 
+  @IsNotEmpty()
+  @Length(36)
   uuid: string
 }
 
 export default class UpdateGoalPostModel {
   @Expose()
+  @ValidateNested()
   @Transform(({ obj }) => {
     return Object.keys(obj)
       .filter(key => key.startsWith('step-status-'))

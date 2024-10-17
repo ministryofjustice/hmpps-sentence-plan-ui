@@ -88,5 +88,31 @@ describe('UpdateGoalController', () => {
       expect(res.render).not.toHaveBeenCalled()
       expect(next).not.toHaveBeenCalled()
     })
+
+    it('should call next with an error if saveAllSteps fails', async () => {
+      req.body = {
+        'step-status-1': StepStatus.IN_PROGRESS,
+        'step-uuid-1': testStep.uuid,
+      }
+
+      const saveError = new Error('Save failed')
+      req.services.stepService.saveAllSteps = jest.fn().mockRejectedValue(saveError)
+
+      await runMiddlewareChain(controller.post, req, res, next)
+
+      expect(next).toHaveBeenCalledWith(saveError)
+      expect(res.render).not.toHaveBeenCalled()
+    })
+
+    it('should have redirected to the error page when incorrect uuid submitted', async () => {
+      req.body = {
+        'step-status-1': 'IN_PROGRESS',
+        'step-uuid-1': 'thisuuid-wasnt-what-waas-expected0000',
+      }
+
+      await runMiddlewareChain(controller.post, req, res, next)
+
+      expect(next).toHaveBeenCalledWith(new Error('different steps were submitted'))
+    })
   })
 })
