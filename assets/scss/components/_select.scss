@@ -1,3 +1,7 @@
 .govuk-select {
-  min-width: auto
+
+  &--auto-width {
+    min-width: auto
+  }
+
 }
