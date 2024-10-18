@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from 'express'
-import { HttpError } from 'http-errors'
 import UpdateGoalController from './UpdateGoalController'
 import mockReq from '../../testutils/preMadeMocks/mockReq'
 import mockRes from '../../testutils/preMadeMocks/mockRes'
