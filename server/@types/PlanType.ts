@@ -23,7 +23,8 @@ export type PlanType = {
   uuid: string
   status: PlanStatus
   agreementStatus: PlanAgreementStatus
-  createdDate: string
-  updatedDate: string
+  createdDate: Date
+  updatedDate: Date
+  agreementDate: Date
   goals: Goal[]
 }
