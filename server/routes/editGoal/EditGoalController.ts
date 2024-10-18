@@ -45,7 +45,7 @@ export default class EditGoalController {
 
     try {
       await req.services.goalService.updateGoal(processedData, goalUuid)
-      return res.redirect(`${URLs.PLAN_SUMMARY}?status=updated&type=${type}`)
+      return res.redirect(`${URLs.PLAN_OVERVIEW}?status=updated&type=${type}`)
     } catch (e) {
       return next(e)
     }

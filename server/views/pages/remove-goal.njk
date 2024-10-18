@@ -2,6 +2,10 @@
 {% from "../components/summary-card/goal-summary-card.njk" import goalSummaryCard %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
+{% set locale = interpolate(locale, {
+    goalUuid: data.goal.uuid
+}) %}
+
 {% block pageTitle %}
     {% if not errors %}
         {{ locale.page.title }}
@@ -19,6 +23,11 @@
         <a href="#" class="govuk-back-link">Back</a>
         <h1 class="govuk-heading-l">{{ locale.mainHeading.title }}</h1>
 
+        {%  if(data.actionType == "delete") %}
+            <p>{{  locale.pageBodyOne }}</p>
+            <p>{{  locale.pageBodyTwo | safe }}</p>
+        {% endif %}
+
         {{ goalSummaryCard({
             goal: data.goal,
             locale: locale
@@ -32,14 +41,9 @@
                 {{ govukButton({
                     text: locale.removeGoalButtonText,
                     name: "action",
-                    value: "remove"
+                    value: data.actionType
                 }) }}
-                {{ govukButton({
-                    text: locale.cancelButtonText,
-                    name: "action",
-                    classes: "govuk-button--secondary",
-                    value: "cancelRemove"
-                }) }}
+                <a class="govuk-link govuk-link--no-visited-state" href="/plan?type={{ data.type }}">{{ locale.cancelButtonText }}</a>
             </div>
         </form>
     </div>

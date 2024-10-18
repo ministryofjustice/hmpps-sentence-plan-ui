@@ -29,7 +29,7 @@ describe('GET /', () => {
 
     return request(app)
       .get('/')
-      .expect('Location', URLs.PLAN_SUMMARY)
+      .expect('Location', URLs.PLAN_OVERVIEW)
       .expect(res => {
         expect(302)
         expect(auditService.logPageView).toHaveBeenCalledWith(Page.EXAMPLE_PAGE, {

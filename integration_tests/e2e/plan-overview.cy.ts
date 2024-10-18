@@ -1,9 +1,9 @@
-import PlanSummary from '../pages/plan-summary'
+import PlanOverview from '../pages/plan-overview'
 import { PlanType } from '../../server/@types/PlanType'
 import DataGenerator from '../support/DataGenerator'
 
-describe('View Plan Summary', () => {
-  const planSummary = new PlanSummary()
+describe('View Plan Overview', () => {
+  const planOverview = new PlanOverview()
 
   beforeEach(() => {
     cy.createSentencePlan().then(planDetails => {
@@ -13,7 +13,7 @@ describe('View Plan Summary', () => {
   })
 
   it('Should have a Create goal button and it should take to create goal', () => {
-    cy.visit('/plan-summary')
+    cy.visit('/plan')
     cy.contains('a', 'Create goal').click()
     cy.url().should('include', '/create-goal/')
   })
@@ -23,18 +23,18 @@ describe('View Plan Summary', () => {
   })
 
   it('Should have text saying no goals to work on now', () => {
-    cy.visit('/plan-summary')
+    cy.visit('/plan')
     cy.get('.govuk-grid-column-full').should('contain', 'does not have any goals to work on now. You can either:')
   })
 
   it('Should have text saying no future goals present', () => {
-    cy.visit('/plan-summary')
+    cy.visit('/plan')
     cy.get('.moj-sub-navigation__link').contains('Future goals').click()
     cy.get('.govuk-grid-column-full').should('contain', 'does not have any future goals in their plan')
   })
 
   it('Should result in error when agree plan without goals', () => {
-    cy.visit('/plan-summary')
+    cy.visit('/plan')
     cy.get('button').contains('Agree plan').click()
     cy.title().should('contain', 'Error:')
     cy.get('.govuk-error-summary').should('contain', 'You must add steps to the goals Sam is working on now')
@@ -43,7 +43,7 @@ describe('View Plan Summary', () => {
   it('Plan with goals and no steps should result into error when Agree plan', () => {
     cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
       cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal({ title: 'Test Accommodation' }))
-      cy.visit('/plan-summary?source=nav')
+      cy.visit('/plan?source=nav')
     })
 
     cy.get('button').contains('Agree plan').click()
@@ -54,7 +54,7 @@ describe('View Plan Summary', () => {
   it('Plan with goals and no steps should have Add steps link and takes to takes to add-steps page', () => {
     cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
       cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal({ title: 'Test Accommodation' }))
-      cy.visit('/plan-summary?source=nav')
+      cy.visit('/plan?source=nav')
     })
     cy.contains('a', 'Add steps').click()
     cy.url().should('include', '/add-steps')
@@ -63,18 +63,18 @@ describe('View Plan Summary', () => {
   it('Plan with goals and steps should have required links and status as not started', () => {
     cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
       cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal({ title: 'Test Accommodation' }))
-      cy.visit('/plan-summary?source=nav')
+      cy.visit('/plan?source=nav')
     })
     cy.contains('a', 'Add steps').click()
     cy.get('#step-description-1-autocomplete').type('Accommodation')
 
     cy.get('button').contains('Save and continue').click()
-    cy.url().should('include', '/plan-summary?status=success')
+    cy.url().should('include', '/plan?status=success')
     cy.get('.goal-summary-card')
     cy.contains('.goal-summary-card', 'Accommodation').within(() => {
       cy.contains('a', 'Change goal')
       cy.contains('a', 'Add or change steps')
-      cy.contains('a', 'Remove goal')
+      cy.contains('a', 'Delete')
       cy.get('.govuk-tag').contains('Not started')
     })
   })
@@ -82,7 +82,7 @@ describe('View Plan Summary', () => {
   it('Plan with valid goals and steps should go to agree-plan', () => {
     cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
       cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal({ title: 'Test Accommodation' }))
-      cy.visit('/plan-summary?source=nav')
+      cy.visit('/plan?source=nav')
     })
     cy.contains('a', 'Add steps').click()
     cy.get(`#step-description-1-autocomplete`).type('Accommodation')
@@ -97,17 +97,17 @@ describe('View Plan Summary', () => {
       ;[1, 2, 3].forEach(i => {
         cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal({ title: `Test Accommodation ${i}` }))
       })
-      cy.visit('/plan-summary?source=nav')
+      cy.visit('/plan?source=nav')
     })
 
-    planSummary.clickUpOnSummaryCard(1)
+    planOverview.clickUpOnSummaryCard(1)
 
-    planSummary
+    planOverview
       .getSummaryCard(0)
       .should('contain', 'Test Accommodation 2')
       .and('contain', 'Move goal down')
       .and('not.contain', 'Move goal up')
-    planSummary
+    planOverview
       .getSummaryCard(1)
       .should('contain', 'Test Accommodation 1')
       .and('contain', 'Move goal down')
@@ -119,17 +119,17 @@ describe('View Plan Summary', () => {
       ;[1, 2, 3].forEach(i => {
         cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal({ title: `Test Accommodation ${i}` }))
       })
-      cy.visit('/plan-summary?source=nav')
+      cy.visit('/plan?source=nav')
     })
 
-    planSummary.clickDownOnSummaryCard(1)
+    planOverview.clickDownOnSummaryCard(1)
 
-    planSummary
+    planOverview
       .getSummaryCard(1)
       .should('contain', 'Test Accommodation 3')
       .and('contain', 'Move goal down')
       .and('contain', 'Move goal up')
-    planSummary
+    planOverview
       .getSummaryCard(2)
       .should('contain', 'Test Accommodation 2')
       .and('contain', 'Move goal up')
