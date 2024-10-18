@@ -38,7 +38,8 @@
           "notStarted": "Not started",
           "inProgress": "In progress",
           "completed": "Completed",
-          "cannotBeDoneYet": "Cannot be done yet"
+          "cannotBeDoneYet": "Cannot be done yet",
+          "noLongerNeeded": "No longer needed"
         }
       },
       "areaOfNeed": {

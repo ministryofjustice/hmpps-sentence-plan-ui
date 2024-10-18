@@ -77,16 +77,9 @@
             text: locale.header.agreePlanButton,
             type: 'submit',
             value: 'agree-plan'
-        } if data.plan.agreementStatus === 'DRAFT',
-        {
-            text: locale.header.recordProgressButton,
-            type: 'submit',
-            value: '#'
-        } if data.plan.agreementStatus !== 'DRAFT'
+        } if data.plan.agreementStatus === 'DRAFT'
     ]
 } %}
-
-
 
 {% block bodyStart %}
     <div id="top"></div>
@@ -216,7 +209,7 @@
                         {% if goal.status === 'ACTIVE' or goal.status === 'FUTURE' %}
                             {% set actions = [
                                 {
-                                    href: '#',
+                                    href: "/update-goal/" + goal.uuid,
                                     text: locale.goalSummaryCard.actions.active.update
                                 },
                                 {
