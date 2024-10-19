@@ -113,7 +113,7 @@
     "prom-client": "^15.1.1",
     "redis": "^4.6.13",
     "reflect-metadata": "^0.2.2",
-    "superagent": "^8.1.2",
+    "superagent": "^10.1.1",
     "url-value-parser": "^2.2.0",
     "uuid": "^10.0.0"
   },
