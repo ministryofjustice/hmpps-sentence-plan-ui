@@ -1,9 +1,23 @@
 declare namespace Cypress {
-  interface Chainable {
-    /**
-     * Custom command to signIn. Set failOnStatusCode to false if you expect and non 200 return code
-     * @example cy.signIn({ failOnStatusCode: boolean })
-     */
-    signIn(options?: { failOnStatusCode: boolean }): Chainable<AUTWindow>
+  import { NewStep, Step } from '../server/@types/StepType'
+  import { NewGoal } from '../server/@types/NewGoalType'
+  import { Goal } from '../server/@types/GoalType'
+
+  interface Chainable<T> {
+    get<S = JQuery<HTMLElement>>(
+      alias: string,
+      options?: Partial<Loggable & Timeoutable & Withinable & Shadow>,
+    ): Chainable<S>
+
+    // Handover/Auth
+    openSentencePlan(oasysAssessmentPk: string): Chainable<T>
+    createSentencePlan(): Chainable<T>
+
+    // API
+    addGoalToPlan(planUuid: string, goal: NewGoal): Chainable<Goal>
+    addStepToGoal(goalUuid: string, step: NewStep): Chainable<Step>
+
+    // Accessibility
+    checkAccessibility(): Chainable
   }
 }

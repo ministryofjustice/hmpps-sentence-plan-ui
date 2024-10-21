@@ -1,0 +1,165 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "hmpps/components/date-picker/macro.njk" import hmppsDatePicker %}
+{% from "moj/components/side-navigation/macro.njk" import mojSideNavigation %}
+{% from "../components/error-summary/error-summary.njk" import errorSummary %}
+
+{% set locale = interpolate(locale, {
+    goal: data.goal
+}) %}
+
+{% block head %}
+    {{ super() }}
+    <style nonce="{{ cspNonce }}">
+        :root {
+            --autocomplete-menu-content: "{{ locale.step.description.autocompleteHint }}";
+        }
+    </style>
+{% endblock %}
+
+{% block pageTitle %}
+    {% if not errors %}
+        {{ locale.page.title }}
+    {% else %}
+        {{ locale.page.errorTitle }}
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<a class="govuk-back-link" href="{{ data.backLinkUrl }}">{{ locale.common.backLink.text }}</a>
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <span class="govuk-caption-l">{{ locale.mainHeading.caption }}</span>
+        <h1 class="govuk-heading-l">{{ locale.mainHeading.title }}</h1>
+
+        {% set summaryContentHtml %}
+            <h3 class="govuk-heading-s">{{ locale.detail.header1 }}</h3>
+            <p class="govuk-body">{{ locale.detail.detail1 }}</p>
+            <h3 class="govuk-heading-s">{{ locale.detail.header2 }}</h3>
+            <p class="govuk-body">{{ locale.detail.detail2 }}</p>
+            <h3 class="govuk-heading-s">{{ locale.detail.header3 }}</h3>
+            <p class="govuk-body">{{ locale.detail.detail3 }}</p>
+            <h3 class="govuk-heading-s">{{ locale.detail.header4 }}</h3>
+            <p class="govuk-body">{{ locale.detail.detail4 }}</p>
+        {% endset %}
+
+        {{ govukDetails({
+            summaryText: locale.detail.heading,
+            html: summaryContentHtml
+        }) }}
+    </div>
+</div>
+
+<form id="create-goal-form" method="POST">
+    <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+    <input type="hidden" id="_areaOfNeed" value="{{ data.areaOfNeed }}"/>
+    {% set steps = data.form.steps if data.form.steps and data.form.steps.length > 0 else [{}] %}
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            <dl class="add-steps-list govuk-summary-list">
+                <div class="govuk-summary-list__row">
+                    <dt class="govuk-summary-list__value govuk-visually-hidden--mobile">
+                        <label class="govuk-label">{{ locale.step.actor.label }}</label>
+                        <span class="govuk-hint">{{ locale.step.actor.hint }}</span>
+                    </dt>
+                    <dt class="govuk-summary-list__value govuk-visually-hidden--mobile">
+                        <label class="govuk-label">{{ locale.step.description.label }}</label>
+                        <span class="govuk-hint">{{ locale.step.description.hint }}</span>
+                    </dt>
+                </div>
+                {% for step in steps %}
+                    <div class="govuk-summary-list__row">
+                        <dt class="govuk-summary-list__value">
+                            {% set actorItemsList = [] %}
+                            {% for actorOption in locale.step.actor.options %}
+                                {% set actorItemsList = actorItemsList.concat({
+                                    value: actorOption,
+                                    text: actorOption,
+                                    selected: step.actor === actorOption
+                                }) %}
+                            {% endfor %}
+
+                            {{ govukSelect({
+                                id: "step-actor-" + loop.index,
+                                name: "step-actor-" + loop.index,
+                                label: {
+                                    text: locale.step.actor.label,
+                                    classes: 'govuk-visually-hidden--desktop'
+                                },
+                                hint: {
+                                    text: locale.step.actor.hint,
+                                    classes: 'govuk-visually-hidden--desktop'
+                                },
+                                items: actorItemsList
+                            }) }}
+                        </dt>
+                        <dt class="govuk-summary-list__value">
+                            <input type="hidden"
+                                   id="step-status-{{ loop.index }}",
+                                   name="step-status-{{ loop.index }}",
+                                   value="{{ step.status | default('NOT_STARTED') }}"/>
+
+                            {% set errorMessage = false %}
+
+                            {% if errors.body['steps.' + loop.index0 + '.description' ].isNotEmpty %}
+                                {% set errorMessage = {
+                                    'text': locale.errors['step-description'].isNotEmpty
+                                } %}
+                            {% endif %}
+
+                            {{ govukInput({
+                                formGroup: {
+                                    classes: "step-description-" + loop.index + "-autocomplete-wrapper"
+                                },
+                                label: {
+                                    text: locale.step.description.label,
+                                    classes: 'govuk-visually-hidden--desktop'
+                                },
+                                hint: {
+                                    text: locale.step.description.hint,
+                                    classes: 'govuk-visually-hidden--desktop'
+                                },
+                                errorMessage: errorMessage,
+                                id: "step-description-" + loop.index,
+                                name: "step-description-" + loop.index,
+                                value: step.description
+                            }) }}
+                        </dt>
+                        <dt class="govuk-summary-list__value">
+                            <button value="remove-step-{{ loop.index }}" type="submit" name="action" class="govuk-link govuk-!-margin-bottom-0" data-module="govuk-button">
+                                {{ locale.removeStepLinkButton }}
+                            </button>
+                        </dt>
+                    </div>
+                {% endfor %}
+            </dl>
+        </div>
+    </div>
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            {{ govukButton({
+                text: locale.addAnotherButton,
+                name: "action",
+                value: "add-step",
+                classes: "govuk-button--secondary"
+            }) }}
+        </div>
+    </div>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            {{ govukButton({
+                name: "action",
+                value: "save",
+                text: locale.saveButtonText
+            }) }}
+        </div>
+    </div>
+</form>
+{% endblock %}

@@ -1,45 +1,45 @@
-import { ClassConstructor, plainToInstance } from 'class-transformer'
 import { validateSync, ValidationError } from 'class-validator'
-import { Request, Response, NextFunction } from 'express'
+import { NextFunction, Request, Response } from 'express'
+import RequestDataSources from '../@types/RequestDataSources'
+import 'reflect-metadata'
 
-enum DataSources {
-  BODY = 'body',
-  PARAMS = 'params',
-  QUERY = 'query',
+export function getValidationErrors(data: object) {
+  function buildPrettyError(errorsInner: ValidationError[], path: string = ''): Record<string, any> {
+    return errorsInner.reduce((accumulator, error) => {
+      const currentPath = path ? `${path}.${error.property}` : error.property
+
+      const updatedAccumulator = {
+        ...accumulator,
+        ...(error.constraints && {
+          [currentPath]: Object.keys(error.constraints).reduce(
+            (constraintAccumulator, key) => ({ ...constraintAccumulator, [key]: true }),
+            {} as Record<string, boolean>,
+          ),
+        }),
+      }
+
+      if (error.children && error.children.length > 0) {
+        const childErrors = buildPrettyError(error.children, currentPath)
+        return { ...updatedAccumulator, ...childErrors }
+      }
+
+      return updatedAccumulator
+    }, {})
+  }
+
+  const errors = validateSync(data)
+  return buildPrettyError(errors)
 }
 
-function simplifyValidationErrors(errors: ValidationError[]): any {
-  const result: any = {}
-  errors.forEach(error => {
-    result[error.property] = error.constraints
-      ? Object.keys(error.constraints).reduce((acc, key) => ({ ...acc, [key]: true }), {})
-      : {}
-  })
-  return result
-}
-
-function validatePart<T>(req: Request, dtoClass: ClassConstructor<T>, source: DataSources) {
-  const dtoInstance = plainToInstance(dtoClass, req[source])
-  const errors = validateSync(dtoInstance as object)
-  req[source] = dtoInstance
-  req.errors[source] = simplifyValidationErrors(errors)
-}
-
-export default function validate(data: { [K in DataSources]?: ClassConstructor<any> }) {
+export default function validateRequest() {
   return (req: Request, res: Response, next: NextFunction) => {
     if (!req.errors) {
       req.errors = {}
     }
 
-    if (data.body) {
-      validatePart(req, data.body, DataSources.BODY)
-    }
-    if (data.params) {
-      validatePart(req, data.params, DataSources.PARAMS)
-    }
-    if (data.query) {
-      validatePart(req, data.query, DataSources.QUERY)
-    }
+    Object.values(RequestDataSources).forEach(source => {
+      req.errors[source] = req[source]?.constructor?.name !== 'Object' ? getValidationErrors(req[source]) : {}
+    })
 
     return next()
   }

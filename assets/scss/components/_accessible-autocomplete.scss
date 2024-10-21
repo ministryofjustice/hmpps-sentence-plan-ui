@@ -1,0 +1,10 @@
+.autocomplete__menu {
+  &:before {
+    content: var(--autocomplete-menu-content);
+    display: block;
+    background-color: govuk-colour("light-grey");
+    padding: govuk-spacing(1);
+    border-bottom: 1px solid govuk-colour("mid-grey");
+    font-weight: bold;
+  }
+}

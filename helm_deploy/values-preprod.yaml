@@ -9,6 +9,7 @@ generic-service:
 
   env:
     INGRESS_URL: "https://hmpps-sentence-plan-ui-preprod.hmpps.service.justice.gov.uk"
+    SENTENCE_PLAN_API_URL: "https://sentence-plan-api-preprod.hmpps.service.justice.gov.uk"
     HMPPS_AUTH_URL: "https://sign-in-preprod.hmpps.service.justice.gov.uk/auth"
     HMPPS_ARNS_HANDOVER_URL: "https://arns-handover-service-preprod.hmpps.service.justice.gov.uk"
     MANAGE_USERS_API_URL: "https://manage-users-api-preprod.hmpps.service.justice.gov.uk"

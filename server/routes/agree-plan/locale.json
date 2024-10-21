@@ -1,0 +1,33 @@
+{
+  "en": {
+    "page": {
+      "title": "Do they agree to this plan? - {{ applicationName }}",
+      "errorTitle": "Error: Do they agree to this plan? - {{ applicationName }}"
+    },
+    "mainHeading": {
+      "title": "Does {{ subject.givenName }} agree to this plan?",
+      "hint": "{{ subject.givenName }} must answer this question, or you must record why {{ subject.givenName }} could not."
+    },
+    "agreePlanOptions": {
+      "yes": "Yes, {{ subject.givenName }} agrees",
+      "no": "No, {{ subject.givenName }} does not agree",
+      "couldNotAnswer": "{{ subject.givenName }} could not answer this question",
+      "enterDetails": "Enter details"
+    },
+    "notes": {
+      "label": "Add any notes (optional)"
+    },
+    "agreePlanButton": "Agree plan with {{ subject.givenName }}",
+    "errors": {
+      "agree-plan-radio": {
+        "isIn": "Select if they agree to the plan"
+      },
+      "does-not-agree-details": {
+        "isNotEmpty": "Enter details about why they do not agree"
+      },
+      "could-not-answer-details": {
+        "isNotEmpty": "Enter details about why they cannot answer"
+      }
+    }
+  }
+}

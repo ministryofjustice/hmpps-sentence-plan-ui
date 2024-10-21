@@ -1,6 +1,11 @@
 {
   "en": {
-    "title": "About {POP_NAME}",
+    "page": {
+      "title": "About - {{ applicationName }}"
+    },
+    "mainHeading": {
+      "title": "About {{ subject.givenName }}"
+    },
     "goalsToAchieve": {
       "title": "Goals to achieve",
       "areaOfNeedHeading": "Area of need",
@@ -8,6 +13,10 @@
       "createGoalLink": "Create goal",
       "viewPreviousGoalsLink": "View previous goals",
       "noPreviousGoals": "No previous goals"
+    },
+    "subNav": {
+      "about": "About",
+      "summary": "Plan summary"
     }
   }
 }

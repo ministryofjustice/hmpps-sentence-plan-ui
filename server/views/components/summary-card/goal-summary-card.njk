@@ -1,0 +1,106 @@
+{% from "./summary-card.njk" import summaryCard %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "moj/components/button-menu/macro.njk" import mojButtonMenu %}
+{% from "govuk/components/tag/macro.njk" import govukTag %}
+{% from "govuk/components/error-message/macro.njk" import govukErrorMessage %}
+
+{% macro goalSummaryCard(params) %}
+    {% set relatedAreasOfNeed = [] %}
+    {% for areaOfNeed in params.goal.relatedAreasOfNeed %}
+        {% set relatedAreasOfNeed = relatedAreasOfNeed.concat(areaOfNeed.name) %}
+    {% endfor %}
+
+    {% set locale = interpolate(params.locale.common.goalSummaryCard, {
+        goal: goal,
+        areaOfNeed: params.goal.areaOfNeed.name | lower,
+        relatedAreasOfNeed: relatedAreasOfNeed | sort | join(', ') | lower,
+        targetDate: (params.goal.targetDate | formatSimpleDate) if params.goal.targetDate,
+        achievedDate: (params.goal.statusDate | formatSimpleDate) if params.goal.statusDate
+    }) %}
+
+    <div class="goal-summary-card {%- if params.errorMessage %} goal-summary-card--error {% endif %}">
+        {% if params.errorMessage %}
+            {{govukTag({
+                text: params.errorMessage.state,
+                classes: "goal-summary-card__state-tag govuk-tag--red"
+            })}}
+        {% endif %}
+
+        {% call summaryCard({
+            title: {
+                text:  params.goal.title
+            },
+            actions: {
+                items: params.actions
+            }
+        }) %}
+        <div class="goal-summary-card__info">
+            {% if params.goal.targetDate and params.goal.status != "ACHIEVED" %}
+                <p>{{ locale.info.aimToAchieveDate }}</p>
+            {% endif %}
+            {% if params.goal.status == "ACHIEVED" %}
+                <p>{{ locale.info.goalAchievedDate }}</p>
+            {% endif %}
+            {% if params.errorMessage %}
+                {{ govukErrorMessage({
+                    text: params.errorMessage.text
+                }) }}
+            {% endif %}
+        </div>
+
+        {% if params.goal.steps and params.goal.steps.length > 0 %}
+            <table class="govuk-table goal-summary-card__steps">
+                <thead class="govuk-table__head">
+                <tr class="govuk-table__row">
+                    <th scope="col" class="govuk-table__header">{{ locale.stepsList.whoHeader }}</th>
+                    <th scope="col" class="govuk-table__header">{{ locale.stepsList.whatHeader }}</th>
+                    <th scope="col" class="govuk-table__header">{{ locale.stepsList.statusHeader }}</th>
+                </tr>
+                </thead>
+                <tbody class="govuk-table__body">
+                {% for step in params.goal.steps %}
+                    <tr class="govuk-table__row">
+                        <td class="govuk-table__cell">{{ step.actor }}</td>
+                        <td class="govuk-table__cell">{{ step.description }}</td>
+                        <td class="govuk-table__cell">
+                            {% if step.status =='NOT_STARTED' %}
+                                <strong class="govuk-tag govuk-tag--grey">{{ locale.stepsList.status.notStarted }}</strong>
+                            {% elseif step.status == 'IN_PROGRESS' %}
+                                <strong class="govuk-tag govuk-tag">{{ locale.stepsList.status.inProgress }}</strong>
+                            {% elseif step.status == 'COMPLETED' %}
+                                <strong class="govuk-tag govuk-tag--green">{{ locale.stepsList.status.completed }}</strong>
+                            {% elseif step.status == 'CANNOT_BE_DONE_YET' %}
+                                <strong class="govuk-tag govuk-tag--purple">{{ locale.stepsList.status.cannotBeDoneYet }}</strong>
+                            {% elseif step.status == 'NO_LONGER_NEEDED' %}
+                                <strong class="govuk-tag govuk-tag--yellow">{{ locale.stepsList.status.noLongerNeeded }}</strong>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="goal-summary-card__steps--empty">
+                <strong>{{ locale.stepsList.noStepsAdded }}</strong>
+                {% if params.actions.length > 0 %}
+                    <a href="/goal/{{ params.goal.uuid }}/add-steps">{{ locale.stepsList.addSteps }}</a>
+                {% endif %}
+            </div>
+        {% endif %}
+
+            <p class="goal-summary-card__areas-of-need">
+                {{ locale.areaOfNeed.mainAreaOfNeed }}<br>
+                {% if params.goal.relatedAreasOfNeed.length > 0 %}
+                    {{ locale.areaOfNeed.relatedAreasOfNeed }}
+                {% endif %}
+            </p>
+
+            {% if params.buttons and params.buttons.length > 0 %}
+                {{ mojButtonMenu({
+                    items: params.buttons,
+                    classes: "goal-summary-card__buttons"
+                }) }}
+            {% endif %}
+        {% endcall %}
+    </div>
+{% endmacro %}

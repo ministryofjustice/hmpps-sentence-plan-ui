@@ -44,7 +44,7 @@ e2e: ## Run the end-to-end tests locally in the Cypress app. Override the defaul
 	docker compose ${DEV_COMPOSE_FILES} up --no-recreate --wait
 	npm i
 	npx cypress install
-	npx cypress open -c baseUrl=$(BASE_URL),experimentalInteractiveRunEvents=true
+	npx cypress open --e2e -c baseUrl=$(BASE_URL),experimentalInteractiveRunEvents=true
 
 BASE_URL_CI ?= "http://ui:3000"
 e2e-ci: ## Run the end-to-end tests in parallel in a headless browser. Used in CI. Override the default base URL with BASE_URL_CI=...

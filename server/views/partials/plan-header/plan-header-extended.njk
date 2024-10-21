@@ -1,0 +1,25 @@
+{% extends "./plan-header-mini.njk" %}
+{% from "moj/components/button-menu/macro.njk" import mojButtonMenu %}
+
+{% block extension %}
+    <div class="plan-header__extended">
+        <div class="plan-header__extended__title">
+            <h1 class="govuk-heading-l govuk-!-margin-bottom-0">{{ locale.common.planHeader.extended.title }}</h1>
+        </div>
+
+        <form method="post">
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+            {% set buttonItems = [] %}
+            {% for item in header.items %}
+                {% if item !== "" %}
+                    {% set buttonItems = buttonItems.concat(item) %}
+                {% endif %}
+            {% endfor %}
+
+            {{ mojButtonMenu({
+                class: "plan-header__extended__menu",
+                items: buttonItems
+            }) }}
+        </form>
+    </div>
+{% endblock %}

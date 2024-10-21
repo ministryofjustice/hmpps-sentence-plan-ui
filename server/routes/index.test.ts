@@ -2,6 +2,7 @@ import type { Express } from 'express'
 import request from 'supertest'
 import { appWithAllRoutes, user } from './testutils/appSetup'
 import AuditService, { Page } from '../services/auditService'
+import URLs from './URLs'
 
 jest.mock('../services/auditService')
 
@@ -28,9 +29,9 @@ describe('GET /', () => {
 
     return request(app)
       .get('/')
-      .expect('Content-Type', /html/)
+      .expect('Location', URLs.PLAN_OVERVIEW)
       .expect(res => {
-        expect(res.text).toContain('This site is under construction...')
+        expect(302)
         expect(auditService.logPageView).toHaveBeenCalledWith(Page.EXAMPLE_PAGE, {
           who: user.username,
           correlationId: expect.any(String),

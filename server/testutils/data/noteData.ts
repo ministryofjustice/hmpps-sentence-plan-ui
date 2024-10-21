@@ -1,7 +1,7 @@
 const testNoteData = {
   author: 'Test Note Author',
   source: 'test source',
-  creationDate: new Date(),
+  createdDate: new Date(),
   content: 'This is a test note data',
 }
 

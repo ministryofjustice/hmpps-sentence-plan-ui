@@ -1,11 +1,26 @@
+import { Step } from './StepType'
+
+export enum GoalStatus {
+  ACTIVE = 'ACTIVE',
+  FUTURE = 'FUTURE',
+  REMOVED = 'REMOVED',
+  ACHIEVED = 'ACHIEVED',
+}
+
 export type Goal = {
-  id: number
   uuid: string
   title: string
-  areaOfNeed: string
-  creationDate: string
-  completedDate?: string
-  targetDate: string
-  isAgreed?: boolean
-  agreementNote: string
+  status: GoalStatus
+  areaOfNeed: AreaOfNeed
+  relatedAreasOfNeed: AreaOfNeed[]
+  createdDate: string
+  targetDate?: string
+  statusDate?: string
+  goalOrder: number
+  steps: Step[]
+}
+
+type AreaOfNeed = {
+  uuid: string
+  name: string
 }

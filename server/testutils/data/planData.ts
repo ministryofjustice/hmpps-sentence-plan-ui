@@ -1,10 +1,23 @@
-import { PlanType } from '../../@types/PlanType'
+import { PlanAgreementStatus, PlanStatus, PlanType } from '../../@types/PlanType'
+import { testGoal } from './goalData'
 
 const testPlan: PlanType = {
-  uuid: '51c9f87b-fdb0-4bfb-9350-032672eedca9',
-  status: 'incomplete',
-  createdAt: new Date(Date.now() - 1000 * 60 * 60),
-  updatedAt: new Date(),
+  uuid: 'draft-plan-uuid',
+  status: PlanStatus.UNSIGNED,
+  agreementStatus: PlanAgreementStatus.DRAFT,
+  createdDate: new Date(Date.now() - 1000 * 60 * 60).toISOString(),
+  updatedDate: new Date().toISOString(),
+  goals: [testGoal],
+}
+
+const agreedTestPlan: PlanType = {
+  uuid: 'agreed-plan-uuid',
+  status: PlanStatus.UNSIGNED,
+  agreementStatus: PlanAgreementStatus.AGREED,
+  createdDate: new Date(Date.now() - 1000 * 60 * 60).toISOString(),
+  updatedDate: new Date().toISOString(),
+  goals: [testGoal],
 }
 
 export default testPlan
+export { agreedTestPlan }

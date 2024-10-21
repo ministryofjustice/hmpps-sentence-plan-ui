@@ -1,0 +1,11 @@
+
+.govuk-summary-card__action:not(:first-child):not(:last-child) {
+  @include govuk-media-query($from: "tablet") {
+    padding-left: govuk-spacing(2);
+  }
+}
+
+.govuk-summary-card__actions {
+  flex-shrink: 0;
+  align-items: flex-start;
+}

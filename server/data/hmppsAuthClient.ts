@@ -2,16 +2,15 @@ import { URLSearchParams } from 'url'
 
 import superagent from 'superagent'
 
-import type TokenStore from './tokenStore/tokenStore'
 import logger from '../../logger'
 import config from '../config'
 import generateOauthClientToken from '../authentication/clientCredentials'
-import RestClient from './restClient'
+import { Token } from '../@types/Token'
 
 const timeoutSpec = config.apis.hmppsAuth.timeout
 const hmppsAuthUrl = config.apis.hmppsAuth.url
 
-function getSystemClientTokenFromHmppsAuth(username?: string): Promise<superagent.Response> {
+function getSystemClientTokenFromHmppsAuth(identifier: string, username?: string): Promise<superagent.Response> {
   const clientToken = generateOauthClientToken(
     config.apis.hmppsAuth.systemClientId,
     config.apis.hmppsAuth.systemClientSecret,
@@ -19,10 +18,10 @@ function getSystemClientTokenFromHmppsAuth(username?: string): Promise<superagen
 
   const grantRequest = new URLSearchParams({
     grant_type: 'client_credentials',
-    ...(username && { username }),
+    username: `${identifier}|${username}`,
   }).toString()
 
-  logger.info(`${grantRequest} HMPPS Auth request for client id '${config.apis.hmppsAuth.systemClientId}''`)
+  logger.info(`${grantRequest} HMPPS Auth request for client id. '${config.apis.hmppsAuth.systemClientId}'`)
 
   return superagent
     .post(`${hmppsAuthUrl}/oauth/token`)
@@ -33,24 +32,30 @@ function getSystemClientTokenFromHmppsAuth(username?: string): Promise<superagen
 }
 
 export default class HmppsAuthClient {
-  constructor(private readonly tokenStore: TokenStore) {}
+  constructor(readonly req: Express.Request) {}
 
-  private static restClient(token: string): RestClient {
-    return new RestClient('HMPPS Auth Client', config.apis.hmppsAuth, token)
+  private getToken() {
+    return this.req.session.token
   }
 
-  async getSystemClientToken(username?: string): Promise<string> {
-    const key = username || '%ANONYMOUS%'
+  private setToken(token: Token) {
+    this.req.session.token = token
+  }
 
-    const token = await this.tokenStore.getToken(key)
-    if (token) {
-      return token
+  async getSystemClientToken(): Promise<string> {
+    if (this.getToken()?.expiresAt < Date.now()) {
+      return this.getToken().token
     }
 
-    const newToken = await getSystemClientTokenFromHmppsAuth(username)
+    const newToken = await getSystemClientTokenFromHmppsAuth(
+      this.req.services.sessionService.getPrincipalDetails().identifier,
+      this.req.services.sessionService.getPrincipalDetails().displayName,
+    )
 
-    // set TTL slightly less than expiry of token. Async but no need to wait
-    await this.tokenStore.setToken(key, newToken.body.access_token, newToken.body.expires_in - 60)
+    await this.setToken({
+      token: newToken.body.access_token,
+      expiresAt: Date.now() + newToken.body.expires_in * 1000,
+    })
 
     return newToken.body.access_token
   }
