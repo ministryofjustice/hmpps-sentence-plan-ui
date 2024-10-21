@@ -45,7 +45,8 @@
     plan: {
         agreementDate: data.plan.agreementDate | formatSimpleDate,
         createdDate: data.plan.createdDate | formatSimpleDate,
-        updatedDate: data.plan.updatedDate | formatSimpleDate
+        updatedDate: data.plan.updatedDate | formatSimpleDate,
+        updatedBy: data.plan.updatedBy.username | title
     }
 }) %}
 

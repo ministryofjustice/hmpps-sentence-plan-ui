@@ -13,8 +13,6 @@ export default class PlanOverviewController {
     try {
       const planUuid = req.services.sessionService.getPlanUUID()
       const plan = await req.services.planService.getPlanByUuid(planUuid)
-      plan.updatedDate = new Date(new Date(plan.updatedDate).setMilliseconds(0))
-      plan.agreementDate = new Date(new Date(plan.agreementDate).setMilliseconds(0))
       const oasysReturnUrl = req.services.sessionService.getOasysReturnUrl()
       const status = req.query?.status
       const type = req.query?.type
