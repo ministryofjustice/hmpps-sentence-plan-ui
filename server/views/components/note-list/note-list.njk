@@ -1,0 +1,19 @@
+{% macro noteList(params) %}
+
+<div id="achieved-goal-notes" class="govuk-!-margin-top-8">
+    <details class="govuk-details">
+        <summary class="govuk-details__summary">
+            <span class="govuk-details__summary-text">
+              {{ params.locale.common.noteList.viewAllNotes }}
+            </span>
+        </summary>
+        <div class="govuk-details__text">
+            {% for note in params.notes %}
+                <h4>{{ note.createdDate | formatSimpleDate }} by {{ note.practitionerName | convertToTitleCase }}</h4>
+                <p>Goal marked as {{ note.type | lower }} on {{ note.createdDate | formatSimpleDate }}</p>
+                <p>{{ note.note }}</p>
+            {% endfor %}
+        </div>
+    </details>
+</div>
+{% endmacro %}

@@ -47,6 +47,9 @@
         "relatedAreasOfNeed": "Also relates to: {{ relatedAreasOfNeed }}"
       }
     },
+    "noteList": {
+      "viewAllNotes": "View all notes"
+    },
     "backLink": {
       "text": "Back"
     },

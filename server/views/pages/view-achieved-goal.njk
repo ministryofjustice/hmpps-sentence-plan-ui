@@ -1,4 +1,5 @@
 {% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "../components/note-list/note-list.njk" import noteList %}
 {% extends "../partials/layout.njk" %}
 
 {% set locale = interpolate(locale, {
@@ -56,23 +57,10 @@
                 </tbody>
             </table>
 
-            <div id="achieved-goal-notes" class="govuk-!-margin-top-8">
-                <details class="govuk-details">
-                    <summary class="govuk-details__summary">
-                        <span class="govuk-details__summary-text">
-                          View all notes
-                        </span>
-                    </summary>
-                    <div class="govuk-details__text">
-                        {% for note in data.goal.notes %}
-                            <h4>{{ note.createdDate | formatSimpleDate }} by {{ note.createdBy | convertToTitleCase }}</h4>
-                            <p>Goal marked as {{ note.type | lower }} on {{ note.createdDate | formatSimpleDate }}</p>
-                            <p>{{ note.note }}</p>
-                        {% endfor %}
-                    </div>
-                </details>
-            </div>
-
+            {{ noteList({
+                notes: data.goal.notes,
+                locale: locale
+            }) }}
 
         </div>
     </div>
