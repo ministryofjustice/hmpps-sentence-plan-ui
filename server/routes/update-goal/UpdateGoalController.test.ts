@@ -79,12 +79,13 @@ describe('UpdateGoalController', () => {
       req.body = {
         'step-status-1': StepStatus.IN_PROGRESS,
         'step-uuid-1': testStep.uuid,
+        type: 'current',
       }
 
       await runMiddlewareChain(controller.post, req, res, next)
 
       expect(req.services.stepService.saveAllSteps).toHaveBeenCalled()
-      expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_OVERVIEW}`)
+      expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_OVERVIEW}?type=current`)
       expect(res.render).not.toHaveBeenCalled()
       expect(next).not.toHaveBeenCalled()
     })
@@ -93,6 +94,7 @@ describe('UpdateGoalController', () => {
       req.body = {
         'step-status-1': StepStatus.IN_PROGRESS,
         'step-uuid-1': testStep.uuid,
+        type: 'current',
       }
 
       const saveError = new Error('Save failed')
@@ -104,10 +106,11 @@ describe('UpdateGoalController', () => {
       expect(res.render).not.toHaveBeenCalled()
     })
 
-    it('should have redirected to the error page when incorrect uuid submitted', async () => {
+    it('should redirect to the error page when incorrect uuid submitted', async () => {
       req.body = {
         'step-status-1': 'IN_PROGRESS',
         'step-uuid-1': 'thisuuid-wasnt-what-waas-expected0000',
+        type: 'current',
       }
 
       await runMiddlewareChain(controller.post, req, res, next)
@@ -115,10 +118,23 @@ describe('UpdateGoalController', () => {
       expect(next).toHaveBeenCalledWith(new Error('different steps were submitted'))
     })
 
+    it('should redirect to the error page when incorrect type submitted', async () => {
+      req.body = {
+        'step-status-1': 'IN_PROGRESS',
+        'step-uuid-1': testStep.uuid,
+        type: 'not-real-type',
+      }
+
+      await runMiddlewareChain(controller.post, req, res, next)
+
+      expect(next).toHaveBeenCalledWith(new Error('incorrect goal type was submitted'))
+    })
+
     it('should redirect to the same page when a validation errors occur', async () => {
       req.body = {
         'step-status-1': 'NOT_A_REAL_STATUS',
         'step-uuid-1': testStep.uuid,
+        type: 'current',
       }
 
       await runMiddlewareChain(controller.post, req, res, next)

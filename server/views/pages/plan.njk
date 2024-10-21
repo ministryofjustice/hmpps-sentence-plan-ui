@@ -209,7 +209,7 @@
                         {% if goal.status === 'ACTIVE' or goal.status === 'FUTURE' %}
                             {% set actions = [
                                 {
-                                    href: "/update-goal/" + goal.uuid,
+                                    href: "/update-goal/" + goal.uuid + "?type=" + goalType,
                                     text: locale.goalSummaryCard.actions.active.update
                                 },
                                 {

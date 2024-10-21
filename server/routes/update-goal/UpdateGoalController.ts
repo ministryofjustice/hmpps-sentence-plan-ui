@@ -14,6 +14,7 @@ export default class UpdateGoalController {
 
   private render = async (req: Request, res: Response, next: NextFunction) => {
     const { uuid } = req.params
+    const { type } = req.query
     const { errors } = req
 
     const sortedAreasOfNeed = this.referentialDataService.getSortedAreasOfNeed()
@@ -29,6 +30,7 @@ export default class UpdateGoalController {
         popData,
         mainAreaOfNeed,
         relatedAreasOfNeed,
+        type,
       },
       errors,
     })
@@ -36,13 +38,20 @@ export default class UpdateGoalController {
 
   private saveAndRedirect = async (req: Request, res: Response, next: NextFunction) => {
     const { uuid } = req.params
-    const { steps } = req.body
+    const { steps, type } = req.body
 
     const goal = await req.services.goalService.getGoal(uuid)
 
     if (goal.steps.some((step: StepModel, index) => step.uuid !== steps[index].uuid)) {
       return next(createError(400, 'different steps were submitted'))
     }
+
+    // move this to class validator?
+    if (!['current', 'future'].includes(type)) {
+      return next(createError(400, 'incorrect goal type was submitted'))
+    }
+
+    // TODO: Sort the steps by status when updated.
 
     const updated: NewStep[] = goal.steps.map((value, index) => {
       return {
@@ -54,7 +63,7 @@ export default class UpdateGoalController {
 
     await req.services.stepService.saveAllSteps(updated, uuid)
 
-    return res.redirect(`${URLs.PLAN_OVERVIEW}`)
+    return res.redirect(`${URLs.PLAN_OVERVIEW}?type=${type}`)
   }
 
   private handleValidationErrors = (req: Request, res: Response, next: NextFunction) => {
