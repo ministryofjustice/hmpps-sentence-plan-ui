@@ -1,0 +1,64 @@
+{
+  "en": {
+    "header": {
+      "serviceName": "{{ applicationName }}",
+      "managedInOasysText": "OASys User",
+      "signOutLink": "Sign out"
+    },
+    "primaryNavigation": {
+      "planLinkText": "{{ subject.possessiveName }} plan",
+      "aboutPopText": "About {{ subject.givenName }}"
+    },
+    "planHeader": {
+      "mini": {
+        "title": "{{ subject.givenName }} {{ subject.familyName }}",
+        "crnLabel": "CRN:",
+        "pncLabel": "PNC:",
+        "dateOfBirthLabel": "Date of birth:"
+      },
+      "extended": {
+        "title": "{{ subject.possessiveName }} plan",
+        "createGoalButton": "Create goal",
+        "agreePlanButton": "Agree plan"
+      }
+    },
+    "goalSummaryCard": {
+      "info": {
+        "aimToAchieveDate": "Aim to achieve this by {{ targetDate }}.",
+        "aimToAchieveSentence": "Aim to achieve this by the end of {{ subject.possessiveName }} sentence.",
+        "goalAchievedDate": "Marked as achieved on {{ achievedDate }}."
+      },
+      "stepsList": {
+        "whoHeader": "Who will do this",
+        "whatHeader": "Step",
+        "statusHeader": "Status",
+        "noStepsAdded": "No steps added",
+        "addSteps": "Add steps",
+        "status": {
+          "notStarted": "Not started",
+          "inProgress": "In progress",
+          "completed": "Completed",
+          "cannotBeDoneYet": "Cannot be done yet",
+          "noLongerNeeded": "No longer needed"
+        }
+      },
+      "areaOfNeed": {
+        "mainAreaOfNeed": "Area of need: {{ areaOfNeed }}",
+        "relatedAreasOfNeed": "Also relates to: {{ relatedAreasOfNeed }}"
+      }
+    },
+    "backLink": {
+      "text": "Back"
+    },
+    "radio": {
+      "divider": "or"
+    },
+    "backToTop": {
+      "text": "Back to top"
+    },
+    "buttons": {},
+    "links": {},
+    "footer": {}
+  },
+  "cy": {}
+}

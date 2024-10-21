@@ -32,6 +32,7 @@ export type HandoverAssessmentContext = {
 
 export type HandoverSentencePlanContext = {
   oasysAssessmentPk: string
+  planId: string
   planVersion: number
 }
 

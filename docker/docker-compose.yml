@@ -1,6 +1,6 @@
 services:
   redis:
-    image: redis:7.2
+    image: redis:7.4
     ports:
       - "6379:6379"
     environment:
@@ -28,9 +28,9 @@ services:
       - ./forward-proxy/nginx.conf:/etc/nginx/nginx.conf
 
   hmpps-auth:
-    image: quay.io/hmpps/hmpps-auth:latest
+    image: quay.io/hmpps/hmpps-auth:2024-10-02.25761.db2ce3c
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://hmpps-auth:9090/auth/health"]
+      test: ["CMD", "curl", "-fs", "http://hmpps-auth:9090/auth/health"]
       interval: 5s
       retries: 60
     ports:
@@ -48,7 +48,9 @@ services:
     ports:
       - "7070:7070"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://arns-handover:7070/health/ping"]
+      test: ["CMD", "wget", "-q", "-O", "-", "http://arns-handover:7070/health/ping"]
+      interval: 5s
+      retries: 60
     environment:
       SERVER_PORT: 7070
       REDIS_HOST: redis
@@ -56,29 +58,58 @@ services:
       HMPPS_HANDOVER_BASE_URL: http://arns-handover:7070
       HMPPS_HANDOVER_EXTERNAL_URL: http://localhost:7070
       HMPPS_AUTH_BASE_URL: http://hmpps-auth:9090
+      COORDINATOR_API_BASE_URL: http://coordinator-api:8080
       SERVER_ERROR_WHITELABEL_ENABLED: true
+      CLIENT_ID: hmpps-assess-risks-and-needs-oastub-ui
+      CLIENT_SECRET: clientsecret
 
   oastub:
     image: quay.io/hmpps/hmpps-assess-risks-and-needs-oastub-ui:latest
+    depends_on:
+      - coordinator-api
     ports:
-      - "7072:3000"
+      - "7072:3005"
     environment:
       ENVIRONMENT_NAME: DEV
-      INGRESS_URL: http://localhost:3000
+      INGRESS_URL: http://localhost:7072
       PRODUCT_ID: ARNS
       AUDIT_ENABLED: "false"
       REDIS_ENABLED: false
       REDIS_HOST: redis
-      SYSTEM_CLIENT_ID: sentence-plan-api-client
-      SYSTEM_CLIENT_SECRET: sentence-plan-api-client
+      SYSTEM_CLIENT_ID: hmpps-assess-risks-and-needs-oastub-ui
+      SYSTEM_CLIENT_SECRET: clientsecret
       SESSION_SECRET: sessionsecret
       TOKEN_VERIFICATION_ENABLED: false
       TOKEN_VERIFICATION_API_URL: http://hmpps-auth:9091/verification
       HMPPS_AUTH_URL: http://hmpps-auth:9090/auth
       HMPPS_ARNS_HANDOVER_URL: http://arns-handover:7070
-      SBNA_API_URL: false
-      SP_API_URL: http://api:8080
+      COORDINATOR_API_URL: http://coordinator-api:8080
+      PORT: 3005
 
+  coordinator-api:
+    image: quay.io/hmpps/hmpps-assess-risks-and-needs-coordinator-api:latest
+    depends_on:
+      - postgres
+      - hmpps-auth
+    ports:
+      - "6060:8080"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://coordinator-api:8080/health/ping" ]
+      interval: 5s
+      retries: 60
+    environment:
+      SERVER_PORT: 8080
+      SPRING_PROFILES_ACTIVE: postgres
+      APP_DB_ENDPOINT: postgres:5432
+      APP_DB_NAME: sentence-plan
+      APP_DB_USERNAME: postgres
+      APP_DB_PASSWORD: postgres
+      HMPPS_AUTH_BASE_URL: http://hmpps-auth:9090/auth
+      SAN_API_BASE_URL: http://san-api:8080
+      SP_API_BASE_URL: http://api:8080
+      CLIENT_ID: hmpps-assess-risks-and-needs-oastub-ui
+      CLIENT_SECRET: clientsecret
+      APP_STRATEGIES_ASSESSMENT: false
 
   api:
     image: quay.io/hmpps/hmpps-sentence-plan:latest
@@ -86,7 +117,7 @@ services:
       - postgres
       - hmpps-auth
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://api:8080/health/ping"]
+      test: ["CMD", "curl", "-fs", "http://api:8080/health/ping"]
       interval: 5s
       retries: 100
     ports:
@@ -106,6 +137,10 @@ services:
     build:
       context: ../
       target: production
+      args:
+        BUILD_NUMBER: "1.0.0"
+        GIT_REF: "a1b2c3"
+        GIT_BRANCH: main
     depends_on:
       - redis
       - hmpps-auth
@@ -129,10 +164,10 @@ services:
       MANAGE_USERS_API_URL: false
       TOKEN_VERIFICATION_ENABLED: false
       TOKEN_VERIFICATION_API_URL: http://hmpps-auth:9091/verification
-      API_CLIENT_ID: sentence-plan-api-client
-      API_CLIENT_SECRET: sentence-plan-api-client
-      SYSTEM_CLIENT_ID: sentence-plan-api-client
-      SYSTEM_CLIENT_SECRET: sentence-plan-api-client
+      API_CLIENT_ID: hmpps-assess-risks-and-needs-oastub-ui
+      API_CLIENT_SECRET: clientsecret
+      SYSTEM_CLIENT_ID: hmpps-assess-risks-and-needs-oastub-ui
+      SYSTEM_CLIENT_SECRET: clientsecret
       HMPPS_ARNS_HANDOVER_CLIENT_ID: sentence-plan
       HMPPS_ARNS_HANDOVER_CLIENT_SECRET: sp-secret
       SESSION_SECRET: sessionsecret

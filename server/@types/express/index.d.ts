@@ -1,6 +1,7 @@
 import { RequestServices } from '../../services'
 import { PlanType } from '../PlanType'
 import { HandoverContextData, HandoverPrincipal } from '../Handover'
+import { Token } from '../Token'
 
 export default {}
 
@@ -12,6 +13,7 @@ declare module 'express-session' {
     plan?: PlanType
     forms?: any
     handover?: HandoverContextData
+    token: Token
   }
 }
 
@@ -31,6 +33,7 @@ export declare global {
         body?: any
         params?: any
         query?: any
+        domain?: any
       }
       services: RequestServices
     }

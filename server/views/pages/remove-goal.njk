@@ -1,0 +1,52 @@
+{% extends "../partials/layout.njk" %}
+{% from "../components/summary-card/goal-summary-card.njk" import goalSummaryCard %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% set locale = interpolate(locale, {
+    goalUuid: data.goal.uuid
+}) %}
+
+{% block pageTitle %}
+    {% if not errors %}
+        {{ locale.page.title }}
+    {% else %}
+        {{ locale.page.errorTitle }}
+    {% endif %}
+{% endblock %}
+
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block content %}
+
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <a href="#" class="govuk-back-link">Back</a>
+        <h1 class="govuk-heading-l">{{ locale.mainHeading.title }}</h1>
+
+        {%  if(data.actionType == "delete") %}
+            <p>{{  locale.pageBodyOne }}</p>
+            <p>{{  locale.pageBodyTwo | safe }}</p>
+        {% endif %}
+
+        {{ goalSummaryCard({
+            goal: data.goal,
+            locale: locale
+        }) }}
+
+        <form id="remove-goal-form" method="POST">
+            <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+            <input type="hidden" name="goalUuid" value="{{ data.goal.uuid }}">
+            <input type="hidden" name="type" value="{{ data.type }}">
+            <div class="govuk-button-group">
+                {{ govukButton({
+                    text: locale.removeGoalButtonText,
+                    name: "action",
+                    value: data.actionType
+                }) }}
+                <a class="govuk-link govuk-link--no-visited-state" href="/plan?type={{ data.type }}">{{ locale.cancelButtonText }}</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

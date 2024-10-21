@@ -1,0 +1,26 @@
+
+
+{% if data.popData %}
+    <header class="plan-header">
+        <div class="plan-header__subject-details">
+            <p class="plan-header__subject-details__title">{{ locale.common.planHeader.mini.title }}</p>
+            <dl class="plan-header__subject-details__identifiers">
+                <div>
+                    <dt>{{ locale.common.planHeader.mini.crnLabel }}</dt>
+                    <dd>{{ data.popData.crn }} </dd>
+                </div>
+                <div>
+                    <dt>{{ locale.common.planHeader.mini.pncLabel }}</dt>
+                    <dd>{{ data.popData.pnc }} </dd>
+                </div>
+                <div>
+                    <dt>{{ locale.common.planHeader.mini.dateOfBirthLabel }}</dt>
+                    <dd>{{ data.popData.dateOfBirth }} </dd>
+                </div>
+            </dl>
+        </div>
+        {% block extension %}
+            {# Block for extended versions #}
+        {% endblock %}
+    </header>
+{% endif %}

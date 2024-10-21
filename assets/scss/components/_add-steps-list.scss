@@ -1,0 +1,26 @@
+.add-steps-list {
+  & .govuk-summary-list__row {
+
+    @include govuk-media-query($from: tablet) {
+      border-bottom: unset;
+    }
+
+    @include govuk-media-query($from: desktop) {
+      & > * {
+        vertical-align: bottom;
+
+        &:nth-child(1) {
+          width: 25%;
+        }
+
+        &:nth-child(2) {
+          width: 67.5%;
+        }
+
+        &:nth-child(3) {
+          width: 7.5%;
+        }
+      }
+    }
+  }
+}

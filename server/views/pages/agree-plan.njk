@@ -1,0 +1,109 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "../components/error-summary/error-summary.njk" import errorSummary %}
+
+{% block pageTitle %}
+    {% if not errors %}
+        {{ locale.page.title }}
+    {% else %}
+        {{ locale.page.errorTitle }}
+    {% endif %}
+{% endblock %}
+
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block content %}
+    <a href="#" class="govuk-back-link">Back</a>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            {{ errorSummary({
+                errors: errors,
+                locale: locale
+            }) }}
+
+            <form id="agree-plan-form" method="POST">
+                <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+
+                {% set doesNotAgreeDetailsHtml %}
+                    {{ govukTextarea({
+                        name: "does-not-agree-details",
+                        id: "does-not-agree-details",
+                        rows: 3,
+                        label: {
+                            text: locale.agreePlanOptions.enterDetails
+                        },
+                        errorMessage: getFormattedError(errors, locale, 'does-not-agree-details')
+                    }) }}
+                {% endset -%}
+
+                {% set couldNotAnswerDetailsHtml %}
+                    {{ govukTextarea({
+                        name: "could-not-answer-details",
+                        id: "could-not-answer-details",
+                        rows: 3,
+                        label: {
+                            text: locale.agreePlanOptions.enterDetails
+                        },
+                        errorMessage: getFormattedError(errors, locale, 'could-not-answer-details')
+                    }) }}
+                {% endset -%}
+
+                {{ govukRadios({
+                    name: "agree-plan-radio",
+                    id: "agree-plan-radio",
+                    fieldset: {
+                        legend: {
+                            text: locale.mainHeading.title,
+                            isPageHeading: true,
+                            classes: "govuk-fieldset__legend--l"
+                        }
+                    },
+                    hint: {
+                        text: locale.mainHeading.hint
+                    },
+                    errorMessage: getFormattedError(errors, locale, 'agree-plan-radio'),
+                    items: [
+                        {
+                            value: "yes",
+                            text: locale.agreePlanOptions.yes,
+                            checked: data.form['agree-plan-radio'] == 'yes'
+                        },
+                        {
+                            value: "no",
+                            text: locale.agreePlanOptions.no,
+                            checked: data.form['agree-plan-radio'] == 'no',
+                            conditional: {
+                                html: doesNotAgreeDetailsHtml
+                            }
+                        },
+                        {
+                            value: "couldNotAnswer",
+                            text: locale.agreePlanOptions.couldNotAnswer,
+                            checked: data.form['agree-plan-radio'] == 'couldNotAnswer',
+                            conditional: {
+                                html: couldNotAnswerDetailsHtml
+                            }
+                        }
+                    ]
+                }) }}
+
+                {{ govukTextarea({
+                    name: "notes",
+                    id: "notes",
+                    label: {
+                        text: locale.notes.label,
+                        classes: "govuk-label--m"
+                    }
+                }) }}
+
+                {{ govukButton({
+                    text: locale.agreePlanButton,
+                    name: "action",
+                    value: "agreePlan"
+                }) }}
+            </form>
+        </div>
+    </div>
+{% endblock %}
