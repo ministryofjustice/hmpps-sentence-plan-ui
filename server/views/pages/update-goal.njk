@@ -3,6 +3,7 @@
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "../components/summary-card/goal-summary-card.njk" import goalSummaryCard %}
+{% from "../components/note-list/note-list.njk" import noteList %}
 
 {% set locale = interpolate(locale, {
     subject: data.popData,
@@ -139,9 +140,9 @@
                                 <textarea class="govuk-textarea" id="more-detail" name="moreDetail" rows="4"
                                           aria-describedby="more-detail-hint"></textarea>
 
-                                {{ govukDetails({
-                                    summaryText: locale.viewAllNotes,
-                                    text: locale.noGoalNotes
+                                {{ noteList({
+                                    notes: data.goal.notes,
+                                    locale: locale
                                 }) }}
 
                                 <div class="govuk-button-group">

@@ -65,11 +65,13 @@ describe('AchieveGoalController', () => {
         uuid: 'some-uuid',
         'goal-achievement-helped': 'Detail on how this goal helped',
       }
+      req.body['goal-achievement-helped'] = 'Note body'
 
       req.method = 'POST'
 
       const expectedPartialNewGoal = {
         status: GoalStatus.ACHIEVED,
+        note: 'Note body',
       }
 
       await controller.post(req, res, next)
