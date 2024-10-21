@@ -96,7 +96,7 @@ describe('AgreePlanController', () => {
       await runMiddlewareChain(controller.get, req, res, next)
 
       expect(req.services.planService.agreePlan).not.toHaveBeenCalled()
-      expect(res.redirect).toHaveBeenCalledWith(URLs.PLAN_SUMMARY)
+      expect(res.redirect).toHaveBeenCalledWith(URLs.PLAN_OVERVIEW)
     })
 
     it('should redirect if plan is not in draft', async () => {
@@ -106,7 +106,7 @@ describe('AgreePlanController', () => {
       await runMiddlewareChain(controller.get, req, res, next)
 
       expect(req.services.planService.agreePlan).not.toHaveBeenCalled()
-      expect(res.redirect).toHaveBeenCalledWith(URLs.PLAN_SUMMARY)
+      expect(res.redirect).toHaveBeenCalledWith(URLs.PLAN_OVERVIEW)
     })
 
     it('should call next if error', async () => {
@@ -201,7 +201,7 @@ describe('AgreePlanController', () => {
       await runMiddlewareChain(controller.post, req, res, next)
 
       expect(req.services.planService.agreePlan).toHaveBeenCalledWith(testPlan.uuid, expectedAgreementData)
-      expect(res.redirect).toHaveBeenCalledWith(URLs.PLAN_SUMMARY)
+      expect(res.redirect).toHaveBeenCalledWith(URLs.PLAN_OVERVIEW)
       expect(next).not.toHaveBeenCalled()
     })
 
@@ -223,7 +223,7 @@ describe('AgreePlanController', () => {
       await runMiddlewareChain(controller.post, req, res, next)
 
       expect(req.services.planService.agreePlan).toHaveBeenCalledWith(testPlan.uuid, expectedAgreementData)
-      expect(res.redirect).toHaveBeenCalledWith(URLs.PLAN_SUMMARY)
+      expect(res.redirect).toHaveBeenCalledWith(URLs.PLAN_OVERVIEW)
       expect(next).not.toHaveBeenCalled()
     })
 

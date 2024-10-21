@@ -11,9 +11,10 @@
       "recordProgressButton": "Record progress"
     },
     "notificationBanner": {
-      "addedGoal": "You added a goal to {{ subject.possessiveName }} plan.",
-      "changedGoal": "You changed a goal in {{ subject.possessiveName }} plan.",
-      "removedGoal": "You removed a goal from {{ subject.possessiveName }} plan.",
+      "addedGoal": "You added a goal to {{ subject.possessiveName }} plan",
+      "changedGoal": "You changed a goal in {{ subject.possessiveName }} plan",
+      "removedGoal": "You removed a goal from {{ subject.possessiveName }} plan",
+      "deletedGoal": "You deleted a goal from {{ subject.possessiveName }} plan",
       "achievedGoal": "Congratulations on achieving a goal, {{ subject.givenName }}"
     },
     "agreePlan": "{{ subject.givenName }} agreed to their plan on {{ plan.agreementDate }}",
@@ -38,12 +39,12 @@
         "draft": {
           "changeGoal": "Change goal",
           "addOrChangeSteps": "Add or change steps",
-          "removeGoal": "Remove goal"
+          "deleteGoal": "Delete"
         },
         "active": {
           "update": "Update",
           "markAsAchieved": "Mark as achieved",
-          "remove": "Remove"
+          "removeGoal": "Remove"
         },
         "achieved": {
           "viewDetails": "View details"

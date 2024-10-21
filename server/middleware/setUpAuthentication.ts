@@ -32,7 +32,7 @@ export default function setUpAuth(): Router {
 
         return req.services.sessionService
           .setupSession()
-          .then(() => res.redirect(req.session.returnTo || URLs.PLAN_SUMMARY))
+          .then(() => res.redirect(req.session.returnTo || URLs.PLAN_OVERVIEW))
           .catch(next)
       })
     })(req, res, next),

@@ -265,7 +265,7 @@ describe('EditGoalController', () => {
       await runMiddlewareChain(controller.post, req, res, next)
 
       expect(req.services.goalService.updateGoal).toHaveBeenCalledWith(updatedGoal, testGoal.uuid)
-      expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_SUMMARY}?status=updated&type=current`)
+      expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_OVERVIEW}?status=updated&type=current`)
       expect(res.render).not.toHaveBeenCalled()
       expect(next).not.toHaveBeenCalled()
     })

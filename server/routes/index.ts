@@ -7,12 +7,13 @@ import setupEditGoalRoutes from './editGoal/routes'
 import setupAboutPopRoutes from './aboutPop/routes'
 import { Page } from '../services/auditService'
 import setupReferenceDataRoutes from './ReferenceData/routes'
-import setupPlanSummaryRoutes from './plan-summary/routes'
+import setupPlanOverviewRoutes from './planOverview/routes'
 import setupAgreePlanRoutes from './agree-plan/routes'
 import URLs from './URLs'
 import setupAddStepsRoutes from './add-steps/routes'
 import setupAchieveGoalRoutes from './achieveGoal/routes'
 import setupViewAchievedGoalRoutes from './viewAchievedGoal/routes'
+import setupUpdateGoalRoutes from './update-goal/routes'
 
 export default function routes(services: Services): Router {
   const router = Router()
@@ -23,7 +24,7 @@ export default function routes(services: Services): Router {
       who: res.locals.user?.username,
       correlationId: req.id,
     })
-    res.redirect(URLs.PLAN_SUMMARY)
+    res.redirect(URLs.PLAN_OVERVIEW)
   })
 
   setupAboutPopRoutes(router, services)
@@ -33,8 +34,9 @@ export default function routes(services: Services): Router {
   setupViewAchievedGoalRoutes(router)
   setupAchieveGoalRoutes(router)
   setupAddStepsRoutes(router)
+  setupUpdateGoalRoutes(router, services)
   setupReferenceDataRoutes(router, services)
-  setupPlanSummaryRoutes(router)
+  setupPlanOverviewRoutes(router)
   setupAgreePlanRoutes(router)
   return router
 }
