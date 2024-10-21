@@ -30,7 +30,7 @@ export type GoalNote = {
   type: GoalNoteType
   note: string
   createdDate: string
-  createdBy: string
+  practitionerName: string
 }
 
 export enum GoalNoteType {

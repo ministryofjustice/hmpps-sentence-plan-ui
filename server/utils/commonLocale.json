@@ -48,7 +48,10 @@
       }
     },
     "noteList": {
-      "viewAllNotes": "View all notes"
+      "viewAllNotes": "View all notes",
+      "noGoalNotes": "There are no notes on this goal yet.",
+      "noteHeading": "{{ noteDate }} by {{ noteAuthor }}",
+      "noteActionEvent": "Goal marked as {{ noteType }} on {{ noteDate }}"
     },
     "backLink": {
       "text": "Back"
