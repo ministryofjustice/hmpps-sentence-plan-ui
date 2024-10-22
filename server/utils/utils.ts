@@ -1,6 +1,7 @@
 import { Person } from '../@types/Person'
 import { RoshData } from '../@types/Rosh'
 import { NewStep, StepStatus } from '../@types/StepType'
+import { GoalStatus } from '../@types/GoalType'
 
 const properCase = (word: string): string =>
   word.length >= 1 ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word
@@ -139,4 +140,8 @@ export function sortSteps(steps: NewStep[]) {
   steps.sort((a, b) => {
     return statusArray.indexOf(a.status) - statusArray.indexOf(b.status) || a.updated - b.updated
   })
+}
+
+export function goalStatusToTabName(status: GoalStatus): string {
+  return status === GoalStatus.ACTIVE ? 'current' : status.toLowerCase()
 }

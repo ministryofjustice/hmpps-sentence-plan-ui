@@ -8,7 +8,7 @@ import UpdateGoalPostModel from './models/UpdateGoalPostModel'
 import StepModel from '../shared-models/StepModel'
 import validateRequest from '../../middleware/validationMiddleware'
 import { NewStep } from '../../@types/StepType'
-import { sortSteps } from '../../utils/utils'
+import { goalStatusToTabName, sortSteps } from '../../utils/utils'
 
 export default class UpdateGoalController {
   constructor(private readonly referentialDataService: ReferentialDataService) {}
@@ -16,16 +16,14 @@ export default class UpdateGoalController {
   private render = async (req: Request, res: Response, next: NextFunction) => {
     const { uuid } = req.params
     const { errors } = req
-    const goalType: string = String(req.query.type)
-
-    req.session.goalType = String(goalType)
-    req.session.backLink = `/update-goal/${uuid}?type=${goalType}`
 
     const sortedAreasOfNeed = this.referentialDataService.getSortedAreasOfNeed()
     const goal = await req.services.goalService.getGoal(uuid)
     const popData = req.services.sessionService.getSubjectDetails()
     const mainAreaOfNeed = sortedAreasOfNeed.find(areaOfNeed => areaOfNeed.name === goal.areaOfNeed.name)
     const relatedAreasOfNeed = goal.relatedAreasOfNeed.map(need => need.name)
+
+    req.session.backLink = `/update-goal/${uuid}`
 
     return res.render('pages/update-goal', {
       locale: locale.en,
@@ -34,7 +32,6 @@ export default class UpdateGoalController {
         popData,
         mainAreaOfNeed,
         relatedAreasOfNeed,
-        goalType,
       },
       errors,
     })
@@ -63,8 +60,7 @@ export default class UpdateGoalController {
 
     await req.services.stepService.saveAllSteps(updated, uuid)
 
-    const { goalType } = req.session
-    req.session.goalType = null
+    const goalType: string = goalStatusToTabName(goal.status)
     req.session.backLink = null
 
     return res.redirect(`${URLs.PLAN_OVERVIEW}?type=${goalType}`)
@@ -72,7 +68,6 @@ export default class UpdateGoalController {
 
   private handleValidationErrors = (req: Request, res: Response, next: NextFunction) => {
     if (Object.keys(req.errors.body).length) {
-      req.query.type = req.session.goalType
       return this.render(req, res, next)
     }
     return next()

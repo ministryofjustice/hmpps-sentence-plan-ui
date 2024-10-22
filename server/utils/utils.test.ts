@@ -4,12 +4,14 @@ import {
   convertToTitleCase,
   formatDate,
   formatRoSHData,
+  goalStatusToTabName,
   initialiseName,
   moveGoal,
   sortSteps,
   toKebabCase,
 } from './utils'
 import { NewStep, StepStatus } from '../@types/StepType'
+import { GoalStatus } from '../@types/GoalType'
 
 describe('convert to title case', () => {
   it.each([
@@ -168,5 +170,16 @@ describe('sorting steps', () => {
     sortSteps(steps)
 
     expect(steps).toEqual([step2, step1, step3, step5, step6, step4])
+  })
+})
+
+describe('status to tab mapping', () => {
+  it.each([
+    [GoalStatus.ACTIVE, 'current'],
+    [GoalStatus.FUTURE, 'future'],
+    [GoalStatus.REMOVED, 'removed'],
+    [GoalStatus.ACHIEVED, 'achieved'],
+  ])('%s maps to %s', (actual: GoalStatus, expected: string) => {
+    expect(goalStatusToTabName(actual)).toEqual(expected)
   })
 })

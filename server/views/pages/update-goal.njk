@@ -34,12 +34,6 @@
     }
 ] %}
 
-{% if data.type == 'future' %}
-    {% set goalType = 'future' %}
-{% else %}
-    {% set goalType = 'current' %}
-{% endif %}
-
 {% block pageTitle %}
     {% if not errors %}
         {{ locale.page.title }}

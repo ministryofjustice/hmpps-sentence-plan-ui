@@ -51,7 +51,6 @@ describe('UpdateGoalController', () => {
       popData: handoverData.subject,
       mainAreaOfNeed: AreaOfNeed.find(x => x.name === testGoal.areaOfNeed.name),
       relatedAreasOfNeed: testGoal.relatedAreasOfNeed.map(x => x.name),
-      goalType: 'current',
     },
     errors: {},
   }
@@ -69,8 +68,6 @@ describe('UpdateGoalController', () => {
 
   describe('get', () => {
     it('should render without validation errors', async () => {
-      req.query.type = 'current'
-
       await controller.get(req, res, next)
 
       expect(res.render).toHaveBeenCalledWith('pages/update-goal', viewData)
@@ -83,7 +80,6 @@ describe('UpdateGoalController', () => {
         'step-status-1': StepStatus.IN_PROGRESS,
         'step-uuid-1': testStep.uuid,
       }
-      req.session.goalType = 'current'
 
       await runMiddlewareChain(controller.post, req, res, next)
 
@@ -124,7 +120,6 @@ describe('UpdateGoalController', () => {
         'step-status-1': 'NOT_A_REAL_STATUS',
         'step-uuid-1': testStep.uuid,
       }
-      req.session.goalType = 'current'
 
       await runMiddlewareChain(controller.post, req, res, next)
 
