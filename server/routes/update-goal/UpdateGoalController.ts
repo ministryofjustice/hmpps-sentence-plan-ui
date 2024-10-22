@@ -15,8 +15,11 @@ export default class UpdateGoalController {
 
   private render = async (req: Request, res: Response, next: NextFunction) => {
     const { uuid } = req.params
-    const { type } = req.query
     const { errors } = req
+    const goalType: string = String(req.query.type)
+
+    req.session.goalType = String(goalType)
+    req.session.backLink = `/update-goal/${uuid}?type=${goalType}`
 
     const sortedAreasOfNeed = this.referentialDataService.getSortedAreasOfNeed()
     const goal = await req.services.goalService.getGoal(uuid)
@@ -31,7 +34,7 @@ export default class UpdateGoalController {
         popData,
         mainAreaOfNeed,
         relatedAreasOfNeed,
-        type,
+        goalType,
       },
       errors,
     })
@@ -39,7 +42,7 @@ export default class UpdateGoalController {
 
   private saveAndRedirect = async (req: Request, res: Response, next: NextFunction) => {
     const { uuid } = req.params
-    const { steps, type } = req.body
+    const { steps } = req.body
 
     const goal = await req.services.goalService.getGoal(uuid)
 
@@ -47,12 +50,6 @@ export default class UpdateGoalController {
       return next(createError(400, 'different steps were submitted'))
     }
 
-    // move this to class validator?
-    if (!['current', 'future'].includes(type)) {
-      return next(createError(400, 'incorrect goal type was submitted'))
-    }
-
-    // TODO: Sort the steps by status when updated.
     const updated: NewStep[] = goal.steps.map((value, index) => {
       return {
         description: value.description,
@@ -66,11 +63,16 @@ export default class UpdateGoalController {
 
     await req.services.stepService.saveAllSteps(updated, uuid)
 
-    return res.redirect(`${URLs.PLAN_OVERVIEW}?type=${type}`)
+    const { goalType } = req.session
+    req.session.goalType = null
+    req.session.backLink = null
+
+    return res.redirect(`${URLs.PLAN_OVERVIEW}?type=${goalType}`)
   }
 
   private handleValidationErrors = (req: Request, res: Response, next: NextFunction) => {
     if (Object.keys(req.errors.body).length) {
+      req.query.type = req.session.goalType
       return this.render(req, res, next)
     }
     return next()

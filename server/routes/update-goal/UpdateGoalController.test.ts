@@ -10,7 +10,7 @@ import { testGoal } from '../../testutils/data/goalData'
 import runMiddlewareChain from '../../testutils/runMiddlewareChain'
 import URLs from '../URLs'
 import { testStep } from '../../testutils/data/stepData'
-import { NewStep, StepStatus } from '../../@types/StepType'
+import { StepStatus } from '../../@types/StepType'
 
 jest.mock('../../services/sentence-plan/referentialDataService', () => {
   return jest.fn().mockImplementation(() => ({
@@ -51,6 +51,7 @@ describe('UpdateGoalController', () => {
       popData: handoverData.subject,
       mainAreaOfNeed: AreaOfNeed.find(x => x.name === testGoal.areaOfNeed.name),
       relatedAreasOfNeed: testGoal.relatedAreasOfNeed.map(x => x.name),
+      goalType: 'current',
     },
     errors: {},
   }
@@ -68,6 +69,8 @@ describe('UpdateGoalController', () => {
 
   describe('get', () => {
     it('should render without validation errors', async () => {
+      req.query.type = 'current'
+
       await controller.get(req, res, next)
 
       expect(res.render).toHaveBeenCalledWith('pages/update-goal', viewData)
@@ -79,8 +82,8 @@ describe('UpdateGoalController', () => {
       req.body = {
         'step-status-1': StepStatus.IN_PROGRESS,
         'step-uuid-1': testStep.uuid,
-        type: 'current',
       }
+      req.session.goalType = 'current'
 
       await runMiddlewareChain(controller.post, req, res, next)
 
@@ -94,7 +97,6 @@ describe('UpdateGoalController', () => {
       req.body = {
         'step-status-1': StepStatus.IN_PROGRESS,
         'step-uuid-1': testStep.uuid,
-        type: 'current',
       }
 
       const saveError = new Error('Save failed')
@@ -110,7 +112,6 @@ describe('UpdateGoalController', () => {
       req.body = {
         'step-status-1': 'IN_PROGRESS',
         'step-uuid-1': 'thisuuid-wasnt-what-waas-expected0000',
-        type: 'current',
       }
 
       await runMiddlewareChain(controller.post, req, res, next)
@@ -118,24 +119,12 @@ describe('UpdateGoalController', () => {
       expect(next).toHaveBeenCalledWith(new Error('different steps were submitted'))
     })
 
-    it('should redirect to the error page when incorrect type submitted', async () => {
-      req.body = {
-        'step-status-1': 'IN_PROGRESS',
-        'step-uuid-1': testStep.uuid,
-        type: 'not-real-type',
-      }
-
-      await runMiddlewareChain(controller.post, req, res, next)
-
-      expect(next).toHaveBeenCalledWith(new Error('incorrect goal type was submitted'))
-    })
-
-    it('should redirect to the same page when a validation errors occur', async () => {
+    it('should redirect to the same page when a validation error occurs', async () => {
       req.body = {
         'step-status-1': 'NOT_A_REAL_STATUS',
         'step-uuid-1': testStep.uuid,
-        type: 'current',
       }
+      req.session.goalType = 'current'
 
       await runMiddlewareChain(controller.post, req, res, next)
 
