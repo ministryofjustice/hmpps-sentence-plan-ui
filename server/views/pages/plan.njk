@@ -111,11 +111,11 @@
             {% endif %}
 
             {% if data.plan.agreementStatus === 'AGREED' %}
-                {% if data.plan.updatedDate > data.plan.agreementDate %}
+{#                {% if data.plan.updatedDate > data.plan.agreementDate %}to be finished at a later date#}
                     <p class="govuk-body">{{ locale.lastUpdatedPlan }}</p>
-                {% else %}
-                    <p class="govuk-body">{{ locale.agreePlan }}</p>
-                {% endif %}
+{#                {% else %}#}
+{#                    <p class="govuk-body">{{ locale.agreePlan }}</p>#}
+{#                {% endif %}#}
             {% elseif data.plan.agreementStatus === 'DO_NOT_AGREE' %}
                 <p class="govuk-body">{{ locale.notAgreePlan }}</p>
             {% elseif data.plan.agreementStatus === 'DRAFT' %}
