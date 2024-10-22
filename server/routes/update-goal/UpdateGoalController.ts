@@ -8,6 +8,7 @@ import UpdateGoalPostModel from './models/UpdateGoalPostModel'
 import StepModel from '../shared-models/StepModel'
 import validateRequest from '../../middleware/validationMiddleware'
 import { NewStep } from '../../@types/StepType'
+import { sortSteps } from '../../utils/utils'
 
 export default class UpdateGoalController {
   constructor(private readonly referentialDataService: ReferentialDataService) {}
@@ -52,14 +53,16 @@ export default class UpdateGoalController {
     }
 
     // TODO: Sort the steps by status when updated.
-
     const updated: NewStep[] = goal.steps.map((value, index) => {
       return {
         description: value.description,
         actor: value.actor,
         status: steps[index].status,
+        updated: value.status === steps[index].status ? 0 : 1,
       }
     })
+
+    sortSteps(updated)
 
     await req.services.stepService.saveAllSteps(updated, uuid)
 

@@ -10,7 +10,7 @@ import { testGoal } from '../../testutils/data/goalData'
 import runMiddlewareChain from '../../testutils/runMiddlewareChain'
 import URLs from '../URLs'
 import { testStep } from '../../testutils/data/stepData'
-import { StepStatus } from '../../@types/StepType'
+import { NewStep, StepStatus } from '../../@types/StepType'
 
 jest.mock('../../services/sentence-plan/referentialDataService', () => {
   return jest.fn().mockImplementation(() => ({

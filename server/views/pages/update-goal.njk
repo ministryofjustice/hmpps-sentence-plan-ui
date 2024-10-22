@@ -81,6 +81,7 @@
             </label>
 
             <form id="update-goal-form" method="POST">
+                <input type="submit" disabled style="display: none" aria-hidden="true" />
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
                 <input type="hidden" name="type" value="{{ goalType }}">
                 {% if data.goal.steps and data.goal.steps.length > 0 %}
