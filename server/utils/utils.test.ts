@@ -1,6 +1,15 @@
 import { RoshData } from '../@types/Rosh'
 import { parsedRoshData, roSHData, unComplitedRoSH } from '../testutils/data/roshData'
-import { convertToTitleCase, formatDate, formatRoSHData, initialiseName, moveGoal, toKebabCase } from './utils'
+import {
+  convertToTitleCase,
+  formatDate,
+  formatRoSHData,
+  initialiseName,
+  moveGoal,
+  sortSteps,
+  toKebabCase,
+} from './utils'
+import { NewStep, StepStatus } from '../@types/StepType'
 
 describe('convert to title case', () => {
   it.each([
@@ -107,5 +116,57 @@ describe('to reorder goals correctly', () => {
       { goalUuid: '2222', goalOrder: 2 },
       { goalUuid: '3333', goalOrder: 3 },
     ])
+  })
+})
+
+describe('sorting steps', () => {
+  it('should reorder the steps based on status and updated', () => {
+    const step1 = {
+      description: 'Accommodation Step 1',
+      actor: 'Citlalli',
+      status: StepStatus.IN_PROGRESS,
+      updated: 1,
+    }
+
+    const step2 = {
+      description: 'Accommodation Step 2',
+      actor: 'Citlalli',
+      status: StepStatus.NOT_STARTED,
+      updated: 0,
+    }
+
+    const step3 = {
+      description: 'Accommodation Step 3',
+      actor: 'Citlalli',
+      status: StepStatus.IN_PROGRESS,
+      updated: 1,
+    }
+
+    const step4 = {
+      description: 'Accommodation Step 4',
+      actor: 'Citlalli',
+      status: StepStatus.COMPLETED,
+      updated: 0,
+    }
+
+    const step5 = {
+      description: 'Accommodation Step 5',
+      actor: 'Citlalli',
+      status: StepStatus.CANNOT_BE_DONE_YET,
+      updated: 0,
+    }
+
+    const step6 = {
+      description: 'Accommodation Step 6',
+      actor: 'Citlalli',
+      status: StepStatus.NO_LONGER_NEEDED,
+      updated: 0,
+    }
+
+    const steps: NewStep[] = [step1, step2, step3, step4, step5, step6]
+
+    sortSteps(steps)
+
+    expect(steps).toEqual([step2, step1, step3, step5, step6, step4])
   })
 })
