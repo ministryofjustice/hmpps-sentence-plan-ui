@@ -90,10 +90,6 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
     return new Date(date).toISOString().substring(0, 10)
   })
 
-  njkEnv.addFilter('formatISODateWithSeconds', date => {
-    return new Date(date).toLocaleString()
-  })
-
   njkEnv.addGlobal('getFormattedError', (errors: any, locale: any, fieldName: string) => {
     const fieldErrors = errors?.body?.[fieldName]
 
