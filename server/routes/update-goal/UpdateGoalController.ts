@@ -8,6 +8,7 @@ import UpdateGoalPostModel from './models/UpdateGoalPostModel'
 import StepModel from '../shared-models/StepModel'
 import validateRequest from '../../middleware/validationMiddleware'
 import { NewStep } from '../../@types/StepType'
+import { goalStatusToTabName, sortSteps } from '../../utils/utils'
 
 export default class UpdateGoalController {
   constructor(private readonly referentialDataService: ReferentialDataService) {}
@@ -21,6 +22,8 @@ export default class UpdateGoalController {
     const popData = req.services.sessionService.getSubjectDetails()
     const mainAreaOfNeed = sortedAreasOfNeed.find(areaOfNeed => areaOfNeed.name === goal.areaOfNeed.name)
     const relatedAreasOfNeed = goal.relatedAreasOfNeed.map(need => need.name)
+
+    req.services.sessionService.setReturnLink(`/update-goal/${uuid}`)
 
     return res.render('pages/update-goal', {
       locale: locale.en,
@@ -49,12 +52,18 @@ export default class UpdateGoalController {
         description: value.description,
         actor: value.actor,
         status: steps[index].status,
+        updated: value.status === steps[index].status ? 0 : 1,
       }
     })
 
+    sortSteps(updated)
+
     await req.services.stepService.saveAllSteps(updated, uuid)
 
-    return res.redirect(`${URLs.PLAN_OVERVIEW}`)
+    const goalType: string = goalStatusToTabName(goal.status)
+    req.services.sessionService.setReturnLink(null)
+
+    return res.redirect(`${URLs.PLAN_OVERVIEW}?type=${goalType}`)
   }
 
   private handleValidationErrors = (req: Request, res: Response, next: NextFunction) => {

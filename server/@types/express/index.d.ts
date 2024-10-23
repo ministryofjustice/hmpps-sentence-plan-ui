@@ -14,6 +14,7 @@ declare module 'express-session' {
     forms?: any
     handover?: HandoverContextData
     token: Token
+    returnLink: string
   }
 }
 

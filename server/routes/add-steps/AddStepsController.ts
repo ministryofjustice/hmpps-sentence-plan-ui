@@ -49,7 +49,10 @@ export default class AddStepsController {
       goalUuid,
     )
 
-    return res.redirect(`${URLs.PLAN_OVERVIEW}?status=success`)
+    const link = req.services.sessionService.getReturnLink() ?? `${URLs.PLAN_OVERVIEW}?status=success`
+    req.services.sessionService.setReturnLink(null)
+
+    return res.redirect(link)
   }
 
   private handleRemoveStep = (req: Request, res: Response, next: NextFunction) => {

@@ -28,6 +28,8 @@ jest.mock('../../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
     getSubjectDetails: jest.fn().mockReturnValue(handoverData.subject),
     getPlanUUID: jest.fn().mockReturnValue('some-plan-uuid'),
+    getReturnLink: jest.fn().mockReturnValue('/plan?status=success'),
+    setReturnLink: jest.fn(),
   }))
 })
 
