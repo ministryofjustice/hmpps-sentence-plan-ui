@@ -16,11 +16,11 @@ describe('Change a goal', () => {
   })
 
   describe('Rendering', () => {
-    it('Edit goal page populated correctly', () => {
+    it('Change goal page populated correctly', () => {
       // Add goal and access remove page
       cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
         cy.addGoalToPlan(plan.uuid, goalData).then(goal => {
-          cy.visit(`/edit-goal/${goal.uuid}`)
+          cy.visit(`/change-goal/${goal.uuid}`)
         })
       })
 
@@ -35,11 +35,11 @@ describe('Change a goal', () => {
   })
 
   describe('Validation behaviours', () => {
-    it('Edit goal page display errors correctly', () => {
+    it('Change goal page display errors correctly', () => {
       // Add goal and access remove page
       cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
         cy.addGoalToPlan(plan.uuid, goalData).then(goal => {
-          cy.visit(`/edit-goal/${goal.uuid}`)
+          cy.visit(`/change-goal/${goal.uuid}`)
         })
       })
 
@@ -57,7 +57,7 @@ describe('Change a goal', () => {
     beforeEach(() => {
       cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
         cy.addGoalToPlan(plan.uuid, goalData).then(goal => {
-          cy.visit(`/edit-goal/${goal.uuid}`)
+          cy.visit(`/change-goal/${goal.uuid}`)
         })
       })
     })

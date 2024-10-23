@@ -1,11 +1,11 @@
 {
   "en": {
     "page": {
-      "title": "Create a goal - {{ applicationName }}",
+      "title": "Change goal - {{ applicationName }}",
       "errorTitle": "Error: Create a goal - {{ applicationName }}"
     },
     "mainHeading": {
-      "title": "Create a goal with {{ subject.givenName }}",
+      "title": "Change goal with {{ subject.givenName }}",
       "caption": "{{ areaOfNeed }}"
     },
     "goalSelection": {

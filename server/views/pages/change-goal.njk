@@ -40,7 +40,7 @@
             <span class="govuk-caption-l">{{ locale.mainHeading.caption }}</span>
             <h1 class="govuk-heading-l">{{ locale.mainHeading.title }}</h1>
 
-            <form id="edit-goal-form" method="POST">
+            <form id="change-goal-form" method="POST">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}">
                 <input type="hidden" id="_areaOfNeed" value="{{ data.selectedAreaOfNeed.url }}">
                 <input type="hidden" name="area-of-need" value="{{ data.selectedAreaOfNeed.name }}">
