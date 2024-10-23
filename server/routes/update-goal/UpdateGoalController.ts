@@ -9,6 +9,8 @@ import StepModel from '../shared-models/StepModel'
 import validateRequest from '../../middleware/validationMiddleware'
 import { NewStep } from '../../@types/StepType'
 import { goalStatusToTabName, sortSteps } from '../../utils/utils'
+import { NewGoal } from '../../@types/NewGoalType'
+import {Goal} from "../../@types/GoalType";
 
 export default class UpdateGoalController {
   constructor(private readonly referentialDataService: ReferentialDataService) {}
@@ -37,33 +39,48 @@ export default class UpdateGoalController {
     })
   }
 
-  private saveAndRedirect = async (req: Request, res: Response, next: NextFunction) => {
-    const { uuid } = req.params
-    const { steps } = req.body
+    private async updateSteps(req: Request, goal: Goal, steps: StepModel[], note: string): string {
+        if (goal.steps.some((step: StepModel, index) => step.uuid !== steps[index].uuid)) {
+            throw createError(400, 'different steps were submitted')
+        }
+    
+        const updatedSteps: NewStep[] = goal.steps.map((value, index) => {
+            return {
+                description: value.description,
+                actor: value.actor,
+                status: steps[index].status,
+                updated: value.status === steps[index].status ? 0 : 1,
+            }
+        })
 
-    const goal = await req.services.goalService.getGoal(uuid)
-
-    if (goal.steps.some((step: StepModel, index) => step.uuid !== steps[index].uuid)) {
-      return next(createError(400, 'different steps were submitted'))
+        sortSteps(updated)
+        
+        const goalData: Partial<NewGoal> = {
+            steps: updatedSteps,
+            note,
+        }
+    
+        await req.services.stepService.saveAllSteps(goalData, uuid)
     }
+  
+  private saveAndRedirect = async (req: Request, res: Response, next: NextFunction) => {
+      const { uuid } = req.params
+      const { steps } = req.body
+      const note = req.body.moreDetail
 
-    const updated: NewStep[] = goal.steps.map((value, index) => {
-      return {
-        description: value.description,
-        actor: value.actor,
-        status: steps[index].status,
-        updated: value.status === steps[index].status ? 0 : 1,
+      const goal = await req.services.goalService.getGoal(uuid)
+      const goalType: string = goalStatusToTabName(goal.status)
+
+      try {
+          await this.updateSteps(req, goal, steps, note)
+          return res.redirect(`${URLs.PLAN_OVERVIEW}`)
+      } catch (e) {
+          return next(e)
       }
-    })
+      
+      req.services.sessionService.setReturnLink(null)
 
-    sortSteps(updated)
-
-    await req.services.stepService.saveAllSteps(updated, uuid)
-
-    const goalType: string = goalStatusToTabName(goal.status)
-    req.services.sessionService.setReturnLink(null)
-
-    return res.redirect(`${URLs.PLAN_OVERVIEW}?type=${goalType}`)
+      return res.redirect(`${URLs.PLAN_OVERVIEW}?type=${goalType}`)
   }
 
   private handleValidationErrors = (req: Request, res: Response, next: NextFunction) => {
