@@ -124,8 +124,8 @@ export function mergeDeep(...objects: Record<string, any>[]): Record<string, any
 
 /*
   Depending on status, steps should be sorted by status, with the ones that have been updated being moved to the bottom of that sorted section.
-  See the Statuses - in order.png for expected ordering.
-  This does mean that steps will move based on a status change.
+  The expected status order top to bottom is:
+  NOT_STARTED, IN_PROGRESS, CANNOT_BE_DONE_YET, NO_LONGER_NEEDED, COMPLETED
 
   If multiple are moved from e.g. not started --> in progress, they should stay in the same order.
   So if you agree a plan, lets say 3 steps in a goal, all are not started to begin with.
