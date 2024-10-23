@@ -1,4 +1,5 @@
 import { GoalStatus } from './GoalType'
+import { NewStep } from './StepType'
 
 export type NewGoal = {
   title: string
@@ -7,4 +8,5 @@ export type NewGoal = {
   relatedAreasOfNeed?: string[]
   status?: GoalStatus
   note?: string
+  steps?: NewStep[]
 }

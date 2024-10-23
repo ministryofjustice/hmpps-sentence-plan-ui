@@ -35,14 +35,14 @@ export default class UpdateGoalController {
     })
   }
 
-  private async updateSteps(req: Request, uuid: string, steps: StepModel[]) {
+  private async updateSteps(req: Request, uuid: string, steps: StepModel[], note: string) {
     const goal = await req.services.goalService.getGoal(uuid)
 
     if (goal.steps.some((step: StepModel, index) => step.uuid !== steps[index].uuid)) {
       throw createError(400, 'different steps were submitted')
     }
 
-    const updated: NewStep[] = goal.steps.map((value, index) => {
+    const updatedSteps: NewStep[] = goal.steps.map((value, index) => {
       return {
         description: value.description,
         actor: value.actor,
@@ -50,15 +50,12 @@ export default class UpdateGoalController {
       }
     })
 
-    await req.services.stepService.saveAllSteps(updated, uuid)
-  }
-
-  private async addNoteToGoal(req: Request, uuid: string, note: string) {
     const goalData: Partial<NewGoal> = {
+      steps: updatedSteps,
       note,
     }
 
-    await req.services.goalService.updateGoal(goalData, uuid)
+    await req.services.stepService.saveAllSteps(goalData, uuid)
   }
 
   private saveAndRedirect = async (req: Request, res: Response, next: NextFunction) => {
@@ -67,8 +64,7 @@ export default class UpdateGoalController {
     const note = req.body.moreDetail
 
     try {
-      await this.updateSteps(req, uuid, steps)
-      await this.addNoteToGoal(req, uuid, note)
+      await this.updateSteps(req, uuid, steps, note)
       return res.redirect(`${URLs.PLAN_OVERVIEW}`)
     } catch (e) {
       return next(e)
