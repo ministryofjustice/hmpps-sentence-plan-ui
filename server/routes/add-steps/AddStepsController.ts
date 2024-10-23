@@ -49,8 +49,8 @@ export default class AddStepsController {
       goalUuid,
     )
 
-    const link = req.services.sessionService.getBackLink() ?? `${URLs.PLAN_OVERVIEW}?status=success`
-    req.services.sessionService.setBackLink(null)
+    const link = req.services.sessionService.getReturnLink() ?? `${URLs.PLAN_OVERVIEW}?status=success`
+    req.services.sessionService.setReturnLink(null)
 
     return res.redirect(link)
   }
