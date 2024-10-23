@@ -43,7 +43,7 @@ export default class UpdateGoalController {
         if (goal.steps.some((step: StepModel, index) => step.uuid !== steps[index].uuid)) {
             throw createError(400, 'different steps were submitted')
         }
-    
+
         const updatedSteps: NewStep[] = goal.steps.map((value, index) => {
             return {
                 description: value.description,
@@ -54,15 +54,15 @@ export default class UpdateGoalController {
         })
 
         sortSteps(updated)
-        
+
         const goalData: Partial<NewGoal> = {
             steps: updatedSteps,
             note,
         }
-    
+
         await req.services.stepService.saveAllSteps(goalData, uuid)
     }
-  
+
   private saveAndRedirect = async (req: Request, res: Response, next: NextFunction) => {
       const { uuid } = req.params
       const { steps } = req.body
@@ -77,7 +77,7 @@ export default class UpdateGoalController {
       } catch (e) {
           return next(e)
       }
-      
+
       req.services.sessionService.setReturnLink(null)
 
       return res.redirect(`${URLs.PLAN_OVERVIEW}?type=${goalType}`)
