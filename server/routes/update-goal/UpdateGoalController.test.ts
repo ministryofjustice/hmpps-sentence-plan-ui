@@ -27,6 +27,7 @@ jest.mock('../../services/sentence-plan/goalService', () => {
 jest.mock('../../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
     getSubjectDetails: jest.fn().mockReturnValue(handoverData.subject),
+    setBackLink: jest.fn(),
   }))
 })
 

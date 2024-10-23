@@ -26,4 +26,10 @@ export default class SessionService {
   getSubjectDetails = () => this.request.session.handover?.subject
 
   getOasysReturnUrl = () => this.request.session.handover?.principal.returnUrl
+
+  getBackLink = () => this.request.session.backLink
+
+  setBackLink = (backLink: string) => {
+    this.request.session.backLink = backLink
+  }
 }

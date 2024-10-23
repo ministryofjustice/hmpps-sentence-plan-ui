@@ -23,7 +23,7 @@ export default class UpdateGoalController {
     const mainAreaOfNeed = sortedAreasOfNeed.find(areaOfNeed => areaOfNeed.name === goal.areaOfNeed.name)
     const relatedAreasOfNeed = goal.relatedAreasOfNeed.map(need => need.name)
 
-    req.session.backLink = `/update-goal/${uuid}`
+    req.services.sessionService.setBackLink(`/update-goal/${uuid}`)
 
     return res.render('pages/update-goal', {
       locale: locale.en,
@@ -61,7 +61,7 @@ export default class UpdateGoalController {
     await req.services.stepService.saveAllSteps(updated, uuid)
 
     const goalType: string = goalStatusToTabName(goal.status)
-    req.session.backLink = null
+    req.services.sessionService.setBackLink(null)
 
     return res.redirect(`${URLs.PLAN_OVERVIEW}?type=${goalType}`)
   }
