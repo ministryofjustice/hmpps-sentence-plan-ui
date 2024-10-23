@@ -8,6 +8,7 @@ import UpdateGoalPostModel from './models/UpdateGoalPostModel'
 import StepModel from '../shared-models/StepModel'
 import validateRequest from '../../middleware/validationMiddleware'
 import { NewStep } from '../../@types/StepType'
+import { NewGoal } from '../../@types/NewGoalType'
 
 export default class UpdateGoalController {
   constructor(private readonly referentialDataService: ReferentialDataService) {}
@@ -34,14 +35,11 @@ export default class UpdateGoalController {
     })
   }
 
-  private saveAndRedirect = async (req: Request, res: Response, next: NextFunction) => {
-    const { uuid } = req.params
-    const { steps } = req.body
-
+  private async updateSteps(req: Request, uuid: string, steps: StepModel[]) {
     const goal = await req.services.goalService.getGoal(uuid)
 
     if (goal.steps.some((step: StepModel, index) => step.uuid !== steps[index].uuid)) {
-      return next(createError(400, 'different steps were submitted'))
+      throw createError(400, 'different steps were submitted')
     }
 
     const updated: NewStep[] = goal.steps.map((value, index) => {
@@ -53,8 +51,28 @@ export default class UpdateGoalController {
     })
 
     await req.services.stepService.saveAllSteps(updated, uuid)
+  }
 
-    return res.redirect(`${URLs.PLAN_OVERVIEW}`)
+  private async addNoteToGoal(req: Request, uuid: string, note: string) {
+    const goalData: Partial<NewGoal> = {
+      note,
+    }
+
+    await req.services.goalService.updateGoal(goalData, uuid)
+  }
+
+  private saveAndRedirect = async (req: Request, res: Response, next: NextFunction) => {
+    const { uuid } = req.params
+    const { steps } = req.body
+    const note = req.body.moreDetail
+
+    try {
+      await this.updateSteps(req, uuid, steps)
+      await this.addNoteToGoal(req, uuid, note)
+      return res.redirect(`${URLs.PLAN_OVERVIEW}`)
+    } catch (e) {
+      return next(e)
+    }
   }
 
   private handleValidationErrors = (req: Request, res: Response, next: NextFunction) => {
