@@ -21,6 +21,7 @@ jest.mock('../../services/sentence-plan/referentialDataService', () => {
 jest.mock('../../services/sentence-plan/goalService', () => {
   return jest.fn().mockImplementation(() => ({
     getGoal: jest.fn().mockResolvedValue(testGoal),
+    updateGoal: jest.fn().mockResolvedValue(testGoal),
   }))
 })
 
