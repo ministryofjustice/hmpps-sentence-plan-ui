@@ -75,7 +75,6 @@
             </label>
 
             <form id="update-goal-form" method="POST">
-                <input type="submit" disabled style="display: none" aria-hidden="true" />
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
                 {% if data.goal.steps and data.goal.steps.length > 0 %}
                     <table class="govuk-table goal-summary-card__steps">
