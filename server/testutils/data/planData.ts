@@ -7,6 +7,8 @@ const testPlan: PlanType = {
   agreementStatus: PlanAgreementStatus.DRAFT,
   createdDate: new Date(Date.now() - 1000 * 60 * 60).toISOString(),
   updatedDate: new Date().toISOString(),
+  updatedBy: '',
+  agreementDate: new Date().toISOString(),
   goals: [testGoal],
 }
 
@@ -16,6 +18,8 @@ const agreedTestPlan: PlanType = {
   agreementStatus: PlanAgreementStatus.AGREED,
   createdDate: new Date(Date.now() - 1000 * 60 * 60).toISOString(),
   updatedDate: new Date().toISOString(),
+  updatedBy: '',
+  agreementDate: new Date().toISOString(),
   goals: [testGoal],
 }
 
