@@ -6,10 +6,15 @@
         "errorTitle": "Error: Remove a goal - {{ applicationName }}"
       },
       "mainHeading": {
-        "title": "Are you sure you want to remove this goal?"
+        "title": "Confirm you want to remove this goal"
       },
-      "removeGoalButtonText": "Yes, remove goal",
-      "cancelButtonText": "No, do not remove goal"
+      "notes": {
+        "label": "Why do you want to remove this goal?"
+      },
+      "pageBodyOne": "Remove a goal if it is no longer relevant to {{ subject.givenName }}.",
+      "pageBodyTwo": "You will still be able to see it in 'Removed goals', but {{ subject.givenName }} will not be expected to achieve it.",
+      "removeGoalButtonText": "Confirm",
+      "cancelButtonText": "Do not remove goal"
     },
     "delete": {
       "page": {
@@ -18,6 +23,9 @@
       },
       "mainHeading": {
         "title": "Confirm you want to delete this goal"
+      },
+      "notes": {
+        "label": ""
       },
       "pageBodyOne": "Delete this goal if you've made a mistake. It will not be saved to {{ subject.possessiveName }} plan.",
       "pageBodyTwo": "Alternatively, you can <a href='/edit-goal/{{ goalUuid }}'>change the goal</a> instead.",

@@ -1,6 +1,7 @@
 {% extends "../partials/layout.njk" %}
 {% from "../components/summary-card/goal-summary-card.njk" import goalSummaryCard %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 
 {% set locale = interpolate(locale, {
     goalUuid: data.goal.uuid
@@ -23,10 +24,8 @@
         <a href="#" class="govuk-back-link">Back</a>
         <h1 class="govuk-heading-l">{{ locale.mainHeading.title }}</h1>
 
-        {%  if(data.actionType == "delete") %}
-            <p>{{  locale.pageBodyOne }}</p>
-            <p>{{  locale.pageBodyTwo | safe }}</p>
-        {% endif %}
+        <p>{{  locale.pageBodyOne }}</p>
+        <p>{{  locale.pageBodyTwo | safe }}</p>
 
         {{ goalSummaryCard({
             goal: data.goal,
@@ -37,6 +36,21 @@
             <input type="hidden" name="_csrf" value="{{ csrfToken }}">
             <input type="hidden" name="goalUuid" value="{{ data.goal.uuid }}">
             <input type="hidden" name="type" value="{{ data.type }}">
+
+            {%  if(data.actionType == "remove") %}
+                <br>
+                {{ govukTextarea({
+                    name: "goal-removal-note",
+                    id: "goal-removal-note",
+                    classes: "govuk-!-width-two-thirds",
+                    rows: 4,
+                    label: {
+                        text: locale.notes.label,
+                        classes: "govuk-label--m"
+                    }
+                }) }}
+            {% endif %}
+
             <div class="govuk-button-group">
                 {{ govukButton({
                     text: locale.removeGoalButtonText,
