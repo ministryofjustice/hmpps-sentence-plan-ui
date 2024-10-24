@@ -28,19 +28,17 @@
       }
     },
     "dateSelection": {
-      "label": "When should {{ subject.givenName }} achieve this?",
+      "label": "When should {{ subject.givenName }} aim to achieve this goal?",
       "hint": "Select one option.",
       "options": {
-        "nextMeeting": "At our next meeting (by {{ dateOptions.nextMeeting }})",
-        "threeMonths": "In 3 months (by {{ dateOptions.threeMonths }})",
-        "sixMonths": "In 6 months (by {{ dateOptions.sixMonths }})",
-        "twelveMonths": "In 12 months (by {{ dateOptions.twelveMonths }})",
-        "twentyFourMonths": "At the end of {{ subject.possessiveName }} sentence (by {{ dateOptions.endOfSentence }})",
+        "threeMonths": "In 3 months ({{ dateOptions.threeMonths }})",
+        "sixMonths": "In 6 months ({{ dateOptions.sixMonths }})",
+        "twelveMonths": "In 12 months ({{ dateOptions.twelveMonths }})",
         "custom": "Set another date"
       }
     },
     "datePicker": {
-      "label": "Select a date.",
+      "label": "Select a date",
       "hint": "For example, 31/3/2024."
     },
     "saveButtonText": "Save and continue",

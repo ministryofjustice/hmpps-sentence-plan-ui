@@ -13,9 +13,7 @@
     dateOptions: {
         threeMonths: data.dateOptions[0] | formatSimpleDate,
         sixMonths: data.dateOptions[1] | formatSimpleDate,
-        twelveMonths: data.dateOptions[2] | formatSimpleDate,
-        endOfSentence: data.dateOptions[3] | formatSimpleDate,
-        nextMeeting: data.dateOptions[4] | formatSimpleDate
+        twelveMonths: data.dateOptions[2] | formatSimpleDate
     }
 }) %}
 
@@ -63,11 +61,11 @@
                     value: data.form['goal-input-autocomplete']
                 }) }}
 
-                {% set additionalAreaOfNeedCheckboxes = [] %}
+                {% set relatedAreaOfNeedCheckboxes = [] %}
                 {% for areaOfNeed in data.sortedAreasOfNeed %}
-                    {% if areaOfNeed.name != data.areaOfNeed %}
+                    {% if areaOfNeed.name != data.selectedAreaOfNeed.name %}
                         {% set isChecked = data.form['related-area-of-need'] and (areaOfNeed.name in data.form['related-area-of-need']) %}
-                        {% set additionalAreaOfNeedCheckboxes = additionalAreaOfNeedCheckboxes.concat({
+                        {% set relatedAreaOfNeedCheckboxes = relatedAreaOfNeedCheckboxes.concat({
                             value: areaOfNeed.name,
                             text: areaOfNeed.name,
                             checked: isChecked
@@ -83,7 +81,7 @@
                             text: locale.relatedAreaOfNeed.hint
                         },
                         errorMessage: getFormattedError(errors, locale, "related-area-of-need"),
-                        items: additionalAreaOfNeedCheckboxes
+                        items: relatedAreaOfNeedCheckboxes
                     }) }}
                 {% endset -%}
 
@@ -148,11 +146,6 @@
                         value: data.form['date-selection-radio'],
                         items: [
                             {
-                                value: data.dateOptions[4] | formatISODate,
-                                text: locale.dateSelection.options.nextMeeting,
-                                checked: data.form['date-selection-radio'] == data.dateOptions[4] | formatISODate
-                            },
-                            {
                                 value: data.dateOptions[0] | formatISODate,
                                 text: locale.dateSelection.options.threeMonths
                             },
@@ -163,10 +156,6 @@
                             {
                                 value: data.dateOptions[2] | formatISODate,
                                 text: locale.dateSelection.options.twelveMonths
-                            },
-                            {
-                                value: data.dateOptions[3] | formatISODate,
-                                text: locale.dateSelection.options.twentyFourMonths
                             },
                             {
                                 divider: "or"
