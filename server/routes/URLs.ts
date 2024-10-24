@@ -9,7 +9,7 @@ export default {
   REMOVE_GOAL: '/remove-goal/:uuid',
   DELETE_GOAL: '/confirm-delete-goal/:uuid',
   UPDATE_GOAL: '/update-goal/:uuid',
-  EDIT_GOAL: '/edit-goal/:uuid',
+  CHANGE_GOAL: '/change-goal/:uuid',
   ACHIEVE_GOAL: '/confirm-achieved-goal/:uuid',
   AGREE_PLAN: '/agree-plan',
 }

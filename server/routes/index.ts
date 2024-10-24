@@ -3,7 +3,7 @@ import asyncMiddleware from '../middleware/asyncMiddleware'
 import type { Services } from '../services'
 import setupCreateGoalRoutes from './createGoal/routes'
 import setupRemoveGoalRoutes from './removeGoal/routes'
-import setupEditGoalRoutes from './editGoal/routes'
+import setupChangeGoalRoutes from './changeGoal/routes'
 import setupAboutPopRoutes from './aboutPop/routes'
 import { Page } from '../services/auditService'
 import setupReferenceDataRoutes from './ReferenceData/routes'
@@ -30,7 +30,7 @@ export default function routes(services: Services): Router {
   setupAboutPopRoutes(router, services)
   setupCreateGoalRoutes(router, services)
   setupRemoveGoalRoutes(router)
-  setupEditGoalRoutes(router, services)
+  setupChangeGoalRoutes(router, services)
   setupViewAchievedGoalRoutes(router)
   setupAchieveGoalRoutes(router)
   setupAddStepsRoutes(router)

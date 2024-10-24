@@ -2,13 +2,13 @@ import { NextFunction, Request, Response } from 'express'
 import { plainToInstance } from 'class-transformer'
 import { AreaOfNeed } from '../../testutils/data/referenceData'
 import ReferentialDataService from '../../services/sentence-plan/referentialDataService'
-import EditGoalController from './EditGoalController'
+import ChangeGoalController from './ChangeGoalController'
 import mockReq from '../../testutils/preMadeMocks/mockReq'
 import mockRes from '../../testutils/preMadeMocks/mockRes'
 import { testGoal } from '../../testutils/data/goalData'
 import locale from './locale.json'
 import { getValidationErrors } from '../../middleware/validationMiddleware'
-import EditGoalPostModel from './models/EditGoalPostModel'
+import ChangeGoalPostModel from './models/ChangeGoalPostModel'
 import URLs from '../URLs'
 import { NewGoal } from '../../@types/NewGoalType'
 import runMiddlewareChain from '../../testutils/runMiddlewareChain'
@@ -26,8 +26,8 @@ jest.mock('../../services/sentence-plan/goalService', () => {
   }))
 })
 
-describe('EditGoalController', () => {
-  let controller: EditGoalController
+describe('ChangeGoalController', () => {
+  let controller: ChangeGoalController
   let mockReferentialDataService: jest.Mocked<ReferentialDataService>
   let req: Request
   let res: Response
@@ -64,14 +64,14 @@ describe('EditGoalController', () => {
     res = mockRes()
     next = jest.fn()
 
-    controller = new EditGoalController(mockReferentialDataService)
+    controller = new ChangeGoalController(mockReferentialDataService)
   })
 
   describe('get', () => {
     it('should render without validation errors', async () => {
       await controller.get(req, res, next)
 
-      expect(res.render).toHaveBeenCalledWith('pages/edit-goal', viewData)
+      expect(res.render).toHaveBeenCalledWith('pages/change-goal', viewData)
     })
 
     it('should render with validation errors', async () => {
@@ -88,7 +88,7 @@ describe('EditGoalController', () => {
 
       await controller.get(req, res, next)
 
-      expect(res.render).toHaveBeenCalledWith('pages/edit-goal', expectedViewData)
+      expect(res.render).toHaveBeenCalledWith('pages/change-goal', expectedViewData)
     })
   })
 
@@ -100,7 +100,7 @@ describe('EditGoalController', () => {
 
       describe('goal-input-autocomplete', () => {
         it('should add error if not provided', () => {
-          const body = plainToInstance(EditGoalPostModel, req.body)
+          const body = plainToInstance(ChangeGoalPostModel, req.body)
           const errors = getValidationErrors(body)
 
           expect(errors).toMatchObject({
@@ -110,7 +110,7 @@ describe('EditGoalController', () => {
 
         it('should not add error if provided', () => {
           req.body['goal-input-autocomplete'] = 'Title of a goal'
-          const body = plainToInstance(EditGoalPostModel, req.body)
+          const body = plainToInstance(ChangeGoalPostModel, req.body)
           const errors = getValidationErrors(body)
 
           expect(errors).not.toMatchObject({
@@ -121,7 +121,7 @@ describe('EditGoalController', () => {
 
       describe('related-area-of-need-radio', () => {
         it('should add error if not provided', () => {
-          const body = plainToInstance(EditGoalPostModel, req.body)
+          const body = plainToInstance(ChangeGoalPostModel, req.body)
           const errors = getValidationErrors(body)
 
           expect(errors).toMatchObject({
@@ -131,7 +131,7 @@ describe('EditGoalController', () => {
 
         it('should not add error if provided', () => {
           req.body['related-area-of-need-radio'] = 'yes'
-          const body = plainToInstance(EditGoalPostModel, req.body)
+          const body = plainToInstance(ChangeGoalPostModel, req.body)
           const errors = getValidationErrors(body)
 
           expect(errors).not.toMatchObject({
@@ -143,7 +143,7 @@ describe('EditGoalController', () => {
       describe('related-area-of-need', () => {
         it('should add error if "related-area-of-need-radio" is "yes" and "related-area-of-need" is not provided', () => {
           req.body['related-area-of-need-radio'] = 'yes'
-          const body = plainToInstance(EditGoalPostModel, req.body)
+          const body = plainToInstance(ChangeGoalPostModel, req.body)
           const errors = getValidationErrors(body)
 
           expect(errors).toMatchObject({
@@ -154,7 +154,7 @@ describe('EditGoalController', () => {
         it('should not add error if "related-area-of-need-radio" is "yes" and "related-area-of-need" is provided', () => {
           req.body['related-area-of-need-radio'] = 'yes'
           req.body['related-area-of-need'] = 'Accommodation'
-          const body = plainToInstance(EditGoalPostModel, req.body)
+          const body = plainToInstance(ChangeGoalPostModel, req.body)
           const errors = getValidationErrors(body)
 
           expect(errors).not.toMatchObject({
@@ -164,7 +164,7 @@ describe('EditGoalController', () => {
 
         it('should not add error if "related-area-of-need-radio" is not "yes"', () => {
           req.body['related-area-of-need-radio'] = 'no'
-          const body = plainToInstance(EditGoalPostModel, req.body)
+          const body = plainToInstance(ChangeGoalPostModel, req.body)
           const errors = getValidationErrors(body)
 
           expect(errors).not.toMatchObject({
@@ -175,7 +175,7 @@ describe('EditGoalController', () => {
 
       describe('start-working-goal-radio', () => {
         it('should add error if "start-working-goal-radio" is not provided', () => {
-          const body = plainToInstance(EditGoalPostModel, req.body)
+          const body = plainToInstance(ChangeGoalPostModel, req.body)
           const errors = getValidationErrors(body)
 
           expect(errors).toMatchObject({
@@ -185,7 +185,7 @@ describe('EditGoalController', () => {
 
         it('should not add error if "start-working-goal-radio" is provided', () => {
           req.body['start-working-goal-radio'] = 'yes'
-          const body = plainToInstance(EditGoalPostModel, req.body)
+          const body = plainToInstance(ChangeGoalPostModel, req.body)
           const errors = getValidationErrors(body)
 
           expect(errors).not.toMatchObject({
@@ -197,7 +197,7 @@ describe('EditGoalController', () => {
       describe('date-selection', () => {
         it('should add error if "date-selection-radio" is not provided', () => {
           req.body['start-working-goal-radio'] = 'yes'
-          const body = plainToInstance(EditGoalPostModel, req.body)
+          const body = plainToInstance(ChangeGoalPostModel, req.body)
           const errors = getValidationErrors(body)
 
           expect(errors).toMatchObject({
@@ -208,7 +208,7 @@ describe('EditGoalController', () => {
         it('should not add error if "date-selection-radio" is provided', () => {
           req.body['start-working-goal-radio'] = 'yes'
           req.body['date-selection-radio'] = 'custom'
-          const body = plainToInstance(EditGoalPostModel, req.body)
+          const body = plainToInstance(ChangeGoalPostModel, req.body)
           const errors = getValidationErrors(body)
 
           expect(errors).not.toMatchObject({
@@ -219,7 +219,7 @@ describe('EditGoalController', () => {
         it('should add error if "date-selection-radio" is "custom", and "date-selection-custom" is not provided', () => {
           req.body['start-working-goal-radio'] = 'yes'
           req.body['date-selection-radio'] = 'custom'
-          const body = plainToInstance(EditGoalPostModel, req.body)
+          const body = plainToInstance(ChangeGoalPostModel, req.body)
           const errors = getValidationErrors(body)
 
           expect(errors).toMatchObject({
@@ -231,7 +231,7 @@ describe('EditGoalController', () => {
           req.body['start-working-goal-radio'] = 'yes'
           req.body['date-selection-radio'] = 'custom'
           req.body['date-selection-custom'] = new Date()
-          const body = plainToInstance(EditGoalPostModel, req.body)
+          const body = plainToInstance(ChangeGoalPostModel, req.body)
           const errors = getValidationErrors(body)
 
           expect(errors).not.toMatchObject({
@@ -284,7 +284,7 @@ describe('EditGoalController', () => {
 
       await runMiddlewareChain(controller.post, req, res, next)
 
-      expect(res.render).toHaveBeenCalledWith('pages/edit-goal', expectedViewData)
+      expect(res.render).toHaveBeenCalledWith('pages/change-goal', expectedViewData)
     })
 
     it('should should return error page if there is an error saving the goal', async () => {
