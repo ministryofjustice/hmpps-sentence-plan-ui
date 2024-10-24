@@ -30,7 +30,7 @@ describe('Change a goal', () => {
       cy.get('.govuk-checkboxes').first().contains('Accommodation').should('not.be.checked')
       cy.get('input[value="Health and wellbeing"]').should('be.checked')
       cy.get('input[name="start-working-goal-radio"]').should('be.checked').and('have.value', 'yes')
-      cy.get('#date-selection-radio-3').should('be.checked')
+      cy.get('#date-selection-radio-2').should('be.checked')
     })
   })
 
@@ -44,7 +44,7 @@ describe('Change a goal', () => {
       })
 
       // Modify data
-      cy.get('#related-area-of-need-6').uncheck()
+      cy.get('#related-area-of-need-5').uncheck()
       cy.contains('button', 'save').click()
 
       cy.get('.govuk-error-summary').should('contain', 'Select all related areas')
@@ -116,7 +116,7 @@ describe('Change a goal', () => {
         .split('-')
       const date = `${twentyMonthsLaterISODate[2]}/${twentyMonthsLaterISODate[1]}/${twentyMonthsLaterISODate[0]}`
       // Modify data
-      cy.get('#date-selection-radio-7').check()
+      cy.get('#date-selection-radio-5').check()
       cy.get('#date-selection-custom').type(date)
       cy.contains('button', 'save').click()
       cy.url().should('include', 'plan?status=updated&type=current')
