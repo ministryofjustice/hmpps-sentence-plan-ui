@@ -113,7 +113,7 @@ describe('Test Removing Goal', () => {
 
   describe('post', () => {
     it('should return to plan overview after removing goal if remove goal is selected', async () => {
-      req.body = { type: 'some-type', action: 'remove', goalUuid: 'xyz' }
+      req.body = { type: 'some-type', action: 'remove', goalUuid: 'xyz', 'goal-removal-note': 'a reason' }
       await controller.post(req as Request, res as Response, next)
       expect(req.services.goalService.updateGoal).toHaveBeenCalled()
       expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_OVERVIEW}?type=some-type&status=removed`)

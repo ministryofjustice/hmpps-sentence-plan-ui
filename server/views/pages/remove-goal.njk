@@ -2,6 +2,7 @@
 {% from "../components/summary-card/goal-summary-card.njk" import goalSummaryCard %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "../components/error-summary/error-summary.njk" import errorSummary %}
 
 {% set locale = interpolate(locale, {
     goalUuid: data.goal.uuid
@@ -21,7 +22,13 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-        <a href="#" class="govuk-back-link">Back</a>
+        <a href="/plan?type={{ data.type }}" class="govuk-back-link">Back</a>
+
+        {{ errorSummary({
+            errors: errors,
+            locale: locale
+        }) }}
+
         <h1 class="govuk-heading-l">{{ locale.mainHeading.title }}</h1>
 
         <p>{{  locale.pageBodyOne }}</p>
@@ -46,8 +53,9 @@
                     rows: 4,
                     label: {
                         text: locale.notes.label,
-                        classes: "govuk-label--m"
-                    }
+                        classes: "govuk-label--m govuk-!-width-two-thirds"
+                    },
+                    errorMessage: getFormattedError(errors, locale, 'goal-removal-note')
                 }) }}
             {% endif %}
 
