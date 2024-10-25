@@ -120,7 +120,7 @@ describe('Test Removing Goal', () => {
       expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_OVERVIEW}?type=some-type&status=removed`)
     })
 
-    it('should rerender remove goal page if remove goal is selected and no reason is provided', async () => {
+    it('should re-render remove goal page if remove goal is selected and no reason is provided', async () => {
       req.body = { type: 'some-type', action: 'remove', goalUuid: 'xyz' }
       await runMiddlewareChain(controller.post, req, res, next)
       expect(req.services.goalService.updateGoal).not.toHaveBeenCalled()
