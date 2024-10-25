@@ -99,14 +99,14 @@ describe('Remove a goal from a Plan after it has been agreed', () => {
         cy.contains('a', 'Remove').click()
       })
 
-      // Check we've landed on confirm goal removeal page
+      // Check we've landed on confirm goal remove page
       cy.get<Goal>('@goal').then(goal => {
         cy.url().should('contain', `/remove-goal/${goal.uuid}`)
       })
       cy.get('.goal-summary-card').should('contain', goalData.title)
 
       // Confirm delete
-      cy.contains('button', 'Yes, remove goal').click()
+      cy.contains('button', 'Confirm').click()
 
       // Check goal has been deleted
       cy.url().should('contain', '/plan?type=current&status=removed')
