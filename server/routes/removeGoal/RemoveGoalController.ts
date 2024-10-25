@@ -5,6 +5,9 @@ import URLs from '../URLs'
 import { NewGoal } from '../../@types/NewGoalType'
 import { GoalStatus } from '../../@types/GoalType'
 import { PlanAgreementStatus } from '../../@types/PlanType'
+import transformRequest from '../../middleware/transformMiddleware'
+import RemoveGoalPostModel from './models/RemoveGoalPostModel'
+import validateRequest from '../../middleware/validationMiddleware'
 
 export default class RemoveGoalController {
   render = async (req: Request, res: Response, next: NextFunction) => {
@@ -55,6 +58,10 @@ export default class RemoveGoalController {
           status: GoalStatus.REMOVED,
         }
 
+        if (req.body['goal-removal-note']) {
+          goalData.note = req.body['goal-removal-note']
+        }
+
         try {
           await req.services.goalService.updateGoal(goalData, goalUuid)
           return res.redirect(`${URLs.PLAN_OVERVIEW}?type=${type}&status=removed`)
@@ -69,9 +76,14 @@ export default class RemoveGoalController {
     }
   }
 
+  private handleValidationErrors = (req: Request, res: Response, next: NextFunction) => {
+    if (Object.keys(req.errors.body).length && req.body.action === 'remove') {
+      return this.render(req, res, next)
+    }
+    return next()
+  }
+
   get = this.render
 
-  post = (req: Request, res: Response, next: NextFunction) => {
-    return this.remove(req, res, next)
-  }
+  post = [transformRequest({ body: RemoveGoalPostModel }), validateRequest(), this.handleValidationErrors, this.remove]
 }
