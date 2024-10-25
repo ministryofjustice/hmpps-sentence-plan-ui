@@ -105,6 +105,9 @@ describe('Remove a goal from a Plan after it has been agreed', () => {
       })
       cy.get('.goal-summary-card').should('contain', goalData.title)
 
+      // Add note text
+      cy.get('#goal-removal-note').type('Some optional text in the note field')
+
       // Confirm delete
       cy.contains('button', 'Confirm').click()
 
