@@ -3,7 +3,8 @@ import RemoveGoalController from './RemoveGoalController'
 import mockReq from '../../testutils/preMadeMocks/mockReq'
 import mockRes from '../../testutils/preMadeMocks/mockRes'
 import { testGoal } from '../../testutils/data/goalData'
-import locale from './locale.json'
+import localeDelete from './locale-delete.json'
+import localeRemove from './locale-remove.json'
 import URLs from '../URLs'
 import testPlan, { agreedTestPlan } from '../../testutils/data/planData'
 import runMiddlewareChain from '../../testutils/runMiddlewareChain'
@@ -49,7 +50,7 @@ describe('Test Deleting Goal', () => {
       actionType: 'delete',
     },
     errors: {},
-    locale: locale.en.delete,
+    locale: localeDelete.en,
   }
 
   beforeEach(() => {
@@ -90,7 +91,7 @@ describe('Test Removing Goal', () => {
       actionType: 'remove',
     },
     errors: {},
-    locale: locale.en.remove,
+    locale: localeRemove.en,
   }
 
   beforeEach(() => {

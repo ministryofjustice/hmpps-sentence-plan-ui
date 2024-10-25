@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import * as superagent from 'superagent'
-import locale from './locale.json'
+import localeDelete from './locale-delete.json'
+import localeRemove from './locale-remove.json'
 import URLs from '../URLs'
 import { NewGoal } from '../../@types/NewGoalType'
 import { GoalStatus } from '../../@types/GoalType'
@@ -16,17 +17,20 @@ export default class RemoveGoalController {
     try {
       const type = req.query?.type
       const { uuid } = req.params
+      let actionType
+      let localeType
 
       const goal = await req.services.goalService.getGoal(uuid)
-      let actionType = 'remove'
-      let localeType = locale.en.remove
 
       const planUuid = req.services.sessionService.getPlanUUID()
       const plan = await req.services.planService.getPlanByUuid(planUuid)
 
       if (plan.agreementStatus === PlanAgreementStatus.DRAFT) {
         actionType = 'delete'
-        localeType = locale.en.delete
+        localeType = localeDelete.en
+      } else {
+        actionType = 'remove'
+        localeType = localeRemove.en
       }
 
       return res.render('pages/remove-goal', {
