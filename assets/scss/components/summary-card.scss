@@ -9,3 +9,11 @@
   flex-shrink: 0;
   align-items: flex-start;
 }
+
+.govuk-summary-card--no-pad {
+  border: unset;
+}
+
+.govuk-summary-card--no-pad .govuk-summary-card__content{
+  padding: 0;
+}

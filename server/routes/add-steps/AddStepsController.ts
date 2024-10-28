@@ -49,6 +49,7 @@ export default class AddStepsController {
       goalUuid,
     )
 
+    // TODO: this is wrong... we should be able to add steps only, or add steps after adding a (current or future) goal, and get a success banner...
     const link = req.services.sessionService.getReturnLink() ?? `${URLs.PLAN_OVERVIEW}?status=success`
     req.services.sessionService.setReturnLink(null)
 

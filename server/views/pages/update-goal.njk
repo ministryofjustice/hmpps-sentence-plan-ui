@@ -67,17 +67,17 @@
             </div>
 
             <p>
-                {% if data.goal.targetDate %}{{ locale.aimToAchieveBy }}{% endif %}
+                {% if data.goal.targetDate %}{{ locale.aimToAchieveBy }}{% else %}{{ locale.common.goalSummaryCard.info.thisIsAFutureGoal }}{% endif %}
                 <a href="#" class="govuk-link govuk-link--no-visited-state">{{ locale.updateGoalDetails }}</a>
             </p>
-
-            <label class="govuk-label govuk-label--m">
-                {{ locale.reviewSteps }}
-            </label>
 
             <form id="update-goal-form" method="POST">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
                 {% if data.goal.steps and data.goal.steps.length > 0 %}
+                    <label class="govuk-label govuk-label--m">
+                        {{ locale.reviewSteps }}
+                    </label>
+
                     <table class="govuk-table goal-summary-card__steps">
                         <thead class="govuk-table__head">
                         <tr class="govuk-table__row">
@@ -113,12 +113,14 @@
                         </tbody>
                     </table>
                 {% else %}
-                    <div class="goal-summary-card__steps--empty">
-                        <strong>{{ locale.stepsList.noStepsAdded }}</strong>
-                        {% if data.actions.length > 0 %}
-                            <a href="/goal/{{ data.goal.uuid }}/add-steps">{{ locale.stepsList.addSteps }}</a>
-                        {% endif %}
+                    <div class="govuk-summary-card govuk-summary-card--no-pad">
+                        <div class="govuk-summary-card__content">
+                            <strong class="govuk-body govuk-!-font-weight-bold">{{ locale.common.goalSummaryCard.stepsList.noStepsAdded }}</strong>
+                        </div>
                     </div>
+                    {% if data.actions.length > 0 %}
+                        <a href="/goal/{{ data.goal.uuid }}/add-steps">{{ locale.stepsList.addSteps }}</a>
+                    {% endif %}
                 {% endif %}
 
                 <p>
