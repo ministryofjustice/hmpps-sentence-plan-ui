@@ -1,0 +1,15 @@
+{
+  "en": {
+    "page": {
+      "title": "Confirm you want to delete this goal - {{ applicationName }}",
+      "errorTitle": "Error: Confirm you want to delete this goal - {{ applicationName }}"
+    },
+    "mainHeading": {
+      "title": "Confirm you want to delete this goal"
+    },
+    "pageBodyOne": "Delete this goal if you've made a mistake. It will not be saved to {{ subject.possessiveName }} plan.",
+    "pageBodyTwo": "Alternatively, you can <a href='/edit-goal/{{ goalUuid }}'>change the goal</a> instead.",
+    "removeGoalButtonText": "Confirm",
+    "cancelButtonText": "Do not delete goal"
+  }
+}
