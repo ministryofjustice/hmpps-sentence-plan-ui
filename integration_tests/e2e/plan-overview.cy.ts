@@ -19,7 +19,7 @@ describe('View Plan Overview', () => {
   })
 
   it('Should have a `Return to OASys` button and it should return the user to the OASys return URL', () => {
-    cy.contains('a', 'Return to OASys').should('have.attr', 'href').and('include', 'https://oasys-url')
+    cy.contains('a', 'Return to OASys').should('have.attr', 'href').and('include', Cypress.env('OASTUB_URL'))
   })
 
   it('Should have text saying no goals to work on now', () => {
