@@ -1,0 +1,168 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "../components/summary-card/goal-summary-card.njk" import goalSummaryCard %}
+{% from "../components/note-list/note-list.njk" import noteList %}
+
+{% set locale = interpolate(locale, {
+    subject: data.popData,
+    goal: {
+        targetDate: data.goal.targetDate | formatSimpleDate
+    }
+}) %}
+
+{% set items = [
+    {
+        value: "NOT_STARTED",
+        text: locale.common.goalSummaryCard.stepsList.status.notStarted
+    },
+    {
+        value: "IN_PROGRESS",
+        text: locale.common.goalSummaryCard.stepsList.status.inProgress
+    },
+    {
+        value: "CANNOT_BE_DONE_YET",
+        text: locale.common.goalSummaryCard.stepsList.status.cannotBeDoneYet
+    },
+    {
+        value: "NO_LONGER_NEEDED",
+        text: locale.common.goalSummaryCard.stepsList.status.noLongerNeeded
+    },
+    {
+        value: "COMPLETED",
+        text: locale.common.goalSummaryCard.stepsList.status.completed
+    }
+] %}
+
+{% block pageTitle %}
+    {% if not errors %}
+        {{ locale.page.title }}
+    {% else %}
+        {{ locale.page.errorTitle }}
+    {% endif %}
+{% endblock %}
+
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+    {{ govukBackLink({
+        text: locale.common.backLink.text,
+        href: "/plan"
+    }) }}
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            <div class="govuk-grid-row">
+                <div class="govuk-grid-column-three-quarters">
+                    <span class="govuk-caption-l">{{ data.mainAreaOfNeed.name }}
+                        {% if data.relatedAreasOfNeed | length %}
+                            (and {{ data.relatedAreasOfNeed | sort | join(', ') | lower }}){% endif %}</span>
+                    <h1 class="govuk-heading-l">{{ data.goal.title }}</h1>
+                </div>
+            </div>
+
+            <p>
+                {% if data.goal.targetDate %}{{ locale.aimToAchieveBy }}{% endif %}
+                <a href="#" class="govuk-link govuk-link--no-visited-state">{{ locale.updateGoalDetails }}</a>
+            </p>
+
+            <label class="govuk-label govuk-label--m">
+                {{ locale.reviewSteps }}
+            </label>
+
+            <form id="update-goal-form" method="POST">
+                <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+                {% if data.goal.steps and data.goal.steps.length > 0 %}
+                    <table class="govuk-table goal-summary-card__steps">
+                        <thead class="govuk-table__head">
+                        <tr class="govuk-table__row">
+                            <th scope="col"
+                                class="govuk-table__header">{{ locale.common.goalSummaryCard.stepsList.whoHeader }}</th>
+                            <th scope="col"
+                                class="govuk-table__header">{{ locale.common.goalSummaryCard.stepsList.whatHeader }}</th>
+                            <th scope="col"
+                                class="govuk-table__header">{{ locale.common.goalSummaryCard.stepsList.statusHeader }}</th>
+                        </tr>
+                        </thead>
+                        <tbody class="govuk-table__body">
+                        {% for step in data.goal.steps %}
+                            <tr class="govuk-table__row">
+                                <td class="govuk-table__cell">{{ step.actor }}</td>
+                                <td id="step-description-{{ loop.index }}"
+                                    class="govuk-table__cell">{{ step.description }}</td>
+                                <td class="govuk-table__cell">
+                                    {{ govukSelect({
+                                        id: "step-status-" + loop.index,
+                                        name: "step-status-" + loop.index,
+                                        items: items,
+                                        value: step.status,
+                                        classes: "govuk-select--auto-width",
+                                        formGroup: {
+                                            classes: "govuk-!-margin-bottom-0"
+                                        }
+                                    }) }}
+                                    <input name="step-uuid-{{ loop.index }}" type="hidden" value="{{ step.uuid }}"/>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <div class="goal-summary-card__steps--empty">
+                        <strong>{{ locale.stepsList.noStepsAdded }}</strong>
+                        {% if data.actions.length > 0 %}
+                            <a href="/goal/{{ data.goal.uuid }}/add-steps">{{ locale.stepsList.addSteps }}</a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+                <p>
+                    <a href="/goal/{{ data.goal.uuid }}/add-steps"
+                       class="govuk-link govuk-link--no-visited-state">{{ locale.addOrChangeSteps }}</a>
+                </p>
+                <br>
+                <div class="govuk-width-container">
+                    <div class="govuk-grid-row">
+                        <div class="govuk-grid-column-two-thirds">
+                            <div class="govuk-form-group">
+                                <label class="govuk-label govuk-label--m" for="more-detail">
+                                    {{ locale.optionalProgressNotes }}
+                                </label>
+
+                                <div id="more-detail-hint" class="govuk-hint">
+                                    {{ locale.moreDetailHint }}
+                                </div>
+                                <textarea class="govuk-textarea" id="more-detail" name="moreDetail" rows="4"
+                                          aria-describedby="more-detail-hint"></textarea>
+
+                                {{ noteList({
+                                    notes: data.goal.notes,
+                                    locale: locale
+                                }) }}
+
+                                <div class="govuk-button-group">
+                                    <button type="submit" class="govuk-button" data-module="govuk-button">
+                                        {{ locale.saveGoalAndSteps }}
+                                    </button>
+                                    <button type="button" class="govuk-button govuk-button--secondary"
+                                            data-module="govuk-button">
+                                        {{ locale.markAsAchieved }}
+                                    </button>
+                                </div>
+                                <p>
+                                    <a href="/remove-goal/{{ data.goal.uuid }}"
+                                       class="govuk-link govuk-link--no-visited-state">{{ locale.removeGoalFromPlan }}</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

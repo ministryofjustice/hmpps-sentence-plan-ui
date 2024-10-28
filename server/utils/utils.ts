@@ -1,5 +1,7 @@
 import { Person } from '../@types/Person'
 import { RoshData } from '../@types/Rosh'
+import { NewStep, StepStatus } from '../@types/StepType'
+import { GoalStatus } from '../@types/GoalType'
 
 const properCase = (word: string): string =>
   word.length >= 1 ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word
@@ -118,4 +120,28 @@ export function mergeDeep(...objects: Record<string, any>[]): Record<string, any
 
     return newObj
   }, {})
+}
+
+/*
+  Depending on status, steps should be sorted by status, with the ones that have been updated being moved to the bottom of that sorted section.
+  The expected status order top to bottom is:
+  NOT_STARTED, IN_PROGRESS, CANNOT_BE_DONE_YET, NO_LONGER_NEEDED, COMPLETED
+
+  If multiple are moved from e.g. not started --> in progress, they should stay in the same order.
+  So if you agree a plan, lets say 3 steps in a goal, all are not started to begin with.
+  step 1 and 3 get moved to in progress, they should then show:
+    1. step 2 (not started)
+    2. step 1 (in progress)
+    3. step 3 (in progress).
+ */
+export function sortSteps(steps: NewStep[]) {
+  const statusArray = Object.values(StepStatus)
+
+  steps.sort((a, b) => {
+    return statusArray.indexOf(a.status) - statusArray.indexOf(b.status) || a.updated - b.updated
+  })
+}
+
+export function goalStatusToTabName(status: GoalStatus): string {
+  return status === GoalStatus.ACTIVE ? 'current' : status.toLowerCase()
 }

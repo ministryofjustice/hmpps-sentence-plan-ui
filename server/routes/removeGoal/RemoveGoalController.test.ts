@@ -3,9 +3,11 @@ import RemoveGoalController from './RemoveGoalController'
 import mockReq from '../../testutils/preMadeMocks/mockReq'
 import mockRes from '../../testutils/preMadeMocks/mockRes'
 import { testGoal } from '../../testutils/data/goalData'
-import locale from './locale.json'
+import localeDelete from './locale-delete.json'
+import localeRemove from './locale-remove.json'
 import URLs from '../URLs'
 import testPlan, { agreedTestPlan } from '../../testutils/data/planData'
+import runMiddlewareChain from '../../testutils/runMiddlewareChain'
 
 const mockGetPlanUUID = jest.fn().mockReturnValue(testPlan.uuid)
 const mockSessionService = jest.fn().mockImplementation(() => ({
@@ -48,7 +50,7 @@ describe('Test Deleting Goal', () => {
       actionType: 'delete',
     },
     errors: {},
-    locale: locale.en.delete,
+    locale: localeDelete.en,
   }
 
   beforeEach(() => {
@@ -70,7 +72,7 @@ describe('Test Deleting Goal', () => {
   describe('post', () => {
     it('should return to plan overview after deleting goal if delete goal is selected', async () => {
       req.body = { type: 'some-type', action: 'delete', goalUuid: 'xyz' }
-      await controller.post(req as Request, res as Response, next)
+      await runMiddlewareChain(controller.post, req, res, next)
       expect(req.services.goalService.deleteGoal).toHaveBeenCalled()
       expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_OVERVIEW}?type=some-type&status=deleted`)
     })
@@ -89,7 +91,7 @@ describe('Test Removing Goal', () => {
       actionType: 'remove',
     },
     errors: {},
-    locale: locale.en.remove,
+    locale: localeRemove.en,
   }
 
   beforeEach(() => {
@@ -112,11 +114,18 @@ describe('Test Removing Goal', () => {
   })
 
   describe('post', () => {
-    it('should return to plan overview after removing goal if remove goal is selected', async () => {
-      req.body = { type: 'some-type', action: 'remove', goalUuid: 'xyz' }
-      await controller.post(req as Request, res as Response, next)
+    it('should return to plan overview after removing goal if remove goal is selected and a reason provided', async () => {
+      req.body = { type: 'some-type', action: 'remove', goalUuid: 'xyz', 'goal-removal-note': 'a reason' }
+      await runMiddlewareChain(controller.post, req, res, next)
       expect(req.services.goalService.updateGoal).toHaveBeenCalled()
       expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_OVERVIEW}?type=some-type&status=removed`)
+    })
+
+    it('should re-render remove goal page if remove goal is selected and no reason is provided', async () => {
+      req.body = { type: 'some-type', action: 'remove', goalUuid: 'xyz' }
+      await runMiddlewareChain(controller.post, req, res, next)
+      expect(req.services.goalService.updateGoal).not.toHaveBeenCalled()
+      expect(res.render).toHaveBeenCalled()
     })
   })
 })

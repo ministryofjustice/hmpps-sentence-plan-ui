@@ -88,12 +88,18 @@ jobs:
       - run:
           name: Run the end-to-end tests
           command: make e2e-ci
+      - run:
+          name: Store container logs
+          command: make save-logs OUTPUT_LOGS_DIR=~/docker-logs PROJECT_NAME="hmpps-sentence-plan-test"
+          when: on_fail
       - store_test_results:
           path: test_results
       - store_artifacts:
           path: cypress/videos
       - store_artifacts:
           path: integration_tests/screenshots
+      - store_artifacts:
+          path: ~/docker-logs
 
 workflows:
   version: 2
@@ -147,6 +153,58 @@ workflows:
           requires:
             - helm_lint
             - publish_docker
+          helm_timeout: 5m
+      - request-preprod-approval:
+          type: approval
+          filters:
+            branches:
+              only:
+                - main
+          requires:
+            - deploy_dev
+      - hmpps/deploy_env:
+          name: deploy_preprod
+          env: "preprod"
+          jira_update: true
+          jira_env_type: staging
+          pipeline_id: <<pipeline.id>>
+          pipeline_number: <<pipeline.number>>
+          context:
+            - hmpps-common-vars
+            - hmpps-sentence-plan-preprod
+          filters:
+            branches:
+              only:
+                - main
+          requires:
+            - request-preprod-approval
+          helm_timeout: 5m
+      - request-prod-approval:
+          type: approval
+          filters:
+            branches:
+              only:
+                - main
+          requires:
+            - deploy_preprod
+      - hmpps/deploy_env:
+          name: deploy_prod
+          env: "prod"
+          jira_update: true
+          jira_env_type: production
+          pipeline_id: <<pipeline.id>>
+          pipeline_number: <<pipeline.number>>
+          slack_notification: true
+          slack_channel_name: << pipeline.parameters.releases-slack-channel >>
+          context:
+            - hmpps-common-vars
+            - hmpps-sentence-plan-prod
+          filters:
+            branches:
+              only:
+                - main
+          requires:
+            - request-prod-approval
           helm_timeout: 5m
 
   deploy-to-test-env:

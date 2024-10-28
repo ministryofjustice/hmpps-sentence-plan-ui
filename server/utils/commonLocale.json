@@ -38,13 +38,20 @@
           "notStarted": "Not started",
           "inProgress": "In progress",
           "completed": "Completed",
-          "cannotBeDoneYet": "Cannot be done yet"
+          "cannotBeDoneYet": "Cannot be done yet",
+          "noLongerNeeded": "No longer needed"
         }
       },
       "areaOfNeed": {
         "mainAreaOfNeed": "Area of need: {{ areaOfNeed }}",
         "relatedAreasOfNeed": "Also relates to: {{ relatedAreasOfNeed }}"
       }
+    },
+    "noteList": {
+      "viewAllNotes": "View all notes",
+      "noGoalNotes": "There are no notes on this goal yet.",
+      "noteHeading": "{{ noteDate }} by {{ noteAuthor }}",
+      "noteActionEvent": "Goal marked as {{ noteType }} on {{ noteDate }}"
     },
     "backLink": {
       "text": "Back"
