@@ -41,7 +41,7 @@ export const openSentencePlan = oasysAssessmentPk => {
               identifier: 123,
               displayName: 'Cypress User',
               accessMode: 'READ_WRITE',
-              returnUrl: 'https://oasys-url',
+              returnUrl: Cypress.env('OASTUB_URL'),
             },
             subjectDetails: {
               crn: 'X123456',
