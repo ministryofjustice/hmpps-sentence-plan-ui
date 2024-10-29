@@ -50,9 +50,6 @@ export default class CreateGoalController {
     const selectedAreaOfNeed = areasOfNeed.find(areaOfNeed => areaOfNeed.url === req.params.areaOfNeed)
     const minimumDatePickerDate = formatDateWithStyle(new Date().toISOString(), 'short')
 
-    // TODO: How many places can I get here from?
-    // TODO: req.services.sessionService.set... something, as I'm adding a goal...
-
     return res.render('pages/create-goal', {
       locale: locale.en,
       data: {

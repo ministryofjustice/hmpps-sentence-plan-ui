@@ -113,14 +113,12 @@
                         </tbody>
                     </table>
                 {% else %}
-                    <div class="govuk-summary-card govuk-summary-card--no-pad">
-                        <div class="govuk-summary-card__content">
-                            <strong class="govuk-body govuk-!-font-weight-bold">{{ locale.common.goalSummaryCard.stepsList.noStepsAdded }}</strong>
-                        </div>
+                    <div class="goal-summary-card__steps--empty-no-shadow">
+                        <strong>{{ locale.common.goalSummaryCard.stepsList.noStepsAdded }}</strong>
+                        {% if data.actions.length > 0 %}
+                            <a href="/goal/{{ data.goal.uuid }}/add-steps">{{ locale.common.goalSummaryCard.stepsList.addSteps }}</a>
+                        {% endif %}
                     </div>
-                    {% if data.actions.length > 0 %}
-                        <a href="/goal/{{ data.goal.uuid }}/add-steps">{{ locale.stepsList.addSteps }}</a>
-                    {% endif %}
                 {% endif %}
 
                 <p>
