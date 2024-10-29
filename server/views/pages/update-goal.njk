@@ -128,39 +128,37 @@
                        class="govuk-link govuk-link--no-visited-state">{{ locale.addOrChangeSteps }}</a>
                 </p>
                 <br>
-                <div class="govuk-width-container">
-                    <div class="govuk-grid-row">
-                        <div class="govuk-grid-column-two-thirds">
-                            <div class="govuk-form-group">
-                                <label class="govuk-label govuk-label--m" for="more-detail">
-                                    {{ locale.optionalProgressNotes }}
-                                </label>
+                <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-two-thirds">
+                        <div class="govuk-form-group">
+                            <label class="govuk-label govuk-label--m" for="more-detail">
+                                {{ locale.optionalProgressNotes }}
+                            </label>
 
-                                <div id="more-detail-hint" class="govuk-hint">
-                                    {{ locale.moreDetailHint }}
-                                </div>
-                                <textarea class="govuk-textarea" id="more-detail" name="moreDetail" rows="4"
-                                          aria-describedby="more-detail-hint"></textarea>
-
-                                {{ noteList({
-                                    notes: data.goal.notes,
-                                    locale: locale
-                                }) }}
-
-                                <div class="govuk-button-group">
-                                    <button type="submit" class="govuk-button" data-module="govuk-button">
-                                        {{ locale.saveGoalAndSteps }}
-                                    </button>
-                                    <button type="button" class="govuk-button govuk-button--secondary"
-                                            data-module="govuk-button">
-                                        {{ locale.markAsAchieved }}
-                                    </button>
-                                </div>
-                                <p>
-                                    <a href="/remove-goal/{{ data.goal.uuid }}"
-                                       class="govuk-link govuk-link--no-visited-state">{{ locale.removeGoalFromPlan }}</a>
-                                </p>
+                            <div id="more-detail-hint" class="govuk-hint">
+                                {{ locale.moreDetailHint }}
                             </div>
+                            <textarea class="govuk-textarea" id="more-detail" name="moreDetail" rows="4"
+                                      aria-describedby="more-detail-hint"></textarea>
+
+                            {{ noteList({
+                                notes: data.goal.notes,
+                                locale: locale
+                            }) }}
+
+                            <div class="govuk-button-group">
+                                <button type="submit" class="govuk-button" data-module="govuk-button">
+                                    {{ locale.saveGoalAndSteps }}
+                                </button>
+                                <button type="button" class="govuk-button govuk-button--secondary"
+                                        data-module="govuk-button">
+                                    {{ locale.markAsAchieved }}
+                                </button>
+                            </div>
+                            <p>
+                                <a href="/remove-goal/{{ data.goal.uuid }}"
+                                   class="govuk-link govuk-link--no-visited-state">{{ locale.removeGoalFromPlan }}</a>
+                            </p>
                         </div>
                     </div>
                 </div>
