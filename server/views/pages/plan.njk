@@ -196,7 +196,7 @@
                     {% if data.plan.agreementStatus === 'DRAFT' %}
                         {% set actions = [
                             {
-                                href: "/edit-goal/" + goal.uuid,
+                                href: "/change-goal/" + goal.uuid,
                                 text: locale.goalSummaryCard.actions.draft.changeGoal
                             },
                             {

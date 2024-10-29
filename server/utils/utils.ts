@@ -60,7 +60,11 @@ export function formatDateWithStyle(isoDate: string, style: 'short' | 'full' | '
 
 export function dateToISOFormat(date: string): string {
   const [day, month, year] = date.split('/')
-  return [year, month, day].join('-')
+  return [year, padToTwoDigits(month), padToTwoDigits(day)].join('-')
+}
+
+function padToTwoDigits(value: string): string {
+  return String(value).padStart(2, '0')
 }
 
 export function moveGoal(goals: Array<any>, gUuid: string, operation: string) {
