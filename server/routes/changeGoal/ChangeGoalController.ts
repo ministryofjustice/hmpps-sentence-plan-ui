@@ -6,10 +6,10 @@ import { dateToISOFormat, formatDateWithStyle, getAchieveDateOptions } from '../
 import { NewGoal } from '../../@types/NewGoalType'
 import { Goal, GoalStatus } from '../../@types/GoalType'
 import transformRequest from '../../middleware/transformMiddleware'
-import EditGoalPostModel from './models/EditGoalPostModel'
+import ChangeGoalPostModel from './models/ChangeGoalPostModel'
 import validateRequest from '../../middleware/validationMiddleware'
 
-export default class EditGoalController {
+export default class ChangeGoalController {
   constructor(private readonly referentialDataService: ReferentialDataService) {}
 
   private render = async (req: Request, res: Response, next: NextFunction) => {
@@ -24,7 +24,7 @@ export default class EditGoalController {
     const minimumDatePickerDate = formatDateWithStyle(new Date().toISOString(), 'short')
     const form = errors ? req.body : this.mapGoalToForm(goal)
 
-    return res.render('pages/edit-goal', {
+    return res.render('pages/change-goal', {
       locale: locale.en,
       data: {
         minimumDatePickerDate,
@@ -116,7 +116,7 @@ export default class EditGoalController {
 
   post = [
     transformRequest({
-      body: EditGoalPostModel,
+      body: ChangeGoalPostModel,
     }),
     validateRequest(),
     this.handleValidationErrors,
