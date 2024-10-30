@@ -22,7 +22,7 @@
 
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-        <a href="/plan?type={{ data.type }}" class="govuk-back-link">Back</a>
+        <a href="{{ data.returnLink }}" class="govuk-back-link">Back</a>
 
         {{ errorSummary({
             errors: errors,
@@ -65,7 +65,7 @@
                     name: "action",
                     value: data.actionType
                 }) }}
-                <a class="govuk-link govuk-link--no-visited-state" href="/plan?type={{ data.type }}">{{ locale.cancelButtonText }}</a>
+                <a class="govuk-link govuk-link--no-visited-state" href="{{ data.returnLink }}">{{ locale.cancelButtonText }}</a>
             </div>
         </form>
     </div>

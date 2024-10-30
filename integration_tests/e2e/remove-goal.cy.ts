@@ -138,9 +138,9 @@ describe('Remove a goal from a Plan after it has been agreed', () => {
       // Confirm delete
       cy.contains('button', 'Confirm').click()
 
-      // Check goal has been deleted
-      cy.url().should('contain', '/plan?type=current&status=removed')
-      cy.get('.goal-list .goal-summary-card').should('have.length', 2).and('not.contain', goalData.title)
+      // Check goal has been removed
+      cy.url().should('contain', '/plan?type=removed&status=removed')
+      cy.get('.goal-list .goal-summary-card').should('have.length', 1).and('contain', goalData.title)
     })
   })
 })

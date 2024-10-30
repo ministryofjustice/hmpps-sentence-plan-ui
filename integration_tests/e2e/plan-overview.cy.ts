@@ -69,7 +69,7 @@ describe('View Plan Overview', () => {
     cy.get('#step-description-1-autocomplete').type('Accommodation')
 
     cy.get('button').contains('Save and continue').click()
-    cy.url().should('include', '/plan?status=success')
+    cy.url().should('include', '/plan?type=current')
     cy.get('.goal-summary-card')
     cy.contains('.goal-summary-card', 'Accommodation').within(() => {
       cy.contains('a', 'Change goal')
