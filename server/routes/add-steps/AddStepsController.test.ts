@@ -192,18 +192,20 @@ describe('AddStepsController', () => {
       }
       req.params = { uuid: 'some-goal-uuid' }
 
-      const expectedData = [
-        {
-          description: 'a test step',
-          status: StepStatus.NOT_STARTED,
-          actor: 'Test actor',
-        },
-        {
-          description: 'test',
-          status: StepStatus.IN_PROGRESS,
-          actor: 'Batman',
-        },
-      ]
+      const expectedData = {
+        steps: [
+          {
+            description: 'a test step',
+            status: StepStatus.NOT_STARTED,
+            actor: 'Test actor',
+          },
+          {
+            description: 'test',
+            status: StepStatus.IN_PROGRESS,
+            actor: 'Batman',
+          },
+        ],
+      }
 
       await runMiddlewareChain(controller.post, req, res, next)
 
