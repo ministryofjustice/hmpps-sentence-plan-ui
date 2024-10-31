@@ -3,6 +3,7 @@
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "../components/summary-card/goal-summary-card.njk" import goalSummaryCard %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 {% from "../components/note-list/note-list.njk" import noteList %}
 
 {% set locale = interpolate(locale, {
@@ -73,11 +74,10 @@
 
             <form id="update-goal-form" method="POST">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+                <label class="govuk-label govuk-label--m">
+                    {{ locale.reviewSteps }}
+                </label>
                 {% if data.goal.steps and data.goal.steps.length > 0 %}
-                    <label class="govuk-label govuk-label--m">
-                        {{ locale.reviewSteps }}
-                    </label>
-
                     <table class="govuk-table goal-summary-card__steps">
                         <thead class="govuk-table__head">
                         <tr class="govuk-table__row">
@@ -129,15 +129,18 @@
                 <div class="govuk-grid-row">
                     <div class="govuk-grid-column-two-thirds">
                         <div class="govuk-form-group">
-                            <label class="govuk-label govuk-label--m" for="more-detail">
-                                {{ locale.optionalProgressNotes }}
-                            </label>
-
-                            <div id="more-detail-hint" class="govuk-hint">
-                                {{ locale.moreDetailHint }}
-                            </div>
-                            <textarea class="govuk-textarea" id="more-detail" name="moreDetail" rows="4"
-                                      aria-describedby="more-detail-hint"></textarea>
+                            {{ govukTextarea({
+                                name: "moreDetail",
+                                id: "more-detail",
+                                rows: 4,
+                                label: {
+                                    text: locale.optionalProgressNotes,
+                                    classes: "govuk-label--m"
+                                },
+                                hint: {
+                                    text: locale.moreDetailHint
+                                }
+                            }) }}
 
                             {{ noteList({
                                 notes: data.goal.notes,
