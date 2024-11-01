@@ -69,7 +69,7 @@
 
             <p>
                 {% if data.goal.targetDate %}{{ locale.aimToAchieveBy }}{% else %}{{ locale.common.goalSummaryCard.info.thisIsAFutureGoal }}{% endif %}
-                <a href="#" class="govuk-link govuk-link--no-visited-state">{{ locale.updateGoalDetails }}</a>
+                <a href="/change-goal/{{ data.goal.uuid }}" class="govuk-link govuk-link--no-visited-state">{{ locale.updateGoalDetails }}</a>
             </p>
 
             <form id="update-goal-form" method="POST">

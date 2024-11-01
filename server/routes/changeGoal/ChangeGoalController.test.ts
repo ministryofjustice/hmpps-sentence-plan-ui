@@ -12,10 +12,24 @@ import ChangeGoalPostModel from './models/ChangeGoalPostModel'
 import URLs from '../URLs'
 import { NewGoal } from '../../@types/NewGoalType'
 import runMiddlewareChain from '../../testutils/runMiddlewareChain'
+import testPlan from '../../testutils/data/planData'
+import { PlanAgreementStatus, PlanType } from '../../@types/PlanType'
 
 jest.mock('../../services/sentence-plan/referentialDataService', () => {
   return jest.fn().mockImplementation(() => ({
     getSortedAreasOfNeed: jest.fn().mockReturnValue(AreaOfNeed),
+  }))
+})
+
+jest.mock('../../services/sessionService', () => {
+  return jest.fn().mockImplementation(() => ({
+    getPlanUUID: jest.fn().mockReturnValue(testPlan.uuid),
+  }))
+})
+
+jest.mock('../../services/sentence-plan/planService', () => {
+  return jest.fn().mockImplementation(() => ({
+    getPlanByUuid: jest.fn().mockResolvedValue(testPlan),
   }))
 })
 
@@ -265,7 +279,7 @@ describe('ChangeGoalController', () => {
       await runMiddlewareChain(controller.post, req, res, next)
 
       expect(req.services.goalService.updateGoal).toHaveBeenCalledWith(updatedGoal, testGoal.uuid)
-      expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_OVERVIEW}?status=updated&type=current`)
+      expect(res.redirect).toHaveBeenCalledWith('/update-goal/a-un1qu3-t3st-Uu1d')
       expect(res.render).not.toHaveBeenCalled()
       expect(next).not.toHaveBeenCalled()
     })
@@ -309,6 +323,18 @@ describe('ChangeGoalController', () => {
       await runMiddlewareChain(controller.post, req, res, next)
 
       expect(next).toHaveBeenCalledWith(error)
+    })
+
+    // if plan is agreed:
+    // if type==current then redirect to /update-goal/uuid
+    // if type==future and goal.steps.size>0 then redirect to /update-goal/uuid
+    // elif type==future and goal.steps.size===0 then redirect to /goal/uuid/add-steps
+    it('should redirect if plan is not agreed', async () => {
+      const draftPlanData: PlanType = { ...testPlan, agreementStatus: PlanAgreementStatus.AGREED }
+
+      req.services.planService.getPlanByUuid = jest.fn().mockResolvedValue(draftPlanData)
+      await controller.get(req, res, next)
+      expect(res.redirect).toHaveBeenCalledWith(URLs.PLAN_OVERVIEW)
     })
   })
 })
