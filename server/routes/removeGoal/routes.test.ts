@@ -13,6 +13,7 @@ const mockSessionService = jest.fn().mockImplementation(() => ({
   getPlanUUID: mockGetPlanUUID,
   getSubjectDetails: jest.fn().mockReturnValue(handoverData.subject),
   getPrincipalDetails: jest.fn().mockReturnValue(handoverData.principal),
+  getReturnLink: jest.fn().mockReturnValue(''),
 }))
 
 jest.mock('../../services/sessionService', () => {
@@ -74,7 +75,7 @@ describe(`GET /remove-goal`, () => {
       .get('/remove-goal/5ee410e5-6998-44cc-9b26-148627ea8a52')
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('Are you sure you want to remove this goal?')
+        expect(res.text).toContain('Confirm you want to remove this goal')
       })
   })
 })

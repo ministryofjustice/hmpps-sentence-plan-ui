@@ -26,7 +26,8 @@
       "info": {
         "aimToAchieveDate": "Aim to achieve this by {{ targetDate }}.",
         "aimToAchieveSentence": "Aim to achieve this by the end of {{ subject.possessiveName }} sentence.",
-        "goalAchievedDate": "Marked as achieved on {{ achievedDate }}."
+        "goalAchievedDate": "Marked as achieved on {{ achievedDate }}.",
+        "thisIsAFutureGoal": "This is a future goal."
       },
       "stepsList": {
         "whoHeader": "Who will do this",
@@ -46,6 +47,12 @@
         "mainAreaOfNeed": "Area of need: {{ areaOfNeed }}",
         "relatedAreasOfNeed": "Also relates to: {{ relatedAreasOfNeed }}"
       }
+    },
+    "noteList": {
+      "viewAllNotes": "View all notes",
+      "noGoalNotes": "There are no notes on this goal yet.",
+      "noteHeading": "{{ noteDate }} by {{ noteAuthor }}",
+      "noteActionEvent": "Goal marked as {{ noteType }} on {{ noteDate }}"
     },
     "backLink": {
       "text": "Back"

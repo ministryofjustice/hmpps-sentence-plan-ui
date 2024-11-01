@@ -1,0 +1,30 @@
+{% macro noteList(params) %}
+
+<div id="achieved-goal-notes" class="govuk-!-margin-top-4">
+    <details class="govuk-details">
+        <summary class="govuk-details__summary">
+            <span class="govuk-details__summary-text">
+              {{ params.locale.common.noteList.viewAllNotes }}
+            </span>
+        </summary>
+        <div class="govuk-details__text">
+            {% if params.notes.length > 0 %}
+                {% for note in params.notes %}
+                    {% set locale = interpolate(params.locale.common.noteList, {
+                        noteDate: note.createdDate | formatSimpleDate,
+                        noteAuthor: note.practitionerName | convertToTitleCase,
+                        noteType: note.type | lower
+                    }) %}
+                    <h4>{{ locale.noteHeading }}</h4>
+                    {% if note.type != "PROGRESS" %}
+                        <p>{{ locale.noteActionEvent }}</p>
+                    {% endif %}
+                    <p>{{ note.note }}</p>
+                {% endfor %}
+            {% else %}
+                <p>{{ params.locale.common.noteList.noGoalNotes }}</p>
+            {% endif %}
+        </div>
+    </details>
+</div>
+{% endmacro %}
