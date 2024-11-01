@@ -36,7 +36,7 @@ describe('Create a new Goal', () => {
     createGoalPage.selectAchievementDate('In 6 months')
     createGoalPage.clickButton('Save without steps')
 
-    cy.url().should('include', '/plan?status=success')
+    cy.url().should('contain', '/plan?status=added&type=current')
     cy.get('#goal-list').children().should('have.length', 1)
 
     cy.get('#goal-list')

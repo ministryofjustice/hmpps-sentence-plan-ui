@@ -19,7 +19,7 @@ describe('View Plan Overview', () => {
   })
 
   it('Should have a `Return to OASys` button and it should return the user to the OASys return URL', () => {
-    cy.contains('a', 'Return to OASys').should('have.attr', 'href').and('include', 'https://oasys-url')
+    cy.contains('a', 'Return to OASys').should('have.attr', 'href').and('include', Cypress.env('OASTUB_URL'))
   })
 
   it('Should have text saying no goals to work on now', () => {
@@ -69,7 +69,7 @@ describe('View Plan Overview', () => {
     cy.get('#step-description-1-autocomplete').type('Accommodation')
 
     cy.get('button').contains('Save and continue').click()
-    cy.url().should('include', '/plan?status=success')
+    cy.url().should('include', '/plan?type=current')
     cy.get('.goal-summary-card')
     cy.contains('.goal-summary-card', 'Accommodation').within(() => {
       cy.contains('a', 'Change goal')

@@ -13,6 +13,7 @@ const mockSessionService = jest.fn().mockImplementation(() => ({
   getPlanUUID: mockGetPlanUUID,
   getSubjectDetails: jest.fn().mockReturnValue(handoverData.subject),
   getPrincipalDetails: jest.fn().mockReturnValue(handoverData.principal),
+  getReturnLink: jest.fn().mockReturnValue(''),
 }))
 
 jest.mock('../../services/sessionService', () => {

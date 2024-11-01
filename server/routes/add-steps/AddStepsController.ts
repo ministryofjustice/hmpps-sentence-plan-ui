@@ -6,6 +6,7 @@ import validateRequest from '../../middleware/validationMiddleware'
 import AddStepsPostModel, { StepModel } from './models/AddStepsPostModel'
 import transformRequest from '../../middleware/transformMiddleware'
 import { StepStatus } from '../../@types/StepType'
+import { NewGoal } from '../../@types/NewGoalType'
 
 export default class AddStepsController {
   private render = async (req: Request, res: Response, next: NextFunction) => {
@@ -39,16 +40,19 @@ export default class AddStepsController {
   }
 
   private saveAndRedirect = async (req: Request, res: Response, next: NextFunction) => {
-    const goalUuid = req.params.uuid
-    await req.services.stepService.saveAllSteps(
-      req.body.steps.map((step: StepModel) => ({
-        description: step.description,
-        actor: step.actor,
-        status: step.status,
-      })),
-      goalUuid,
-    )
+    const updatedSteps = req.body.steps.map((step: StepModel) => ({
+      description: step.description,
+      actor: step.actor,
+      status: step.status,
+    }))
 
+    const goalData: Partial<NewGoal> = {
+      steps: updatedSteps,
+    }
+
+    await req.services.stepService.saveAllSteps(goalData, req.params.uuid)
+
+    // TODO: this is wrong... we should be able to add steps only, or add steps after adding a (current or future) goal, and get a success banner...
     const link = req.services.sessionService.getReturnLink() ?? `${URLs.PLAN_OVERVIEW}?status=success`
     req.services.sessionService.setReturnLink(null)
 

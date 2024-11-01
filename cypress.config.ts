@@ -36,6 +36,7 @@ export default defineConfig({
       ARNS_HANDOVER_CLIENT_ID: 'sentence-plan',
       SP_API_URL: 'http://localhost:8080',
       COORDINATOR_API_URL: 'http://localhost:6060',
+      OASTUB_URL: 'http://localhost:7072',
     },
   },
 })

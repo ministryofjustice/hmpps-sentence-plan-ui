@@ -1,5 +1,6 @@
 import SentencePlanApiClient from '../../data/sentencePlanApiClient'
 import { NewStep, Step } from '../../@types/StepType'
+import { NewGoal } from '../../@types/NewGoalType'
 
 export default class StepService {
   constructor(private readonly sentencePlanApiClient: SentencePlanApiClient) {}
@@ -9,9 +10,9 @@ export default class StepService {
     return restClient.post<Step[]>({ path: `/goals/${parentGoalId}/steps`, data: steps })
   }
 
-  async saveAllSteps(steps: NewStep[], parentGoalId: string) {
+  async saveAllSteps(goal: Partial<NewGoal>, parentGoalId: string) {
     const restClient = await this.sentencePlanApiClient.restClient('Replacing all steps')
-    return restClient.put<Step[]>({ path: `/goals/${parentGoalId}/steps`, data: steps })
+    return restClient.put<Step[]>({ path: `/goals/${parentGoalId}/steps`, data: goal })
   }
 
   async getSteps(parentGoalId: string): Promise<Step[]> {

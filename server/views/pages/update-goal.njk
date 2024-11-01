@@ -3,6 +3,7 @@
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "../components/summary-card/goal-summary-card.njk" import goalSummaryCard %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 {% from "../components/note-list/note-list.njk" import noteList %}
 
 {% set locale = interpolate(locale, {
@@ -67,16 +68,15 @@
             </div>
 
             <p>
-                {% if data.goal.targetDate %}{{ locale.aimToAchieveBy }}{% endif %}
+                {% if data.goal.targetDate %}{{ locale.aimToAchieveBy }}{% else %}{{ locale.common.goalSummaryCard.info.thisIsAFutureGoal }}{% endif %}
                 <a href="#" class="govuk-link govuk-link--no-visited-state">{{ locale.updateGoalDetails }}</a>
             </p>
 
-            <label class="govuk-label govuk-label--m">
-                {{ locale.reviewSteps }}
-            </label>
-
             <form id="update-goal-form" method="POST">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
+                <label class="govuk-label govuk-label--m">
+                    {{ locale.reviewSteps }}
+                </label>
                 {% if data.goal.steps and data.goal.steps.length > 0 %}
                     <table class="govuk-table goal-summary-card__steps">
                         <thead class="govuk-table__head">
@@ -113,10 +113,10 @@
                         </tbody>
                     </table>
                 {% else %}
-                    <div class="goal-summary-card__steps--empty">
-                        <strong>{{ locale.stepsList.noStepsAdded }}</strong>
+                    <div class="goal-summary-card__steps--empty-no-shadow">
+                        <strong>{{ locale.common.goalSummaryCard.stepsList.noStepsAdded }}</strong>
                         {% if data.actions.length > 0 %}
-                            <a href="/goal/{{ data.goal.uuid }}/add-steps">{{ locale.stepsList.addSteps }}</a>
+                            <a href="/goal/{{ data.goal.uuid }}/add-steps">{{ locale.common.goalSummaryCard.stepsList.addSteps }}</a>
                         {% endif %}
                     </div>
                 {% endif %}
@@ -126,39 +126,40 @@
                        class="govuk-link govuk-link--no-visited-state">{{ locale.addOrChangeSteps }}</a>
                 </p>
                 <br>
-                <div class="govuk-width-container">
-                    <div class="govuk-grid-row">
-                        <div class="govuk-grid-column-two-thirds">
-                            <div class="govuk-form-group">
-                                <label class="govuk-label govuk-label--m" for="more-detail">
-                                    {{ locale.optionalProgressNotes }}
-                                </label>
+                <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-two-thirds">
+                        <div class="govuk-form-group">
+                            {{ govukTextarea({
+                                name: "moreDetail",
+                                id: "more-detail",
+                                rows: 4,
+                                label: {
+                                    text: locale.optionalProgressNotes,
+                                    classes: "govuk-label--m"
+                                },
+                                hint: {
+                                    text: locale.moreDetailHint
+                                }
+                            }) }}
 
-                                <div id="more-detail-hint" class="govuk-hint">
-                                    {{ locale.moreDetailHint }}
-                                </div>
-                                <textarea class="govuk-textarea" id="more-detail" name="moreDetail" rows="4"
-                                          aria-describedby="more-detail-hint"></textarea>
+                            {{ noteList({
+                                notes: data.goal.notes,
+                                locale: locale
+                            }) }}
 
-                                {{ noteList({
-                                    notes: data.goal.notes,
-                                    locale: locale
-                                }) }}
-
-                                <div class="govuk-button-group">
-                                    <button type="submit" class="govuk-button" data-module="govuk-button">
-                                        {{ locale.saveGoalAndSteps }}
-                                    </button>
-                                    <button type="button" class="govuk-button govuk-button--secondary"
-                                            data-module="govuk-button">
-                                        {{ locale.markAsAchieved }}
-                                    </button>
-                                </div>
-                                <p>
-                                    <a href="/remove-goal/{{ data.goal.uuid }}"
-                                       class="govuk-link govuk-link--no-visited-state">{{ locale.removeGoalFromPlan }}</a>
-                                </p>
+                            <div class="govuk-button-group">
+                                <button type="submit" class="govuk-button" data-module="govuk-button">
+                                    {{ locale.saveGoalAndSteps }}
+                                </button>
+                                <button type="button" class="govuk-button govuk-button--secondary"
+                                        data-module="govuk-button">
+                                    {{ locale.markAsAchieved }}
+                                </button>
                             </div>
+                            <p>
+                                <a href="/remove-goal/{{ data.goal.uuid }}"
+                                   class="govuk-link govuk-link--no-visited-state">{{ locale.removeGoalFromPlan }}</a>
+                            </p>
                         </div>
                     </div>
                 </div>
