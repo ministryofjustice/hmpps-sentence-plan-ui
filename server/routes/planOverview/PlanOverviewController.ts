@@ -17,6 +17,8 @@ export default class PlanOverviewController {
       const status = req.query?.status
       const type = req.query?.type
 
+      req.services.sessionService.setReturnLink(`/plan?type=${type ?? 'current'}`)
+
       return res.render('pages/plan', {
         locale: locale.en,
         data: {

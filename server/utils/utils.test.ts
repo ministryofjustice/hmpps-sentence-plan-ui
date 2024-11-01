@@ -2,6 +2,7 @@ import { RoshData } from '../@types/Rosh'
 import { parsedRoshData, roSHData, unComplitedRoSH } from '../testutils/data/roshData'
 import {
   convertToTitleCase,
+  dateToISOFormat,
   formatDate,
   formatRoSHData,
   goalStatusToTabName,
@@ -181,5 +182,12 @@ describe('status to tab mapping', () => {
     [GoalStatus.ACHIEVED, 'achieved'],
   ])('%s maps to %s', (actual: GoalStatus, expected: string) => {
     expect(goalStatusToTabName(actual)).toEqual(expected)
+  })
+})
+
+describe('format dates correctly', () => {
+  it('should format date correctly', () => {
+    expect(dateToISOFormat('31/3/2023')).toEqual('2023-03-31')
+    expect(dateToISOFormat('1/3/2023')).toEqual('2023-03-01')
   })
 })

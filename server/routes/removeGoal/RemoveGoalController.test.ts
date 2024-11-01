@@ -12,6 +12,7 @@ import runMiddlewareChain from '../../testutils/runMiddlewareChain'
 const mockGetPlanUUID = jest.fn().mockReturnValue(testPlan.uuid)
 const mockSessionService = jest.fn().mockImplementation(() => ({
   getPlanUUID: mockGetPlanUUID,
+  getReturnLink: jest.fn().mockReturnValue(''),
 }))
 
 jest.mock('../../services/sessionService', () => {
@@ -45,7 +46,8 @@ describe('Test Deleting Goal', () => {
   let next: NextFunction
   const viewData = {
     data: {
-      type: 'some-type',
+      returnLink: '',
+      type: 'current',
       goal: testGoal,
       actionType: 'delete',
     },
@@ -86,7 +88,8 @@ describe('Test Removing Goal', () => {
   let next: NextFunction
   const viewData = {
     data: {
-      type: 'some-type',
+      returnLink: '',
+      type: 'current',
       goal: testGoal,
       actionType: 'remove',
     },
@@ -118,7 +121,7 @@ describe('Test Removing Goal', () => {
       req.body = { type: 'some-type', action: 'remove', goalUuid: 'xyz', 'goal-removal-note': 'a reason' }
       await runMiddlewareChain(controller.post, req, res, next)
       expect(req.services.goalService.updateGoal).toHaveBeenCalled()
-      expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_OVERVIEW}?type=some-type&status=removed`)
+      expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_OVERVIEW}?type=removed&status=removed`)
     })
 
     it('should re-render remove goal page if remove goal is selected and no reason is provided', async () => {

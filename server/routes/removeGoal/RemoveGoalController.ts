@@ -9,13 +9,13 @@ import { PlanAgreementStatus } from '../../@types/PlanType'
 import transformRequest from '../../middleware/transformMiddleware'
 import RemoveGoalPostModel from './models/RemoveGoalPostModel'
 import validateRequest from '../../middleware/validationMiddleware'
+import { goalStatusToTabName } from '../../utils/utils'
 
 export default class RemoveGoalController {
   render = async (req: Request, res: Response, next: NextFunction) => {
     const { errors } = req
 
     try {
-      const type = req.query?.type
       const { uuid } = req.params
       let actionType
       let localeType
@@ -24,6 +24,9 @@ export default class RemoveGoalController {
 
       const planUuid = req.services.sessionService.getPlanUUID()
       const plan = await req.services.planService.getPlanByUuid(planUuid)
+
+      const type = goalStatusToTabName(goal.status)
+      const returnLink = req.services.sessionService.getReturnLink()
 
       if (plan.agreementStatus === PlanAgreementStatus.DRAFT) {
         actionType = 'delete'
@@ -39,6 +42,7 @@ export default class RemoveGoalController {
           type,
           goal,
           actionType,
+          returnLink,
         },
         errors,
       })
@@ -68,7 +72,7 @@ export default class RemoveGoalController {
 
         try {
           await req.services.goalService.updateGoal(goalData, goalUuid)
-          return res.redirect(`${URLs.PLAN_OVERVIEW}?type=${type}&status=removed`)
+          return res.redirect(`${URLs.PLAN_OVERVIEW}?type=removed&status=removed`)
         } catch (e) {
           return next(e)
         }
