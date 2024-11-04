@@ -1,7 +1,7 @@
 export default class UpdateGoal {
   public notesEntry = 'A goal update note'
 
-  createNotes = () => {
+  createNote = () => {
     cy.url().should('satisfy', url => url.endsWith('/plan')) // check we're back to plan-overview
     cy.contains('a', 'Update').click() // click update link
     cy.url().should('include', '/update-goal') // check url is update goal

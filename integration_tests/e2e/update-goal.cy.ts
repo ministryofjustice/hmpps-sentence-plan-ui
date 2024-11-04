@@ -68,7 +68,7 @@ describe('Update goal', () => {
       const planOverview = new PlanOverview()
       planOverview.agreePlan()
       const updateGoal = new UpdateGoal()
-      updateGoal.createNotes()
+      updateGoal.createNote()
       cy.contains('a', 'Update').click() // click update link
       cy.contains('View all notes').click() // open drop down of notes
       cy.get('.govuk-details__text').contains(updateGoal.notesEntry) // check if created note is there
