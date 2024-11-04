@@ -3,7 +3,6 @@ import PlanOverviewController from './PlanOverviewController'
 import mockReq from '../../testutils/preMadeMocks/mockReq'
 import mockRes from '../../testutils/preMadeMocks/mockRes'
 import locale from './locale.json'
-import { testGoal } from '../../testutils/data/goalData'
 import testPlan from '../../testutils/data/planData'
 
 const oasysReturnUrl = 'https://oasys.return.url'
@@ -28,21 +27,20 @@ describe('PlanOverviewController', () => {
   let req: Request
   let res: Response
   let next: NextFunction
-
-  const viewData = {
-    locale: locale.en,
-    data: {
-      plan: testPlan,
-      type: 'current',
-      oasysReturnUrl,
-    },
-    errors: {},
-  }
+  let viewData: any
 
   beforeEach(() => {
-    req = mockReq({
-      params: { uuid: testGoal.uuid },
-    })
+    viewData = {
+      locale: locale.en,
+      data: {
+        plan: testPlan,
+        type: 'current',
+        oasysReturnUrl,
+      },
+      errors: {},
+    }
+
+    req = mockReq()
     res = mockRes()
     next = jest.fn()
 
@@ -51,6 +49,38 @@ describe('PlanOverviewController', () => {
 
   describe('get', () => {
     it('should render without validation errors', async () => {
+      await controller.get(req, res, next)
+
+      expect(res.render).toHaveBeenCalledWith('pages/plan', viewData)
+    })
+
+    it('should permit valid type and status parameters', async () => {
+      viewData.data = {
+        ...viewData.data,
+        type: 'future',
+        status: 'removed',
+      }
+
+      req = mockReq({
+        query: {
+          type: 'future',
+          status: 'removed',
+        },
+      })
+
+      await controller.get(req, res, next)
+
+      expect(res.render).toHaveBeenCalledWith('pages/plan', viewData)
+    })
+
+    it('should remove invalid type and status parameters', async () => {
+      req = mockReq({
+        params: {
+          type: 'cheese',
+          status: 'sausage',
+        },
+      })
+
       await controller.get(req, res, next)
 
       expect(res.render).toHaveBeenCalledWith('pages/plan', viewData)
