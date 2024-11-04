@@ -9,13 +9,27 @@ import { testGoal } from '../../testutils/data/goalData'
 import locale from './locale.json'
 import { getValidationErrors } from '../../middleware/validationMiddleware'
 import ChangeGoalPostModel from './models/ChangeGoalPostModel'
-import URLs from '../URLs'
 import { NewGoal } from '../../@types/NewGoalType'
 import runMiddlewareChain from '../../testutils/runMiddlewareChain'
+import testPlan from '../../testutils/data/planData'
+import { PlanAgreementStatus, PlanType } from '../../@types/PlanType'
+import { Goal } from '../../@types/GoalType'
 
 jest.mock('../../services/sentence-plan/referentialDataService', () => {
   return jest.fn().mockImplementation(() => ({
     getSortedAreasOfNeed: jest.fn().mockReturnValue(AreaOfNeed),
+  }))
+})
+
+jest.mock('../../services/sessionService', () => {
+  return jest.fn().mockImplementation(() => ({
+    getPlanUUID: jest.fn().mockReturnValue(testPlan.uuid),
+  }))
+})
+
+jest.mock('../../services/sentence-plan/planService', () => {
+  return jest.fn().mockImplementation(() => ({
+    getPlanByUuid: jest.fn().mockResolvedValue(testPlan),
   }))
 })
 
@@ -241,7 +255,7 @@ describe('ChangeGoalController', () => {
       })
     })
 
-    it('should save and redirect when there are no validation errors', async () => {
+    it('should redirect to /plan if Plan is not agreed', async () => {
       const updatedGoal: NewGoal = {
         title: 'A new title for the test goal',
         areaOfNeed: testGoal.areaOfNeed.name,
@@ -265,7 +279,7 @@ describe('ChangeGoalController', () => {
       await runMiddlewareChain(controller.post, req, res, next)
 
       expect(req.services.goalService.updateGoal).toHaveBeenCalledWith(updatedGoal, testGoal.uuid)
-      expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_OVERVIEW}?status=updated&type=current`)
+      expect(res.redirect).toHaveBeenCalledWith(`/plan?status=updated&type=current`)
       expect(res.render).not.toHaveBeenCalled()
       expect(next).not.toHaveBeenCalled()
     })
@@ -309,6 +323,79 @@ describe('ChangeGoalController', () => {
       await runMiddlewareChain(controller.post, req, res, next)
 
       expect(next).toHaveBeenCalledWith(error)
+    })
+
+    it('should redirect to update-goal if Plan is agreed and goal.type==current ', async () => {
+      const draftPlanData: PlanType = { ...testPlan, agreementStatus: PlanAgreementStatus.AGREED }
+      req.services.planService.getPlanByUuid = jest.fn().mockResolvedValue(draftPlanData)
+
+      const updatedGoal: NewGoal = {
+        title: 'A new title for the test goal',
+        areaOfNeed: testGoal.areaOfNeed.name,
+        targetDate: viewData.data.dateOptions[1].toISOString(),
+        relatedAreasOfNeed: undefined,
+        status: undefined,
+      }
+
+      req.body = {
+        'goal-input-autocomplete': updatedGoal.title,
+        'area-of-need': updatedGoal.areaOfNeed,
+        'related-area-of-need-radio': 'no',
+        'start-working-goal-radio': 'yes',
+        'date-selection-radio': updatedGoal.targetDate,
+      }
+      req.errors = {
+        body: {},
+      }
+      req.params.uuid = testGoal.uuid
+
+      await runMiddlewareChain(controller.post, req, res, next)
+
+      expect(req.services.goalService.updateGoal).toHaveBeenCalledWith(updatedGoal, testGoal.uuid)
+      expect(res.redirect).toHaveBeenCalledWith(`/update-goal/${testGoal.uuid}`)
+      expect(res.render).not.toHaveBeenCalled()
+      expect(next).not.toHaveBeenCalled()
+    })
+
+    it('should redirect to update-goal if Plan is agreed and future goal has steps', async () => {
+      const draftPlanData: PlanType = { ...testPlan, agreementStatus: PlanAgreementStatus.AGREED }
+      req.services.planService.getPlanByUuid = jest.fn().mockResolvedValue(draftPlanData)
+
+      req.body = {
+        'goal-input-autocomplete': 'Goal for the future with steps',
+        'area-of-need': testGoal.areaOfNeed.name,
+        'related-area-of-need-radio': 'no',
+        'start-working-goal-radio': 'no',
+      }
+      req.errors = {
+        body: {},
+      }
+      req.params.uuid = testGoal.uuid
+
+      await runMiddlewareChain(controller.post, req, res, next)
+      expect(res.redirect).toHaveBeenCalledWith(`/update-goal/${testGoal.uuid}`)
+    })
+
+    it('should redirect to add-steps if Plan is agreed and future goal has no steps', async () => {
+      const draftPlanData: PlanType = { ...testPlan, agreementStatus: PlanAgreementStatus.AGREED }
+      req.services.planService.getPlanByUuid = jest.fn().mockResolvedValue(draftPlanData)
+
+      const testGoalWithNoSteps: Goal = { ...testGoal, steps: [] }
+      req.services.goalService.getGoal = jest.fn().mockReturnValue(testGoalWithNoSteps)
+
+      req.body = {
+        'goal-input-autocomplete': 'Goal for the future with no steps',
+        'area-of-need': testGoal.areaOfNeed.name,
+        'related-area-of-need-radio': 'no',
+        'start-working-goal-radio': 'no',
+      }
+      req.errors = {
+        body: {},
+      }
+      req.params.uuid = testGoal.uuid
+
+      await runMiddlewareChain(controller.post, req, res, next)
+      expect(res.redirect).toHaveBeenCalledWith(`/goal/${testGoal.uuid}/add-steps`)
     })
   })
 })

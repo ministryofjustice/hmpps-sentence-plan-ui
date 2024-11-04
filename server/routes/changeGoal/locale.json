@@ -41,7 +41,7 @@
       "label": "Select a date",
       "hint": "For example, 31/3/2024."
     },
-    "saveButtonText": "Save and continue",
+    "saveButtonText": "Save goal",
     "addStepsButton": "Add steps",
     "saveWithoutStepsButton": "Save without steps",
     "errors": {

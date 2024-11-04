@@ -8,6 +8,7 @@ import { Goal, GoalStatus } from '../../@types/GoalType'
 import transformRequest from '../../middleware/transformMiddleware'
 import ChangeGoalPostModel from './models/ChangeGoalPostModel'
 import validateRequest from '../../middleware/validationMiddleware'
+import { PlanAgreementStatus } from '../../@types/PlanType'
 
 export default class ChangeGoalController {
   constructor(private readonly referentialDataService: ReferentialDataService) {}
@@ -45,7 +46,24 @@ export default class ChangeGoalController {
 
     try {
       await req.services.goalService.updateGoal(processedData, goalUuid)
-      return res.redirect(`${URLs.PLAN_OVERVIEW}?status=updated&type=${type}`)
+
+      let redirectTarget = `${URLs.PLAN_OVERVIEW}?status=updated&type=${type}`
+
+      const planUuid = req.services.sessionService.getPlanUUID()
+      const plan = await req.services.planService.getPlanByUuid(planUuid)
+
+      if (plan.agreementStatus === PlanAgreementStatus.AGREED) {
+        redirectTarget = `/update-goal/${goalUuid}`
+
+        if (type === 'future') {
+          const goal = await req.services.goalService.getGoal(goalUuid)
+          if (goal.steps.length === 0) {
+            redirectTarget = `/goal/${goalUuid}/add-steps`
+          }
+        }
+      }
+
+      return res.redirect(redirectTarget)
     } catch (e) {
       return next(e)
     }
