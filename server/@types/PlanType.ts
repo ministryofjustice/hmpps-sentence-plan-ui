@@ -25,5 +25,7 @@ export type PlanType = {
   agreementStatus: PlanAgreementStatus
   createdDate: string
   updatedDate: string
+  updatedBy: string
+  agreementDate: string
   goals: Goal[]
 }

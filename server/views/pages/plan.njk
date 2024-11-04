@@ -45,7 +45,8 @@
     plan: {
         agreementDate: data.plan.agreementDate | formatSimpleDate,
         createdDate: data.plan.createdDate | formatSimpleDate,
-        updatedDate: data.plan.updatedDate | formatSimpleDate
+        updatedDate: data.plan.updatedDate | formatSimpleDate,
+        updatedBy: data.plan.updatedBy.username | title
     }
 }) %}
 
@@ -110,13 +111,15 @@
             {% endif %}
 
             {% if data.plan.agreementStatus === 'AGREED' %}
-                <p class="govuk-body">{{ locale.agreePlan }}</p>
+{#                {% if data.plan.updatedDate > data.plan.agreementDate %}#TODO: SP2-836#}
+                    <p class="govuk-body">{{ locale.lastUpdatedPlan }}</p>
+{#                {% else %}#}
+{#                    <p class="govuk-body">{{ locale.agreePlan }}</p>#}
+{#                {% endif %}#}
             {% elseif data.plan.agreementStatus === 'DO_NOT_AGREE' %}
                 <p class="govuk-body">{{ locale.notAgreePlan }}</p>
             {% elseif data.plan.agreementStatus === 'DRAFT' %}
                 <p class="govuk-body">{{ locale.addStepSuggestion }}</p>
-            {% else %}
-                <p class="govuk-body">{{ locale.lastUpdatedPlan }}</p>
             {% endif %}
 
             {{ mojSubNavigation({
@@ -193,7 +196,7 @@
                     {% if data.plan.agreementStatus === 'DRAFT' %}
                         {% set actions = [
                             {
-                                href: "/edit-goal/" + goal.uuid,
+                                href: "/change-goal/" + goal.uuid,
                                 text: locale.goalSummaryCard.actions.draft.changeGoal
                             },
                             {

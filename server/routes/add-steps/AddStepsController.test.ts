@@ -28,6 +28,8 @@ jest.mock('../../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
     getSubjectDetails: jest.fn().mockReturnValue(handoverData.subject),
     getPlanUUID: jest.fn().mockReturnValue('some-plan-uuid'),
+    getReturnLink: jest.fn().mockReturnValue('/plan?status=success'),
+    setReturnLink: jest.fn(),
   }))
 })
 
@@ -190,18 +192,20 @@ describe('AddStepsController', () => {
       }
       req.params = { uuid: 'some-goal-uuid' }
 
-      const expectedData = [
-        {
-          description: 'a test step',
-          status: StepStatus.NOT_STARTED,
-          actor: 'Test actor',
-        },
-        {
-          description: 'test',
-          status: StepStatus.IN_PROGRESS,
-          actor: 'Batman',
-        },
-      ]
+      const expectedData = {
+        steps: [
+          {
+            description: 'a test step',
+            status: StepStatus.NOT_STARTED,
+            actor: 'Test actor',
+          },
+          {
+            description: 'test',
+            status: StepStatus.IN_PROGRESS,
+            actor: 'Batman',
+          },
+        ],
+      }
 
       await runMiddlewareChain(controller.post, req, res, next)
 

@@ -18,9 +18,23 @@ export type Goal = {
   statusDate?: string
   goalOrder: number
   steps: Step[]
+  notes?: GoalNote[]
 }
 
 type AreaOfNeed = {
   uuid: string
   name: string
+}
+
+export type GoalNote = {
+  type: GoalNoteType
+  note: string
+  createdDate: string
+  practitionerName: string
+}
+
+export enum GoalNoteType {
+  PROGRESS = 'PROGRESS',
+  REMOVED = 'REMOVED',
+  ACHIEVED = 'ACHIEVED',
 }

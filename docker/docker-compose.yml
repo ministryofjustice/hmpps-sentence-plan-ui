@@ -1,6 +1,6 @@
 services:
   redis:
-    image: redis:7.2
+    image: redis:7.4
     ports:
       - "6379:6379"
     environment:
@@ -58,10 +58,15 @@ services:
       HMPPS_HANDOVER_BASE_URL: http://arns-handover:7070
       HMPPS_HANDOVER_EXTERNAL_URL: http://localhost:7070
       HMPPS_AUTH_BASE_URL: http://hmpps-auth:9090
+      OASYS_BASE_URL: http://localhost:7072
+      OASYS_RETURN_URLS: http://localhost:7072
       COORDINATOR_API_BASE_URL: http://coordinator-api:8080
       SERVER_ERROR_WHITELABEL_ENABLED: true
       CLIENT_ID: hmpps-assess-risks-and-needs-oastub-ui
       CLIENT_SECRET: clientsecret
+      CLIENT_SP_SECRET: sp-secret
+      CLIENT_SP_OAUTH_REDIRECT_URI: http://localhost:3000/sign-in/callback
+      CLIENT_SP_HANDOVER_REDIRECT_URI: http://localhost:3000/sign-in
 
   oastub:
     image: quay.io/hmpps/hmpps-assess-risks-and-needs-oastub-ui:latest

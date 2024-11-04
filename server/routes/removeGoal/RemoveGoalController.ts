@@ -1,29 +1,39 @@
 import { NextFunction, Request, Response } from 'express'
 import * as superagent from 'superagent'
-import locale from './locale.json'
+import localeDelete from './locale-delete.json'
+import localeRemove from './locale-remove.json'
 import URLs from '../URLs'
 import { NewGoal } from '../../@types/NewGoalType'
 import { GoalStatus } from '../../@types/GoalType'
 import { PlanAgreementStatus } from '../../@types/PlanType'
+import transformRequest from '../../middleware/transformMiddleware'
+import RemoveGoalPostModel from './models/RemoveGoalPostModel'
+import validateRequest from '../../middleware/validationMiddleware'
+import { goalStatusToTabName } from '../../utils/utils'
 
 export default class RemoveGoalController {
   render = async (req: Request, res: Response, next: NextFunction) => {
     const { errors } = req
 
     try {
-      const type = req.query?.type
       const { uuid } = req.params
+      let actionType
+      let localeType
 
       const goal = await req.services.goalService.getGoal(uuid)
-      let actionType = 'remove'
-      let localeType = locale.en.remove
 
       const planUuid = req.services.sessionService.getPlanUUID()
       const plan = await req.services.planService.getPlanByUuid(planUuid)
 
+      const type = goalStatusToTabName(goal.status)
+      const returnLink = req.services.sessionService.getReturnLink()
+
       if (plan.agreementStatus === PlanAgreementStatus.DRAFT) {
         actionType = 'delete'
-        localeType = locale.en.delete
+        localeType = localeDelete.en
+      } else {
+        actionType = 'remove'
+        localeType = localeRemove.en
       }
 
       return res.render('pages/remove-goal', {
@@ -32,6 +42,7 @@ export default class RemoveGoalController {
           type,
           goal,
           actionType,
+          returnLink,
         },
         errors,
       })
@@ -55,9 +66,13 @@ export default class RemoveGoalController {
           status: GoalStatus.REMOVED,
         }
 
+        if (req.body['goal-removal-note']) {
+          goalData.note = req.body['goal-removal-note']
+        }
+
         try {
           await req.services.goalService.updateGoal(goalData, goalUuid)
-          return res.redirect(`${URLs.PLAN_OVERVIEW}?type=${type}&status=removed`)
+          return res.redirect(`${URLs.PLAN_OVERVIEW}?type=removed&status=removed`)
         } catch (e) {
           return next(e)
         }
@@ -69,9 +84,14 @@ export default class RemoveGoalController {
     }
   }
 
+  private handleValidationErrors = (req: Request, res: Response, next: NextFunction) => {
+    if (Object.keys(req.errors.body).length && req.body.action === 'remove') {
+      return this.render(req, res, next)
+    }
+    return next()
+  }
+
   get = this.render
 
-  post = (req: Request, res: Response, next: NextFunction) => {
-    return this.remove(req, res, next)
-  }
+  post = [transformRequest({ body: RemoveGoalPostModel }), validateRequest(), this.handleValidationErrors, this.remove]
 }

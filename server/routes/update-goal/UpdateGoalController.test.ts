@@ -21,12 +21,14 @@ jest.mock('../../services/sentence-plan/referentialDataService', () => {
 jest.mock('../../services/sentence-plan/goalService', () => {
   return jest.fn().mockImplementation(() => ({
     getGoal: jest.fn().mockResolvedValue(testGoal),
+    updateGoal: jest.fn().mockResolvedValue(testGoal),
   }))
 })
 
 jest.mock('../../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
     getSubjectDetails: jest.fn().mockReturnValue(handoverData.subject),
+    setReturnLink: jest.fn(),
   }))
 })
 
@@ -84,7 +86,7 @@ describe('UpdateGoalController', () => {
       await runMiddlewareChain(controller.post, req, res, next)
 
       expect(req.services.stepService.saveAllSteps).toHaveBeenCalled()
-      expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_OVERVIEW}`)
+      expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_OVERVIEW}?type=current`)
       expect(res.render).not.toHaveBeenCalled()
       expect(next).not.toHaveBeenCalled()
     })
@@ -104,7 +106,7 @@ describe('UpdateGoalController', () => {
       expect(res.render).not.toHaveBeenCalled()
     })
 
-    it('should have redirected to the error page when incorrect uuid submitted', async () => {
+    it('should redirect to the error page when incorrect uuid submitted', async () => {
       req.body = {
         'step-status-1': 'IN_PROGRESS',
         'step-uuid-1': 'thisuuid-wasnt-what-waas-expected0000',
@@ -115,7 +117,17 @@ describe('UpdateGoalController', () => {
       expect(next).toHaveBeenCalledWith(new Error('different steps were submitted'))
     })
 
-    it('should redirect to the same page when a validation errors occur', async () => {
+    it('should redirect to the plan page when saved with no steps and no note', async () => {
+      testGoal.steps = []
+
+      await runMiddlewareChain(controller.post, req, res, next)
+
+      expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_OVERVIEW}?type=current`)
+      expect(req.services.stepService.saveAllSteps).not.toHaveBeenCalled()
+      expect(next).not.toHaveBeenCalled()
+    })
+
+    it('should redirect to the same page when a validation error occurs', async () => {
       req.body = {
         'step-status-1': 'NOT_A_REAL_STATUS',
         'step-uuid-1': testStep.uuid,

@@ -12,6 +12,7 @@ jest.mock('../../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
     getPlanUUID: jest.fn().mockReturnValue('9506fba0-d2c7-4978-b3fc-aefd86821844'),
     getSubjectDetails: jest.fn().mockReturnValue(handoverData.subject),
+    setReturnLink: jest.fn(),
   }))
 })
 
@@ -46,7 +47,7 @@ afterEach(() => {
 describe(`GET ${URLs.UPDATE_GOAL}`, () => {
   it('should render update goal page', () => {
     return request(app)
-      .get(URLs.UPDATE_GOAL)
+      .get(`${URLs.UPDATE_GOAL}?type=current`)
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain('Test goal</h1>')
