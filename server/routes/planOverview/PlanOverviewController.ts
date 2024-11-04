@@ -18,10 +18,10 @@ export default class PlanOverviewController {
       const requestedType = String(req.query?.type)
 
       const validGoalTypes = ['current', 'future', 'removed', 'completed']
-      const type = validGoalTypes.includes(<string>requestedType) ? requestedType : 'current'
+      const type = validGoalTypes.includes(requestedType) ? requestedType : 'current'
 
       const validStatusTypes = ['added', 'changed', 'removed', 'deleted', 'achieved']
-      const status = validStatusTypes.includes(<string>requestedStatus) ? requestedStatus : undefined
+      const status = validStatusTypes.includes(requestedStatus) ? requestedStatus : undefined
 
       req.services.sessionService.setReturnLink(`/plan?type=${type ?? 'current'}`)
 
