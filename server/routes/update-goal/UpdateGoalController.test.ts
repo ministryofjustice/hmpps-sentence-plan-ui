@@ -117,6 +117,16 @@ describe('UpdateGoalController', () => {
       expect(next).toHaveBeenCalledWith(new Error('different steps were submitted'))
     })
 
+    it('should redirect to the plan page when saved with no steps and no note', async () => {
+      testGoal.steps = []
+
+      await runMiddlewareChain(controller.post, req, res, next)
+
+      expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_OVERVIEW}?type=current`)
+      expect(req.services.stepService.saveAllSteps).not.toHaveBeenCalled()
+      expect(next).not.toHaveBeenCalled()
+    })
+
     it('should redirect to the same page when a validation error occurs', async () => {
       req.body = {
         'step-status-1': 'NOT_A_REAL_STATUS',
