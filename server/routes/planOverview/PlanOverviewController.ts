@@ -17,7 +17,7 @@ export default class PlanOverviewController {
       const requestedStatus = String(req.query?.status)
       const requestedType = String(req.query?.type)
 
-      const validGoalTypes = ['current', 'future', 'removed', 'completed']
+      const validGoalTypes = ['current', 'future', 'removed', 'achieved']
       const type = validGoalTypes.includes(requestedType) ? requestedType : 'current'
 
       const validStatusTypes = ['added', 'changed', 'removed', 'deleted', 'achieved']
