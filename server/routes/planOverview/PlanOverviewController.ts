@@ -14,8 +14,14 @@ export default class PlanOverviewController {
       const planUuid = req.services.sessionService.getPlanUUID()
       const plan = await req.services.planService.getPlanByUuid(planUuid)
       const oasysReturnUrl = req.services.sessionService.getOasysReturnUrl()
-      const status = req.query?.status
-      const type = req.query?.type
+      const requestedStatus = String(req.query?.status)
+      const requestedType = String(req.query?.type)
+
+      const validGoalTypes = ['current', 'future', 'removed', 'completed']
+      const type = validGoalTypes.includes(<string>requestedType) ? requestedType : 'current'
+
+      const validStatusTypes = ['added', 'changed', 'removed', 'deleted', 'achieved']
+      const status = validStatusTypes.includes(<string>requestedStatus) ? requestedStatus : undefined
 
       req.services.sessionService.setReturnLink(`/plan?type=${type ?? 'current'}`)
 
