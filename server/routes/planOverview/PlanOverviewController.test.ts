@@ -4,6 +4,7 @@ import mockReq from '../../testutils/preMadeMocks/mockReq'
 import mockRes from '../../testutils/preMadeMocks/mockRes'
 import locale from './locale.json'
 import testPlan from '../../testutils/data/planData'
+import runMiddlewareChain from '../../testutils/runMiddlewareChain'
 
 const oasysReturnUrl = 'https://oasys.return.url'
 
@@ -37,7 +38,11 @@ describe('PlanOverviewController', () => {
         type: 'current',
         oasysReturnUrl,
       },
-      errors: {},
+      errors: {
+        body: {},
+        params: {},
+        query: {},
+      },
     }
 
     req = mockReq()
@@ -49,7 +54,7 @@ describe('PlanOverviewController', () => {
 
   describe('get', () => {
     it('should render without validation errors', async () => {
-      await controller.get(req, res, next)
+      await runMiddlewareChain(controller.get, req, res, next)
 
       expect(res.render).toHaveBeenCalledWith('pages/plan', viewData)
     })
@@ -68,20 +73,29 @@ describe('PlanOverviewController', () => {
         },
       })
 
-      await controller.get(req, res, next)
+      await runMiddlewareChain(controller.get, req, res, next)
 
       expect(res.render).toHaveBeenCalledWith('pages/plan', viewData)
     })
 
     it('should remove invalid type and status parameters', async () => {
+      viewData.errors.query = {
+        status: {
+          isEnum: true,
+        },
+        type: {
+          isEnum: true,
+        },
+      }
+
       req = mockReq({
-        params: {
+        query: {
           type: 'cheese',
           status: 'sausage',
         },
       })
 
-      await controller.get(req, res, next)
+      await runMiddlewareChain(controller.get, req, res, next)
 
       expect(res.render).toHaveBeenCalledWith('pages/plan', viewData)
     })
