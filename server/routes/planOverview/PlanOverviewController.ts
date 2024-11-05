@@ -3,8 +3,10 @@ import { plainToInstance } from 'class-transformer'
 import locale from './locale.json'
 import { moveGoal } from '../../utils/utils'
 import URLs from '../URLs'
-import { getValidationErrors } from '../../middleware/validationMiddleware'
+import validateRequest, { getValidationErrors } from '../../middleware/validationMiddleware'
 import PlanModel from '../shared-models/PlanModel'
+import transformRequest from '../../middleware/transformMiddleware'
+import PlanOverviewQueryModel from './models/PlanOverviewQueryModel'
 
 export default class PlanOverviewController {
   private render = async (req: Request, res: Response, next: NextFunction) => {
@@ -14,8 +16,8 @@ export default class PlanOverviewController {
       const planUuid = req.services.sessionService.getPlanUUID()
       const plan = await req.services.planService.getPlanByUuid(planUuid)
       const oasysReturnUrl = req.services.sessionService.getOasysReturnUrl()
+      const type = req.query?.type ?? 'current'
       const status = req.query?.status
-      const type = req.query?.type
 
       req.services.sessionService.setReturnLink(`/plan?type=${type ?? 'current'}`)
 
@@ -66,6 +68,14 @@ export default class PlanOverviewController {
     const hasErrors = Object.values(req.errors).some(errorCategory => Object.keys(errorCategory).length)
 
     if (hasErrors) {
+      if (req.errors.query?.type) {
+        delete req.query.type
+      }
+
+      if (req.errors.query?.status) {
+        delete req.query.status
+      }
+
       return this.render(req, res, next)
     }
 
@@ -76,7 +86,12 @@ export default class PlanOverviewController {
     return res.redirect(URLs.AGREE_PLAN)
   }
 
-  get = this.render
+  get = [
+    transformRequest({ query: PlanOverviewQueryModel }),
+    validateRequest(),
+    this.handleValidationErrors,
+    this.render,
+  ]
 
   post = [this.validatePlanForAgreement, this.handleValidationErrors, this.handleSuccessRedirect]
 }
