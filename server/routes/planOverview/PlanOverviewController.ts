@@ -16,7 +16,7 @@ export default class PlanOverviewController {
       const planUuid = req.services.sessionService.getPlanUUID()
       const plan = await req.services.planService.getPlanByUuid(planUuid)
       const oasysReturnUrl = req.services.sessionService.getOasysReturnUrl()
-      const type = req.query.type ?? 'current'
+      const type = req.query?.type ?? 'current'
       const status = req.query?.status
 
       req.services.sessionService.setReturnLink(`/plan?type=${type ?? 'current'}`)
@@ -68,11 +68,11 @@ export default class PlanOverviewController {
     const hasErrors = Object.values(req.errors).some(errorCategory => Object.keys(errorCategory).length)
 
     if (hasErrors) {
-      if (req.errors.query.type) {
+      if (req.errors.query?.type) {
         delete req.query.type
       }
 
-      if (req.errors.query.status) {
+      if (req.errors.query?.status) {
         delete req.query.status
       }
 

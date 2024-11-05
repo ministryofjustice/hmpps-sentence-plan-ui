@@ -4,7 +4,7 @@ enum GoalTypes {
   CURRENT = 'current',
   FUTURE = 'future',
   REMOVED = 'removed',
-  COMPLETED = 'completed',
+  ACHIEVED = 'achieved',
 }
 
 enum StatusTypes {
