@@ -376,7 +376,7 @@ describe('ChangeGoalController', () => {
       expect(res.redirect).toHaveBeenCalledWith(`/update-goal/${testGoal.uuid}`)
     })
 
-    it('should redirect to add-steps if Plan is agreed and future goal has no steps', async () => {
+    it('should redirect to add-steps if Plan is agreed and current goal has no steps', async () => {
       const draftPlanData: PlanType = { ...testPlan, agreementStatus: PlanAgreementStatus.AGREED }
       req.services.planService.getPlanByUuid = jest.fn().mockResolvedValue(draftPlanData)
 
@@ -387,7 +387,8 @@ describe('ChangeGoalController', () => {
         'goal-input-autocomplete': 'Goal for the future with no steps',
         'area-of-need': testGoal.areaOfNeed.name,
         'related-area-of-need-radio': 'no',
-        'start-working-goal-radio': 'no',
+        'start-working-goal-radio': 'yes',
+        'date-selection-radio': viewData.data.dateOptions[1].toISOString(),
       }
       req.errors = {
         body: {},
