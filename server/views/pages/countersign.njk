@@ -58,6 +58,17 @@
 {% endblock %}
 
 {% set mainClasses = "app-container govuk-body" %}
+{% set header = {
+    type: "extended",
+    items: [
+    {
+        text: locale.header.returnToOasysButton,
+        href: data.oasysReturnUrl,
+        classes: "govuk-button--secondary",
+        type: 'button'
+    }
+    ]
+} %}
 
 {% block bodyStart %}
     <div id="top"></div>
