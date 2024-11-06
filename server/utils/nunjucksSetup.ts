@@ -13,7 +13,7 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
   app.set('view engine', 'njk')
 
   app.locals.asset_path = '/assets/'
-  app.locals.applicationName = 'Sentence plan'
+  app.locals.applicationName = 'Sentence Plan'
   app.locals.environmentName = config.environmentName
   app.locals.environmentNameColour = config.environmentName === 'PRE-PRODUCTION' ? 'govuk-tag--green' : ''
 
