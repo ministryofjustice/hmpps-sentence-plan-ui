@@ -2,6 +2,7 @@
 {% from "../components/summary-card/goal-summary-card.njk" import goalSummaryCard %}
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "../components/error-summary/error-summary.njk" import errorSummary %}
 
 {% block pageTitle %}
     {% if not errors %}
@@ -18,6 +19,10 @@
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
         <a href="#" class="govuk-back-link">Back</a>
+        {{ errorSummary({
+            errors: errors,
+            locale: locale
+        }) }}
         <h1 class="govuk-heading-l">{{ locale.mainHeading.title }}</h1>
 
         {{ goalSummaryCard({
@@ -36,7 +41,9 @@
                 label: {
                     text: locale.notes.label,
                     classes: "govuk-label--m"
-                }
+                },
+                value: data.form['goal-achievement-helped'],
+                errorMessage: getFormattedError(errors, locale, 'goal-achievement-helped')
             }) }}
             <div class="govuk-button-group">
                 {{ govukButton({
