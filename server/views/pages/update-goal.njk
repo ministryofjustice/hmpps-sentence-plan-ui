@@ -130,7 +130,7 @@
                     <div class="govuk-grid-column-two-thirds">
                         <div class="govuk-form-group">
                             {{ govukTextarea({
-                                name: "moreDetail",
+                                name: "more-detail",
                                 id: "more-detail",
                                 rows: 4,
                                 label: {
@@ -139,7 +139,9 @@
                                 },
                                 hint: {
                                     text: locale.moreDetailHint
-                                }
+                                },
+                                value: data.form['more-detail'],
+                                errorMessage: getFormattedError(errors, locale, 'more-detail')
                             }) }}
 
                             {{ noteList({

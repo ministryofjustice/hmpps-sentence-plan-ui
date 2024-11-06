@@ -49,6 +49,7 @@ describe('UpdateGoalController', () => {
   const viewData = {
     locale: locale.en,
     data: {
+      form: {},
       goal: testGoal,
       popData: handoverData.subject,
       mainAreaOfNeed: AreaOfNeed.find(x => x.name === testGoal.areaOfNeed.name),
@@ -81,6 +82,7 @@ describe('UpdateGoalController', () => {
       req.body = {
         'step-status-1': StepStatus.IN_PROGRESS,
         'step-uuid-1': testStep.uuid,
+        'more-detail': '',
       }
 
       await runMiddlewareChain(controller.post, req, res, next)
@@ -95,6 +97,7 @@ describe('UpdateGoalController', () => {
       req.body = {
         'step-status-1': StepStatus.IN_PROGRESS,
         'step-uuid-1': testStep.uuid,
+        'more-detail': '',
       }
 
       const saveError = new Error('Save failed')
@@ -110,6 +113,7 @@ describe('UpdateGoalController', () => {
       req.body = {
         'step-status-1': 'IN_PROGRESS',
         'step-uuid-1': 'thisuuid-wasnt-what-waas-expected0000',
+        'more-detail': '',
       }
 
       await runMiddlewareChain(controller.post, req, res, next)
@@ -119,6 +123,7 @@ describe('UpdateGoalController', () => {
 
     it('should redirect to the plan page when saved with no steps and no note', async () => {
       testGoal.steps = []
+      req.body['more-detail'] = ''
 
       await runMiddlewareChain(controller.post, req, res, next)
 

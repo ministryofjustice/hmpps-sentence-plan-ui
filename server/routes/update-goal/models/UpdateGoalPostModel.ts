@@ -1,6 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import { Expose, plainToInstance, Transform } from 'class-transformer'
-import { IsEnum, IsNotEmpty, Length, ValidateNested } from 'class-validator'
+import { IsEnum, IsNotEmpty, Length, MaxLength, ValidateNested } from 'class-validator'
 import { StepStatus } from '../../../@types/StepType'
 
 export class StepModel {
@@ -15,6 +15,10 @@ export class StepModel {
 }
 
 export default class UpdateGoalPostModel {
+  @Expose()
+  @MaxLength(4000)
+  'more-detail': string
+
   @Expose()
   @ValidateNested()
   @Transform(({ obj }) => {
