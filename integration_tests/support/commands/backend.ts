@@ -65,7 +65,7 @@ export const openSentencePlan = oasysAssessmentPk => {
 }
 
 export const createSentencePlan = () => {
-  const oasysAssessmentPk = Math.random().toString(36).substring(2, 9)
+  const oasysAssessmentPk = Math.random().toString(10).substring(2, 9)
 
   return getApiToken().then(apiToken =>
     cy
