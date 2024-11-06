@@ -34,6 +34,7 @@
                         label: {
                             text: locale.agreePlanOptions.enterDetails
                         },
+                        value: data.form['does-not-agree-details'] if data.form['agree-plan-radio'] == 'no',
                         errorMessage: getFormattedError(errors, locale, 'does-not-agree-details')
                     }) }}
                 {% endset -%}
@@ -46,6 +47,7 @@
                         label: {
                             text: locale.agreePlanOptions.enterDetails
                         },
+                        value: data.form['could-not-answer-details'] if data.form['agree-plan-radio'] == 'couldNotAnswer',
                         errorMessage: getFormattedError(errors, locale, 'could-not-answer-details')
                     }) }}
                 {% endset -%}
@@ -95,7 +97,9 @@
                     label: {
                         text: locale.notes.label,
                         classes: "govuk-label--m"
-                    }
+                    },
+                    value: data.form['notes'],
+                    errorMessage: getFormattedError(errors, locale, 'notes')
                 }) }}
 
                 {{ govukButton({
