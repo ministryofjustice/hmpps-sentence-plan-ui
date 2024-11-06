@@ -11,7 +11,7 @@
     "agreePlanOptions": {
       "yes": "Yes, I agree",
       "no": "No, I do not agree",
-      "couldNotAnswerHint": "Share this plan with {{ subject.givenName }} next time you see them",
+      "couldNotAnswerHint": "Share this plan with {{ subject.givenName }} next time you see them.",
       "couldNotAnswer": "{{ subject.givenName }} could not answer this question",
       "enterDetails": "Enter details"
     },
