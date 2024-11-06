@@ -15,6 +15,9 @@
       "couldNotAnswer": "{{ subject.givenName }} could not answer this question",
       "enterDetails": "Enter details"
     },
+    "radio": {
+      "divider": "or"
+    },
     "notes": {
       "label": "Add any notes (optional)"
     },
