@@ -70,7 +70,7 @@ export const openSentencePlan = (oasysAssessmentPk, accessMode) => {
 }
 
 export const createSentencePlan = () => {
-  const oasysAssessmentPk = Math.random().toString(36).substring(2, 9)
+  const oasysAssessmentPk = Math.random().toString().substring(2, 9)
 
   return getApiToken().then(apiToken =>
     cy
