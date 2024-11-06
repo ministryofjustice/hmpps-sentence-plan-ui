@@ -1,5 +1,6 @@
 import { NewGoal } from '../../../server/@types/NewGoalType'
 import { NewStep } from '../../../server/@types/StepType'
+import { AccessMode } from '../../../server/@types/Handover'
 
 const getApiToken = () => {
   const apiToken = Cypress.env('API_TOKEN')
@@ -27,34 +28,38 @@ const getApiToken = () => {
     })
 }
 
-export const openSentencePlan = oasysAssessmentPk => {
+function createHandoverContext(apiToken, oasysAssessmentPk, accessMode) {
+  return {
+    url: `${Cypress.env('ARNS_HANDOVER_URL')}/handover`,
+    method: 'POST',
+    auth: { bearer: apiToken },
+    body: {
+      oasysAssessmentPk,
+      user: {
+        identifier: 123,
+        displayName: 'Cypress User',
+        accessMode,
+        returnUrl: Cypress.env('OASTUB_URL'),
+      },
+      subjectDetails: {
+        crn: 'X123456',
+        pnc: '01/123456789A',
+        givenName: 'Sam',
+        familyName: 'Whitfield',
+        dateOfBirth: '1970-01-01',
+        gender: 0,
+        location: 'COMMUNITY',
+        sexuallyMotivatedOffenceHistory: 'NO',
+      },
+    },
+  }
+}
+
+export const openSentencePlan = (oasysAssessmentPk, accessMode) => {
   cy.session(oasysAssessmentPk, () =>
     getApiToken().then(apiToken =>
       cy
-        .request({
-          url: `${Cypress.env('ARNS_HANDOVER_URL')}/handover`,
-          method: 'POST',
-          auth: { bearer: apiToken },
-          body: {
-            oasysAssessmentPk,
-            user: {
-              identifier: 123,
-              displayName: 'Cypress User',
-              accessMode: 'READ_WRITE',
-              returnUrl: Cypress.env('OASTUB_URL'),
-            },
-            subjectDetails: {
-              crn: 'X123456',
-              pnc: '01/123456789A',
-              givenName: 'Sam',
-              familyName: 'Whitfield',
-              dateOfBirth: '1970-01-01',
-              gender: 0,
-              location: 'COMMUNITY',
-              sexuallyMotivatedOffenceHistory: 'NO',
-            },
-          },
-        })
+        .request(createHandoverContext(apiToken, oasysAssessmentPk, accessMode ?? AccessMode.READ_WRITE))
         .then(handoverResponse =>
           cy.visit(`${handoverResponse.body.handoverLink}?clientId=${Cypress.env('ARNS_HANDOVER_CLIENT_ID')}`),
         ),

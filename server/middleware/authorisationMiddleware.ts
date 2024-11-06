@@ -7,7 +7,7 @@ export default function authorisationMiddleware(): RequestHandler {
     if (req.services.sessionService.getPrincipalDetails()) {
       if (
         req.services.sessionService.getPrincipalDetails().accessMode === AccessMode.READ_ONLY &&
-        !req.originalUrl.split('?')[0].startsWith(URLs.PLAN_OVERVIEW)
+        req.originalUrl.split('?')[0] !== URLs.PLAN_OVERVIEW
       ) {
         req.session.returnTo = req.originalUrl
         return res.redirect('/sign-in')

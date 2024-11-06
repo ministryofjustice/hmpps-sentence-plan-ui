@@ -10,7 +10,7 @@ declare namespace Cypress {
     ): Chainable<S>
 
     // Handover/Auth
-    openSentencePlan(oasysAssessmentPk: string): Chainable<T>
+    openSentencePlan(oasysAssessmentPk: string, accessMode: string): Chainable<T>
     createSentencePlan(): Chainable<T>
 
     // API
