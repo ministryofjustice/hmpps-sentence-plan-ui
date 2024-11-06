@@ -39,6 +39,7 @@ export default class RemoveGoalController {
       return res.render('pages/remove-goal', {
         locale: localeType,
         data: {
+          form: req.body,
           type,
           goal,
           actionType,
