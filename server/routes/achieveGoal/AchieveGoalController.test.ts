@@ -59,6 +59,23 @@ describe('AchieveGoalController', () => {
 
       expect(res.render).toHaveBeenCalledWith('pages/confirm-achieved-goal', viewData)
     })
+
+    it('should render with validation errors', async () => {
+      const errors = {
+        body: { 'goal-achievement-helped': { maxLength: true } },
+        params: {},
+        query: {},
+      }
+      req.errors = errors
+      const expectedViewData = {
+        ...viewData,
+        errors,
+      }
+
+      await controller.get(req, res, next)
+
+      expect(res.render).toHaveBeenCalledWith('pages/confirm-achieved-goal', expectedViewData)
+    })
   })
 
   describe('post', () => {
