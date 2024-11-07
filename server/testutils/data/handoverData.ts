@@ -1,11 +1,11 @@
-import { HandoverContextData } from '../../@types/Handover'
+import { AccessMode, HandoverContextData } from '../../@types/Handover'
 
 const testHandoverContext: HandoverContextData = {
   handoverSessionId: 'e7501b21-3951-426d-9a73-0c2c4527aa27',
   principal: {
     identifier: 'a23ccacf-7160-4431-9b4d-c560be9c9f5c',
     displayName: 'Dr. Benjamin Runolfsdottir',
-    accessMode: 'READ_WRITE',
+    accessMode: AccessMode.READ_WRITE,
     returnUrl: '',
   },
   subject: {

@@ -7,6 +7,7 @@ import validateRequest, { getValidationErrors } from '../../middleware/validatio
 import PlanModel from '../shared-models/PlanModel'
 import transformRequest from '../../middleware/transformMiddleware'
 import PlanOverviewQueryModel from './models/PlanOverviewQueryModel'
+import { AccessMode } from '../../@types/Handover'
 
 export default class PlanOverviewController {
   private render = async (req: Request, res: Response, next: NextFunction) => {
@@ -21,7 +22,13 @@ export default class PlanOverviewController {
 
       req.services.sessionService.setReturnLink(`/plan?type=${type ?? 'current'}`)
 
-      return res.render('pages/plan', {
+      let pageToRender = 'pages/plan'
+
+      if (req.services.sessionService.getPrincipalDetails().accessMode === AccessMode.READ_ONLY) {
+        pageToRender = 'pages/countersign'
+      }
+
+      return res.render(pageToRender, {
         locale: locale.en,
         data: {
           plan,
