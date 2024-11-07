@@ -176,5 +176,29 @@ describe('Remove a goal from a Plan after it has been agreed', () => {
 
       cy.get('#goal-removal-note').should('contain', lorem)
     })
+
+    it('When goal is removed, view details is available and has correct content', () => {
+      const planOverview = new PlanOverview()
+
+      // Click remove goal
+      cy.contains('.goal-summary-card', goalData.title).within(() => {
+        cy.contains('a', 'Remove').click()
+      })
+
+      // Add note text
+      cy.get('#goal-removal-note').type('Some optional text in the note field')
+
+      // Confirm delete
+      cy.contains('button', 'Confirm').click()
+
+      // Check goal has been removed
+      cy.url().should('contain', '/plan?type=removed&status=removed')
+      cy.get('.goal-list .goal-summary-card').should('have.length', 1).and('contain', goalData.title)
+      planOverview.getSummaryCard(0).get('a').contains('View details').click()
+      cy.get('.govuk-details__text').should('contain', 'Some optional text in the note field')
+      cy.get('h2').should('contain', goalData.title)
+      cy.get('p.govuk-body').should('contain', 'Removed on ')
+      cy.get('a.govuk-back-link').should('have.attr', 'href').and('include', '/plan?type=removed')
+    })
   })
 })
