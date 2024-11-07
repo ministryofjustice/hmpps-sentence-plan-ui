@@ -13,17 +13,16 @@ describe('Update goal', () => {
 
   describe('Set-up agreed plan', () => {
     beforeEach(() => {
+      const planOverview = new PlanOverview()
       cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
         cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal()).then(goal => {
           cy.addStepToGoal(goal.uuid, DataGenerator.generateStep())
         })
 
-        cy.visit(`/agree-plan`)
+        planOverview.agreePlan()
       })
     })
     it('Can select and update a step status', () => {
-      const planOverview = new PlanOverview()
-      planOverview.agreePlan()
       cy.url().should('satisfy', url => url.endsWith('/plan')) // check we're back to plan-overview
       cy.contains('a', 'Update').click() // click update link
       cy.url().should('include', '/update-goal') // check url is update goal
@@ -44,8 +43,6 @@ describe('Update goal', () => {
     })
 
     it('Clicking Back link does not save', () => {
-      const planOverview = new PlanOverview()
-      planOverview.agreePlan()
       cy.url().should('satisfy', url => url.endsWith('/plan')) // check we're back to plan-overview
       cy.contains('a', 'Update').click() // click update link
       cy.url().should('include', '/update-goal') // check url is update goal
@@ -65,8 +62,6 @@ describe('Update goal', () => {
     })
 
     it('Can save and view notes attached to a goal', () => {
-      const planOverview = new PlanOverview()
-      planOverview.agreePlan()
       const updateGoal = new UpdateGoal()
       updateGoal.createNote()
       cy.contains('a', 'Update').click() // click update link
