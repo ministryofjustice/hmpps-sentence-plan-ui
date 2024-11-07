@@ -23,11 +23,12 @@ describe('Agree plan', () => {
     it('Display agree plan page correctly on load', () => {
       cy.url()
       cy.get('.govuk-fieldset__heading').contains('agree to this plan?')
-      cy.get('.govuk-label').contains('Yes')
-      cy.get('.govuk-label').contains('No')
+      cy.get('.govuk-label').contains('Yes, I agree')
+      cy.get('.govuk-label').contains('No, I do not agree')
       cy.get('.govuk-label').contains('could not answer this question')
+      cy.get('#agree-plan-radio-4-item-hint').contains('Share this plan with')
       cy.get('.govuk-label').contains('Add any notes (optional)')
-      cy.get('.govuk-button').contains('Agree plan with')
+      cy.get('.govuk-button').contains('Save')
     })
   })
 
@@ -86,7 +87,10 @@ describe('Agree plan', () => {
       it('Display validation error if nothing is selected', () => {
         cy.get('.govuk-button').click()
 
-        cy.contains('#agree-plan-radio-error', 'Select if they agree to the plan')
+        cy.contains(
+          '#agree-plan-radio-error',
+          'Select if they agree to the plan, or that they could not answer this question',
+        )
         cy.title().should('contain', 'Error:')
       })
       it('Display validation error if No is selected but no details provided', () => {
@@ -97,10 +101,10 @@ describe('Agree plan', () => {
         cy.title().should('contain', 'Error:')
       })
       it('Display validation error if Not answered is selected but no details provided', () => {
-        cy.get('#agree-plan-radio-3').click()
+        cy.get('#agree-plan-radio-4').click()
         cy.get('.govuk-button').click()
 
-        cy.contains('#could-not-answer-details-error', 'Enter details about why they cannot answer')
+        cy.contains('#could-not-answer-details-error', 'Enter details about why they could not answer')
         cy.title().should('contain', 'Error:')
       })
     })
@@ -134,7 +138,7 @@ describe('Agree plan', () => {
       cy.url().should('satisfy', url => url.endsWith('/plan'))
     })
     it('Submit successfully when "Could not answer this question" is selected and additional information provided', () => {
-      cy.get('#agree-plan-radio-3').click()
+      cy.get('#agree-plan-radio-4').click()
       cy.get('#could-not-answer-details').type('abc')
 
       cy.get('.govuk-button').click()

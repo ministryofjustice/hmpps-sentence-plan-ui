@@ -9,24 +9,33 @@
       "hint": "{{ subject.givenName }} must answer this question, or you must record why {{ subject.givenName }} could not."
     },
     "agreePlanOptions": {
-      "yes": "Yes, {{ subject.givenName }} agrees",
-      "no": "No, {{ subject.givenName }} does not agree",
+      "yes": "Yes, I agree",
+      "no": "No, I do not agree",
+      "couldNotAnswerHint": "Share this plan with {{ subject.givenName }} next time you see them.",
       "couldNotAnswer": "{{ subject.givenName }} could not answer this question",
       "enterDetails": "Enter details"
+    },
+    "radio": {
+      "divider": "or"
     },
     "notes": {
       "label": "Add any notes (optional)"
     },
-    "agreePlanButton": "Agree plan with {{ subject.givenName }}",
+    "agreePlanButton": "Save",
     "errors": {
       "agree-plan-radio": {
-        "isIn": "Select if they agree to the plan"
+        "isIn": "Select if they agree to the plan, or that they could not answer this question"
       },
       "does-not-agree-details": {
-        "isNotEmpty": "Enter details about why they do not agree"
+        "isNotEmpty": "Enter details about why they do not agree",
+        "isOverCharacterLimit": "Details on why they do not agree must be 4,000 characters or less"
       },
       "could-not-answer-details": {
-        "isNotEmpty": "Enter details about why they cannot answer"
+        "isNotEmpty": "Enter details about why they could not answer",
+        "isOverCharacterLimit": "Details on why they could not agree must be 4,000 characters or less"
+      },
+      "notes-exceed-character-limit": {
+        "isOverCharacterLimit": "Notes must be 4,000 characters or less"
       }
     }
   }
