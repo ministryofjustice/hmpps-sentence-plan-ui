@@ -1,3 +1,4 @@
+import { faker } from '@faker-js/faker'
 import DataGenerator from '../support/DataGenerator'
 import { PlanType } from '../../server/@types/PlanType'
 import PlanOverview from '../pages/plan-overview'
@@ -67,6 +68,16 @@ describe('Update goal', () => {
       cy.contains('a', 'Update').click() // click update link
       cy.contains('View all notes').click() // open drop down of notes
       cy.get('.govuk-details__text').contains(updateGoal.notesEntry) // check if created note is there
+    })
+
+    it('Can save and view notes attached to a goal', () => {
+      cy.contains('a', 'Update').click() // click update link
+      cy.url().should('include', '/update-goal')
+      cy.get('#more-detail').invoke('val', faker.lorem.paragraphs(40))
+      cy.get('.govuk-button').contains('Save goal and steps').click()
+
+      cy.get('.govuk-error-summary').should('contain', 'Notes about progress must be 4,000 characters or less')
+      cy.get('#more-detail-error').should('contain', 'Notes about progress must be 4,000 characters or less')
     })
   })
 })

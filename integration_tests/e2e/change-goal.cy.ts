@@ -1,3 +1,4 @@
+import { faker } from '@faker-js/faker'
 import { NewGoal } from '../../server/@types/NewGoalType'
 import { PlanType } from '../../server/@types/PlanType'
 
@@ -131,6 +132,18 @@ describe('Change a goal', () => {
 
       // Check goal data is saved and rendered correctly
       cy.get('.moj-sub-navigation').and('contain', 'Future goals (1)')
+    })
+
+    it('Should display error if goal title is too long', () => {
+      // Modify data
+      cy.get('#goal-input-autocomplete').invoke('val', faker.lorem.paragraphs(40))
+      cy.get('input[value="Employment and education"]').check()
+      cy.get('input[value="Alcohol use"]').check()
+
+      cy.contains('button', 'save').click()
+      cy.url().should('include', '/change-goal')
+      cy.get('.govuk-error-summary').should('contain', 'Goal must be 4,000 characters or less')
+      cy.get('#goal-input-error').should('contain', 'Goal must be 4,000 characters or less')
     })
   })
 })

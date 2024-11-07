@@ -1,3 +1,4 @@
+import { faker } from '@faker-js/faker'
 import CreateGoal from '../pages/create-goal'
 
 describe('Create a new Goal', () => {
@@ -24,6 +25,21 @@ describe('Create a new Goal', () => {
       .should('contain', 'Select a date')
     cy.contains('#related-area-of-need-radio-error', 'Select yes if this goal is related to any other area of need')
     cy.contains('.hmpps-datepicker', 'Select a date')
+    cy.title().should('contain', 'Error:')
+  })
+
+  it('Creates a new goal with errors', () => {
+    createGoalPage.createGoal('accommodation')
+    createGoalPage.putGoalAutoCompletionText(faker.lorem.paragraphs(40))
+    createGoalPage.selectRelatedAreasOfNeedRadio('yes')
+    createGoalPage.selectRelatedAreasOfNeed(['Employment and education', 'Drug use'])
+    createGoalPage.selectStartWorkingRadio('yes')
+    createGoalPage.selectAchievementDate('In 6 months')
+    createGoalPage.clickButton('Add steps')
+
+    cy.url().should('include', '/create-goal/accommodation')
+    cy.get('.govuk-error-summary').should('contain', 'Goal must be 4,000 characters or less')
+    cy.get('#goal-input-error').should('contain', 'Goal must be 4,000 characters or less')
     cy.title().should('contain', 'Error:')
   })
 

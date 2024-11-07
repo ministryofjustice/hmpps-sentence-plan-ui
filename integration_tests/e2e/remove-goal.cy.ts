@@ -1,3 +1,4 @@
+import { faker } from '@faker-js/faker'
 import { NewGoal } from '../../server/@types/NewGoalType'
 import { Goal } from '../../server/@types/GoalType'
 import DataGenerator from '../support/DataGenerator'
@@ -141,6 +142,35 @@ describe('Remove a goal from a Plan after it has been agreed', () => {
       // Check goal has been removed
       cy.url().should('contain', '/plan?type=removed&status=removed')
       cy.get('.goal-list .goal-summary-card').should('have.length', 1).and('contain', goalData.title)
+    })
+
+    it('When confirmed, and a long note is provided, page with error details is rendered', () => {
+      // Go to plan overview page, check goal appears
+      cy.visit(`/plan`)
+
+      // Click remove goal
+      cy.contains('.goal-summary-card', goalData.title).within(() => {
+        cy.contains('a', 'Remove').click()
+      })
+
+      // Add note text
+      cy.get('#goal-removal-note').invoke('val', faker.lorem.paragraphs(40))
+
+      // Confirm delete
+      cy.contains('button', 'Confirm').click()
+
+      // Check page has been re-rendered with error summary and highlight on the notes box
+      cy.get<Goal>('@goal').then(goal => {
+        cy.url().should('contain', `/remove-goal/${goal.uuid}`)
+      })
+      cy.get('.govuk-error-summary').should(
+        'contain',
+        'The reason for removing this goal must be 4,000 characters or less',
+      )
+      cy.get('.govuk-error-message').should(
+        'contain',
+        'The reason for removing this goal must be 4,000 characters or less',
+      )
     })
   })
 })
