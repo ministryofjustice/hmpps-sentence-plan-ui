@@ -73,7 +73,8 @@ describe('Achieve goal', () => {
     })
 
     it('Confirm errors are displayed with optional note of more than 4000 characters', () => {
-      cy.get('#goal-achievement-helped').invoke('val', faker.lorem.paragraphs(40))
+      const lorem = faker.lorem.paragraphs(40)
+      cy.get('#goal-achievement-helped').invoke('val', lorem)
       cy.get('button').contains('Confirm').click()
       cy.url().should('include', '/confirm-achieved-goal/')
       cy.get('.govuk-error-summary').should(
@@ -84,6 +85,7 @@ describe('Achieve goal', () => {
         'contain',
         'How achieving this goal has helped must be 4,000 characters or less',
       )
+      cy.get('#goal-achievement-helped').should('have.text', lorem)
     })
 
     it('Cancel goal achieved and redirect successfully', () => {

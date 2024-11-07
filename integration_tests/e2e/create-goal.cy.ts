@@ -29,8 +29,9 @@ describe('Create a new Goal', () => {
   })
 
   it('Creates a new goal with errors', () => {
+    const lorem = faker.lorem.paragraphs(40).replace(/(\r\n|\n|\r)/gm, '')
     createGoalPage.createGoal('accommodation')
-    createGoalPage.putGoalAutoCompletionText(faker.lorem.paragraphs(40))
+    createGoalPage.putGoalAutoCompletionText(lorem)
     createGoalPage.selectRelatedAreasOfNeedRadio('yes')
     createGoalPage.selectRelatedAreasOfNeed(['Employment and education', 'Drug use'])
     createGoalPage.selectStartWorkingRadio('yes')
@@ -41,6 +42,8 @@ describe('Create a new Goal', () => {
     cy.get('.govuk-error-summary').should('contain', 'Goal must be 4,000 characters or less')
     cy.get('#goal-input-error').should('contain', 'Goal must be 4,000 characters or less')
     cy.title().should('contain', 'Error:')
+
+    cy.get('#goal-input-autocomplete').invoke('val').should('contain', lorem)
   })
 
   it('Creates a new goal without steps', () => {

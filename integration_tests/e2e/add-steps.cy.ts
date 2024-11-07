@@ -167,10 +167,11 @@ describe('Add Steps', () => {
     })
 
     it('Save with a long step description shows error', () => {
+      const lorem = faker.lorem.paragraphs(40).replace(/(\r\n|\n|\r)/gm, '')
       cy.url().should('include', '/add-steps')
 
       const firstStep = DataGenerator.generateStep({})
-      addStep.putStepAutocompleteText(1, faker.lorem.paragraphs(40))
+      addStep.putStepAutocompleteText(1, lorem)
       addStep.selectStepActor(1, firstStep.actor)
       addStep.saveAndContinue()
 
@@ -178,6 +179,8 @@ describe('Add Steps', () => {
         'contain',
         'What they should do to achieve the goal must be 4,000 characters or less',
       )
+
+      cy.get(`#step-description-1-autocomplete`).invoke('val').should('contain', lorem)
     })
   })
 })

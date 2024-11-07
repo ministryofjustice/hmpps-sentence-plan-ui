@@ -135,8 +135,9 @@ describe('Change a goal', () => {
     })
 
     it('Should display error if goal title is too long', () => {
+      const lorem = faker.lorem.paragraphs(40).replace(/(\r\n|\n|\r)/gm, '')
       // Modify data
-      cy.get('#goal-input-autocomplete').invoke('val', faker.lorem.paragraphs(40))
+      cy.get('#goal-input-autocomplete').invoke('val', lorem)
       cy.get('input[value="Employment and education"]').check()
       cy.get('input[value="Alcohol use"]').check()
 
@@ -144,6 +145,7 @@ describe('Change a goal', () => {
       cy.url().should('include', '/change-goal')
       cy.get('.govuk-error-summary').should('contain', 'Goal must be 4,000 characters or less')
       cy.get('#goal-input-error').should('contain', 'Goal must be 4,000 characters or less')
+      cy.get('#goal-input-autocomplete').invoke('val').should('contain', lorem)
     })
   })
 })

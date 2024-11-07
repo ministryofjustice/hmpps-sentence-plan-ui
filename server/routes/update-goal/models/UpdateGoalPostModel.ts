@@ -15,7 +15,6 @@ export class StepModel {
 }
 
 export default class UpdateGoalPostModel {
-  @Expose()
   @MaxLength(4000)
   'more-detail': string
 

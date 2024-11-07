@@ -132,14 +132,18 @@ describe('Agree plan', () => {
     })
 
     it('Displays errors if Yes is selected and long additional notes provided', () => {
+      const lorem = faker.lorem.paragraphs(40)
+
       cy.get('#agree-plan-radio').click()
-      cy.get('#notes').invoke('val', faker.lorem.paragraphs(40))
+      cy.get('#notes').invoke('val', lorem)
 
       cy.get('.govuk-button').click()
 
       cy.url().should('satisfy', url => url.endsWith('/agree-plan'))
       cy.get('.govuk-error-summary').should('contain', 'Notes must be 4,000 characters or less')
       cy.get('#notes-error').should('contain', 'Notes must be 4,000 characters or less')
+
+      cy.get('#notes').should('contain', lorem)
     })
 
     it('Submit successfully when No is selected and additional information provided', () => {
@@ -152,8 +156,10 @@ describe('Agree plan', () => {
     })
 
     it('Displays errors when No is selected and long additional information provided', () => {
+      const lorem = faker.lorem.paragraphs(40).replace(/(\r\n|\n|\r)/gm, '')
+
       cy.get('#agree-plan-radio-2').click()
-      cy.get('#does-not-agree-details').invoke('val', faker.lorem.paragraphs(40))
+      cy.get('#does-not-agree-details').invoke('val', lorem)
 
       cy.get('.govuk-button').click()
 
@@ -166,6 +172,8 @@ describe('Agree plan', () => {
         'contain',
         'Details on why they do not agree must be 4,000 characters or less',
       )
+
+      cy.get('#does-not-agree-details').should('contain', lorem)
     })
 
     it('Submit successfully when "Could not answer this question" is selected and additional information provided', () => {
@@ -178,8 +186,10 @@ describe('Agree plan', () => {
     })
 
     it('Display errors when "Could not answer this question" is selected and long additional information provided', () => {
+      const lorem = faker.lorem.paragraphs(40).replace(/(\r\n|\n|\r)/gm, '')
+
       cy.get('#agree-plan-radio-4').click()
-      cy.get('#could-not-answer-details').invoke('val', faker.lorem.paragraphs(40))
+      cy.get('#could-not-answer-details').invoke('val', lorem)
 
       cy.get('.govuk-button').click()
 
@@ -192,6 +202,8 @@ describe('Agree plan', () => {
         'contain',
         'Details on why they could not agree must be 4,000 characters or less',
       )
+
+      cy.get('#could-not-answer-details').should('contain', lorem)
     })
   })
 })

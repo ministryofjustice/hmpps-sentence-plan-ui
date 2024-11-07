@@ -145,6 +145,8 @@ describe('Remove a goal from a Plan after it has been agreed', () => {
     })
 
     it('When confirmed, and a long note is provided, page with error details is rendered', () => {
+      const lorem = faker.lorem.paragraphs(40)
+
       // Go to plan overview page, check goal appears
       cy.visit(`/plan`)
 
@@ -154,7 +156,7 @@ describe('Remove a goal from a Plan after it has been agreed', () => {
       })
 
       // Add note text
-      cy.get('#goal-removal-note').invoke('val', faker.lorem.paragraphs(40))
+      cy.get('#goal-removal-note').invoke('val', lorem)
 
       // Confirm delete
       cy.contains('button', 'Confirm').click()
@@ -171,6 +173,8 @@ describe('Remove a goal from a Plan after it has been agreed', () => {
         'contain',
         'The reason for removing this goal must be 4,000 characters or less',
       )
+
+      cy.get('#goal-removal-note').should('contain', lorem)
     })
   })
 })
