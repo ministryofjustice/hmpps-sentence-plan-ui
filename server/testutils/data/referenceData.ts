@@ -7,7 +7,7 @@ export const AreaOfNeed = [
     name: 'Employment and education',
     url: 'employment-and-education',
   },
-  { id: 3, name: 'Finance', url: 'finance' },
+  { id: 3, name: 'Finances', url: 'finances' },
   { id: 4, name: 'Drug use', url: 'drug-use' },
   { id: 5, name: 'Alcohol use', url: 'alcohol-use' },
   { id: 6, name: 'Health and wellbeing', url: 'health-and-wellbeing' },
