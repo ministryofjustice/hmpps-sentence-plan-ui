@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express'
 import locale from './locale.json'
 import { GoalStatus } from '../../@types/GoalType'
 
-export default class ViewAchievedGoalController {
+export default class ViewGoalDetailsController {
   private render = async (req: Request, res: Response, next: NextFunction) => {
     const { errors } = req
 
@@ -12,11 +12,12 @@ export default class ViewAchievedGoalController {
 
       const goal = await req.services.goalService.getGoal(uuid)
 
-      if (goal.status !== GoalStatus.ACHIEVED) {
+      const validStatuses = [GoalStatus.ACHIEVED, GoalStatus.REMOVED]
+      if (!validStatuses.includes(goal.status)) {
         res.redirect(`/plan?type=${type}`)
       }
 
-      return res.render('pages/view-achieved-goal', {
+      return res.render('pages/view-goal-details', {
         locale: locale.en,
         data: {
           goal,

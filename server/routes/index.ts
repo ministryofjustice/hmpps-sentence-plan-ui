@@ -12,7 +12,7 @@ import setupAgreePlanRoutes from './agree-plan/routes'
 import URLs from './URLs'
 import setupAddStepsRoutes from './add-steps/routes'
 import setupAchieveGoalRoutes from './achieveGoal/routes'
-import setupViewAchievedGoalRoutes from './viewAchievedGoal/routes'
+import setupViewAchievedGoalRoutes from './viewGoalDetails/routes'
 import setupUpdateGoalRoutes from './update-goal/routes'
 
 export default function routes(services: Services): Router {
