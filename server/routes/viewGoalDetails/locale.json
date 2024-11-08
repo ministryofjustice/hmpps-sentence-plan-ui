@@ -2,13 +2,14 @@
   "en": {
     "page": {
       "title": "View {{ status }} goal - {{ applicationName }}",
-      "errorTitle": "Error: View achieved goal - {{ applicationName }}"
+      "errorTitle": "Error: View {{ status }} goal - {{ applicationName }}"
     },
     "mainHeading": {
       "title": "View goal details"
     },
     "goalTitlePrefix": "Goal:",
     "markedAsAchieved": "Marked as achieved on {{ statusChangedDate }}.",
-    "markedAsRemoved": "Removed on {{ statusChangedDate }}."
+    "markedAsRemoved": "Removed on {{ statusChangedDate }}.",
+    "addToPlan": "Add to plan"
   }
 }
