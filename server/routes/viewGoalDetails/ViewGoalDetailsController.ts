@@ -1,25 +1,28 @@
 import { NextFunction, Request, Response } from 'express'
 import locale from './locale.json'
 import { GoalStatus } from '../../@types/GoalType'
+import URLs from '../URLs'
 
-export default class ViewAchievedGoalController {
+export default class ViewGoalDetailsController {
   private render = async (req: Request, res: Response, next: NextFunction) => {
     const { errors } = req
 
     try {
       const { uuid } = req.params
-      const type = req.query?.type
+      const returnLink = req.services.sessionService.getReturnLink() ?? URLs.PLAN_OVERVIEW
 
       const goal = await req.services.goalService.getGoal(uuid)
 
-      if (goal.status !== GoalStatus.ACHIEVED) {
-        res.redirect(`/plan?type=${type}`)
+      const validStatuses = [GoalStatus.ACHIEVED, GoalStatus.REMOVED]
+      if (!validStatuses.includes(goal.status)) {
+        return next()
       }
 
-      return res.render('pages/view-achieved-goal', {
+      return res.render('pages/view-goal-details', {
         locale: locale.en,
         data: {
           goal,
+          returnLink,
         },
         errors,
       })
