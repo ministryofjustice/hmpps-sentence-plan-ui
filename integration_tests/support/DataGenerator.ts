@@ -12,7 +12,7 @@ export default class DataGenerator {
     ...overrides,
   })
 
-  static generateStep = (overrides: Partial<NewStep>): NewStep => ({
+  static generateStep = (overrides?: Partial<NewStep>): NewStep => ({
     description: faker.lorem.lines(1),
     status: faker.helpers.arrayElement([StepStatus.NOT_STARTED, StepStatus.IN_PROGRESS, StepStatus.COMPLETED]),
     actor: 'Probation practitioner',
