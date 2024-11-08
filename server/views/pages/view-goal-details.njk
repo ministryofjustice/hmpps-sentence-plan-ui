@@ -49,13 +49,15 @@
                         <td class="govuk-table__cell">{{ step.description }}</td>
                         <td class="govuk-table__cell">
                             {% if step.status =='NOT_STARTED' %}
-                                <strong class="govuk-tag govuk-tag--grey">{{ locale.common.goalSummaryCard.stepsList.status.notStarted }}</strong>
+                                <strong class="govuk-tag govuk-tag--grey">{{ locale.stepsList.status.notStarted }}</strong>
                             {% elseif step.status == 'IN_PROGRESS' %}
-                                <strong class="govuk-tag govuk-tag">{{ locale.common.goalSummaryCard.stepsList.status.inProgress }}</strong>
+                                <strong class="govuk-tag govuk-tag">{{ locale.stepsList.status.inProgress }}</strong>
                             {% elseif step.status == 'COMPLETED' %}
-                                <strong class="govuk-tag govuk-tag--green">{{ locale.common.goalSummaryCard.stepsList.status.completed }}</strong>
+                                <strong class="govuk-tag govuk-tag--green">{{ locale.stepsList.status.completed }}</strong>
                             {% elseif step.status == 'CANNOT_BE_DONE_YET' %}
-                                <strong class="govuk-tag govuk-tag--purple">{{ locale.common.goalSummaryCard.stepsList.status.cannotBeDoneYet }}</strong>
+                                <strong class="govuk-tag govuk-tag--purple">{{ locale.stepsList.status.cannotBeDoneYet }}</strong>
+                            {% elseif step.status == 'NO_LONGER_NEEDED' %}
+                                <strong class="govuk-tag govuk-tag--yellow">{{ locale.stepsList.status.noLongerNeeded }}</strong>
                             {% endif %}
                         </td>
                     </tr>
