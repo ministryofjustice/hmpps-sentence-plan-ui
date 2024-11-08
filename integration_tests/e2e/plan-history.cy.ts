@@ -9,6 +9,6 @@ describe('Rendering', () => {
 
   it('Display plan history page correctly on load', () => {
     cy.url()
-    cy.get('.govuk-heading-l').contains('Plan history')
+    cy.get('h1').contains('Plan history')
   })
 })
