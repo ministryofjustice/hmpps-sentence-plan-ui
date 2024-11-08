@@ -69,16 +69,12 @@
             }) }}
 
             {% if data.goal.status == 'REMOVED' %}
-            <div class="govuk-grid-row">
-                <div class="govuk-grid-column-full">
-                    {{ govukButton({
-                        text: locale.addToPlan,
-                        name: "action",
-                        value: "#",
-                        classes: "govuk-button--secondary"
-                    }) }}
-                </div>
-            </div>
+                {{ govukButton({
+                    text: locale.addToPlan,
+                    name: "action",
+                    value: "#",
+                    classes: "govuk-button--secondary"
+                }) }}
             {% endif %}
 
         </div>
