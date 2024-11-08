@@ -1,0 +1,35 @@
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block pageTitle %}
+    {% if not errors %}
+        {{ locale.mainHeading.title }}
+    {% else %}
+        {{ locale.mainHeading.errorTitle }}
+    {% endif %}
+{% endblock %}
+
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block content %}
+<div class="govuk-grid-column-full">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-l govuk-!-margin-bottom-2">{{ locale.mainHeading.title }}</h1>
+    </div>
+    <div class="govuk-grid-column-one-third">
+    {{ govukButton({
+        text: locale.header.returnToOasysButton,
+        href: data.oasysReturnUrl,
+        classes: "govuk-button--secondary",
+        type: 'button'
+    }) }}
+    {{ govukButton({
+        text: locale.common.printLink.text,
+        href: "#",
+        classes: "govuk-button--secondary",
+        type: 'link'
+    }) }}
+    </div>
+</div>
+{% endblock %}

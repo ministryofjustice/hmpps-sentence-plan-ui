@@ -6,14 +6,13 @@ export default class PlanHistoryController {
     const { errors } = req
 
     try {
-      const { uuid } = req.params
-
-      const goal = await req.services.goalService.getGoal(uuid)
+      const planUuid = req.services.sessionService.getPlanUUID()
+      const plan = await req.services.planService.getPlanByUuid(planUuid)
 
       return res.render('pages/plan-history', {
         locale: locale.en,
         data: {
-          goal,
+          plan,
         },
         errors,
       })

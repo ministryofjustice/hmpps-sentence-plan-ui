@@ -6,6 +6,9 @@
     },
     "mainHeading": {
       "title": "Plan history"
+    },
+    "header": {
+      "returnToOasysButton": "Return to OASys"
     }
   }
 }
