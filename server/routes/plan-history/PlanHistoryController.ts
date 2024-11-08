@@ -7,12 +7,12 @@ export default class PlanHistoryController {
 
     try {
       const planUuid = req.services.sessionService.getPlanUUID()
-      const plan = await req.services.planService.getPlanByUuid(planUuid)
+      const notes = await req.services.planService.getNotes(planUuid)
 
       return res.render('pages/plan-history', {
         locale: locale.en,
         data: {
-          plan,
+          notes,
         },
         errors,
       })
