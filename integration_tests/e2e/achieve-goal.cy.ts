@@ -72,6 +72,7 @@ describe('Achieve goal', () => {
       cy.get('.govuk-details__text').should('contain', 'Some optional text in the achievement note field')
       cy.get('p.govuk-body').should('contain', 'Marked as achieved on ')
       cy.get('a.govuk-back-link').should('have.attr', 'href').and('include', '/plan?type=achieved')
+      cy.get('.govuk-button--secondary').should('have.length', 0)
     })
 
     it('Confirm errors are displayed with optional note of more than 4000 characters', () => {

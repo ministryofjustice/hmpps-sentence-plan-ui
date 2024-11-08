@@ -199,6 +199,7 @@ describe('Remove a goal from a Plan after it has been agreed', () => {
       cy.get('h2').should('contain', goalData.title)
       cy.get('p.govuk-body').should('contain', 'Removed on ')
       cy.get('a.govuk-back-link').should('have.attr', 'href').and('include', '/plan?type=removed')
+      cy.get('.govuk-button--secondary').should('contain', 'Add to plan')
     })
   })
 })
