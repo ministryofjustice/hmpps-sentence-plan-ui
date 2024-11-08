@@ -13,4 +13,5 @@ export default {
   CHANGE_GOAL: '/change-goal/:uuid',
   ACHIEVE_GOAL: '/confirm-achieved-goal/:uuid',
   AGREE_PLAN: '/agree-plan',
+  PLAN_HISTORY: '/plan-history',
 }
