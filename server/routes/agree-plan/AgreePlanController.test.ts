@@ -156,6 +156,7 @@ describe('AgreePlanController', () => {
     it('should render the form again if there are validation errors', async () => {
       req.body = {
         'agree-plan-radio': 'no',
+        'does-not-agree-details': '',
       }
       req.method = 'POST'
       const expectedViewData = {
@@ -163,6 +164,7 @@ describe('AgreePlanController', () => {
         data: {
           form: {
             'agree-plan-radio': 'no',
+            'does-not-agree-details': '',
           },
         },
         errors: {

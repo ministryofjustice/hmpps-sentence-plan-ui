@@ -1,3 +1,4 @@
+import { faker } from '@faker-js/faker'
 import AddSteps from '../pages/add-steps'
 import { PlanType } from '../../server/@types/PlanType'
 import DataGenerator from '../support/DataGenerator'
@@ -163,6 +164,23 @@ describe('Add Steps', () => {
       addStep.saveAndContinue()
 
       cy.get('#step-description-2-error').should('contain', 'Select or enter what they should do to achieve the goal.')
+    })
+
+    it('Save with a long step description shows error', () => {
+      const lorem = faker.lorem.paragraphs(40).replace(/(\r\n|\n|\r)/gm, '')
+      cy.url().should('include', '/add-steps')
+
+      const firstStep = DataGenerator.generateStep({})
+      addStep.putStepAutocompleteText(1, lorem)
+      addStep.selectStepActor(1, firstStep.actor)
+      addStep.saveAndContinue()
+
+      cy.get('#step-description-1-error').should(
+        'contain',
+        'What they should do to achieve the goal must be 4,000 characters or less',
+      )
+
+      cy.get(`#step-description-1-autocomplete`).invoke('val').should('contain', lorem)
     })
   })
 })

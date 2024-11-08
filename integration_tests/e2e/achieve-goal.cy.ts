@@ -1,3 +1,4 @@
+import { faker } from '@faker-js/faker'
 import DataGenerator from '../support/DataGenerator'
 import { PlanType } from '../../server/@types/PlanType'
 import { Goal } from '../../server/@types/GoalType'
@@ -69,6 +70,22 @@ describe('Achieve goal', () => {
       cy.get('.moj-sub-navigation__link').eq(2).click()
       planOverview.getSummaryCard(0).get('a').contains('View details').click()
       cy.get('.govuk-details__text').should('contain', 'Some optional text in the achievement note field')
+    })
+
+    it('Confirm errors are displayed with optional note of more than 4000 characters', () => {
+      const lorem = faker.lorem.paragraphs(40)
+      cy.get('#goal-achievement-helped').invoke('val', lorem)
+      cy.get('button').contains('Confirm').click()
+      cy.url().should('include', '/confirm-achieved-goal/')
+      cy.get('.govuk-error-summary').should(
+        'contain',
+        'How achieving this goal has helped must be 4,000 characters or less',
+      )
+      cy.get('#goal-achievement-helped-error').should(
+        'contain',
+        'How achieving this goal has helped must be 4,000 characters or less',
+      )
+      cy.get('#goal-achievement-helped').should('have.text', lorem)
     })
 
     it('Cancel goal achieved and redirect successfully', () => {

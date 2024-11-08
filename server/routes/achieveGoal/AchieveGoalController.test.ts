@@ -7,6 +7,7 @@ import testHandoverContext from '../../testutils/data/handoverData'
 import AchieveGoalController from './AchieveGoalController'
 import { testGoal } from '../../testutils/data/goalData'
 import { GoalStatus } from '../../@types/GoalType'
+import runMiddlewareChain from '../../testutils/runMiddlewareChain'
 
 jest.mock('../../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
@@ -37,6 +38,7 @@ describe('AchieveGoalController', () => {
   let next: NextFunction
   const viewData = {
     data: {
+      form: {},
       goal: testGoal,
     },
     errors: {},
@@ -57,6 +59,23 @@ describe('AchieveGoalController', () => {
 
       expect(res.render).toHaveBeenCalledWith('pages/confirm-achieved-goal', viewData)
     })
+
+    it('should render with validation errors', async () => {
+      const errors = {
+        body: { 'goal-achievement-helped': { maxLength: true } },
+        params: {},
+        query: {},
+      }
+      req.errors = errors
+      const expectedViewData = {
+        ...viewData,
+        errors,
+      }
+
+      await controller.get(req, res, next)
+
+      expect(res.render).toHaveBeenCalledWith('pages/confirm-achieved-goal', expectedViewData)
+    })
   })
 
   describe('post', () => {
@@ -74,7 +93,7 @@ describe('AchieveGoalController', () => {
         note: 'Note body',
       }
 
-      await controller.post(req, res, next)
+      await runMiddlewareChain(controller.post, req, res, next)
 
       expect(req.services.goalService.updateGoal).toHaveBeenCalledWith(expectedPartialNewGoal, 'some-uuid')
       expect(res.redirect).toHaveBeenCalledWith('/plan?type=achieved&status=achieved')

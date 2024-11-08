@@ -28,14 +28,14 @@
       },
       "does-not-agree-details": {
         "isNotEmpty": "Enter details about why they do not agree",
-        "isOverCharacterLimit": "Details on why they do not agree must be 4,000 characters or less"
+        "maxLength": "Details on why they do not agree must be 4,000 characters or less"
       },
       "could-not-answer-details": {
         "isNotEmpty": "Enter details about why they could not answer",
-        "isOverCharacterLimit": "Details on why they could not agree must be 4,000 characters or less"
+        "maxLength": "Details on why they could not agree must be 4,000 characters or less"
       },
-      "notes-exceed-character-limit": {
-        "isOverCharacterLimit": "Notes must be 4,000 characters or less"
+      "notes": {
+        "maxLength": "Notes must be 4,000 characters or less"
       }
     }
   }

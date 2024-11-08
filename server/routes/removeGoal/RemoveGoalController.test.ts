@@ -46,6 +46,7 @@ describe('Test Deleting Goal', () => {
   let next: NextFunction
   const viewData = {
     data: {
+      form: {},
       returnLink: '',
       type: 'current',
       goal: testGoal,
@@ -88,6 +89,7 @@ describe('Test Removing Goal', () => {
   let next: NextFunction
   const viewData = {
     data: {
+      form: {},
       returnLink: '',
       type: 'current',
       goal: testGoal,

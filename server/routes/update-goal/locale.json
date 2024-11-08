@@ -4,6 +4,11 @@
       "title": "Update Goal - {{ applicationName }}",
       "errorTitle": "Error: Update Goal - {{ applicationName }}"
     },
+    "errors": {
+      "more-detail": {
+        "maxLength": "Notes about progress must be 4,000 characters or less"
+      }
+    },
     "aimToAchieveBy": "Aim to achieve this by {{ goal.targetDate }}. ",
     "moreDetailHint": "For example, how {{ subject.givenName }} feels about their progress, any strengths or protective factors they have developed, or any support they need.",
     "addSteps": "Add steps",

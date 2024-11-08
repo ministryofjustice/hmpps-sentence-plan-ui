@@ -13,7 +13,8 @@
     },
     "errors": {
       "goal-removal-note": {
-        "isNotEmpty": "Enter why you want to remove this goal"
+        "isNotEmpty": "Enter why you want to remove this goal",
+        "maxLength": "The reason for removing this goal must be 4,000 characters or less"
       }
     },
     "pageBodyOne": "Remove a goal if it is no longer relevant to {{ subject.givenName }}.",
