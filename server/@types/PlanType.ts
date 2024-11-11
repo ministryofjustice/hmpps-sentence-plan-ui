@@ -28,4 +28,5 @@ export type PlanType = {
   updatedBy: string
   agreementDate: string
   goals: Goal[]
+  readOnly: boolean
 }

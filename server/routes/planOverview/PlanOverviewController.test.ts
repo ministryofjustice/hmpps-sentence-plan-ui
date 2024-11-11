@@ -16,6 +16,7 @@ jest.mock('../../services/sessionService', () => {
     getOasysReturnUrl: jest.fn().mockReturnValue(oasysReturnUrl),
     getPrincipalDetails: jest.fn().mockReturnValue(testHandoverContext.principal),
     setReturnLink: jest.fn().mockImplementation,
+    getPlanVersionNumber: jest.fn().mockReturnValue(null),
   }))
 })
 

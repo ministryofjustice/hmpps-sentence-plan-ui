@@ -12,7 +12,15 @@ export default class SessionService {
   setupSession = async () => {
     try {
       this.request.session.handover = await this.handoverContextService.getContext(this.request.user?.token)
-      this.request.session.plan = await this.planService.getPlanByUuid(this.getPlanUUID())
+
+      if (this.getPlanVersionNumber() != null) {
+        this.request.session.plan = await this.planService.getPlanByUuidAndVersionNumber(
+          this.getPlanUUID(),
+          this.getPlanVersionNumber(),
+        )
+      } else {
+        this.request.session.plan = await this.planService.getPlanByUuid(this.getPlanUUID())
+      }
     } catch (e) {
       Logger.error('Failed to setup session:', e)
       throw Error(e)
@@ -20,6 +28,8 @@ export default class SessionService {
   }
 
   getPlanUUID = () => this.request.session.handover?.sentencePlanContext.planId
+
+  getPlanVersionNumber = () => this.request.session.handover?.sentencePlanContext.planVersion
 
   getPrincipalDetails = () => this.request.session.handover?.principal
 

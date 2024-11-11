@@ -10,6 +10,7 @@ const testPlan: PlanType = {
   updatedBy: '',
   agreementDate: new Date().toISOString(),
   goals: [testGoal],
+  readOnly: false,
 }
 
 const agreedTestPlan: PlanType = {
@@ -21,6 +22,7 @@ const agreedTestPlan: PlanType = {
   updatedBy: '',
   agreementDate: new Date().toISOString(),
   goals: [testGoal],
+  readOnly: false,
 }
 
 export default testPlan
