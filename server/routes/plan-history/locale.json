@@ -9,6 +9,34 @@
     },
     "header": {
       "returnToOasysButton": "Return to OASys"
+    },
+    "linkType": {
+      "direct": "View goal",
+      "latest": "View latest version"
+    },
+    "who": {
+      "practitionerOnly": "on {{ noteCreatedDate }} by {{ noteCreatedBy }}",
+      "practitionerAndSubject": "on {{ noteCreatedDate }} by {{ noteCreatedBy }} and {{ subject.givenName }}"
+    },
+    "subjectResponse": {
+      "agreed": "{{ subject.givenName }} agreed to this plan.",
+      "didNotAgree": "{{ subject.givenName }} did not agree to this plan.",
+      "couldNotAgree": "{{ subject.givenName }} could not agree to this plan."
+    },
+    "note": {
+      "status": {
+        "plan": {
+          "agreed": "Plan agreed",
+          "created": "Plan created"
+        },
+        "goal": {
+          "created": "Goal created",
+          "addedBackToPlan": "Goal added back to plan",
+          "removed": "Goal removed",
+          "updated": "Goal updated",
+          "achieved": "Goal marked as achieved"
+        }
+      }
     }
   }
 }
