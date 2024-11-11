@@ -35,8 +35,10 @@
       ]
     }) }}
 
-    {% if header.type == 'extended' %}
+    {% if header.type == 'plan-extended' %}
       {% include "./plan-header/plan-header-extended.njk" %}
+    {% elseif header.type == 'plan-history-extended' %}
+      {% include "./plan-history-header/plan-history-header-extended.njk" %}
     {% else %}
       {% include "./plan-header/plan-header-mini.njk" %}
     {% endif %}

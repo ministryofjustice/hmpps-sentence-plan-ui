@@ -23,6 +23,18 @@
         "agreePlanButton": "Agree plan"
       }
     },
+    "planHistoryHeader": {
+      "mini": {
+        "title": "{{ subject.givenName }} {{ subject.familyName }}",
+        "crnLabel": "CRN:",
+        "pncLabel": "PNC:",
+        "dateOfBirthLabel": "Date of birth:"
+      },
+      "extended": {
+        "title": "Plan history",
+        "createGoalButton": "Create goal"
+      }
+    },
     "goalSummaryCard": {
       "info": {
         "aimToAchieveDate": "Aim to achieve this by {{ targetDate }}.",

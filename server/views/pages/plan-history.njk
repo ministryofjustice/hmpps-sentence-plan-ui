@@ -1,6 +1,6 @@
+{% extends "../partials/layout.njk" %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% extends "../partials/layout.njk" %}
 
 {% block pageTitle %}
     {% if not errors %}
@@ -11,29 +11,39 @@
 {% endblock %}
 
 {% set mainClasses = "app-container govuk-body" %}
+{% set header = {
+    type: "plan-history-extended",
+    items: [
+        {
+            text: locale.header.returnToOasysButton,
+            href: data.oasysReturnUrl,
+            classes: "govuk-button--secondary",
+            type: 'button'
+        }
+    ]
+} %}
+
+{% block bodyStart %}
+    <div id="top"></div>
+{% endblock %}
 
 {% block content %}
-    <div class="govuk-grid-row">
-        <h1 class="govuk-heading-l govuk-!-margin-bottom-2">{{ locale.mainHeading.title }}</h1>
-    </div>
-    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
-    <p>View all updates and changes made to this plan</p>
-
+    <p class='govuk-!-margin-top-4'>View all updates and changes made to this plan</p>
+    <div class="govuk-grid-column-three-quarters govuk-!-margin-left-0">
     {% for note in data.notes %}
         {% set locale = interpolate(locale, {
             noteCreatedDate: note.createdDate | formatSimpleDate,
             noteCreatedBy: note.createdBy | convertToTitleCase
         }) %}
-    <div class="govuk-grid-row govuk-!-margin-left-0">
         <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" >
         {% if note.noteObject == 'Plan' %}
-            {% if note.noteStatus == 'AGREED' %}
+            {% if note.noteType == 'AGREED' %}
                 <p><strong>{{ locale.note.status.plan.agreed }}</strong> {{ locale.who.practitionerAndSubject }}</p>
                 <p>{{ locale.subjectResponse.agreed }}</p>
-            {% elseif note.noteStatus == 'DO_NOT_AGREE' %}
+            {% elseif note.noteType == 'DO_NOT_AGREE' %}
                 <p><strong>{{ locale.note.status.plan.created }}</strong> by {{ locale.who.practitionerOnly }}</p>
                 <p>{{ locale.subjectResponse.didNotAgree }}</p>
-            {% elseif note.noteStatus == 'COULD_NOT_ANSWER' %}
+            {% elseif note.noteType == 'COULD_NOT_ANSWER' %}
                 <p><strong>{{ locale.note.status.plan.created }}</strong> {{ locale.who.practitionerOnly }}</p>
                 <p>{{ locale.subjectResponse.couldNotAgree }}</p>
             {% endif %}
@@ -76,8 +86,8 @@
                 <p><a href='#' class="govuk-link govuk-link--no-visited-state">{{ locale.linkType.latest }}</a></p>
 {#        {% endif %}#}
 {#        {% endif %}#}
-    </div>
     {% endfor %}
+    </div>
 
 {% endblock %}
 

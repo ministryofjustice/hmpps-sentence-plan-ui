@@ -1,10 +1,10 @@
-{% extends "./plan-header-mini.njk" %}
+{% extends "./plan-history-header-mini.njk" %}
 {% from "moj/components/button-menu/macro.njk" import mojButtonMenu %}
 
 {% block extension %}
-    <div class="plan-header__extended">
-        <div class="plan-header__extended__title">
-            <h1 class="govuk-heading-l govuk-!-margin-bottom-0">{{ locale.common.planHeader.extended.title }}</h1>
+    <div class="plan-history-header__extended">
+        <div class="plan-history-header__extended__title">
+            <h1 class="govuk-heading-l govuk-!-margin-bottom-0">{{ locale.common.planHistoryHeader.extended.title }}</h1>
         </div>
 
         <form method="post">
@@ -17,7 +17,7 @@
             {% endfor %}
 
             {{ mojButtonMenu({
-                class: "plan-header__extended__menu",
+                class: "plan-history-header__extended__menu",
                 items: buttonItems
             }) }}
         </form>
