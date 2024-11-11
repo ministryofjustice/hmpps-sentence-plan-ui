@@ -33,10 +33,7 @@ export default class PlanOverviewController {
 
       let pageToRender = 'pages/plan'
 
-      if (
-        req.services.sessionService.getPrincipalDetails().accessMode === AccessMode.READ_ONLY ||
-        plan.readOnly === true
-      ) {
+      if (req.services.sessionService.getPrincipalDetails().accessMode === AccessMode.READ_ONLY) {
         pageToRender = 'pages/countersign'
       }
 
