@@ -1,8 +1,10 @@
 const testNoteData = {
-  author: 'Test Note Author',
-  source: 'test source',
-  createdDate: new Date(),
-  content: 'This is a test note data',
+  noteObject: 'Plan',
+  note: 'example note',
+  additionalNote: 'additional example note',
+  noteType: 'AGREED',
+  createdDate: new Date().toISOString(),
+  createdBy: 'Practitioner',
 }
 
 export default testNoteData
