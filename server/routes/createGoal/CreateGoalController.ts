@@ -8,6 +8,8 @@ import { dateToISOFormat, formatDateWithStyle, getAchieveDateOptions } from '../
 import transformRequest from '../../middleware/transformMiddleware'
 import CreateGoalPostModel from './models/CreateGoalPostModel'
 import validateRequest from '../../middleware/validationMiddleware'
+import { hasAccessMode } from '../../middleware/authorisationMiddleware'
+import { AccessMode } from '../../@types/Handover'
 
 export default class CreateGoalController {
   constructor(private readonly referentialDataService: ReferentialDataService) {}
@@ -96,7 +98,7 @@ export default class CreateGoalController {
     return next()
   }
 
-  get = this.render
+  get = [hasAccessMode(AccessMode.READ_WRITE), this.render]
 
   post = [
     transformRequest({

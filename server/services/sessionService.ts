@@ -1,7 +1,7 @@
 import HandoverContextService from './handover/handoverContextService'
 import PlanService from './sentence-plan/planService'
 import Logger from '../../logger'
-import {AccessMode} from "../@types/Handover";
+import { AccessMode } from '../@types/Handover'
 
 export default class SessionService {
   constructor(
@@ -37,14 +37,14 @@ export default class SessionService {
   getSubjectDetails = () => this.request.session.handover?.subject
 
   getAccessMode = () => {
-    const isReadOnlyUser = this.getPrincipalDetails().accessMode === AccessMode.READ_ONLY;
-    const isHistoricalPlan = this.getPlanVersionNumber() !== undefined;
+    const isReadOnlyUser = this.getPrincipalDetails().accessMode === AccessMode.READ_ONLY
+    const isHistoricalPlan = this.getPlanVersionNumber() !== undefined
 
     if (isReadOnlyUser || isHistoricalPlan) {
-      return AccessMode.READ_ONLY;
+      return AccessMode.READ_ONLY
     }
 
-    return AccessMode.READ_WRITE;
+    return AccessMode.READ_WRITE
   }
 
   getOasysReturnUrl = () => this.request.session.handover?.principal.returnUrl

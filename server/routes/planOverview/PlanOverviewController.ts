@@ -1,14 +1,14 @@
-import {NextFunction, Request, Response} from 'express'
-import {plainToInstance} from 'class-transformer'
+import { NextFunction, Request, Response } from 'express'
+import { plainToInstance } from 'class-transformer'
 import locale from './locale.json'
-import {moveGoal} from '../../utils/utils'
+import { moveGoal } from '../../utils/utils'
 import URLs from '../URLs'
-import validateRequest, {getValidationErrors} from '../../middleware/validationMiddleware'
+import validateRequest, { getValidationErrors } from '../../middleware/validationMiddleware'
 import PlanModel from '../shared-models/PlanModel'
 import transformRequest from '../../middleware/transformMiddleware'
 import PlanOverviewQueryModel from './models/PlanOverviewQueryModel'
-import {AccessMode} from '../../@types/Handover'
-import {hasAccessMode} from "../../middleware/authorisationMiddleware";
+import { AccessMode } from '../../@types/Handover'
+import { hasAccessMode } from '../../middleware/authorisationMiddleware'
 
 export default class PlanOverviewController {
   private render = async (req: Request, res: Response, next: NextFunction) => {
@@ -34,7 +34,7 @@ export default class PlanOverviewController {
 
       let pageToRender = 'pages/plan'
 
-      if (req.services.sessionService.getPrincipalDetails().accessMode === AccessMode.READ_ONLY) {
+      if (req.services.sessionService.getAccessMode() === AccessMode.READ_ONLY) {
         pageToRender = 'pages/countersign'
       }
 
@@ -115,6 +115,6 @@ export default class PlanOverviewController {
     hasAccessMode(AccessMode.READ_WRITE),
     this.validatePlanForAgreement,
     this.handleValidationErrors,
-    this.handleSuccessRedirect
+    this.handleSuccessRedirect,
   ]
 }
