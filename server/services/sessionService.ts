@@ -38,7 +38,7 @@ export default class SessionService {
 
   getAccessMode = () => {
     const isReadOnlyUser = this.getPrincipalDetails().accessMode === AccessMode.READ_ONLY
-    const isHistoricalPlan = this.getPlanVersionNumber() !== undefined
+    const isHistoricalPlan = this.getPlanVersionNumber() !== null
 
     if (isReadOnlyUser || isHistoricalPlan) {
       return AccessMode.READ_ONLY
