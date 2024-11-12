@@ -13,7 +13,7 @@ export default function authorisationMiddleware(): RequestHandler {
   }
 }
 
-export function hasAccessMode(requiredAccessMode: AccessMode): RequestHandler {
+export function requireAccessMode(requiredAccessMode: AccessMode): RequestHandler {
   return (req, res, next) => {
     try {
       const currentAccessMode = req.services.sessionService.getAccessMode()

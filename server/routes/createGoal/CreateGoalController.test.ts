@@ -13,7 +13,7 @@ import { testGoal, testNewGoal } from '../../testutils/data/goalData'
 import runMiddlewareChain from '../../testutils/runMiddlewareChain'
 
 jest.mock('../../middleware/authorisationMiddleware', () => ({
-  hasAccessMode: jest.fn(() => (req: Request, res: Response, next: NextFunction) => {
+  requireAccessMode: jest.fn(() => (req: Request, res: Response, next: NextFunction) => {
     return next()
   }),
 }))

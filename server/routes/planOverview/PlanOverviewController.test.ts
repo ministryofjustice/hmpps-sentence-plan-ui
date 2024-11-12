@@ -11,7 +11,7 @@ import { AccessMode } from '../../@types/Handover'
 const oasysReturnUrl = 'https://oasys.return.url'
 
 jest.mock('../../middleware/authorisationMiddleware', () => ({
-  hasAccessMode: jest.fn(() => (req: Request, res: Response, next: NextFunction) => {
+  requireAccessMode: jest.fn(() => (req: Request, res: Response, next: NextFunction) => {
     return next()
   }),
 }))

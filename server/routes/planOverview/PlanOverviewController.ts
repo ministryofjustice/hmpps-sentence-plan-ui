@@ -8,7 +8,7 @@ import PlanModel from '../shared-models/PlanModel'
 import transformRequest from '../../middleware/transformMiddleware'
 import PlanOverviewQueryModel from './models/PlanOverviewQueryModel'
 import { AccessMode } from '../../@types/Handover'
-import { hasAccessMode } from '../../middleware/authorisationMiddleware'
+import { requireAccessMode } from '../../middleware/authorisationMiddleware'
 
 export default class PlanOverviewController {
   private render = async (req: Request, res: Response, next: NextFunction) => {
@@ -104,7 +104,7 @@ export default class PlanOverviewController {
   }
 
   get = [
-    hasAccessMode(AccessMode.READ_ONLY),
+    requireAccessMode(AccessMode.READ_ONLY),
     transformRequest({ query: PlanOverviewQueryModel }),
     validateRequest(),
     this.handleValidationErrors,
@@ -112,7 +112,7 @@ export default class PlanOverviewController {
   ]
 
   post = [
-    hasAccessMode(AccessMode.READ_WRITE),
+    requireAccessMode(AccessMode.READ_WRITE),
     this.validatePlanForAgreement,
     this.handleValidationErrors,
     this.handleSuccessRedirect,

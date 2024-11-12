@@ -8,7 +8,7 @@ import { dateToISOFormat, formatDateWithStyle, getAchieveDateOptions } from '../
 import transformRequest from '../../middleware/transformMiddleware'
 import CreateGoalPostModel from './models/CreateGoalPostModel'
 import validateRequest from '../../middleware/validationMiddleware'
-import { hasAccessMode } from '../../middleware/authorisationMiddleware'
+import { requireAccessMode } from '../../middleware/authorisationMiddleware'
 import { AccessMode } from '../../@types/Handover'
 
 export default class CreateGoalController {
@@ -98,10 +98,10 @@ export default class CreateGoalController {
     return next()
   }
 
-  get = [hasAccessMode(AccessMode.READ_WRITE), this.render]
+  get = [requireAccessMode(AccessMode.READ_WRITE), this.render]
 
   post = [
-    hasAccessMode(AccessMode.READ_WRITE),
+    requireAccessMode(AccessMode.READ_WRITE),
     transformRequest({
       body: CreateGoalPostModel,
     }),
