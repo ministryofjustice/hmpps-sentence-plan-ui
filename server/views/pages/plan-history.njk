@@ -40,42 +40,42 @@
         <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" >
         {% if note.noteObject == 'Plan' %}
             {% if note.noteType == 'AGREED' %}
-                <p><strong>{{ locale.note.status.plan.agreed }}</strong> {{ locale.who.practitionerAndSubject }}</p>
-                <p>{{ locale.subjectResponse.agreed }}</p>
+                <p class='plan-status'><strong>{{ locale.note.status.plan.agreed }}</strong> {{ locale.who.practitionerAndSubject }}</p>
+                <p class='subject-response'>{{ locale.subjectResponse.agreed }}</p>
             {% elseif note.noteType == 'DO_NOT_AGREE' %}
-                <p><strong>{{ locale.note.status.plan.created }}</strong> by {{ locale.who.practitionerOnly }}</p>
-                <p>{{ locale.subjectResponse.didNotAgree }}</p>
+                <p class='plan-status'><strong>{{ locale.note.status.plan.created }}</strong> by {{ locale.who.practitionerOnly }}</p>
+                <p class='subject-response'>{{ locale.subjectResponse.didNotAgree }}</p>
             {% elseif note.noteType == 'COULD_NOT_ANSWER' %}
-                <p><strong>{{ locale.note.status.plan.created }}</strong> {{ locale.who.practitionerOnly }}</p>
-                <p>{{ locale.subjectResponse.couldNotAgree }}</p>
+                <p class='plan-status'><strong>{{ locale.note.status.plan.created }}</strong> {{ locale.who.practitionerOnly }}</p>
+                <p class='subject-response'>{{ locale.subjectResponse.couldNotAgree }}</p>
             {% endif %}
 
-            <div>
+            <div class='plan-note'>
                 {{ note.note }}
             </div>
 
             {% if note.additionalNote %}
-                <div>{{ note.additionalNote }}</div>
+                <div class='plan-additional-note'>{{ note.additionalNote }}</div>
             {% endif %}
 
         {% endif %}
 
         {% if note.noteObject == 'Goal' %}
             {% if note.noteType == 'REMOVED'%}
-                <p><strong>{{ locale.note.status.goal.removed }}</strong> {{ locale.who.practitionerOnly }}</p>
-                <p><strong>{{ note.goalTitle }}</strong></p>
-                <p>{{ note.note }}</p> 
+                <p class='goal-status'><strong>{{ locale.note.status.goal.removed }}</strong> {{ locale.who.practitionerOnly }}</p>
+                <p class='goal-title'><strong>{{ note.goalTitle }}</strong></p>
+                <p class='note-note'>{{ note.note }}</p>
             {% elseif note.noteType == 'ACHIEVED'%}
-                <p><strong>{{ locale.note.status.goal.achieved }}</strong> {{ locale.who.practitionerOnly }}</p>
-                <p><strong>{{ note.goalTitle }}</strong></p>
+                <p class='goal-status'><strong>{{ locale.note.status.goal.achieved }}</strong> {{ locale.who.practitionerOnly }}</p>
+                <p class='goal-title'><strong>{{ note.goalTitle }}</strong></p>
                     {% if note.note.length > 0 %}
-                           <p>{{ note.note }}</p>
+                           <p class='note-note'>{{ note.note }}</p>
                     {% endif %}
             {% elseif note.noteType == 'PROGRESS'%}
-                <p><strong>{{ locale.note.status.goal.updated }}</strong> {{ locale.who.practitionerOnly }}</p>
-                <p><strong>{{ note.goalTitle }}</strong></p>
+                <p class='goal-status'><strong>{{ locale.note.status.goal.updated }}</strong> {{ locale.who.practitionerOnly }}</p>
+                <p class='goal-title'><strong>{{ note.goalTitle }}</strong></p>
                     {% if note.note.length > 0 %}
-                            <p>{{ note.note }}</p>
+                            <p class='note-note'>{{ note.note }}</p>
                     {% endif %}
             {% endif %}
 
@@ -88,7 +88,7 @@
                 {%  set goalLink = '/update-goal/' + note.goalUuid  %}
                 {%  set goalText = locale.linkType.latest %}
             {% endif %}
-            <p><a href='{{ goalLink }}' class="govuk-link govuk-link--no-visited-state">{{ goalText }}</a></p>
+            <p class='goal-link'><a href='{{ goalLink }}' class="govuk-link govuk-link--no-visited-state">{{ goalText }}</a></p>
         {% endif %}
     {% endfor %}
     <div class='govuk-!-margin-top-6'>{% include "../partials/back-to-top-link.njk" %}</div>
