@@ -101,6 +101,7 @@ export default class CreateGoalController {
   get = [hasAccessMode(AccessMode.READ_WRITE), this.render]
 
   post = [
+    hasAccessMode(AccessMode.READ_WRITE),
     transformRequest({
       body: CreateGoalPostModel,
     }),

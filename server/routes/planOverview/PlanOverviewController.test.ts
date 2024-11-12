@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from 'express'
+import { NextFunction, Request, RequestHandler, Response } from 'express'
 import PlanOverviewController from './PlanOverviewController'
 import mockReq from '../../testutils/preMadeMocks/mockReq'
 import mockRes from '../../testutils/preMadeMocks/mockRes'
@@ -10,11 +10,18 @@ import { AccessMode } from '../../@types/Handover'
 
 const oasysReturnUrl = 'https://oasys.return.url'
 
+jest.mock('../../middleware/authorisationMiddleware', () => ({
+  hasAccessMode: jest.fn(() => (req, res, next): RequestHandler => {
+    return next()
+  }),
+}))
+
 jest.mock('../../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
     getPlanUUID: jest.fn().mockReturnValue(testPlan.uuid),
     getOasysReturnUrl: jest.fn().mockReturnValue(oasysReturnUrl),
     getPrincipalDetails: jest.fn().mockReturnValue(testHandoverContext.principal),
+    getAccessMode: jest.fn().mockReturnValue(AccessMode.READ_WRITE),
     setReturnLink: jest.fn().mockImplementation,
     getPlanVersionNumber: jest.fn().mockReturnValue(null),
   }))
@@ -64,10 +71,7 @@ describe('PlanOverviewController', () => {
     })
 
     it('should render without validation errors when user is READ_ONLY', async () => {
-      req.services.sessionService.getPrincipalDetails = jest.fn().mockReturnValue({
-        ...testHandoverContext.principal,
-        accessMode: AccessMode.READ_ONLY,
-      })
+      ;(req.services.sessionService.getAccessMode as jest.Mock).mockReturnValue(AccessMode.READ_ONLY)
       await runMiddlewareChain(controller.get, req, res, next)
 
       expect(res.render).toHaveBeenCalledWith('pages/countersign', viewData)

@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from 'express'
+import { NextFunction, Request, RequestHandler, Response } from 'express'
 import { plainToInstance } from 'class-transformer'
 import { AreaOfNeed } from '../../testutils/data/referenceData'
 import ReferentialDataService from '../../services/sentence-plan/referentialDataService'
@@ -11,6 +11,12 @@ import CreateGoalPostModel from './models/CreateGoalPostModel'
 import URLs from '../URLs'
 import { testGoal, testNewGoal } from '../../testutils/data/goalData'
 import runMiddlewareChain from '../../testutils/runMiddlewareChain'
+
+jest.mock('../../middleware/authorisationMiddleware', () => ({
+  hasAccessMode: jest.fn(() => (req, res, next): RequestHandler => {
+    return next()
+  }),
+}))
 
 jest.mock('../../services/sentence-plan/referentialDataService', () => {
   return jest.fn().mockImplementation(() => ({
@@ -75,7 +81,7 @@ describe('CreateGoalController', () => {
 
   describe('get', () => {
     it('should render without validation errors', async () => {
-      await controller.get(req, res, next)
+      await runMiddlewareChain(controller.get, req, res, next)
 
       expect(res.render).toHaveBeenCalledWith('pages/create-goal', viewData)
     })
@@ -92,7 +98,7 @@ describe('CreateGoalController', () => {
         errors,
       }
 
-      await controller.get(req, res, next)
+      await runMiddlewareChain(controller.get, req, res, next)
 
       expect(res.render).toHaveBeenCalledWith('pages/create-goal', expectedViewData)
     })
