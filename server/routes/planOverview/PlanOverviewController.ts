@@ -1,13 +1,14 @@
-import { NextFunction, Request, Response } from 'express'
-import { plainToInstance } from 'class-transformer'
+import {NextFunction, Request, Response} from 'express'
+import {plainToInstance} from 'class-transformer'
 import locale from './locale.json'
-import { moveGoal } from '../../utils/utils'
+import {moveGoal} from '../../utils/utils'
 import URLs from '../URLs'
-import validateRequest, { getValidationErrors } from '../../middleware/validationMiddleware'
+import validateRequest, {getValidationErrors} from '../../middleware/validationMiddleware'
 import PlanModel from '../shared-models/PlanModel'
 import transformRequest from '../../middleware/transformMiddleware'
 import PlanOverviewQueryModel from './models/PlanOverviewQueryModel'
-import { AccessMode } from '../../@types/Handover'
+import {AccessMode} from '../../@types/Handover'
+import {hasAccessMode} from "../../middleware/authorisationMiddleware";
 
 export default class PlanOverviewController {
   private render = async (req: Request, res: Response, next: NextFunction) => {
@@ -103,11 +104,17 @@ export default class PlanOverviewController {
   }
 
   get = [
+    hasAccessMode(AccessMode.READ_ONLY),
     transformRequest({ query: PlanOverviewQueryModel }),
     validateRequest(),
     this.handleValidationErrors,
     this.render,
   ]
 
-  post = [this.validatePlanForAgreement, this.handleValidationErrors, this.handleSuccessRedirect]
+  post = [
+    hasAccessMode(AccessMode.READ_WRITE),
+    this.validatePlanForAgreement,
+    this.handleValidationErrors,
+    this.handleSuccessRedirect
+  ]
 }
