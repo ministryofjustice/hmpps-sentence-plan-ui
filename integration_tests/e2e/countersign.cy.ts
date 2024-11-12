@@ -43,7 +43,7 @@ describe('View specific plan version for READ_ONLY user', () => {
     })
   })
 
-  it('Should have one button', () => {
+  it('Should check there are different numbers of goals pre and post lock', () => {
     cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
       cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal()).then(goal => {
         cy.addStepToGoal(goal.uuid, DataGenerator.generateStep())
@@ -51,10 +51,7 @@ describe('View specific plan version for READ_ONLY user', () => {
 
       cy.openSentencePlan(pk, AccessMode.READ_ONLY, 0)
       cy.url().should('include', '/plan')
-      // // assert 1 goal card
-      //
-      // then open sentence plan v2
-      // /;assert 2 goal cards
+      cy.get('.goal-list .goal-summary-card').should('have.length', 1)
     })
   })
 })
