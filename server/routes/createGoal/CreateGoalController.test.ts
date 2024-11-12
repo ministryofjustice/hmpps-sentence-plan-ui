@@ -1,4 +1,4 @@
-import { NextFunction, Request, RequestHandler, Response } from 'express'
+import { NextFunction, Request, Response } from 'express'
 import { plainToInstance } from 'class-transformer'
 import { AreaOfNeed } from '../../testutils/data/referenceData'
 import ReferentialDataService from '../../services/sentence-plan/referentialDataService'
@@ -13,7 +13,7 @@ import { testGoal, testNewGoal } from '../../testutils/data/goalData'
 import runMiddlewareChain from '../../testutils/runMiddlewareChain'
 
 jest.mock('../../middleware/authorisationMiddleware', () => ({
-  hasAccessMode: jest.fn(() => (req, res, next): RequestHandler => {
+  hasAccessMode: jest.fn(() => (req: Request, res: Response, next: NextFunction) => {
     return next()
   }),
 }))

@@ -1,4 +1,4 @@
-import { NextFunction, Request, RequestHandler, Response } from 'express'
+import { NextFunction, Request, Response } from 'express'
 import PlanOverviewController from './PlanOverviewController'
 import mockReq from '../../testutils/preMadeMocks/mockReq'
 import mockRes from '../../testutils/preMadeMocks/mockRes'
@@ -11,7 +11,7 @@ import { AccessMode } from '../../@types/Handover'
 const oasysReturnUrl = 'https://oasys.return.url'
 
 jest.mock('../../middleware/authorisationMiddleware', () => ({
-  hasAccessMode: jest.fn(() => (req, res, next): RequestHandler => {
+  hasAccessMode: jest.fn(() => (req: Request, res: Response, next: NextFunction) => {
     return next()
   }),
 }))
