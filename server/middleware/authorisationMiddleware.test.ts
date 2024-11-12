@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from 'express'
 import { Session } from 'express-session'
-import createHttpError from 'http-errors'
 import authorisationMiddleware from './authorisationMiddleware'
 import mockReq from '../testutils/preMadeMocks/mockReq'
 import mockRes from '../testutils/preMadeMocks/mockRes'
@@ -17,13 +16,11 @@ describe('authorisationMiddleware', () => {
   let req: Partial<Request>
   let res: Partial<Response>
   let next: NextFunction
-  let createError: createHttpError.CreateHttpError
 
   beforeEach(() => {
     req = mockReq()
     res = mockRes()
     next = jest.fn()
-    createError = jest.fn()
   })
 
   it('should call next if READ_WRITE principal details are present', async () => {
