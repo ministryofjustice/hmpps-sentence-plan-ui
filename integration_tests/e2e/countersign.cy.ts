@@ -1,4 +1,6 @@
 import { AccessMode } from '../../server/@types/Handover'
+import DataGenerator from '../support/DataGenerator'
+import { PlanType } from '../../server/@types/PlanType'
 
 describe('View Plan Overview for READ_ONLY user', () => {
   beforeEach(() => {
@@ -24,5 +26,35 @@ describe('View Plan Overview for READ_ONLY user', () => {
 
   it.skip('Should have no accessibility violations', () => {
     cy.checkAccessibility()
+  })
+})
+
+describe('View specific plan version for READ_ONLY user', () => {
+  let pk
+
+  beforeEach(() => {
+    cy.createSentencePlan().then(planDetails => {
+      cy.wrap(planDetails).as('plan')
+      pk = planDetails.oasysAssessmentPk
+      cy.addGoalToPlan(planDetails.plan.uuid, DataGenerator.generateGoal()).then(goal => {
+        cy.addStepToGoal(goal.uuid, DataGenerator.generateStep())
+      })
+      cy.lockPlan(planDetails.plan.uuid)
+    })
+  })
+
+  it('Should have one button', () => {
+    cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
+      cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal()).then(goal => {
+        cy.addStepToGoal(goal.uuid, DataGenerator.generateStep())
+      })
+
+      cy.openSentencePlan(pk, AccessMode.READ_ONLY, 0)
+      cy.url().should('include', '/plan')
+      // // assert 1 goal card
+      //
+      // then open sentence plan v2
+      // /;assert 2 goal cards
+    })
   })
 })
