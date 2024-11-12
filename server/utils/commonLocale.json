@@ -3,7 +3,8 @@
     "header": {
       "serviceName": "{{ applicationName }}",
       "managedInOasysText": "OASys User",
-      "signOutLink": "Sign out"
+      "signOutLink": "Sign out",
+      "returnToOasysButton": "Return to OASys"
     },
     "primaryNavigation": {
       "planLinkText": "{{ subject.possessiveName }} plan",

@@ -15,7 +15,7 @@
     type: "plan-history-extended",
     items: [
         {
-            text: locale.header.returnToOasysButton,
+            text: locale.common.header.returnToOasysButton,
             href: data.oasysReturnUrl,
             classes: "govuk-button--secondary",
             type: 'button'
@@ -28,13 +28,15 @@
 {% endblock %}
 
 {% block content %}
-    <p class='govuk-!-margin-top-4'>View all updates and changes made to this plan</p>
-    <div class="govuk-grid-column-three-quarters govuk-!-margin-left-0">
+    <p class='govuk-!-margin-top-5'>{{ locale.page.introduction }}</p>
+    <div class='govuk-grid-row'>
+    <div class="govuk-grid-column-two-thirds">
     {% for note in data.notes %}
         {% set locale = interpolate(locale, {
             noteCreatedDate: note.createdDate | formatSimpleDate,
             noteCreatedBy: note.createdBy | convertToTitleCase
         }) %}
+
         <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" >
         {% if note.noteObject == 'Plan' %}
             {% if note.noteType == 'AGREED' %}
@@ -53,40 +55,44 @@
             </div>
 
             {% if note.additionalNote %}
-                {{ note.additionalNote }}
+                <div>{{ note.additionalNote }}</div>
             {% endif %}
 
         {% endif %}
 
-{#        {% if note.noteObject == 'Goal' %}#}
-{#            {% if data.status and data.status in ['added', 'changed', 'removed', 'deleted', 'achieved'] %}#}
-{#            {% if goal is CREATED %}#}
-                <p><strong>{{ locale.note.status.goal.created }}</strong> {{ locale.who.practitionerOnly }}</p>
-                <P><strong>{{ note.goalTitle }}</strong></P>
-                <p><a href='#' class="govuk-link govuk-link--no-visited-state">{{ locale.linkType.latest }}</a></p>
-{#            {% elseif goal is added back%} to update when functionality is added#}
-            {#  {% elseif goal is REMOVED%}#}
+        {% if note.noteObject == 'Goal' %}
+            {% if note.noteType == 'REMOVED'%}
                 <p><strong>{{ locale.note.status.goal.removed }}</strong> {{ locale.who.practitionerOnly }}</p>
-                <P><strong>{{ note.goalTitle }}</strong></P>
-                {#                <p>{{ note.note }}</p> NOT SURE ABOUT THIS#}
-                <p><a href='#' class="govuk-link govuk-link--no-visited-state">{{ locale.linkType.latest }}</a></p>
-            {#  {% elseif goal is ACHIEVED%}#}
+                <p><strong>{{ note.goalTitle }}</strong></p>
+                <p>{{ note.note }}</p> 
+            {% elseif note.noteType == 'ACHIEVED'%}
                 <p><strong>{{ locale.note.status.goal.achieved }}</strong> {{ locale.who.practitionerOnly }}</p>
-                <P><strong>{{ note.goalTitle }}</strong></P>
+                <p><strong>{{ note.goalTitle }}</strong></p>
                     {% if note.note.length > 0 %}
-                        {#   <p>{{ note.note }}</p> NOT SURE ABOUT THIS#}
+                           <p>{{ note.note }}</p>
                     {% endif %}
-                <p><a href='#' class="govuk-link govuk-link--no-visited-state">{{ locale.linkType.direct }}</a></p>
-                {#  {% elseif goal is UPDATED%}#}
+            {% elseif note.noteType == 'PROGRESS'%}
                 <p><strong>{{ locale.note.status.goal.updated }}</strong> {{ locale.who.practitionerOnly }}</p>
-                <P><strong>{{ note.goalTitle }}</strong></P>
+                <p><strong>{{ note.goalTitle }}</strong></p>
                     {% if note.note.length > 0 %}
-                {# <p>{{ note.note }}</p> NOT SURE ABOUT THIS#}
+                            <p>{{ note.note }}</p>
                     {% endif %}
-                <p><a href='#' class="govuk-link govuk-link--no-visited-state">{{ locale.linkType.latest }}</a></p>
-{#        {% endif %}#}
-{#        {% endif %}#}
+            {% endif %}
+
+            {%  set goalText = locale.linkType.direct %}
+            {% if note.goalStatus == 'REMOVED' %}
+                {%  set goalLink = '/view-removed-goal/' + note.goalUuid %}
+            {% elseif note.goalStatus == 'ACHIEVED' %}
+                {%  set goalLink = '/view-achieved-goal/' + note.goalUuid  %}
+            {% else %}
+                {%  set goalLink = '/update-goal/' + note.goalUuid  %}
+                {%  set goalText = locale.linkType.latest %}
+            {% endif %}
+            <p><a href='{{ goalLink }}' class="govuk-link govuk-link--no-visited-state">{{ goalText }}</a></p>
+        {% endif %}
     {% endfor %}
+    <div class='govuk-!-margin-top-6'>{% include "../partials/back-to-top-link.njk" %}</div>
+    </div>
     </div>
 
 {% endblock %}

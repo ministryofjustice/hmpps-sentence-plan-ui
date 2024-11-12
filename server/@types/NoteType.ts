@@ -5,6 +5,7 @@ export type NoteType = {
   noteType: string // value of enum event matching the noteObject
   goalTitle: string
   goalUuid: string
+  goalStatus: string
   createdDate: string
   createdBy: string
 }

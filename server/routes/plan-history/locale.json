@@ -2,13 +2,8 @@
   "en": {
     "page": {
       "title": "Plan history - {{ applicationName }}",
-      "errorTitle": "Error: Plan history - {{ applicationName }}"
-    },
-    "mainHeading": {
-      "title": "Plan history"
-    },
-    "header": {
-      "returnToOasysButton": "Return to OASys"
+      "errorTitle": "Error: Plan history - {{ applicationName }}",
+      "introduction": "View all updates and changes made to this plan."
     },
     "linkType": {
       "direct": "View goal",
