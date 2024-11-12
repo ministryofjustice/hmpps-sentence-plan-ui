@@ -28,13 +28,14 @@ const getApiToken = () => {
     })
 }
 
-function createHandoverContext(apiToken, oasysAssessmentPk, accessMode) {
+function createHandoverContext(apiToken, oasysAssessmentPk, accessMode, sentencePlanVersion) {
   return {
     url: `${Cypress.env('ARNS_HANDOVER_URL')}/handover`,
     method: 'POST',
     auth: { bearer: apiToken },
     body: {
       oasysAssessmentPk,
+      planVersion: sentencePlanVersion,
       user: {
         identifier: 123,
         displayName: 'Cypress User',
@@ -55,11 +56,13 @@ function createHandoverContext(apiToken, oasysAssessmentPk, accessMode) {
   }
 }
 
-export const openSentencePlan = (oasysAssessmentPk, accessMode) => {
+export const openSentencePlan = (oasysAssessmentPk, accessMode, sentencePlanVersion) => {
   cy.session(oasysAssessmentPk, () =>
     getApiToken().then(apiToken =>
       cy
-        .request(createHandoverContext(apiToken, oasysAssessmentPk, accessMode ?? AccessMode.READ_WRITE))
+        .request(
+          createHandoverContext(apiToken, oasysAssessmentPk, accessMode ?? AccessMode.READ_WRITE, sentencePlanVersion),
+        )
         .then(handoverResponse =>
           cy.visit(`${handoverResponse.body.handoverLink}?clientId=${Cypress.env('ARNS_HANDOVER_CLIENT_ID')}`),
         ),
@@ -93,6 +96,26 @@ export const createSentencePlan = () => {
         },
         oasysAssessmentPk,
       })),
+  )
+}
+
+export const lockPlan = (planUuid: string) => {
+  const lockBody = {
+    userDetails: {
+      id: '12345',
+      name: 'Cypress',
+    },
+  }
+
+  return getApiToken().then(apiToken =>
+    cy
+      .request({
+        url: `${Cypress.env('SP_API_URL')}/coordinator/plan/${planUuid}/lock`,
+        method: 'POST',
+        auth: { bearer: apiToken },
+        body: lockBody,
+      })
+      .then(createResponse => createResponse.body),
   )
 }
 

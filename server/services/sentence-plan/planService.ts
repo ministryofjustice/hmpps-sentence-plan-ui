@@ -10,6 +10,13 @@ export default class PlanService {
     return restClient.get<PlanType>({ path: `/plans/${planUuid}` })
   }
 
+  async getPlanByUuidAndVersionNumber(planUuid: string, planVersionNumber: number) {
+    const restClient = await this.sentencePlanApiClient.restClient(
+      `Getting plan with plan UUID and version: ${planUuid}, ${planVersionNumber}`,
+    )
+    return restClient.get<PlanType>({ path: `/plans/${planUuid}/${planVersionNumber}` })
+  }
+
   async getPlanByOasysAssessmentPk(oasysAssessmentPk: string) {
     const restClient = await this.sentencePlanApiClient.restClient(
       `Getting plan with OASys Assessment PK: ${oasysAssessmentPk}`,

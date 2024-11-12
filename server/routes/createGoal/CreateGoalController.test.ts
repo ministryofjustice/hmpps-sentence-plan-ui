@@ -12,6 +12,12 @@ import URLs from '../URLs'
 import { testGoal, testNewGoal } from '../../testutils/data/goalData'
 import runMiddlewareChain from '../../testutils/runMiddlewareChain'
 
+jest.mock('../../middleware/authorisationMiddleware', () => ({
+  requireAccessMode: jest.fn(() => (req: Request, res: Response, next: NextFunction) => {
+    return next()
+  }),
+}))
+
 jest.mock('../../services/sentence-plan/referentialDataService', () => {
   return jest.fn().mockImplementation(() => ({
     getAreasOfNeed: jest.fn().mockReturnValue(AreaOfNeed),
@@ -75,7 +81,7 @@ describe('CreateGoalController', () => {
 
   describe('get', () => {
     it('should render without validation errors', async () => {
-      await controller.get(req, res, next)
+      await runMiddlewareChain(controller.get, req, res, next)
 
       expect(res.render).toHaveBeenCalledWith('pages/create-goal', viewData)
     })
@@ -92,7 +98,7 @@ describe('CreateGoalController', () => {
         errors,
       }
 
-      await controller.get(req, res, next)
+      await runMiddlewareChain(controller.get, req, res, next)
 
       expect(res.render).toHaveBeenCalledWith('pages/create-goal', expectedViewData)
     })

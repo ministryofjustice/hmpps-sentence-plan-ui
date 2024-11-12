@@ -44,28 +44,8 @@ describe('authorisationMiddleware', () => {
     middleware(req as Request, res as Response, next)
 
     expect(req.services!.sessionService.getPrincipalDetails).toHaveBeenCalled()
-    expect(next).not.toHaveBeenCalled()
-    expect(res.redirect).toHaveBeenCalledWith('/sign-in')
+    expect(next).toHaveBeenCalled()
   })
-
-  it.each(['/create-goal', '/planning', 'plan?query=value'])(
-    'should redirect to /sign-in from %s if READ_ONLY principal details are present',
-    urlPath => {
-      ;(req.services.sessionService.getPrincipalDetails as jest.Mock).mockReturnValue({
-        ...handoverData.principal,
-        accessMode: AccessMode.READ_ONLY,
-      })
-
-      req.originalUrl = urlPath
-
-      const middleware = authorisationMiddleware()
-      middleware(req as Request, res as Response, next)
-
-      expect(req.services!.sessionService.getPrincipalDetails).toHaveBeenCalled()
-      expect(next).not.toHaveBeenCalled()
-      expect(res.redirect).toHaveBeenCalledWith('/sign-in')
-    },
-  )
 
   it('should redirect to /sign-in if principal details are not present', async () => {
     ;(req.services.sessionService.getPrincipalDetails as jest.Mock).mockReturnValue(null)

@@ -1,4 +1,6 @@
 import { AccessMode } from '../../server/@types/Handover'
+import DataGenerator from '../support/DataGenerator'
+import { PlanType } from '../../server/@types/PlanType'
 
 describe('View Plan Overview for READ_ONLY user', () => {
   beforeEach(() => {
@@ -14,8 +16,8 @@ describe('View Plan Overview for READ_ONLY user', () => {
   })
 
   it('Visiting create-goal should fail', () => {
-    cy.visit('/create-goal/accommodation')
-    cy.url().should('include', '/plan')
+    cy.visit('/create-goal/accommodation', { failOnStatusCode: false })
+    cy.url().should('not.include', '/plan')
   })
 
   it('Should have a `Return to OASys` button and it should return the user to the OASys return URL', () => {
@@ -24,5 +26,32 @@ describe('View Plan Overview for READ_ONLY user', () => {
 
   it.skip('Should have no accessibility violations', () => {
     cy.checkAccessibility()
+  })
+})
+
+describe('View specific plan version for READ_ONLY user', () => {
+  let pk
+
+  beforeEach(() => {
+    cy.createSentencePlan().then(planDetails => {
+      cy.wrap(planDetails).as('plan')
+      pk = planDetails.oasysAssessmentPk
+      cy.addGoalToPlan(planDetails.plan.uuid, DataGenerator.generateGoal()).then(goal => {
+        cy.addStepToGoal(goal.uuid, DataGenerator.generateStep())
+      })
+      cy.lockPlan(planDetails.plan.uuid)
+    })
+  })
+
+  it('Should check there are different numbers of goals pre and post lock', () => {
+    cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
+      cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal()).then(goal => {
+        cy.addStepToGoal(goal.uuid, DataGenerator.generateStep())
+      })
+
+      cy.openSentencePlan(pk, AccessMode.READ_ONLY, 0)
+      cy.url().should('include', '/plan')
+      cy.get('.goal-list .goal-summary-card').should('have.length', 1)
+    })
   })
 })
