@@ -12,12 +12,13 @@
                 {% for note in params.notes %}
                     {% set locale = interpolate(params.locale.common.noteList, {
                         noteDate: note.createdDate | formatSimpleDate,
-                        noteAuthor: note.practitionerName | convertToTitleCase,
-                        noteType: note.type | lower
+                        noteAuthor: note.practitionerName | convertToTitleCase
                     }) %}
                     <h4>{{ locale.noteHeading }}</h4>
-                    {% if note.type != "PROGRESS" %}
-                        <p>{{ locale.noteActionEvent }}</p>
+                    {% if note.type == "ACHIEVED" %}
+                        <p>{{ locale.goalAchievedNote }}</p>
+                    {% elif note.type == "REMOVED" %}
+                        <p>{{ locale.goalRemovedNote }}</p>
                     {% endif %}
                     <p>{{ note.note }}</p>
                 {% endfor %}

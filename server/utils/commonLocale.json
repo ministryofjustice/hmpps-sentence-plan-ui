@@ -66,7 +66,8 @@
       "viewAllNotes": "View all notes",
       "noGoalNotes": "There are no notes on this goal yet.",
       "noteHeading": "{{ noteDate }} by {{ noteAuthor }}",
-      "noteActionEvent": "Goal marked as {{ noteType }} on {{ noteDate }}"
+      "goalAchievedNote": "Goal marked as achieved on {{ noteDate }}.",
+      "goalRemovedNote": "Goal removed on {{ noteDate }}."
     },
     "backLink": {
       "text": "Back"

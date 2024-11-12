@@ -8,6 +8,7 @@ import PlanModel from '../shared-models/PlanModel'
 import transformRequest from '../../middleware/transformMiddleware'
 import PlanOverviewQueryModel from './models/PlanOverviewQueryModel'
 import { AccessMode } from '../../@types/Handover'
+import { requireAccessMode } from '../../middleware/authorisationMiddleware'
 
 export default class PlanOverviewController {
   private render = async (req: Request, res: Response, next: NextFunction) => {
@@ -15,7 +16,16 @@ export default class PlanOverviewController {
 
     try {
       const planUuid = req.services.sessionService.getPlanUUID()
-      const plan = await req.services.planService.getPlanByUuid(planUuid)
+      const planVersionNumber = req.services.sessionService.getPlanVersionNumber()
+
+      let plan
+
+      if (planVersionNumber != null) {
+        plan = await req.services.planService.getPlanByUuidAndVersionNumber(planUuid, planVersionNumber)
+      } else {
+        plan = await req.services.planService.getPlanByUuid(planUuid)
+      }
+
       const oasysReturnUrl = req.services.sessionService.getOasysReturnUrl()
       const type = req.query?.type ?? 'current'
       const status = req.query?.status
@@ -24,7 +34,7 @@ export default class PlanOverviewController {
 
       let pageToRender = 'pages/plan'
 
-      if (req.services.sessionService.getPrincipalDetails().accessMode === AccessMode.READ_ONLY) {
+      if (req.services.sessionService.getAccessMode() === AccessMode.READ_ONLY) {
         pageToRender = 'pages/countersign'
       }
 
@@ -94,11 +104,17 @@ export default class PlanOverviewController {
   }
 
   get = [
+    requireAccessMode(AccessMode.READ_ONLY),
     transformRequest({ query: PlanOverviewQueryModel }),
     validateRequest(),
     this.handleValidationErrors,
     this.render,
   ]
 
-  post = [this.validatePlanForAgreement, this.handleValidationErrors, this.handleSuccessRedirect]
+  post = [
+    requireAccessMode(AccessMode.READ_WRITE),
+    this.validatePlanForAgreement,
+    this.handleValidationErrors,
+    this.handleSuccessRedirect,
+  ]
 }
