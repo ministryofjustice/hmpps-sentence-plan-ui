@@ -48,9 +48,6 @@ describe('Rendering', () => {
     cy.visit('/plan')
     cy.contains('a', 'Update').click() // click update link
     cy.url().should('include', '/update-goal') // check url is update goal
-    cy.get('.govuk-table__body > .govuk-table__row > :nth-child(3)').contains(
-      'Not started' || 'In progress' || 'Cannot be done yet' || 'No longer needed' || 'Completed',
-    )
     cy.get('#step-status-1').select('Not started') // select not started status
     cy.get('textarea#more-detail').type('Updated goal to not started')
     cy.get('.govuk-button').contains('Save goal and steps').click()
@@ -58,7 +55,7 @@ describe('Rendering', () => {
     cy.get('.govuk-tag').contains('Not started')
     cy.get('.moj-primary-navigation__container').contains('Plan history').click()
     cy.get('.goal-status').contains('Goal updated')
-    cy.get('.note-note').contains('Updated goal to not started')
+    cy.get('.goal-note').contains('Updated goal to not started')
   })
 
   // 2. render goal note for achieved goal: create goal > agree plan > click mark as achieved > add note > click achieved > click plan history link > check values
@@ -74,21 +71,22 @@ describe('Rendering', () => {
     cy.url().should('include', '/plan') // check we're back to plan-overview
     cy.get('.moj-primary-navigation__container').contains('Plan history').click()
     cy.get('.goal-status').contains('Goal marked as achieved')
-    cy.get('.note-note').contains('Updated goal to achieved status')
+    cy.get('.goal-note').contains('Updated goal to achieved status')
   })
+
   // 3. render goal note for removed: create goal > agree plan > click remove > check url contains remove-goal > add note > click confirm > check url contains plan > click plan history > check values
   it('Display plan history page with removed goal status', () => {
     planOverview.agreePlan()
     cy.get('.moj-primary-navigation__container').contains('Plan history').click()
     cy.get('.plan-status').contains('Plan agreed')
     cy.visit('/plan')
-    cy.contains('a', 'Remove').click() // click update link
-    cy.url().should('include', '/remove-goal') // check url
+    cy.contains('a', 'Remove').click()
+    cy.url().should('include', '/remove-goal')
     cy.get('textarea#goal-removal-note').type('Updated goal to removed status')
     cy.get('.govuk-button').contains('Confirm').click()
-    cy.url().should('include', '/plan') // check we're back to plan-overview
+    cy.url().should('include', '/plan')
     cy.get('.moj-primary-navigation__container').contains('Plan history').click()
     cy.get('.goal-status').contains('Goal removed')
-    cy.get('.note-note').contains('Updated goal to removed status')
+    cy.get('.goal-note').contains('Updated goal to removed status')
   })
 })

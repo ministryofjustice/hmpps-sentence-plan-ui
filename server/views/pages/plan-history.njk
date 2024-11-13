@@ -64,18 +64,18 @@
             {% if note.noteType == 'REMOVED'%}
                 <p class='goal-status'><strong>{{ locale.note.status.goal.removed }}</strong> {{ locale.who.practitionerOnly }}</p>
                 <p class='goal-title'><strong>{{ note.goalTitle }}</strong></p>
-                <p class='note-note'>{{ note.note }}</p>
+                <p class='goal-note'>{{ note.note }}</p>
             {% elseif note.noteType == 'ACHIEVED'%}
                 <p class='goal-status'><strong>{{ locale.note.status.goal.achieved }}</strong> {{ locale.who.practitionerOnly }}</p>
                 <p class='goal-title'><strong>{{ note.goalTitle }}</strong></p>
                     {% if note.note.length > 0 %}
-                           <p class='note-note'>{{ note.note }}</p>
+                           <p class='goal-note'>{{ note.note }}</p>
                     {% endif %}
             {% elseif note.noteType == 'PROGRESS'%}
                 <p class='goal-status'><strong>{{ locale.note.status.goal.updated }}</strong> {{ locale.who.practitionerOnly }}</p>
                 <p class='goal-title'><strong>{{ note.goalTitle }}</strong></p>
                     {% if note.note.length > 0 %}
-                            <p class='note-note'>{{ note.note }}</p>
+                            <p class='goal-note'>{{ note.note }}</p>
                     {% endif %}
             {% endif %}
 
