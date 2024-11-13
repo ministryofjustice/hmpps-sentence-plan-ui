@@ -3,6 +3,10 @@ export default class AddSteps {
     cy.get(`#step-description-${position}-autocomplete`).type(text)
   }
 
+  putStepAutocompleteText = (position: number, text: string) => {
+    cy.get(`#step-description-${position}-autocomplete`).invoke('val', text)
+  }
+
   selectStepActor = (position: number, text: string) => {
     cy.get(`#step-actor-${position}`).select(text)
   }

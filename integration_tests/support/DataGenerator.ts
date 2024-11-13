@@ -4,7 +4,7 @@ import { AreaOfNeed } from '../../server/testutils/data/referenceData'
 import { NewStep, StepStatus } from '../../server/@types/StepType'
 
 export default class DataGenerator {
-  static generateGoal = (overrides: Partial<NewGoal>): NewGoal => ({
+  static generateGoal = (overrides?: Partial<NewGoal>): NewGoal => ({
     title: faker.lorem.sentence(8),
     areaOfNeed: DataGenerator.getRandomAreaOfNeed(),
     relatedAreasOfNeed: [DataGenerator.getRandomAreaOfNeed()],
@@ -12,7 +12,7 @@ export default class DataGenerator {
     ...overrides,
   })
 
-  static generateStep = (overrides: Partial<NewStep>): NewStep => ({
+  static generateStep = (overrides?: Partial<NewStep>): NewStep => ({
     description: faker.lorem.lines(1),
     status: faker.helpers.arrayElement([StepStatus.NOT_STARTED, StepStatus.IN_PROGRESS, StepStatus.COMPLETED]),
     actor: 'Probation practitioner',

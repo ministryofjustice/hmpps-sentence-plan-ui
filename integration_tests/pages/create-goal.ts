@@ -8,6 +8,10 @@ export default class CreateGoal {
     cy.get('#goal-input-autocomplete').type(text)
   }
 
+  putGoalAutoCompletionText = (text: string) => {
+    cy.get('#goal-input-autocomplete').invoke('val', text)
+  }
+
   createGoal = (goalType: string) => {
     cy.get(`a[href='/create-goal/${goalType}']`).click()
     cy.url().should('include', `/create-goal/${goalType}`)

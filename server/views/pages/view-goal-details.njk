@@ -1,9 +1,11 @@
 {% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "../components/note-list/note-list.njk" import noteList %}
 {% extends "../partials/layout.njk" %}
 
 {% set locale = interpolate(locale, {
-    achievedOn: data.goal.statusDate | formatSimpleDate
+    statusChangedDate: data.goal.statusDate | formatSimpleDate,
+    status: data.goal.status | lower
 }) %}
 
 {% block pageTitle %}
@@ -19,15 +21,19 @@
 {% block content %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
-            <a href="#" class="govuk-back-link">Back</a>
+            <a href="{{ data.returnLink }}" class="govuk-back-link">{{ locale.common.backLink.text }}</a>
             <span class="govuk-caption-l">{{ data.goal.areaOfNeed.name }}
                 {% if data.goal.relatedAreasOfNeed.length > 0 %}
                     (and {% for aon in data.goal.relatedAreasOfNeed %}{{ aon.name | lower }}{% if loop.index < data.goal.relatedAreasOfNeed.length %}, {% endif %}{% endfor %})
                 {% endif %}
             </span>
-            <h1 class="govuk-heading-l govuk-!-margin-bottom-2">{{ data.goal.title }}</h1>
-            <p class="govuk-body">{{ locale.markedAsAchieved }}</p>
-
+            <h1 class="govuk-heading-l govuk-!-margin-bottom-2">{{ locale.mainHeading.title }}</h1>
+            <h2 class="govuk-heading-m govuk-!-margin-bottom-2">{{ locale.goalTitlePrefix }} {{ data.goal.title }}</h2>
+            {% if data.goal.status == 'ACHIEVED' %}
+                <p class="govuk-body">{{ locale.markedAsAchieved }}</p>
+            {% elif data.goal.status == 'REMOVED' %}
+                <p class="govuk-body">{{ locale.markedAsRemoved }}</p>
+            {% endif %}
             <table class="govuk-table goal-summary-card__steps">
                 <thead class="govuk-table__head">
                 <tr class="govuk-table__row">
@@ -50,6 +56,8 @@
                                 <strong class="govuk-tag govuk-tag--green">{{ locale.common.goalSummaryCard.stepsList.status.completed }}</strong>
                             {% elseif step.status == 'CANNOT_BE_DONE_YET' %}
                                 <strong class="govuk-tag govuk-tag--purple">{{ locale.common.goalSummaryCard.stepsList.status.cannotBeDoneYet }}</strong>
+                            {% elseif step.status == 'NO_LONGER_NEEDED' %}
+                                <strong class="govuk-tag govuk-tag--yellow">{{ locale.common.goalSummaryCard.stepsList.status.noLongerNeeded }}</strong>
                             {% endif %}
                         </td>
                     </tr>
@@ -61,6 +69,15 @@
                 notes: data.goal.notes,
                 locale: locale
             }) }}
+
+            {% if data.goal.status == 'REMOVED' %}
+                {{ govukButton({
+                    text: locale.addToPlan,
+                    name: "action",
+                    value: "#",
+                    classes: "govuk-button--secondary"
+                }) }}
+            {% endif %}
 
         </div>
     </div>

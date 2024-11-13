@@ -6,7 +6,7 @@ export default class PlanOverview {
   agreePlan = () => {
     cy.get('button').contains('Agree plan').click()
     cy.get('label').contains('Yes, ').click()
-    cy.get('button').contains('Agree plan with').click()
+    cy.get('button').contains('Save').click()
   }
 
   clickUpOnSummaryCard = (value: number) => {

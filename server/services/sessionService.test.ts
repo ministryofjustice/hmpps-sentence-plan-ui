@@ -8,6 +8,7 @@ import HandoverContextService from './handover/handoverContextService'
 jest.mock('./sentence-plan/planService', () => {
   return jest.fn().mockImplementation(() => ({
     getPlanByUuid: jest.fn(),
+    getPlanByUuidAndVersionNumber: jest.fn(),
   }))
 })
 jest.mock('./handover/handoverContextService', () => {
@@ -32,7 +33,7 @@ describe('SessionService', () => {
   describe('setupSession', () => {
     it('should set up session with handover and plan', async () => {
       handoverContextServiceMock.getContext.mockResolvedValue(testHandoverContext)
-      planServiceMock.getPlanByUuid.mockResolvedValue(testPlan)
+      planServiceMock.getPlanByUuidAndVersionNumber.mockResolvedValue(testPlan)
 
       await sessionService.setupSession()
 
@@ -42,7 +43,7 @@ describe('SessionService', () => {
 
     it('should throw if either getContext or getPlanByOasysAssessmentPk fails', async () => {
       handoverContextServiceMock.getContext.mockRejectedValue('getContext')
-      planServiceMock.getPlanByUuid.mockRejectedValue('getPlanByOasysAssessmentPk')
+      planServiceMock.getPlanByUuidAndVersionNumber.mockRejectedValue('getPlanByOasysAssessmentPk')
 
       await expect(sessionService.setupSession()).rejects.toThrow('getContext')
 

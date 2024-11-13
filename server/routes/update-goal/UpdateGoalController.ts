@@ -30,6 +30,7 @@ export default class UpdateGoalController {
     return res.render('pages/update-goal', {
       locale: locale.en,
       data: {
+        form: req.body,
         goal,
         popData,
         mainAreaOfNeed,
@@ -57,16 +58,18 @@ export default class UpdateGoalController {
 
     const goalData: Partial<NewGoal> = {
       steps: updatedSteps,
-      note,
+      note: note || null,
     }
 
-    await req.services.stepService.saveAllSteps(goalData, goal.uuid)
+    if (updatedSteps.length > 0 || note) {
+      await req.services.stepService.saveAllSteps(goalData, goal.uuid)
+    }
   }
 
   private saveAndRedirect = async (req: Request, res: Response, next: NextFunction) => {
     const { uuid } = req.params
     const { steps } = req.body
-    const note = req.body.moreDetail
+    const note = req.body['more-detail']
 
     const goal = await req.services.goalService.getGoal(uuid)
     const goalType: string = goalStatusToTabName(goal.status)

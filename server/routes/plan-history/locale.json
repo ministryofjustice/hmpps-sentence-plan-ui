@@ -1,0 +1,14 @@
+{
+  "en": {
+    "page": {
+      "title": "Plan history - {{ applicationName }}",
+      "errorTitle": "Error: Plan history - {{ applicationName }}"
+    },
+    "mainHeading": {
+      "title": "Plan history"
+    },
+    "header": {
+      "returnToOasysButton": "Return to OASys"
+    }
+  }
+}

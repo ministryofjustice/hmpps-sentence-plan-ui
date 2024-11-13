@@ -1,3 +1,4 @@
+import { faker } from '@faker-js/faker'
 import { NewGoal } from '../../server/@types/NewGoalType'
 import { PlanType } from '../../server/@types/PlanType'
 
@@ -17,7 +18,7 @@ describe('Change a goal', () => {
 
   describe('Rendering', () => {
     it('Change goal page populated correctly', () => {
-      // Add goal and access remove page
+      // Add goal and access change-goal page
       cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
         cy.addGoalToPlan(plan.uuid, goalData).then(goal => {
           cy.visit(`/change-goal/${goal.uuid}`)
@@ -36,7 +37,7 @@ describe('Change a goal', () => {
 
   describe('Validation behaviours', () => {
     it('Change goal page display errors correctly', () => {
-      // Add goal and access remove page
+      // Add goal and access change-goal page
       cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
         cy.addGoalToPlan(plan.uuid, goalData).then(goal => {
           cy.visit(`/change-goal/${goal.uuid}`)
@@ -62,7 +63,7 @@ describe('Change a goal', () => {
       })
     })
 
-    it('Should update goal title, related areas of need', () => {
+    it('Should change goal title, related areas of need', () => {
       // Modify data
       cy.get('#goal-input-autocomplete').type('some goal')
       cy.get('input[value="Employment and education"]').check()
@@ -78,7 +79,7 @@ describe('Change a goal', () => {
         .and('contain', 'Also relates to: alcohol use, employment and education, health and wellbeing')
     })
 
-    it('Should update goal with NO related areas of need', () => {
+    it('Should change goal with NO related areas of need', () => {
       // Modify data
       cy.get('#related-area-of-need-radio-2').check()
 
@@ -89,7 +90,7 @@ describe('Change a goal', () => {
       cy.get('.goal-summary-card').and('not.contain', 'Also relates to:')
     })
 
-    it('Should update goal with related areas of need', () => {
+    it('Should change goal with related areas of need', () => {
       // Modify data
       cy.get('input[value="Employment and education"]').check()
       cy.get('input[value="Health and wellbeing"]').uncheck()
@@ -101,7 +102,7 @@ describe('Change a goal', () => {
       cy.get('.goal-summary-card').and('contain', 'Also relates to: employment and education')
     })
 
-    it('Should update goal with standard date', () => {
+    it('Should change goal with standard date', () => {
       // Modify data
       cy.get('#date-selection-radio-2').check()
 
@@ -109,20 +110,20 @@ describe('Change a goal', () => {
       cy.url().should('include', 'plan?status=updated&type=current')
     })
 
-    it('Should update goal with custom date', () => {
+    it('Should change goal with custom date', () => {
       const twentyMonthsLaterISODate = new Date(new Date().setMonth(new Date().getMonth() + 20))
         .toISOString()
         .split('T')[0]
         .split('-')
       const date = `${twentyMonthsLaterISODate[2]}/${twentyMonthsLaterISODate[1]}/${twentyMonthsLaterISODate[0]}`
       // Modify data
-      cy.get('#date-selection-radio-5').check()
+      cy.get('label[for="date-selection-radio-5"]').should('contain', 'Set another date').click()
       cy.get('#date-selection-custom').type(date)
       cy.contains('button', 'save').click()
       cy.url().should('include', 'plan?status=updated&type=current')
     })
 
-    it('Should update goal with future date', () => {
+    it('Should change goal with future date', () => {
       // Modify data
       cy.get('label[for="start-working-goal-radio-2"]').should('contain', 'No, it is a future goal').click()
 
@@ -131,6 +132,20 @@ describe('Change a goal', () => {
 
       // Check goal data is saved and rendered correctly
       cy.get('.moj-sub-navigation').and('contain', 'Future goals (1)')
+    })
+
+    it('Should display error if goal title is too long', () => {
+      const lorem = faker.lorem.paragraphs(40).replace(/(\r\n|\n|\r)/gm, '')
+      // Modify data
+      cy.get('#goal-input-autocomplete').invoke('val', lorem)
+      cy.get('input[value="Employment and education"]').check()
+      cy.get('input[value="Alcohol use"]').check()
+
+      cy.contains('button', 'save').click()
+      cy.url().should('include', '/change-goal')
+      cy.get('.govuk-error-summary').should('contain', 'Goal must be 4,000 characters or less')
+      cy.get('#goal-input-error').should('contain', 'Goal must be 4,000 characters or less')
+      cy.get('#goal-input-autocomplete').invoke('val').should('contain', lorem)
     })
   })
 })

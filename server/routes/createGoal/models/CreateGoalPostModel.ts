@@ -1,8 +1,9 @@
-import { IsNotEmpty, ValidateIf } from 'class-validator'
+import { IsNotEmpty, MaxLength, ValidateIf } from 'class-validator'
 import { Expose, Transform } from 'class-transformer'
 
 export default class CreateGoalPostModel {
   @IsNotEmpty()
+  @MaxLength(4000)
   'goal-input-autocomplete': string
 
   @IsNotEmpty()

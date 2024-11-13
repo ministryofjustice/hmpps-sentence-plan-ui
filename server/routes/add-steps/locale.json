@@ -43,7 +43,8 @@
     "removeStepLinkButton": "Remove",
     "errors": {
       "step-description": {
-        "isNotEmpty": "Select or enter what they should do to achieve the goal."
+        "isNotEmpty": "Select or enter what they should do to achieve the goal.",
+        "maxLength": "What they should do to achieve the goal must be 4,000 characters or less"
       }
     }
   }

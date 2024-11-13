@@ -41,7 +41,7 @@
       "label": "Select a date",
       "hint": "For example, 31/3/2024."
     },
-    "saveButtonText": "Save and continue",
+    "saveButtonText": "Save goal",
     "addStepsButton": "Add steps",
     "saveWithoutStepsButton": "Save without steps",
     "errors": {
@@ -49,7 +49,8 @@
         "isNotEmpty": "Select yes if this goal is related to any other area of need"
       },
       "goal-input-autocomplete": {
-        "isNotEmpty": "Select or enter what goal they should try to achieve"
+        "isNotEmpty": "Select or enter what goal they should try to achieve",
+        "maxLength": "Goal must be 4,000 characters or less"
       },
       "related-area-of-need": {
         "isNotEmpty": "Select all related areas"

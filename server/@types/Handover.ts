@@ -9,7 +9,7 @@ export type HandoverContextData = {
 export type HandoverPrincipal = {
   identifier: string
   displayName: string
-  accessMode: string
+  accessMode: AccessMode
   returnUrl?: string
 }
 
@@ -34,6 +34,11 @@ export type HandoverSentencePlanContext = {
   oasysAssessmentPk: string
   planId: string
   planVersion: number
+}
+
+export const enum AccessMode {
+  READ_WRITE = 'READ_WRITE',
+  READ_ONLY = 'READ_ONLY',
 }
 
 export const enum Gender {

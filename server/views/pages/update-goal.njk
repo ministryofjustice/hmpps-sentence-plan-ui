@@ -5,6 +5,7 @@
 {% from "../components/summary-card/goal-summary-card.njk" import goalSummaryCard %}
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 {% from "../components/note-list/note-list.njk" import noteList %}
+{% from "../components/error-summary/error-summary.njk" import errorSummary %}
 
 {% set locale = interpolate(locale, {
     subject: data.popData,
@@ -58,6 +59,12 @@
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
+
+            {{ errorSummary({
+                errors: errors,
+                locale: locale
+            }) }}
+
             <div class="govuk-grid-row">
                 <div class="govuk-grid-column-three-quarters">
                     <span class="govuk-caption-l">{{ data.mainAreaOfNeed.name }}
@@ -69,7 +76,7 @@
 
             <p>
                 {% if data.goal.targetDate %}{{ locale.aimToAchieveBy }}{% else %}{{ locale.common.goalSummaryCard.info.thisIsAFutureGoal }}{% endif %}
-                <a href="#" class="govuk-link govuk-link--no-visited-state">{{ locale.updateGoalDetails }}</a>
+                <a href="/change-goal/{{ data.goal.uuid }}" class="govuk-link govuk-link--no-visited-state">{{ locale.updateGoalDetails }}</a>
             </p>
 
             <form id="update-goal-form" method="POST">
@@ -130,7 +137,7 @@
                     <div class="govuk-grid-column-two-thirds">
                         <div class="govuk-form-group">
                             {{ govukTextarea({
-                                name: "moreDetail",
+                                name: "more-detail",
                                 id: "more-detail",
                                 rows: 4,
                                 label: {
@@ -139,7 +146,9 @@
                                 },
                                 hint: {
                                     text: locale.moreDetailHint
-                                }
+                                },
+                                value: data.form['more-detail'],
+                                errorMessage: getFormattedError(errors, locale, 'more-detail')
                             }) }}
 
                             {{ noteList({

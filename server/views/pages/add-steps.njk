@@ -113,6 +113,12 @@
                                 } %}
                             {% endif %}
 
+                            {% if errors.body['steps.' + loop.index0 + '.description' ].maxLength %}
+                                {% set errorMessage = {
+                                    'text': locale.errors['step-description'].maxLength
+                                } %}
+                            {% endif %}
+
                             {{ govukInput({
                                 formGroup: {
                                     classes: "step-description-" + loop.index + "-autocomplete-wrapper"

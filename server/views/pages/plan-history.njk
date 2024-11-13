@@ -1,0 +1,19 @@
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% extends "../partials/layout.njk" %}
+
+{% block pageTitle %}
+    {% if not errors %}
+        {{ locale.mainHeading.title }}
+    {% else %}
+        {{ locale.mainHeading.errorTitle }}
+    {% endif %}
+{% endblock %}
+
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <h1 class="govuk-heading-l govuk-!-margin-bottom-2">{{ locale.mainHeading.title }}</h1>
+    </div>
+{% endblock %}
