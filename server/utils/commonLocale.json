@@ -9,7 +9,7 @@
     "primaryNavigation": {
       "planLinkText": "{{ subject.possessiveName }} plan",
       "aboutPopText": "About {{ subject.givenName }}",
-      "planHistoryLink": "Plan history"
+      "planHistoryText": "Plan history"
     },
     "planHeader": {
       "mini": {
@@ -19,21 +19,8 @@
         "dateOfBirthLabel": "Date of birth:"
       },
       "extended": {
-        "title": "{{ subject.possessiveName }} plan",
         "createGoalButton": "Create goal",
         "agreePlanButton": "Agree plan"
-      }
-    },
-    "planHistoryHeader": {
-      "mini": {
-        "title": "{{ subject.givenName }} {{ subject.familyName }}",
-        "crnLabel": "CRN:",
-        "pncLabel": "PNC:",
-        "dateOfBirthLabel": "Date of birth:"
-      },
-      "extended": {
-        "title": "Plan history",
-        "createGoalButton": "Create goal"
       }
     },
     "goalSummaryCard": {

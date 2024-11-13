@@ -35,6 +35,7 @@ describe('PlanHistoryController', () => {
       data: {
         notes: [],
         oasysReturnUrl,
+        pageId: 'plan-history',
       },
       errors: {},
     }

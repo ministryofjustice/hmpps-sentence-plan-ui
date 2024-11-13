@@ -47,7 +47,8 @@
         createdDate: data.plan.createdDate | formatSimpleDate,
         updatedDate: data.plan.updatedDate | formatSimpleDate,
         updatedBy: data.plan.updatedBy.username | title
-    }
+    },
+    subject: data.popData
 }) %}
 
 {% block pageTitle %}
@@ -61,6 +62,7 @@
 {% set mainClasses = "app-container govuk-body" %}
 {% set header = {
     type: "plan-extended",
+    heading: locale.common.primaryNavigation.planLinkText,
     items: [
         {
             text: locale.header.returnToOasysButton,
