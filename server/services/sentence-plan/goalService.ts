@@ -12,6 +12,11 @@ export default class GoalService {
     return restClient.get<Goal>({ path: `/goals/${goalUuid}` })
   }
 
+  async replaceGoal(goal: Partial<NewGoal>, goalUuid: string) {
+    const restClient = await this.sentencePlanApiClient.restClient('Replace goal data')
+    return restClient.put<Goal>({ path: `/goals/${goalUuid}`, data: goal })
+  }
+
   async updateGoal(goal: Partial<NewGoal>, goalUuid: string) {
     const restClient = await this.sentencePlanApiClient.restClient('Update goal data')
     return restClient.patch<Goal>({ path: `/goals/${goalUuid}`, data: goal })
