@@ -36,7 +36,7 @@ jest.mock('../../services/sentence-plan/planService', () => {
 jest.mock('../../services/sentence-plan/goalService', () => {
   return jest.fn().mockImplementation(() => ({
     getGoal: jest.fn().mockReturnValue(testGoal),
-    updateGoal: jest.fn().mockReturnValue(testGoal),
+    replaceGoal: jest.fn().mockReturnValue(testGoal),
   }))
 })
 
@@ -278,7 +278,7 @@ describe('ChangeGoalController', () => {
 
       await runMiddlewareChain(controller.post, req, res, next)
 
-      expect(req.services.goalService.updateGoal).toHaveBeenCalledWith(updatedGoal, testGoal.uuid)
+      expect(req.services.goalService.replaceGoal).toHaveBeenCalledWith(updatedGoal, testGoal.uuid)
       expect(res.redirect).toHaveBeenCalledWith(`/plan?status=updated&type=current`)
       expect(res.render).not.toHaveBeenCalled()
       expect(next).not.toHaveBeenCalled()
@@ -319,7 +319,7 @@ describe('ChangeGoalController', () => {
         body: {},
       }
       const error = new Error('This is a test error')
-      req.services.goalService.updateGoal = jest.fn().mockRejectedValue(error)
+      req.services.goalService.replaceGoal = jest.fn().mockRejectedValue(error)
       await runMiddlewareChain(controller.post, req, res, next)
 
       expect(next).toHaveBeenCalledWith(error)
@@ -351,7 +351,7 @@ describe('ChangeGoalController', () => {
 
       await runMiddlewareChain(controller.post, req, res, next)
 
-      expect(req.services.goalService.updateGoal).toHaveBeenCalledWith(updatedGoal, testGoal.uuid)
+      expect(req.services.goalService.replaceGoal).toHaveBeenCalledWith(updatedGoal, testGoal.uuid)
       expect(res.redirect).toHaveBeenCalledWith(`/update-goal/${testGoal.uuid}`)
       expect(res.render).not.toHaveBeenCalled()
       expect(next).not.toHaveBeenCalled()
