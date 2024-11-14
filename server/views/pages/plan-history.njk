@@ -1,19 +1,102 @@
+{% extends "../partials/layout.njk" %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% extends "../partials/layout.njk" %}
 
 {% block pageTitle %}
     {% if not errors %}
-        {{ locale.mainHeading.title }}
+        {{ locale.page.title }}
     {% else %}
-        {{ locale.mainHeading.errorTitle }}
+        {{ locale.page.errorTitle }}
     {% endif %}
 {% endblock %}
 
 {% set mainClasses = "app-container govuk-body" %}
+{% set header = {
+    type: "plan-extended",
+    heading: locale.common.primaryNavigation.planHistoryText,
+    items: [
+        {
+            text: locale.common.header.returnToOasysButton,
+            href: data.oasysReturnUrl,
+            classes: "govuk-button--secondary",
+            type: 'button'
+        }
+    ]
+} %}
+
+{% block bodyStart %}
+    <div id="top"></div>
+{% endblock %}
 
 {% block content %}
-    <div class="govuk-grid-row">
-        <h1 class="govuk-heading-l govuk-!-margin-bottom-2">{{ locale.mainHeading.title }}</h1>
+    <p class='govuk-!-margin-top-5'>{{ locale.page.introduction }}</p>
+    <div class='govuk-grid-row'>
+    <div class="govuk-grid-column-two-thirds">
+    {% for note in data.notes %}
+        {% set locale = interpolate(locale, {
+            noteCreatedDate: note.createdDate | formatSimpleDate,
+            noteCreatedBy: note.createdBy | convertToTitleCase
+        }) %}
+
+        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" >
+        {% if note.noteObject == 'Plan' %}
+            {% if note.noteType == 'AGREED' %}
+                <p class='plan-status'><strong>{{ locale.note.status.plan.agreed }}</strong> {{ locale.who.practitionerAndSubject }}</p>
+                <p class='subject-response'>{{ locale.subjectResponse.agreed }}</p>
+            {% elseif note.noteType == 'DO_NOT_AGREE' %}
+                <p class='plan-status'><strong>{{ locale.note.status.plan.created }}</strong> by {{ locale.who.practitionerOnly }}</p>
+                <p class='subject-response'>{{ locale.subjectResponse.didNotAgree }}</p>
+            {% elseif note.noteType == 'COULD_NOT_ANSWER' %}
+                <p class='plan-status'><strong>{{ locale.note.status.plan.created }}</strong> {{ locale.who.practitionerOnly }}</p>
+                <p class='subject-response'>{{ locale.subjectResponse.couldNotAgree }}</p>
+            {% endif %}
+
+            <div class='plan-note'>
+                {{ note.note }}
+            </div>
+
+            {% if note.additionalNote %}
+                <div class='plan-additional-note'>{{ note.additionalNote }}</div>
+            {% endif %}
+
+        {% endif %}
+
+        {% if note.noteObject == 'Goal' %}
+            {% if note.noteType == 'REMOVED'%}
+                <p class='goal-status'><strong>{{ locale.note.status.goal.removed }}</strong> {{ locale.who.practitionerOnly }}</p>
+                <p class='goal-title'><strong>{{ note.goalTitle }}</strong></p>
+                <p class='goal-note'>{{ note.note }}</p>
+            {% elseif note.noteType == 'ACHIEVED'%}
+                <p class='goal-status'><strong>{{ locale.note.status.goal.achieved }}</strong> {{ locale.who.practitionerOnly }}</p>
+                <p class='goal-title'><strong>{{ note.goalTitle }}</strong></p>
+                    {% if note.note.length > 0 %}
+                           <p class='goal-note'>{{ note.note }}</p>
+                    {% endif %}
+            {% elseif note.noteType == 'PROGRESS'%}
+                <p class='goal-status'><strong>{{ locale.note.status.goal.updated }}</strong> {{ locale.who.practitionerOnly }}</p>
+                <p class='goal-title'><strong>{{ note.goalTitle }}</strong></p>
+                    {% if note.note.length > 0 %}
+                            <p class='goal-note'>{{ note.note }}</p>
+                    {% endif %}
+            {% endif %}
+
+            {%  set goalText = locale.linkType.direct %}
+            {% if note.goalStatus == 'REMOVED' %}
+                {%  set goalLink = '/view-removed-goal/' + note.goalUuid %}
+            {% elseif note.goalStatus == 'ACHIEVED' %}
+                {%  set goalLink = '/view-achieved-goal/' + note.goalUuid  %}
+            {% else %}
+                {%  set goalLink = '/update-goal/' + note.goalUuid  %}
+                {%  set goalText = locale.linkType.latest %}
+            {% endif %}
+            <p class='goal-link'><a href='{{ goalLink }}' class="govuk-link govuk-link--no-visited-state">{{ goalText }}</a></p>
+        {% endif %}
+    {% endfor %}
+    <div class='govuk-!-margin-top-6'>{% include "../partials/back-to-top-link.njk" %}</div>
     </div>
+    </div>
+
 {% endblock %}
+
+
+
