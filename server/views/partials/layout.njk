@@ -15,27 +15,28 @@
 
 {% block header %}
   {% include "./header.njk" %}
-  {# TODO: Provide a way to set the active sub-navigation, or, programtically set it based on URL #}
   {% if data.popData %}
     {{ mojPrimaryNavigation({
       label: 'Primary navigation',
       items: [{
           text: locale.common.primaryNavigation.planLinkText,
           href: '/plan?source=nav',
-          active: true
+          active: data.pageId != 'plan-history' and data.pageId != 'about'
         },
         {
-        text: locale.common.primaryNavigation.planHistoryLink,
-        href: '/plan-history'
+          text: locale.common.primaryNavigation.planHistoryText,
+          href: '/plan-history',
+          active: data.pageId == 'plan-history'
         },
         {
           text: locale.common.primaryNavigation.aboutPopText,
-          href: '/about-pop'
+          href: '/about-pop',
+          active: data.pageId == 'about'
         }
       ]
     }) }}
 
-    {% if header.type == 'extended' %}
+    {% if header.type == 'plan-extended' %}
       {% include "./plan-header/plan-header-extended.njk" %}
     {% else %}
       {% include "./plan-header/plan-header-mini.njk" %}
