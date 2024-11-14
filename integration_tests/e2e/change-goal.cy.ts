@@ -104,7 +104,7 @@ describe('Change a goal', () => {
 
     it('Should change goal with standard date', () => {
       // Modify data
-      cy.get('#date-selection-radio-2').check()
+      cy.get('.govuk-radios').contains('In 6 months').click()
 
       cy.contains('button', 'save').click()
       cy.url().should('include', 'plan?status=updated&type=current')
@@ -112,7 +112,7 @@ describe('Change a goal', () => {
 
     it('Should change goal with standard date and related areas of need are retained', () => {
       // Modify data
-      cy.get('#date-selection-radio-2').check()
+      cy.get('.govuk-radios').contains('In 6 months').click()
 
       cy.contains('button', 'save').click()
       cy.url().should('include', 'plan?status=updated&type=current')
@@ -126,8 +126,7 @@ describe('Change a goal', () => {
         .split('-')
       const date = `${twentyMonthsLaterISODate[2]}/${twentyMonthsLaterISODate[1]}/${twentyMonthsLaterISODate[0]}`
       // Modify data
-      cy.get('label[for="date-selection-radio-5"]').should('contain', 'Set another date')
-      cy.get('label[for="date-selection-radio-5"]').click()
+      cy.get('.govuk-radios').contains('Set another date').click()
       cy.get('#date-selection-custom').type(date)
       cy.contains('button', 'save').click()
       cy.url().should('include', 'plan?status=updated&type=current')
@@ -135,8 +134,7 @@ describe('Change a goal', () => {
 
     it('Should change goal with future date', () => {
       // Modify data
-      cy.get('label[for="start-working-goal-radio-2"]').should('contain', 'No, it is a future goal')
-      cy.get('label[for="start-working-goal-radio-2"]').click()
+      cy.get('.govuk-radios').contains('No, it is a future goal').click()
 
       cy.contains('button', 'save').click()
       cy.url().should('include', 'plan?status=updated&type=future')
