@@ -29,7 +29,11 @@
 {% endblock %}
 
 {% block content %}
-    <p class='govuk-!-margin-top-5'>{{ locale.page.introduction }}</p>
+    {% if data.notes.length == 0 %}
+        <p class='plan-history-intro govuk-!-margin-top-5'>{{ locale.page.noPlanIntroduction }}</p>
+    {% else %}
+        <p class='plan-history-intro govuk-!-margin-top-5'>{{ locale.page.ifPlanIntroduction }}</p>
+    {% endif %}
     <div class='govuk-grid-row'>
     <div class="govuk-grid-column-two-thirds">
     {% for note in data.notes %}
@@ -37,7 +41,6 @@
             noteCreatedDate: note.createdDate | formatSimpleDate,
             noteCreatedBy: note.createdBy | convertToTitleCase
         }) %}
-
         <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" >
         {% if note.noteObject == 'Plan' %}
             {% if note.noteType == 'AGREED' %}
@@ -58,7 +61,6 @@
             {% if note.additionalNote %}
                 <div class='plan-additional-note'>{{ note.additionalNote }}</div>
             {% endif %}
-
         {% endif %}
 
         {% if note.noteObject == 'Goal' %}
@@ -92,6 +94,7 @@
             <p class='goal-link'><a href='{{ goalLink }}' class="govuk-link govuk-link--no-visited-state">{{ goalText }}</a></p>
         {% endif %}
     {% endfor %}
+
     <div class='govuk-!-margin-top-6'>{% include "../partials/back-to-top-link.njk" %}</div>
     </div>
     </div>
