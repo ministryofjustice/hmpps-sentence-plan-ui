@@ -19,7 +19,10 @@
       "didNotAgree": "{{ subject.givenName }} did not agree to this plan.",
       "couldNotAgree": "{{ subject.givenName }} could not agree to this plan."
     },
-    "ariaText": "View {{ hiddenText }}",
+    "ariaText": {
+      "ifLatestGoal": "View latest version of {{ hiddenText }}",
+      "notLatestGoal": "View {{ hiddenText }}"
+    },
     "note": {
       "status": {
         "plan": {
