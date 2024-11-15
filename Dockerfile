@@ -27,7 +27,7 @@ ENV GIT_BRANCH=${GIT_BRANCH}
 RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get autoremove -y && \
-    apt-get install -y make python g++ curl && \
+    apt-get install -y make python g++ curl default-jre && \
     rm -rf /var/lib/apt/lists/*
 
 FROM base as development

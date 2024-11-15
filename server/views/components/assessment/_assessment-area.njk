@@ -1,0 +1,75 @@
+{% from "../../components/need-score/macro.njk" import needsScore %}
+{% from "components/need-score-indicator/macro.njk" import needsScoreIndicator %}
+
+<div class="govuk-accordion" data-module="govuk-accordion" id="accordion-default-{{ loop.index }}">
+    {% for assessment in assessmentAreas %}
+        {% set riskOfSeriousHarm = assessment.riskOfSeriousHarm %}
+        {% set riskOfReoffending = assessment.riskOfReoffending %}
+        <div class="govuk-accordion__section">
+            <div class="govuk-accordion__section-header">
+                <h2 class="govuk-accordion__section-heading">
+                      <span class="govuk-accordion__section-button sp-accordion-header" id="accordion-default-heading-{{ loop.index }}">
+                        {{ assessment.title }}
+                      </span>
+                </h2>
+                <div class="govuk-accordion__section-summary govuk-body sp-accordion-tags"
+                     id="accordion-with-summary-sections-summary-{{ loop.index }}">
+                    {% if riskOfSeriousHarm %}
+                        <span class="moj-badge moj-badge--purple">ROSH (Risk of serious harm)</span>
+                    {% endif %}
+                    {% if riskOfReoffending %}
+                        <span class="moj-badge moj-badge--bright-purple">Risk of reoffending</span>
+                    {% endif %}
+                </div>
+                <div id="accordion-default-content-{{ loop.index }}" class="govuk-accordion__section-content">
+                    <div class="rosh">
+
+                        {% if riskOfSeriousHarm  %}
+                            <div class="ror">
+                                <h3 class="govuk-heading-s">This area is linked to RoSH (risk of serious harm)</h3>
+                                <p class="govuk-body">{{ riskOfSeriousHarm }}</p>
+                            </div>
+                        {% else %}
+                            <h3 class="govuk-heading-s">This area is not linked to RoSH (risk of serious harm)</h3>
+                        {% endif %}
+
+                        {% if riskOfReoffending  %}
+                            <div class="ror" >
+                                <h3 class="govuk-heading-s">This area is linked to risk of reoffending</h3>
+                                <p class="sp-text-pre-wrap govuk-body">{{ riskOfReoffending }}</p>
+                            </div>
+                        {%  else %}
+                            <h3 class="govuk-heading-s">This area is not linked to risk of reoffending</h3>
+                        {% endif %}
+
+                        <div class="motivation">
+                            <h3 class="govuk-heading-s">Motivation to make changes in this area</h3>
+                            <p class="govuk-body">{{ assessment.motivationToMakeChanges }}</p>
+                        </div>
+
+                        {% if assessment.strengthsOrProtectiveFactors %}
+                            <div class="strengths">
+                                <h3 class="govuk-heading-s">There are strengths or protective factors related to
+                                    this area</h3>
+                                <p class="govuk-body">{{ assessment.strengthsOrProtectiveFactors }}</p>
+                            </div>
+                        {% else %}
+                            <h3 class="govuk-heading-s">There are no strengths or protective factors related to this area</h3>
+                        {% endif %}
+                        <div class="assessment-score">
+                            <h3 class="govuk-heading-s">{{ assessment.title }} need score</h3>
+                            <p class="govuk-body">{{ assessment.criminogenicNeedsScore }} out of 10. (Scores above 3 are flagged.)</p>
+                            <div class="govuk-grid-row">
+                                <div class="govuk-grid-column-full">
+                                    {{ needsScore({
+                                        "score": assessment.criminogenicNeedsScore | string
+                                    }) }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>

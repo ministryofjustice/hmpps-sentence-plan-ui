@@ -1,7 +1,15 @@
+import { DateTime } from 'luxon'
 import { Person } from '../@types/Person'
 import { RoshData } from '../@types/Rosh'
 import { NewStep, StepStatus } from '../@types/StepType'
 import { GoalStatus } from '../@types/GoalType'
+import {
+  AssessmentArea,
+  AssessmentAreaConfig,
+  AssessmentAreas,
+  AssessmentResponse,
+  CriminogenicNeedsData,
+} from '../@types/Assessment'
 
 const properCase = (word: string): string =>
   word.length >= 1 ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word
@@ -52,6 +60,110 @@ export function formatDate(date: string): string {
     month: 'long',
     year: 'numeric',
   })
+}
+
+export const formatAssessmentData = (
+  crimNeeds: CriminogenicNeedsData,
+  assessment: AssessmentResponse,
+  areas: AssessmentAreaConfig[],
+  forename: string,
+): AssessmentAreas => {
+  if (assessment === null) {
+    return { lowScoring: [], highScoring: [] }
+  }
+  const all = Object.values(areas)
+    .map(area => {
+      let score = '0'
+      let linkedtoRoSH
+      let linkedtoReoffending
+
+      if (Object.prototype.hasOwnProperty.call(crimNeeds, area.crimNeedsKey)) {
+        score = crimNeeds[area.crimNeedsKey][`${area.crimNeedsSubKey}OtherWeightedScore`]
+        linkedtoRoSH = crimNeeds[area.crimNeedsKey][`${area.crimNeedsSubKey}LinkedToHarm`] === 'YES'
+        linkedtoReoffending = crimNeeds[area.crimNeedsKey][`${area.crimNeedsSubKey}LinkedToReoffending`] === 'YES'
+      }
+
+      if (Number.isNaN(Number(score))) {
+        score = '0'
+      }
+      return {
+        title: area.area,
+        linkedtoRoSH,
+        linkedtoReoffending,
+        motivationToMakeChanges: motivationText(
+          assessment.assessment[`${area.assessmentKey}_changes`]?.value,
+          forename,
+        ),
+        riskOfSeriousHarm:
+          assessment.assessment[`${area.assessmentKey}_practitioner_analysis_risk_of_serious_harm_yes_details`]?.value,
+        riskOfReoffending:
+          assessment.assessment[`${area.assessmentKey}_practitioner_analysis_risk_of_reoffending_yes_details`]?.value,
+        strengthsOrProtectiveFactors:
+          assessment.assessment[
+            `${area.assessmentKey}_practitioner_analysis_strengths_or_protective_factors_yes_details`
+          ]?.value,
+        criminogenicNeedsScore: score,
+      } as AssessmentArea
+    })
+    .sort((a, b) => 0 - (a.criminogenicNeedsScore > b.criminogenicNeedsScore ? 1 : -1))
+
+  const lowScoring = all.filter(area => Number(area.criminogenicNeedsScore) < 3)
+  const highScoring = all.filter(area => Number(area.criminogenicNeedsScore) >= 3)
+  return { lowScoring, highScoring, versionUpdatedAt: assessment.metaData.versionCreatedAt } as AssessmentAreas
+}
+
+export const toHtml = (content: string): string => {
+  return content.replace('\n', '&#13;&#10;')
+}
+
+const motivationText = (optionResult: string, forename: string): string => {
+  if (forename === undefined || forename === null) return null
+  let text = ''
+  switch (optionResult) {
+    case 'MADE_CHANGES':
+      text = '[Name] has already made positive changes and wants to maintain them.'
+      break
+    case 'MAKING_CHANGES':
+      text = '[Name] is actively making changes.'
+      break
+    case 'WANT_TO_MAKE_CHANGES':
+      text = '[Name] wants to make changes and knows how to.'
+      break
+    case 'NEEDS_HELP_TO_MAKE_CHANGES':
+      text = '[Name] wants to make changes but needs help.'
+      break
+    case 'THINKING_ABOUT_MAKING_CHANGES':
+      text = '[Name] is thinking about making changes.'
+      break
+    case 'DOES_NOT_WANT_TO_MAKE_CHANGES':
+      text = '[Name] does not want to make changes.'
+      break
+    case 'DOES_NOT_WANT_TO_ANSWER':
+      text = '[Name] does not want to answer.'
+      break
+    case 'NOT_PRESENT':
+      text = '[Name] was not present to answer this question.'
+      break
+    case 'NOT_APPLICABLE':
+      text = 'This question was not applicable.'
+      break
+    default:
+      text = 'This question was not applicable.'
+  }
+  return text.replace('[Name]', forename)
+}
+
+export const dateWithYear = (datetimeString: string): string | null => {
+  if (!datetimeString || isBlank(datetimeString)) return ''
+  return DateTime.fromISO(datetimeString).toFormat('d MMMM yyyy')
+}
+
+export const yearsAndDaysElapsed = (datetimeStringFrom: string, datetimeStringTo: string): string => {
+  if (!datetimeStringFrom || isBlank(datetimeStringFrom)) return null
+  if (!datetimeStringTo || isBlank(datetimeStringTo)) return null
+  const yearsDays = DateTime.fromISO(datetimeStringTo).diff(DateTime.fromISO(datetimeStringFrom), ['years', 'days'])
+
+  return `(${yearsDays.years} years and ${yearsDays.days} days)`
 }
 
 export function formatDateWithStyle(isoDate: string, style: 'short' | 'full' | 'long' | 'medium' = 'long'): string {

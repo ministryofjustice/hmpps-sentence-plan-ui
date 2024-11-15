@@ -177,3 +177,4 @@ services:
       HMPPS_ARNS_HANDOVER_CLIENT_SECRET: sp-secret
       SESSION_SECRET: sessionsecret
       SENTENCE_PLAN_API_URL: http://api:8080
+      COORDINATOR_API_URL: http://localhost:9095

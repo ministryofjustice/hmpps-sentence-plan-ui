@@ -1,0 +1,117 @@
+.app-print-only {
+    display: none;
+  }
+  
+  @media print {
+    .app-print-only {
+      display: block;
+    }
+
+    .govuk-accordion {
+        break-after: avoid;
+    }
+  }
+
+@media print {
+    .page-break-after {
+      page-break-after: always;
+    }
+    .pdf-header,
+    .pdf-footer {
+      display: none;
+    }
+    .pdf-table,
+    .pdf-chart,
+    .pdf-avoid-break {
+      break-inside: avoid;
+    }
+    h1,
+    h2 {
+      break-after: avoid-page;
+    }
+    .govuk-template {
+      background: none;
+    }
+  }
+  .pdf-cover-page__logo {
+    margin-right: 30px;
+    margin-top: 150px;
+  }
+  .pdf-cover-page__title {
+    margin-top: 20px;
+    margin-bottom: 30px;
+    padding-right: 15px;
+    width: 327px;
+    border-bottom: 1px solid #505a5f;
+  }
+  .pdf-cover-page__title p {
+    font-size: 12px;
+    margin-bottom: 0;
+    margin-top: 50px;
+  }
+  .pdf-cover-page__title h1 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    font-size: 36px;
+    font-family: Arial, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+  }
+  .pdf-cover-page__details p {
+    font-size: 10px;
+    line-height: 16px;
+    margin-bottom: 0;
+  }
+  .pdf-cover-page__body {
+    margin-top: 60px;
+  }
+  .pdf-header {
+    width: 100%;
+    display: none;
+    flex-direction: row;
+    align-items: center;
+    padding-bottom: 10px;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #0b0c0c;
+  }
+  @media print {
+    .pdf-header {
+      display: flex;
+    }
+  }
+  .pdf-header__left {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+  .pdf-header__right {
+    justify-content: flex-end;
+    margin-left: auto;
+  }
+  .pdf-header__logo svg {
+    width: 33px;
+    height: 27px;
+    top: -2px;
+  }
+  .pdf-header__title span {
+    display: block;
+    width: 100%;
+    font-size: 9px;
+  }
+  .pdf-header__title span:first-of-type {
+    font-weight: bold;
+  }
+  .pdf-header .govuk-tag {
+    font-size: 12px;
+  }
+  .pdf-footer {
+    font-weight: bold;
+  }
+  .pdf-footer strong {
+    color: #d4351c;
+  }
+  .pdf-section-break--bold {
+    width: 1220px;
+    background-color: #0b0c0c;
+    height: 2px;
+  }

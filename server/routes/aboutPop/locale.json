@@ -3,8 +3,16 @@
     "page": {
       "title": "About - {{ applicationName }}"
     },
+    "header": {
+      "returnToOasysButton": "Return to OASys",
+      "createGoalButton": "Create goal"
+    },
     "mainHeading": {
       "title": "About {{ subject.givenName }}"
+    },
+    "errors": {
+      "noAssessmentDataFound": "No assessment data found",
+      "noSentenceDataFound": "No sentence data found"
     },
     "goalsToAchieve": {
       "title": "Goals to achieve",
@@ -17,6 +25,56 @@
     "subNav": {
       "about": "About",
       "summary": "Plan summary"
-    }
+    },
+    "areas": [
+      {
+        "area": "Thinking, behaviours and attitudes",
+        "crimNeedsKey": "thinkingBehaviourAndAttitudes",
+        "crimNeedsSubKey": "think",
+        "assessmentKey": "thinking_behaviours_attitudes"
+      },
+      {
+        "area": "Alchohol use",
+        "crimNeedsKey": "alcoholMisuse",
+        "crimNeedsSubKey": "alcohol",
+        "assessmentKey": "alcohol_use"
+      },
+      {
+        "area": "Health and wellbeing",
+        "crimNeedsKey": "healthAndWellbeing",
+        "crimNeedsSubKey": "emu",
+        "assessmentKey": "health_wellbeing"
+      },
+      {
+        "area": "Accommodation",
+        "crimNeedsKey": "accommodation",
+        "crimNeedsSubKey": "acc",
+        "assessmentKey": "accommodation"
+      },
+      {
+        "area": "Education and employment",
+        "crimNeedsKey": "educationTrainingEmployability",
+        "crimNeedsSubKey": "ete",
+        "assessmentKey": "employment_education"
+      },
+      {
+        "area": "Finance",
+        "crimNeedsKey": "finance",
+        "crimNeedsSubKey": "finance",
+        "assessmentKey": "finance_debt"
+      },
+      {
+        "area": "Personal relationships and community",
+        "crimNeedsKey": "personalRelationshipsAndCommunity",
+        "crimNeedsSubKey": "rel",
+        "assessmentKey": "personal_relationships_community"
+      },
+      {
+        "area": "Drug use",
+        "crimNeedsKey": "drugMisuse",
+        "crimNeedsSubKey": "drug",
+        "assessmentKey": "drug_use"
+      }
+    ]
   }
 }
