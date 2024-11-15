@@ -14,14 +14,16 @@ describe('Rendering', () => {
     })
   })
 
-  it('Display plan history page correctly on load', () => {
+  it('Display plan history page correctly on load with no plan agreed', () => {
     cy.get('.moj-primary-navigation__container').contains('Plan history').click()
     cy.get('h1').contains('Plan history')
+    cy.get('.plan-history-intro').should('include.text', "plan has been agreed, you'll be able to view updates here.")
   })
 
   it('Display plan history page with plan agreement', () => {
     planOverview.agreePlan()
     cy.get('.moj-primary-navigation__container').contains('Plan history').click()
+    cy.get('.plan-history-intro').contains('View all updates and changes made to this plan.')
     cy.get('.plan-status').contains('Plan agreed')
     cy.get('.plan-additional-note').contains('Reason to agree')
   })
