@@ -29,11 +29,13 @@
 {% endblock %}
 
 {% block content %}
+    <p class='plan-history-intro govuk-!-margin-top-5'>
     {% if data.notes.length == 0 %}
-        <p class='plan-history-intro govuk-!-margin-top-5'>{{ locale.page.noPlanIntroduction }}</p>
+        {{ locale.page.noPlanIntroduction }}
     {% else %}
-        <p class='plan-history-intro govuk-!-margin-top-5'>{{ locale.page.ifPlanIntroduction }}</p>
+        {{ locale.page.ifPlanIntroduction }}
     {% endif %}
+    </p>
     <div class='govuk-grid-row'>
     <div class="govuk-grid-column-two-thirds">
     {% for note in data.notes %}
