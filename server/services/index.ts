@@ -3,7 +3,6 @@ import { dataAccess } from '../data'
 import AuditService from './auditService'
 import ReferentialDataService from './sentence-plan/referentialDataService'
 import InfoService from './sentence-plan/infoService'
-import NoteService from './sentence-plan/noteService'
 import GoalService from './sentence-plan/goalService'
 import StepService from './sentence-plan/stepsService'
 import FormStorageService from './formStorageService'
@@ -34,7 +33,6 @@ export const requestServices = (appServices: Services) => ({
   planService: (req: Request) => new PlanService(req.services.sentencePlanApiClient),
   goalService: (req: Request) => new GoalService(req.services.sentencePlanApiClient),
   stepService: (req: Request) => new StepService(req.services.sentencePlanApiClient),
-  noteService: (req: Request) => new NoteService(req.services.sentencePlanApiClient),
   infoService: (req: Request) => new InfoService(req.services.sentencePlanApiClient),
   sessionService: (req: Request) =>
     new SessionService(req, appServices.handoverContextService, req.services.planService),
