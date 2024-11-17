@@ -15,10 +15,10 @@
                 <div class="govuk-accordion__section-summary govuk-body sp-accordion-tags"
                      id="accordion-with-summary-sections-summary-{{ loop.index }}">
                     {% if riskOfSeriousHarm %}
-                        <span class="moj-badge moj-badge--purple">ROSH (Risk of serious harm)</span>
+                        <span class="moj-badge moj-badge--purple sp-badge">RoSH (Risk of Serious Harm)</span>
                     {% endif %}
                     {% if riskOfReoffending %}
-                        <span class="moj-badge moj-badge--bright-purple">Risk of reoffending</span>
+                        <span class="moj-badge moj-badge--bright-purple no-to-upper">Risk of reoffending</span>
                     {% endif %}
                 </div>
                 <div id="accordion-default-content-{{ loop.index }}" class="govuk-accordion__section-content">
@@ -42,10 +42,12 @@
                             <h3 class="govuk-heading-s">This area is not linked to risk of reoffending</h3>
                         {% endif %}
 
-                        <div class="motivation">
-                            <h3 class="govuk-heading-s">Motivation to make changes in this area</h3>
-                            <p class="govuk-body">{{ assessment.motivationToMakeChanges }}</p>
-                        </div>
+                        {% if assessment.motivationToMakeChanges %}
+                            <div class="motivation">
+                                <h3 class="govuk-heading-s">Motivation to make changes in this area</h3>
+                                <p class="govuk-body">{{ assessment.motivationToMakeChanges }}</p>
+                            </div>
+                        {% endif %}
 
                         {% if assessment.strengthsOrProtectiveFactors %}
                             <div class="strengths">
@@ -58,7 +60,7 @@
                         {% endif %}
                         <div class="assessment-score">
                             <h3 class="govuk-heading-s">{{ assessment.title }} need score</h3>
-                            <p class="govuk-body">{{ assessment.criminogenicNeedsScore }} out of 10. (Scores above 3 are flagged.)</p>
+                            <p class="govuk-body">{{ assessment.criminogenicNeedsScore }} out of 10. (Scores above 3 are high-scoring.)</p>
                             <div class="govuk-grid-row">
                                 <div class="govuk-grid-column-full">
                                     {{ needsScore({
@@ -66,6 +68,10 @@
                                     }) }}
                                 </div>
                             </div>
+                        </div>
+
+                        <div>
+                            <p class='goal-link'><a href='./create-goal/{{ assessment.goalRoute }}' class="govuk-link govuk-link--no-visited-state">Create link to <span class="lower-case"> {{ assessment.title }}</span> goal</a></p>
                         </div>
                     </div>
                 </div>

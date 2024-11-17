@@ -15,6 +15,7 @@ export interface AssessmentArea {
   riskOfReoffending: string
   strengthsOrProtectiveFactors?: string
   criminogenicNeedsScore?: string
+  goalRoute?: string
 }
 
 export interface AssessmentAreas {
@@ -28,6 +29,7 @@ export interface AssessmentAreaConfig {
   crimNeedsKey: string
   crimNeedsSubKey: string
   assessmentKey: string
+  goalRoute: string
 }
 
 interface AssessmentMetaData {
@@ -54,8 +56,8 @@ export const enum FieldType {
 }
 
 export interface AnswerDto {
-  type: FieldType
-  description: string
+  type?: FieldType
+  description?: string
   options?: Option[]
   value?: string
   values?: string[]

@@ -36,6 +36,10 @@
     }
   }
 }
+.sp-badge {
+  text-transform: none !important;
+  letter-spacing: 1px;
+}
 
 .govuk-flex {
   display: flex;

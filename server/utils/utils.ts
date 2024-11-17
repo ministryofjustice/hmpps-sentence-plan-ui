@@ -73,7 +73,7 @@ export const formatAssessmentData = (
   }
   const all = Object.values(areas)
     .map(area => {
-      let score = '0'
+      let score
       let linkedtoRoSH
       let linkedtoReoffending
 
@@ -81,42 +81,48 @@ export const formatAssessmentData = (
         score = crimNeeds[area.crimNeedsKey][`${area.crimNeedsSubKey}OtherWeightedScore`]
         linkedtoRoSH = crimNeeds[area.crimNeedsKey][`${area.crimNeedsSubKey}LinkedToHarm`] === 'YES'
         linkedtoReoffending = crimNeeds[area.crimNeedsKey][`${area.crimNeedsSubKey}LinkedToReoffending`] === 'YES'
+
+        if (Number.isNaN(Number(score))) {
+          score = undefined
+        }
       }
 
-      if (Number.isNaN(Number(score))) {
-        score = '0'
-      }
+      const motivationToMakeChanges = motivationText(
+        assessment.assessment[`${area.assessmentKey}_changes`]?.value,
+        forename,
+      )
+      const riskOfSeriousHarm =
+        assessment.assessment[`${area.assessmentKey}_practitioner_analysis_risk_of_serious_harm_yes_details`]?.value
+      const riskOfReoffending =
+        assessment.assessment[`${area.assessmentKey}_practitioner_analysis_risk_of_reoffending_yes_details`]?.value
+      const strengthsOrProtectiveFactors =
+        assessment.assessment[`${area.assessmentKey}_practitioner_analysis_strengths_or_protective_factors_yes_details`]
+          ?.value
+
       return {
         title: area.area,
         linkedtoRoSH,
         linkedtoReoffending,
-        motivationToMakeChanges: motivationText(
-          assessment.assessment[`${area.assessmentKey}_changes`]?.value,
-          forename,
-        ),
-        riskOfSeriousHarm:
-          assessment.assessment[`${area.assessmentKey}_practitioner_analysis_risk_of_serious_harm_yes_details`]?.value,
-        riskOfReoffending:
-          assessment.assessment[`${area.assessmentKey}_practitioner_analysis_risk_of_reoffending_yes_details`]?.value,
-        strengthsOrProtectiveFactors:
-          assessment.assessment[
-            `${area.assessmentKey}_practitioner_analysis_strengths_or_protective_factors_yes_details`
-          ]?.value,
+        motivationToMakeChanges,
+        riskOfSeriousHarm,
+        riskOfReoffending,
+        strengthsOrProtectiveFactors,
         criminogenicNeedsScore: score,
+        goalRoute: area.goalRoute,
       } as AssessmentArea
     })
     .sort((a, b) => 0 - (a.criminogenicNeedsScore > b.criminogenicNeedsScore ? 1 : -1))
 
   const lowScoring = all.filter(area => Number(area.criminogenicNeedsScore) < 3)
   const highScoring = all.filter(area => Number(area.criminogenicNeedsScore) >= 3)
-  return { lowScoring, highScoring, versionUpdatedAt: assessment.metaData.versionCreatedAt } as AssessmentAreas
+  return { lowScoring, highScoring, versionUpdatedAt: assessment.metaData?.versionUpdatedAt } as AssessmentAreas
 }
 
 export const toHtml = (content: string): string => {
   return content.replace('\n', '&#13;&#10;')
 }
 
-const motivationText = (optionResult: string, forename: string): string => {
+export const motivationText = (optionResult: string, forename: string): string => {
   if (forename === undefined || forename === null) return null
   let text = ''
   switch (optionResult) {
@@ -148,19 +154,22 @@ const motivationText = (optionResult: string, forename: string): string => {
       text = 'This question was not applicable.'
       break
     default:
-      text = 'This question was not applicable.'
+      text = undefined
+  }
+  if (text === undefined) {
+    return undefined
   }
   return text.replace('[Name]', forename)
 }
 
 export const dateWithYear = (datetimeString: string): string | null => {
-  if (!datetimeString || isBlank(datetimeString)) return ''
+  if (!datetimeString || isBlank(datetimeString)) return undefined
   return DateTime.fromISO(datetimeString).toFormat('d MMMM yyyy')
 }
 
 export const yearsAndDaysElapsed = (datetimeStringFrom: string, datetimeStringTo: string): string => {
-  if (!datetimeStringFrom || isBlank(datetimeStringFrom)) return null
-  if (!datetimeStringTo || isBlank(datetimeStringTo)) return null
+  if (!datetimeStringFrom || isBlank(datetimeStringFrom)) return undefined
+  if (!datetimeStringTo || isBlank(datetimeStringTo)) return undefined
   const yearsDays = DateTime.fromISO(datetimeStringTo).diff(DateTime.fromISO(datetimeStringFrom), ['years', 'days'])
 
   return `(${yearsDays.years} years and ${yearsDays.days} days)`

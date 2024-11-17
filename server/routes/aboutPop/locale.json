@@ -31,49 +31,57 @@
         "area": "Thinking, behaviours and attitudes",
         "crimNeedsKey": "thinkingBehaviourAndAttitudes",
         "crimNeedsSubKey": "think",
-        "assessmentKey": "thinking_behaviours_attitudes"
+        "assessmentKey": "thinking_behaviours_attitudes",
+        "goalRoute": "thinking-behaviours-and-attitudes"
       },
       {
         "area": "Alchohol use",
         "crimNeedsKey": "alcoholMisuse",
         "crimNeedsSubKey": "alcohol",
-        "assessmentKey": "alcohol_use"
+        "assessmentKey": "alcohol_use",
+        "goalRoute": "alcohol-use"
       },
       {
         "area": "Health and wellbeing",
         "crimNeedsKey": "healthAndWellbeing",
         "crimNeedsSubKey": "emu",
-        "assessmentKey": "health_wellbeing"
+        "assessmentKey": "health_wellbeing",
+        "goalRoute": "health-and-wellbeing"
       },
       {
         "area": "Accommodation",
         "crimNeedsKey": "accommodation",
         "crimNeedsSubKey": "acc",
-        "assessmentKey": "accommodation"
+        "assessmentKey": "accommodation",
+        "goalRoute": "accommodation"
       },
       {
         "area": "Education and employment",
         "crimNeedsKey": "educationTrainingEmployability",
         "crimNeedsSubKey": "ete",
-        "assessmentKey": "employment_education"
+        "assessmentKey": "employment_education",
+        "goalRoute": "employment-and-education"
       },
       {
         "area": "Finance",
         "crimNeedsKey": "finance",
         "crimNeedsSubKey": "finance",
-        "assessmentKey": "finance_debt"
+        "assessmentKey": "finance_debt",
+        "goalRoute": "finances"
       },
       {
         "area": "Personal relationships and community",
         "crimNeedsKey": "personalRelationshipsAndCommunity",
         "crimNeedsSubKey": "rel",
-        "assessmentKey": "personal_relationships_community"
+        "assessmentKey": "personal_relationships_community",
+        "goalRoute": "personal-relationships-and-community"
       },
       {
         "area": "Drug use",
         "crimNeedsKey": "drugMisuse",
         "crimNeedsSubKey": "drug",
-        "assessmentKey": "drug_use"
+        "assessmentKey": "drug_use",
+        "goalRoute": "drug-use"
       }
     ]
   }
