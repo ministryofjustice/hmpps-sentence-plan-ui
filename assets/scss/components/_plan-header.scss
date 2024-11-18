@@ -1,11 +1,5 @@
 .plan-header {
   @include govuk-width-container;
-
-  .app-link-print {
-    padding-top: 0;
-    @include govuk-font($size: 16, $weight: 'normal');
-  }
-
   & {
     box-shadow: inset 0 -1px 0 $govuk-border-colour;
     padding-bottom: govuk-spacing(3);
