@@ -23,6 +23,7 @@ describe('Update goal', () => {
         planOverview.agreePlan()
       })
     })
+
     it('Can select and update a step status', () => {
       cy.url().should('satisfy', url => url.endsWith('/plan')) // check we're back to plan-overview
       cy.contains('a', 'Update').click() // click update link
@@ -43,23 +44,31 @@ describe('Update goal', () => {
       cy.get('.govuk-table__body > .govuk-table__row > :nth-child(3)').contains('In progress')
     })
 
+    it('Can visit change goal and back link is correct', () => {
+      cy.contains('a', 'Update').click()
+      cy.contains('a', 'Update goal details').click()
+      cy.url().should('include', '/change-goal/')
+      cy.url().then(url => {
+        const goalUuid = url.substring(url.lastIndexOf('/') + 1)
+        cy.contains('a', 'Back').should('have.attr', 'href', `/update-goal/${goalUuid}`)
+      })
+    })
+
     it('Clicking Back link does not save', () => {
-      cy.url().should('satisfy', url => url.endsWith('/plan')) // check we're back to plan-overview
       cy.contains('a', 'Update').click() // click update link
       cy.url().should('include', '/update-goal') // check url is update goal
       cy.get('.govuk-table__body > .govuk-table__row > :nth-child(3)').contains(
         'Not started' || 'In progress' || 'Cannot be done yet' || 'No longer needed' || 'Completed',
       ) // check contains not started status
-      cy.get('#step-status-1').select('Not started') // select not started status
+      cy.get('#step-status-1').select('Not started') // select Not started status
       cy.get('.govuk-button').contains('Save goal and steps').click()
       cy.url().should('include', '/plan') // check we're back to plan-overview
-      cy.get('.govuk-table__body > .govuk-table__row > :nth-child(3)').contains('Not started') // check contains not started status
+      cy.get('.govuk-table__body > .govuk-table__row > :nth-child(3)').contains('Not started') // check contains Not started status
       cy.contains('a', 'Update').click() // click update link
-      cy.url().should('include', '/update-goal') // check url is update goal
-      cy.get('.govuk-table__body > .govuk-table__row > :nth-child(3)').contains('In progress') // check contains not started status
-      cy.get('#step-status-1').select('In progress') // select not started status
+      cy.get('.govuk-table__body > .govuk-table__row > :nth-child(3)').contains('In progress') // check contains In progress status
+      cy.get('#step-status-1').select('In progress') // select In progress status
       cy.contains('a', 'Back').click()
-      cy.get('.govuk-table__body > .govuk-table__row > :nth-child(3)').contains('Not started') // check contains not started status
+      cy.get('.govuk-table__body > .govuk-table__row > :nth-child(3)').contains('Not started') // check contains Not started status
     })
 
     it('Can save and view notes attached to a goal', () => {
