@@ -113,8 +113,8 @@ export const formatAssessmentData = (
     })
     .sort((a, b) => 0 - (a.criminogenicNeedsScore > b.criminogenicNeedsScore ? 1 : -1))
 
-  const lowScoring = all.filter(area => Number(area.criminogenicNeedsScore) < 3)
-  const highScoring = all.filter(area => Number(area.criminogenicNeedsScore) >= 3)
+  const lowScoring = all.filter(area => Number(area.criminogenicNeedsScore) <= 3)
+  const highScoring = all.filter(area => Number(area.criminogenicNeedsScore) > 3)
   return { lowScoring, highScoring, versionUpdatedAt: assessment.metaData?.versionUpdatedAt } as AssessmentAreas
 }
 

@@ -35,7 +35,7 @@
         "goalRoute": "thinking-behaviours-and-attitudes"
       },
       {
-        "area": "Alchohol use",
+        "area": "Alcohol use",
         "crimNeedsKey": "alcoholMisuse",
         "crimNeedsSubKey": "alcohol",
         "assessmentKey": "alcohol_use",

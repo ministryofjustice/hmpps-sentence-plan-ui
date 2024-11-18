@@ -18,7 +18,7 @@
                         <span class="moj-badge moj-badge--purple sp-badge">RoSH (Risk of Serious Harm)</span>
                     {% endif %}
                     {% if riskOfReoffending %}
-                        <span class="moj-badge moj-badge--bright-purple no-to-upper">Risk of reoffending</span>
+                        <span class="moj-badge moj-badge--bright-purple sp-badge">Risk of reoffending</span>
                     {% endif %}
                 </div>
                 <div id="accordion-default-content-{{ loop.index }}" class="govuk-accordion__section-content">
@@ -71,7 +71,7 @@
                         </div>
 
                         <div>
-                            <p class='goal-link'><a href='./create-goal/{{ assessment.goalRoute }}' class="govuk-link govuk-link--no-visited-state">Create link to <span class="lower-case"> {{ assessment.title }}</span> goal</a></p>
+                            <p class='goal-link'><a href='./create-goal/{{ assessment.goalRoute }}' class="govuk-link govuk-link--no-visited-state">Create {{ assessment.title | lower}} goal</a></p>
                         </div>
                     </div>
                 </div>
