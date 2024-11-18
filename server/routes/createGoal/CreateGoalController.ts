@@ -52,6 +52,9 @@ export default class CreateGoalController {
     const selectedAreaOfNeed = areasOfNeed.find(areaOfNeed => areaOfNeed.url === req.params.areaOfNeed)
     const minimumDatePickerDate = formatDateWithStyle(new Date().toISOString(), 'short')
 
+    const returnLink = req.services.sessionService.getReturnLink()
+    req.services.sessionService.setReturnLink(`/create-goal/${selectedAreaOfNeed.url}`)
+
     return res.render('pages/create-goal', {
       locale: locale.en,
       data: {
@@ -60,6 +63,7 @@ export default class CreateGoalController {
         selectedAreaOfNeed,
         dateOptions,
         minimumDatePickerDate,
+        returnLink,
         form: req.body,
       },
       errors,

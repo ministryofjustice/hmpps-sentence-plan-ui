@@ -28,6 +28,7 @@ jest.mock('../../services/sentence-plan/referentialDataService', () => {
 jest.mock('../../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
     getPlanUUID: jest.fn().mockReturnValue('some-plan-uuid'),
+    getReturnLink: jest.fn().mockReturnValue('return-link'),
   }))
 })
 
@@ -45,6 +46,7 @@ describe('CreateGoalController', () => {
   let next: NextFunction
   const viewData = {
     data: {
+      returnLink: 'return-link',
       areasOfNeed: AreaOfNeed,
       sortedAreasOfNeed: AreaOfNeed,
       form: {},
