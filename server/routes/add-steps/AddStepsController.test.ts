@@ -51,6 +51,7 @@ describe('AddStepsController', () => {
       popData: handoverData.subject,
       areaOfNeed: toKebabCase(testGoal.areaOfNeed.name),
       goal: testGoal,
+      returnLink: '/plan?status=success',
       form: {
         steps: [
           {
@@ -228,6 +229,7 @@ describe('AddStepsController', () => {
           popData: viewData.data.popData,
           areaOfNeed: viewData.data.areaOfNeed,
           goal: viewData.data.goal,
+          returnLink: viewData.data.returnLink,
           form: {
             action: 'save',
             'step-actor-1': 'Batman',

@@ -28,7 +28,8 @@ jest.mock('../../services/sentence-plan/referentialDataService', () => {
 jest.mock('../../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
     getPlanUUID: jest.fn().mockReturnValue('some-plan-uuid'),
-    getReturnLink: jest.fn().mockReturnValue('return-link'),
+    getReturnLink: jest.fn().mockReturnValue('/some-return-link'),
+    setReturnLink: jest.fn(),
   }))
 })
 
@@ -46,11 +47,11 @@ describe('CreateGoalController', () => {
   let next: NextFunction
   const viewData = {
     data: {
-      returnLink: 'return-link',
+      returnLink: '/some-return-link',
       areasOfNeed: AreaOfNeed,
       sortedAreasOfNeed: AreaOfNeed,
       form: {},
-      selectedAreaOfNeed: AreaOfNeed.find(x => x.url === 'area-url'),
+      selectedAreaOfNeed: AreaOfNeed.find(x => x.url === 'accommodation'),
       minimumDatePickerDate: '01/01/2024',
       dateOptions: [
         new Date('2024-04-01T00:00:00.000Z'),
@@ -75,6 +76,7 @@ describe('CreateGoalController', () => {
   beforeEach(() => {
     mockReferentialDataService = new ReferentialDataService() as jest.Mocked<ReferentialDataService>
     req = mockReq()
+    req.params.areaOfNeed = 'accommodation'
     res = mockRes()
     next = jest.fn()
 
