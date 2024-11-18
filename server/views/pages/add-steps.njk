@@ -101,8 +101,8 @@
                         </dt>
                         <dt class="govuk-summary-list__value">
                             <input type="hidden"
-                                   id="step-status-{{ loop.index }}",
-                                   name="step-status-{{ loop.index }}",
+                                   id="step-status-{{ loop.index }}"
+                                   name="step-status-{{ loop.index }}"
                                    value="{{ step.status | default('NOT_STARTED') }}"/>
 
                             {% set errorMessage = false %}
