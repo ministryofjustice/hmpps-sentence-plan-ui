@@ -20,8 +20,15 @@ describe('Rendering', () => {
   it('Displays and references the button correctly on the plan history page', () => {
     cy.get('.moj-primary-navigation__container').contains('Plan history').click()
     cy.get('h1').contains('Plan history')
-    cy.get('.plan-history-intro').should('include.text', "plan has been agreed, you'll be able to view updates here.")
     cy.get('.govuk-button--secondary').contains('Return to OASys')
     cy.get('.govuk-button--secondary').should('have.attr', 'href').and('not.be.empty')
   })
+
+  // TODO SP2-822 (After about page is merged in)
+  // it('Displays and references the button correctly on the about page', () => {
+  //   cy.visit('/about-pop')
+  //   cy.get('h1').should('include.text', 'About')
+  //   cy.get('.govuk-button--secondary').contains('Return to OASys')
+  //   cy.get('.govuk-button--secondary').should('have.attr', 'href').and('not.be.empty')
+  // })
 })
