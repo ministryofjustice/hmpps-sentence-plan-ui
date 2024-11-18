@@ -3,7 +3,7 @@ import { Expose, Transform } from 'class-transformer'
 
 export default class CreateGoalPostModel {
   @IsNotEmpty()
-  @MaxLength(4000)
+  @MaxLength(1500)
   'goal-input-autocomplete': string
 
   @IsNotEmpty()

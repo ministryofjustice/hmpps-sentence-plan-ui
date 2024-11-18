@@ -5,17 +5,17 @@ export default class AgreePlanPostModel {
   'agree-plan-radio': string
 
   @IsNotEmpty()
-  @MaxLength(4000)
+  @MaxLength(1500)
   @ValidateIf((obj: AgreePlanPostModel) => obj['agree-plan-radio'] === 'no')
   'does-not-agree-details': string
 
   @IsNotEmpty()
-  @MaxLength(4000)
+  @MaxLength(1500)
   @ValidateIf((obj: AgreePlanPostModel) => obj['agree-plan-radio'] === 'couldNotAnswer')
   'could-not-answer-details': string
 
   @IsString()
   @IsOptional()
-  @MaxLength(4000)
+  @MaxLength(1500)
   notes?: string
 }

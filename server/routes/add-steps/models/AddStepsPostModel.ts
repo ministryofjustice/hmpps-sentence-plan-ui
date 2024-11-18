@@ -8,7 +8,7 @@ export class StepModel {
   actor: string
 
   @IsNotEmpty()
-  @MaxLength(4000)
+  @MaxLength(1500)
   description: string
 
   @IsEnum(StepStatus)
