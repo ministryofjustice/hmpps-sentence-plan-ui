@@ -17,12 +17,12 @@ describe('Agree plan', () => {
           cy.addStepToGoal(goal.uuid, DataGenerator.generateStep())
         })
 
-        cy.visit(`/agree-plan`)
+        cy.visit(`/plan`)
       })
     })
 
     it('Display agree plan page correctly on load', () => {
-      cy.url()
+      cy.get('button[value="agree-plan"]').click()
       cy.get('.govuk-fieldset__heading').contains('agree to this plan?')
       cy.get('.govuk-label').contains('Yes, I agree')
       cy.get('.govuk-label').contains('No, I do not agree')
@@ -30,7 +30,7 @@ describe('Agree plan', () => {
       cy.get('#agree-plan-radio-4-item-hint').contains('Share this plan with')
       cy.get('.govuk-label').contains('Add any notes (optional)')
       cy.get('.govuk-button').contains('Save')
-      cy.get('.govuk-back-link').should('have.attr', 'href', '/plan')
+      cy.get('.govuk-back-link').should('have.attr', 'href', '/plan?type=current')
     })
   })
 
@@ -48,8 +48,6 @@ describe('Agree plan', () => {
           targetDate: undefined,
         }
 
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
         cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
           cy.addGoalToPlan(plan.uuid, futureGoal)
           cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal())
@@ -77,7 +75,6 @@ describe('Agree plan', () => {
           targetDate: undefined,
         }
 
-        // @ts-expect-error: Type assertion is necessary for accessing plan details
         cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
           cy.addGoalToPlan(plan.uuid, futureGoal)
           cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal()).then(goal => {
@@ -117,7 +114,6 @@ describe('Agree plan', () => {
 
   describe('Submission behaviour', () => {
     beforeEach(() => {
-      // @ts-expect-error: Type assertion is necessary for accessing plan details
       cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
         cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal()).then(goal => {
           cy.addStepToGoal(goal.uuid, DataGenerator.generateStep())
@@ -149,6 +145,7 @@ describe('Agree plan', () => {
       cy.get('#notes-error').should('contain', 'Notes must be 4,000 characters or less')
 
       cy.get('#notes').should('contain', lorem)
+      cy.get('.govuk-back-link').should('have.attr', 'href', '/plan?type=current')
     })
 
     it('Submit successfully when No is selected and additional information provided', () => {
