@@ -9,6 +9,6 @@ export default class CoordinatorApiClient {
   async restClient(info?: string): Promise<RestClient> {
     if (info) logger.info(info)
     const token = await this.authClient.getSystemClientToken()
-    return new RestClient('Coordinator Plan Client', config.apis.coordinatorApi, token)
+    return new RestClient('Coordinator API Client', config.apis.coordinatorApi, token)
   }
 }
