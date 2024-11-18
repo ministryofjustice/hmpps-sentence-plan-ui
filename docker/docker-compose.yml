@@ -153,6 +153,7 @@ services:
       - oastub
       - arns-handover
       - api
+      - wiremock
     ports:
       - "3000:3000"
     environment:
@@ -177,4 +178,13 @@ services:
       HMPPS_ARNS_HANDOVER_CLIENT_SECRET: sp-secret
       SESSION_SECRET: sessionsecret
       SENTENCE_PLAN_API_URL: http://api:8080
-      COORDINATOR_API_URL: http://localhost:9095
+      COORDINATOR_API_URL: http://wiremock:8080
+
+  wiremock:
+    image: wiremock/wiremock:latest
+    container_name: "wiremock"
+    ports:
+      - "9094:8080"
+    volumes:
+      - ../wiremock/mappings:/home/wiremock/mappings
+    entrypoint: ["/docker-entrypoint.sh", "--global-response-templating", "--disable-gzip", "--verbose"]
