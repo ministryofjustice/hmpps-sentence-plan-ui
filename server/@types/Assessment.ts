@@ -21,6 +21,7 @@ export interface AssessmentArea {
 export interface AssessmentAreas {
   lowScoring: AssessmentArea[]
   highScoring: AssessmentArea[]
+  other: AssessmentArea[]
   versionUpdatedAt?: string
 }
 
@@ -30,6 +31,7 @@ export interface AssessmentAreaConfig {
   crimNeedsSubKey: string
   assessmentKey: string
   goalRoute: string
+  upperBound?: number
 }
 
 interface AssessmentMetaData {

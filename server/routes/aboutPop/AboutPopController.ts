@@ -25,12 +25,7 @@ export default class AboutPopController {
         errors = { domain: errorMessages }
       }
 
-      const assessmentAreas = formatAssessmentData(
-        criminogenicNeedsData,
-        assessmentData,
-        locale.en.areas,
-        popData.givenName,
-      )
+      const assessmentAreas = formatAssessmentData(criminogenicNeedsData, assessmentData, locale.en.areas)
       const pageId = 'about'
       return res.render('pages/about-pop', {
         locale: locale.en,

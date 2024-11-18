@@ -33,35 +33,10 @@
         </div>
     </div>
     <div class="{{ barTypeClass }}">
-        <div>
-            <span></span>
-        </div>
-        <div>
-            <span></span>
-        </div>
-        <div>
-            <span></span>
-        </div>
-        <div>
-            <span></span>
-        </div>
-        <div>
-            <span></span>
-        </div>
-        <div>
-            <span></span>
-        </div>
-        <div>
-            <span></span>
-        </div>
-        <div>
-            <span></span>
-        </div>
-        <div>
-            <span></span>
-        </div>
-        <div>
-            <span></span>
-        </div>
+        {% for i in range(0, needsScore.upperBound) -%}
+            <div>
+                <span></span>
+            </div>
+        {%- endfor %}
     </div>
 </div>

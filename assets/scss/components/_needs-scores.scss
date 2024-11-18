@@ -340,6 +340,11 @@ $white-needs-score-background-colour: #ffffff;
 }
 
 .needs-score-bar--small-tenths {
+
+  & > div:last-child{
+    border-right: 1px solid govuk-colour("black");
+  }
+
   & > div {
     width: 10%;
   }

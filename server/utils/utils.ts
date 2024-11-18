@@ -1,4 +1,6 @@
 import { DateTime } from 'luxon'
+// eslint-disable-next-line import/no-extraneous-dependencies
+import camelCase from 'camelcase'
 import { Person } from '../@types/Person'
 import { RoshData } from '../@types/Rosh'
 import { NewStep, StepStatus } from '../@types/StepType'
@@ -66,10 +68,9 @@ export const formatAssessmentData = (
   crimNeeds: CriminogenicNeedsData,
   assessment: AssessmentResponse,
   areas: AssessmentAreaConfig[],
-  forename: string,
 ): AssessmentAreas => {
   if (assessment === null) {
-    return { lowScoring: [], highScoring: [] }
+    return { lowScoring: [], highScoring: [], other: [] }
   }
   const all = Object.values(areas)
     .map(area => {
@@ -81,16 +82,14 @@ export const formatAssessmentData = (
         score = crimNeeds[area.crimNeedsKey][`${area.crimNeedsSubKey}OtherWeightedScore`]
         linkedtoRoSH = crimNeeds[area.crimNeedsKey][`${area.crimNeedsSubKey}LinkedToHarm`] === 'YES'
         linkedtoReoffending = crimNeeds[area.crimNeedsKey][`${area.crimNeedsSubKey}LinkedToReoffending`] === 'YES'
-
         if (Number.isNaN(Number(score))) {
           score = undefined
+        } else if (score > area.upperBound) {
+          score = area.upperBound
         }
       }
 
-      const motivationToMakeChanges = motivationText(
-        assessment.assessment[`${area.assessmentKey}_changes`]?.value,
-        forename,
-      )
+      const motivationToMakeChanges = motivationText(assessment.assessment[`${area.assessmentKey}_changes`]?.value)
       const riskOfSeriousHarm =
         assessment.assessment[`${area.assessmentKey}_practitioner_analysis_risk_of_serious_harm_yes_details`]?.value
       const riskOfReoffending =
@@ -109,53 +108,22 @@ export const formatAssessmentData = (
         strengthsOrProtectiveFactors,
         criminogenicNeedsScore: score,
         goalRoute: area.goalRoute,
+        upperBound: area.upperBound,
       } as AssessmentArea
     })
     .sort((a, b) => 0 - (a.criminogenicNeedsScore > b.criminogenicNeedsScore ? 1 : -1))
 
   const lowScoring = all.filter(area => Number(area.criminogenicNeedsScore) <= 3)
   const highScoring = all.filter(area => Number(area.criminogenicNeedsScore) > 3)
-  return { lowScoring, highScoring, versionUpdatedAt: assessment.metaData?.versionUpdatedAt } as AssessmentAreas
+  const other = all.filter(area => area.criminogenicNeedsScore === undefined)
+  return { lowScoring, highScoring, other, versionUpdatedAt: assessment.metaData?.versionUpdatedAt } as AssessmentAreas
 }
 
-export const motivationText = (optionResult: string, forename: string): string => {
-  if (forename === undefined || forename === null) return null
-  let text = ''
-  switch (optionResult) {
-    case 'MADE_CHANGES':
-      text = '[Name] has already made positive changes and wants to maintain them.'
-      break
-    case 'MAKING_CHANGES':
-      text = '[Name] is actively making changes.'
-      break
-    case 'WANT_TO_MAKE_CHANGES':
-      text = '[Name] wants to make changes and knows how to.'
-      break
-    case 'NEEDS_HELP_TO_MAKE_CHANGES':
-      text = '[Name] wants to make changes but needs help.'
-      break
-    case 'THINKING_ABOUT_MAKING_CHANGES':
-      text = '[Name] is thinking about making changes.'
-      break
-    case 'DOES_NOT_WANT_TO_MAKE_CHANGES':
-      text = '[Name] does not want to make changes.'
-      break
-    case 'DOES_NOT_WANT_TO_ANSWER':
-      text = '[Name] does not want to answer.'
-      break
-    case 'NOT_PRESENT':
-      text = '[Name] was not present to answer this question.'
-      break
-    case 'NOT_APPLICABLE':
-      text = 'This question was not applicable.'
-      break
-    default:
-      text = undefined
-  }
-  if (text === undefined) {
+export const motivationText = (optionResult?: string): string => {
+  if (optionResult === undefined || optionResult === null) {
     return undefined
   }
-  return text.replace('[Name]', forename)
+  return camelCase(optionResult)
 }
 
 export const dateWithYear = (datetimeString: string): string | null => {

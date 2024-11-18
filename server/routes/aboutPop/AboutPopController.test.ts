@@ -45,12 +45,7 @@ jest.mock('../../services/sentence-plan/infoService', () => {
 
 describe('AboutPopController', () => {
   let controller: AboutPopController
-  const assessmentAreas: AssessmentAreas = formatAssessmentData(
-    crimNeeds,
-    assessmentData,
-    locale.en.areas,
-    popData.givenName,
-  )
+  const assessmentAreas: AssessmentAreas = formatAssessmentData(crimNeeds, assessmentData, locale.en.areas)
 
   beforeEach(() => {
     controller = new AboutPopController()

@@ -96,15 +96,19 @@
             </table>
             {% endif %}
 
-
             {% if data.assessmentAreas.highScoring.length > 0 %}
                 <h2 class="govuk-heading-m">High-scoring areas from the assessment</h2>
-                {{ renderAssessment(data.assessmentAreas.highScoring) }}
+                {{ renderAssessment(data.assessmentAreas.highScoring, locale) }}
             {% endif %}
 
             {% if data.assessmentAreas.lowScoring.length > 0 %}
                 <h2 class="govuk-heading-m">Low-scoring areas from the assessment</h2>
-                {{ renderAssessment(data.assessmentAreas.lowScoring) }}
+                {{ renderAssessment(data.assessmentAreas.lowScoring, locale) }}
+            {% endif %}
+
+            {% if data.assessmentAreas.other.length > 0 %}
+                <h2 class="govuk-heading-m">Other areas from the assessment</h2>
+                {{ renderAssessment(data.assessmentAreas.other, locale) }}
             {% endif %}
 
         </div>
