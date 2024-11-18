@@ -30,6 +30,7 @@ describe('Agree plan', () => {
       cy.get('#agree-plan-radio-4-item-hint').contains('Share this plan with')
       cy.get('.govuk-label').contains('Add any notes (optional)')
       cy.get('.govuk-button').contains('Save')
+      cy.get('.govuk-back-link').should('have.attr', 'href', '/plan')
     })
   })
 
@@ -47,6 +48,8 @@ describe('Agree plan', () => {
           targetDate: undefined,
         }
 
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
         cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
           cy.addGoalToPlan(plan.uuid, futureGoal)
           cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal())
@@ -74,6 +77,7 @@ describe('Agree plan', () => {
           targetDate: undefined,
         }
 
+        // @ts-expect-error: Type assertion is necessary for accessing plan details
         cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
           cy.addGoalToPlan(plan.uuid, futureGoal)
           cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal()).then(goal => {
@@ -113,6 +117,7 @@ describe('Agree plan', () => {
 
   describe('Submission behaviour', () => {
     beforeEach(() => {
+      // @ts-expect-error: Type assertion is necessary for accessing plan details
       cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
         cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal()).then(goal => {
           cy.addStepToGoal(goal.uuid, DataGenerator.generateStep())
