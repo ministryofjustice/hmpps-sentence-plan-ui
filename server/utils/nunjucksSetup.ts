@@ -4,7 +4,7 @@ import nunjucks from 'nunjucks'
 import express from 'express'
 import { ApplicationInfo } from '../applicationInfo'
 import config from '../config'
-import { initialiseName, mergeDeep, convertToTitleCase, dateWithYear, yearsAndDaysElapsed, toHtml } from './utils'
+import { initialiseName, mergeDeep, convertToTitleCase, dateWithYear, yearsAndDaysElapsed } from './utils'
 import commonLocale from './commonLocale.json'
 
 const production = process.env.NODE_ENV === 'production'
@@ -66,7 +66,6 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
   njkEnv.addFilter('initialiseName', initialiseName)
   njkEnv.addFilter('convertToTitleCase', convertToTitleCase)
   njkEnv.addFilter('dateWithYear', dateWithYear)
-  njkEnv.addFilter('toHtml', toHtml)
   njkEnv.addGlobal('yearsAndDaysElapsed', yearsAndDaysElapsed)
 
   // Filter to format date as 'Month YYYY'

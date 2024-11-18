@@ -118,10 +118,6 @@ export const formatAssessmentData = (
   return { lowScoring, highScoring, versionUpdatedAt: assessment.metaData?.versionUpdatedAt } as AssessmentAreas
 }
 
-export const toHtml = (content: string): string => {
-  return content.replace('\n', '&#13;&#10;')
-}
-
 export const motivationText = (optionResult: string, forename: string): string => {
   if (forename === undefined || forename === null) return null
   let text = ''

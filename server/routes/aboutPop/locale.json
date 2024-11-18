@@ -3,10 +3,6 @@
     "page": {
       "title": "About - {{ applicationName }}"
     },
-    "header": {
-      "returnToOasysButton": "Return to OASys",
-      "createGoalButton": "Create goal"
-    },
     "mainHeading": {
       "title": "About {{ subject.givenName }}"
     },
@@ -63,7 +59,7 @@
         "goalRoute": "employment-and-education"
       },
       {
-        "area": "Finance",
+        "area": "Finances",
         "crimNeedsKey": "finance",
         "crimNeedsSubKey": "finance",
         "assessmentKey": "finance_debt",
