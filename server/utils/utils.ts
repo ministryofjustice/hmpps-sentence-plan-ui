@@ -69,7 +69,7 @@ export const formatAssessmentData = (
   assessment: AssessmentResponse,
   areas: AssessmentAreaConfig[],
 ): AssessmentAreas => {
-  if (assessment === null) {
+  if (!assessment || !assessment.assessment) {
     return { lowScoring: [], highScoring: [], other: [] }
   }
   const all = Object.values(areas)
@@ -88,7 +88,6 @@ export const formatAssessmentData = (
           score = area.upperBound
         }
       }
-
       const motivationToMakeChanges = motivationText(assessment.assessment[`${area.assessmentKey}_changes`]?.value)
       const riskOfSeriousHarm =
         assessment.assessment[`${area.assessmentKey}_practitioner_analysis_risk_of_serious_harm_yes_details`]?.value

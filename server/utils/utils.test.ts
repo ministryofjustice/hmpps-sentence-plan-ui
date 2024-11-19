@@ -19,7 +19,12 @@ import {
 import { NewStep, StepStatus } from '../@types/StepType'
 import { GoalStatus } from '../@types/GoalType'
 import { AssessmentAreaConfig, AssessmentAreas, AssessmentResponse, CriminogenicNeedsData } from '../@types/Assessment'
-import { assessmentData, assessmentDataNoAssessments, crimNeeds } from '../testutils/data/assessmentData'
+import {
+  assessmentData,
+  assessmentDataNoAssessments,
+  assessmentUndefined,
+  crimNeeds,
+} from '../testutils/data/assessmentData'
 import locale from '../routes/aboutPop/locale.json'
 
 describe('convert to title case', () => {
@@ -204,6 +209,17 @@ describe('format assessment data', () => {
   it.each([
     [
       crimNeeds,
+      assessmentUndefined.sanAssessmentData,
+      locale.en.areas,
+      {
+        highScoring: [],
+        lowScoring: [],
+        other: [],
+        versionUpdatedAt: undefined,
+      },
+    ],
+    [
+      crimNeeds,
       null,
       locale.en.areas,
       {
@@ -215,7 +231,7 @@ describe('format assessment data', () => {
     ],
     [
       crimNeeds,
-      assessmentDataNoAssessments,
+      assessmentDataNoAssessments.sanAssessmentData,
       locale.en.areas,
       {
         highScoring: [
@@ -325,7 +341,7 @@ describe('format assessment data', () => {
     ],
     [
       crimNeeds,
-      assessmentData,
+      assessmentData.sanAssessmentData,
       locale.en.areas,
       {
         highScoring: [
