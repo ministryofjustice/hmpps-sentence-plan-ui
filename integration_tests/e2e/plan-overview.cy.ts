@@ -40,6 +40,18 @@ describe('View Plan Overview for READ_WRITE user', () => {
     cy.get('.govuk-error-summary').should('contain', 'To agree the plan, create a goal to work on now')
   })
 
+  it('Should result in error when agree plan with future goal but no current goals', () => {
+    cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
+      const newGoal = DataGenerator.generateGoal({ title: 'Test Accommodation' })
+      newGoal.targetDate = null
+      cy.addGoalToPlan(plan.uuid, newGoal)
+    })
+    cy.visit('/plan')
+    cy.get('button').contains('Agree plan').click()
+    cy.title().should('contain', 'Error:')
+    cy.get('.govuk-error-summary').should('contain', 'To agree the plan, create a goal to work on now')
+  })
+
   it('Plan with goals and no steps should result into error when Agree plan', () => {
     cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
       cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal({ title: 'Test Accommodation' }))

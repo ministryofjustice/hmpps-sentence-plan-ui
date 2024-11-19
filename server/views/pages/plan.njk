@@ -95,7 +95,7 @@
         <div class="govuk-grid-column-full">
 
             {% set errorList = [] %}
-            {% if errors.domain['goals']['arrayNotEmpty'] %}
+            {% if errors.domain['goals'] %}
                 {% set errorList = errorList.concat({
                     text: locale.errors['goals'].arrayNotEmpty,
                     href: "#goal-list"
