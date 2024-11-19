@@ -3,8 +3,10 @@
 
 <div class="govuk-accordion" data-module="govuk-accordion" id="accordion-default-{{ loop.index }}">
     {% for assessment in assessmentAreas %}
-        {% set riskOfSeriousHarm = assessment.riskOfSeriousHarm %}
-        {% set riskOfReoffending = assessment.riskOfReoffending %}
+        {% set linkedtoRoSH = assessment.linkedtoRoSH %}
+        {% set linkedtoReoffending = assessment.linkedtoReoffending %}
+        {% set riskOfSeriousHarmData = assessment.riskOfSeriousHarm %}
+        {% set riskOfReoffendingData = assessment.riskOfReoffending %}
         <div class="govuk-accordion__section">
             <div class="govuk-accordion__section-header">
                 <h2 class="govuk-accordion__section-heading">
@@ -14,29 +16,29 @@
                 </h2>
                 <div class="govuk-accordion__section-summary govuk-body sp-accordion-tags"
                      id="accordion-with-summary-sections-summary-{{ loop.index }}">
-                    {% if riskOfSeriousHarm %}
+                    {% if linkedtoRoSH === true %}
                         <span class="moj-badge moj-badge--purple sp-badge">RoSH (Risk of Serious Harm)</span>
                     {% endif %}
-                    {% if riskOfReoffending %}
+                    {% if linkedtoReoffending === true %}
                         <span class="moj-badge moj-badge--bright-purple sp-badge">Risk of reoffending</span>
                     {% endif %}
                 </div>
                 <div id="accordion-default-content-{{ loop.index }}" class="govuk-accordion__section-content">
                     <div class="rosh">
 
-                        {% if riskOfSeriousHarm  %}
+                        {% if linkedtoRoSH or riskOfSeriousHarmData %}
                             <div class="ror">
                                 <h3 class="govuk-heading-s">This area is linked to RoSH (risk of serious harm)</h3>
-                                <p class="govuk-body">{{ riskOfSeriousHarm }}</p>
+                                <p class="govuk-body">{{ riskOfSeriousHarmData }}</p>
                             </div>
                         {% else %}
                             <h3 class="govuk-heading-s">This area is not linked to RoSH (risk of serious harm)</h3>
                         {% endif %}
 
-                        {% if riskOfReoffending  %}
+                        {% if linkedtoReoffending or riskOfReoffendingData %}
                             <div class="ror" >
                                 <h3 class="govuk-heading-s">This area is linked to risk of reoffending</h3>
-                                <p class="sp-text-pre-wrap govuk-body">{{ riskOfReoffending }}</p>
+                                <p class="sp-text-pre-wrap govuk-body">{{ riskOfReoffendingData }}</p>
                             </div>
                         {%  else %}
                             <h3 class="govuk-heading-s">This area is not linked to risk of reoffending</h3>
