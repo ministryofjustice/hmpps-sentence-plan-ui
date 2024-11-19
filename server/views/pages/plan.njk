@@ -6,6 +6,7 @@
 {% from "../components/summary-card/goal-summary-card.njk" import goalSummaryCard %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "../components/error-summary/error-summary.njk" import errorSummary %}
+{% from "govuk/components/error-message/macro.njk" import govukErrorMessage %}
 
 {% set currentGoals = [] %}
 {% set futureGoals = [] %}
@@ -93,12 +94,14 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
 
-            {{  errors | dump }}
-<hr>
-            {{  errors.body | dump }}
-<hr>
             {% set errorList = [] %}
-            {% for id, errorObj in errors.body %}
+            {% if errors.domain['goals']['arrayNotEmpty'] %}
+                {% set errorList = errorList.concat({
+                    text: locale.errors['goals'].arrayNotEmpty,
+                    href: "#goal-list"
+                }) %}
+            {% endif %}
+            {% for id, errorObj in errors.domain %}
                 {% if '.steps' in id %}
                     {% set errorList = errorList.concat({
                         text: locale.errors['steps'].arrayNotEmpty,
@@ -106,8 +109,8 @@
                     }) %}
                 {% endif %}
             {% endfor %}
-<hr>
-            {% if errors.body.length > 0 %}
+
+            {% if errors.domain %}
                 {{ govukErrorSummary({
                     titleText: "There is a problem",
                     errorList: errorList
@@ -197,7 +200,7 @@
                     {% endif %}
 
                     {% set errorMessage = false %}
-                    {% if errors.body['goals.' + item.index + '.steps'].arrayNotEmpty %}
+                    {% if errors.domain['goals.' + item.index + '.steps'].arrayNotEmpty %}
                         {% set errorMessage = {
                             id: 'goal-summary-card-' + item.index,
                             text: locale.errors['steps'].arrayNotEmpty,
@@ -272,11 +275,18 @@
             {% endif %}
 
             {% if goalType == 'current' and goals.length == 0 %}
+                <div id="goal-list" class="{% if errors.domain %}govuk-form-group--error{% endif %}">
+                    {% if errors.domain %}
+                        {{ govukErrorMessage({
+                            text: locale.errors['goals'].arrayNotEmpty
+                        }) }}
+                    {% endif %}
                 <p>{{ locale.ifNoCurrentGoals.text }}</p>
                 <ul>
                     <li><a href="/create-goal/accommodation" class="govuk-link govuk-link--no-visited-state">{{ locale.ifNoCurrentGoals.action1 }}</a></li>
                     <li><a href="/about-pop" class="govuk-link govuk-link--no-visited-state">{{ locale.ifNoCurrentGoals.action2 }}</a></li>
                 </ul>
+                </div>
             {% elseif goalType == 'future' and goals.length == 0 %}
                 <p>{{ locale.ifNoFutureGoals.text }}</p>
             {% endif %}

@@ -64,9 +64,9 @@
     },
     "errors": {
       "steps": {
-        "arrayNotEmpty": "You must add steps"
+        "arrayNotEmpty": "You must add steps to the goals {{ subject.givenName }} is working on now"
       },
-      "goal-summary-card": {
+      "goals": {
         "arrayNotEmpty": "To agree the plan, create a goal to work on now"
       }
     }
