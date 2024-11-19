@@ -1,7 +1,15 @@
 {% extends "../partials/layout.njk" %}
-{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
-{% from "../components/rosh/macro.njk" import roshWidget %}
+{% from "moj/components/sub-navigation/macro.njk" import mojSubNavigation %}
+{% from "moj/components/button-menu/macro.njk" import mojButtonMenu %}
+{%- from "moj/components/banner/macro.njk" import mojBanner -%}
+{% from "../components/assessment/assessment.njk" import renderAssessment %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+
+{% set print = true %}
+{% set locale = interpolate(locale, {
+    subject: data.popData
+}) %}
 
 {% block pageTitle %}
     {% if not errors %}
@@ -12,71 +20,99 @@
 {% endblock %}
 
 {% set mainClasses = "app-container govuk-body" %}
-
-{# TODO: Probably could just make this whole widget a macro considering how big it is#}
-{# Setup Goals To Achieve widget #}
-{% set goalsToAchieveWidgetRows = [] %}
-{% set goalsToAchieveWidgetRows = (goalsToAchieveWidgetRows.push({
-        key: {
-            text: locale.goalsToAchieve.areaOfNeedHeading,
-            classes: "govuk-!-width-three-quarters govuk-!-font-weight-bold"
+{% set header = {
+    type: "plan-extended",
+    heading: locale.mainHeading.title,
+    items: [
+        {
+            text: locale.common.header.returnToOasysButton,
+            href: data.oasysReturnUrl,
+            classes: "govuk-button--secondary",
+            type: 'button'
         },
-        value: {
-            text: locale.goalsToAchieve.goalHeading,
-            classes: "govuk-!-text-align-right govuk-!-font-weight-bold"
+        {
+            text: locale.common.planHeader.extended.createGoalButton,
+            href: "/create-goal/accommodation",
+            classes: "govuk-button--secondary",
+            type: 'button'
         }
-    }), goalsToAchieveWidgetRows)
-    %}
-{% for areaOfNeed in data.referenceData %}
-    {% set HTML %}
-    <div class="govuk-!-width-three-quarters">
-        <p class="govuk-!-margin-bottom-0">{{ areaOfNeed.name }}</p>
-        <a class="govuk-link" href="/create-goal/{{ areaOfNeed.url }}">{{ locale.goalsToAchieve.createGoalLink }}</a>
-    </div>
-    {% endset %}
-    {% set goalsToAchieveWidgetRows = (goalsToAchieveWidgetRows.push({
-        key: {
-            html: HTML,
-            classes: "govuk-!-width-three-quarters govuk-!-font-weight-regular"
-        },
-        value: {
-            text: 0,
-            classes: "govuk-!-text-align-right govuk-!-font-weight-bold rosh-low-risk"
-        }
-    }), goalsToAchieveWidgetRows) %}
-{% endfor %}
+    ]
+} %}
 
-{% set goalsToAchieveWidgetLastRow %}
-    {{ govukDetails({
-        summaryText: locale.goalsToAchieve.viewPreviousGoalsLink,
-        text: locale.goalsToAchieve.noPreviousGoals
-    }) }}
-{% endset %}
-
-{% set goalsToAchieveWidgetRows =
-    (goalsToAchieveWidgetRows.push({
-        key: {
-            html: goalsToAchieveWidgetLastRow,
-            classes: "govuk-!-width-full"
-        }
-    }), goalsToAchieveWidgetRows)
-%}
+{% block bodyStart %}
+    <div id="top"></div>
+{% endblock %}
 
 {% block content %}
-    <h1>{{ locale.mainHeading.title }}</h1>
     <div class="govuk-grid-row">
-        <div class="govuk-grid-column-one-third">
-            {{ govukSummaryList({
-                card: {
-                    title: {
-                        text: locale.goalsToAchieve.title
-                    }
-                },
-                rows: goalsToAchieveWidgetRows
-            }) }}
+        <div class="govuk-grid-column-full">
+
+            {% if errors.domain %}
+            {%  set errorList = [] %}
+            {%  for error in errors.domain %}
+                {%  set errorList = (errorList.push({ text: locale.errors[error]}), errorList)    %}
+            {%  endfor %}
+                {{ govukErrorSummary({
+                    titleText: "There is a problem",
+                    errorList: errorList
+                }) }}
+            {% endif %}
+
+            {% if data.assessmentAreas.versionUpdatedAt %}
+                <p class="govuk-body">Last updated: {{ data.assessmentAreas.versionUpdatedAt | dateWithYear }}</p>
+            {% endif %}
+
+            {% if data.deliusData.sentences.length > 0 %}
+            <h2 class="govuk-heading-m">Sentence information</h2>
+            <table class="govuk-table govuk-!-margin-bottom-4" >
+
+                <tr class="govuk-body-s">
+                    <td class="govuk-padding-right--25">Sentence</td>
+                    <td class="govuk-padding-right--25">Expected end date</td>
+                    <td class="govuk-padding-right--25">Unpaid work</td>
+                    <td class="govuk-padding-right--25">Rehabilitation activity requirement (RAR)</td>
+                </tr>
+
+                {% for sentence in data.deliusData.sentences %}
+                    <tr class="govuk-table__row govuk-body-l">
+                        <td class = "govuk-table__cell govuk-padding-bottom--25 ">{{ sentence.description }} <br/> {{ yearsAndDaysElapsed(sentence.startDate, sentence.endDate) }} </td>
+                        <td class = "govuk-table__cell govuk-padding-bottom--25">{{ sentence.endDate | dateWithYear }}</td>
+                        <td class = "govuk-table__cell govuk-padding-bottom--25">
+                            {% if sentence.unpaidWorkHoursOrdered > 0 %}
+                                {{ sentence.unpaidWorkHoursOrdered }} hours
+                            {% else %}
+                                No
+                            {% endif %}
+                        </td>
+                        <td class = "govuk-table__cell govuk-padding-bottom--25">
+                            {% if sentence.rarDaysOrdered > 0 %}
+                                {{ sentence.rarDaysOrdered }} days
+                            {% else %}
+                                No
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor  %}
+            </table>
+            {% endif %}
+
+            {% if data.assessmentAreas.highScoring.length > 0 %}
+                <h2 class="govuk-heading-m">High-scoring areas from the assessment</h2>
+                {{ renderAssessment(data.assessmentAreas.highScoring, locale) }}
+            {% endif %}
+
+            {% if data.assessmentAreas.lowScoring.length > 0 %}
+                <h2 class="govuk-heading-m">Low-scoring areas from the assessment</h2>
+                {{ renderAssessment(data.assessmentAreas.lowScoring, locale) }}
+            {% endif %}
+
+            {% if data.assessmentAreas.other.length > 0 %}
+                <h2 class="govuk-heading-m">Areas without a need score</h2>
+                {{ renderAssessment(data.assessmentAreas.other, locale) }}
+            {% endif %}
+
         </div>
-        <div class="govuk-grid-column-one-third">
-            {{ roshWidget( data.roshData )  }}
-        </div>
+
     </div>
+
 {% endblock %}

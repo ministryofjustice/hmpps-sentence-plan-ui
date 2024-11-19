@@ -8,7 +8,6 @@ describe('Create a new Goal', () => {
     cy.createSentencePlan().then(planDetails => {
       cy.wrap(planDetails).as('planDetails')
       cy.openSentencePlan(planDetails.oasysAssessmentPk)
-      cy.visit('/about-pop')
     })
   })
 

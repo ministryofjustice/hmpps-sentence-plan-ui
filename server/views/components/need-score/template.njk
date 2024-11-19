@@ -1,0 +1,42 @@
+{% from "components/need-score-indicator/macro.njk" import needsScoreIndicator %}
+
+{% if needsScore.score === '0' %}
+    {% set scoreLabelClass = 'needs-score-label-wrapper needs-score-label-wrapper--position-zero-of-ten' %}
+{% elif needsScore.score === '1' %}
+    {% set scoreLabelClass = 'needs-score-label-wrapper needs-score-label-wrapper--position-one-of-ten' %}
+{% elif needsScore.score === '2' %}
+    {% set scoreLabelClass = 'needs-score-label-wrapper needs-score-label-wrapper--position-two-of-ten' %}
+{% elif needsScore.score === '3' %}
+    {% set scoreLabelClass = 'needs-score-label-wrapper needs-score-label-wrapper--position-three-of-ten' %}
+{% elif needsScore.score === '4' %}
+    {% set scoreLabelClass = 'needs-score-label-wrapper needs-score-label-wrapper--position-four-of-ten' %}
+{% elif needsScore.score === '5' %}
+    {% set scoreLabelClass = 'needs-score-label-wrapper needs-score-label-wrapper--position-five-of-ten' %}
+{% elif needsScore.score === '6' %}
+    {% set scoreLabelClass = 'needs-score-label-wrapper needs-score-label-wrapper--position-six-of-ten' %}
+{% elif needsScore.score === '7' %}
+    {% set scoreLabelClass = 'needs-score-label-wrapper needs-score-label-wrapper--position-seven-of-ten' %}
+{% elif needsScore.score === '8' %}
+    {% set scoreLabelClass = 'needs-score-label-wrapper needs-score-label-wrapper--position-eight-of-ten' %}
+{% elif needsScore.score === '9' %}
+    {% set scoreLabelClass = 'needs-score-label-wrapper needs-score-label-wrapper--position-nine-of-ten' %}
+{% elif needsScore.score === '10' %}
+    {% set scoreLabelClass = 'needs-score-label-wrapper needs-score-label-wrapper--position-ten-of-ten' %}
+{% endif %}
+
+{% set barTypeClass = 'needs-score-bar--small-' + needsScore.score + ' needs-score-bar--small-tenths' %}
+
+<div class="needs-score  govuk-body">
+    <div class="needs-score-label">
+        <div class="{{ scoreLabelClass }}">
+            {{ needsScoreIndicator(needsScore) }}
+        </div>
+    </div>
+    <div class="{{ barTypeClass }}">
+        {% for i in range(0, needsScore.upperBound) -%}
+            <div>
+                <span></span>
+            </div>
+        {%- endfor %}
+    </div>
+</div>

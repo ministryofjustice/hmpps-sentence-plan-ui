@@ -1,37 +1,54 @@
-import ReferentialDataService from '../../services/sentence-plan/referentialDataService'
 import mockRes from '../../testutils/preMadeMocks/mockRes'
 import mockReq from '../../testutils/preMadeMocks/mockReq'
 import AboutPopController from './AboutPopController'
 import locale from './locale.json'
-import { parsedRoshData } from '../../testutils/data/roshData'
-import handoverData from '../../testutils/data/handoverData'
 import { AreaOfNeed } from '../../testutils/data/referenceData'
+import testPlan from '../../testutils/data/planData'
+import popData from '../../testutils/data/popData'
+import testHandoverContext from '../../testutils/data/handoverData'
+import { assessmentData, crimNeeds } from '../../testutils/data/assessmentData'
+import { AssessmentAreas } from '../../@types/Assessment'
+import { formatAssessmentData } from '../../utils/utils'
 
-const refData = AreaOfNeed.slice(0, 3)
+jest.mock('../../services/sentence-plan/assessmentService', () => {
+  return jest.fn().mockImplementation(() => ({
+    getAssessmentByUuid: jest.fn().mockReturnValue(assessmentData),
+  }))
+})
+
+jest.mock('../../services/sessionService', () => {
+  return jest.fn().mockImplementation(() => ({
+    getPlanUUID: jest.fn().mockReturnValue(testPlan.uuid),
+  }))
+})
 
 jest.mock('../../services/sentence-plan/referentialDataService', () => {
   return jest.fn().mockImplementation(() => ({
     getAreasOfNeed: jest.fn().mockReturnValue(AreaOfNeed),
   }))
 })
-jest.mock('../../services/sentence-plan/infoService', () => {
-  return jest.fn().mockImplementation(() => ({
-    getRoSHData: jest.fn().mockResolvedValue(parsedRoshData),
-  }))
-})
+
 jest.mock('../../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
-    getSubjectDetails: jest.fn().mockReturnValue(handoverData.subject),
+    getPlanUUID: jest.fn().mockReturnValue(testPlan.uuid),
+    getPrincipalDetails: jest.fn().mockReturnValue(testHandoverContext.principal),
+    getSubjectDetails: jest.fn().mockReturnValue(testHandoverContext.subject),
+    getCriminogenicNeeds: jest.fn().mockReturnValue(crimNeeds),
+  }))
+})
+
+jest.mock('../../services/sentence-plan/infoService', () => {
+  return jest.fn().mockImplementation(() => ({
+    getPopData: jest.fn().mockReturnValue(popData),
   }))
 })
 
 describe('AboutPopController', () => {
   let controller: AboutPopController
-  let mockReferentialDataService: jest.Mocked<ReferentialDataService>
-  beforeEach(() => {
-    mockReferentialDataService = new ReferentialDataService() as jest.Mocked<ReferentialDataService>
+  const assessmentAreas: AssessmentAreas = formatAssessmentData(crimNeeds, assessmentData, locale.en.areas)
 
-    controller = new AboutPopController(mockReferentialDataService)
+  beforeEach(() => {
+    controller = new AboutPopController()
   })
 
   describe('get', () => {
@@ -39,14 +56,14 @@ describe('AboutPopController', () => {
       const req = mockReq()
       const res = mockRes()
       const next = jest.fn()
-
       await controller.get(req, res, next)
 
       const payload = {
         locale: locale.en,
         data: {
-          roshData: parsedRoshData,
-          referenceData: refData,
+          pageId: 'about',
+          deliusData: popData,
+          assessmentAreas,
         },
         errors: {},
       }

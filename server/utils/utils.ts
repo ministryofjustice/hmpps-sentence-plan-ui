@@ -1,7 +1,17 @@
+import { DateTime } from 'luxon'
+// eslint-disable-next-line import/no-extraneous-dependencies
+import camelCase from 'camelcase'
 import { Person } from '../@types/Person'
 import { RoshData } from '../@types/Rosh'
 import { NewStep, StepStatus } from '../@types/StepType'
 import { GoalStatus } from '../@types/GoalType'
+import {
+  AssessmentArea,
+  AssessmentAreaConfig,
+  AssessmentAreas,
+  AssessmentResponse,
+  CriminogenicNeedsData,
+} from '../@types/Assessment'
 
 const properCase = (word: string): string =>
   word.length >= 1 ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word
@@ -52,6 +62,81 @@ export function formatDate(date: string): string {
     month: 'long',
     year: 'numeric',
   })
+}
+
+export const formatAssessmentData = (
+  crimNeeds: CriminogenicNeedsData,
+  assessment: AssessmentResponse,
+  areas: AssessmentAreaConfig[],
+): AssessmentAreas => {
+  if (assessment === null) {
+    return { lowScoring: [], highScoring: [], other: [] }
+  }
+  const all = Object.values(areas)
+    .map(area => {
+      let score
+      let linkedtoRoSH
+      let linkedtoReoffending
+
+      if (Object.prototype.hasOwnProperty.call(crimNeeds, area.crimNeedsKey)) {
+        score = crimNeeds[area.crimNeedsKey][`${area.crimNeedsSubKey}OtherWeightedScore`]
+        linkedtoRoSH = crimNeeds[area.crimNeedsKey][`${area.crimNeedsSubKey}LinkedToHarm`] === 'YES'
+        linkedtoReoffending = crimNeeds[area.crimNeedsKey][`${area.crimNeedsSubKey}LinkedToReoffending`] === 'YES'
+        if (Number.isNaN(Number(score))) {
+          score = undefined
+        } else if (score > area.upperBound) {
+          score = area.upperBound
+        }
+      }
+
+      const motivationToMakeChanges = motivationText(assessment.assessment[`${area.assessmentKey}_changes`]?.value)
+      const riskOfSeriousHarm =
+        assessment.assessment[`${area.assessmentKey}_practitioner_analysis_risk_of_serious_harm_yes_details`]?.value
+      const riskOfReoffending =
+        assessment.assessment[`${area.assessmentKey}_practitioner_analysis_risk_of_reoffending_yes_details`]?.value
+      const strengthsOrProtectiveFactors =
+        assessment.assessment[`${area.assessmentKey}_practitioner_analysis_strengths_or_protective_factors_yes_details`]
+          ?.value
+
+      return {
+        title: area.area,
+        linkedtoRoSH,
+        linkedtoReoffending,
+        motivationToMakeChanges,
+        riskOfSeriousHarm,
+        riskOfReoffending,
+        strengthsOrProtectiveFactors,
+        criminogenicNeedsScore: score,
+        goalRoute: area.goalRoute,
+        upperBound: area.upperBound,
+      } as AssessmentArea
+    })
+    .sort((a, b) => 0 - (a.criminogenicNeedsScore > b.criminogenicNeedsScore ? 1 : -1))
+
+  const lowScoring = all.filter(area => Number(area.criminogenicNeedsScore) <= 3)
+  const highScoring = all.filter(area => Number(area.criminogenicNeedsScore) > 3)
+  const other = all.filter(area => area.criminogenicNeedsScore === undefined)
+  return { lowScoring, highScoring, other, versionUpdatedAt: assessment.metaData?.versionUpdatedAt } as AssessmentAreas
+}
+
+export const motivationText = (optionResult?: string): string => {
+  if (optionResult === undefined || optionResult === null) {
+    return undefined
+  }
+  return camelCase(optionResult)
+}
+
+export const dateWithYear = (datetimeString: string): string | null => {
+  if (!datetimeString || isBlank(datetimeString)) return undefined
+  return DateTime.fromISO(datetimeString).toFormat('d MMMM yyyy')
+}
+
+export const yearsAndDaysElapsed = (datetimeStringFrom: string, datetimeStringTo: string): string => {
+  if (!datetimeStringFrom || isBlank(datetimeStringFrom)) return undefined
+  if (!datetimeStringTo || isBlank(datetimeStringTo)) return undefined
+  const yearsDays = DateTime.fromISO(datetimeStringTo).diff(DateTime.fromISO(datetimeStringFrom), ['years', 'days'])
+
+  return `(${yearsDays.years} years and ${yearsDays.days} days)`
 }
 
 export function formatDateWithStyle(isoDate: string, style: 'short' | 'full' | 'long' | 'medium' = 'long'): string {

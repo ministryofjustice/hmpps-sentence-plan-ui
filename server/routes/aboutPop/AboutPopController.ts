@@ -1,23 +1,38 @@
 import { NextFunction, Request, Response } from 'express'
 import locale from './locale.json'
-import ReferentialDataService from '../../services/sentence-plan/referentialDataService'
+import { formatAssessmentData } from '../../utils/utils'
 
 export default class AboutPopController {
-  constructor(private readonly referentialDataService: ReferentialDataService) {}
+  constructor() {}
 
   get = async (req: Request, res: Response, next: NextFunction) => {
-    const { errors } = req
-
+    let { errors } = req
     try {
+      const planUuid = req.services.sessionService.getPlanUUID()
       const popData = req.services.sessionService.getSubjectDetails()
-      const areasOfNeed = this.referentialDataService.getAreasOfNeed()
-      const referenceData = Array.isArray(areasOfNeed) ? areasOfNeed.slice(0, 3) : []
-      const roshData = await req.services.infoService.getRoSHData(popData.crn)
+      const deliusData = await req.services.infoService.getPopData(popData.crn)
+      const criminogenicNeedsData = req.services.sessionService.getCriminogenicNeeds()
+      const assessmentData = await req.services.assessmentService.getAssessmentByUuid(planUuid)
+      const errorMessages = []
+
+      if (assessmentData === null) {
+        errorMessages.push('noAssessmentDataFound')
+      }
+      if (deliusData.sentences === null || deliusData.sentences.length === 0) {
+        errorMessages.push('noSentenceDataFound')
+      }
+      if (errorMessages.length > 0) {
+        errors = { domain: errorMessages }
+      }
+
+      const assessmentAreas = formatAssessmentData(criminogenicNeedsData, assessmentData, locale.en.areas)
+      const pageId = 'about'
       return res.render('pages/about-pop', {
         locale: locale.en,
         data: {
-          referenceData,
-          roshData,
+          pageId,
+          deliusData,
+          assessmentAreas,
         },
         errors,
       })
