@@ -10,6 +10,7 @@ export default class AboutPopController {
     try {
       const planUuid = req.services.sessionService.getPlanUUID()
       const popData = req.services.sessionService.getSubjectDetails()
+      const oasysReturnUrl = req.services.sessionService.getOasysReturnUrl()
       const deliusData = await req.services.infoService.getPopData(popData.crn)
       const criminogenicNeedsData = req.services.sessionService.getCriminogenicNeeds()
       const assessmentData = await req.services.assessmentService.getAssessmentByUuid(planUuid)
@@ -30,6 +31,7 @@ export default class AboutPopController {
       return res.render('pages/about-pop', {
         locale: locale.en,
         data: {
+          oasysReturnUrl,
           pageId,
           deliusData,
           assessmentAreas,
