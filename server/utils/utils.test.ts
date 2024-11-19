@@ -209,7 +209,7 @@ describe('format assessment data', () => {
   it.each([
     [
       crimNeeds,
-      assessmentUndefined.sanAssessmentData,
+      assessmentUndefined,
       locale.en.areas,
       {
         highScoring: [],
@@ -231,7 +231,7 @@ describe('format assessment data', () => {
     ],
     [
       crimNeeds,
-      assessmentDataNoAssessments.sanAssessmentData,
+      assessmentDataNoAssessments,
       locale.en.areas,
       {
         highScoring: [
@@ -341,7 +341,7 @@ describe('format assessment data', () => {
     ],
     [
       crimNeeds,
-      assessmentData.sanAssessmentData,
+      assessmentData,
       locale.en.areas,
       {
         highScoring: [
