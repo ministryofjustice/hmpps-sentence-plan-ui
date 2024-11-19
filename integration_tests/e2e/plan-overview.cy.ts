@@ -37,13 +37,25 @@ describe('View Plan Overview for READ_WRITE user', () => {
     cy.visit('/plan')
     cy.get('button').contains('Agree plan').click()
     cy.title().should('contain', 'Error:')
-    cy.get('.govuk-error-summary').should('contain', 'You must add steps to the goals Sam is working on now')
+    cy.get('.govuk-error-summary').should('contain', 'To agree the plan, create a goal to work on now')
+  })
+
+  it('Should result in error when agree plan with future goal but no current goals', () => {
+    cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
+      const newGoal = DataGenerator.generateGoal({ title: 'Test Accommodation' })
+      newGoal.targetDate = null
+      cy.addGoalToPlan(plan.uuid, newGoal)
+    })
+    cy.visit('/plan')
+    cy.get('button').contains('Agree plan').click()
+    cy.title().should('contain', 'Error:')
+    cy.get('.govuk-error-summary').should('contain', 'To agree the plan, create a goal to work on now')
   })
 
   it('Plan with goals and no steps should result into error when Agree plan', () => {
     cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
       cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal({ title: 'Test Accommodation' }))
-      cy.visit('/plan?source=nav')
+      cy.visit('/plan')
     })
 
     cy.get('button').contains('Agree plan').click()
@@ -54,7 +66,7 @@ describe('View Plan Overview for READ_WRITE user', () => {
   it('Plan with goals and no steps should have Add steps link and takes to takes to add-steps page', () => {
     cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
       cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal({ title: 'Test Accommodation' }))
-      cy.visit('/plan?source=nav')
+      cy.visit('/plan')
     })
     cy.contains('a', 'Add steps').click()
     cy.url().should('include', '/add-steps')
@@ -63,7 +75,7 @@ describe('View Plan Overview for READ_WRITE user', () => {
   it('Plan with goals and steps should have required links and status as not started', () => {
     cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
       cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal({ title: 'Test Accommodation' }))
-      cy.visit('/plan?source=nav')
+      cy.visit('/plan')
     })
     cy.contains('a', 'Add steps').click()
     cy.get('#step-description-1-autocomplete').type('Accommodation')
@@ -82,7 +94,7 @@ describe('View Plan Overview for READ_WRITE user', () => {
   it('Plan with valid goals and steps should go to agree-plan', () => {
     cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
       cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal({ title: 'Test Accommodation' }))
-      cy.visit('/plan?source=nav')
+      cy.visit('/plan')
     })
     cy.contains('a', 'Add steps').click()
     cy.get(`#step-description-1-autocomplete`).type('Accommodation')
@@ -97,7 +109,7 @@ describe('View Plan Overview for READ_WRITE user', () => {
       ;[1, 2, 3].forEach(i => {
         cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal({ title: `Test Accommodation ${i}` }))
       })
-      cy.visit('/plan?source=nav')
+      cy.visit('/plan')
     })
 
     planOverview.clickUpOnSummaryCard(1)
@@ -119,7 +131,7 @@ describe('View Plan Overview for READ_WRITE user', () => {
       ;[1, 2, 3].forEach(i => {
         cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal({ title: `Test Accommodation ${i}` }))
       })
-      cy.visit('/plan?source=nav')
+      cy.visit('/plan')
     })
 
     planOverview.clickDownOnSummaryCard(1)
