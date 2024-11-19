@@ -63,8 +63,11 @@
       }
     },
     "errors": {
+      "steps": {
+        "arrayNotEmpty": "You must add steps"
+      },
       "goal-summary-card": {
-        "arrayNotEmpty": "You must add steps to the goals {{ subject.givenName }} is working on now"
+        "arrayNotEmpty": "To agree the plan, create a goal to work on now"
       }
     }
   }

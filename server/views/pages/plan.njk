@@ -5,6 +5,7 @@
 {%- from "moj/components/banner/macro.njk" import mojBanner -%}
 {% from "../components/summary-card/goal-summary-card.njk" import goalSummaryCard %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "../components/error-summary/error-summary.njk" import errorSummary %}
 
 {% set currentGoals = [] %}
 {% set futureGoals = [] %}
@@ -92,15 +93,24 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
 
-            {% if errors.domain %}
+            {{  errors | dump }}
+<hr>
+            {{  errors.body | dump }}
+<hr>
+            {% set errorList = [] %}
+            {% for id, errorObj in errors.body %}
+                {% if '.steps' in id %}
+                    {% set errorList = errorList.concat({
+                        text: locale.errors['steps'].arrayNotEmpty,
+                        href: "#goal-list"
+                    }) %}
+                {% endif %}
+            {% endfor %}
+<hr>
+            {% if errors.body.length > 0 %}
                 {{ govukErrorSummary({
                     titleText: "There is a problem",
-                    errorList: [
-                        {
-                            text: locale.errors['goal-summary-card'].arrayNotEmpty,
-                            href: "#goal-list"
-                        }
-                    ]
+                    errorList: errorList
                 }) }}
             {% endif %}
 
@@ -187,10 +197,10 @@
                     {% endif %}
 
                     {% set errorMessage = false %}
-                    {% if errors.domain['goals.' + item.index + '.steps'].arrayNotEmpty %}
+                    {% if errors.body['goals.' + item.index + '.steps'].arrayNotEmpty %}
                         {% set errorMessage = {
                             id: 'goal-summary-card-' + item.index,
-                            text: locale.errors['goal-summary-card'].arrayNotEmpty,
+                            text: locale.errors['steps'].arrayNotEmpty,
                             state: locale.goalSummaryCard.state.incomplete
                         } %}
                     {% endif %}

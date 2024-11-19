@@ -73,7 +73,7 @@ export default class PlanOverviewController {
       const plan = await req.services.planService.getPlanByUuid(planUuid)
       req.errors = { ...req.errors }
 
-      req.errors.domain = getValidationErrors(plainToInstance(PlanModel, plan))
+      req.errors.body = getValidationErrors(plainToInstance(PlanModel, plan))
 
       return next()
     } catch (e) {
