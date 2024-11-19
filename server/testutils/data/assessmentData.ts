@@ -35,6 +35,12 @@ export const assessmentData: AssessmentResponse = {
   oasysEquivalent: {},
 }
 
+export const assessmentUndefined: AssessmentResponse = {
+  metaData: undefined,
+  assessment: undefined,
+  oasysEquivalent: undefined,
+}
+
 export const crimNeeds: CriminogenicNeedsData = {
   accommodation: {
     accLinkedToHarm: 'NO',
