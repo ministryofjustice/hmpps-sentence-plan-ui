@@ -1,5 +1,10 @@
 export type AnswerDTOs = Record<string, AnswerDto>
 export type OasysEquivalent = Record<string, string | string[]>
+
+export interface SanAssessmentResponse {
+  sanAssessmentData?: AssessmentResponse
+}
+
 export interface AssessmentResponse {
   assessment: AnswerDTOs
   oasysEquivalent: OasysEquivalent
