@@ -1,14 +1,10 @@
 export type AnswerDTOs = Record<string, AnswerDto>
 export type OasysEquivalent = Record<string, string | string[]>
 
-export interface SanAssessmentResponse {
-  sanAssessmentData?: AssessmentResponse
-}
-
 export interface AssessmentResponse {
-  assessment: AnswerDTOs
-  oasysEquivalent: OasysEquivalent
-  metaData: AssessmentMetaData
+  sanAssessmentData: AnswerDTOs
+  sanOasysEquivalent: OasysEquivalent
+  lastUpdatedTimestampSAN?: string
 }
 
 export interface AssessmentArea {
@@ -37,17 +33,6 @@ export interface AssessmentAreaConfig {
   assessmentKey: string
   goalRoute: string
   upperBound?: number
-}
-
-interface AssessmentMetaData {
-  uuid?: string
-  createdAt?: string
-  oasys_pks?: string[]
-  versionUuid?: string
-  versionCreatedAt?: string
-  versionUpdatedAt?: string
-  versionTag?: string
-  formVersion?: string
 }
 
 export const enum FieldType {
