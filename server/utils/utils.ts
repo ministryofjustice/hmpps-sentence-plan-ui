@@ -69,7 +69,7 @@ export const formatAssessmentData = (
   assessment: AssessmentResponse,
   areas: AssessmentAreaConfig[],
 ): AssessmentAreas => {
-  if (assessment === null || assessment.assessment === undefined) {
+  if (assessment === null || assessment === undefined || assessment.assessment === undefined) {
     return { lowScoring: [], highScoring: [], other: [] }
   }
   const all = Object.values(areas)
