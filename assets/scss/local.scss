@@ -4,7 +4,6 @@
 
 .capital:first-letter {text-transform: uppercase}
 
-
 .govuk-visually-hidden {
   &--mobile {
     @include govuk-media-query($until: tablet) {
@@ -35,4 +34,52 @@
       float: right;
     }
   }
+}
+.sp-badge {
+  text-transform: none !important;
+  letter-spacing: 1px;
+}
+
+.govuk-flex {
+  display: flex;
+  padding-bottom: 20px;
+}
+
+.govuk-padding-right--25 {
+  padding-right: 25px
+}
+
+.govuk-padding-bottom--25 {
+  bottom: 25px
+}
+
+
+.govuk-margin-top--60 {
+  margin-top: 60px!important;
+}
+
+.sp-accordion-header {
+  font-size: 24px!important;
+  font-weight: 100!important;
+  display: flex;
+  align-items: center;
+  row-gap: 10px;
+  column-gap: 10px;
+  padding-top: 25px!important;
+}
+
+.sp-text-pre-wrap {
+  white-space: pre-wrap
+}
+
+.sp-accordion-tags {
+  margin-right: auto;
+}
+
+.sp-accordion-header-no-risk {
+  font-size: 24px!important;
+  font-weight: 100!important;
+  display: flex;
+  justify-content: space-between;
+  padding-top: 25px!important;
 }

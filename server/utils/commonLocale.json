@@ -21,6 +21,11 @@
       "extended": {
         "createGoalButton": "Create goal",
         "agreePlanButton": "Agree plan"
+      },
+      "about": {
+        "title": "About {{ subject.givenName }}",
+        "createGoalButton": "Create goal",
+        "agreePlanButton": "Agree plan"
       }
     },
     "goalSummaryCard": {

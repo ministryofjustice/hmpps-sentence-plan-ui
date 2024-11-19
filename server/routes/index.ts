@@ -28,7 +28,7 @@ export default function routes(services: Services): Router {
     res.redirect(URLs.PLAN_OVERVIEW)
   })
 
-  setupAboutPopRoutes(router, services)
+  setupAboutPopRoutes(router)
   setupCreateGoalRoutes(router, services)
   setupRemoveGoalRoutes(router)
   setupChangeGoalRoutes(router, services)
