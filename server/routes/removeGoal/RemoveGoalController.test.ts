@@ -15,6 +15,12 @@ const mockSessionService = jest.fn().mockImplementation(() => ({
   getReturnLink: jest.fn().mockReturnValue(''),
 }))
 
+jest.mock('../../middleware/authorisationMiddleware', () => ({
+  requireAccessMode: jest.fn(() => (req: Request, res: Response, next: NextFunction) => {
+    return next()
+  }),
+}))
+
 jest.mock('../../services/sessionService', () => {
   return jest.fn().mockImplementation(() => mockSessionService())
 })
@@ -39,7 +45,7 @@ jest.mock('../../services/sentence-plan/goalService', () => {
   }))
 })
 
-describe('Test Deleting Goal', () => {
+describe('Remove Goal', () => {
   let controller: RemoveGoalController
   let req: Request
   let res: Response
@@ -67,7 +73,8 @@ describe('Test Deleting Goal', () => {
 
   describe('get', () => {
     it('should render without validation errors', async () => {
-      await controller.get(req, res, next)
+      await runMiddlewareChain(controller.get, req, res, next)
+
       expect(res.render).toHaveBeenCalledWith('pages/remove-goal', viewData)
     })
   })
@@ -75,7 +82,9 @@ describe('Test Deleting Goal', () => {
   describe('post', () => {
     it('should return to plan overview after deleting goal if delete goal is selected', async () => {
       req.body = { type: 'some-type', action: 'delete', goalUuid: 'xyz' }
+
       await runMiddlewareChain(controller.post, req, res, next)
+
       expect(req.services.goalService.deleteGoal).toHaveBeenCalled()
       expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_OVERVIEW}?type=some-type&status=deleted`)
     })
@@ -113,7 +122,9 @@ describe('Test Removing Goal', () => {
 
     it('should render without validation errors', async () => {
       mockGetPlanUUID.mockImplementation(() => 'agreed-plan-uuid')
-      await controller.get(req, res, next)
+
+      await runMiddlewareChain(controller.get, req, res, next)
+
       expect(res.render).toHaveBeenCalledWith('pages/remove-goal', viewData)
     })
   })
@@ -121,14 +132,18 @@ describe('Test Removing Goal', () => {
   describe('post', () => {
     it('should return to plan overview after removing goal if remove goal is selected and a reason provided', async () => {
       req.body = { type: 'some-type', action: 'remove', goalUuid: 'xyz', 'goal-removal-note': 'a reason' }
+
       await runMiddlewareChain(controller.post, req, res, next)
+
       expect(req.services.goalService.updateGoal).toHaveBeenCalled()
       expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_OVERVIEW}?type=removed&status=removed`)
     })
 
     it('should re-render remove goal page if remove goal is selected and no reason is provided', async () => {
       req.body = { type: 'some-type', action: 'remove', goalUuid: 'xyz' }
+
       await runMiddlewareChain(controller.post, req, res, next)
+
       expect(req.services.goalService.updateGoal).not.toHaveBeenCalled()
       expect(res.render).toHaveBeenCalled()
     })

@@ -14,6 +14,12 @@ import PlanModel from '../shared-models/PlanModel'
 import { testGoal } from '../../testutils/data/goalData'
 import testHandoverContext from '../../testutils/data/handoverData'
 
+jest.mock('../../middleware/authorisationMiddleware', () => ({
+  requireAccessMode: jest.fn(() => (req: Request, res: Response, next: NextFunction) => {
+    return next()
+  }),
+}))
+
 jest.mock('../../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
     getPlanUUID: jest.fn().mockReturnValue(testPlan.uuid),

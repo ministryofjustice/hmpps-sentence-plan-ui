@@ -12,6 +12,7 @@ jest.mock('../../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
     getPlanUUID: jest.fn().mockReturnValue('9506fba0-d2c7-4978-b3fc-aefd86821844'),
     getSubjectDetails: jest.fn().mockReturnValue(handoverData.subject),
+    getAccessMode: jest.fn().mockReturnValue('READ_WRITE'),
     setReturnLink: jest.fn(),
   }))
 })

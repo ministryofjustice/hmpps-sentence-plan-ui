@@ -9,6 +9,12 @@ import { testGoal } from '../../testutils/data/goalData'
 import { GoalStatus } from '../../@types/GoalType'
 import runMiddlewareChain from '../../testutils/runMiddlewareChain'
 
+jest.mock('../../middleware/authorisationMiddleware', () => ({
+  requireAccessMode: jest.fn(() => (req: Request, res: Response, next: NextFunction) => {
+    return next()
+  }),
+}))
+
 jest.mock('../../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
     getPlanUUID: jest.fn().mockReturnValue(testPlan.uuid),
@@ -55,7 +61,7 @@ describe('AchieveGoalController', () => {
 
   describe('get', () => {
     it('should render OK', async () => {
-      await controller.get(req, res, next)
+      await runMiddlewareChain(controller.get, req, res, next)
 
       expect(res.render).toHaveBeenCalledWith('pages/confirm-achieved-goal', viewData)
     })
@@ -72,7 +78,7 @@ describe('AchieveGoalController', () => {
         errors,
       }
 
-      await controller.get(req, res, next)
+      await runMiddlewareChain(controller.get, req, res, next)
 
       expect(res.render).toHaveBeenCalledWith('pages/confirm-achieved-goal', expectedViewData)
     })
