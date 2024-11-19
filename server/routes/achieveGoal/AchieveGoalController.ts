@@ -5,6 +5,8 @@ import locale from './locale.json'
 import validateRequest from '../../middleware/validationMiddleware'
 import transformRequest from '../../middleware/transformMiddleware'
 import AchieveGoalPostModel from './models/AchieveGoalPostModel'
+import { requireAccessMode } from '../../middleware/authorisationMiddleware'
+import { AccessMode } from '../../@types/Handover'
 
 export default class AchieveGoalController {
   constructor() {}
@@ -56,9 +58,10 @@ export default class AchieveGoalController {
     return next()
   }
 
-  get = this.render
+  get = [requireAccessMode(AccessMode.READ_WRITE), this.render]
 
   post = [
+    requireAccessMode(AccessMode.READ_WRITE),
     transformRequest({ body: AchieveGoalPostModel }),
     validateRequest(),
     this.handleValidationErrors,

@@ -7,6 +7,8 @@ import AddStepsPostModel, { StepModel } from './models/AddStepsPostModel'
 import transformRequest from '../../middleware/transformMiddleware'
 import { StepStatus } from '../../@types/StepType'
 import { NewGoal } from '../../@types/NewGoalType'
+import { requireAccessMode } from '../../middleware/authorisationMiddleware'
+import { AccessMode } from '../../@types/Handover'
 
 export default class AddStepsController {
   private render = async (req: Request, res: Response, next: NextFunction) => {
@@ -100,7 +102,10 @@ export default class AddStepsController {
     return next()
   }
 
+  get = [requireAccessMode(AccessMode.READ_WRITE), this.render]
+
   post = [
+    requireAccessMode(AccessMode.READ_WRITE),
     transformRequest({
       body: AddStepsPostModel,
     }),
@@ -110,6 +115,4 @@ export default class AddStepsController {
     this.handleValidationErrors,
     this.saveAndRedirect,
   ]
-
-  get = this.render
 }

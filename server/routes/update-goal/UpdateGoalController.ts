@@ -11,6 +11,8 @@ import { NewStep } from '../../@types/StepType'
 import { goalStatusToTabName, sortSteps } from '../../utils/utils'
 import { NewGoal } from '../../@types/NewGoalType'
 import { Goal } from '../../@types/GoalType'
+import { requireAccessMode } from '../../middleware/authorisationMiddleware'
+import { AccessMode } from '../../@types/Handover'
 
 export default class UpdateGoalController {
   constructor(private readonly referentialDataService: ReferentialDataService) {}
@@ -90,9 +92,10 @@ export default class UpdateGoalController {
     return next()
   }
 
-  get = this.render
+  get = [requireAccessMode(AccessMode.READ_WRITE), this.render]
 
   post = [
+    requireAccessMode(AccessMode.READ_WRITE),
     transformRequest({ body: UpdateGoalPostModel }),
     validateRequest(),
     this.handleValidationErrors,
