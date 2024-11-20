@@ -13,9 +13,7 @@
     dateOptions: {
         threeMonths: data.dateOptions[0] | formatSimpleDate,
         sixMonths: data.dateOptions[1] | formatSimpleDate,
-        twelveMonths: data.dateOptions[2] | formatSimpleDate,
-        endOfSentence: data.dateOptions[3] | formatSimpleDate,
-        nextMeeting: data.dateOptions[4] | formatSimpleDate
+        twelveMonths: data.dateOptions[2] | formatSimpleDate
     }
 }) %}
 
@@ -41,6 +39,7 @@
 {% block content %}
     <a href="{{ data.returnLink }}" class="govuk-back-link">{{ locale.common.backLink.text }}</a>
     <div class="govuk-grid-row">
+        {{  errors | dump }}
         <div class="govuk-grid-column-one-third">
             {% set areaOfNeedNavigationLinks = [] %}
             {% for areaOfNeed in data.areasOfNeed %}
@@ -172,11 +171,6 @@
                         value: data.form['date-selection-radio'],
                         items: [
                             {
-                                value: data.dateOptions[4] | formatISODate,
-                                text: locale.dateSelection.options.nextMeeting,
-                                checked: data.form['date-selection-radio'] == data.dateOptions[4] | formatISODate
-                            },
-                            {
                                 value: data.dateOptions[0] | formatISODate,
                                 text: locale.dateSelection.options.threeMonths
                             },
@@ -187,10 +181,6 @@
                             {
                                 value: data.dateOptions[2] | formatISODate,
                                 text: locale.dateSelection.options.twelveMonths
-                            },
-                            {
-                                value: data.dateOptions[3] | formatISODate,
-                                text: locale.dateSelection.options.twentyFourMonths
                             },
                             {
                                 divider: locale.common.radio.divider
