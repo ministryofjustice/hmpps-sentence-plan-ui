@@ -56,13 +56,15 @@ function createHandoverContext(apiToken, oasysAssessmentPk, accessMode, sentence
   }
 }
 
-export const openSentencePlan = (oasysAssessmentPk, accessMode, sentencePlanVersion) => {
-  cy.session(oasysAssessmentPk, () =>
+export const openSentencePlan = (
+  oasysAssessmentPk,
+  accessMode = AccessMode.READ_WRITE,
+  sentencePlanVersion = undefined,
+) => {
+  cy.session(`${oasysAssessmentPk}_${accessMode}`, () =>
     getApiToken().then(apiToken =>
       cy
-        .request(
-          createHandoverContext(apiToken, oasysAssessmentPk, accessMode ?? AccessMode.READ_WRITE, sentencePlanVersion),
-        )
+        .request(createHandoverContext(apiToken, oasysAssessmentPk, accessMode, sentencePlanVersion))
         .then(handoverResponse =>
           cy.visit(`${handoverResponse.body.handoverLink}?clientId=${Cypress.env('ARNS_HANDOVER_CLIENT_ID')}`),
         ),
