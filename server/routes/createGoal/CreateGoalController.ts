@@ -34,7 +34,7 @@ export default class CreateGoalController {
       })
 
       if (req.body.action === 'addStep') {
-        return res.redirect(URLs.ADD_STEPS.replace(':uuid', uuid))
+        return res.redirect(`${URLs.ADD_STEPS.replace(':uuid', uuid)}?type=${type}`)
       }
       return res.redirect(`${URLs.PLAN_OVERVIEW}?status=added&type=${type}`)
     } catch (e) {
@@ -92,7 +92,7 @@ export default class CreateGoalController {
 
   private getDateOptions = () => {
     const today = new Date()
-    return [...getAchieveDateOptions(today), new Date(today.setDate(today.getDate() + 7))]
+    return getAchieveDateOptions(today)
   }
 
   private handleValidationErrors = (req: Request, res: Response, next: NextFunction) => {

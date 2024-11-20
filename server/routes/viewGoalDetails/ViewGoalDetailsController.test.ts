@@ -6,6 +6,13 @@ import locale from './locale.json'
 import { testGoal } from '../../testutils/data/goalData'
 import URLs from '../URLs'
 import { Goal, GoalStatus } from '../../@types/GoalType'
+import runMiddlewareChain from '../../testutils/runMiddlewareChain'
+
+jest.mock('../../middleware/authorisationMiddleware', () => ({
+  requireAccessMode: jest.fn(() => (req: Request, res: Response, next: NextFunction) => {
+    return next()
+  }),
+}))
 
 jest.mock('../../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
@@ -60,14 +67,14 @@ describe('ViewGoalDetailsController', () => {
           },
         }
 
-        await controller.get(req, res, next)
+        await runMiddlewareChain(controller.get, req, res, next)
 
         expect(res.render).toHaveBeenCalledWith('pages/view-goal-details', viewDataPermittedStatus)
       },
     )
 
     it('should not render when Goal is not Achieved or Removed', async () => {
-      await controller.get(req, res, next)
+      await runMiddlewareChain(controller.get, req, res, next)
 
       expect(res.render).not.toHaveBeenCalledWith('pages/view-goal-details', viewData)
     })

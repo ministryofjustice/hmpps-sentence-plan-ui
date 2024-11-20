@@ -15,6 +15,12 @@ import testPlan from '../../testutils/data/planData'
 import { PlanAgreementStatus, PlanType } from '../../@types/PlanType'
 import { Goal } from '../../@types/GoalType'
 
+jest.mock('../../middleware/authorisationMiddleware', () => ({
+  requireAccessMode: jest.fn(() => (req: Request, res: Response, next: NextFunction) => {
+    return next()
+  }),
+}))
+
 jest.mock('../../services/sentence-plan/referentialDataService', () => {
   return jest.fn().mockImplementation(() => ({
     getSortedAreasOfNeed: jest.fn().mockReturnValue(AreaOfNeed),
@@ -58,8 +64,6 @@ describe('ChangeGoalController', () => {
         new Date('2024-04-01T00:00:00.000Z'),
         new Date('2024-07-01T00:00:00.000Z'),
         new Date('2025-01-01T00:00:00.000Z'),
-        new Date('2026-01-01T00:00:00.000Z'),
-        new Date('2024-01-08T00:00:00.000Z'),
       ],
     },
     errors: {},
@@ -85,7 +89,7 @@ describe('ChangeGoalController', () => {
 
   describe('get', () => {
     it('should render without validation errors', async () => {
-      await controller.get(req, res, next)
+      await runMiddlewareChain(controller.get, req, res, next)
 
       expect(res.render).toHaveBeenCalledWith('pages/change-goal', viewData)
     })
@@ -102,7 +106,7 @@ describe('ChangeGoalController', () => {
         errors,
       }
 
-      await controller.get(req, res, next)
+      await runMiddlewareChain(controller.get, req, res, next)
 
       expect(res.render).toHaveBeenCalledWith('pages/change-goal', expectedViewData)
     })

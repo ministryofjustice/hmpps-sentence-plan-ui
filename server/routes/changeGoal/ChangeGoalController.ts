@@ -9,6 +9,8 @@ import transformRequest from '../../middleware/transformMiddleware'
 import ChangeGoalPostModel from './models/ChangeGoalPostModel'
 import validateRequest from '../../middleware/validationMiddleware'
 import { PlanAgreementStatus } from '../../@types/PlanType'
+import { requireAccessMode } from '../../middleware/authorisationMiddleware'
+import { AccessMode } from '../../@types/Handover'
 
 export default class ChangeGoalController {
   constructor(private readonly referentialDataService: ReferentialDataService) {}
@@ -74,7 +76,7 @@ export default class ChangeGoalController {
 
   private getDateOptions = () => {
     const today = new Date()
-    return [...getAchieveDateOptions(today), new Date(today.setDate(today.getDate() + 7))]
+    return getAchieveDateOptions(today)
   }
 
   private mapGoalToForm = (goal: Goal) => {
@@ -133,9 +135,10 @@ export default class ChangeGoalController {
     return next()
   }
 
-  get = this.render
+  get = [requireAccessMode(AccessMode.READ_WRITE), this.render]
 
   post = [
+    requireAccessMode(AccessMode.READ_WRITE),
     transformRequest({
       body: ChangeGoalPostModel,
     }),

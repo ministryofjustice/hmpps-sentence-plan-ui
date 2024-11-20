@@ -7,15 +7,18 @@ import AddStepsPostModel, { StepModel } from './models/AddStepsPostModel'
 import transformRequest from '../../middleware/transformMiddleware'
 import { StepStatus } from '../../@types/StepType'
 import { NewGoal } from '../../@types/NewGoalType'
+import { requireAccessMode } from '../../middleware/authorisationMiddleware'
+import { AccessMode } from '../../@types/Handover'
 
 export default class AddStepsController {
   private render = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { errors } = req
+      const { type } = req.query
       const popData = await req.services.sessionService.getSubjectDetails()
       const goal = await req.services.goalService.getGoal(req.params.uuid)
       const steps = await req.services.stepService.getSteps(req.params.uuid)
-      const returnLink = req.services.sessionService.getReturnLink()
+      const returnLink = req.services.sessionService.getReturnLink() ?? `${URLs.PLAN_OVERVIEW}?type=${type}`
 
       if (!req.body.steps || req.body.steps.length === 0) {
         req.body.steps = steps.map(step => ({
@@ -102,7 +105,10 @@ export default class AddStepsController {
     return next()
   }
 
+  get = [requireAccessMode(AccessMode.READ_WRITE), this.render]
+
   post = [
+    requireAccessMode(AccessMode.READ_WRITE),
     transformRequest({
       body: AddStepsPostModel,
     }),
@@ -112,6 +118,4 @@ export default class AddStepsController {
     this.handleValidationErrors,
     this.saveAndRedirect,
   ]
-
-  get = this.render
 }
