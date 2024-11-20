@@ -28,5 +28,5 @@ export default class ChangeGoalPostModel {
   @IsNotEmpty()
   @Validate(GoalDateMustBeTodayOrFuture, { message: 'Date must be today or in the future' })
   @Expose()
-  'date-selection-custom': Date
+  'date-selection-custom': string
 }
