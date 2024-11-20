@@ -120,6 +120,14 @@ export default {
       },
       agent: new AgentConfig(Number(get('SENTENCE_PLAN_API_TIMEOUT_RESPONSE', 10000))),
     },
+    coordinatorApi: {
+      url: get('COORDINATOR_API_URL', 'https://arns-coordinator-api-dev.hmpps.service.justice.gov.uk'),
+      timeout: {
+        response: Number(get('COORDINATOR_API_TIMEOUT_RESPONSE', 10000)),
+        deadline: Number(get('COORDINATOR_API_TIMEOUT_DEADLINE', 10000)),
+      },
+      agent: new AgentConfig(Number(get('COORDINATOR_API_TIMEOUT_RESPONSE', 10000))),
+    },
   },
   sqs: {
     audit: auditConfig(),

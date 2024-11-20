@@ -1,7 +1,6 @@
 import URLs from '../URLs'
 import testReferenceData from '../../testutils/data/referenceData'
 import testPopData from '../../testutils/data/popData'
-import testNoteData from '../../testutils/data/noteData'
 import { roSHData } from '../../testutils/data/roshData'
 
 jest.mock('../../services/sentence-plan/referentialDataService', () => {
@@ -15,23 +14,15 @@ jest.mock('../../services/sentence-plan/infoService', () => {
     getRoSHData: jest.fn().mockResolvedValue(roSHData),
   }))
 })
-jest.mock('../../services/sentence-plan/noteService', () => {
-  return jest.fn().mockImplementation(() => ({
-    getNoteDataByAreaOfNeed: jest.fn().mockResolvedValue(testNoteData),
-  }))
-})
 
 // let app: Express
 // const referentialDataService = new ReferentialDataService() as jest.Mocked<ReferentialDataService>
 // const infoService = new InfoService(null) as jest.Mocked<InfoService>
-// const noteService = new NoteService(null) as jest.Mocked<NoteService>
-
 // beforeEach(() => {
 //   app = appWithAllRoutes({
 //     services: {
 //       referentialDataService,
 //       infoService,
-//       noteService,
 //     },
 //   })
 // })
@@ -47,7 +38,6 @@ describe(`GET ${URLs.CREATE_GOAL}`, () => {
     // expect(response.text).toContain(locale.en.title.replace('{POP_NAME}', testPopData.givenName))
     // expect(infoService.getPopData).toHaveBeenCalled()
     // expect(infoService.getRoSHData).toHaveBeenCalled()
-    // expect(noteService.getNoteDataByAreaOfNeed).toHaveBeenCalled()
     expect(true)
   })
 })

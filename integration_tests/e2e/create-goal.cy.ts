@@ -8,13 +8,12 @@ describe('Create a new Goal', () => {
     cy.createSentencePlan().then(planDetails => {
       cy.wrap(planDetails).as('planDetails')
       cy.openSentencePlan(planDetails.oasysAssessmentPk)
-      cy.visit('/about-pop')
     })
   })
 
   it('Creates a new goal with errors', () => {
     createGoalPage.createGoal('accommodation')
-    createGoalPage.selectGoalAutocompleteOption('acc', 'Accommodation Goal 1')
+    createGoalPage.selectGoalAutocompleteOption('I w', 'I will comply with the conditions of my tenancy agreement')
     createGoalPage.selectStartWorkingRadio('yes')
     createGoalPage.selectAchievementDateSomethingElse('{backspace}')
     createGoalPage.clickButton('Add steps')
@@ -48,7 +47,7 @@ describe('Create a new Goal', () => {
 
   it('Creates a new goal without steps', () => {
     createGoalPage.createGoal('accommodation')
-    createGoalPage.selectGoalAutocompleteOption('acc', 'Accommodation Goal 1')
+    createGoalPage.selectGoalAutocompleteOption('I w', 'I will comply with the conditions of my tenancy agreement')
     createGoalPage.selectRelatedAreasOfNeedRadio('yes')
     createGoalPage.selectRelatedAreasOfNeed(['Employment and education', 'Drug use'])
     createGoalPage.selectStartWorkingRadio('yes')
@@ -62,7 +61,10 @@ describe('Create a new Goal', () => {
       .children()
       .first()
       .within(() => {
-        cy.get('.govuk-summary-card__title').should('contain', 'Accommodation Goal 1')
+        cy.get('.govuk-summary-card__title').should(
+          'contain',
+          'I will comply with the conditions of my tenancy agreement',
+        )
         cy.get('.goal-summary-card__areas-of-need').should('contain', 'Area of need: accommodation')
         cy.get('.goal-summary-card__areas-of-need').should(
           'contain',

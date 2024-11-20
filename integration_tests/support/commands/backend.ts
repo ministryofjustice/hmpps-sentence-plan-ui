@@ -35,7 +35,7 @@ function createHandoverContext(apiToken, oasysAssessmentPk, accessMode, sentence
     auth: { bearer: apiToken },
     body: {
       oasysAssessmentPk,
-      planVersion: sentencePlanVersion,
+      sentencePlanVersion,
       user: {
         identifier: 123,
         displayName: 'Cypress User',

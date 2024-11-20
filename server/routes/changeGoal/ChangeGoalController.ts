@@ -45,7 +45,7 @@ export default class ChangeGoalController {
     const type = processedData.targetDate === null ? 'future' : 'current'
 
     try {
-      await req.services.goalService.updateGoal(processedData, goalUuid)
+      await req.services.goalService.replaceGoal(processedData, goalUuid)
 
       let redirectTarget = `${URLs.PLAN_OVERVIEW}?status=updated&type=${type}`
 
