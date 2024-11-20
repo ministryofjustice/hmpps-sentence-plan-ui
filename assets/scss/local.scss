@@ -1,7 +1,3 @@
-.govuk-main-wrapper {
-  min-height: 600px;
-}
-
 .capital:first-letter {text-transform: uppercase}
 
 .govuk-visually-hidden {
@@ -82,4 +78,11 @@
   display: flex;
   justify-content: space-between;
   padding-top: 25px!important;
+}
+
+.code-block {
+  display: block;
+  overflow: auto;
+  background-color: govuk-colour('light-grey');
+  @include govuk-responsive-padding(4);
 }
