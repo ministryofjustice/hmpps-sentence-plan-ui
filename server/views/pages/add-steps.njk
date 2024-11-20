@@ -31,7 +31,7 @@
 {% endblock %}
 
 {% block content %}
-<a class="govuk-back-link" href="{{ data.backLinkUrl }}">{{ locale.common.backLink.text }}</a>
+<a class="govuk-back-link" href="{{ data.returnLink }}">{{ locale.common.backLink.text }}</a>
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
         <span class="govuk-caption-l">{{ locale.mainHeading.caption }}</span>
@@ -101,8 +101,8 @@
                         </dt>
                         <dt class="govuk-summary-list__value">
                             <input type="hidden"
-                                   id="step-status-{{ loop.index }}",
-                                   name="step-status-{{ loop.index }}",
+                                   id="step-status-{{ loop.index }}"
+                                   name="step-status-{{ loop.index }}"
                                    value="{{ step.status | default('NOT_STARTED') }}"/>
 
                             {% set errorMessage = false %}

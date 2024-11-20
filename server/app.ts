@@ -1,7 +1,5 @@
 import express from 'express'
-import createError from 'http-errors'
 import nunjucksSetup from './utils/nunjucksSetup'
-import errorHandler from './errorHandler'
 import { appInsightsMiddleware } from './utils/azureAppInsights'
 import { metricsMiddleware } from './monitoring/metricsApp'
 import setUpCsrf from './middleware/setUpCsrf'
@@ -15,6 +13,8 @@ import { requestServices, Services } from './services'
 import setupRequestServices from './middleware/setupRequestServices'
 import setUpAuth from './middleware/setUpAuthentication'
 import authorisationMiddleware from './middleware/authorisationMiddleware'
+import setupNotFoundRoute from './routes/not-found/routes'
+import setupErrorRoute from './routes/error/routes'
 
 export default function createApp(services: Services): express.Application {
   const app = express()
@@ -37,9 +37,8 @@ export default function createApp(services: Services): express.Application {
   app.use(setUpCsrf())
 
   app.use(routes(services))
-
-  app.use((req, res, next) => next(createError(404, 'Not found')))
-  app.use(errorHandler(process.env.NODE_ENV === 'production'))
+  app.use(setupNotFoundRoute())
+  app.use(setupErrorRoute())
 
   app.disable('x-powered-by')
 

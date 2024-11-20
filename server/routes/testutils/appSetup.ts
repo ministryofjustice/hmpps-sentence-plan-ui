@@ -1,16 +1,16 @@
 import express, { Express } from 'express'
 import cookieSession from 'cookie-session'
-import { NotFound } from 'http-errors'
 import { v4 as uuidv4 } from 'uuid'
 
 import routes from '../index'
 import nunjucksSetup from '../../utils/nunjucksSetup'
-import errorHandler from '../../errorHandler'
 import * as auth from '../../authentication/auth'
 import { requestServices, Services } from '../../services'
 import type { ApplicationInfo } from '../../applicationInfo'
 import AuditService from '../../services/auditService'
 import setupRequestServices from '../../middleware/setupRequestServices'
+import setupNotFoundRoute from '../not-found/routes'
+import setupErrorRoute from '../error/routes'
 
 jest.mock('../../services/auditService')
 
@@ -58,8 +58,8 @@ function appSetup(services: Services, production: boolean, userSupplier: () => E
   app.use(express.urlencoded({ extended: true }))
   app.use(setupRequestServices(requestServices(services)))
   app.use(routes(services))
-  app.use((req, res, next) => next(new NotFound()))
-  app.use(errorHandler(production))
+  app.use(setupNotFoundRoute())
+  app.use(setupErrorRoute(production))
 
   return app
 }

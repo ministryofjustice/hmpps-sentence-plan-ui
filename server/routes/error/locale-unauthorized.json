@@ -1,0 +1,14 @@
+{
+  "en": {
+    "page": {
+      "title": "You need to sign in to use this service - {{ applicationName }}"
+    },
+    "mainHeading": {
+      "title": "You need to sign in to use this service"
+    },
+    "suggestions": [
+      "This could be because you’ve used a bookmarked link, or your session has expired due to inactivity."
+    ],
+    "resolution": "<a href='{{ oasysReturnUrl }}' class='govuk-link govuk-link--no-visited-state'>Go to the OASys homepage</a> to sign-in again"
+  }
+}

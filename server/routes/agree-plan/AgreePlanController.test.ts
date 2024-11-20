@@ -19,6 +19,7 @@ jest.mock('../../services/sessionService', () => {
     getPlanUUID: jest.fn().mockReturnValue(testPlan.uuid),
     getPrincipalDetails: jest.fn().mockReturnValue(testHandoverContext.principal),
     getSubjectDetails: jest.fn().mockReturnValue(testHandoverContext.subject),
+    getReturnLink: jest.fn().mockReturnValue('/some-return-link'),
   }))
 })
 
@@ -36,6 +37,7 @@ describe('AgreePlanController', () => {
   let next: NextFunction
   const viewData = {
     data: {
+      returnLink: '/some-return-link',
       form: {},
     },
     errors: {},
@@ -162,6 +164,7 @@ describe('AgreePlanController', () => {
       const expectedViewData = {
         ...viewData,
         data: {
+          returnLink: '/some-return-link',
           form: {
             'agree-plan-radio': 'no',
             'does-not-agree-details': '',

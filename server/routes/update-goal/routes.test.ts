@@ -13,6 +13,7 @@ jest.mock('../../services/sessionService', () => {
     getPlanUUID: jest.fn().mockReturnValue('9506fba0-d2c7-4978-b3fc-aefd86821844'),
     getSubjectDetails: jest.fn().mockReturnValue(handoverData.subject),
     setReturnLink: jest.fn(),
+    getReturnLink: jest.fn().mockReturnValue('/some-return-link'),
   }))
 })
 

@@ -25,6 +25,8 @@ describe('Change a goal', () => {
         })
       })
 
+      cy.get('.govuk-back-link').should('have.attr', 'href', '/plan?type=current')
+
       // Check goal data is populated correctly
       cy.contains('#goal-input-autocomplete__option--0', goalData.title)
       cy.get('input[name="related-area-of-need-radio"]').should('be.checked').and('have.value', 'yes')
@@ -51,6 +53,8 @@ describe('Change a goal', () => {
       cy.get('.govuk-error-summary').should('contain', 'Select all related areas')
       cy.contains('#related-area-of-need-error', 'Select all related areas')
       cy.title().should('contain', 'Error:')
+
+      cy.get('.govuk-back-link').should('have.attr', 'href', '/plan?type=current')
     })
   })
 
