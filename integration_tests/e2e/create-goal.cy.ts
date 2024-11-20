@@ -7,7 +7,18 @@ describe('Create a new Goal', () => {
   beforeEach(() => {
     cy.createSentencePlan().then(planDetails => {
       cy.wrap(planDetails).as('planDetails')
+      cy.wrap(planDetails.oasysAssessmentPk).as('oasysAssessmentPk')
       cy.openSentencePlan(planDetails.oasysAssessmentPk)
+    })
+  })
+
+  describe('Security', () => {
+    it('Should display authorisation error if user does not have READ_WRITE role', () => {
+      cy.get<string>('@oasysAssessmentPk').then(oasysAssessmentPk => {
+        cy.openSentencePlan(oasysAssessmentPk, 'READ_ONLY')
+      })
+
+      cy.visit(`/create-goal/accommodation`, { failOnStatusCode: false })
     })
   })
 
