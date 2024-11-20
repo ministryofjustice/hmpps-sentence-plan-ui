@@ -15,6 +15,7 @@ export default class AddStepsController {
       const popData = await req.services.sessionService.getSubjectDetails()
       const goal = await req.services.goalService.getGoal(req.params.uuid)
       const steps = await req.services.stepService.getSteps(req.params.uuid)
+      const returnLink = req.services.sessionService.getReturnLink()
 
       if (!req.body.steps || req.body.steps.length === 0) {
         req.body.steps = steps.map(step => ({
@@ -30,6 +31,7 @@ export default class AddStepsController {
           goal,
           popData,
           areaOfNeed: toKebabCase(goal.areaOfNeed.name),
+          returnLink,
           form: req.body,
         },
         errors,

@@ -13,9 +13,12 @@ export default class AgreePlanController {
   private render = async (req: Request, res: Response) => {
     const { errors } = req
 
+    const returnLink = req.services.sessionService.getReturnLink()
+
     return res.render('pages/agree-plan', {
       locale: locale.en,
       data: {
+        returnLink,
         form: req.body,
       },
       errors,
