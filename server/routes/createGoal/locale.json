@@ -29,14 +29,11 @@
       }
     },
     "dateSelection": {
-      "label": "When should {{ subject.givenName }} achieve this?",
-      "hint": "Select one option.",
+      "label": "When should {{ subject.givenName }} aim to achieve this goal?",
       "options": {
-        "nextMeeting": "At our next meeting (by {{ dateOptions.nextMeeting }})",
-        "threeMonths": "In 3 months (by {{ dateOptions.threeMonths }})",
-        "sixMonths": "In 6 months (by {{ dateOptions.sixMonths }})",
-        "twelveMonths": "In 12 months (by {{ dateOptions.twelveMonths }})",
-        "twentyFourMonths": "At the end of {{ subject.possessiveName }} sentence (by {{ dateOptions.endOfSentence }})",
+        "threeMonths": "In 3 months ({{ dateOptions.threeMonths }})",
+        "sixMonths": "In 6 months ({{ dateOptions.sixMonths }})",
+        "twelveMonths": "In 12 months ({{ dateOptions.twelveMonths }})",
         "custom": "Set another date"
       }
     },
