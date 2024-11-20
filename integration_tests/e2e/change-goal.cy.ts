@@ -12,7 +12,24 @@ describe('Change a goal', () => {
   beforeEach(() => {
     cy.createSentencePlan().then(planDetails => {
       cy.wrap(planDetails).as('plan')
+      cy.wrap(planDetails.oasysAssessmentPk).as('oasysAssessmentPk')
       cy.openSentencePlan(planDetails.oasysAssessmentPk)
+    })
+  })
+
+  describe('Security', () => {
+    it('Should display authorisation error if user does not have READ_WRITE role', () => {
+      cy.get<string>('@oasysAssessmentPk').then(oasysAssessmentPk => {
+        cy.openSentencePlan(oasysAssessmentPk, 'READ_ONLY')
+      })
+
+      cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
+        cy.addGoalToPlan(plan.uuid, goalData).then(goal => {
+          cy.visit(`/change-goal/${goal.uuid}`, { failOnStatusCode: false })
+        })
+
+        cy.get('.govuk-body').should('contain', 'You do not have permission to perform this action')
+      })
     })
   })
 

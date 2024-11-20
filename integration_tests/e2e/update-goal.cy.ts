@@ -3,11 +3,13 @@ import DataGenerator from '../support/DataGenerator'
 import { PlanType } from '../../server/@types/PlanType'
 import PlanOverview from '../pages/plan-overview'
 import UpdateGoal from '../pages/update-goal'
+import { Goal } from '../../server/@types/GoalType'
 
 describe('Update goal', () => {
   beforeEach(() => {
     cy.createSentencePlan().then(planDetails => {
       cy.wrap(planDetails).as('plan')
+      cy.wrap(planDetails.oasysAssessmentPk).as('oasysAssessmentPk')
       cy.openSentencePlan(planDetails.oasysAssessmentPk)
     })
   })
@@ -17,10 +19,22 @@ describe('Update goal', () => {
       const planOverview = new PlanOverview()
       cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
         cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal()).then(goal => {
+          cy.wrap(goal).as('updateableGoal')
           cy.addStepToGoal(goal.uuid, DataGenerator.generateStep())
         })
 
         planOverview.agreePlan()
+      })
+    })
+
+    it('Should display authorisation error if user does not have READ_WRITE role', () => {
+      cy.get<string>('@oasysAssessmentPk').then(oasysAssessmentPk => {
+        cy.openSentencePlan(oasysAssessmentPk, 'READ_ONLY')
+      })
+
+      cy.get<Goal>('@updateableGoal').then(goal => {
+        cy.visit(`/update-goal/${goal.uuid}`, { failOnStatusCode: false })
+        cy.get('.govuk-body').should('contain', 'You do not have permission to perform this action')
       })
     })
 
