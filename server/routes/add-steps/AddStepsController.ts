@@ -14,10 +14,11 @@ export default class AddStepsController {
   private render = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { errors } = req
+      const { type } = req.query
       const popData = await req.services.sessionService.getSubjectDetails()
       const goal = await req.services.goalService.getGoal(req.params.uuid)
       const steps = await req.services.stepService.getSteps(req.params.uuid)
-      const returnLink = req.services.sessionService.getReturnLink()
+      const returnLink = req.services.sessionService.getReturnLink() ?? `${URLs.PLAN_OVERVIEW}?type=${type}`
 
       if (!req.body.steps || req.body.steps.length === 0) {
         req.body.steps = steps.map(step => ({
