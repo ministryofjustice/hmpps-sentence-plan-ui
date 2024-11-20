@@ -44,6 +44,7 @@ export default class CreateGoalController {
 
   private render = async (req: Request, res: Response, next: NextFunction) => {
     const { errors } = req
+    const type = req.query?.type ?? 'current'
 
     const areasOfNeed = this.referentialDataService.getAreasOfNeed()
     const sortedAreasOfNeed = this.referentialDataService.getSortedAreasOfNeed()
@@ -52,7 +53,6 @@ export default class CreateGoalController {
     const selectedAreaOfNeed = areasOfNeed.find(areaOfNeed => areaOfNeed.url === req.params.areaOfNeed)
     const minimumDatePickerDate = formatDateWithStyle(new Date().toISOString(), 'short')
 
-    const returnLink = req.services.sessionService.getReturnLink()
     req.services.sessionService.setReturnLink(null)
 
     return res.render('pages/create-goal', {
@@ -63,7 +63,7 @@ export default class CreateGoalController {
         selectedAreaOfNeed,
         dateOptions,
         minimumDatePickerDate,
-        returnLink,
+        returnLink: `/plan?type=${type}`,
         form: req.body,
       },
       errors,
