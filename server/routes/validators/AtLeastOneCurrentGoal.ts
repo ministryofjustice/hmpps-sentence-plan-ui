@@ -1,5 +1,5 @@
 import { ValidatorConstraint, ValidatorConstraintInterface } from 'class-validator'
-import GoalModel from './GoalModel'
+import GoalModel from '../shared-models/GoalModel'
 
 @ValidatorConstraint()
 export default class AtLeastOneCurrentGoal implements ValidatorConstraintInterface {
