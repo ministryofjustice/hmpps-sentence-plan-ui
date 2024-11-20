@@ -37,9 +37,9 @@ describe('Create a new Goal', () => {
     cy.url().should('include', '/create-goal/accommodation')
     cy.get('.govuk-error-summary')
       .should('contain', 'Select yes if this goal is related to any other area of need')
-      .should('contain', 'Select a date')
+      .should('contain', 'Date must be today or in the future')
     cy.contains('#related-area-of-need-radio-error', 'Select yes if this goal is related to any other area of need')
-    cy.contains('.hmpps-datepicker', 'Select a date')
+    cy.contains('.hmpps-datepicker', 'Date must be today or in the future')
     cy.title().should('contain', 'Error:')
   })
 

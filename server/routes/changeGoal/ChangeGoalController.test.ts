@@ -64,8 +64,6 @@ describe('ChangeGoalController', () => {
         new Date('2024-04-01T00:00:00.000Z'),
         new Date('2024-07-01T00:00:00.000Z'),
         new Date('2025-01-01T00:00:00.000Z'),
-        new Date('2026-01-01T00:00:00.000Z'),
-        new Date('2024-01-08T00:00:00.000Z'),
       ],
     },
     errors: {},
