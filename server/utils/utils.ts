@@ -69,7 +69,7 @@ export const formatAssessmentData = (
   assessment: AssessmentResponse,
   areas: AssessmentAreaConfig[],
 ): AssessmentAreas => {
-  if (!assessment || !assessment.assessment) {
+  if (!assessment || !assessment.sanAssessmentData) {
     return { lowScoring: [], highScoring: [], other: [] }
   }
   const all = Object.values(areas)
@@ -88,14 +88,19 @@ export const formatAssessmentData = (
           score = area.upperBound
         }
       }
-      const motivationToMakeChanges = motivationText(assessment.assessment[`${area.assessmentKey}_changes`]?.value)
+      const motivationToMakeChanges = motivationText(
+        assessment.sanAssessmentData[`${area.assessmentKey}_changes`]?.value,
+      )
       const riskOfSeriousHarm =
-        assessment.assessment[`${area.assessmentKey}_practitioner_analysis_risk_of_serious_harm_yes_details`]?.value
-      const riskOfReoffending =
-        assessment.assessment[`${area.assessmentKey}_practitioner_analysis_risk_of_reoffending_yes_details`]?.value
-      const strengthsOrProtectiveFactors =
-        assessment.assessment[`${area.assessmentKey}_practitioner_analysis_strengths_or_protective_factors_yes_details`]
+        assessment.sanAssessmentData[`${area.assessmentKey}_practitioner_analysis_risk_of_serious_harm_yes_details`]
           ?.value
+      const riskOfReoffending =
+        assessment.sanAssessmentData[`${area.assessmentKey}_practitioner_analysis_risk_of_reoffending_yes_details`]
+          ?.value
+      const strengthsOrProtectiveFactors =
+        assessment.sanAssessmentData[
+          `${area.assessmentKey}_practitioner_analysis_strengths_or_protective_factors_yes_details`
+        ]?.value
 
       return {
         title: area.area,
@@ -115,7 +120,7 @@ export const formatAssessmentData = (
   const lowScoring = all.filter(area => Number(area.criminogenicNeedsScore) <= 3)
   const highScoring = all.filter(area => Number(area.criminogenicNeedsScore) > 3)
   const other = all.filter(area => area.criminogenicNeedsScore === undefined)
-  return { lowScoring, highScoring, other, versionUpdatedAt: assessment.metaData?.versionUpdatedAt } as AssessmentAreas
+  return { lowScoring, highScoring, other, versionUpdatedAt: assessment.lastUpdatedTimestampSAN } as AssessmentAreas
 }
 
 export const motivationText = (optionResult?: string): string => {
