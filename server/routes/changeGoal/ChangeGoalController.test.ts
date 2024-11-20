@@ -14,6 +14,7 @@ import runMiddlewareChain from '../../testutils/runMiddlewareChain'
 import testPlan from '../../testutils/data/planData'
 import { PlanAgreementStatus, PlanType } from '../../@types/PlanType'
 import { Goal } from '../../@types/GoalType'
+import CreateGoalPostModel from '../createGoal/models/CreateGoalPostModel'
 
 jest.mock('../../middleware/authorisationMiddleware', () => ({
   requireAccessMode: jest.fn(() => (req: Request, res: Response, next: NextFunction) => {
@@ -244,6 +245,19 @@ describe('ChangeGoalController', () => {
 
           expect(errors).toMatchObject({
             'date-selection-custom': { isNotEmpty: true },
+          })
+        })
+
+        it('should add error if "date-selection-radio" is "custom", and "date-selection-custom" is in the past', () => {
+          req.body['start-working-goal-radio'] = 'yes'
+          req.body['date-selection-radio'] = 'custom'
+          const today = new Date()
+          req.body['date-selection-custom'] = `${today.getDate() - 1}/${today.getMonth() + 1}/${today.getFullYear()}`
+          const body = plainToInstance(CreateGoalPostModel, req.body)
+          const errors = getValidationErrors(body)
+
+          expect(errors).toMatchObject({
+            'date-selection-custom': { GoalDateMustBeTodayOrFuture: true },
           })
         })
 
