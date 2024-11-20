@@ -47,7 +47,7 @@ describe('CreateGoalController', () => {
   let next: NextFunction
   const viewData = {
     data: {
-      returnLink: '/some-return-link',
+      returnLink: '/plan?type=current',
       areasOfNeed: AreaOfNeed,
       sortedAreasOfNeed: AreaOfNeed,
       form: {},
