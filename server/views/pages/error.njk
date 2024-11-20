@@ -7,7 +7,7 @@
 {% set mainClasses = "app-container govuk-body" %}
 
 {% block header %}
-  {% include "../partials//header.njk" %}
+  {% include "../partials/header.njk" %}
 {% endblock %}
 
 {% block content %}
@@ -21,11 +21,13 @@
     </div>
   </div>
 
-  <div class="govuk-grid-row govuk-!-margin-top-4">
-    <div class="govuk-grid-column-full">
-      <code class="code-block">
-        <pre>{{ stack }}</pre>
-      </code>
+  {% if stack %}
+    <div class="govuk-grid-row govuk-!-margin-top-4">
+      <div class="govuk-grid-column-full">
+        <code class="code-block">
+          <pre>{{ stack }}</pre>
+        </code>
+      </div>
     </div>
-  </div>
+  {% endif %}
 {% endblock %}
