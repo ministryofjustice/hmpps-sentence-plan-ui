@@ -25,6 +25,8 @@ export default class ChangeGoalController {
     const minimumDatePickerDate = formatDateWithStyle(new Date().toISOString(), 'short')
     const form = errors ? req.body : this.mapGoalToForm(goal)
 
+    const returnLink = req.services.sessionService.getReturnLink()
+
     return res.render('pages/change-goal', {
       locale: locale.en,
       data: {
@@ -32,6 +34,7 @@ export default class ChangeGoalController {
         sortedAreasOfNeed,
         selectedAreaOfNeed,
         dateOptions,
+        returnLink,
         form,
       },
       errors,
