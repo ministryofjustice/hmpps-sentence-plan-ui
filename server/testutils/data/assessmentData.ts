@@ -1,50 +1,32 @@
-import { CriminogenicNeedsData, SanAssessmentResponse } from '../../@types/Assessment'
+import { AssessmentResponse, CriminogenicNeedsData } from '../../@types/Assessment'
 
-export const assessmentDataNoAssessments: SanAssessmentResponse = {
-  sanAssessmentData: {
-    metaData: {
-      uuid: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-      createdAt: '2024-10-03T15:22:31.452243',
-      versionUuid: 'd52fdb5d-4450-40af-806e-97d47b96fa57',
-      versionCreatedAt: '2024-10-03T15:22:31.453096',
-      versionUpdatedAt: '2024-10-04T15:22:31.453096',
-    },
-    assessment: {},
-    oasysEquivalent: {},
-  },
+export const assessmentDataNoAssessments: AssessmentResponse = {
+  lastUpdatedTimestampSAN: '2024-10-04T15:22:31.453096',
+  sanAssessmentData: {},
+  sanOasysEquivalent: {},
 }
 
-export const assessmentData: SanAssessmentResponse = {
+export const assessmentData: AssessmentResponse = {
+  lastUpdatedTimestampSAN: '2024-10-04T15:22:31.453096',
   sanAssessmentData: {
-    metaData: {
-      uuid: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
-      createdAt: '2024-10-03T15:22:31.452243',
-      versionUuid: 'd52fdb5d-4450-40af-806e-97d47b96fa57',
-      versionCreatedAt: '2024-10-03T15:22:31.453096',
-      versionUpdatedAt: '2024-10-04T15:22:31.453096',
+    employment_education_changes: {
+      value: 'NEEDS_HELP_TO_MAKE_CHANGES',
+      values: null,
+      collection: null,
     },
-    assessment: {
-      employment_education_changes: {
-        value: 'NEEDS_HELP_TO_MAKE_CHANGES',
-        values: null,
-        collection: null,
-      },
-      accommodation_changes: {
-        value: 'THINKING_ABOUT_MAKING_CHANGES',
-        values: null,
-        collection: null,
-      },
+    accommodation_changes: {
+      value: 'THINKING_ABOUT_MAKING_CHANGES',
+      values: null,
+      collection: null,
     },
-    oasysEquivalent: {},
   },
+  sanOasysEquivalent: {},
 }
 
-export const assessmentUndefined: SanAssessmentResponse = {
-  sanAssessmentData: {
-    metaData: undefined,
-    assessment: undefined,
-    oasysEquivalent: undefined,
-  },
+export const assessmentUndefined: AssessmentResponse = {
+  lastUpdatedTimestampSAN: undefined,
+  sanAssessmentData: undefined,
+  sanOasysEquivalent: undefined,
 }
 
 export const crimNeeds: CriminogenicNeedsData = {
