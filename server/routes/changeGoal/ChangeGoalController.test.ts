@@ -250,7 +250,8 @@ describe('ChangeGoalController', () => {
         it('should not add error if "date-selection-radio" is "custom", and "date-selection-custom" is provided', () => {
           req.body['start-working-goal-radio'] = 'yes'
           req.body['date-selection-radio'] = 'custom'
-          req.body['date-selection-custom'] = new Date()
+          const today = new Date()
+          req.body['date-selection-custom'] = `${today.getDate()}/${today.getMonth() + 1}/${today.getFullYear()}`
           const body = plainToInstance(ChangeGoalPostModel, req.body)
           const errors = getValidationErrors(body)
 
