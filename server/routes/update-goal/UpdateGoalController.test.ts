@@ -35,6 +35,7 @@ jest.mock('../../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
     getSubjectDetails: jest.fn().mockReturnValue(handoverData.subject),
     setReturnLink: jest.fn(),
+    getReturnLink: jest.fn().mockReturnValue('/some-return-link'),
   }))
 })
 
@@ -60,6 +61,7 @@ describe('UpdateGoalController', () => {
       popData: handoverData.subject,
       mainAreaOfNeed: AreaOfNeed.find(x => x.name === testGoal.areaOfNeed.name),
       relatedAreasOfNeed: testGoal.relatedAreasOfNeed.map(x => x.name),
+      returnLink: '/some-return-link',
     },
     errors: {},
   }

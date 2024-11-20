@@ -30,6 +30,7 @@ jest.mock('../../services/sentence-plan/referentialDataService', () => {
 jest.mock('../../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
     getPlanUUID: jest.fn().mockReturnValue(testPlan.uuid),
+    getReturnLink: jest.fn().mockReturnValue('/some-return-link'),
   }))
 })
 
@@ -55,6 +56,7 @@ describe('ChangeGoalController', () => {
   const viewData = {
     data: {
       sortedAreasOfNeed: AreaOfNeed,
+      returnLink: '/some-return-link',
       form: {},
       selectedAreaOfNeed: AreaOfNeed.find(x => x.name === testGoal.areaOfNeed.name),
       minimumDatePickerDate: '01/01/2024',

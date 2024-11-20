@@ -19,12 +19,14 @@ export default class AchieveGoalController {
       const { uuid } = req.params
 
       const goal = await req.services.goalService.getGoal(uuid)
+      const returnLink = req.services.sessionService.getReturnLink()
 
       return res.render('pages/confirm-achieved-goal', {
         locale: locale.en,
         data: {
           form: req.body,
           type,
+          returnLink,
           goal,
         },
         errors,

@@ -14,6 +14,7 @@ jest.mock('../../services/sessionService', () => {
     getSubjectDetails: jest.fn().mockReturnValue(handoverData.subject),
     getAccessMode: jest.fn().mockReturnValue('READ_WRITE'),
     setReturnLink: jest.fn(),
+    getReturnLink: jest.fn().mockReturnValue('/some-return-link'),
   }))
 })
 

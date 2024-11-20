@@ -1,0 +1,14 @@
+{
+  "en": {
+    "page": {
+      "title": "Sorry, there is a problem with the service - {{ applicationName }}"
+    },
+    "mainHeading": {
+      "title": "Sorry, there is a problem with the service"
+    },
+    "suggestions": [
+      "Try reloading the page. You can do this by pressing F5 (on a PC), or Cmd + R (on a Mac).",
+      "If the page still does not load, try again later."
+    ]
+  }
+}

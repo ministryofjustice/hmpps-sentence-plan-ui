@@ -1,0 +1,12 @@
+{
+  "en": {
+    "page": {
+      "title": "There was an issue with your request - {{ applicationName }}"
+    },
+    "mainHeading": {
+      "title": "There was an issue with your request"
+    },
+    "suggestions": ["Try performing your request again", "If the request still fails, try again later."],
+    "resolution": "<a href='{{ oasysReturnUrl }}' class='govuk-link govuk-link--no-visited-state'>Go to the OASys homepage</a>"
+  }
+}

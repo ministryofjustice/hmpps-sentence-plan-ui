@@ -11,6 +11,11 @@ describe('Create a new Goal', () => {
     })
   })
 
+  it('Checks the back link is correct', () => {
+    createGoalPage.createGoal('accommodation')
+    cy.get('.govuk-back-link').should('have.attr', 'href', '/plan?type=current')
+  })
+
   it('Creates a new goal with errors', () => {
     createGoalPage.createGoal('accommodation')
     createGoalPage.selectGoalAutocompleteOption('I w', 'I will comply with the conditions of my tenancy agreement')

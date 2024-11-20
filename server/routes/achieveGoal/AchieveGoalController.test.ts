@@ -20,6 +20,7 @@ jest.mock('../../services/sessionService', () => {
     getPlanUUID: jest.fn().mockReturnValue(testPlan.uuid),
     getPrincipalDetails: jest.fn().mockReturnValue(testHandoverContext.principal),
     getSubjectDetails: jest.fn().mockReturnValue(testHandoverContext.subject),
+    getReturnLink: jest.fn().mockReturnValue('/some-return-link'),
   }))
 })
 
@@ -44,6 +45,7 @@ describe('AchieveGoalController', () => {
   let next: NextFunction
   const viewData = {
     data: {
+      returnLink: '/some-return-link',
       form: {},
       goal: testGoal,
     },
