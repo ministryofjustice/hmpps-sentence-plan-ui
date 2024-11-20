@@ -39,7 +39,6 @@
 {% block content %}
     <a href="{{ data.returnLink }}" class="govuk-back-link">{{ locale.common.backLink.text }}</a>
     <div class="govuk-grid-row">
-        {{  errors | dump }}
         <div class="govuk-grid-column-one-third">
             {% set areaOfNeedNavigationLinks = [] %}
             {% for areaOfNeed in data.areasOfNeed %}
@@ -189,8 +188,8 @@
                                 value: "custom",
                                 text: locale.dateSelection.options.custom,
                                 conditional: {
-                                html: customDateHtml
-                            }
+                                    html: customDateHtml
+                                }
                             }
                         ]
                     }) }}

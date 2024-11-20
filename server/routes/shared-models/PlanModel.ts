@@ -2,7 +2,7 @@ import { ArrayNotEmpty, IsDateString, IsEnum, Validate, ValidateNested } from 'c
 import { Type } from 'class-transformer'
 import GoalModel from './GoalModel'
 import { PlanStatus } from '../../@types/PlanType'
-import AtLeastOneCurrentGoal from './AtLeastOneCurrentGoal'
+import AtLeastOneCurrentGoal from '../validators/AtLeastOneCurrentGoal'
 
 export default class PlanModel {
   uuid: string

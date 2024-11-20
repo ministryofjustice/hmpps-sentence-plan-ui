@@ -92,7 +92,7 @@ export default class CreateGoalController {
 
   private getDateOptions = () => {
     const today = new Date()
-    return [...getAchieveDateOptions(today), new Date(today.setDate(today.getDate() + 7))]
+    return getAchieveDateOptions(today)
   }
 
   private handleValidationErrors = (req: Request, res: Response, next: NextFunction) => {
