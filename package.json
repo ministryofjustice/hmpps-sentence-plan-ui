@@ -83,7 +83,7 @@
     ]
   },
   "dependencies": {
-    "@aws-sdk/client-sqs": "^3.687.0",
+    "@aws-sdk/client-sqs": "^3.693.0",
     "@ministryofjustice/frontend": "^2.2.5",
     "accessible-autocomplete": "^3.0.1",
     "agentkeepalive": "^4.5.0",
@@ -170,11 +170,11 @@
     "jsonwebtoken": "^9.0.2",
     "lint-staged": "^15.2.10",
     "mocha-junit-reporter": "^2.2.1",
-    "nock": "^13.5.5",
+    "nock": "^13.5.6",
     "nodemon": "^3.1.7",
     "prettier": "^3.3.3",
-    "prettier-plugin-jinja-template": "^1.5.0",
-    "sass": "^1.80.6",
+    "prettier-plugin-jinja-template": "^2.0.0",
+    "sass": "^1.81.0",
     "supertest": "^7.0.0",
     "ts-jest": "^29.2.5",
     "typescript": "^5.6.3"
