@@ -74,10 +74,15 @@
                                     </div>
                                 </div>
                             </div>
+                        {% else %}
+                            {% if assessment.title in ['Finances', 'Health and wellbeing'] %}
+                                <p>{{ locale.needScore.doesNotHaveNeedScore }}</p>
+                            {% else %}
+                                <p>{{ locale.needScore.needScoreNotAvailable }}</p>
+                            {% endif %}
                         {% endif %}
-
                         <div>
-                            <p class='goal-link'><a href='./create-goal/{{ assessment.goalRoute }}' class="govuk-link govuk-link--no-visited-state">Create {{ assessment.title | lower}} goal</a></p>
+                            <p class='goal-link'><a href='/create-goal/{{ assessment.goalRoute }}' class="govuk-link govuk-link--no-visited-state">Create {{ assessment.title | lower}} goal</a></p>
                         </div>
                     </div>
                 </div>
