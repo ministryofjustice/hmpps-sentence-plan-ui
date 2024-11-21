@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from 'express'
 import ReferentialDataService from '../../services/sentence-plan/referentialDataService'
 import locale from './locale.json'
 import URLs from '../URLs'
-import { FORMS } from '../../services/formStorageService'
 import { NewGoal } from '../../@types/NewGoalType'
 import { dateToISOFormat, formatDateWithStyle, getAchieveDateOptions } from '../../utils/utils'
 import transformRequest from '../../middleware/transformMiddleware'
@@ -15,27 +14,17 @@ export default class CreateGoalController {
   constructor(private readonly referentialDataService: ReferentialDataService) {}
 
   private saveAndRedirect = async (req: Request, res: Response, next: NextFunction) => {
-    // TODO: Delete this saved form data when the new steps controller/logic is in
-    req.services.formStorageService.saveFormData(FORMS.CREATE_GOAL, {
-      processed: this.processGoalData(req.body),
-      raw: req.body,
-    })
-
     const processedData: NewGoal = this.processGoalData(req.body)
     const type: string = processedData.targetDate == null ? 'future' : 'current'
     const planUuid = req.services.sessionService.getPlanUUID()
+
     try {
       const { uuid } = await req.services.goalService.saveGoal(processedData, planUuid)
-
-      // TODO: Delete this saved form data when the new steps controller/logic is in
-      req.services.formStorageService.saveFormData('currentGoal', {
-        processed: null,
-        raw: { uuid },
-      })
 
       if (req.body.action === 'addStep') {
         return res.redirect(`${URLs.ADD_STEPS.replace(':uuid', uuid)}?type=${type}`)
       }
+
       return res.redirect(`${URLs.PLAN_OVERVIEW}?status=added&type=${type}`)
     } catch (e) {
       return next(e)

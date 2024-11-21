@@ -166,7 +166,7 @@ export function formatDateWithStyle(isoDate: string, style: 'short' | 'full' | '
 export function dateToISOFormat(date: string): string {
   if (date != null && date.indexOf('/') > -1) {
     const [day, month, year] = date.split('/')
-    return [year, padToTwoDigits(month), padToTwoDigits(day)].join('-')
+    return [year.trim(), padToTwoDigits(month.trim()), padToTwoDigits(day.trim())].join('-')
   }
   return date
 }

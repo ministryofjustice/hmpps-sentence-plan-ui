@@ -61,6 +61,18 @@ describe('Create a new Goal', () => {
     cy.get('#goal-input-autocomplete').invoke('val').should('contain', lorem)
   })
 
+  it('Creates a new goal without steps with padded target date field', () => {
+    createGoalPage.createGoal('accommodation')
+    createGoalPage.selectGoalAutocompleteOption('I w', 'I will comply with the conditions of my tenancy agreement')
+    createGoalPage.selectRelatedAreasOfNeedRadio('no')
+    createGoalPage.selectStartWorkingRadio('yes')
+    createGoalPage.selectAchievementDateSomethingElse('  4/4/3036')
+    createGoalPage.clickButton('Save without steps')
+
+    cy.url().should('contain', '/plan?status=added&type=current')
+    cy.get('#goal-list').children().should('have.length', 1)
+  })
+
   it('Creates a new goal without steps', () => {
     createGoalPage.createGoal('accommodation')
     createGoalPage.selectGoalAutocompleteOption('I w', 'I will comply with the conditions of my tenancy agreement')
