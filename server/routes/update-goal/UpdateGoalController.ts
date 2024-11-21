@@ -21,27 +21,31 @@ export default class UpdateGoalController {
     const { uuid } = req.params
     const { errors } = req
 
-    const sortedAreasOfNeed = this.referentialDataService.getSortedAreasOfNeed()
-    const goal = await req.services.goalService.getGoal(uuid)
-    const popData = req.services.sessionService.getSubjectDetails()
-    const mainAreaOfNeed = sortedAreasOfNeed.find(areaOfNeed => areaOfNeed.name === goal.areaOfNeed.name)
-    const relatedAreasOfNeed = goal.relatedAreasOfNeed.map(need => need.name)
+    try {
+      const sortedAreasOfNeed = this.referentialDataService.getSortedAreasOfNeed()
+      const goal = await req.services.goalService.getGoal(uuid)
+      const popData = req.services.sessionService.getSubjectDetails()
+      const mainAreaOfNeed = sortedAreasOfNeed.find(areaOfNeed => areaOfNeed.name === goal.areaOfNeed.name)
+      const relatedAreasOfNeed = goal.relatedAreasOfNeed.map(need => need.name)
 
-    const returnLink = req.services.sessionService.getReturnLink()
-    req.services.sessionService.setReturnLink(`/update-goal/${uuid}`)
+      const returnLink = req.services.sessionService.getReturnLink()
+      req.services.sessionService.setReturnLink(`/update-goal/${uuid}`)
 
-    return res.render('pages/update-goal', {
-      locale: locale.en,
-      data: {
-        form: req.body,
-        goal,
-        popData,
-        mainAreaOfNeed,
-        relatedAreasOfNeed,
-        returnLink,
-      },
-      errors,
-    })
+      return res.render('pages/update-goal', {
+        locale: locale.en,
+        data: {
+          form: req.body,
+          goal,
+          popData,
+          mainAreaOfNeed,
+          relatedAreasOfNeed,
+          returnLink,
+        },
+        errors,
+      })
+    } catch (e) {
+      return next(e)
+    }
   }
 
   private async updateSteps(req: Request, goal: Goal, steps: StepModel[], note: string) {
@@ -75,10 +79,10 @@ export default class UpdateGoalController {
     const { steps } = req.body
     const note = req.body['more-detail']
 
-    const goal = await req.services.goalService.getGoal(uuid)
-    const goalType: string = goalStatusToTabName(goal.status)
-
     try {
+      const goal = await req.services.goalService.getGoal(uuid)
+      const goalType: string = goalStatusToTabName(goal.status)
+
       await this.updateSteps(req, goal, steps, note)
       req.services.sessionService.setReturnLink(null)
       return res.redirect(`${URLs.PLAN_OVERVIEW}?type=${goalType}`)

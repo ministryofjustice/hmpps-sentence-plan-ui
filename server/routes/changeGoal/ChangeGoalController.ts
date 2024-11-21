@@ -20,27 +20,30 @@ export default class ChangeGoalController {
     const { errors } = req
 
     const sortedAreasOfNeed = this.referentialDataService.getSortedAreasOfNeed()
-    const goal = await req.services.goalService.getGoal(uuid)
-
-    const dateOptions = this.getDateOptions()
-    const selectedAreaOfNeed = sortedAreasOfNeed.find(areaOfNeed => areaOfNeed.name === goal.areaOfNeed.name)
-    const minimumDatePickerDate = formatDateWithStyle(new Date().toISOString(), 'short')
-    const form = errors ? req.body : this.mapGoalToForm(goal)
-
     const returnLink = req.services.sessionService.getReturnLink()
+    const dateOptions = this.getDateOptions()
+    const minimumDatePickerDate = formatDateWithStyle(new Date().toISOString(), 'short')
 
-    return res.render('pages/change-goal', {
-      locale: locale.en,
-      data: {
-        minimumDatePickerDate,
-        sortedAreasOfNeed,
-        selectedAreaOfNeed,
-        dateOptions,
-        returnLink,
-        form,
-      },
-      errors,
-    })
+    try {
+      const goal = await req.services.goalService.getGoal(uuid)
+      const selectedAreaOfNeed = sortedAreasOfNeed.find(areaOfNeed => areaOfNeed.name === goal.areaOfNeed.name)
+      const form = errors ? req.body : this.mapGoalToForm(goal)
+
+      return res.render('pages/change-goal', {
+        locale: locale.en,
+        data: {
+          minimumDatePickerDate,
+          sortedAreasOfNeed,
+          selectedAreaOfNeed,
+          dateOptions,
+          returnLink,
+          form,
+        },
+        errors,
+      })
+    } catch (e) {
+      return next(e)
+    }
   }
 
   private saveAndRedirect = async (req: Request, res: Response, next: NextFunction) => {
