@@ -12,7 +12,24 @@ describe('Change a goal', () => {
   beforeEach(() => {
     cy.createSentencePlan().then(planDetails => {
       cy.wrap(planDetails).as('plan')
+      cy.wrap(planDetails.oasysAssessmentPk).as('oasysAssessmentPk')
       cy.openSentencePlan(planDetails.oasysAssessmentPk)
+    })
+  })
+
+  describe('Security', () => {
+    it('Should display authorisation error if user does not have READ_WRITE role', () => {
+      cy.get<string>('@oasysAssessmentPk').then(oasysAssessmentPk => {
+        cy.openSentencePlan(oasysAssessmentPk, 'READ_ONLY')
+      })
+
+      cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
+        cy.addGoalToPlan(plan.uuid, goalData).then(goal => {
+          cy.visit(`/change-goal/${goal.uuid}`, { failOnStatusCode: false })
+        })
+
+        cy.get('.govuk-body').should('contain', 'You do not have permission to perform this action')
+      })
     })
   })
 
@@ -46,11 +63,19 @@ describe('Change a goal', () => {
         })
       })
 
-      // Modify data
+      // Uncheck related areas of need
       cy.get('#related-area-of-need-5').uncheck()
+
+      // set invalid date
+      cy.get('.govuk-radios').contains('Set another date').click()
+      const today = new Date()
+      cy.get('#date-selection-custom').type(`${today.getDate() - 1}/${today.getMonth() + 1}/${today.getFullYear()}`)
+
       cy.contains('button', 'save').click()
 
-      cy.get('.govuk-error-summary').should('contain', 'Select all related areas')
+      cy.get('.govuk-error-summary')
+        .should('contain', 'Select all related areas')
+        .should('contain', 'Date must be today or in the future')
       cy.contains('#related-area-of-need-error', 'Select all related areas')
       cy.title().should('contain', 'Error:')
 

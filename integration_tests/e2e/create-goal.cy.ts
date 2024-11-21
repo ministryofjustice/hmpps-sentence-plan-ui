@@ -7,7 +7,18 @@ describe('Create a new Goal', () => {
   beforeEach(() => {
     cy.createSentencePlan().then(planDetails => {
       cy.wrap(planDetails).as('planDetails')
+      cy.wrap(planDetails.oasysAssessmentPk).as('oasysAssessmentPk')
       cy.openSentencePlan(planDetails.oasysAssessmentPk)
+    })
+  })
+
+  describe('Security', () => {
+    it('Should display authorisation error if user does not have READ_WRITE role', () => {
+      cy.get<string>('@oasysAssessmentPk').then(oasysAssessmentPk => {
+        cy.openSentencePlan(oasysAssessmentPk, 'READ_ONLY')
+      })
+
+      cy.visit(`/create-goal/accommodation`, { failOnStatusCode: false })
     })
   })
 
@@ -26,9 +37,9 @@ describe('Create a new Goal', () => {
     cy.url().should('include', '/create-goal/accommodation')
     cy.get('.govuk-error-summary')
       .should('contain', 'Select yes if this goal is related to any other area of need')
-      .should('contain', 'Select a date')
+      .should('contain', 'Date must be today or in the future')
     cy.contains('#related-area-of-need-radio-error', 'Select yes if this goal is related to any other area of need')
-    cy.contains('.hmpps-datepicker', 'Select a date')
+    cy.contains('.hmpps-datepicker', 'Date must be today or in the future')
     cy.title().should('contain', 'Error:')
   })
 
@@ -48,6 +59,18 @@ describe('Create a new Goal', () => {
     cy.title().should('contain', 'Error:')
 
     cy.get('#goal-input-autocomplete').invoke('val').should('contain', lorem)
+  })
+
+  it('Creates a new goal without steps with padded target date field', () => {
+    createGoalPage.createGoal('accommodation')
+    createGoalPage.selectGoalAutocompleteOption('I w', 'I will comply with the conditions of my tenancy agreement')
+    createGoalPage.selectRelatedAreasOfNeedRadio('no')
+    createGoalPage.selectStartWorkingRadio('yes')
+    createGoalPage.selectAchievementDateSomethingElse('  4/4/3036')
+    createGoalPage.clickButton('Save without steps')
+
+    cy.url().should('contain', '/plan?status=added&type=current')
+    cy.get('#goal-list').children().should('have.length', 1)
   })
 
   it('Creates a new goal without steps', () => {

@@ -14,6 +14,13 @@ import runMiddlewareChain from '../../testutils/runMiddlewareChain'
 import testPlan from '../../testutils/data/planData'
 import { PlanAgreementStatus, PlanType } from '../../@types/PlanType'
 import { Goal } from '../../@types/GoalType'
+import CreateGoalPostModel from '../createGoal/models/CreateGoalPostModel'
+
+jest.mock('../../middleware/authorisationMiddleware', () => ({
+  requireAccessMode: jest.fn(() => (req: Request, res: Response, next: NextFunction) => {
+    return next()
+  }),
+}))
 
 jest.mock('../../services/sentence-plan/referentialDataService', () => {
   return jest.fn().mockImplementation(() => ({
@@ -58,8 +65,6 @@ describe('ChangeGoalController', () => {
         new Date('2024-04-01T00:00:00.000Z'),
         new Date('2024-07-01T00:00:00.000Z'),
         new Date('2025-01-01T00:00:00.000Z'),
-        new Date('2026-01-01T00:00:00.000Z'),
-        new Date('2024-01-08T00:00:00.000Z'),
       ],
     },
     errors: {},
@@ -85,7 +90,7 @@ describe('ChangeGoalController', () => {
 
   describe('get', () => {
     it('should render without validation errors', async () => {
-      await controller.get(req, res, next)
+      await runMiddlewareChain(controller.get, req, res, next)
 
       expect(res.render).toHaveBeenCalledWith('pages/change-goal', viewData)
     })
@@ -102,7 +107,7 @@ describe('ChangeGoalController', () => {
         errors,
       }
 
-      await controller.get(req, res, next)
+      await runMiddlewareChain(controller.get, req, res, next)
 
       expect(res.render).toHaveBeenCalledWith('pages/change-goal', expectedViewData)
     })
@@ -243,10 +248,24 @@ describe('ChangeGoalController', () => {
           })
         })
 
+        it('should add error if "date-selection-radio" is "custom", and "date-selection-custom" is in the past', () => {
+          req.body['start-working-goal-radio'] = 'yes'
+          req.body['date-selection-radio'] = 'custom'
+          const today = new Date()
+          req.body['date-selection-custom'] = `${today.getDate() - 1}/${today.getMonth() + 1}/${today.getFullYear()}`
+          const body = plainToInstance(CreateGoalPostModel, req.body)
+          const errors = getValidationErrors(body)
+
+          expect(errors).toMatchObject({
+            'date-selection-custom': { GoalDateMustBeTodayOrFuture: true },
+          })
+        })
+
         it('should not add error if "date-selection-radio" is "custom", and "date-selection-custom" is provided', () => {
           req.body['start-working-goal-radio'] = 'yes'
           req.body['date-selection-radio'] = 'custom'
-          req.body['date-selection-custom'] = new Date()
+          const today = new Date()
+          req.body['date-selection-custom'] = `${today.getDate()}/${today.getMonth() + 1}/${today.getFullYear()}`
           const body = plainToInstance(ChangeGoalPostModel, req.body)
           const errors = getValidationErrors(body)
 
