@@ -69,7 +69,8 @@
                                     <div class="govuk-grid-column-full">
                                         {{ needsScore({
                                             "score": assessment.criminogenicNeedsScore | string,
-                                            "upperBound": assessment.upperBound
+                                            "upperBound": assessment.upperBound,
+                                            "thresholdValue": assessment.thresholdValue
                                         }) }}
                                     </div>
                                 </div>

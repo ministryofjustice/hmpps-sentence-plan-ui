@@ -34,7 +34,9 @@
     </div>
     <div class="{{ barTypeClass }}">
         {% for i in range(0, needsScore.upperBound) -%}
-            <div>
+            <div {% if i==needsScore.thresholdValue-1 %} class="thresholdmarker-leftside"
+                 {% elseif i==needsScore.thresholdValue%} class="thresholdmarker-rightside"
+                 {% endif %}>
                 <span></span>
             </div>
         {%- endfor %}
