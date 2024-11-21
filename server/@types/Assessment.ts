@@ -138,7 +138,7 @@ export interface ThinkingBehaviourAndAttitudes {
   thinkStrengths?: string
   thinkOtherWeightedScore?: string
   thinkThreshold?: string
-  subData: SubAreaData
+  subData?: SubAreaData
 }
 
 export interface LifestyleAndAssociates {
