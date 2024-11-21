@@ -76,6 +76,23 @@
                             </div>
                         {% endif %}
 
+                        {% if assessment.subData %}
+                            <br>
+                            <div class="assessment-score">
+                                <h3 class="govuk-heading-s">Lifestyle & Associates need score</h3>
+                                <p class="govuk-body">{{ assessment.subData.score }} out of {{ assessment.subData.threshold }}. (Scores above 1 are high-scoring.)</p>
+                                <div class="govuk-grid-row">
+                                    <div class="govuk-grid-column-full">
+                                        {{ needsScore({
+                                            "score": assessment.subData.score | string,
+                                            "upperBound": 6
+                                        }) }}
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                        {% endif %}
+
                         <div>
                             <p class='goal-link'><a href='./create-goal/{{ assessment.goalRoute }}' class="govuk-link govuk-link--no-visited-state">Create {{ assessment.title | lower}} goal</a></p>
                         </div>

@@ -19,7 +19,7 @@
         "status": 200,
         "jsonBody": {
           "lastUpdatedTimestampSAN": "2024-11-04T10:17:00.217158",
-          "sanAassessmentData": {
+          "sanAssessmentData": {
             "drug_use": {
               "type": "RADIO",
               "description": "Has [subject] ever used drugs?",

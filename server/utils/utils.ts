@@ -77,6 +77,14 @@ export const formatAssessmentData = (
       let score
       let linkedtoRoSH
       let linkedtoReoffending
+      let subData
+
+      if (crimNeeds.lifestyleAndAssociates && area.crimNeedsKey === 'thinkingBehaviourAndAttitudes') {
+        subData = {
+          threshold: 6,
+          score: crimNeeds.lifestyleAndAssociates.lifestyleOtherWeightedScore,
+        }
+      }
 
       if (Object.prototype.hasOwnProperty.call(crimNeeds, area.crimNeedsKey)) {
         score = crimNeeds[area.crimNeedsKey][`${area.crimNeedsSubKey}OtherWeightedScore`]
@@ -113,6 +121,7 @@ export const formatAssessmentData = (
         criminogenicNeedsScore: score,
         goalRoute: area.goalRoute,
         upperBound: area.upperBound,
+        subData,
       } as AssessmentArea
     })
     .sort((a, b) => 0 - (a.criminogenicNeedsScore > b.criminogenicNeedsScore ? 1 : -1))

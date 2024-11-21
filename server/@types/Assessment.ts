@@ -61,6 +61,11 @@ interface Option {
   text: string
 }
 
+export interface SubAreaScore {
+  threshold: string
+  score: string
+}
+
 export interface Accommodation {
   [key: string]: any
   accLinkedToHarm?: string
@@ -131,6 +136,7 @@ export interface ThinkingBehaviourAndAttitudes {
   thinkStrengths?: string
   thinkOtherWeightedScore?: string
   thinkThreshold?: string
+  subData: SubAreaScore
 }
 
 export interface LifestyleAndAssociates {
