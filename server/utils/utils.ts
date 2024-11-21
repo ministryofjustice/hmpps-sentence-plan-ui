@@ -9,6 +9,7 @@ import {
   AssessmentArea,
   AssessmentAreaConfig,
   AssessmentAreas,
+  AssessmentAreaThreshold,
   AssessmentResponse,
   CriminogenicNeedsData,
   SubAreaData,
@@ -134,13 +135,14 @@ export const formatAssessmentData = (
         criminogenicNeedsScore: score,
         goalRoute: area.goalRoute,
         upperBound: area.upperBound,
+        thresholdValue: AssessmentAreaThreshold.get(area.crimNeedsKey),
         subData,
       } as AssessmentArea
     })
     .sort((a, b) => 0 - (a.criminogenicNeedsScore > b.criminogenicNeedsScore ? 1 : -1))
 
-  const lowScoring = all.filter(area => Number(area.overallScore) <= 3)
-  const highScoring = all.filter(area => Number(area.overallScore) > 3)
+  const lowScoring = all.filter(area => Number(area.overallScore) <= area.thresholdValue)
+  const highScoring = all.filter(area => Number(area.overallScore) > area.thresholdValue)
   const other = all.filter(area => area.criminogenicNeedsScore === undefined)
   return { lowScoring, highScoring, other, versionUpdatedAt: assessment.lastUpdatedTimestampSAN } as AssessmentAreas
 }

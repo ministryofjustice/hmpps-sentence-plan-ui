@@ -1,6 +1,18 @@
 export type AnswerDTOs = Record<string, AnswerDto>
 export type OasysEquivalent = Record<string, string | string[]>
 
+// Anything higher than this value is considered high scoring
+// the names of these fields match the CriminogenicNeedsData interface
+export const AssessmentAreaThreshold = new Map<string, number>([
+  ['accommodation', 1],
+  ['educationTrainingEmployability', 1],
+  ['drugMisuse', 0],
+  ['alcoholMisuse', 1],
+  ['personalRelationshipsAndCommunity', 1],
+  ['thinkingBehaviourAndAttitudes', 2],
+  ['lifestyleAndAssociates', 1],
+])
+
 export interface AssessmentResponse {
   sanAssessmentData: AnswerDTOs
   sanOasysEquivalent: OasysEquivalent
@@ -18,6 +30,7 @@ export interface AssessmentArea {
   strengthsOrProtectiveFactors?: string
   criminogenicNeedsScore?: string
   goalRoute?: string
+  thresholdValue?: number
 }
 
 export interface AssessmentAreas {
@@ -34,6 +47,7 @@ export interface AssessmentAreaConfig {
   assessmentKey: string
   goalRoute: string
   upperBound?: number
+  thresholdValue?: number
 }
 
 export const enum FieldType {
