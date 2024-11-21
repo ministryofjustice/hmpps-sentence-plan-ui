@@ -11,6 +11,7 @@ import {
   AssessmentAreas,
   AssessmentResponse,
   CriminogenicNeedsData,
+  SubAreaData,
 } from '../@types/Assessment'
 
 const properCase = (word: string): string =>
@@ -77,7 +78,7 @@ export const formatAssessmentData = (
       let score
       let linkedtoRoSH
       let linkedtoReoffending
-      let subData
+      let subData: SubAreaData
       let overallScore
 
       if (Object.prototype.hasOwnProperty.call(crimNeeds, area.crimNeedsKey)) {
@@ -93,12 +94,13 @@ export const formatAssessmentData = (
 
       if (crimNeeds.lifestyleAndAssociates && area.crimNeedsKey === 'thinkingBehaviourAndAttitudes') {
         subData = {
-          threshold: 6,
-          score: crimNeeds.lifestyleAndAssociates.lifestyleOtherWeightedScore,
+          upperBound: '6',
+          thresholdValue: '1',
+          criminogenicNeedsScore: crimNeeds.lifestyleAndAssociates.lifestyleOtherWeightedScore,
         }
         overallScore = Math.max(
           Number(crimNeeds.thinkingBehaviourAndAttitudes.thinkOtherWeightedScore),
-          Number(subData.score),
+          Number(subData.criminogenicNeedsScore),
         )
       }
 
