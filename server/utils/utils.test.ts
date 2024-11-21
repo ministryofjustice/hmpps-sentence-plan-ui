@@ -202,6 +202,7 @@ describe('format dates correctly', () => {
   it('should format date correctly', () => {
     expect(dateToISOFormat('31/3/2023')).toEqual('2023-03-31')
     expect(dateToISOFormat('1/3/2023')).toEqual('2023-03-01')
+    expect(dateToISOFormat('  1/3/2023')).toEqual('2023-03-01')
   })
 })
 
