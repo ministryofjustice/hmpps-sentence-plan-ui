@@ -10,15 +10,11 @@ import { assessmentData, crimNeeds } from '../../testutils/data/assessmentData'
 import { AssessmentAreas } from '../../@types/Assessment'
 import { formatAssessmentData } from '../../utils/utils'
 
+const oasysReturnUrl = 'https://oasys.return.url'
+
 jest.mock('../../services/sentence-plan/assessmentService', () => {
   return jest.fn().mockImplementation(() => ({
     getAssessmentByUuid: jest.fn().mockReturnValue(assessmentData),
-  }))
-})
-
-jest.mock('../../services/sessionService', () => {
-  return jest.fn().mockImplementation(() => ({
-    getPlanUUID: jest.fn().mockReturnValue(testPlan.uuid),
   }))
 })
 
@@ -31,6 +27,7 @@ jest.mock('../../services/sentence-plan/referentialDataService', () => {
 jest.mock('../../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
     getPlanUUID: jest.fn().mockReturnValue(testPlan.uuid),
+    getOasysReturnUrl: jest.fn().mockReturnValue(oasysReturnUrl),
     getPrincipalDetails: jest.fn().mockReturnValue(testHandoverContext.principal),
     getSubjectDetails: jest.fn().mockReturnValue(testHandoverContext.subject),
     getCriminogenicNeeds: jest.fn().mockReturnValue(crimNeeds),
@@ -61,6 +58,7 @@ describe('AboutPopController', () => {
       const payload = {
         locale: locale.en,
         data: {
+          oasysReturnUrl,
           pageId: 'about',
           deliusData: popData,
           assessmentAreas,

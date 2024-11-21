@@ -28,6 +28,8 @@ jest.mock('../../services/sentence-plan/referentialDataService', () => {
 jest.mock('../../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
     getPlanUUID: jest.fn().mockReturnValue('some-plan-uuid'),
+    getReturnLink: jest.fn().mockReturnValue('/some-return-link'),
+    setReturnLink: jest.fn(),
   }))
 })
 
@@ -45,17 +47,16 @@ describe('CreateGoalController', () => {
   let next: NextFunction
   const viewData = {
     data: {
+      returnLink: '/plan?type=current',
       areasOfNeed: AreaOfNeed,
       sortedAreasOfNeed: AreaOfNeed,
       form: {},
-      selectedAreaOfNeed: AreaOfNeed.find(x => x.url === 'area-url'),
+      selectedAreaOfNeed: AreaOfNeed.find(x => x.url === 'accommodation'),
       minimumDatePickerDate: '01/01/2024',
       dateOptions: [
         new Date('2024-04-01T00:00:00.000Z'),
         new Date('2024-07-01T00:00:00.000Z'),
         new Date('2025-01-01T00:00:00.000Z'),
-        new Date('2026-01-01T00:00:00.000Z'),
-        new Date('2024-01-08T00:00:00.000Z'),
       ],
     },
     errors: {},
@@ -73,6 +74,7 @@ describe('CreateGoalController', () => {
   beforeEach(() => {
     mockReferentialDataService = new ReferentialDataService() as jest.Mocked<ReferentialDataService>
     req = mockReq()
+    req.params.areaOfNeed = 'accommodation'
     res = mockRes()
     next = jest.fn()
 
@@ -220,6 +222,8 @@ describe('CreateGoalController', () => {
         it('should not add error if "date-selection-radio" is provided', () => {
           req.body['start-working-goal-radio'] = 'yes'
           req.body['date-selection-radio'] = 'custom'
+          const today = new Date()
+          req.body['date-selection-custom'] = `${today.getDate()}/${today.getMonth() + 1}/${today.getFullYear()}`
           const body = plainToInstance(CreateGoalPostModel, req.body)
           const errors = getValidationErrors(body)
 
@@ -239,10 +243,24 @@ describe('CreateGoalController', () => {
           })
         })
 
+        it('should add error if "date-selection-radio" is "custom", and "date-selection-custom" is in the past', () => {
+          req.body['start-working-goal-radio'] = 'yes'
+          req.body['date-selection-radio'] = 'custom'
+          const today = new Date()
+          req.body['date-selection-custom'] = `${today.getDate() - 1}/${today.getMonth() + 1}/${today.getFullYear()}`
+          const body = plainToInstance(CreateGoalPostModel, req.body)
+          const errors = getValidationErrors(body)
+
+          expect(errors).toMatchObject({
+            'date-selection-custom': { GoalDateMustBeTodayOrFuture: true },
+          })
+        })
+
         it('should not add error if "date-selection-radio" is "custom", and "date-selection-custom" is provided', () => {
           req.body['start-working-goal-radio'] = 'yes'
           req.body['date-selection-radio'] = 'custom'
-          req.body['date-selection-custom'] = new Date()
+          const today = new Date()
+          req.body['date-selection-custom'] = `${today.getDate()}/${today.getMonth() + 1}/${today.getFullYear()}`
           const body = plainToInstance(CreateGoalPostModel, req.body)
           const errors = getValidationErrors(body)
 
@@ -288,7 +306,7 @@ describe('CreateGoalController', () => {
       await runMiddlewareChain(controller.post, req, res, next)
 
       expect(req.services.goalService.saveGoal).toHaveBeenCalledWith(testNewGoal, 'some-plan-uuid')
-      expect(res.redirect).toHaveBeenCalledWith(URLs.ADD_STEPS.replace(':uuid', 'new-goal-uuid'))
+      expect(res.redirect).toHaveBeenCalledWith(`${URLs.ADD_STEPS.replace(':uuid', 'new-goal-uuid')}?type=current`)
       expect(res.render).not.toHaveBeenCalled()
       expect(next).not.toHaveBeenCalled()
     })

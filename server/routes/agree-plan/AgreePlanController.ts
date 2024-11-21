@@ -8,14 +8,19 @@ import transformRequest from '../../middleware/transformMiddleware'
 import AgreePlanPostModel from './models/AgreePlanPostModel'
 import { PlanAgreementStatus } from '../../@types/PlanType'
 import { PlanAgreement } from '../../@types/PlanAgreement'
+import { requireAccessMode } from '../../middleware/authorisationMiddleware'
+import { AccessMode } from '../../@types/Handover'
 
 export default class AgreePlanController {
   private render = async (req: Request, res: Response) => {
     const { errors } = req
 
+    const returnLink = req.services.sessionService.getReturnLink()
+
     return res.render('pages/agree-plan', {
       locale: locale.en,
       data: {
+        returnLink,
         form: req.body,
       },
       errors,
@@ -93,9 +98,15 @@ export default class AgreePlanController {
     return next()
   }
 
-  get = [this.validatePlanForAgreement, this.handleValidationErrors, this.render]
+  get = [
+    requireAccessMode(AccessMode.READ_WRITE),
+    this.validatePlanForAgreement,
+    this.handleValidationErrors,
+    this.render,
+  ]
 
   post = [
+    requireAccessMode(AccessMode.READ_WRITE),
     transformRequest({
       body: AgreePlanPostModel,
     }),

@@ -148,8 +148,11 @@ export function formatDateWithStyle(isoDate: string, style: 'short' | 'full' | '
 }
 
 export function dateToISOFormat(date: string): string {
-  const [day, month, year] = date.split('/')
-  return [year, padToTwoDigits(month), padToTwoDigits(day)].join('-')
+  if (date != null && date.indexOf('/') > -1) {
+    const [day, month, year] = date.split('/')
+    return [year.trim(), padToTwoDigits(month.trim()), padToTwoDigits(day.trim())].join('-')
+  }
+  return date
 }
 
 function padToTwoDigits(value: string): string {
@@ -180,7 +183,7 @@ export function moveGoal(goals: Array<any>, gUuid: string, operation: string) {
   return orderedGoals.map(({ uuid: goalUuid, goalOrder }) => ({ goalUuid, goalOrder }))
 }
 
-export function getAchieveDateOptions(date: Date, dateOptionsInMonths = [3, 6, 12, 24]) {
+export function getAchieveDateOptions(date: Date, dateOptionsInMonths = [3, 6, 12]) {
   return dateOptionsInMonths.map(option => {
     const achieveDate = new Date(date)
     achieveDate.setMonth(date.getMonth() + option)

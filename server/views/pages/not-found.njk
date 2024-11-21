@@ -17,17 +17,7 @@
       {% for suggestion in locale.suggestions %}
         <p class="govuk-body">{{ suggestion }}</p>
       {% endfor %}
-      {{ locale.resolution | safe }}
+      <a class="govuk-link govuk-link--no-visited-state" href="/plan">{{ locale.returnToPlan }}</a>
     </div>
   </div>
-
-  {% if stack %}
-    <div class="govuk-grid-row govuk-!-margin-top-4">
-      <div class="govuk-grid-column-full">
-        <code class="code-block">
-          <pre>{{ stack }}</pre>
-        </code>
-      </div>
-    </div>
-  {% endif %}
 {% endblock %}

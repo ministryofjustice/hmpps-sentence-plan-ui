@@ -9,6 +9,8 @@ import transformRequest from '../../middleware/transformMiddleware'
 import ChangeGoalPostModel from './models/ChangeGoalPostModel'
 import validateRequest from '../../middleware/validationMiddleware'
 import { PlanAgreementStatus } from '../../@types/PlanType'
+import { requireAccessMode } from '../../middleware/authorisationMiddleware'
+import { AccessMode } from '../../@types/Handover'
 
 export default class ChangeGoalController {
   constructor(private readonly referentialDataService: ReferentialDataService) {}
@@ -18,24 +20,30 @@ export default class ChangeGoalController {
     const { errors } = req
 
     const sortedAreasOfNeed = this.referentialDataService.getSortedAreasOfNeed()
-    const goal = await req.services.goalService.getGoal(uuid)
-
+    const returnLink = req.services.sessionService.getReturnLink()
     const dateOptions = this.getDateOptions()
-    const selectedAreaOfNeed = sortedAreasOfNeed.find(areaOfNeed => areaOfNeed.name === goal.areaOfNeed.name)
     const minimumDatePickerDate = formatDateWithStyle(new Date().toISOString(), 'short')
-    const form = errors ? req.body : this.mapGoalToForm(goal)
 
-    return res.render('pages/change-goal', {
-      locale: locale.en,
-      data: {
-        minimumDatePickerDate,
-        sortedAreasOfNeed,
-        selectedAreaOfNeed,
-        dateOptions,
-        form,
-      },
-      errors,
-    })
+    try {
+      const goal = await req.services.goalService.getGoal(uuid)
+      const selectedAreaOfNeed = sortedAreasOfNeed.find(areaOfNeed => areaOfNeed.name === goal.areaOfNeed.name)
+      const form = errors ? req.body : this.mapGoalToForm(goal)
+
+      return res.render('pages/change-goal', {
+        locale: locale.en,
+        data: {
+          minimumDatePickerDate,
+          sortedAreasOfNeed,
+          selectedAreaOfNeed,
+          dateOptions,
+          returnLink,
+          form,
+        },
+        errors,
+      })
+    } catch (e) {
+      return next(e)
+    }
   }
 
   private saveAndRedirect = async (req: Request, res: Response, next: NextFunction) => {
@@ -71,7 +79,7 @@ export default class ChangeGoalController {
 
   private getDateOptions = () => {
     const today = new Date()
-    return [...getAchieveDateOptions(today), new Date(today.setDate(today.getDate() + 7))]
+    return getAchieveDateOptions(today)
   }
 
   private mapGoalToForm = (goal: Goal) => {
@@ -130,9 +138,10 @@ export default class ChangeGoalController {
     return next()
   }
 
-  get = this.render
+  get = [requireAccessMode(AccessMode.READ_WRITE), this.render]
 
   post = [
+    requireAccessMode(AccessMode.READ_WRITE),
     transformRequest({
       body: ChangeGoalPostModel,
     }),

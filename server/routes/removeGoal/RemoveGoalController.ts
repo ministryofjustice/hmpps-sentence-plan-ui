@@ -10,6 +10,8 @@ import transformRequest from '../../middleware/transformMiddleware'
 import RemoveGoalPostModel from './models/RemoveGoalPostModel'
 import validateRequest from '../../middleware/validationMiddleware'
 import { goalStatusToTabName } from '../../utils/utils'
+import { requireAccessMode } from '../../middleware/authorisationMiddleware'
+import { AccessMode } from '../../@types/Handover'
 
 export default class RemoveGoalController {
   render = async (req: Request, res: Response, next: NextFunction) => {
@@ -92,7 +94,13 @@ export default class RemoveGoalController {
     return next()
   }
 
-  get = this.render
+  get = [requireAccessMode(AccessMode.READ_WRITE), this.render]
 
-  post = [transformRequest({ body: RemoveGoalPostModel }), validateRequest(), this.handleValidationErrors, this.remove]
+  post = [
+    requireAccessMode(AccessMode.READ_WRITE),
+    transformRequest({ body: RemoveGoalPostModel }),
+    validateRequest(),
+    this.handleValidationErrors,
+    this.remove,
+  ]
 }
