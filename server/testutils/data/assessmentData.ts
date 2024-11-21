@@ -41,7 +41,7 @@ export const crimNeeds: CriminogenicNeedsData = {
     eteLinkedToHarm: 'NO',
     eteLinkedToReoffending: 'YES',
     eteStrengths: 'YES',
-    eteOtherWeightedScore: '2',
+    eteOtherWeightedScore: '1',
     eteThreshold: 'YES',
   },
   healthAndWellbeing: {

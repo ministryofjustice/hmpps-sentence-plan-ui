@@ -250,8 +250,10 @@ describe('format assessment data', () => {
             goalRoute: 'accommodation',
             upperBound: 6,
           },
+        ],
+        lowScoring: [
           {
-            criminogenicNeedsScore: '2',
+            criminogenicNeedsScore: '1',
             linkedtoReoffending: true,
             linkedtoRoSH: false,
             motivationToMakeChanges: undefined,
@@ -265,7 +267,6 @@ describe('format assessment data', () => {
             upperBound: 4,
           },
         ],
-        lowScoring: [],
         other: [
           {
             criminogenicNeedsScore: undefined,
@@ -369,8 +370,10 @@ describe('format assessment data', () => {
             title: 'Accommodation',
             upperBound: 6,
           },
+        ],
+        lowScoring: [
           {
-            criminogenicNeedsScore: '2',
+            criminogenicNeedsScore: '1',
             linkedtoReoffending: true,
             linkedtoRoSH: false,
             motivationToMakeChanges: 'needsHelpToMakeChanges',
@@ -384,7 +387,6 @@ describe('format assessment data', () => {
             upperBound: 4,
           },
         ],
-        lowScoring: [],
         other: [
           {
             criminogenicNeedsScore: undefined,
