@@ -9,11 +9,11 @@ import {
   AssessmentArea,
   AssessmentAreaConfig,
   AssessmentAreas,
-  AssessmentAreaThreshold,
   AssessmentResponse,
   CriminogenicNeedsData,
   SubAreaData,
 } from '../@types/Assessment'
+import { assessmentAreaThreshold } from '../services/sentence-plan/assessmentService'
 
 const properCase = (word: string): string =>
   word.length >= 1 ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word
@@ -135,7 +135,7 @@ export const formatAssessmentData = (
         criminogenicNeedsScore: score,
         goalRoute: area.goalRoute,
         upperBound: area.upperBound,
-        thresholdValue: AssessmentAreaThreshold.get(area.crimNeedsKey),
+        thresholdValue: assessmentAreaThreshold.get(area.crimNeedsKey),
         subData,
       } as AssessmentArea
     })
