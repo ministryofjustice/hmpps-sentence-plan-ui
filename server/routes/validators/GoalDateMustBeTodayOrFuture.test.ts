@@ -31,4 +31,9 @@ describe('GoalDateMustBeTodayOrFuture', () => {
     const invalidDate = 'invalid-date'
     expect(validator.validate(invalidDate)).toBe(false)
   })
+
+  it('returns true for a date in the future with padded date', () => {
+    const futureInput = ' 2/4 /3026'
+    expect(validator.validate(futureInput)).toBe(true)
+  })
 })
