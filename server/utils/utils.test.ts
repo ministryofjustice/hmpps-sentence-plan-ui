@@ -272,7 +272,6 @@ describe('format assessment data', () => {
             linkedtoReoffending: undefined,
             linkedtoRoSH: undefined,
             motivationToMakeChanges: undefined,
-            overallScore: undefined,
             riskOfReoffending: undefined,
             riskOfSeriousHarm: undefined,
             strengthsOrProtectiveFactors: undefined,

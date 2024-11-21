@@ -92,7 +92,11 @@ export const formatAssessmentData = (
         }
       }
 
-      if (crimNeeds.lifestyleAndAssociates && area.crimNeedsKey === 'thinkingBehaviourAndAttitudes') {
+      if (
+        crimNeeds.lifestyleAndAssociates &&
+        crimNeeds.thinkingBehaviourAndAttitudes &&
+        area.crimNeedsKey === 'thinkingBehaviourAndAttitudes'
+      ) {
         subData = {
           upperBound: '6',
           thresholdValue: '1',
