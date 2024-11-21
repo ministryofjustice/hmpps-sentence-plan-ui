@@ -23,62 +23,62 @@
                         <span class="moj-badge moj-badge--bright-purple sp-badge">Risk of reoffending</span>
                     {% endif %}
                 </div>
-                <div id="accordion-default-content-{{ loop.index }}" class="govuk-accordion__section-content">
-                    <div class="rosh">
+            </div>
+            <div id="accordion-default-content-{{ loop.index }}" class="govuk-accordion__section-content">
+                <div class="rosh">
 
-                        {% if linkedtoRoSH or riskOfSeriousHarmData %}
-                            <div class="ror">
-                                <h3 class="govuk-heading-s">This area is linked to RoSH (risk of serious harm)</h3>
-                                <p class="govuk-body">{{ riskOfSeriousHarmData }}</p>
-                            </div>
-                        {% else %}
-                            <h3 class="govuk-heading-s">This area is not linked to RoSH (risk of serious harm)</h3>
-                        {% endif %}
+                    {% if linkedtoRoSH or riskOfSeriousHarmData %}
+                        <div class="ror">
+                            <h3 class="govuk-heading-s">This area is linked to RoSH (risk of serious harm)</h3>
+                            <p class="govuk-body">{{ riskOfSeriousHarmData }}</p>
+                        </div>
+                    {% else %}
+                        <h3 class="govuk-heading-s">This area is not linked to RoSH (risk of serious harm)</h3>
+                    {% endif %}
 
-                        {% if linkedtoReoffending or riskOfReoffendingData %}
-                            <div class="ror" >
-                                <h3 class="govuk-heading-s">This area is linked to risk of reoffending</h3>
-                                <p class="sp-text-pre-wrap govuk-body">{{ riskOfReoffendingData }}</p>
-                            </div>
-                        {%  else %}
-                            <h3 class="govuk-heading-s">This area is not linked to risk of reoffending</h3>
-                        {% endif %}
+                    {% if linkedtoReoffending or riskOfReoffendingData %}
+                        <div class="ror" >
+                            <h3 class="govuk-heading-s">This area is linked to risk of reoffending</h3>
+                            <p class="sp-text-pre-wrap govuk-body">{{ riskOfReoffendingData }}</p>
+                        </div>
+                    {%  else %}
+                        <h3 class="govuk-heading-s">This area is not linked to risk of reoffending</h3>
+                    {% endif %}
 
-                        {% if assessment.motivationToMakeChanges %}
-                            <div class="motivation">
-                                <h3 class="govuk-heading-s">Motivation to make changes in this area</h3>
-                                <p class="govuk-body">{{ locale.motivationText[assessment.motivationToMakeChanges] }}</p>
-                            </div>
-                        {% endif %}
+                    {% if assessment.motivationToMakeChanges %}
+                        <div class="motivation">
+                            <h3 class="govuk-heading-s">Motivation to make changes in this area</h3>
+                            <p class="govuk-body">{{ locale.motivationText[assessment.motivationToMakeChanges] }}</p>
+                        </div>
+                    {% endif %}
 
-                        {% if assessment.strengthsOrProtectiveFactors %}
-                            <div class="strengths">
-                                <h3 class="govuk-heading-s">There are strengths or protective factors related to
-                                    this area</h3>
-                                <p class="govuk-body">{{ assessment.strengthsOrProtectiveFactors }}</p>
-                            </div>
-                        {% else %}
-                            <h3 class="govuk-heading-s">There are no strengths or protective factors related to this area</h3>
-                        {% endif %}
+                    {% if assessment.strengthsOrProtectiveFactors %}
+                        <div class="strengths">
+                            <h3 class="govuk-heading-s">There are strengths or protective factors related to
+                                this area</h3>
+                            <p class="govuk-body">{{ assessment.strengthsOrProtectiveFactors }}</p>
+                        </div>
+                    {% else %}
+                        <h3 class="govuk-heading-s">There are no strengths or protective factors related to this area</h3>
+                    {% endif %}
 
-                        {% if assessment.criminogenicNeedsScore %}
-                            <div class="assessment-score">
-                                <h3 class="govuk-heading-s">{{ assessment.title }} need score</h3>
-                                <p class="govuk-body">{{ assessment.criminogenicNeedsScore }} out of {{ assessment.upperBound }}. (Scores above 3 are high-scoring.)</p>
-                                <div class="govuk-grid-row">
-                                    <div class="govuk-grid-column-full">
-                                        {{ needsScore({
-                                            "score": assessment.criminogenicNeedsScore | string,
-                                            "upperBound": assessment.upperBound
-                                        }) }}
-                                    </div>
+                    {% if assessment.criminogenicNeedsScore %}
+                        <div class="assessment-score">
+                            <h3 class="govuk-heading-s">{{ assessment.title }} need score</h3>
+                            <p class="govuk-body">{{ assessment.criminogenicNeedsScore }} out of {{ assessment.upperBound }}. (Scores above 3 are high-scoring.)</p>
+                            <div class="govuk-grid-row">
+                                <div class="govuk-grid-column-full">
+                                    {{ needsScore({
+                                        "score": assessment.criminogenicNeedsScore | string,
+                                        "upperBound": assessment.upperBound
+                                    }) }}
                                 </div>
                             </div>
-                        {% endif %}
-
-                        <div>
-                            <p class='goal-link'><a href='./create-goal/{{ assessment.goalRoute }}' class="govuk-link govuk-link--no-visited-state">Create {{ assessment.title | lower}} goal</a></p>
                         </div>
+                    {% endif %}
+
+                    <div>
+                        <p class='goal-link'><a href='./create-goal/{{ assessment.goalRoute }}' class="govuk-link govuk-link--no-visited-state">Create {{ assessment.title | lower}} goal</a></p>
                     </div>
                 </div>
             </div>
