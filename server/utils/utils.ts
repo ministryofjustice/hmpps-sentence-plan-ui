@@ -78,13 +78,7 @@ export const formatAssessmentData = (
       let linkedtoRoSH
       let linkedtoReoffending
       let subData
-
-      if (crimNeeds.lifestyleAndAssociates && area.crimNeedsKey === 'thinkingBehaviourAndAttitudes') {
-        subData = {
-          threshold: 6,
-          score: crimNeeds.lifestyleAndAssociates.lifestyleOtherWeightedScore,
-        }
-      }
+      let overallScore
 
       if (Object.prototype.hasOwnProperty.call(crimNeeds, area.crimNeedsKey)) {
         score = crimNeeds[area.crimNeedsKey][`${area.crimNeedsSubKey}OtherWeightedScore`]
@@ -96,6 +90,18 @@ export const formatAssessmentData = (
           score = area.upperBound
         }
       }
+
+      if (crimNeeds.lifestyleAndAssociates && area.crimNeedsKey === 'thinkingBehaviourAndAttitudes') {
+        subData = {
+          threshold: 6,
+          score: crimNeeds.lifestyleAndAssociates.lifestyleOtherWeightedScore,
+        }
+        overallScore = Math.max(
+          Number(crimNeeds.thinkingBehaviourAndAttitudes.thinkOtherWeightedScore),
+          Number(subData.score),
+        )
+      }
+
       const motivationToMakeChanges = motivationText(
         assessment.sanAssessmentData[`${area.assessmentKey}_changes`]?.value,
       )
@@ -112,6 +118,7 @@ export const formatAssessmentData = (
 
       return {
         title: area.area,
+        overallScore: overallScore ?? score,
         linkedtoRoSH,
         linkedtoReoffending,
         motivationToMakeChanges,
@@ -126,8 +133,8 @@ export const formatAssessmentData = (
     })
     .sort((a, b) => 0 - (a.criminogenicNeedsScore > b.criminogenicNeedsScore ? 1 : -1))
 
-  const lowScoring = all.filter(area => Number(area.criminogenicNeedsScore) <= 3)
-  const highScoring = all.filter(area => Number(area.criminogenicNeedsScore) > 3)
+  const lowScoring = all.filter(area => Number(area.overallScore) <= 3)
+  const highScoring = all.filter(area => Number(area.overallScore) > 3)
   const other = all.filter(area => area.criminogenicNeedsScore === undefined)
   return { lowScoring, highScoring, other, versionUpdatedAt: assessment.lastUpdatedTimestampSAN } as AssessmentAreas
 }

@@ -9,6 +9,7 @@ export interface AssessmentResponse {
 
 export interface AssessmentArea {
   title: string
+  overallScore?: string
   linkedtoRoSH: boolean
   linkedtoReoffending: boolean
   motivationToMakeChanges?: string
