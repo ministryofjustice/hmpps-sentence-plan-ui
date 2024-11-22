@@ -65,7 +65,7 @@ describe('AboutPopController', () => {
         },
         errors: {},
       }
-      expect(res.render).toHaveBeenCalledWith('pages/about-pop', payload)
+      expect(res.render).toHaveBeenCalledWith('pages/about', payload)
     })
   })
 })

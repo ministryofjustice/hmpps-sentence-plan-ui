@@ -111,6 +111,10 @@
         "goalRoute": "drug-use",
         "upperBound": 8
       }
-    ]
+    ],
+    "needScore": {
+      "doesNotHaveNeedScore": "This area does not have a need score.",
+      "needScoreNotAvailable": "The score for this area is not available yet."
+    }
   }
 }

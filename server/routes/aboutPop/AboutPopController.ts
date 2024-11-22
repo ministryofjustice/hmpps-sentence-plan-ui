@@ -28,7 +28,7 @@ export default class AboutPopController {
 
       const assessmentAreas = formatAssessmentData(criminogenicNeedsData, assessmentData, locale.en.areas)
       const pageId = 'about'
-      return res.render('pages/about-pop', {
+      return res.render('pages/about', {
         locale: locale.en,
         data: {
           oasysReturnUrl,

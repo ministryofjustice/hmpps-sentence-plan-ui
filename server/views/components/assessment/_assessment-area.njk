@@ -23,6 +23,7 @@
                         <span class="moj-badge moj-badge--bright-purple sp-badge">{{ locale.detail.riskOfReoffending }}</span>
                     {% endif %}
                 </div>
+            </div>
                 <div id="accordion-default-content-{{ loop.index }}" class="govuk-accordion__section-content">
                     <div class="rosh">
                         {% if linkedtoRoSH or riskOfSeriousHarmData %}
@@ -61,7 +62,7 @@
 
                         {% if assessment.criminogenicNeedsScore %}
                             <div class="assessment-score">
-                                <h3 class="govuk-heading-s">{{ assessment.title }} {{ locale.detail.needScore }}</h3>
+                                <h3 class="govuk-heading-s">{{ assessment.title }} need score</h3>
                                 <p class="govuk-body">{{ assessment.criminogenicNeedsScore }} out of {{ assessment.upperBound }}. (Scores above 3 are high-scoring.)</p>
                                 <div class="govuk-grid-row">
                                     <div class="govuk-grid-column-full">
@@ -72,6 +73,12 @@
                                     </div>
                                 </div>
                             </div>
+                        {% else %}
+                            {% if assessment.title in ['Finances', 'Health and wellbeing'] %}
+                                <p>{{ locale.needScore.doesNotHaveNeedScore }}</p>
+                            {% else %}
+                                <p>{{ locale.needScore.needScoreNotAvailable }}</p>
+                            {% endif %}
                         {% endif %}
 
                         {% if assessment.subData %}
@@ -93,7 +100,7 @@
                         {% endif %}
 
                         <div>
-                            <p class='goal-link'><a href='./create-goal/{{ assessment.goalRoute }}' class="govuk-link govuk-link--no-visited-state">Create {{ assessment.title | lower}} goal</a></p>
+                            <p class='goal-link'><a href='/create-goal/{{ assessment.goalRoute }}' class="govuk-link govuk-link--no-visited-state">Create {{ assessment.title | lower}} goal</a></p>
                         </div>
                     </div>
                 </div>
