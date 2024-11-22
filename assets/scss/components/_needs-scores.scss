@@ -156,6 +156,14 @@ $white-needs-score-background-colour: #ffffff;
     box-sizing: border-box;
   }
 
+  & > div.thresholdmarker-leftside {
+    border-right: 5px solid govuk-colour("black") !important;
+  }
+
+  & > div.thresholdmarker-rightside {
+    border-left: 5px solid govuk-colour("black") !important;
+  }
+
   & > div:nth-child(10n + 1) {
     background-color: $white-needs-score-background-colour;
     border-left: 1px solid govuk-colour("black");
@@ -167,12 +175,10 @@ $white-needs-score-background-colour: #ffffff;
 
   & > div:nth-child(10n + 3)  {
     background-color: $white-needs-score-background-colour;
-    border-right: 5px solid govuk-colour("black");
   }
 
   & > div:nth-child(10n + 4)  {
     background-color: $white-needs-score-background-colour;
-    border-left: 5px solid govuk-colour("black");
   }
 
   & > div:nth-child(10n + 5)  {
@@ -199,6 +205,7 @@ $white-needs-score-background-colour: #ffffff;
     background-color: $white-needs-score-background-colour;
     border-right: 1px solid govuk-colour("black");
   }
+
   & > div:nth-child(10n + 1) {
     &::before {
       position: relative;
