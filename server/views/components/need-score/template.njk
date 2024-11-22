@@ -26,7 +26,7 @@
 
 {% set barTypeClass = 'needs-score-bar--small-' + needsScore.score + ' needs-score-bar--small-tenths' %}
 
-<div class="needs-score  govuk-body">
+<div class="needs-score govuk-body">
     <div class="needs-score-label">
         <div class="{{ scoreLabelClass }}">
             {{ needsScoreIndicator(needsScore) }}
@@ -34,9 +34,11 @@
     </div>
     <div class="{{ barTypeClass }}">
         {% for i in range(0, needsScore.upperBound) -%}
-            <div>
+            <div {%- if i == needsScore.thresholdValue - 1 %} class="thresholdmarker-leftside"
+                 {%- elseif i == needsScore.thresholdValue %} class="thresholdmarker-rightside"
+                 {%- endif %}>
                 <span></span>
             </div>
-        {%- endfor %}
+        {% endfor %}
     </div>
 </div>
