@@ -6,6 +6,19 @@
     "mainHeading": {
       "title": "About {{ subject.givenName }}"
     },
+    "detail": {
+      "RoSH": "RoSH (Risk of Serious Harm)",
+      "riskOfReoffending": "Risk of reoffending",
+      "linkedToRoSH": "This area is linked to RoSH (risk of serious harm)",
+      "notLinkedToRoSH": "This area is not linked to RoSH (risk of serious harm)",
+      "linkedToReoffending": "This area is linked to risk of reoffending",
+      "notLinkedToRiskOfReoffending": "This area is not linked to risk of reoffending",
+      "motivationToMakeChanges": "Motivation to make changes in this area",
+      "strengthsOrProtectiveFactors": "There are strengths or protective factors related to this area",
+      "noStrengthsOrProtectiveFactors": "There are no strengths or protective factors related to this area",
+      "needScore": "need score",
+      "lifeStyleAndAssociatesNeedScore": "Lifestyle & Associates need score"
+    },
     "errors": {
       "noAssessmentDataFound": "No assessment data found",
       "noSentenceDataFound": "No sentence data found"

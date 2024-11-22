@@ -9,6 +9,7 @@ export interface AssessmentResponse {
 
 export interface AssessmentArea {
   title: string
+  overallScore?: string
   linkedtoRoSH: boolean
   linkedtoReoffending: boolean
   motivationToMakeChanges?: string
@@ -59,6 +60,12 @@ export interface AnswerDto {
 interface Option {
   value: string
   text: string
+}
+
+export interface SubAreaData {
+  upperBound: string
+  thresholdValue: string
+  criminogenicNeedsScore: string
 }
 
 export interface Accommodation {
@@ -131,6 +138,7 @@ export interface ThinkingBehaviourAndAttitudes {
   thinkStrengths?: string
   thinkOtherWeightedScore?: string
   thinkThreshold?: string
+  subData?: SubAreaData
 }
 
 export interface LifestyleAndAssociates {
