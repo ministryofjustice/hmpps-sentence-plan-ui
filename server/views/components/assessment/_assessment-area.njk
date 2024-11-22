@@ -77,9 +77,9 @@
                             </div>
                         {% else %}
                             {% if assessment.title in ['Finances', 'Health and wellbeing'] %}
-                                <p>{{ locale.needScore.doesNotHaveNeedScore }}</p>
+                                <h3 class="govuk-heading-s">{{ locale.needScore.doesNotHaveNeedScore }}</h3>
                             {% else %}
-                                <p>{{ locale.needScore.needScoreNotAvailable }}</p>
+                                <h3 class="govuk-heading-s">{{ locale.needScore.needScoreNotAvailable }}</h3>
                             {% endif %}
                         {% endif %}
 
