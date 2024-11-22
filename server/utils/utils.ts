@@ -100,7 +100,7 @@ export const formatAssessmentData = (
       ) {
         subData = {
           upperBound: '6',
-          thresholdValue: '1',
+          thresholdValue: getAssessmentAreaThreshold('lifestyleAndAssociates'),
           criminogenicNeedsScore: crimNeeds.lifestyleAndAssociates.lifestyleOtherWeightedScore,
         }
         overallScore = Math.max(
