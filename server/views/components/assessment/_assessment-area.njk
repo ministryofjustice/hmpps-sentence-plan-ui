@@ -62,23 +62,29 @@
                         <h3 class="govuk-heading-s">There are no strengths or protective factors related to this area</h3>
                     {% endif %}
 
-                    {% if assessment.criminogenicNeedsScore %}
-                        <div class="assessment-score">
-                            <h3 class="govuk-heading-s">{{ assessment.title }} need score</h3>
-                            <p class="govuk-body">{{ assessment.criminogenicNeedsScore }} out of {{ assessment.upperBound }}. (Scores above 3 are high-scoring.)</p>
-                            <div class="govuk-grid-row">
-                                <div class="govuk-grid-column-full">
-                                    {{ needsScore({
-                                        "score": assessment.criminogenicNeedsScore | string,
-                                        "upperBound": assessment.upperBound
-                                    }) }}
+                        {% if assessment.criminogenicNeedsScore %}
+                            <div class="assessment-score">
+                                <h3 class="govuk-heading-s">{{ assessment.title }} need score</h3>
+                                <p class="govuk-body">{{ assessment.criminogenicNeedsScore }} out of {{ assessment.upperBound }}. (Scores above 3 are high-scoring.)</p>
+                                <div class="govuk-grid-row">
+                                    <div class="govuk-grid-column-full">
+                                        {{ needsScore({
+                                            "score": assessment.criminogenicNeedsScore | string,
+                                            "upperBound": assessment.upperBound
+                                        }) }}
+                                    </div>
                                 </div>
                             </div>
+                        {% else %}
+                            {% if assessment.title in ['Finances', 'Health and wellbeing'] %}
+                                <p>{{ locale.needScore.doesNotHaveNeedScore }}</p>
+                            {% else %}
+                                <p>{{ locale.needScore.needScoreNotAvailable }}</p>
+                            {% endif %}
+                        {% endif %}
+                        <div>
+                            <p class='goal-link'><a href='/create-goal/{{ assessment.goalRoute }}' class="govuk-link govuk-link--no-visited-state">Create {{ assessment.title | lower}} goal</a></p>
                         </div>
-                    {% endif %}
-
-                    <div>
-                        <p class='goal-link'><a href='./create-goal/{{ assessment.goalRoute }}' class="govuk-link govuk-link--no-visited-state">Create {{ assessment.title | lower}} goal</a></p>
                     </div>
                 </div>
             </div>
