@@ -25,7 +25,7 @@ describe('Rendering', () => {
   })
 
   it('Displays and references the button correctly on the about page', () => {
-    cy.visit('/about-pop')
+    cy.visit('/about')
     cy.get('h1').should('include.text', 'About')
     cy.get('.govuk-button--secondary').contains('Return to OASys')
     cy.get('.govuk-button--secondary').should('have.attr', 'href').and('not.be.empty')

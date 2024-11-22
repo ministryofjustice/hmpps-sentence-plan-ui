@@ -1,5 +1,5 @@
 export default {
-  ABOUT_POP: '/about-pop',
+  ABOUT_POP: '/about',
   CREATE_GOAL: '/create-goal/:areaOfNeed',
   ADD_STEPS: '/goal/:uuid/add-steps',
   PLAN_OVERVIEW: '/plan',
