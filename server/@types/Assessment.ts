@@ -18,6 +18,7 @@ export interface AssessmentArea {
   strengthsOrProtectiveFactors?: string
   criminogenicNeedsScore?: string
   goalRoute?: string
+  thresholdValue?: number
 }
 
 export interface AssessmentAreas {
@@ -34,6 +35,7 @@ export interface AssessmentAreaConfig {
   assessmentKey: string
   goalRoute: string
   upperBound?: number
+  thresholdValue?: number
 }
 
 export const enum FieldType {

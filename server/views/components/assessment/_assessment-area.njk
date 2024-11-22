@@ -63,12 +63,14 @@
                         {% if assessment.criminogenicNeedsScore %}
                             <div class="assessment-score">
                                 <h3 class="govuk-heading-s">{{ assessment.title }} need score</h3>
-                                <p class="govuk-body">{{ assessment.criminogenicNeedsScore }} out of {{ assessment.upperBound }}. (Scores above 3 are high-scoring.)</p>
+                                <p class="govuk-body">{{ assessment.criminogenicNeedsScore }} out of {{ assessment.upperBound }}. (Scores above
+                                    {{ assessment.thresholdValue }} are high-scoring.)</p>
                                 <div class="govuk-grid-row">
                                     <div class="govuk-grid-column-full">
                                         {{ needsScore({
                                             "score": assessment.criminogenicNeedsScore | string,
-                                            "upperBound": assessment.upperBound
+                                            "upperBound": assessment.upperBound,
+                                            "thresholdValue": assessment.thresholdValue
                                         }) }}
                                     </div>
                                 </div>
@@ -84,7 +86,7 @@
                         {% if assessment.subData %}
                             <br>
                             <div class="assessment-score">
-                                <h3 class="govuk-heading-s">{{ locale.detail.lifestyleAndAssociatedNeedScore }}</h3>
+                                <h3 class="govuk-heading-s">{{ locale.detail.lifestyleAndAssociatesNeedScore }}</h3>
                                 <p class="govuk-body">{{ assessment.subData.criminogenicNeedsScore }} out of {{ assessment.subData.upperBound }}. (Scores above
                                     {{ assessment.subData.thresholdValue }} are high-scoring.)</p>
                                 <div class="govuk-grid-row">

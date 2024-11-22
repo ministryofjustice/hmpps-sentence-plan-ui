@@ -13,6 +13,7 @@ import {
   CriminogenicNeedsData,
   SubAreaData,
 } from '../@types/Assessment'
+import getAssessmentAreaThreshold from '../services/sentence-plan/assessmentAreaThresholds'
 
 const properCase = (word: string): string =>
   word.length >= 1 ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word
@@ -134,13 +135,14 @@ export const formatAssessmentData = (
         criminogenicNeedsScore: score,
         goalRoute: area.goalRoute,
         upperBound: area.upperBound,
+        thresholdValue: getAssessmentAreaThreshold(area.crimNeedsKey),
         subData,
       } as AssessmentArea
     })
     .sort((a, b) => 0 - (a.criminogenicNeedsScore > b.criminogenicNeedsScore ? 1 : -1))
 
-  const lowScoring = all.filter(area => Number(area.overallScore) <= 3)
-  const highScoring = all.filter(area => Number(area.overallScore) > 3)
+  const lowScoring = all.filter(area => Number(area.overallScore) <= area.thresholdValue)
+  const highScoring = all.filter(area => Number(area.overallScore) > area.thresholdValue)
   const other = all.filter(area => area.criminogenicNeedsScore === undefined)
   return { lowScoring, highScoring, other, versionUpdatedAt: assessment.lastUpdatedTimestampSAN } as AssessmentAreas
 }
