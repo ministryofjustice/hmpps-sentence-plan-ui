@@ -113,8 +113,8 @@
       }
     ],
     "needScore": {
-      "doesNotHaveNeedScore": "This area does not have a need score.",
-      "needScoreNotAvailable": "The score for this area is not available yet."
+      "doesNotHaveNeedScore": "This area does not have a need score",
+      "needScoreNotAvailable": "The score for this area is not available yet"
     }
   }
 }
