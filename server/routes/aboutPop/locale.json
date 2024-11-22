@@ -17,7 +17,7 @@
       "strengthsOrProtectiveFactors": "There are strengths or protective factors related to this area",
       "noStrengthsOrProtectiveFactors": "There are no strengths or protective factors related to this area",
       "needScore": "need score",
-      "lifeStyleAndAssociatesNeedScore": "Lifestyle & Associates need score"
+      "lifestyleAndAssociatesNeedScore": "Lifestyle & Associates need score"
     },
     "errors": {
       "noAssessmentDataFound": "No assessment data found",
