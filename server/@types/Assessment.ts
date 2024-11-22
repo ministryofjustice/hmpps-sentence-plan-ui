@@ -66,7 +66,7 @@ interface Option {
 
 export interface SubAreaData {
   upperBound: string
-  thresholdValue: string
+  thresholdValue: number
   criminogenicNeedsScore: string
 }
 
