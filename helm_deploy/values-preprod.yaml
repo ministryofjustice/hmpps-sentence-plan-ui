@@ -5,10 +5,10 @@ generic-service:
   replicaCount: 2
 
   ingress:
-    host: hmpps-sentence-plan-preprod.hmpps.service.justice.gov.uk
+    host: sentence-plan-preprod.hmpps.service.justice.gov.uk
 
   env:
-    INGRESS_URL: "https://hmpps-sentence-plan-preprod.hmpps.service.justice.gov.uk"
+    INGRESS_URL: "https://sentence-plan-preprod.hmpps.service.justice.gov.uk"
     SENTENCE_PLAN_API_URL: "https://sentence-plan-api-preprod.hmpps.service.justice.gov.uk"
     HMPPS_AUTH_URL: "https://sign-in-preprod.hmpps.service.justice.gov.uk/auth"
     HMPPS_ARNS_HANDOVER_URL: "https://arns-handover-service-preprod.hmpps.service.justice.gov.uk"
