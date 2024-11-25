@@ -68,7 +68,7 @@
                                 <div class="govuk-grid-row">
                                     <div class="govuk-grid-column-full">
                                         {{ needsScore({
-                                            "score": assessment.criminogenicNeedsScore | string,
+                                            "score": assessment.criminogenicNeedsScore,
                                             "upperBound": assessment.upperBound,
                                             "thresholdValue": assessment.thresholdValue
                                         }) }}
@@ -92,7 +92,7 @@
                                 <div class="govuk-grid-row">
                                     <div class="govuk-grid-column-full">
                                         {{ needsScore({
-                                            "score": assessment.subData.criminogenicNeedsScore | string,
+                                            "score": assessment.subData.criminogenicNeedsScore,
                                             "upperBound": assessment.subData.upperBound,
                                             "thresholdValue": assessment.subData.thresholdValue
                                         }) }}
