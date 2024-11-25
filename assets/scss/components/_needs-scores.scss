@@ -131,7 +131,7 @@ $white-needs-score-background-colour: #ffffff;
   content: "";
 }
 
-@mixin needs-score-bar--small {
+@mixin needs-score-bar--small($highlightedNumber) {
   margin-bottom: 15px;
   width: 500px;
   & {
@@ -145,7 +145,6 @@ $white-needs-score-background-colour: #ffffff;
       display: block;
     }
   }
-
 
   & > div {
     width: 10%;
@@ -164,49 +163,19 @@ $white-needs-score-background-colour: #ffffff;
     border-left: 5px solid govuk-colour("black") !important;
   }
 
-  & > div:nth-child(10n + 1) {
-    background-color: $white-needs-score-background-colour;
+  & > div:nth-child(1) {
     border-left: 1px solid govuk-colour("black");
   }
 
-  & > div:nth-child(10n + 2)  {
-    background-color: $white-needs-score-background-colour;
+  & > .highscoring {
+    background-color: $high-needs-score-colour;
   }
 
-  & > div:nth-child(10n + 3)  {
-    background-color: $white-needs-score-background-colour;
+  & > .lowscoring {
+    background-color: $low-needs-score-colour;
   }
 
-  & > div:nth-child(10n + 4)  {
-    background-color: $white-needs-score-background-colour;
-  }
-
-  & > div:nth-child(10n + 5)  {
-    background-color: $white-needs-score-background-colour;
-  }
-
-  & > div:nth-child(10n + 6) {
-    background-color: $white-needs-score-background-colour;
-  }
-
-  & > div:nth-child(10n + 7)  {
-    background-color: $white-needs-score-background-colour;
-  }
-
-  & > div:nth-child(10n + 8) {
-    background-color: $white-needs-score-background-colour;
-  }
-
-  & > div:nth-child(10n + 9) {
-    background-color: $white-needs-score-background-colour;
-  }
-
-  & > div:nth-child(10n + 10) {
-    background-color: $white-needs-score-background-colour;
-    border-right: 1px solid govuk-colour("black");
-  }
-
-  & > div:nth-child(10n + 1) {
+  & > div:nth-child(1) {
     &::before {
       position: relative;
       text-align: center;
@@ -231,122 +200,29 @@ $white-needs-score-background-colour: #ffffff;
     }
   }
 
-  & > div:nth-child(10n + 2) {
-    &::before {
-      position: relative;
-      text-align: center;
-      color: govuk-colour("black");
-      float: right;
-      content: "2";
-      left: 5%;
-      bottom: -35px;
-      @include govuk-font(16, "regular");
+  @for $i from 2 through 10 {
+    & > div:nth-child(#{$i}) {
+      &::before {
+        position: relative;
+        text-align: center;
+        color: govuk-colour("black");
+        float: right;
+        content: "#{$i}";
+        left: 5%;
+        bottom: -35px;
+        @include govuk-font(16, "regular");
+      }
     }
   }
 
-  & > div:nth-child(10n + 3) {
+  & > div:nth-child(#{$highlightedNumber}) {
     &::before {
-      position: relative;
-      text-align: center;
-      color: govuk-colour("black");
-      float: right;
-      content: "3";
-      left: 20%;
-      bottom: -35px;
-      @include govuk-font(16, "regular");
-    }
-  }
-
-  & > div:nth-child(10n + 4) {
-    &::before {
-      position: relative;
-      text-align: center;
-      color: govuk-colour("black");
-      float: right;
-      content: "4";
-      left: 5%;
-      bottom: -35px;
-      @include govuk-font(16, "regular");
-    }
-  }
-
-  & > div:nth-child(10n + 5) {
-    &::before {
-      position: relative;
-      text-align: center;
-      color: govuk-colour("black");
-      float: right;
-      content: "5";
-      left: 5%;
-      bottom: -35px;
-      @include govuk-font(16, "regular");
-    }
-  }
-
-  & > div:nth-child(10n + 6) {
-    &::before {
-      position: relative;
-      text-align: center;
-      color: govuk-colour("black");
-      float: right;
-      content: "6";
-      bottom: -35px;
-      @include govuk-font(16, "regular");
-    }
-  }
-
-  & > div:nth-child(10n + 7) {
-    &::before {
-      position: relative;
-      text-align: center;
-      color: govuk-colour("black");
-      float: right;
-      content: "7";
-      bottom: -35px;
-      @include govuk-font(16, "regular");
-    }
-  }
-
-  & > div:nth-child(10n + 8) {
-    &::before {
-      position: relative;
-      text-align: center;
-      color: govuk-colour("black");
-      float: right;
-      content: "8";
-      bottom: -35px;
-      @include govuk-font(16, "regular");
-    }
-  }
-
-  & > div:nth-child(10n + 9) {
-    &::before {
-      position: relative;
-      text-align: center;
-      color: govuk-colour("black");
-      float: right;
-      content: "9";
-      bottom: -35px;
-      @include govuk-font(16, "regular");
-    }
-  }
-
-  & > div:nth-child(10n + 10) {
-    &::before {
-      position: relative;
-      text-align: center;
-      color: govuk-colour("black");
-      float: right;
-      content: "10";
-      right: -10%;
-      bottom: -35px;
-      @include govuk-font(16, "regular");
+      @include govuk-font(16, "bold");
     }
   }
 }
 
 .needs-score-bar--small-tenths {
-
   & > div:last-child{
     border-right: 1px solid govuk-colour("black");
   }
@@ -357,334 +233,47 @@ $white-needs-score-background-colour: #ffffff;
 }
 
 .needs-score-bar--small-0 {
-  @include needs-score-bar--small
+  @include needs-score-bar--small(0)
 }
 
 .needs-score-bar--small-1 {
-  @include needs-score-bar--small;
-  & > div:nth-child(10n + 1) {
-    background-color: $low-needs-score-colour;
-    border-left: 1px solid govuk-colour("black");
-  }
-
-  & > div:nth-child(10n + 1) {
-    &::before {
-      @include govuk-font(16, "bold");
-    }
-  }
+  @include needs-score-bar--small(1);
 }
 
 .needs-score-bar--small-2 {
-  @include needs-score-bar--small;
-  & > div:nth-child(10n + 1) {
-    background-color: $low-needs-score-colour;
-    border-left: 1px solid govuk-colour("black");
-  }
-
-  & > div:nth-child(10n + 2) {
-    background-color: $low-needs-score-colour;
-  }
-
-  & > div:nth-child(10n + 2) {
-    &::before {
-      @include govuk-font(16, "bold");
-    }
-  }
+  @include needs-score-bar--small(2);
 }
 
 .needs-score-bar--small-3 {
-  @include needs-score-bar--small;
-
-  & > div:nth-child(10n + 1) {
-    background-color: $low-needs-score-colour;
-    border-left: 1px solid govuk-colour("black");
-  }
-
-  & > div:nth-child(10n + 2) {
-    background-color: $low-needs-score-colour;
-  }
-
-  & > div:nth-child(10n + 3) {
-    background-color: $low-needs-score-colour;
-  }
-
-  & > div:nth-child(10n + 3) {
-    &::before {
-      @include govuk-font(16, "bold");
-    }
-  }
+  @include needs-score-bar--small(3);
 }
 
 .needs-score-bar--small-4 {
-  @include needs-score-bar--small;
-
-  & > div:nth-child(10n + 1) {
-    background-color: $high-needs-score-colour;
-    border-left: 1px solid govuk-colour("black");
-  }
-
-  & > div:nth-child(10n + 2) {
-    background-color: $high-needs-score-colour;
-  }
-
-  & > div:nth-child(10n + 3) {
-    background-color: $high-needs-score-colour;
-  }
-
-  & > div:nth-child(10n + 4) {
-    background-color: $high-needs-score-colour;
-  }
-
-  & > div:nth-child(10n + 4) {
-    &::before {
-      @include govuk-font(16, "bold");
-    }
-  }
+  @include needs-score-bar--small(4);
 }
 
 .needs-score-bar--small-5 {
-  @include needs-score-bar--small;
-
-  & > div:nth-child(10n + 1) {
-    background-color: $high-needs-score-colour;
-    border-left: 1px solid govuk-colour("black");
-  }
-
-  & > div:nth-child(10n + 2) {
-    background-color: $high-needs-score-colour;
-  }
-
-  & > div:nth-child(10n + 3) {
-    background-color: $high-needs-score-colour;
-  }
-
-  & > div:nth-child(10n + 4) {
-    background-color: $high-needs-score-colour;
-  }
-
-  & > div:nth-child(10n + 5) {
-    background-color: $high-needs-score-colour;
-  }
-  & > div:nth-child(10n + 5) {
-    &::before {
-      @include govuk-font(16, "bold");
-    }
-  }
+  @include needs-score-bar--small(5);
 }
 
 .needs-score-bar--small-6 {
-  @include needs-score-bar--small;
-
-  & > div:nth-child(10n + 1) {
-    background-color: $high-needs-score-colour;
-    border-left: 1px solid govuk-colour("black");
-  }
-
-  & > div:nth-child(10n + 2) {
-    background-color: $high-needs-score-colour;
-  }
-
-  & > div:nth-child(10n + 3) {
-    background-color: $high-needs-score-colour;
-  }
-
-  & > div:nth-child(10n + 4) {
-    background-color: $high-needs-score-colour;
-  }
-
-  & > div:nth-child(10n + 5) {
-    background-color: $high-needs-score-colour;
-  }
-
-  & > div:nth-child(10n + 6) {
-    background-color: $high-needs-score-colour;
-  }
-
-  & > div:nth-child(10n + 6) {
-    &::before {
-      @include govuk-font(16, "bold");
-    }
-  }
+  @include needs-score-bar--small(6);
 }
 
 .needs-score-bar--small-7 {
-  @include needs-score-bar--small;
-
-  & > div:nth-child(10n + 1) {
-    background-color: $high-needs-score-colour;
-    border-left: 1px solid govuk-colour("black");
-  }
-
-  & > div:nth-child(10n + 2) {
-    background-color: $high-needs-score-colour;
-  }
-
-  & > div:nth-child(10n + 3) {
-    background-color: $high-needs-score-colour;
-  }
-
-  & > div:nth-child(10n + 4) {
-    background-color: $high-needs-score-colour;
-  }
-
-  & > div:nth-child(10n + 5) {
-    background-color: $high-needs-score-colour;
-  }
-
-  & > div:nth-child(10n + 6) {
-    background-color: $high-needs-score-colour;
-  }
-
-  & > div:nth-child(10n + 7) {
-    background-color: $high-needs-score-colour;
-  }
-
-  & > div:nth-child(10n + 7) {
-    &::before {
-      @include govuk-font(16, "bold");
-    }
-  }
+  @include needs-score-bar--small(7);
 }
 
 .needs-score-bar--small-8 {
-  @include needs-score-bar--small;
-
-  & > div:nth-child(10n + 1) {
-    background-color: $high-needs-score-colour;
-    border-left: 1px solid govuk-colour("black");
-  }
-
-  & > div:nth-child(10n + 2) {
-    background-color: $high-needs-score-colour;
-  }
-
-  & > div:nth-child(10n + 3) {
-    background-color: $high-needs-score-colour;
-  }
-
-  & > div:nth-child(10n + 4) {
-    background-color: $high-needs-score-colour;
-  }
-
-  & > div:nth-child(10n + 5) {
-    background-color: $high-needs-score-colour;
-  }
-
-  & > div:nth-child(10n + 6) {
-    background-color: $high-needs-score-colour;
-  }
-
-  & > div:nth-child(10n + 7) {
-    background-color: $high-needs-score-colour;
-  }
-
-  & > div:nth-child(10n + 8) {
-    background-color: $high-needs-score-colour;
-  }
-
-  & > div:nth-child(10n + 8) {
-    &::before {
-      @include govuk-font(16, "bold");
-    }
-  }
+  @include needs-score-bar--small(8);
 }
 
 .needs-score-bar--small-9 {
-  @include needs-score-bar--small;
-
-  & > div:nth-child(10n + 1) {
-    background-color: $high-needs-score-colour;
-    border-left: 1px solid govuk-colour("black");
-  }
-
-  & > div:nth-child(10n + 2) {
-    background-color: $high-needs-score-colour;
-  }
-
-  & > div:nth-child(10n + 3) {
-    background-color: $high-needs-score-colour;
-  }
-
-  & > div:nth-child(10n + 4) {
-    background-color: $high-needs-score-colour;
-  }
-
-  & > div:nth-child(10n + 5) {
-    background-color: $high-needs-score-colour;
-  }
-
-  & > div:nth-child(10n + 6) {
-    background-color: $high-needs-score-colour;
-  }
-
-  & > div:nth-child(10n + 7) {
-    background-color: $high-needs-score-colour;
-  }
-
-  & > div:nth-child(10n + 8) {
-    background-color: $high-needs-score-colour;
-  }
-
-  & > div:nth-child(10n + 9) {
-    background-color: $high-needs-score-colour;
-  }
-
-  & > div:nth-child(10n + 9) {
-    &::before {
-      @include govuk-font(16, "bold");
-    }
-  }
+  @include needs-score-bar--small(9);
 }
 
 .needs-score-bar--small-10 {
-  @include needs-score-bar--small;
-
-  & > div:nth-child(10n + 1) {
-    background-color: $high-needs-score-colour;
-    border-left: 1px solid govuk-colour("black");
-  }
-
-  & > div:nth-child(10n + 2) {
-    background-color: $high-needs-score-colour;
-  }
-
-  & > div:nth-child(10n + 3) {
-    background-color: $high-needs-score-colour;
-  }
-
-  & > div:nth-child(10n + 4) {
-    background-color: $high-needs-score-colour;
-  }
-
-  & > div:nth-child(10n + 5) {
-    background-color: $high-needs-score-colour;
-  }
-
-  & > div:nth-child(10n + 6) {
-    background-color: $high-needs-score-colour;
-  }
-
-  & > div:nth-child(10n + 7) {
-    background-color: $high-needs-score-colour;
-  }
-
-  & > div:nth-child(10n + 8) {
-    background-color: $high-needs-score-colour;
-  }
-
-  & > div:nth-child(10n + 9) {
-    background-color: $high-needs-score-colour;
-  }
-
-  & > div:nth-child(10n + 10) {
-    background-color: $high-needs-score-colour;
-  }
-
-  & > div:nth-child(10n + 10) {
-    &::before {
-      @include govuk-font(16, "bold");
-    }
-  }
+  @include needs-score-bar--small(10);
 }
 
 .needs-complete-panel {
