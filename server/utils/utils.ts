@@ -139,7 +139,11 @@ export const formatAssessmentData = (
         subData,
       } as AssessmentArea
     })
-    .sort((a, b) => 0 - (a.criminogenicNeedsScore > b.criminogenicNeedsScore ? 1 : -1))
+    .sort((a, b) =>
+      Number(b.criminogenicNeedsScore) - b.thresholdValue - (Number(a.criminogenicNeedsScore) - a.thresholdValue) > 0
+        ? 1
+        : -1,
+    )
 
   const lowScoring = all.filter(area => Number(area.overallScore) <= area.thresholdValue)
   const highScoring = all.filter(area => Number(area.overallScore) > area.thresholdValue)
