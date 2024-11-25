@@ -14,7 +14,7 @@ import runMiddlewareChain from '../../testutils/runMiddlewareChain'
 import testPlan from '../../testutils/data/planData'
 import { PlanAgreementStatus, PlanType } from '../../@types/PlanType'
 import { Goal } from '../../@types/GoalType'
-import CreateGoalPostModel from '../createGoal/models/CreateGoalPostModel'
+import CreateGoalPostModel from '../create-goal/models/CreateGoalPostModel'
 
 jest.mock('../../middleware/authorisationMiddleware', () => ({
   requireAccessMode: jest.fn(() => (req: Request, res: Response, next: NextFunction) => {

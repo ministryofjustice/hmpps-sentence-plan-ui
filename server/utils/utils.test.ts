@@ -25,7 +25,7 @@ import {
   assessmentUndefined,
   crimNeeds,
 } from '../testutils/data/assessmentData'
-import locale from '../routes/aboutPop/locale.json'
+import locale from '../routes/about-person/locale.json'
 
 describe('convert to title case', () => {
   it.each([

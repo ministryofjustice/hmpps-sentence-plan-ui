@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express'
 import locale from './locale.json'
 import { formatAssessmentData } from '../../utils/utils'
 
-export default class AboutPopController {
+export default class AboutPersonController {
   constructor() {}
 
   get = async (req: Request, res: Response, next: NextFunction) => {

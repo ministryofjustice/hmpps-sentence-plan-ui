@@ -1,6 +1,6 @@
 import mockRes from '../../testutils/preMadeMocks/mockRes'
 import mockReq from '../../testutils/preMadeMocks/mockReq'
-import AboutPopController from './AboutPopController'
+import AboutPersonController from './AboutPersonController'
 import locale from './locale.json'
 import { AreaOfNeed } from '../../testutils/data/referenceData'
 import testPlan from '../../testutils/data/planData'
@@ -41,11 +41,11 @@ jest.mock('../../services/sentence-plan/infoService', () => {
 })
 
 describe('AboutPopController', () => {
-  let controller: AboutPopController
+  let controller: AboutPersonController
   const assessmentAreas: AssessmentAreas = formatAssessmentData(crimNeeds, assessmentData, locale.en.areas)
 
   beforeEach(() => {
-    controller = new AboutPopController()
+    controller = new AboutPersonController()
   })
 
   describe('get', () => {
