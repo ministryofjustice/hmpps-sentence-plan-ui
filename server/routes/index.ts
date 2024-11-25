@@ -4,7 +4,7 @@ import type { Services } from '../services'
 import setupCreateGoalRoutes from './create-goal/routes'
 import setupRemoveGoalRoutes from './remove-goal/routes'
 import setupChangeGoalRoutes from './change-goal/routes'
-import setupAboutPopRoutes from './about-person/routes'
+import setupAboutPersonRoutes from './about-person/routes'
 import { Page } from '../services/auditService'
 import setupReferenceDataRoutes from './reference-data/routes'
 import setupPlanOverviewRoutes from './plan-overview/routes'
@@ -28,7 +28,7 @@ export default function routes(services: Services): Router {
     res.redirect(URLs.PLAN_OVERVIEW)
   })
 
-  setupAboutPopRoutes(router)
+  setupAboutPersonRoutes(router)
   setupCreateGoalRoutes(router, services)
   setupRemoveGoalRoutes(router)
   setupChangeGoalRoutes(router, services)
