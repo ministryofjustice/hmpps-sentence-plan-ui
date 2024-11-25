@@ -54,10 +54,10 @@ afterEach(() => {
   jest.resetAllMocks()
 })
 
-describe(`GET ${URLs.ABOUT_POP}`, () => {
+describe(`GET ${URLs.ABOUT_PERSON}`, () => {
   it('should render about pop page', () => {
     return request(app)
-      .get(URLs.ABOUT_POP)
+      .get(URLs.ABOUT_PERSON)
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain(
