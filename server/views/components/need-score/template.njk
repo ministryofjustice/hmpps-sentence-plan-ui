@@ -37,7 +37,7 @@
             {% set classes = [] %}
             {%- if i == needsScore.thresholdValue - 1 %}
                 {% set classes = classes.concat('thresholdmarker-leftside') %}
-            {%- elseif i == needsScore.thresholdValue %}
+            {%- elif i == needsScore.thresholdValue %}
                 {% set classes = classes.concat('thresholdmarker-rightside') %}
             {%- endif %}
             {%- if needsScore.score > needsScore.thresholdValue and i < needsScore.score %}
