@@ -19,7 +19,7 @@
     },
     "agreePlan": "{{ subject.givenName }} agreed to their plan on {{ plan.agreementDate }}",
     "notAgreePlan": "Plan created on {{ plan.createdDate }}",
-    "lastUpdatedPlan": "Last updated on {{ plan.updatedDate }} by {{ plan.updatedBy }}",
+    "lastUpdatedPlan": "Last updated on {{ plan.updatedDate }} by {{ plan.updatedBy }}.",
     "subNavigation": {
       "currentGoals": "Goals to work on now ({{ goalCounts.currentGoals }})",
       "futureGoals": "Future goals ({{ goalCounts.futureGoals }})",
