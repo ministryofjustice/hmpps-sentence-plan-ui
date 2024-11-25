@@ -34,9 +34,18 @@
     </div>
     <div class="{{ barTypeClass }}">
         {% for i in range(0, needsScore.upperBound) -%}
-            <div {%- if i == needsScore.thresholdValue - 1 %} class="thresholdmarker-leftside"
-                 {%- elseif i == needsScore.thresholdValue %} class="thresholdmarker-rightside"
-                 {%- endif %}>
+            {% set classes = [] %}
+            {%- if i == needsScore.thresholdValue - 1 %}
+                {% set classes = classes.concat('thresholdmarker-leftside') %}
+            {%- elif i == needsScore.thresholdValue %}
+                {% set classes = classes.concat('thresholdmarker-rightside') %}
+            {%- endif %}
+            {%- if needsScore.score > needsScore.thresholdValue and i < needsScore.score %}
+                {% set classes = classes.concat('highscoring') %}
+            {%- elif needsScore.score <= needsScore.thresholdValue and i < needsScore.score %}
+                {% set classes = classes.concat('lowscoring') %}
+            {%- endif %}
+            <div class="{{ classes | join(' ') }}">
                 <span></span>
             </div>
         {% endfor %}
