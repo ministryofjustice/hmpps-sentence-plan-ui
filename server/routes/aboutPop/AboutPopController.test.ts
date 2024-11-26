@@ -8,7 +8,8 @@ import popData from '../../testutils/data/popData'
 import testHandoverContext from '../../testutils/data/handoverData'
 import { assessmentData, crimNeeds } from '../../testutils/data/assessmentData'
 import { AssessmentAreas } from '../../@types/Assessment'
-import { formatAssessmentData } from '../../utils/utils'
+
+import { formatAssessmentData } from '../../utils/assessmentUtils'
 
 const oasysReturnUrl = 'https://oasys.return.url'
 

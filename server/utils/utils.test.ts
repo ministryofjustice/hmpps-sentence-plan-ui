@@ -536,12 +536,3 @@ describe('format date with year', () => {
     expect(dateWithYear(date)).toEqual(expected)
   })
 })
-
-describe('years and days elapsed', () => {
-  it.each([
-    ['2024-11-06', '2029-01-12', '(4 years and 67 days)'],
-    [undefined, undefined, undefined],
-  ])('%s maps to %s', (from: string, to: string, expected: string) => {
-    expect(yearsAndDaysElapsed(from, to)).toEqual(expected)
-  })
-})
