@@ -7,6 +7,7 @@
       "title": "About {{ subject.givenName }}"
     },
     "detail": {
+      "lastUpdated": "Last updated on {{ lastUpdatedDate }}.",
       "RoSH": "RoSH (Risk of Serious Harm)",
       "riskOfReoffending": "Risk of reoffending",
       "linkedToRoSH": "This area is linked to RoSH (risk of serious harm)",
@@ -17,7 +18,7 @@
       "strengthsOrProtectiveFactors": "There are strengths or protective factors related to this area",
       "noStrengthsOrProtectiveFactors": "There are no strengths or protective factors related to this area",
       "needScore": "need score",
-      "lifestyleAndAssociatesNeedScore": "Lifestyle & associates need score"
+      "lifestyleAndAssociatesNeedScore": "Lifestyle and associates need score"
     },
     "errors": {
       "noAssessmentDataFound": "No assessment data found",
@@ -80,7 +81,7 @@
         "upperBound": 6
       },
       {
-        "area": "Education and employment",
+        "area": "Employment and education",
         "crimNeedsKey": "educationTrainingEmployability",
         "crimNeedsSubKey": "ete",
         "assessmentKey": "employment_education",

@@ -8,7 +8,8 @@
 
 {% set print = true %}
 {% set locale = interpolate(locale, {
-    subject: data.popData
+    subject: data.popData,
+    lastUpdatedDate: data.assessmentAreas.versionUpdatedAt | formatSimpleDate
 }) %}
 
 {% block pageTitle %}
@@ -59,7 +60,7 @@
             {% endif %}
 
             {% if data.assessmentAreas.versionUpdatedAt %}
-                <p class="govuk-body">Last updated: {{ data.assessmentAreas.versionUpdatedAt | dateWithYear }}</p>
+                <p class="govuk-body">{{ locale.detail.lastUpdated }}</p>
             {% endif %}
 
             {% if data.deliusData.sentences.length > 0 %}
@@ -76,7 +77,7 @@
                 {% for sentence in data.deliusData.sentences %}
                     <tr class="govuk-table__row govuk-body-l">
                         <td class = "govuk-table__cell govuk-padding-bottom--25 ">{{ sentence.description }} <br/> {{ yearsAndDaysElapsed(sentence.startDate, sentence.endDate) }} </td>
-                        <td class = "govuk-table__cell govuk-padding-bottom--25">{{ sentence.endDate | dateWithYear }}</td>
+                        <td class = "govuk-table__cell govuk-padding-bottom--25">{{ sentence.endDate | formatSimpleDate }}</td>
                         <td class = "govuk-table__cell govuk-padding-bottom--25">
                             {% if sentence.unpaidWorkHoursOrdered > 0 %}
                                 {{ sentence.unpaidWorkHoursOrdered }} hours
