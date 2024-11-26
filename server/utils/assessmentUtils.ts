@@ -103,31 +103,38 @@ export const formatAssessmentData = (
     versionUpdatedAt: assessment.lastUpdatedTimestampSAN,
   } as AssessmentAreas
 }
-const groupAndSortOtherAreas = (other: AssessmentArea[]): AssessmentArea[] => {
+
+export const groupAndSortOtherAreas = (other: AssessmentArea[]): AssessmentArea[] => {
   const groupedByRiskCount: Record<number, AssessmentArea[]> = {}
 
+  // group the areas by the sum of their risk counts, RoSH first
   other.forEach(area => {
-    const riskCount = (area.riskOfSeriousHarm ? 1 : 0) + (area.riskOfReoffending ? 1 : 0)
+    const riskCount = (area.riskOfSeriousHarm === 'YES' ? 2 : 0) + (area.riskOfReoffending === 'YES' ? 1 : 0)
     if (!groupedByRiskCount[riskCount]) {
       groupedByRiskCount[riskCount] = []
     }
     groupedByRiskCount[riskCount].push(area)
   })
 
-  return Object.values(groupedByRiskCount)
-    .map(areas => areas.sort((a, b) => a.title.localeCompare(b.title)))
+  // invert the order of the keys and sort the areas by title
+  return Object.keys(groupedByRiskCount)
+    .sort((a, b) => Number(b) - Number(a))
+    .map(key => groupedByRiskCount[Number(key)].sort((a, b) => a.title.localeCompare(b.title)))
     .reduce((acc, val) => acc.concat(val), [])
 }
+
 export const motivationText = (optionResult?: string): string => {
   if (optionResult === undefined || optionResult === null) {
     return undefined
   }
   return camelCase(optionResult)
 }
+
 export const dateWithYear = (datetimeString: string): string | null => {
   if (!datetimeString || isBlank(datetimeString)) return undefined
   return DateTime.fromISO(datetimeString).toFormat('d MMMM yyyy')
 }
+
 export const yearsAndDaysElapsed = (datetimeStringFrom: string, datetimeStringTo: string): string => {
   if (!datetimeStringFrom || isBlank(datetimeStringFrom)) return undefined
   if (!datetimeStringTo || isBlank(datetimeStringTo)) return undefined

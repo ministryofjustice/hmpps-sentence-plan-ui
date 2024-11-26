@@ -5,8 +5,14 @@ import {
   crimNeeds,
 } from '../testutils/data/assessmentData'
 import locale from '../routes/aboutPop/locale.json'
-import { AssessmentAreaConfig, AssessmentAreas, AssessmentResponse, CriminogenicNeedsData } from '../@types/Assessment'
-import { formatAssessmentData, motivationText, yearsAndDaysElapsed } from './assessmentUtils'
+import {
+  AssessmentArea,
+  AssessmentAreaConfig,
+  AssessmentAreas,
+  AssessmentResponse,
+  CriminogenicNeedsData,
+} from '../@types/Assessment'
+import { formatAssessmentData, groupAndSortOtherAreas, motivationText, yearsAndDaysElapsed } from './assessmentUtils'
 
 describe('format assessment data', () => {
   it.each([
@@ -246,5 +252,61 @@ describe('years and days elapsed', () => {
     [undefined, undefined, undefined],
   ])('%s maps to %s', (from: string, to: string, expected: string) => {
     expect(yearsAndDaysElapsed(from, to)).toEqual(expected)
+  })
+})
+
+describe('groupAndSortOtherAreas', () => {
+  it('groups and sorts areas by risk count', () => {
+    const areas: AssessmentArea[] = [
+      { title: 'Area D', riskOfSeriousHarm: 'NO', riskOfReoffending: 'NO' } as AssessmentArea,
+      { title: 'Area A', riskOfSeriousHarm: 'YES', riskOfReoffending: 'YES' } as AssessmentArea,
+      { title: 'Area B', riskOfSeriousHarm: 'YES', riskOfReoffending: 'NO' } as AssessmentArea,
+      { title: 'Area C', riskOfSeriousHarm: 'NO', riskOfReoffending: 'YES' } as AssessmentArea,
+    ]
+
+    const result = groupAndSortOtherAreas(areas)
+
+    expect(result).toEqual([
+      { title: 'Area A', riskOfSeriousHarm: 'YES', riskOfReoffending: 'YES' },
+      { title: 'Area B', riskOfSeriousHarm: 'YES', riskOfReoffending: 'NO' },
+      { title: 'Area C', riskOfSeriousHarm: 'NO', riskOfReoffending: 'YES' },
+      { title: 'Area D', riskOfSeriousHarm: 'NO', riskOfReoffending: 'NO' },
+    ])
+  })
+
+  it('handles empty array', () => {
+    const areas: AssessmentArea[] = []
+
+    const result = groupAndSortOtherAreas(areas)
+
+    expect(result).toEqual([])
+  })
+
+  it('sorts areas alphabetically within the same risk count', () => {
+    const areas: AssessmentArea[] = [
+      { title: 'Area B', riskOfSeriousHarm: 'YES', riskOfReoffending: 'NO' } as AssessmentArea,
+      { title: 'Area A', riskOfSeriousHarm: 'YES', riskOfReoffending: 'NO' } as AssessmentArea,
+    ]
+
+    const result = groupAndSortOtherAreas(areas)
+
+    expect(result).toEqual([
+      { title: 'Area A', riskOfSeriousHarm: 'YES', riskOfReoffending: 'NO' },
+      { title: 'Area B', riskOfSeriousHarm: 'YES', riskOfReoffending: 'NO' },
+    ])
+  })
+
+  it('handles areas with undefined risk values', () => {
+    const areas: AssessmentArea[] = [
+      { title: 'Area A', riskOfSeriousHarm: undefined, riskOfReoffending: undefined } as AssessmentArea,
+      { title: 'Area B', riskOfSeriousHarm: 'YES', riskOfReoffending: undefined } as AssessmentArea,
+    ]
+
+    const result = groupAndSortOtherAreas(areas)
+
+    expect(result).toEqual([
+      { title: 'Area B', riskOfSeriousHarm: 'YES', riskOfReoffending: undefined },
+      { title: 'Area A', riskOfSeriousHarm: undefined, riskOfReoffending: undefined },
+    ])
   })
 })
