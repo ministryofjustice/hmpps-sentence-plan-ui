@@ -74,81 +74,78 @@ export const formatAssessmentData = (
   if (!assessment || !assessment.sanAssessmentData) {
     return { lowScoring: [], highScoring: [], other: [] }
   }
-  const all = Object.values(areas)
-    .map(area => {
-      let score
-      let linkedtoRoSH
-      let linkedtoReoffending
-      let subData: SubAreaData
-      let overallScore
+  const all = Object.values(areas).map(area => {
+    let score
+    let linkedtoRoSH
+    let linkedtoReoffending
+    let subData: SubAreaData
+    let overallScore
 
-      if (Object.prototype.hasOwnProperty.call(crimNeeds, area.crimNeedsKey)) {
-        score = crimNeeds[area.crimNeedsKey][`${area.crimNeedsSubKey}OtherWeightedScore`]
-        linkedtoRoSH = crimNeeds[area.crimNeedsKey][`${area.crimNeedsSubKey}LinkedToHarm`] === 'YES'
-        linkedtoReoffending = crimNeeds[area.crimNeedsKey][`${area.crimNeedsSubKey}LinkedToReoffending`] === 'YES'
-        if (Number.isNaN(Number(score))) {
-          score = undefined
-        } else if (score > area.upperBound) {
-          score = area.upperBound
-        }
+    if (Object.prototype.hasOwnProperty.call(crimNeeds, area.crimNeedsKey)) {
+      score = crimNeeds[area.crimNeedsKey][`${area.crimNeedsSubKey}OtherWeightedScore`]
+      linkedtoRoSH = crimNeeds[area.crimNeedsKey][`${area.crimNeedsSubKey}LinkedToHarm`] === 'YES'
+      linkedtoReoffending = crimNeeds[area.crimNeedsKey][`${area.crimNeedsSubKey}LinkedToReoffending`] === 'YES'
+      if (Number.isNaN(Number(score))) {
+        score = undefined
+      } else if (score > area.upperBound) {
+        score = area.upperBound
       }
+    }
 
-      if (
-        crimNeeds.lifestyleAndAssociates &&
-        crimNeeds.thinkingBehaviourAndAttitudes &&
-        area.crimNeedsKey === 'thinkingBehaviourAndAttitudes'
-      ) {
-        subData = {
-          upperBound: '6',
-          thresholdValue: getAssessmentAreaThreshold('lifestyleAndAssociates'),
-          criminogenicNeedsScore: crimNeeds.lifestyleAndAssociates.lifestyleOtherWeightedScore,
-        }
-        overallScore = Math.max(
-          Number(crimNeeds.thinkingBehaviourAndAttitudes.thinkOtherWeightedScore),
-          Number(subData.criminogenicNeedsScore),
-        )
+    if (
+      crimNeeds.lifestyleAndAssociates &&
+      crimNeeds.thinkingBehaviourAndAttitudes &&
+      area.crimNeedsKey === 'thinkingBehaviourAndAttitudes'
+    ) {
+      subData = {
+        upperBound: '6',
+        thresholdValue: getAssessmentAreaThreshold('lifestyleAndAssociates'),
+        criminogenicNeedsScore: crimNeeds.lifestyleAndAssociates.lifestyleOtherWeightedScore,
       }
-
-      const motivationToMakeChanges = motivationText(
-        assessment.sanAssessmentData[`${area.assessmentKey}_changes`]?.value,
+      overallScore = Math.max(
+        Number(crimNeeds.thinkingBehaviourAndAttitudes.thinkOtherWeightedScore),
+        Number(subData.criminogenicNeedsScore),
       )
-      const riskOfSeriousHarm =
-        assessment.sanAssessmentData[`${area.assessmentKey}_practitioner_analysis_risk_of_serious_harm_yes_details`]
-          ?.value
-      const riskOfReoffending =
-        assessment.sanAssessmentData[`${area.assessmentKey}_practitioner_analysis_risk_of_reoffending_yes_details`]
-          ?.value
-      const strengthsOrProtectiveFactors =
-        assessment.sanAssessmentData[
-          `${area.assessmentKey}_practitioner_analysis_strengths_or_protective_factors_yes_details`
-        ]?.value
+    }
 
-      return {
-        title: area.area,
-        overallScore: overallScore ?? score,
-        linkedtoRoSH,
-        linkedtoReoffending,
-        motivationToMakeChanges,
-        riskOfSeriousHarm,
-        riskOfReoffending,
-        strengthsOrProtectiveFactors,
-        criminogenicNeedsScore: score,
-        goalRoute: area.goalRoute,
-        upperBound: area.upperBound,
-        thresholdValue: getAssessmentAreaThreshold(area.crimNeedsKey),
-        subData,
-      } as AssessmentArea
-    })
-    .sort((a, b) =>
-      Number(b.criminogenicNeedsScore) - b.thresholdValue - (Number(a.criminogenicNeedsScore) - a.thresholdValue) > 0
-        ? 1
-        : -1,
-    )
+    const motivationToMakeChanges = motivationText(assessment.sanAssessmentData[`${area.assessmentKey}_changes`]?.value)
+    const riskOfSeriousHarm =
+      assessment.sanAssessmentData[`${area.assessmentKey}_practitioner_analysis_risk_of_serious_harm_yes_details`]
+        ?.value
+    const riskOfReoffending =
+      assessment.sanAssessmentData[`${area.assessmentKey}_practitioner_analysis_risk_of_reoffending_yes_details`]?.value
+    const strengthsOrProtectiveFactors =
+      assessment.sanAssessmentData[
+        `${area.assessmentKey}_practitioner_analysis_strengths_or_protective_factors_yes_details`
+      ]?.value
 
-  const lowScoring = all.filter(area => Number(area.overallScore) <= area.thresholdValue)
-  const highScoring = all.filter(area => Number(area.overallScore) > area.thresholdValue)
+    return {
+      title: area.area,
+      overallScore: overallScore ?? score,
+      linkedtoRoSH,
+      linkedtoReoffending,
+      motivationToMakeChanges,
+      riskOfSeriousHarm,
+      riskOfReoffending,
+      strengthsOrProtectiveFactors,
+      criminogenicNeedsScore: score,
+      goalRoute: area.goalRoute,
+      upperBound: area.upperBound,
+      thresholdValue: getAssessmentAreaThreshold(area.crimNeedsKey),
+      subData,
+    } as AssessmentArea
+  })
+
+  const lowScoring = filterAndSortAreas(all, (score, threshold) => score <= threshold)
+  const highScoring = filterAndSortAreas(all, (score, threshold) => score > threshold)
   const other = all.filter(area => area.criminogenicNeedsScore === undefined)
   return { lowScoring, highScoring, other, versionUpdatedAt: assessment.lastUpdatedTimestampSAN } as AssessmentAreas
+}
+
+const filterAndSortAreas = (areas: AssessmentArea[], comparator: (score: number, threshold: number) => boolean) => {
+  return areas
+    .filter(area => comparator(Number(area.overallScore), area.thresholdValue))
+    .sort((a, b) => (Number(a.overallScore) - a.thresholdValue > Number(b.overallScore) - b.thresholdValue ? -1 : 1))
 }
 
 export const motivationText = (optionResult?: string): string => {
