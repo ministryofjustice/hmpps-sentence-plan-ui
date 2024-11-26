@@ -156,10 +156,10 @@
                                 <button type="submit" class="govuk-button" data-module="govuk-button">
                                     {{ locale.saveGoalAndSteps }}
                                 </button>
-                                <button type="button" class="govuk-button govuk-button--secondary"
+                                <a href="/confirm-achieved-goal/{{ data.goal.uuid }}?type=current" role="button" class="govuk-button govuk-button--secondary"
                                         data-module="govuk-button">
                                     {{ locale.markAsAchieved }}
-                                </button>
+                                </a>
                             </div>
                             <p>
                                 <a href="/remove-goal/{{ data.goal.uuid }}"
