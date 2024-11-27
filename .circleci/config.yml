@@ -138,7 +138,7 @@ workflows:
           filters:
             branches:
               only:
-                - main
+                - deployment-build
       - hmpps/deploy_env:
           name: deploy_dev
           env: "dev"
@@ -149,7 +149,7 @@ workflows:
           filters:
             branches:
               only:
-                - main
+                - deployment-build
           requires:
             - helm_lint
             - publish_docker
@@ -159,7 +159,7 @@ workflows:
           filters:
             branches:
               only:
-                - main
+                - deployment-build
           requires:
             - deploy_dev
       - hmpps/deploy_env:
@@ -175,7 +175,7 @@ workflows:
           filters:
             branches:
               only:
-                - main
+                - deployment-build
           requires:
             - request-preprod-approval
           helm_timeout: 5m
@@ -184,7 +184,7 @@ workflows:
           filters:
             branches:
               only:
-                - main
+                - deployment-build
           requires:
             - deploy_preprod
       - hmpps/deploy_env:
@@ -202,7 +202,7 @@ workflows:
           filters:
             branches:
               only:
-                - main
+                - deployment-build
           requires:
             - request-prod-approval
           helm_timeout: 5m
