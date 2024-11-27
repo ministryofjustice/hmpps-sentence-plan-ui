@@ -10,11 +10,11 @@ export interface AssessmentResponse {
 export interface AssessmentArea {
   title: string
   overallScore?: string
+  riskOfSeriousHarm?: string
   linkedtoRoSH: boolean
   riskOfReoffending: string
   linkedtoReoffending: boolean
   motivationToMakeChanges?: string
-  riskOfSeriousHarm?: string
   strengthsOrProtectiveFactors?: string
   criminogenicNeedsScore?: string
   goalRoute?: string
