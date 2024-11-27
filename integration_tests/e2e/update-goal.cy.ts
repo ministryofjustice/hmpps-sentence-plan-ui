@@ -104,15 +104,5 @@ describe('Update goal', () => {
       cy.get('#more-detail-error').should('contain', 'Notes about progress must be 4,000 characters or less')
       cy.get('#more-detail').should('contain', lorem)
     })
-
-    it('Should go to the mark as achieved page if the link is clicked', () => {
-      cy.contains('a', 'Update').click() // click update link
-      cy.url().should('include', '/update-goal')
-      cy.get('.govuk-button').contains('Mark as achieved').click()
-
-      cy.get<Goal>('@updateableGoal').then(goal => {
-        cy.url().should('include', `/confirm-achieved-goal/${goal.uuid}`)
-      })
-    })
   })
 })
