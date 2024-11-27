@@ -242,6 +242,36 @@ workflows:
             - publish_docker
           helm_timeout: 5m
 
+  deploy-to-dev-env:
+    when:
+      and:
+        - equal: [ "dev", << pipeline.parameters.deploy >> ]
+    jobs:
+      - hmpps/build_docker:
+          name: build_docker
+          publish: false
+          persist_container_image: true
+          jira_update: true
+          pipeline_id: << pipeline.id >>
+          pipeline_number: << pipeline.number >>
+          context: hmpps-common-vars
+      - hmpps/publish_docker:
+          name: publish_docker
+          publish_latest_tag: false
+          context: hmpps-common-vars
+          requires:
+            - build_docker
+      - hmpps/deploy_env:
+          name: deploy_dev
+          env: "dev"
+          jira_update: true
+          pipeline_id: << pipeline.id >>
+          pipeline_number: << pipeline.number >>
+          context: hmpps-common-vars
+          requires:
+            - publish_docker
+          helm_timeout: 5m
+
   security:
     triggers:
       - schedule:
