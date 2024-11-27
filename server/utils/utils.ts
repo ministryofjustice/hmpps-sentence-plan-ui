@@ -81,7 +81,7 @@ export const formatAssessmentData = (
     let subData: SubAreaData
     let overallScore
 
-    if (Object.prototype.hasOwnProperty.call(crimNeeds, area.crimNeedsKey)) {
+    if (area.crimNeedsKey in crimNeeds) {
       score = crimNeeds[area.crimNeedsKey][`${area.crimNeedsSubKey}OtherWeightedScore`]
       linkedtoRoSH = crimNeeds[area.crimNeedsKey][`${area.crimNeedsSubKey}LinkedToHarm`] === 'YES'
       linkedtoReoffending = crimNeeds[area.crimNeedsKey][`${area.crimNeedsSubKey}LinkedToReoffending`] === 'YES'
@@ -145,7 +145,13 @@ export const formatAssessmentData = (
 const filterAndSortAreas = (areas: AssessmentArea[], comparator: (score: number, threshold: number) => boolean) => {
   return areas
     .filter(area => comparator(Number(area.overallScore), area.thresholdValue))
-    .sort((a, b) => (Number(a.overallScore) - a.thresholdValue > Number(b.overallScore) - b.thresholdValue ? -1 : 1))
+    .sort((a, b) => {
+      const scoreDifference = Number(a.overallScore) - a.thresholdValue - (Number(b.overallScore) - b.thresholdValue)
+      if (scoreDifference !== 0) {
+        return scoreDifference > 0 ? -1 : 1
+      }
+      return a.title.localeCompare(b.title)
+    })
 }
 
 export const motivationText = (optionResult?: string): string => {
