@@ -57,14 +57,11 @@ export const crimNeeds: CriminogenicNeedsData = {
 export const crimNeedsOrdering: CriminogenicNeedsData = {
   accommodation: {
     accOtherWeightedScore: '3',
-    riskOfReoffending: 'YES',
   },
   drugMisuse: {
     drugOtherWeightedScore: '4',
-    riskOfReoffending: 'YES',
   },
   thinkingBehaviourAndAttitudes: {
     thinkOtherWeightedScore: '5',
-    riskOfReoffending: 'YES',
   },
 }

@@ -5,20 +5,11 @@ import { Person } from '../@types/Person'
 import { RoshData } from '../@types/Rosh'
 import { NewStep, StepStatus } from '../@types/StepType'
 import { GoalStatus } from '../@types/GoalType'
-import {
-  AssessmentArea,
-  AssessmentAreaConfig,
-  AssessmentAreas,
-  AssessmentResponse,
-  CriminogenicNeedsData,
-  SubAreaData,
-} from '../@types/Assessment'
-import getAssessmentAreaThreshold from '../services/sentence-plan/assessmentAreaThresholds'
 
 const properCase = (word: string): string =>
   word.length >= 1 ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word
 
-const isBlank = (str: string): boolean => !str || /^\s*$/.test(str)
+export const isBlank = (str: string): boolean => !str || /^\s*$/.test(str)
 
 /**
  * Converts a name (first name, last name, middle name, etc.) to proper case equivalent, handling double-barreled names
@@ -64,94 +55,6 @@ export function formatDate(date: string): string {
     month: 'long',
     year: 'numeric',
   })
-}
-
-export const formatAssessmentData = (
-  crimNeeds: CriminogenicNeedsData,
-  assessment: AssessmentResponse,
-  areas: AssessmentAreaConfig[],
-): AssessmentAreas => {
-  if (!assessment || !assessment.sanAssessmentData) {
-    return { lowScoring: [], highScoring: [], other: [] }
-  }
-  const all = Object.values(areas).map(area => {
-    let score
-    let linkedtoRoSH
-    let linkedtoReoffending
-    let subData: SubAreaData
-    let overallScore
-
-    if (area.crimNeedsKey in crimNeeds) {
-      score = crimNeeds[area.crimNeedsKey][`${area.crimNeedsSubKey}OtherWeightedScore`]
-      linkedtoRoSH = crimNeeds[area.crimNeedsKey][`${area.crimNeedsSubKey}LinkedToHarm`] === 'YES'
-      linkedtoReoffending = crimNeeds[area.crimNeedsKey][`${area.crimNeedsSubKey}LinkedToReoffending`] === 'YES'
-      if (Number.isNaN(Number(score))) {
-        score = undefined
-      } else if (score > area.upperBound) {
-        score = area.upperBound
-      }
-    }
-
-    if (
-      crimNeeds.lifestyleAndAssociates &&
-      crimNeeds.thinkingBehaviourAndAttitudes &&
-      area.crimNeedsKey === 'thinkingBehaviourAndAttitudes'
-    ) {
-      subData = {
-        upperBound: '6',
-        thresholdValue: getAssessmentAreaThreshold('lifestyleAndAssociates'),
-        criminogenicNeedsScore: crimNeeds.lifestyleAndAssociates.lifestyleOtherWeightedScore,
-      }
-      overallScore = Math.max(
-        Number(crimNeeds.thinkingBehaviourAndAttitudes.thinkOtherWeightedScore),
-        Number(subData.criminogenicNeedsScore),
-      )
-    }
-
-    const motivationToMakeChanges = motivationText(assessment.sanAssessmentData[`${area.assessmentKey}_changes`]?.value)
-    const riskOfSeriousHarm =
-      assessment.sanAssessmentData[`${area.assessmentKey}_practitioner_analysis_risk_of_serious_harm_yes_details`]
-        ?.value
-    const riskOfReoffending =
-      assessment.sanAssessmentData[`${area.assessmentKey}_practitioner_analysis_risk_of_reoffending_yes_details`]?.value
-    const strengthsOrProtectiveFactors =
-      assessment.sanAssessmentData[
-        `${area.assessmentKey}_practitioner_analysis_strengths_or_protective_factors_yes_details`
-      ]?.value
-
-    return {
-      title: area.area,
-      overallScore: overallScore ?? score,
-      linkedtoRoSH,
-      linkedtoReoffending,
-      motivationToMakeChanges,
-      riskOfSeriousHarm,
-      riskOfReoffending,
-      strengthsOrProtectiveFactors,
-      criminogenicNeedsScore: score,
-      goalRoute: area.goalRoute,
-      upperBound: area.upperBound,
-      thresholdValue: getAssessmentAreaThreshold(area.crimNeedsKey),
-      subData,
-    } as AssessmentArea
-  })
-
-  const lowScoring = filterAndSortAreas(all, (score, threshold) => score <= threshold)
-  const highScoring = filterAndSortAreas(all, (score, threshold) => score > threshold)
-  const other = all.filter(area => area.criminogenicNeedsScore === undefined)
-  return { lowScoring, highScoring, other, versionUpdatedAt: assessment.lastUpdatedTimestampSAN } as AssessmentAreas
-}
-
-const filterAndSortAreas = (areas: AssessmentArea[], comparator: (score: number, threshold: number) => boolean) => {
-  return areas
-    .filter(area => comparator(Number(area.overallScore), area.thresholdValue))
-    .sort((a, b) => {
-      const scoreDifference = Number(a.overallScore) - a.thresholdValue - (Number(b.overallScore) - b.thresholdValue)
-      if (scoreDifference !== 0) {
-        return scoreDifference > 0 ? -1 : 1
-      }
-      return a.title.localeCompare(b.title)
-    })
 }
 
 export const motivationText = (optionResult?: string): string => {
