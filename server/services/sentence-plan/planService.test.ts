@@ -30,18 +30,4 @@ describe('PlanService', () => {
       expect(mockRestClient.get).toHaveBeenCalledWith({ path: expectedPath })
     })
   })
-
-  describe('getPlanByOasysAssessmentPk', () => {
-    it('should call restClient.get with correct path', async () => {
-      const oasysAssessmentPk = '987654'
-      const expectedPath = `/oasys/plans/${oasysAssessmentPk}`
-
-      await planService.getPlanByOasysAssessmentPk(oasysAssessmentPk)
-
-      expect(mockSentencePlanApiClient.restClient).toHaveBeenCalledWith(
-        `Getting plan with OASys Assessment PK: ${oasysAssessmentPk}`,
-      )
-      expect(mockRestClient.get).toHaveBeenCalledWith({ path: expectedPath })
-    })
-  })
 })
