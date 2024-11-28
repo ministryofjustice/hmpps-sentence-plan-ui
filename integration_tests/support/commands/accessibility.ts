@@ -1,16 +1,21 @@
 import { Result } from 'axe-core'
 
 // eslint-disable-next-line import/prefer-default-export
-export const checkAccessibility = (injectAxe: boolean = true) => {
+export const checkAccessibility = (injectAxe: boolean = true, disabledRules = []) => {
   if (injectAxe) {
     cy.injectAxe()
     cy.configureAxe({
       rules: [
+        ...disabledRules.map(rule => ({ id: rule, enabled: false })),
         {
           id: 'aria-allowed-attr',
           // Temporary rule until this gets resolved https://github.com/w3c/aria/issues/1404
           // GovUK Frontend issue https://github.com/alphagov/govuk-frontend/issues/979
-          matches: (node: Element, _) => !(node.tagName === 'INPUT' && node.hasAttribute('aria-expanded')),
+          matches: (node: Element) => !(node.tagName === 'INPUT' && node.hasAttribute('aria-expanded')),
+        },
+        {
+          id: 'region',
+          enabled: false,
         },
       ],
     })
