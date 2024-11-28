@@ -24,7 +24,7 @@ describe('View Plan Overview for READ_WRITE user', () => {
 
   it('Should have text saying no goals to work on now', () => {
     cy.visit('/plan')
-    cy.get('.govuk-grid-column-full').should('contain', 'does not have any goals to work on now. You can either:')
+    cy.get('.govuk-grid-column-full').should('contain', 'does not have any goals to work on now. create a goal with')
   })
 
   it('Should have text saying no future goals present', () => {

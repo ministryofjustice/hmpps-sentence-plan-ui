@@ -27,9 +27,8 @@
       "removedGoals": "Removed goals ({{ goalCounts.removedGoals }})"
     },
     "ifNoCurrentGoals": {
-      "text": "{{ subject.givenName }} does not have any goals to work on now. You can either:",
-      "action1": "create a goal with {{ subject.givenName }}",
-      "action2": "view information from {{ subject.possessiveName }} assessment"
+      "text": "{{ subject.givenName }} does not have any goals to work on now.",
+      "action1": "create a goal with {{ subject.givenName }}"
     },
     "ifNoFutureGoals": {
       "text": "{{ subject.givenName }} does not have any future goals in their plan."
