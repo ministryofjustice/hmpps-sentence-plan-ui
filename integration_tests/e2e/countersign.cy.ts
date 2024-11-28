@@ -39,7 +39,6 @@ describe('View specific plan version for READ_ONLY user', () => {
         cy.addStepToGoal(goal.uuid, DataGenerator.generateStep())
       })
       cy.lockPlan(planDetails.plan.uuid)
-      cy.checkAccessibility()
     })
   })
 

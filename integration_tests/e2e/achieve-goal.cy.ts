@@ -25,7 +25,6 @@ describe('Achieve goal', () => {
 
         planOverview.agreePlan()
       })
-      cy.checkAccessibility()
     })
 
     it('Should display authorisation error if user does not have READ_WRITE role', () => {

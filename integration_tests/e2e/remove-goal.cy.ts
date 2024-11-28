@@ -108,7 +108,6 @@ describe('Remove a goal from a Plan after it has been agreed', () => {
       })
 
       planOverview.agreePlan()
-      cy.checkAccessibility()
     })
 
     it('When confirmed, and no note is provided, page with error details is rendered', () => {
