@@ -28,7 +28,7 @@
     },
     "ifNoCurrentGoals": {
       "text": "{{ subject.givenName }} does not have any goals to work on now.",
-      "action1": "create a goal with {{ subject.givenName }}"
+      "action1": "Create a goal with {{ subject.givenName }}"
     },
     "ifNoFutureGoals": {
       "text": "{{ subject.givenName }} does not have any future goals in their plan."
