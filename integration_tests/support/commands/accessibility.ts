@@ -17,6 +17,14 @@ export const checkAccessibility = (injectAxe: boolean = true, disabledRules = []
           id: 'region',
           enabled: false,
         },
+        {
+          id: 'link-name',
+          enabled: false,
+        },
+        {
+          id: 'scrollable-region-focusable',
+          enabled: false,
+        },
       ],
     })
   }

@@ -24,7 +24,7 @@ async function initializeGoalInputAutocomplete() {
 
   accessibleAutocomplete({
     element: wrapperElement,
-    id: `${GOAL_INPUT_ID}-autocomplete`,
+    id: `${GOAL_INPUT_ID}`,
     name: `${GOAL_INPUT_ID}-autocomplete`,
     source,
     minLength: 2,
