@@ -4,8 +4,9 @@ import nunjucks from 'nunjucks'
 import express from 'express'
 import { ApplicationInfo } from '../applicationInfo'
 import config from '../config'
-import { initialiseName, mergeDeep, convertToTitleCase, dateWithYear, yearsAndDaysElapsed } from './utils'
+import { initialiseName, mergeDeep, convertToTitleCase } from './utils'
 import commonLocale from './commonLocale.json'
+import { dateWithYear, yearsAndDaysElapsed } from './assessmentUtils'
 
 const production = process.env.NODE_ENV === 'production'
 
