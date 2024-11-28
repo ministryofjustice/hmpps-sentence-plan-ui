@@ -106,7 +106,7 @@ export const groupAndSortOtherAreas = (other: AssessmentArea[]): AssessmentArea[
 
   // group the areas by the sum of their risk counts, RoSH first
   other.forEach(area => {
-    const riskCount = (area.riskOfSeriousHarm === 'YES' ? 2 : 0) + (area.riskOfReoffending === 'YES' ? 1 : 0)
+    const riskCount = (area.linkedtoRoSH ? 2 : 0) + (area.linkedtoReoffending ? 1 : 0)
     if (!groupedByRiskCount[riskCount]) {
       groupedByRiskCount[riskCount] = []
     }
