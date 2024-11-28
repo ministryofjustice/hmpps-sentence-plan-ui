@@ -35,6 +35,8 @@ describe('Add Steps', () => {
           cy.get('.govuk-body').should('contain', 'You do not have permission to perform this action')
         })
       })
+
+      cy.checkAccessibility()
     })
   })
 
@@ -60,6 +62,7 @@ describe('Add Steps', () => {
       cy.get('table.goal-summary-card__steps .govuk-table__body').children().should('have.length', 1)
       selectStepDescriptionByIndex(1).should('contain', step.description)
       selectStepActorByIndex(1).should('contain', step.actor)
+      cy.checkAccessibility()
     })
 
     it('Add one step, save, then add another', () => {
@@ -88,6 +91,7 @@ describe('Add Steps', () => {
       selectStepActorByIndex(1).should('contain', firstStep.actor)
       selectStepDescriptionByIndex(2).should('contain', secondStep.description)
       selectStepActorByIndex(2).should('contain', secondStep.actor)
+      cy.checkAccessibility()
     })
 
     it('Add multiple steps, removing one during creation', () => {
@@ -122,6 +126,7 @@ describe('Add Steps', () => {
 
       selectStepDescriptionByIndex(2).should('contain', secondStep.description)
       selectStepActorByIndex(2).should('contain', secondStep.actor)
+      cy.checkAccessibility()
     })
 
     it('Add multiple steps, removing one afterwards', () => {
@@ -148,6 +153,7 @@ describe('Add Steps', () => {
       cy.get('table.goal-summary-card__steps .govuk-table__body').children().should('have.length', 1)
       selectStepDescriptionByIndex(1).should('contain', firstStep.description)
       selectStepActorByIndex(1).should('contain', firstStep.actor)
+      cy.checkAccessibility()
     })
   })
 
@@ -167,6 +173,7 @@ describe('Add Steps', () => {
       addStep.saveAndContinue()
 
       cy.get('#step-description-1-error').should('contain', 'Select or enter what they should do to achieve the goal.')
+      cy.checkAccessibility()
     })
 
     it('Save with incomplete step throws error', () => {
@@ -181,6 +188,7 @@ describe('Add Steps', () => {
       addStep.saveAndContinue()
 
       cy.get('#step-description-2-error').should('contain', 'Select or enter what they should do to achieve the goal.')
+      cy.checkAccessibility()
     })
 
     it('Save with a long step description shows error', () => {
@@ -198,6 +206,7 @@ describe('Add Steps', () => {
       )
 
       cy.get(`#step-description-1-autocomplete`).invoke('val').should('contain', lorem)
+      cy.checkAccessibility()
     })
   })
 })

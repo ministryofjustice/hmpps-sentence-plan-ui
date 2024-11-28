@@ -19,12 +19,14 @@ describe('Create a new Goal', () => {
       })
 
       cy.visit(`/create-goal/accommodation`, { failOnStatusCode: false })
+      cy.checkAccessibility()
     })
   })
 
   it('Checks the back link is correct', () => {
     createGoalPage.createGoal('accommodation')
     cy.get('.govuk-back-link').should('have.attr', 'href', '/plan?type=current')
+    cy.checkAccessibility()
   })
 
   it('Creates a new goal with errors', () => {
@@ -41,6 +43,7 @@ describe('Create a new Goal', () => {
     cy.contains('#related-area-of-need-radio-error', 'Select yes if this goal is related to any other area of need')
     cy.contains('.hmpps-datepicker', 'Date must be today or in the future')
     cy.title().should('contain', 'Error:')
+    cy.checkAccessibility()
   })
 
   it('Creates a new goal with errors', () => {
@@ -59,6 +62,7 @@ describe('Create a new Goal', () => {
     cy.title().should('contain', 'Error:')
 
     cy.get('#goal-input-autocomplete').invoke('val').should('contain', lorem)
+    cy.checkAccessibility()
   })
 
   it('Creates a new goal without steps with padded target date field', () => {
@@ -71,6 +75,7 @@ describe('Create a new Goal', () => {
 
     cy.url().should('contain', '/plan?status=added&type=current')
     cy.get('#goal-list').children().should('have.length', 1)
+    cy.checkAccessibility()
   })
 
   it('Creates a new goal without steps', () => {
@@ -99,9 +104,6 @@ describe('Create a new Goal', () => {
           'Also relates to: drug use, employment and education',
         )
       })
-  })
-
-  it.skip('Should have no accessibility violations', () => {
     cy.checkAccessibility()
   })
 })

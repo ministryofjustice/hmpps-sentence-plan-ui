@@ -16,21 +16,25 @@ describe('View Plan Overview for READ_WRITE user', () => {
     cy.visit('/plan')
     cy.contains('a', 'Create goal').click()
     cy.url().should('include', '/create-goal/')
+    cy.checkAccessibility()
   })
 
   it('Should have a `Return to OASys` button and it should return the user to the OASys return URL', () => {
     cy.contains('a', 'Return to OASys').should('have.attr', 'href').and('include', Cypress.env('OASTUB_URL'))
+    cy.checkAccessibility()
   })
 
   it('Should have text saying no goals to work on now', () => {
     cy.visit('/plan')
     cy.get('.govuk-grid-column-full').should('contain', 'does not have any goals to work on now. You can either:')
+    cy.checkAccessibility()
   })
 
   it('Should have text saying no future goals present', () => {
     cy.visit('/plan')
     cy.get('.moj-sub-navigation__link').contains('Future goals').click()
     cy.get('.govuk-grid-column-full').should('contain', 'does not have any future goals in their plan')
+    cy.checkAccessibility()
   })
 
   it('Should result in error when agree plan without goals', () => {
@@ -38,6 +42,7 @@ describe('View Plan Overview for READ_WRITE user', () => {
     cy.get('button').contains('Agree plan').click()
     cy.title().should('contain', 'Error:')
     cy.get('.govuk-error-summary').should('contain', 'To agree the plan, create a goal to work on now')
+    cy.checkAccessibility()
   })
 
   it('Should result in error when agree plan with future goal but no current goals', () => {
@@ -50,6 +55,7 @@ describe('View Plan Overview for READ_WRITE user', () => {
     cy.get('button').contains('Agree plan').click()
     cy.title().should('contain', 'Error:')
     cy.get('.govuk-error-summary').should('contain', 'To agree the plan, create a goal to work on now')
+    cy.checkAccessibility()
   })
 
   it('Plan with goals and no steps should result into error when Agree plan', () => {
@@ -61,6 +67,7 @@ describe('View Plan Overview for READ_WRITE user', () => {
     cy.get('button').contains('Agree plan').click()
     cy.title().should('contain', 'Error:')
     cy.get('.govuk-error-summary').should('contain', 'You must add steps to the goals Sam is working on now')
+    cy.checkAccessibility()
   })
 
   it('Plan with goals and no steps should have Add steps link and takes to takes to add-steps page', () => {
@@ -70,6 +77,7 @@ describe('View Plan Overview for READ_WRITE user', () => {
     })
     cy.contains('a', 'Add steps').click()
     cy.url().should('include', '/add-steps')
+    cy.checkAccessibility()
   })
 
   it('Plan with goals and steps should have required links and status as not started', () => {
@@ -89,6 +97,7 @@ describe('View Plan Overview for READ_WRITE user', () => {
       cy.contains('a', 'Delete')
       cy.get('.govuk-tag').contains('Not started')
     })
+    cy.checkAccessibility()
   })
 
   it('Plan with valid goals and steps should go to agree-plan', () => {
@@ -102,6 +111,7 @@ describe('View Plan Overview for READ_WRITE user', () => {
     cy.get('button').contains('Save and continue').click()
     cy.get('button').contains('Agree plan').click()
     cy.url().should('include', '/agree-plan')
+    cy.checkAccessibility()
   })
 
   it('Creates three new goals, and moves the middle goal up', () => {
@@ -124,6 +134,7 @@ describe('View Plan Overview for READ_WRITE user', () => {
       .should('contain', 'Test Accommodation 1')
       .and('contain', 'Move goal down')
       .and('contain', 'Move goal up')
+    cy.checkAccessibility()
   })
 
   it('Creates three new goals, and moves the middle goal down', () => {
@@ -146,9 +157,6 @@ describe('View Plan Overview for READ_WRITE user', () => {
       .should('contain', 'Test Accommodation 2')
       .and('contain', 'Move goal up')
       .and('not.contain', 'Move goal down')
-  })
-
-  it.skip('Should have no accessibility violations', () => {
     cy.checkAccessibility()
   })
 })

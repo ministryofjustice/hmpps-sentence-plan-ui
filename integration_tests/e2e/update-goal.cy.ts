@@ -36,6 +36,7 @@ describe('Update goal', () => {
         cy.visit(`/update-goal/${goal.uuid}`, { failOnStatusCode: false })
         cy.get('.govuk-body').should('contain', 'You do not have permission to perform this action')
       })
+      cy.checkAccessibility()
     })
 
     it('Can select and update a step status', () => {
@@ -56,6 +57,7 @@ describe('Update goal', () => {
       cy.get('.govuk-button').contains('Save goal and steps').click()
       cy.url().should('include', '/plan') // check we're back to plan-overview
       cy.get('.govuk-table__body > .govuk-table__row > :nth-child(3)').contains('In progress')
+      cy.checkAccessibility()
     })
 
     it('Can visit change goal and back link is correct', () => {
@@ -66,6 +68,7 @@ describe('Update goal', () => {
         const goalUuid = url.substring(url.lastIndexOf('/') + 1)
         cy.contains('a', 'Back').should('have.attr', 'href', `/update-goal/${goalUuid}`)
       })
+      cy.checkAccessibility()
     })
 
     it('Clicking Back link does not save', () => {
@@ -83,6 +86,7 @@ describe('Update goal', () => {
       cy.get('#step-status-1').select('In progress') // select In progress status
       cy.contains('a', 'Back').click()
       cy.get('.govuk-table__body > .govuk-table__row > :nth-child(3)').contains('Not started') // check contains Not started status
+      cy.checkAccessibility()
     })
 
     it('Can save and view notes attached to a goal', () => {
@@ -91,6 +95,7 @@ describe('Update goal', () => {
       cy.contains('a', 'Update').click() // click update link
       cy.contains('View all notes').click() // open drop down of notes
       cy.get('.govuk-details__text').contains(updateGoal.notesEntry) // check if created note is there
+      cy.checkAccessibility()
     })
 
     it('Entering a long progress note diplays an error', () => {
@@ -103,6 +108,7 @@ describe('Update goal', () => {
       cy.get('.govuk-error-summary').should('contain', 'Notes about progress must be 4,000 characters or less')
       cy.get('#more-detail-error').should('contain', 'Notes about progress must be 4,000 characters or less')
       cy.get('#more-detail').should('contain', lorem)
+      cy.checkAccessibility()
     })
   })
 })

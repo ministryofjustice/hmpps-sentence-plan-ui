@@ -29,6 +29,7 @@ describe('Change a goal', () => {
         })
 
         cy.get('.govuk-body').should('contain', 'You do not have permission to perform this action')
+        cy.checkAccessibility()
       })
     })
   })
@@ -51,6 +52,7 @@ describe('Change a goal', () => {
       cy.get('input[value="Health and wellbeing"]').should('be.checked')
       cy.get('input[name="start-working-goal-radio"]').should('be.checked').and('have.value', 'yes')
       cy.get('#date-selection-radio-2').should('be.checked')
+      cy.checkAccessibility()
     })
   })
 
@@ -80,6 +82,7 @@ describe('Change a goal', () => {
       cy.title().should('contain', 'Error:')
 
       cy.get('.govuk-back-link').should('have.attr', 'href', '/plan?type=current')
+      cy.checkAccessibility()
     })
   })
 
@@ -106,6 +109,8 @@ describe('Change a goal', () => {
         .should('contain', 'some goal')
         .and('contain', `Area of need: ${goalData.areaOfNeed.toLowerCase()}`)
         .and('contain', 'Also relates to: alcohol use, employment and education, health and wellbeing')
+
+      cy.checkAccessibility()
     })
 
     it('Should change goal with NO related areas of need', () => {
@@ -117,6 +122,8 @@ describe('Change a goal', () => {
 
       // Check goal data is saved and rendered correctly
       cy.get('.goal-summary-card').and('not.contain', 'Also relates to:')
+
+      cy.checkAccessibility()
     })
 
     it('Should change goal with related areas of need', () => {
@@ -129,6 +136,8 @@ describe('Change a goal', () => {
 
       // Check goal data is saved and rendered correctly
       cy.get('.goal-summary-card').and('contain', 'Also relates to: employment and education')
+
+      cy.checkAccessibility()
     })
 
     it('Should change goal with standard date', () => {
@@ -137,6 +146,8 @@ describe('Change a goal', () => {
 
       cy.contains('button', 'save').click()
       cy.url().should('include', 'plan?status=updated&type=current')
+
+      cy.checkAccessibility()
     })
 
     it('Should change goal with standard date and related areas of need are retained', () => {
@@ -146,6 +157,8 @@ describe('Change a goal', () => {
       cy.contains('button', 'save').click()
       cy.url().should('include', 'plan?status=updated&type=current')
       cy.get('.goal-summary-card').and('contain', 'Also relates to: health and wellbeing')
+
+      cy.checkAccessibility()
     })
 
     it('Should change goal with custom date', () => {
@@ -159,6 +172,8 @@ describe('Change a goal', () => {
       cy.get('#date-selection-custom').type(date)
       cy.contains('button', 'save').click()
       cy.url().should('include', 'plan?status=updated&type=current')
+
+      cy.checkAccessibility()
     })
 
     it('Should change goal with future date', () => {
@@ -170,6 +185,8 @@ describe('Change a goal', () => {
 
       // Check goal data is saved and rendered correctly
       cy.get('.moj-sub-navigation').and('contain', 'Future goals (1)')
+
+      cy.checkAccessibility()
     })
 
     it('Should display error if goal title is too long', () => {
@@ -184,6 +201,8 @@ describe('Change a goal', () => {
       cy.get('.govuk-error-summary').should('contain', 'Goal must be 4,000 characters or less')
       cy.get('#goal-input-error').should('contain', 'Goal must be 4,000 characters or less')
       cy.get('#goal-input-autocomplete').invoke('val').should('contain', lorem)
+
+      cy.checkAccessibility()
     })
   })
 })
