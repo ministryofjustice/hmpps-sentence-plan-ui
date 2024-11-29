@@ -68,10 +68,10 @@
             <table class="govuk-table govuk-!-margin-bottom-4" >
 
                 <tr class="govuk-body-s">
-                    <td class="govuk-padding-right--25">Sentence</td>
-                    <td class="govuk-padding-right--25">Expected end date</td>
-                    <td class="govuk-padding-right--25">Unpaid work</td>
-                    <td class="govuk-padding-right--25">Rehabilitation activity requirement (RAR)</td>
+                    <td class="govuk-padding-right--25">{{ locale.detail.sentenceHeading }}</td>
+                    <td class="govuk-padding-right--25">{{ locale.detail.endDateHeading }}</td>
+                    <td class="govuk-padding-right--25">{{ locale.detail.unpaidWorkHeading }}</td>
+                    <td class="govuk-padding-right--25">{{ locale.detail.rarHeading }}</td>
                 </tr>
 
                 {% for sentence in data.deliusData.sentences %}
