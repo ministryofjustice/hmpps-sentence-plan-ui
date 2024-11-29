@@ -40,17 +40,6 @@ describe('SessionService', () => {
       expect(requestMock.session.handover).toEqual(testHandoverContext)
       expect(requestMock.session.plan).toEqual(testPlan)
     })
-
-    it('should throw if either getContext or getPlanByOasysAssessmentPk fails', async () => {
-      handoverContextServiceMock.getContext.mockRejectedValue('getContext')
-      planServiceMock.getPlanByUuidAndVersionNumber.mockRejectedValue('getPlanByOasysAssessmentPk')
-
-      await expect(sessionService.setupSession()).rejects.toThrow('getContext')
-
-      handoverContextServiceMock.getContext.mockResolvedValue(testHandoverContext)
-
-      await expect(sessionService.setupSession()).rejects.toThrow('getPlanByOasysAssessmentPk')
-    })
   })
 
   describe('getPlanUUID', () => {

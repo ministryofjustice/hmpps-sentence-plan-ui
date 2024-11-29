@@ -67,7 +67,7 @@
       {
         "area": "Health and wellbeing",
         "crimNeedsKey": "healthAndWellbeing",
-        "crimNeedsSubKey": "emu",
+        "crimNeedsSubKey": "emo",
         "assessmentKey": "health_wellbeing",
         "goalRoute": "health-and-wellbeing",
         "upperBound": null
