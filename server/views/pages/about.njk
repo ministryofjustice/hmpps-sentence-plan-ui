@@ -76,7 +76,7 @@
 
                 {% for sentence in data.deliusData.sentences %}
                     <tr class="govuk-table__row govuk-body-l">
-                        <td class = "govuk-table__cell govuk-padding-bottom--25 ">{{ sentence.description }} <br/> {{ yearsAndDaysElapsed(sentence.startDate, sentence.endDate) }} </td>
+                        <td class = "govuk-table__cell govuk-padding-bottom--25 ">{{ sentence.description }} <br/> ({{ sentenceLength(sentence.startDate, sentence.endDate, locale.common.sentence) }}) </td>
                         <td class = "govuk-table__cell govuk-padding-bottom--25">{{ sentence.endDate | formatSimpleDate }}</td>
                         <td class = "govuk-table__cell govuk-padding-bottom--25">
                             {% if sentence.unpaidWorkHoursOrdered > 0 %}

@@ -132,10 +132,42 @@ export const dateWithYear = (datetimeString: string): string | null => {
   return DateTime.fromISO(datetimeString).toFormat('d MMMM yyyy')
 }
 
-export const yearsAndDaysElapsed = (datetimeStringFrom: string, datetimeStringTo: string): string => {
+export const yearsAndDaysElapsed = (datetimeStringFrom: string, datetimeStringTo: string): any => {
   if (!datetimeStringFrom || isBlank(datetimeStringFrom)) return undefined
   if (!datetimeStringTo || isBlank(datetimeStringTo)) return undefined
-  const yearsDays = DateTime.fromISO(datetimeStringTo).diff(DateTime.fromISO(datetimeStringFrom), ['years', 'days'])
+  const yearsMonthsDays = DateTime.fromISO(datetimeStringTo).diff(DateTime.fromISO(datetimeStringFrom), [
+    'years',
+    'months',
+    'days',
+  ])
 
-  return `(${yearsDays.years} years and ${yearsDays.days} days)`
+  return yearsMonthsDays
+}
+
+const pluralise = (count: number, noun: string, suffix = 's'): string => {
+  return `${count} ${noun}${count !== 1 ? suffix : ''}`
+}
+
+// TODO add parameters to replace hardcoded words
+export const sentenceLength = (datetimeStringFrom: string, datetimeStringTo: string, locale: any): any => {
+  const yearsMonthsDays = yearsAndDaysElapsed(datetimeStringFrom, datetimeStringTo)
+  let sentenceLengthstring = ''
+
+  if (yearsMonthsDays.years > 0 && yearsMonthsDays.months > 0 && yearsMonthsDays.days > 0) {
+    sentenceLengthstring = `${pluralise(yearsMonthsDays.years, locale.year)}, ${pluralise(yearsMonthsDays.months, locale.month)} and ${pluralise(yearsMonthsDays.days, locale.day)}`
+  } else if (yearsMonthsDays.years > 0 && yearsMonthsDays.months > 0) {
+    sentenceLengthstring = `${pluralise(yearsMonthsDays.years, locale.year)} ${locale.conjunction} ${pluralise(yearsMonthsDays.months, locale.month)}`
+  } else if (yearsMonthsDays.months > 0 && yearsMonthsDays.days > 0) {
+    sentenceLengthstring = `${pluralise(yearsMonthsDays.months, locale.month)} ${locale.conjunction} ${pluralise(yearsMonthsDays.days, locale.day)}`
+  } else if (yearsMonthsDays.years > 0 && yearsMonthsDays.days > 0) {
+    sentenceLengthstring = `${pluralise(yearsMonthsDays.years, locale.year)} ${locale.conjunction} ${pluralise(yearsMonthsDays.days, locale.day)}`
+  } else if (yearsMonthsDays.years > 0) {
+    sentenceLengthstring = `${pluralise(yearsMonthsDays.years, locale.year)}`
+  } else if (yearsMonthsDays.months > 0) {
+    sentenceLengthstring = `${pluralise(yearsMonthsDays.months, locale.month)}`
+  } else if (yearsMonthsDays.days > 0) {
+    sentenceLengthstring = `${pluralise(yearsMonthsDays.days, locale.day)}`
+  }
+
+  return sentenceLengthstring
 }
