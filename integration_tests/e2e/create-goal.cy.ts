@@ -61,7 +61,7 @@ describe('Create a new Goal', () => {
     cy.get('#goal-input-error').should('contain', 'Goal must be 4,000 characters or less')
     cy.title().should('contain', 'Error:')
 
-    cy.get('#goal-input').invoke('val').should('contain', lorem)
+    cy.get('#goal-input-autocomplete').invoke('val').should('contain', lorem)
     cy.checkAccessibility()
   })
 
