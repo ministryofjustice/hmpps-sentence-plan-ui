@@ -14,7 +14,7 @@
                         noteDate: note.createdDate | formatSimpleDate,
                         noteAuthor: note.practitionerName | convertToTitleCase
                     }) %}
-                    <h4>{{ locale.noteHeading }}</h4>
+                    <h3 class="govuk-heading-s">{{ locale.noteHeading }}</h3>
                     {% if note.type == "ACHIEVED" %}
                         <p>{{ locale.goalAchievedNote }}</p>
                     {% elif note.type == "REMOVED" %}
