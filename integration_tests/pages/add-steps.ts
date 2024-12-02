@@ -19,6 +19,10 @@ export default class AddSteps {
     cy.get('button').contains('Save and continue').click()
   }
 
+  saveAndContinuePressingEnter = (position: number) => {
+    cy.get(`#step-description-${position}-autocomplete`).type('{enter}')
+  }
+
   removeStep(position: number) {
     cy.get(`button[value="remove-step-${position}"]`).click()
   }

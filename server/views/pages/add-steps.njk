@@ -60,6 +60,10 @@
     <input type="hidden" id="_areaOfNeed" value="{{ data.areaOfNeed }}"/>
     {% set steps = data.form.steps if data.form.steps and data.form.steps.length > 0 else [{}] %}
 
+    <div class="visually-hidden">
+                 <button value="save" type="submit" name="action" class="govuk-visually-hidden">Visually hidden submit button</button>
+    </div>
+
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
             <dl class="add-steps-list govuk-summary-list">

@@ -81,7 +81,7 @@ describe('Add Steps', () => {
       addStep.addStepAutocompleteText(2, secondStep.description)
       addStep.selectStepActor(2, secondStep.actor)
 
-      addStep.saveAndContinue()
+      addStep.saveAndContinuePressingEnter(2)
 
       cy.get('table.goal-summary-card__steps .govuk-table__body').children().should('have.length', 2)
       selectStepDescriptionByIndex(1).should('contain', firstStep.description)
