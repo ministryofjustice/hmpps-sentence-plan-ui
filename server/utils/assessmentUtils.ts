@@ -148,7 +148,8 @@ const pluralise = (count: number, noun: string, suffix = 's'): string => {
   return `${count} ${noun}${count !== 1 ? suffix : ''}`
 }
 
-// TODO add parameters to replace hardcoded words
+// The sentence duration returned is in the form "x years, y months and z days" where any of year,month,date can
+// be 0, in which case it shouldn't be displayed and the formatting of the layout is updated accordingly.
 export const sentenceLength = (datetimeStringFrom: string, datetimeStringTo: string, locale: any): any => {
   const yearsMonthsDays = yearsAndDaysElapsed(datetimeStringFrom, datetimeStringTo)
   let sentenceLengthstring = ''
