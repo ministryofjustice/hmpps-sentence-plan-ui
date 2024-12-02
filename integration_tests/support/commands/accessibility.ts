@@ -18,10 +18,6 @@ export const checkAccessibility = (injectAxe: boolean = true, disabledRules = []
           enabled: false,
         },
         {
-          id: 'link-name', // hidden/empty links in the nav bar, need to fix css if we filter these out.
-          enabled: false,
-        },
-        {
           id: 'scrollable-region-focusable', // stacktrace on the error page
           enabled: false,
         },

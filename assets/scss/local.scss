@@ -25,10 +25,8 @@
 }
 
 .plan-navigation {
-  .moj-sub-navigation__list {
-    & > *:last-child {
-      float: right;
-    }
+  .moj-sub-navigation__list > li:has(> a[data-module="float"]) {
+    float: right;
   }
 }
 .sp-badge {
