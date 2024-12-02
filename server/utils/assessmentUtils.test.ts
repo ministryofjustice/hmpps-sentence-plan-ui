@@ -50,7 +50,7 @@ describe('format assessment data', () => {
             linkedtoReoffending: true,
             linkedtoRoSH: false,
             overallScore: '6',
-            riskOfReoffending: undefined,
+            riskOfReoffendingDetails: undefined,
             thresholdValue: 1,
             title: 'Accommodation',
             goalRoute: 'accommodation',
@@ -63,7 +63,7 @@ describe('format assessment data', () => {
             linkedtoReoffending: true,
             linkedtoRoSH: false,
             overallScore: '1',
-            riskOfReoffending: undefined,
+            riskOfReoffendingDetails: undefined,
             thresholdValue: 1,
             title: 'Employment and education',
             goalRoute: 'employment-and-education',
@@ -78,7 +78,7 @@ describe('format assessment data', () => {
             upperBound: 4,
             linkedtoReoffending: undefined,
             linkedtoRoSH: undefined,
-            riskOfReoffending: undefined,
+            riskOfReoffendingDetails: undefined,
           },
           {
             goalRoute: 'drug-use',
@@ -87,7 +87,7 @@ describe('format assessment data', () => {
             upperBound: 8,
             linkedtoReoffending: undefined,
             linkedtoRoSH: undefined,
-            riskOfReoffending: undefined,
+            riskOfReoffendingDetails: undefined,
           },
           {
             goalRoute: 'finances',
@@ -95,7 +95,7 @@ describe('format assessment data', () => {
             upperBound: null,
             linkedtoReoffending: undefined,
             linkedtoRoSH: undefined,
-            riskOfReoffending: undefined,
+            riskOfReoffendingDetails: undefined,
           },
           {
             goalRoute: 'health-and-wellbeing',
@@ -103,7 +103,7 @@ describe('format assessment data', () => {
             upperBound: null,
             linkedtoReoffending: false,
             linkedtoRoSH: false,
-            riskOfReoffending: undefined,
+            riskOfReoffendingDetails: undefined,
           },
           {
             goalRoute: 'personal-relationships-and-community',
@@ -112,7 +112,7 @@ describe('format assessment data', () => {
             upperBound: 6,
             linkedtoReoffending: undefined,
             linkedtoRoSH: undefined,
-            riskOfReoffending: undefined,
+            riskOfReoffendingDetails: undefined,
           },
           {
             goalRoute: 'thinking-behaviours-and-attitudes',
@@ -121,7 +121,7 @@ describe('format assessment data', () => {
             upperBound: 10,
             linkedtoReoffending: undefined,
             linkedtoRoSH: undefined,
-            riskOfReoffending: undefined,
+            riskOfReoffendingDetails: undefined,
           },
         ],
         versionUpdatedAt: '2024-10-04T15:22:31.453096',
@@ -139,7 +139,7 @@ describe('format assessment data', () => {
             linkedtoRoSH: false,
             motivationToMakeChanges: 'thinkingAboutMakingChanges',
             overallScore: '6',
-            riskOfReoffending: undefined,
+            riskOfReoffendingDetails: undefined,
             goalRoute: 'accommodation',
             thresholdValue: 1,
             title: 'Accommodation',
@@ -153,7 +153,7 @@ describe('format assessment data', () => {
             linkedtoRoSH: false,
             motivationToMakeChanges: 'needsHelpToMakeChanges',
             overallScore: '1',
-            riskOfReoffending: undefined,
+            riskOfReoffendingDetails: undefined,
             thresholdValue: 1,
             title: 'Employment and education',
             goalRoute: 'employment-and-education',
@@ -168,7 +168,7 @@ describe('format assessment data', () => {
             upperBound: 4,
             linkedtoReoffending: undefined,
             linkedtoRoSH: undefined,
-            riskOfReoffending: undefined,
+            riskOfReoffendingDetails: undefined,
           },
           {
             goalRoute: 'drug-use',
@@ -177,7 +177,7 @@ describe('format assessment data', () => {
             upperBound: 8,
             linkedtoReoffending: undefined,
             linkedtoRoSH: undefined,
-            riskOfReoffending: undefined,
+            riskOfReoffendingDetails: undefined,
           },
           {
             goalRoute: 'finances',
@@ -185,7 +185,7 @@ describe('format assessment data', () => {
             upperBound: null,
             linkedtoReoffending: undefined,
             linkedtoRoSH: undefined,
-            riskOfReoffending: undefined,
+            riskOfReoffendingDetails: undefined,
           },
           {
             goalRoute: 'health-and-wellbeing',
@@ -193,7 +193,7 @@ describe('format assessment data', () => {
             upperBound: null,
             linkedtoReoffending: false,
             linkedtoRoSH: false,
-            riskOfReoffending: undefined,
+            riskOfReoffendingDetails: undefined,
           },
           {
             goalRoute: 'personal-relationships-and-community',
@@ -202,7 +202,7 @@ describe('format assessment data', () => {
             upperBound: 6,
             linkedtoReoffending: undefined,
             linkedtoRoSH: undefined,
-            riskOfReoffending: undefined,
+            riskOfReoffendingDetails: undefined,
           },
           {
             goalRoute: 'thinking-behaviours-and-attitudes',
@@ -211,7 +211,7 @@ describe('format assessment data', () => {
             upperBound: 10,
             linkedtoReoffending: undefined,
             linkedtoRoSH: undefined,
-            riskOfReoffending: undefined,
+            riskOfReoffendingDetails: undefined,
           },
         ],
         versionUpdatedAt: '2024-10-04T15:22:31.453096',
@@ -228,7 +228,7 @@ describe('format assessment data', () => {
             goalRoute: 'drug-use',
             linkedtoReoffending: false,
             linkedtoRoSH: false,
-            riskOfReoffending: undefined,
+            riskOfReoffendingDetails: undefined,
             overallScore: '4',
             thresholdValue: 0,
             title: 'Drug use',
@@ -239,7 +239,7 @@ describe('format assessment data', () => {
             goalRoute: 'thinking-behaviours-and-attitudes',
             linkedtoReoffending: false,
             linkedtoRoSH: false,
-            riskOfReoffending: undefined,
+            riskOfReoffendingDetails: undefined,
             overallScore: '5',
             thresholdValue: 2,
             title: 'Thinking, behaviours and attitudes',
@@ -250,7 +250,7 @@ describe('format assessment data', () => {
             goalRoute: 'accommodation',
             linkedtoReoffending: false,
             linkedtoRoSH: false,
-            riskOfReoffending: undefined,
+            riskOfReoffendingDetails: undefined,
             overallScore: '3',
             thresholdValue: 1,
             title: 'Accommodation',
@@ -265,7 +265,7 @@ describe('format assessment data', () => {
             title: 'Alcohol use',
             upperBound: 4,
             linkedtoRoSH: undefined,
-            riskOfReoffending: undefined,
+            riskOfReoffendingDetails: undefined,
             linkedtoReoffending: undefined,
           },
           {
@@ -273,7 +273,7 @@ describe('format assessment data', () => {
             thresholdValue: 1,
             title: 'Employment and education',
             linkedtoRoSH: undefined,
-            riskOfReoffending: undefined,
+            riskOfReoffendingDetails: undefined,
             linkedtoReoffending: undefined,
             upperBound: 4,
           },
@@ -282,7 +282,7 @@ describe('format assessment data', () => {
             title: 'Finances',
             upperBound: null,
             linkedtoRoSH: undefined,
-            riskOfReoffending: undefined,
+            riskOfReoffendingDetails: undefined,
             linkedtoReoffending: undefined,
           },
           {
@@ -290,7 +290,7 @@ describe('format assessment data', () => {
             title: 'Health and wellbeing',
             upperBound: null,
             linkedtoRoSH: undefined,
-            riskOfReoffending: undefined,
+            riskOfReoffendingDetails: undefined,
             linkedtoReoffending: undefined,
           },
           {
@@ -299,7 +299,7 @@ describe('format assessment data', () => {
             title: 'Personal relationships and community',
             upperBound: 6,
             linkedtoRoSH: undefined,
-            riskOfReoffending: undefined,
+            riskOfReoffendingDetails: undefined,
             linkedtoReoffending: undefined,
           },
         ],
@@ -348,19 +348,19 @@ describe('years and days elapsed', () => {
 describe('groupAndSortOtherAreas', () => {
   it('groups and sorts areas by risk count', () => {
     const areas: AssessmentArea[] = [
-      { title: 'Area D', riskOfSeriousHarm: 'NO', riskOfReoffending: 'NO' } as AssessmentArea,
-      { title: 'Area A', riskOfSeriousHarm: 'YES', riskOfReoffending: 'YES' } as AssessmentArea,
-      { title: 'Area B', riskOfSeriousHarm: 'YES', riskOfReoffending: 'NO' } as AssessmentArea,
-      { title: 'Area C', riskOfSeriousHarm: 'NO', riskOfReoffending: 'YES' } as AssessmentArea,
+      { title: 'Area D', linkedtoRoSH: false, linkedtoReoffending: false } as AssessmentArea,
+      { title: 'Area A', linkedtoRoSH: true, linkedtoReoffending: true } as AssessmentArea,
+      { title: 'Area B', linkedtoRoSH: true, linkedtoReoffending: false } as AssessmentArea,
+      { title: 'Area C', linkedtoRoSH: false, linkedtoReoffending: true } as AssessmentArea,
     ]
 
     const result = groupAndSortOtherAreas(areas)
 
     expect(result).toEqual([
-      { title: 'Area A', riskOfSeriousHarm: 'YES', riskOfReoffending: 'YES' },
-      { title: 'Area B', riskOfSeriousHarm: 'YES', riskOfReoffending: 'NO' },
-      { title: 'Area C', riskOfSeriousHarm: 'NO', riskOfReoffending: 'YES' },
-      { title: 'Area D', riskOfSeriousHarm: 'NO', riskOfReoffending: 'NO' },
+      { title: 'Area A', linkedtoRoSH: true, linkedtoReoffending: true },
+      { title: 'Area B', linkedtoRoSH: true, linkedtoReoffending: false },
+      { title: 'Area C', linkedtoRoSH: false, linkedtoReoffending: true },
+      { title: 'Area D', linkedtoRoSH: false, linkedtoReoffending: false },
     ])
   })
 
@@ -374,29 +374,29 @@ describe('groupAndSortOtherAreas', () => {
 
   it('sorts areas alphabetically within the same risk count', () => {
     const areas: AssessmentArea[] = [
-      { title: 'Area B', riskOfSeriousHarm: 'YES', riskOfReoffending: 'NO' } as AssessmentArea,
-      { title: 'Area A', riskOfSeriousHarm: 'YES', riskOfReoffending: 'NO' } as AssessmentArea,
+      { title: 'Area B', linkedtoRoSH: true, linkedtoReoffending: false } as AssessmentArea,
+      { title: 'Area A', linkedtoRoSH: true, linkedtoReoffending: false } as AssessmentArea,
     ]
 
     const result = groupAndSortOtherAreas(areas)
 
     expect(result).toEqual([
-      { title: 'Area A', riskOfSeriousHarm: 'YES', riskOfReoffending: 'NO' },
-      { title: 'Area B', riskOfSeriousHarm: 'YES', riskOfReoffending: 'NO' },
+      { title: 'Area A', linkedtoRoSH: true, linkedtoReoffending: false },
+      { title: 'Area B', linkedtoRoSH: true, linkedtoReoffending: false },
     ])
   })
 
   it('handles areas with undefined risk values', () => {
     const areas: AssessmentArea[] = [
-      { title: 'Area A', riskOfSeriousHarm: undefined, riskOfReoffending: undefined } as AssessmentArea,
-      { title: 'Area B', riskOfSeriousHarm: 'YES', riskOfReoffending: undefined } as AssessmentArea,
+      { title: 'Area A', linkedtoRoSH: undefined, linkedtoReoffending: undefined } as AssessmentArea,
+      { title: 'Area B', linkedtoRoSH: true, linkedtoReoffending: undefined } as AssessmentArea,
     ]
 
     const result = groupAndSortOtherAreas(areas)
 
     expect(result).toEqual([
-      { title: 'Area B', riskOfSeriousHarm: 'YES', riskOfReoffending: undefined },
-      { title: 'Area A', riskOfSeriousHarm: undefined, riskOfReoffending: undefined },
+      { title: 'Area B', linkedtoRoSH: true, linkedtoReoffending: undefined },
+      { title: 'Area A', linkedtoRoSH: undefined, linkedtoReoffending: undefined },
     ])
   })
 })
