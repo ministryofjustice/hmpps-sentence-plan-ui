@@ -26,7 +26,7 @@ describe('Delete a goal from a Plan before it has been agreed', () => {
       })
 
       cy.get('.govuk-body').should('contain', 'You do not have permission to perform this action')
-      cy.checkAccessibility()
+      cy.checkAccessibility(true, ['scrollable-region-focusable'])
     })
   })
 

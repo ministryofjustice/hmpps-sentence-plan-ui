@@ -36,7 +36,7 @@ describe('Update goal', () => {
         cy.visit(`/update-goal/${goal.uuid}`, { failOnStatusCode: false })
         cy.get('.govuk-body').should('contain', 'You do not have permission to perform this action')
       })
-      cy.checkAccessibility()
+      cy.checkAccessibility(true, ['scrollable-region-focusable'])
     })
 
     it('Can select and update a step status', () => {

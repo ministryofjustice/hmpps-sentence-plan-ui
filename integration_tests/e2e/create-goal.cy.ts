@@ -19,7 +19,7 @@ describe('Create a new Goal', () => {
       })
 
       cy.visit(`/create-goal/accommodation`, { failOnStatusCode: false })
-      cy.checkAccessibility()
+      cy.checkAccessibility(true, ['scrollable-region-focusable'])
     })
   })
 

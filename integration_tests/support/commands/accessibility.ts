@@ -1,7 +1,7 @@
 import { Result } from 'axe-core'
 
 // eslint-disable-next-line import/prefer-default-export
-export const checkAccessibility = (injectAxe: boolean = true, disabledRules = []) => {
+export const checkAccessibility = (injectAxe: boolean = true, disabledRules: string[] = []) => {
   if (injectAxe) {
     cy.injectAxe()
     cy.configureAxe({
@@ -12,14 +12,6 @@ export const checkAccessibility = (injectAxe: boolean = true, disabledRules = []
           // Temporary rule until this gets resolved https://github.com/w3c/aria/issues/1404
           // GovUK Frontend issue https://github.com/alphagov/govuk-frontend/issues/979
           matches: (node: Element) => !(node.tagName === 'INPUT' && node.hasAttribute('aria-expanded')),
-        },
-        {
-          id: 'region', // two <header> on the page
-          enabled: false,
-        },
-        {
-          id: 'scrollable-region-focusable', // stacktrace on the error page
-          enabled: false,
         },
       ],
     })

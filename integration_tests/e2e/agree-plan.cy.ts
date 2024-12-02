@@ -25,7 +25,7 @@ describe('Agree plan', () => {
         cy.visit(`/agree-plan`, { failOnStatusCode: false })
         cy.get('.govuk-body').should('contain', 'You do not have permission to perform this action')
 
-        cy.checkAccessibility()
+        cy.checkAccessibility(true, ['scrollable-region-focusable'])
       })
     })
   })

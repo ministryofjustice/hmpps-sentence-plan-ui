@@ -36,7 +36,7 @@ describe('Add Steps', () => {
         })
       })
 
-      cy.checkAccessibility()
+      cy.checkAccessibility(true, ['scrollable-region-focusable'])
     })
   })
 
