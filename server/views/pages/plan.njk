@@ -203,7 +203,7 @@
                     {% if errors.domain['goals.' + item.index + '.steps'].arrayNotEmpty %}
                         {% set errorMessage = {
                             id: 'goal-summary-card-' + item.index,
-                            text: locale.errors['steps'].arrayNotEmpty,
+                            text: locale.errors['steps'].arrayNotEmptyShortened,
                             state: locale.goalSummaryCard.state.incomplete
                         } %}
                     {% endif %}
