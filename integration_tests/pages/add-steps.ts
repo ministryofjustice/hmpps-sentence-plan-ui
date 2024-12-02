@@ -26,4 +26,8 @@ export default class AddSteps {
   removeStep(position: number) {
     cy.get(`button[value="remove-step-${position}"]`).click()
   }
+
+  clearStep = () => {
+    cy.get(`button[value="clear-step-1"]`).click()
+  }
 }
