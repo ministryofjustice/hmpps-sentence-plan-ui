@@ -62,7 +62,7 @@ describe('Add Steps', () => {
       selectStepActorByIndex(1).should('contain', step.actor)
     })
 
-    it('Add one step, save, then add another', () => {
+    it('Add one step, save, then add 2 more', () => {
       cy.url().should('include', '/add-steps')
 
       const firstStep = DataGenerator.generateStep()
@@ -81,13 +81,21 @@ describe('Add Steps', () => {
       addStep.addStepAutocompleteText(2, secondStep.description)
       addStep.selectStepActor(2, secondStep.actor)
 
+      addStep.AddAnotherStepPressingEnter(2)
+
+      const thirdStep = DataGenerator.generateStep()
+      addStep.addStepAutocompleteText(3, thirdStep.description)
+      addStep.selectStepActor(3, thirdStep.actor)
+
       addStep.saveAndContinue()
 
-      cy.get('table.goal-summary-card__steps .govuk-table__body').children().should('have.length', 2)
+      cy.get('table.goal-summary-card__steps .govuk-table__body').children().should('have.length', 3)
       selectStepDescriptionByIndex(1).should('contain', firstStep.description)
       selectStepActorByIndex(1).should('contain', firstStep.actor)
       selectStepDescriptionByIndex(2).should('contain', secondStep.description)
       selectStepActorByIndex(2).should('contain', secondStep.actor)
+      selectStepDescriptionByIndex(3).should('contain', thirdStep.description)
+      selectStepActorByIndex(3).should('contain', thirdStep.actor)
     })
 
     it('Add multiple steps, removing one during creation', () => {
