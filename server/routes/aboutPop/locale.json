@@ -7,6 +7,10 @@
       "title": "About {{ subject.givenName }}"
     },
     "detail": {
+      "sentenceHeading": "Sentence",
+      "endDateHeading": "Expected end date",
+      "unpaidWorkHeading": "Unpaid work",
+      "rarHeading": "RAR (Rehabilitation activity requirement)",
       "lastUpdated": "Last updated on {{ lastUpdatedDate }}.",
       "RoSH": "RoSH (Risk of Serious Harm)",
       "riskOfReoffending": "Risk of reoffending",
