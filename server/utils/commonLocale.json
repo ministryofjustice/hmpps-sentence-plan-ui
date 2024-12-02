@@ -31,6 +31,7 @@
     "goalSummaryCard": {
       "info": {
         "aimToAchieveDate": "Aim to achieve this by {{ targetDate }}.",
+        "removedDate": "Removed on {{ achievedDate }}",
         "aimToAchieveSentence": "Aim to achieve this by the end of {{ subject.possessiveName }} sentence.",
         "goalAchievedDate": "Marked as achieved on {{ achievedDate }}.",
         "thisIsAFutureGoal": "This is a future goal."
