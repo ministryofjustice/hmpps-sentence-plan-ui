@@ -15,7 +15,7 @@
         areaOfNeed: params.goal.areaOfNeed.name | lower,
         relatedAreasOfNeed: relatedAreasOfNeed | sort | join(', ') | lower,
         targetDate: (params.goal.targetDate | formatSimpleDate) if params.goal.targetDate,
-        achievedDate: (params.goal.statusDate | formatSimpleDate) if params.goal.statusDate
+        lastStatusChangeDate: (params.goal.statusDate | formatSimpleDate) if params.goal.statusDate
     }) %}
 
     <div class="goal-summary-card {%- if params.errorMessage %} goal-summary-card--error {% endif %}">
@@ -42,7 +42,7 @@
                 <p>{{ locale.info.removedDate }}</p>
             {% endif %}
             {% if params.goal.status == "ACHIEVED" %}
-                <p>{{ locale.info.goalAchievedDate }}</p>
+                <p>{{ locale.info.goallastStatusChangeDate }}</p>
             {% endif %}
             {% if params.errorMessage %}
                 {{ govukErrorMessage({
