@@ -62,17 +62,6 @@
       "ts"
     ]
   },
-  "nodemonConfig": {
-    "ignore": [
-      ".circleci/*",
-      "migrations/*",
-      "node_modules/*",
-      "test/*",
-      "integration_tests/*"
-    ],
-    "delay": 2500,
-    "ext": "js,json,html,njk"
-  },
   "lint-staged": {
     "*.{ts,js,css}": [
       "prettier --write",
@@ -85,6 +74,7 @@
   "dependencies": {
     "@aws-sdk/client-sqs": "^3.693.0",
     "@ministryofjustice/frontend": "^2.2.5",
+    "@ministryofjustice/hmpps-monitoring": "^0.0.1-beta.2",
     "accessible-autocomplete": "^3.0.1",
     "agentkeepalive": "^4.5.0",
     "applicationinsights": "^3.4.0",
