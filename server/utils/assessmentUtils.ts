@@ -55,10 +55,10 @@ export const formatAssessmentData = (
     }
 
     const motivationToMakeChanges = motivationText(assessment.sanAssessmentData[`${area.assessmentKey}_changes`]?.value)
-    const riskOfSeriousHarm =
+    const riskOfSeriousHarmDetails =
       assessment.sanAssessmentData[`${area.assessmentKey}_practitioner_analysis_risk_of_serious_harm_yes_details`]
         ?.value
-    const riskOfReoffending =
+    const riskOfReoffendingDetails =
       assessment.sanAssessmentData[`${area.assessmentKey}_practitioner_analysis_risk_of_reoffending_yes_details`]?.value
     const strengthsOrProtectiveFactors =
       assessment.sanAssessmentData[
@@ -71,8 +71,8 @@ export const formatAssessmentData = (
       linkedtoRoSH,
       linkedtoReoffending,
       motivationToMakeChanges,
-      riskOfSeriousHarm,
-      riskOfReoffending,
+      riskOfSeriousHarmDetails,
+      riskOfReoffendingDetails,
       strengthsOrProtectiveFactors,
       criminogenicNeedsScore: score,
       goalRoute: area.goalRoute,
@@ -106,7 +106,7 @@ export const groupAndSortOtherAreas = (other: AssessmentArea[]): AssessmentArea[
 
   // group the areas by the sum of their risk counts, RoSH first
   other.forEach(area => {
-    const riskCount = (area.riskOfSeriousHarm === 'YES' ? 2 : 0) + (area.riskOfReoffending === 'YES' ? 1 : 0)
+    const riskCount = (area.linkedtoRoSH ? 2 : 0) + (area.linkedtoReoffending ? 1 : 0)
     if (!groupedByRiskCount[riskCount]) {
       groupedByRiskCount[riskCount] = []
     }
