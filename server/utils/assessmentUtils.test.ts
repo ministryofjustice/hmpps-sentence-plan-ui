@@ -5,6 +5,7 @@ import {
   crimNeeds,
   crimNeedsOrdering,
 } from '../testutils/data/assessmentData'
+import commonLocale from './commonLocale.json'
 import locale from '../routes/aboutPop/locale.json'
 import {
   AssessmentArea,
@@ -13,7 +14,13 @@ import {
   AssessmentResponse,
   CriminogenicNeedsData,
 } from '../@types/Assessment'
-import { formatAssessmentData, groupAndSortOtherAreas, motivationText, yearsAndDaysElapsed } from './assessmentUtils'
+import {
+  formatAssessmentData,
+  groupAndSortOtherAreas,
+  motivationText,
+  sentenceLength,
+  yearsAndDaysElapsed,
+} from './assessmentUtils'
 
 describe('format assessment data', () => {
   it.each([
@@ -336,12 +343,28 @@ describe('replace motivation text', () => {
   })
 })
 
-describe('years and days elapsed', () => {
+describe('years, months and days elapsed', () => {
   it.each([
-    ['2024-11-06', '2029-01-12', '(4 years and 67 days)'],
-    [undefined, undefined, undefined],
-  ])('%s maps to %s', (from: string, to: string, expected: string) => {
-    expect(yearsAndDaysElapsed(from, to)).toEqual(expected)
+    ['2024-11-06', '2029-01-12', { days: 6, months: 2, years: 4 }],
+    ['2024-11-06', '2024-11-07', { days: 1, months: 0, years: 0 }],
+  ])('%s maps to %s', (from: string, to: string, expected: any) => {
+    expect(yearsAndDaysElapsed(from, to).values).toEqual(expected)
+  })
+})
+
+describe('sentence length', () => {
+  it.each([
+    ['2024-11-06', '2029-01-12', '4 years, 2 months and 6 days'],
+    ['2024-11-06', '2028-12-06', '4 years and 1 month'],
+    ['2024-11-06', '2029-11-12', '5 years and 6 days'],
+    ['2024-11-06', '2025-11-07', '1 year and 1 day'],
+    ['2024-11-06', '2025-01-12', '2 months and 6 days'],
+    ['2024-11-06', '2025-01-07', '2 months and 1 day'],
+    ['2024-11-06', '2024-11-07', '1 day'],
+    ['2024-11-06', '2025-01-06', '2 months'],
+    ['2024-11-06', '2027-11-06', '3 years'],
+  ])('%s to %s should be %s', (from: string, to: string, expected: any) => {
+    expect(sentenceLength(from, to, commonLocale.en.sentence)).toEqual(expected)
   })
 })
 
