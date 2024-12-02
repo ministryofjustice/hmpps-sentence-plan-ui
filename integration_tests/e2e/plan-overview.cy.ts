@@ -67,6 +67,7 @@ describe('View Plan Overview for READ_WRITE user', () => {
     cy.get('button').contains('Agree plan').click()
     cy.title().should('contain', 'Error:')
     cy.get('.govuk-error-summary').should('contain', 'You must add steps to the goals Sam is working on now')
+    cy.get('.govuk-error-message').should('contain', 'Add steps to agree plan')
     cy.checkAccessibility()
   })
 
