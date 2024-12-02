@@ -33,7 +33,7 @@
         "aimToAchieveDate": "Aim to achieve this by {{ targetDate }}.",
         "removedDate": "Removed on {{ lastStatusChangeDate }}",
         "aimToAchieveSentence": "Aim to achieve this by the end of {{ subject.possessiveName }} sentence.",
-        "goalAchievedDate": "Marked as achieved on {{ lastStatusChangeDate }}.",
+        "achievedDate": "Marked as achieved on {{ lastStatusChangeDate }}.",
         "thisIsAFutureGoal": "This is a future goal."
       },
       "stepsList": {
