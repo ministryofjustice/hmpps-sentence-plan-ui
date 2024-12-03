@@ -107,6 +107,9 @@
                                         classes: "govuk-select--auto-width",
                                         formGroup: {
                                             classes: "govuk-!-margin-bottom-0"
+                                        },
+                                        attributes: {
+                                            'aria-label': locale.common.goalSummaryCard.stepsList.statusHeader
                                         }
                                     }) }}
                                     <input name="step-uuid-{{ loop.index }}" type="hidden" value="{{ step.uuid }}"/>
