@@ -88,6 +88,22 @@ export default class AddStepsController {
     return next()
   }
 
+  private handleClearStep = (req: Request, res: Response, next: NextFunction) => {
+    if (req.body.action.startsWith('clear-step-')) {
+      const defaultStepValue = {
+        actor: req.services.sessionService.getSubjectDetails().givenName,
+        description: '',
+        status: StepStatus.NOT_STARTED,
+      }
+
+      req.body.steps.splice(0, 1, defaultStepValue)
+
+      return this.render(req, res, next)
+    }
+
+    return next()
+  }
+
   private handleAddStep = (req: Request, res: Response, next: NextFunction) => {
     if (req.body.action === 'add-step') {
       delete req.body.action
@@ -117,6 +133,7 @@ export default class AddStepsController {
       body: AddStepsPostModel,
     }),
     this.handleRemoveStep,
+    this.handleClearStep,
     this.handleAddStep,
     validateRequest(),
     this.handleValidationErrors,
