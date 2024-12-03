@@ -75,7 +75,13 @@
     },
     "buttons": {},
     "links": {},
-    "footer": {}
+    "footer": {},
+    "sentence": {
+      "year": "year",
+      "month": "month",
+      "day": "day",
+      "conjunction": "and"
+    }
   },
   "cy": {}
 }
