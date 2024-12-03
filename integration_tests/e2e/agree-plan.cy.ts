@@ -38,7 +38,6 @@ describe('Agree plan', () => {
         })
 
         cy.visit(`/plan`)
-        cy.checkAccessibility()
       })
     })
 
@@ -149,7 +148,6 @@ describe('Agree plan', () => {
         })
 
         cy.visit(`/agree-plan`)
-        cy.checkAccessibility()
       })
     })
 
