@@ -5,10 +5,8 @@
 {% set barTypeClass = 'needs-score-bar--small-' + needsScore.score + ' needs-score-bar--small-tenths' %}
 
 <div class="needs-score govuk-body">
-    <div class="needs-score-label">
-        <div class="{{ scoreLabelClass }}">
-            {{ needsScoreIndicator(needsScore) }}
-        </div>
+    <div class="{{ scoreLabelClass }}">
+        {{ needsScoreIndicator(needsScore) }}
     </div>
     <div class="{{ barTypeClass }}">
         {% for i in range(0, needsScore.upperBound) -%}
