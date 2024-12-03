@@ -91,7 +91,7 @@ export default class AddStepsController {
   private handleClearStep = (req: Request, res: Response, next: NextFunction) => {
     if (req.body.action.startsWith('clear-step-')) {
       const defaultStepValue = {
-        actor: req.services.sessionService.getSubjectDetails().givenName,
+        actor: 'Choose someone',
         description: '',
         status: StepStatus.NOT_STARTED,
       }
@@ -108,7 +108,7 @@ export default class AddStepsController {
     if (req.body.action === 'add-step') {
       delete req.body.action
       req.body.steps.push({
-        actor: req.services.sessionService.getSubjectDetails().givenName,
+        actor: 'Choose someone',
         description: '',
         status: StepStatus.NOT_STARTED,
       })
