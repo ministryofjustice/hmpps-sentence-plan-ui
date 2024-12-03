@@ -125,7 +125,7 @@
                     text: locale.subNavigation.removedGoals,
                     href: '/plan?type=removed',
                     active: data.type === 'removed'
-                } if removedGoals.length > 0]
+                } if removedGoals.length > 0] | reject('string')
             }) }}
 
             {% if data.type == 'future' %}
