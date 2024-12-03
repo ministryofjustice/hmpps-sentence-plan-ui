@@ -25,7 +25,7 @@
 }
 
 .plan-navigation {
-  .moj-sub-navigation__list > li:has(> a[data-module="float"]) {
+  .moj-sub-navigation__list > li:has(> a[href="/plan?type=removed"]) {
     float: right;
   }
 }
