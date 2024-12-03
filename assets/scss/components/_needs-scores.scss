@@ -24,7 +24,8 @@ $white-needs-score-background-colour: #ffffff;
 
 .needs-score-label-wrapper {
   width: 10%;
-  margin-bottom: 15px;
+  // TODO margin-bottom should probably be a relative value based on font-size or line-height rather than a fixed value
+  margin-bottom: 16px;
 }
 
 @for $i from 0 through 10 {
