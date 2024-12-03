@@ -105,6 +105,21 @@ describe('View Plan Overview for READ_WRITE user', () => {
     cy.url().should('include', '/agree-plan')
   })
 
+  it('Agreed plan can show when a goal was removed', () => {
+    cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
+      cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal({ title: 'Test Accommodation' })).then(goal => {
+        cy.addStepToGoal(goal.uuid, DataGenerator.generateStep())
+        cy.visit('/plan')
+      })
+    })
+    planOverview.agreePlan()
+    cy.get(':nth-child(3) > .govuk-link').contains('Remove').click()
+    cy.get('#goal-removal-note').type('Removed during cypress test')
+    cy.get('button').contains('Confirm').click()
+    cy.get('.goal-date-and-notes > :nth-child(1)').contains('Removed on')
+    cy.get('.goal-date-and-notes > :nth-child(2)').contains('Removed during cypress test')
+  })
+
   it('Creates three new goals, and moves the middle goal up', () => {
     cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
       ;[1, 2, 3].forEach(i => {
