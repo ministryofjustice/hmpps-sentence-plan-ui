@@ -12,13 +12,15 @@ export interface AssessmentArea {
   overallScore?: string
   riskOfSeriousHarmDetails?: string
   linkedtoRoSH: boolean
-  riskOfReoffendingDetails: string
+  riskOfReoffendingDetails?: string
   linkedtoReoffending: boolean
   motivationToMakeChanges?: string
   strengthsOrProtectiveFactors?: string
   criminogenicNeedsScore?: string
   goalRoute?: string
   thresholdValue?: number
+  upperBound?: number
+  criminogenicNeedMissing?: boolean
 }
 
 export interface AssessmentAreas {

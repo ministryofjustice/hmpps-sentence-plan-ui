@@ -20,72 +20,77 @@ export const formatAssessmentData = (
   if (!assessment || !assessment.sanAssessmentData) {
     return { lowScoring: [], highScoring: [], other: [] }
   }
-  const all = Object.values(areas).map(area => {
-    let score
-    let linkedtoRoSH
-    let linkedtoReoffending
-    let subData: SubAreaData
-    let overallScore
 
-    if (area.crimNeedsKey in crimNeeds) {
+  const all = areas
+    .filter(area => area.crimNeedsKey in crimNeeds && crimNeeds[area.crimNeedsKey])
+    .map(area => {
+      let score
+      const linkedtoRoSH = crimNeeds[area.crimNeedsKey][`${area.crimNeedsSubKey}LinkedToHarm`] === 'YES'
+      const linkedtoReoffending = crimNeeds[area.crimNeedsKey][`${area.crimNeedsSubKey}LinkedToReoffending`] === 'YES'
+      let subData: SubAreaData
+      let overallScore
+      const motivationToMakeChanges = motivationText(
+        assessment.sanAssessmentData[`${area.assessmentKey}_changes`]?.value,
+      )
+      const riskOfSeriousHarmDetails =
+        assessment.sanAssessmentData[`${area.assessmentKey}_practitioner_analysis_risk_of_serious_harm_yes_details`]
+          ?.value
+      const riskOfReoffendingDetails =
+        assessment.sanAssessmentData[`${area.assessmentKey}_practitioner_analysis_risk_of_reoffending_yes_details`]
+          ?.value
+      const strengthsOrProtectiveFactors =
+        assessment.sanAssessmentData[
+          `${area.assessmentKey}_practitioner_analysis_strengths_or_protective_factors_yes_details`
+        ]?.value
+
       score = crimNeeds[area.crimNeedsKey][`${area.crimNeedsSubKey}OtherWeightedScore`]
-      linkedtoRoSH = crimNeeds[area.crimNeedsKey][`${area.crimNeedsSubKey}LinkedToHarm`] === 'YES'
-      linkedtoReoffending = crimNeeds[area.crimNeedsKey][`${area.crimNeedsSubKey}LinkedToReoffending`] === 'YES'
       if (Number.isNaN(Number(score))) {
         score = undefined
       } else if (score > area.upperBound) {
         score = area.upperBound
       }
-    }
 
-    if (
-      crimNeeds.lifestyleAndAssociates &&
-      crimNeeds.thinkingBehaviourAndAttitudes &&
-      area.crimNeedsKey === 'thinkingBehaviourAndAttitudes'
-    ) {
-      subData = {
-        upperBound: '6',
-        thresholdValue: getAssessmentAreaThreshold('lifestyleAndAssociates'),
-        criminogenicNeedsScore: crimNeeds.lifestyleAndAssociates.lifestyleOtherWeightedScore,
+      if (
+        crimNeeds.lifestyleAndAssociates &&
+        crimNeeds.thinkingBehaviourAndAttitudes &&
+        area.crimNeedsKey === 'thinkingBehaviourAndAttitudes'
+      ) {
+        subData = {
+          upperBound: '6',
+          thresholdValue: getAssessmentAreaThreshold('lifestyleAndAssociates'),
+          criminogenicNeedsScore: crimNeeds.lifestyleAndAssociates.lifestyleOtherWeightedScore,
+        }
+        overallScore = Math.max(
+          Number(crimNeeds.thinkingBehaviourAndAttitudes.thinkOtherWeightedScore),
+          Number(subData.criminogenicNeedsScore),
+        )
       }
-      overallScore = Math.max(
-        Number(crimNeeds.thinkingBehaviourAndAttitudes.thinkOtherWeightedScore),
-        Number(subData.criminogenicNeedsScore),
-      )
-    }
 
-    const motivationToMakeChanges = motivationText(assessment.sanAssessmentData[`${area.assessmentKey}_changes`]?.value)
-    const riskOfSeriousHarmDetails =
-      assessment.sanAssessmentData[`${area.assessmentKey}_practitioner_analysis_risk_of_serious_harm_yes_details`]
-        ?.value
-    const riskOfReoffendingDetails =
-      assessment.sanAssessmentData[`${area.assessmentKey}_practitioner_analysis_risk_of_reoffending_yes_details`]?.value
-    const strengthsOrProtectiveFactors =
-      assessment.sanAssessmentData[
-        `${area.assessmentKey}_practitioner_analysis_strengths_or_protective_factors_yes_details`
-      ]?.value
-
-    return {
-      title: area.area,
-      overallScore: overallScore ?? score,
-      linkedtoRoSH,
-      linkedtoReoffending,
-      motivationToMakeChanges,
-      riskOfSeriousHarmDetails,
-      riskOfReoffendingDetails,
-      strengthsOrProtectiveFactors,
-      criminogenicNeedsScore: score,
-      goalRoute: area.goalRoute,
-      upperBound: area.upperBound,
-      thresholdValue: getAssessmentAreaThreshold(area.crimNeedsKey),
-      subData,
-    } as AssessmentArea
-  })
+      return {
+        title: area.area,
+        overallScore: overallScore ?? score,
+        linkedtoRoSH,
+        linkedtoReoffending,
+        motivationToMakeChanges,
+        riskOfSeriousHarmDetails,
+        riskOfReoffendingDetails,
+        strengthsOrProtectiveFactors,
+        criminogenicNeedsScore: score,
+        goalRoute: area.goalRoute,
+        upperBound: area.upperBound,
+        thresholdValue: getAssessmentAreaThreshold(area.crimNeedsKey),
+        subData,
+      } as AssessmentArea
+    })
 
   const lowScoring = filterAndSortAreas(all, (score, threshold) => score <= threshold)
   const highScoring = filterAndSortAreas(all, (score, threshold) => score > threshold)
   const otherUnsorted = all.filter(area => area.criminogenicNeedsScore === undefined)
-  const other = groupAndSortOtherAreas(otherUnsorted)
+
+  // emptyAreas are areas that are missing from the criminogenic needs data
+  const emptyAreas = groupAndSortMissingAreas(areas, crimNeeds)
+
+  const other = groupAndSortOtherAreas(otherUnsorted).concat(emptyAreas)
   return { lowScoring, highScoring, other, versionUpdatedAt: assessment.lastUpdatedTimestampSAN } as AssessmentAreas
 }
 
@@ -120,6 +125,23 @@ export const groupAndSortOtherAreas = (other: AssessmentArea[]): AssessmentArea[
     .reduce((acc, val) => acc.concat(val), [])
 }
 
+// This function is used to group and sort the areas that are missing from the criminogenic needs data
+// providing the minimum needed information to display them in the UI
+function groupAndSortMissingAreas(areas: AssessmentAreaConfig[], crimNeeds: CriminogenicNeedsData) {
+  return areas
+    .reduce((acc, area) => {
+      if (!(area.crimNeedsKey in crimNeeds && crimNeeds[area.crimNeedsKey])) {
+        acc.push({
+          title: area.area,
+          goalRoute: area.goalRoute,
+          criminogenicNeedMissing: true,
+        } as AssessmentArea)
+      }
+      return acc
+    }, [] as AssessmentArea[])
+    .sort((a, b) => a.title.localeCompare(b.title))
+}
+
 export const motivationText = (optionResult?: string): string => {
   if (optionResult === undefined || optionResult === null) {
     return undefined
@@ -135,13 +157,7 @@ export const dateWithYear = (datetimeString: string): string | null => {
 export const yearsAndDaysElapsed = (datetimeStringFrom: string, datetimeStringTo: string): any => {
   if (!datetimeStringFrom || isBlank(datetimeStringFrom)) return undefined
   if (!datetimeStringTo || isBlank(datetimeStringTo)) return undefined
-  const yearsMonthsDays = DateTime.fromISO(datetimeStringTo).diff(DateTime.fromISO(datetimeStringFrom), [
-    'years',
-    'months',
-    'days',
-  ])
-
-  return yearsMonthsDays
+  return DateTime.fromISO(datetimeStringTo).diff(DateTime.fromISO(datetimeStringFrom), ['years', 'months', 'days'])
 }
 
 const pluralise = (count: number, noun: string, suffix = 's'): string => {
