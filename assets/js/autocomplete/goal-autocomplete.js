@@ -22,6 +22,10 @@ async function initializeGoalInputAutocomplete() {
   const defaultValue = inputElement?.value ?? ''
   inputElement.remove()
 
+  // Update label for the autocomplete input
+  const label = document.querySelector('label[for="goal-input"]')
+  label.setAttribute('for', `${GOAL_INPUT_ID}-autocomplete`)
+
   accessibleAutocomplete({
     element: wrapperElement,
     id: `${GOAL_INPUT_ID}-autocomplete`,
