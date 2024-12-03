@@ -20,6 +20,6 @@ declare namespace Cypress {
     lockPlan(planUuid: string): Chainable<T>
 
     // Accessibility
-    checkAccessibility(): Chainable<T>
+    checkAccessibility(injectAxe: boolean = true, disabledRules: string[] = []): Chainable<T>
   }
 }
