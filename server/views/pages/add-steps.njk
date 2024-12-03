@@ -140,9 +140,15 @@
                             }) }}
                         </dt>
                         <dt class="govuk-summary-list__value">
-                            <button value="remove-step-{{ loop.index }}" type="submit" name="action" class="govuk-link govuk-!-margin-bottom-0" data-module="govuk-button">
-                                {{ locale.removeStepLinkButton }}
+                            {% if steps|length > 1 %}
+                              <button value="remove-step-{{ loop.index }}" type="submit" name="action" class="govuk-link govuk-!-margin-bottom-0" data-module="govuk-button">
+                                  {{ locale.removeStepLinkButton }}
+                              </button>
+                            {% else %}
+                            <button value="clear-step-{{ loop.index }}" type="submit" name="action" class="govuk-link govuk-!-margin-bottom-0" data-module="govuk-button">
+                              {{ locale.clearStepLinkButton }}
                             </button>
+                            {% endif %}
                         </dt>
                     </div>
                 {% endfor %}
