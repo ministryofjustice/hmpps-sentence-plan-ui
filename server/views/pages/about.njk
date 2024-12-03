@@ -47,7 +47,7 @@
 {% block content %}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
-
+            {{ super() }}
             {% if errors.domain %}
             {%  set errorList = [] %}
             {%  for error in errors.domain %}

@@ -35,16 +35,18 @@
         }
       ]
     }) }}
-
-    {% if header.type == 'plan-extended' %}
-      {% include "./plan-header/plan-header-extended.njk" %}
-    {% else %}
-      {% include "./plan-header/plan-header-mini.njk" %}
-    {% endif %}
   {% endif  %}
 {% endblock %}
 
 {% block bodyStart %}{% endblock %}
+
+{% block content %}
+  {% if header.type == 'plan-extended' %}
+    {% include "./plan-header/plan-header-extended.njk" %}
+  {% else %}
+    {% include "./plan-header/plan-header-mini.njk" %}
+  {% endif %}
+{% endblock %}
 
 {% block bodyEnd %}
   <script type="module" src="/assets/js/app.js"></script>
