@@ -6,7 +6,7 @@ import { AreaOfNeed } from '../../testutils/data/referenceData'
 import testPlan from '../../testutils/data/planData'
 import popData from '../../testutils/data/popData'
 import testHandoverContext from '../../testutils/data/handoverData'
-import { assessmentData, crimNeeds } from '../../testutils/data/assessmentData'
+import { assessmentData, crimNeedsSubset } from '../../testutils/data/assessmentData'
 import { AssessmentAreas } from '../../@types/Assessment'
 
 import { formatAssessmentData } from '../../utils/assessmentUtils'
@@ -31,7 +31,7 @@ jest.mock('../../services/sessionService', () => {
     getOasysReturnUrl: jest.fn().mockReturnValue(oasysReturnUrl),
     getPrincipalDetails: jest.fn().mockReturnValue(testHandoverContext.principal),
     getSubjectDetails: jest.fn().mockReturnValue(testHandoverContext.subject),
-    getCriminogenicNeeds: jest.fn().mockReturnValue(crimNeeds),
+    getCriminogenicNeeds: jest.fn().mockReturnValue(crimNeedsSubset),
   }))
 })
 
@@ -43,7 +43,7 @@ jest.mock('../../services/sentence-plan/infoService', () => {
 
 describe('AboutPopController', () => {
   let controller: AboutPopController
-  const assessmentAreas: AssessmentAreas = formatAssessmentData(crimNeeds, assessmentData, locale.en.areas)
+  const assessmentAreas: AssessmentAreas = formatAssessmentData(crimNeedsSubset, assessmentData, locale.en.areas)
 
   beforeEach(() => {
     controller = new AboutPopController()

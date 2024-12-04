@@ -29,19 +29,19 @@ export const assessmentUndefined: AssessmentResponse = {
   sanOasysEquivalent: undefined,
 }
 
-export const crimNeeds: CriminogenicNeedsData = {
+export const crimNeedsSubset: CriminogenicNeedsData = {
   accommodation: {
     accLinkedToHarm: 'NO',
     accLinkedToReoffending: 'YES',
     accStrengths: 'NO',
-    accOtherWeightedScore: '6',
+    accOtherWeightedScore: '6', // out of 6
     accThreshold: 'YES',
   },
   educationTrainingEmployability: {
     eteLinkedToHarm: 'NO',
     eteLinkedToReoffending: 'YES',
     eteStrengths: 'YES',
-    eteOtherWeightedScore: '1',
+    eteOtherWeightedScore: '1', // out of 4
     eteThreshold: 'YES',
   },
   healthAndWellbeing: {
@@ -51,10 +51,11 @@ export const crimNeeds: CriminogenicNeedsData = {
     emoOtherWeightedScore: 'N/A',
     emoThreshold: 'N/A',
   },
+  thinkingBehaviourAndAttitudes: null,
 }
 
 // Test data for the criminogenic needs that need ordering by difference between score and Need threshold
-export const crimNeedsOrdering: CriminogenicNeedsData = {
+export const crimNeedsOrdered: CriminogenicNeedsData = {
   accommodation: {
     accOtherWeightedScore: '3',
   },

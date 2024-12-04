@@ -1,4 +1,3 @@
-import { faker } from '@faker-js/faker'
 import AddSteps from '../pages/add-steps'
 import { PlanType } from '../../server/@types/PlanType'
 import DataGenerator from '../support/DataGenerator'
@@ -9,6 +8,18 @@ const selectStepDescriptionByIndex = (index: number) => {
 
 const selectStepActorByIndex = (index: number) => {
   return cy.get(`table.goal-summary-card__steps .govuk-table__body > :nth-child(${index}) > :nth-child(1)`)
+}
+
+function generateStringOfLength(length: number): string {
+  let result = ''
+  const characters = 'abcdefghijklmnopqrstuvwxyz'
+  const charactersLength = characters.length
+
+  for (let i = 0; i < length; i += 1) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength))
+  }
+
+  return result
 }
 
 describe('Add Steps', () => {
@@ -189,6 +200,20 @@ describe('Add Steps', () => {
       selectStepDescriptionByIndex(1).should('contain', firstStepSecondPopulation.description)
       selectStepActorByIndex(1).should('contain', firstStepSecondPopulation.actor)
     })
+
+    it('Save with a long step description <=4000 characters works OK', () => {
+      cy.url().should('include', '/add-steps')
+
+      const firstStep = DataGenerator.generateStep({})
+      firstStep.description = generateStringOfLength(4000)
+      addStep.putStepAutocompleteText(1, firstStep.description)
+      addStep.selectStepActor(1, firstStep.actor)
+      addStep.saveAndContinue()
+
+      cy.get('table.goal-summary-card__steps .govuk-table__body').children().should('have.length', 1)
+
+      selectStepDescriptionByIndex(1).should('contain', firstStep.description)
+    })
   })
 
   describe('Error cases when adding steps', () => {
@@ -225,12 +250,12 @@ describe('Add Steps', () => {
       cy.checkAccessibility()
     })
 
-    it('Save with a long step description shows error', () => {
-      const lorem = faker.lorem.paragraphs(40).replace(/(\r\n|\n|\r)/gm, '')
+    it('Save with a step description >4000 characters shows error', () => {
       cy.url().should('include', '/add-steps')
 
       const firstStep = DataGenerator.generateStep({})
-      addStep.putStepAutocompleteText(1, lorem)
+      firstStep.description = generateStringOfLength(4001)
+      addStep.putStepAutocompleteText(1, firstStep.description)
       addStep.selectStepActor(1, firstStep.actor)
       addStep.saveAndContinue()
 
@@ -239,7 +264,7 @@ describe('Add Steps', () => {
         'What they should do to achieve the goal must be 4,000 characters or less',
       )
 
-      cy.get(`#step-description-1-autocomplete`).invoke('val').should('contain', lorem)
+      cy.get(`#step-description-1-autocomplete`).invoke('val').should('contain', firstStep.description)
       cy.checkAccessibility()
     })
   })
