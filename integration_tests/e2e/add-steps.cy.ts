@@ -1,4 +1,3 @@
-import { faker } from '@faker-js/faker'
 import AddSteps from '../pages/add-steps'
 import { PlanType } from '../../server/@types/PlanType'
 import DataGenerator from '../support/DataGenerator'
