@@ -88,6 +88,14 @@
                                 }) %}
                             {% endfor %}
 
+                            {% set errorMessage = false %}
+
+                            {% if errors.body['steps.' + loop.index0 + '.actor' ].notContains %}
+                                {% set errorMessage = {
+                                    'text': locale.errors['step-actor'].notContains
+                                } %}
+                            {% endif %}
+
                             {{ govukSelect({
                                 id: "step-actor-" + loop.index,
                                 name: "step-actor-" + loop.index,
@@ -99,7 +107,8 @@
                                     text: locale.step.actor.hint,
                                     classes: 'govuk-visually-hidden--desktop'
                                 },
-                                items: actorItemsList
+                                items: actorItemsList,
+                                errorMessage: errorMessage
                             }) }}
                         </dt>
                         <dt class="govuk-summary-list__value">

@@ -87,6 +87,10 @@ describe('View Plan Overview for READ_WRITE user', () => {
       cy.visit('/plan')
     })
     cy.contains('a', 'Add steps').click()
+
+    const firstStep = DataGenerator.generateStep()
+
+    cy.get(`#step-actor-1`).select(firstStep.actor)
     cy.get('#step-description-1-autocomplete').type('Accommodation')
 
     cy.get('button').contains('Save and continue').click()
@@ -107,6 +111,10 @@ describe('View Plan Overview for READ_WRITE user', () => {
       cy.visit('/plan')
     })
     cy.contains('a', 'Add steps').click()
+
+    const firstStep = DataGenerator.generateStep()
+
+    cy.get(`#step-actor-1`).select(firstStep.actor)
     cy.get(`#step-description-1-autocomplete`).type('Accommodation')
 
     cy.get('button').contains('Save and continue').click()
