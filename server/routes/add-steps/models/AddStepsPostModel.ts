@@ -1,10 +1,11 @@
 /* eslint-disable max-classes-per-file */
-import { IsEnum, IsNotEmpty, MaxLength, ValidateNested } from 'class-validator'
+import { IsEnum, IsNotEmpty, MaxLength, NotContains, ValidateNested } from 'class-validator'
 import { Expose, plainToInstance, Transform } from 'class-transformer'
 import { StepStatus } from '../../../@types/StepType'
 
 export class StepModel {
   @IsNotEmpty()
+  @NotContains('Choose someone')
   actor: string
 
   @IsNotEmpty()

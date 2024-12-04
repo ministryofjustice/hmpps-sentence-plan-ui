@@ -168,11 +168,15 @@ describe('Add Steps', () => {
     it('Add single step, pressing clear then repopulating', () => {
       cy.url().should('include', '/add-steps')
 
+      addStep.getStepActor(1).should('contain', 'Choose someone')
+
       const firstStep = DataGenerator.generateStep()
       addStep.addStepAutocompleteText(1, firstStep.description)
       addStep.selectStepActor(1, firstStep.actor)
 
       addStep.clearStep()
+
+      addStep.getStepActor(1).should('contain', 'Choose someone')
 
       const firstStepSecondPopulation = DataGenerator.generateStep()
       addStep.addStepAutocompleteText(1, firstStepSecondPopulation.description)
