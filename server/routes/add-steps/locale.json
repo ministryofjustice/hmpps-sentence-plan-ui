@@ -41,6 +41,7 @@
     "saveButtonText": "Save and continue",
     "addAnotherButton": "Add another step",
     "removeStepLinkButton": "Remove",
+    "clearStepLinkButton": "Clear",
     "errors": {
       "step-description": {
         "isNotEmpty": "Select or enter what they should do to achieve the goal.",

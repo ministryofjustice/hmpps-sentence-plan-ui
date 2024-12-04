@@ -164,6 +164,27 @@ describe('Add Steps', () => {
       selectStepActorByIndex(1).should('contain', firstStep.actor)
       cy.checkAccessibility()
     })
+
+    it('Add single step, pressing clear then repopulating', () => {
+      cy.url().should('include', '/add-steps')
+
+      const firstStep = DataGenerator.generateStep()
+      addStep.addStepAutocompleteText(1, firstStep.description)
+      addStep.selectStepActor(1, firstStep.actor)
+
+      addStep.clearStep()
+
+      const firstStepSecondPopulation = DataGenerator.generateStep()
+      addStep.addStepAutocompleteText(1, firstStepSecondPopulation.description)
+      addStep.selectStepActor(1, firstStepSecondPopulation.actor)
+
+      addStep.saveAndContinue()
+
+      cy.get('table.goal-summary-card__steps .govuk-table__body').children().should('have.length', 1)
+
+      selectStepDescriptionByIndex(1).should('contain', firstStepSecondPopulation.description)
+      selectStepActorByIndex(1).should('contain', firstStepSecondPopulation.actor)
+    })
   })
 
   describe('Error cases when adding steps', () => {
