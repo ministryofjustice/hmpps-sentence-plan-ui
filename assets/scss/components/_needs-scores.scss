@@ -14,72 +14,24 @@ $white-needs-score-background-colour: #ffffff;
 }
 
 .needs-score {
-  width: 100%;
+  max-width: map-get($govuk-grid-widths, 'full');
+  @include govuk-media-query($from: "desktop") {
+    max-width: map-get($govuk-grid-widths, 'one-third');
+  }
   padding: 10px 0px 10px;
   box-sizing: border-box;
 }
 
-.needs-score-label {
-  margin-bottom: 15px;
-  width: 500px;
-}
-
-.needs-score-label-wrapper--position-zero-of-ten,
-.needs-score-label-wrapper--position-one-of-ten,
-.needs-score-label-wrapper--position-two-of-ten,
-.needs-score-label-wrapper--position-three-of-ten,
-.needs-score-label-wrapper--position-four-of-ten,
-.needs-score-label-wrapper--position-five-of-ten,
-.needs-score-label-wrapper--position-six-of-ten,
-.needs-score-label-wrapper--position-seven-of-ten,
-.needs-score-label-wrapper--position-eight-of-ten,
-.needs-score-label-wrapper--position-nine-of-ten,
-.needs-score-label-wrapper--position-ten-of-ten {
+.needs-score-label-wrapper {
   width: 10%;
+  // TODO margin-bottom should probably be a relative value based on font-size or line-height rather than a fixed value
+  margin-bottom: 16px;
 }
 
-.needs-score-label-wrapper--position-zero-of-ten {
-  margin-left: -8%;
-}
-
-.needs-score-label-wrapper--position-one-of-ten {
-  margin-left: 2%;
-}
-
-.needs-score-label-wrapper--position-two-of-ten {
-  margin-left: 12%;
-}
-
-.needs-score-label-wrapper--position-three-of-ten {
-  margin-left: 22%;
-}
-
-.needs-score-label-wrapper--position-four-of-ten {
-  margin-left: 32%;
-}
-
-.needs-score-label-wrapper--position-five-of-ten {
-  margin-left: 42%;
-}
-
-.needs-score-label-wrapper--position-six-of-ten {
-  margin-left: 52%;
-}
-
-.needs-score-label-wrapper--position-seven-of-ten {
-  margin-left: 62%;
-}
-
-.needs-score-label-wrapper--position-eight-of-ten {
-  margin-left: 72%;
-}
-
-.needs-score-label-wrapper--position-nine-of-ten {
-  margin-left: 82%;
-}
-
-.needs-score-label-wrapper--position-ten-of-ten {
-  margin-left: 92%;
+@for $i from 0 through 10 {
+  .needs-score-label-wrapper--position-#{$i} {
+    margin-left: ($i - 1) * 10%;
+  }
 }
 
 .needs-score-label__card {
@@ -133,7 +85,6 @@ $white-needs-score-background-colour: #ffffff;
 
 @mixin needs-score-bar--small($highlightedNumber) {
   margin-bottom: 15px;
-  width: 500px;
   & {
     &::after {
       content: "" "";
