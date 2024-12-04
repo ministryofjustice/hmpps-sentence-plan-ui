@@ -69,14 +69,6 @@ export const dateWithYear = (datetimeString: string): string | null => {
   return DateTime.fromISO(datetimeString).toFormat('d MMMM yyyy')
 }
 
-export const yearsAndDaysElapsed = (datetimeStringFrom: string, datetimeStringTo: string): string => {
-  if (!datetimeStringFrom || isBlank(datetimeStringFrom)) return undefined
-  if (!datetimeStringTo || isBlank(datetimeStringTo)) return undefined
-  const yearsDays = DateTime.fromISO(datetimeStringTo).diff(DateTime.fromISO(datetimeStringFrom), ['years', 'days'])
-
-  return `(${yearsDays.years} years and ${yearsDays.days} days)`
-}
-
 export function formatDateWithStyle(isoDate: string, style: 'short' | 'full' | 'long' | 'medium' = 'long'): string {
   return new Date(isoDate).toLocaleDateString('en-gb', { dateStyle: style })
 }

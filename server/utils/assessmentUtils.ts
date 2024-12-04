@@ -158,8 +158,6 @@ export const dateWithYear = (datetimeString: string): string | null => {
 }
 
 export const yearsAndDaysElapsed = (datetimeStringFrom: string, datetimeStringTo: string): any => {
-  if (!datetimeStringFrom || isBlank(datetimeStringFrom)) return undefined
-  if (!datetimeStringTo || isBlank(datetimeStringTo)) return undefined
   return DateTime.fromISO(datetimeStringTo).diff(DateTime.fromISO(datetimeStringFrom), ['years', 'months', 'days'])
 }
 
@@ -170,6 +168,9 @@ const pluralise = (count: number, noun: string, suffix = 's'): string => {
 // The sentence duration returned is in the form "x years, y months and z days" where any of year,month,date can
 // be 0, in which case it shouldn't be displayed and the formatting of the layout is updated accordingly.
 export const sentenceLength = (datetimeStringFrom: string, datetimeStringTo: string, locale: any): any => {
+  if (!datetimeStringFrom || isBlank(datetimeStringFrom)) return undefined
+  if (!datetimeStringTo || isBlank(datetimeStringTo)) return undefined
+
   const yearsMonthsDays = yearsAndDaysElapsed(datetimeStringFrom, datetimeStringTo)
   let sentenceLengthstring = ''
 
