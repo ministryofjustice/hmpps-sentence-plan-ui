@@ -131,7 +131,7 @@ describe('View Plan Overview for READ_WRITE user', () => {
       })
     })
     planOverview.agreePlan()
-    cy.get(':nth-child(3) > .govuk-link').contains('Remove').click()
+    cy.contains('a', 'Remove').click()
     cy.get('#goal-removal-note').type('Removed during cypress test')
     cy.get('button').contains('Confirm').click()
     cy.get('.goal-date-and-notes > :nth-child(1)').contains('Removed on')
