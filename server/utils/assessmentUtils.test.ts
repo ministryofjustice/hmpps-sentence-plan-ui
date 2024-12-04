@@ -328,15 +328,15 @@ describe('years, months and days elapsed', () => {
 
 describe('sentence length', () => {
   it.each([
-    ['2024-11-06', '2029-01-12', '4 years, 2 months and 6 days'],
-    ['2024-11-06', '2028-12-06', '4 years and 1 month'],
-    ['2024-11-06', '2029-11-12', '5 years and 6 days'],
-    ['2024-11-06', '2025-11-07', '1 year and 1 day'],
-    ['2024-11-06', '2025-01-12', '2 months and 6 days'],
-    ['2024-11-06', '2025-01-07', '2 months and 1 day'],
-    ['2024-11-06', '2024-11-07', '1 day'],
-    ['2024-11-06', '2025-01-06', '2 months'],
-    ['2024-11-06', '2027-11-06', '3 years'],
+    ['2024-11-06', '2029-01-12', '(4 years, 2 months and 6 days)'],
+    ['2024-11-06', '2028-12-06', '(4 years and 1 month)'],
+    ['2024-11-06', '2029-11-12', '(5 years and 6 days)'],
+    ['2024-11-06', '2025-11-07', '(1 year and 1 day)'],
+    ['2024-11-06', '2025-01-12', '(2 months and 6 days)'],
+    ['2024-11-06', '2025-01-07', '(2 months and 1 day)'],
+    ['2024-11-06', '2024-11-07', '(1 day)'],
+    ['2024-11-06', '2025-01-06', '(2 months)'],
+    ['2024-11-06', '2027-11-06', '(3 years)'],
   ])('%s to %s should be %s', (from: string, to: string, expected: any) => {
     expect(sentenceLength(from, to, commonLocale.en.sentence)).toEqual(expected)
   })
