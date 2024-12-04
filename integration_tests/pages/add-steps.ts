@@ -11,6 +11,10 @@ export default class AddSteps {
     cy.get(`#step-actor-${position}`).select(text)
   }
 
+  getStepActor = (position: number) => {
+    return cy.get(`#step-actor-${position}`)
+  }
+
   addAnotherStepButton = () => {
     cy.get('button').contains('Add another step').click()
   }

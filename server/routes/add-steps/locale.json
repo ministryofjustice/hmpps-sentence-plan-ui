@@ -29,6 +29,7 @@
         "label": "Who will do this step?",
         "hint": "Add one person or agency.",
         "options": [
+          "Choose someone",
           "{{ subject.givenName }}",
           "Probation practitioner",
           "Programme staff",
@@ -46,6 +47,9 @@
       "step-description": {
         "isNotEmpty": "Select or enter what they should do to achieve the goal.",
         "maxLength": "What they should do to achieve the goal must be 4,000 characters or less"
+      },
+      "step-actor": {
+        "notContains": "Select who will do the step"
       }
     }
   }
