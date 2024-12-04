@@ -13,10 +13,6 @@ export const checkAccessibility = (injectAxe: boolean = true, disabledRules: str
           // GovUK Frontend issue https://github.com/alphagov/govuk-frontend/issues/979
           matches: (node: Element) => !(node.tagName === 'INPUT' && node.hasAttribute('aria-expanded')),
         },
-        {
-          id: 'region',
-          enabled: false,
-        },
       ],
     })
   }
