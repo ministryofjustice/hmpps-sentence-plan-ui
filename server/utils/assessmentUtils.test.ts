@@ -337,6 +337,9 @@ describe('sentence length', () => {
     ['2024-11-06', '2024-11-07', '(1 day)'],
     ['2024-11-06', '2025-01-06', '(2 months)'],
     ['2024-11-06', '2027-11-06', '(3 years)'],
+    ['2024-11-06', undefined, undefined],
+    [undefined, '2027-11-06', undefined],
+    [undefined, undefined, undefined],
   ])('%s to %s should be %s', (from: string, to: string, expected: any) => {
     expect(sentenceLength(from, to, commonLocale.en.sentence)).toEqual(expected)
   })
