@@ -37,22 +37,6 @@
     <div class="govuk-grid-column-full">
         <span class="govuk-caption-l">{{ locale.mainHeading.caption }}</span>
         <h1 class="govuk-heading-l">{{ locale.mainHeading.title }}</h1>
-
-        {% set summaryContentHtml %}
-            <h3 class="govuk-heading-s">{{ locale.detail.header1 }}</h3>
-            <p class="govuk-body">{{ locale.detail.detail1 }}</p>
-            <h3 class="govuk-heading-s">{{ locale.detail.header2 }}</h3>
-            <p class="govuk-body">{{ locale.detail.detail2 }}</p>
-            <h3 class="govuk-heading-s">{{ locale.detail.header3 }}</h3>
-            <p class="govuk-body">{{ locale.detail.detail3 }}</p>
-            <h3 class="govuk-heading-s">{{ locale.detail.header4 }}</h3>
-            <p class="govuk-body">{{ locale.detail.detail4 }}</p>
-        {% endset %}
-
-        {{ govukDetails({
-            summaryText: locale.detail.heading,
-            html: summaryContentHtml
-        }) }}
     </div>
 </div>
 
