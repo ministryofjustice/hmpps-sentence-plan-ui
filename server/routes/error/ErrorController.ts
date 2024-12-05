@@ -31,18 +31,23 @@ export default class ErrorController {
   }
 
   private handleBadRequestErrors = async (error: HTTPError, req: Request, res: Response, next: NextFunction) => {
+    const oasysReturnUrl = req.services.sessionService.getOasysReturnUrl()
+
     switch (error.status) {
       case http.HTTP_STATUS_UNAUTHORIZED:
         return res.render('pages/error', {
           locale: localeUnauthorized.en,
+          data: { oasysReturnUrl },
         })
       case http.HTTP_STATUS_FORBIDDEN:
         return res.render('pages/error', {
           locale: localeForbidden.en,
+          data: { oasysReturnUrl },
         })
       default:
         return res.render('pages/error', {
           locale: localeBadRequest.en,
+          data: { oasysReturnUrl },
         })
     }
   }
