@@ -169,7 +169,7 @@ export function goalStatusToTabName(status: GoalStatus): string {
   return status === GoalStatus.ACTIVE ? 'current' : status.toLowerCase()
 }
 
-export default function generateOauthClientToken(
+export function generateOauthClientToken(
   clientId: string = config.apis.hmppsAuth.apiClientId,
   clientSecret: string = config.apis.hmppsAuth.apiClientSecret,
 ): string {

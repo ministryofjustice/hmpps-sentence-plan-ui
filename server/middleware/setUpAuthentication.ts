@@ -4,7 +4,7 @@ import { Router } from 'express'
 import { Strategy } from 'passport-oauth2'
 import config from '../config'
 import tokenVerifier from '../data/tokenVerification'
-import generateOauthClientToken from '../utils/utils'
+import { generateOauthClientToken } from '../utils/utils'
 import URLs from '../routes/URLs'
 
 passport.serializeUser((user, done) => {

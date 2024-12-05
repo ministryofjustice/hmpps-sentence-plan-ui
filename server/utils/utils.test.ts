@@ -1,7 +1,8 @@
 import { RoshData } from '../@types/Rosh'
 import { parsedRoshData, roSHData, unComplitedRoSH } from '../testutils/data/roshData'
 
-import generateOauthClientToken, {
+import {
+  generateOauthClientToken,
   convertToTitleCase,
   dateToISOFormat,
   dateWithYear,
