@@ -190,5 +190,5 @@ export const sentenceLength = (datetimeStringFrom: string, datetimeStringTo: str
     sentenceLengthstring = `${pluralise(yearsMonthsDays.days, locale.day)}`
   }
 
-  return sentenceLengthstring
+  return `(${sentenceLengthstring})`
 }
