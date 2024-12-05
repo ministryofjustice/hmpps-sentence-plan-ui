@@ -282,11 +282,7 @@
                             text: locale.errors['goals'].arrayNotEmpty
                         }) }}
                     {% endif %}
-                <p>{{ locale.ifNoCurrentGoals.text }}</p>
-                <ul>
-                    <li><a href="/create-goal/accommodation" class="govuk-link govuk-link--no-visited-state">{{ locale.ifNoCurrentGoals.action1 }}</a></li>
-                    <li><a href="/about" class="govuk-link govuk-link--no-visited-state">{{ locale.ifNoCurrentGoals.action2 }}</a></li>
-                </ul>
+                <p>{{ locale.ifNoCurrentGoals.text }} <a href="/create-goal/accommodation" class="govuk-link govuk-link--no-visited-state">{{ locale.ifNoCurrentGoals.action1 }}</a>.</p>
                 </div>
             {% elseif goalType == 'future' and goals.length == 0 %}
                 <p>{{ locale.ifNoFutureGoals.text }}</p>
