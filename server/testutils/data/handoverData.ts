@@ -6,7 +6,7 @@ const testHandoverContext: HandoverContextData = {
     identifier: 'a23ccacf-7160-4431-9b4d-c560be9c9f5c',
     displayName: 'Dr. Benjamin Runolfsdottir',
     accessMode: AccessMode.READ_WRITE,
-    returnUrl: '',
+    returnUrl: 'https://oasys.return.url',
   },
   subject: {
     crn: 'X336018',

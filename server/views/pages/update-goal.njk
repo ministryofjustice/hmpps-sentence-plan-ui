@@ -51,6 +51,7 @@
 {% endblock %}
 
 {% block content %}
+    {{ super() }}
     <a href="/plan" class="govuk-back-link">{{ locale.common.backLink.text }}</a>
 
     <div class="govuk-grid-row">
@@ -107,6 +108,9 @@
                                         classes: "govuk-select--auto-width",
                                         formGroup: {
                                             classes: "govuk-!-margin-bottom-0"
+                                        },
+                                        attributes: {
+                                            'aria-label': locale.common.goalSummaryCard.stepsList.statusHeader
                                         }
                                     }) }}
                                     <input name="step-uuid-{{ loop.index }}" type="hidden" value="{{ step.uuid }}"/>
@@ -156,15 +160,7 @@
                                 <button type="submit" class="govuk-button" data-module="govuk-button">
                                     {{ locale.saveGoalAndSteps }}
                                 </button>
-                                <button type="button" class="govuk-button govuk-button--secondary"
-                                        data-module="govuk-button">
-                                    {{ locale.markAsAchieved }}
-                                </button>
                             </div>
-                            <p>
-                                <a href="/remove-goal/{{ data.goal.uuid }}"
-                                   class="govuk-link govuk-link--no-visited-state">{{ locale.removeGoalFromPlan }}</a>
-                            </p>
                         </div>
                     </div>
                 </div>

@@ -29,6 +29,7 @@
 {% endblock %}
 
 {% block content %}
+    {{ super() }}
     <p class='plan-history-intro govuk-!-margin-top-5'>
     {% if data.notes.length == 0 %}
         {{ locale.page.noPlanIntroduction }}

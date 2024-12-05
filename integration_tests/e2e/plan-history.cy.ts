@@ -18,6 +18,7 @@ describe('Rendering', () => {
     cy.get('.moj-primary-navigation__container').contains('Plan history').click()
     cy.get('h1').contains('Plan history')
     cy.get('.plan-history-intro').should('include.text', "plan has been agreed, you'll be able to view updates here.")
+    cy.checkAccessibility()
   })
 
   it('Display plan history page with plan agreement', () => {
@@ -26,6 +27,7 @@ describe('Rendering', () => {
     cy.get('.plan-history-intro').contains('View all updates and changes made to this plan.')
     cy.get('.plan-status').contains('Plan agreed')
     cy.get('.plan-additional-note').contains('Reason to agree')
+    cy.checkAccessibility()
   })
 
   it('Display plan history page with plan did not agree', () => {
@@ -33,6 +35,7 @@ describe('Rendering', () => {
     cy.get('.moj-primary-navigation__container').contains('Plan history').click()
     cy.get('.plan-status').contains('Plan created')
     cy.get('.plan-note').contains('Reason to not agree')
+    cy.checkAccessibility()
   })
 
   it('Display plan history page with plan could not agree', () => {
@@ -40,6 +43,7 @@ describe('Rendering', () => {
     cy.get('.moj-primary-navigation__container').contains('Plan history').click()
     cy.get('.plan-status').contains('Plan created')
     cy.get('.plan-note').contains('Reason they could not agree')
+    cy.checkAccessibility()
   })
 
   // 1. render goal note for in progress goal: create goal > agree plan > check status update goal > change status
@@ -58,6 +62,7 @@ describe('Rendering', () => {
     cy.get('.moj-primary-navigation__container').contains('Plan history').click()
     cy.get('.goal-status').contains('Goal updated')
     cy.get('.goal-note').contains('Updated goal to not started')
+    cy.checkAccessibility()
   })
 
   // 2. render goal note for achieved goal: create goal > agree plan > click mark as achieved > add note > click achieved > click plan history link > check values
@@ -74,6 +79,7 @@ describe('Rendering', () => {
     cy.get('.moj-primary-navigation__container').contains('Plan history').click()
     cy.get('.goal-status').contains('Goal marked as achieved')
     cy.get('.goal-note').contains('Updated goal to achieved status')
+    cy.checkAccessibility()
   })
 
   // 3. render goal note for removed: create goal > agree plan > click remove > check url contains remove-goal > add note > click confirm > check url contains plan > click plan history > check values
@@ -90,5 +96,6 @@ describe('Rendering', () => {
     cy.get('.moj-primary-navigation__container').contains('Plan history').click()
     cy.get('.goal-status').contains('Goal removed')
     cy.get('.goal-note').contains('Updated goal to removed status')
+    cy.checkAccessibility()
   })
 })

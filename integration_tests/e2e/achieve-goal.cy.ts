@@ -36,6 +36,8 @@ describe('Achieve goal', () => {
         cy.visit(`/confirm-achieved-goal/${goal.uuid}`, { failOnStatusCode: false })
         cy.get('.govuk-body').should('contain', 'You do not have permission to perform this action')
       })
+
+      cy.checkAccessibility(true, ['scrollable-region-focusable'])
     })
   })
 
@@ -57,6 +59,7 @@ describe('Achieve goal', () => {
       cy.get<Goal>('@newGoal').then(goal => {
         cy.get('.govuk-summary-card__title').should('contain', goal.title)
       })
+      cy.checkAccessibility()
     })
   })
 
@@ -83,6 +86,7 @@ describe('Achieve goal', () => {
         cy.visit(`/view-achieved-goal/${goal.uuid}`)
       })
       cy.get('.govuk-body').should('contain', 'Marked as achieved on')
+      cy.checkAccessibility()
     })
 
     it('Confirm goal achieved successfully with optional note', () => {
@@ -98,6 +102,7 @@ describe('Achieve goal', () => {
       cy.get('p.govuk-body').should('contain', 'Marked as achieved on ')
       cy.get('a.govuk-back-link').should('have.attr', 'href').and('include', '/plan?type=achieved')
       cy.get('.govuk-button--secondary').should('have.length', 0)
+      cy.checkAccessibility()
     })
 
     it('Confirm errors are displayed with optional note of more than 4000 characters', () => {
@@ -114,12 +119,14 @@ describe('Achieve goal', () => {
         'How achieving this goal has helped must be 4,000 characters or less',
       )
       cy.get('#goal-achievement-helped').should('have.text', lorem)
+      cy.checkAccessibility()
     })
 
     it('Cancel goal achieved and redirect successfully', () => {
       cy.get('a').contains('Do not mark as achieved').click()
       cy.url().should('include', 'plan?type=current')
       planOverview.getSummaryCard(0).get('a').contains('Mark as achieved')
+      cy.checkAccessibility()
     })
   })
 })

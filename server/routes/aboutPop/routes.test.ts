@@ -9,7 +9,7 @@ import { roSHData } from '../../testutils/data/roshData'
 import { AreaOfNeed } from '../../testutils/data/referenceData'
 import testPlan from '../../testutils/data/planData'
 import testHandoverContext from '../../testutils/data/handoverData'
-import { assessmentData, crimNeeds } from '../../testutils/data/assessmentData'
+import { assessmentData, crimNeedsSubset } from '../../testutils/data/assessmentData'
 
 jest.mock('../../services/sentence-plan/referentialDataService', () => {
   return jest.fn().mockImplementation(() => ({
@@ -35,7 +35,7 @@ jest.mock('../../services/sessionService', () => {
     getPlanUUID: jest.fn().mockReturnValue(testPlan.uuid),
     getPrincipalDetails: jest.fn().mockReturnValue(testHandoverContext.principal),
     getSubjectDetails: jest.fn().mockReturnValue(testHandoverContext.subject),
-    getCriminogenicNeeds: jest.fn().mockReturnValue(crimNeeds),
+    getCriminogenicNeeds: jest.fn().mockReturnValue(crimNeedsSubset),
     getOasysReturnUrl: jest.fn().mockReturnValue('http://mock-return-url'),
   }))
 })

@@ -16,6 +16,7 @@ const mockPost = jest.fn()
 jest.mock('../../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
     getSubjectDetails: jest.fn().mockReturnValue(handoverData.subject),
+    getOasysReturnUrl: jest.fn().mockReturnValue(handoverData.principal.returnUrl),
   }))
 })
 

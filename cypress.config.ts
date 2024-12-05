@@ -28,6 +28,7 @@ export default defineConfig({
     excludeSpecPattern: '**/!(*.cy).ts',
     specPattern: 'integration_tests/e2e/**/*.{cy,spec}.{js,jsx,ts,tsx}',
     supportFile: 'integration_tests/support/index.ts',
+    experimentalRunAllSpecs: true,
     env: {
       CLIENT_ID: 'hmpps-assess-risks-and-needs-oastub-ui',
       CLIENT_SECRET: 'clientsecret',

@@ -31,4 +31,7 @@ async function initializeStepInputAutocomplete(inputElement) {
     showNoOptionsFound: false,
     defaultValue: value ?? '',
   })
+
+  const element = document.getElementById(`step-description-${row}-autocomplete`)
+  element.setAttribute('aria-labelledby', 'step-descriptions-label')
 }
