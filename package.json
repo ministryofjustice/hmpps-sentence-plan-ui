@@ -104,7 +104,7 @@
     "reflect-metadata": "^0.2.2",
     "superagent": "^10.1.1",
     "url-value-parser": "^2.2.0",
-    "uuid": "^10.0.0"
+    "uuid": "^11.0.3"
   },
   "devDependencies": {
     "@faker-js/faker": "^9.2.0",
