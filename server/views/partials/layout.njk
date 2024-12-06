@@ -15,35 +15,33 @@
 
 {% block header %}
   {% include "./header.njk" %}
-  {# TODO: Provide a way to set the active sub-navigation, or, programtically set it based on URL #}
   {% if data.popData %}
     {{ mojPrimaryNavigation({
       label: 'Primary navigation',
       items: [{
           text: locale.common.primaryNavigation.planLinkText,
-          href: '/plan?source=nav',
-          active: true
+          href: '/plan',
+          active: data.pageId != 'plan-history' and data.pageId != 'about'
         },
         {
-        text: locale.common.primaryNavigation.planHistoryLink,
-        href: '/plan-history'
-        },
-        {
-          text: locale.common.primaryNavigation.aboutPopText,
-          href: '/about-pop'
+          text: locale.common.primaryNavigation.planHistoryText,
+          href: '/plan-history',
+          active: data.pageId == 'plan-history'
         }
       ]
     }) }}
-
-    {% if header.type == 'extended' %}
-      {% include "./plan-header/plan-header-extended.njk" %}
-    {% else %}
-      {% include "./plan-header/plan-header-mini.njk" %}
-    {% endif %}
   {% endif  %}
 {% endblock %}
 
 {% block bodyStart %}{% endblock %}
+
+{% block content %}
+  {% if header.type == 'plan-extended' %}
+    {% include "./plan-header/plan-header-extended.njk" %}
+  {% else %}
+    {% include "./plan-header/plan-header-mini.njk" %}
+  {% endif %}
+{% endblock %}
 
 {% block bodyEnd %}
   <script type="module" src="/assets/js/app.js"></script>

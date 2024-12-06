@@ -1,4 +1,3 @@
-import { faker } from '@faker-js/faker'
 import AddSteps from '../pages/add-steps'
 import { PlanType } from '../../server/@types/PlanType'
 import DataGenerator from '../support/DataGenerator'
@@ -11,13 +10,44 @@ const selectStepActorByIndex = (index: number) => {
   return cy.get(`table.goal-summary-card__steps .govuk-table__body > :nth-child(${index}) > :nth-child(1)`)
 }
 
+function generateStringOfLength(length: number): string {
+  let result = ''
+  const characters = 'abcdefghijklmnopqrstuvwxyz'
+  const charactersLength = characters.length
+
+  for (let i = 0; i < length; i += 1) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength))
+  }
+
+  return result
+}
+
 describe('Add Steps', () => {
   const addStep = new AddSteps()
 
   beforeEach(() => {
     cy.createSentencePlan().then(planDetails => {
       cy.wrap(planDetails).as('plan')
+      cy.wrap(planDetails.oasysAssessmentPk).as('oasysAssessmentPk')
       cy.openSentencePlan(planDetails.oasysAssessmentPk)
+    })
+  })
+
+  describe('Security', () => {
+    it('Should display authorisation error if user does not have READ_WRITE role', () => {
+      cy.get<string>('@oasysAssessmentPk').then(oasysAssessmentPk => {
+        cy.openSentencePlan(oasysAssessmentPk, 'READ_ONLY')
+      })
+
+      cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
+        const goalData = DataGenerator.generateGoal()
+        cy.addGoalToPlan(plan.uuid, goalData).then(goal => {
+          cy.visit(`/goal/${goal.uuid}/add-steps`, { failOnStatusCode: false })
+          cy.get('.govuk-body').should('contain', 'You do not have permission to perform this action')
+        })
+      })
+
+      cy.checkAccessibility(true, ['scrollable-region-focusable'])
     })
   })
 
@@ -43,9 +73,10 @@ describe('Add Steps', () => {
       cy.get('table.goal-summary-card__steps .govuk-table__body').children().should('have.length', 1)
       selectStepDescriptionByIndex(1).should('contain', step.description)
       selectStepActorByIndex(1).should('contain', step.actor)
+      cy.checkAccessibility()
     })
 
-    it('Add one step, save, then add another', () => {
+    it('Add one step, save, then add 2 more', () => {
       cy.url().should('include', '/add-steps')
 
       const firstStep = DataGenerator.generateStep()
@@ -64,13 +95,23 @@ describe('Add Steps', () => {
       addStep.addStepAutocompleteText(2, secondStep.description)
       addStep.selectStepActor(2, secondStep.actor)
 
+      addStep.AddAnotherStepPressingEnter(2)
+
+      const thirdStep = DataGenerator.generateStep()
+      addStep.addStepAutocompleteText(3, thirdStep.description)
+      addStep.selectStepActor(3, thirdStep.actor)
+
       addStep.saveAndContinue()
 
-      cy.get('table.goal-summary-card__steps .govuk-table__body').children().should('have.length', 2)
+      cy.get('table.goal-summary-card__steps .govuk-table__body').children().should('have.length', 3)
       selectStepDescriptionByIndex(1).should('contain', firstStep.description)
       selectStepActorByIndex(1).should('contain', firstStep.actor)
       selectStepDescriptionByIndex(2).should('contain', secondStep.description)
       selectStepActorByIndex(2).should('contain', secondStep.actor)
+      cy.checkAccessibility()
+      selectStepDescriptionByIndex(3).should('contain', thirdStep.description)
+      selectStepActorByIndex(3).should('contain', thirdStep.actor)
+      cy.checkAccessibility()
     })
 
     it('Add multiple steps, removing one during creation', () => {
@@ -105,6 +146,7 @@ describe('Add Steps', () => {
 
       selectStepDescriptionByIndex(2).should('contain', secondStep.description)
       selectStepActorByIndex(2).should('contain', secondStep.actor)
+      cy.checkAccessibility()
     })
 
     it('Add multiple steps, removing one afterwards', () => {
@@ -131,6 +173,46 @@ describe('Add Steps', () => {
       cy.get('table.goal-summary-card__steps .govuk-table__body').children().should('have.length', 1)
       selectStepDescriptionByIndex(1).should('contain', firstStep.description)
       selectStepActorByIndex(1).should('contain', firstStep.actor)
+      cy.checkAccessibility()
+    })
+
+    it('Add single step, pressing clear then repopulating', () => {
+      cy.url().should('include', '/add-steps')
+
+      addStep.getStepActor(1).should('contain', 'Choose someone')
+
+      const firstStep = DataGenerator.generateStep()
+      addStep.addStepAutocompleteText(1, firstStep.description)
+      addStep.selectStepActor(1, firstStep.actor)
+
+      addStep.clearStep()
+
+      addStep.getStepActor(1).should('contain', 'Choose someone')
+
+      const firstStepSecondPopulation = DataGenerator.generateStep()
+      addStep.addStepAutocompleteText(1, firstStepSecondPopulation.description)
+      addStep.selectStepActor(1, firstStepSecondPopulation.actor)
+
+      addStep.saveAndContinue()
+
+      cy.get('table.goal-summary-card__steps .govuk-table__body').children().should('have.length', 1)
+
+      selectStepDescriptionByIndex(1).should('contain', firstStepSecondPopulation.description)
+      selectStepActorByIndex(1).should('contain', firstStepSecondPopulation.actor)
+    })
+
+    it('Save with a long step description <=4000 characters works OK', () => {
+      cy.url().should('include', '/add-steps')
+
+      const firstStep = DataGenerator.generateStep({})
+      firstStep.description = generateStringOfLength(4000)
+      addStep.putStepAutocompleteText(1, firstStep.description)
+      addStep.selectStepActor(1, firstStep.actor)
+      addStep.saveAndContinue()
+
+      cy.get('table.goal-summary-card__steps .govuk-table__body').children().should('have.length', 1)
+
+      selectStepDescriptionByIndex(1).should('contain', firstStep.description)
     })
   })
 
@@ -150,6 +232,7 @@ describe('Add Steps', () => {
       addStep.saveAndContinue()
 
       cy.get('#step-description-1-error').should('contain', 'Select or enter what they should do to achieve the goal.')
+      cy.checkAccessibility()
     })
 
     it('Save with incomplete step throws error', () => {
@@ -164,14 +247,15 @@ describe('Add Steps', () => {
       addStep.saveAndContinue()
 
       cy.get('#step-description-2-error').should('contain', 'Select or enter what they should do to achieve the goal.')
+      cy.checkAccessibility()
     })
 
-    it('Save with a long step description shows error', () => {
-      const lorem = faker.lorem.paragraphs(40).replace(/(\r\n|\n|\r)/gm, '')
+    it('Save with a step description >4000 characters shows error', () => {
       cy.url().should('include', '/add-steps')
 
       const firstStep = DataGenerator.generateStep({})
-      addStep.putStepAutocompleteText(1, lorem)
+      firstStep.description = generateStringOfLength(4001)
+      addStep.putStepAutocompleteText(1, firstStep.description)
       addStep.selectStepActor(1, firstStep.actor)
       addStep.saveAndContinue()
 
@@ -180,7 +264,8 @@ describe('Add Steps', () => {
         'What they should do to achieve the goal must be 4,000 characters or less',
       )
 
-      cy.get(`#step-description-1-autocomplete`).invoke('val').should('contain', lorem)
+      cy.get(`#step-description-1-autocomplete`).invoke('val').should('contain', firstStep.description)
+      cy.checkAccessibility()
     })
   })
 })

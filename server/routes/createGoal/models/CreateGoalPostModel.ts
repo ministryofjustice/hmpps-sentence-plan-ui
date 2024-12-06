@@ -1,5 +1,6 @@
-import { IsNotEmpty, MaxLength, ValidateIf } from 'class-validator'
+import { IsNotEmpty, MaxLength, Validate, ValidateIf } from 'class-validator'
 import { Expose, Transform } from 'class-transformer'
+import GoalDateMustBeTodayOrFuture from '../../validators/GoalDateMustBeTodayOrFuture'
 
 export default class CreateGoalPostModel {
   @IsNotEmpty()
@@ -25,6 +26,7 @@ export default class CreateGoalPostModel {
 
   @ValidateIf(o => o['date-selection-radio'] === 'custom' && o['start-working-goal-radio'] === 'yes')
   @IsNotEmpty()
+  @Validate(GoalDateMustBeTodayOrFuture, { message: 'Date must be today or in the future' })
   @Expose()
-  'date-selection-custom': Date
+  'date-selection-custom': string
 }

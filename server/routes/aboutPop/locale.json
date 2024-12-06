@@ -6,6 +6,28 @@
     "mainHeading": {
       "title": "About {{ subject.givenName }}"
     },
+    "detail": {
+      "sentenceHeading": "Sentence",
+      "endDateHeading": "Expected end date",
+      "unpaidWorkHeading": "Unpaid work",
+      "rarHeading": "RAR (Rehabilitation activity requirement)",
+      "lastUpdated": "Last updated on {{ lastUpdatedDate }}.",
+      "RoSH": "RoSH (Risk of Serious Harm)",
+      "riskOfReoffending": "Risk of reoffending",
+      "linkedToRoSH": "This area is linked to RoSH (risk of serious harm)",
+      "notLinkedToRoSH": "This area is not linked to RoSH (risk of serious harm)",
+      "linkedToReoffending": "This area is linked to risk of reoffending",
+      "notLinkedToRiskOfReoffending": "This area is not linked to risk of reoffending",
+      "motivationToMakeChanges": "Motivation to make changes in this area",
+      "strengthsOrProtectiveFactors": "There are strengths or protective factors related to this area",
+      "noStrengthsOrProtectiveFactors": "There are no strengths or protective factors related to this area",
+      "needScore": "need score",
+      "lifestyleAndAssociatesNeedScore": "Lifestyle and associates need score"
+    },
+    "errors": {
+      "noAssessmentDataFound": "No assessment data found",
+      "noSentenceDataFound": "No sentence data found"
+    },
     "goalsToAchieve": {
       "title": "Goals to achieve",
       "areaOfNeedHeading": "Area of need",
@@ -17,6 +39,87 @@
     "subNav": {
       "about": "About",
       "summary": "Plan summary"
+    },
+    "motivationText": {
+      "madeChanges": "{{ subject.givenName }} has already made positive changes and wants to maintain them.",
+      "makingChanges": "{{ subject.givenName }} is actively making changes.",
+      "wantToMakeChanges": "{{ subject.givenName }} wants to make changes and knows how to.",
+      "needsHelpToMakeChanges": "{{ subject.givenName }} wants to make changes but needs help.",
+      "thinkingAboutMakingChanges": "{{ subject.givenName }} is thinking about making changes.",
+      "doesNotWantToMakeChanges": "{{ subject.givenName }} does not want to make changes.",
+      "doesNotWantToAnswer": "{{ subject.givenName }} does not want to answer.",
+      "notPresent": "{{ subject.givenName }} was not present to answer this question.",
+      "notApplicable": "This question was not applicable."
+    },
+    "areas": [
+      {
+        "area": "Thinking, behaviours and attitudes",
+        "crimNeedsKey": "thinkingBehaviourAndAttitudes",
+        "crimNeedsSubKey": "think",
+        "assessmentKey": "thinking_behaviours_attitudes",
+        "goalRoute": "thinking-behaviours-and-attitudes",
+        "upperBound": 10
+      },
+      {
+        "area": "Alcohol use",
+        "crimNeedsKey": "alcoholMisuse",
+        "crimNeedsSubKey": "alcohol",
+        "assessmentKey": "alcohol_use",
+        "goalRoute": "alcohol-use",
+        "upperBound": 4
+      },
+      {
+        "area": "Health and wellbeing",
+        "crimNeedsKey": "healthAndWellbeing",
+        "crimNeedsSubKey": "emo",
+        "assessmentKey": "health_wellbeing",
+        "goalRoute": "health-and-wellbeing",
+        "upperBound": null
+      },
+      {
+        "area": "Accommodation",
+        "crimNeedsKey": "accommodation",
+        "crimNeedsSubKey": "acc",
+        "assessmentKey": "accommodation",
+        "goalRoute": "accommodation",
+        "upperBound": 6
+      },
+      {
+        "area": "Employment and education",
+        "crimNeedsKey": "educationTrainingEmployability",
+        "crimNeedsSubKey": "ete",
+        "assessmentKey": "employment_education",
+        "goalRoute": "employment-and-education",
+        "upperBound": 4
+      },
+      {
+        "area": "Finances",
+        "crimNeedsKey": "finance",
+        "crimNeedsSubKey": "finance",
+        "assessmentKey": "finance_debt",
+        "goalRoute": "finances",
+        "upperBound": null
+      },
+      {
+        "area": "Personal relationships and community",
+        "crimNeedsKey": "personalRelationshipsAndCommunity",
+        "crimNeedsSubKey": "rel",
+        "assessmentKey": "personal_relationships_community",
+        "goalRoute": "personal-relationships-and-community",
+        "upperBound": 6
+      },
+      {
+        "area": "Drug use",
+        "crimNeedsKey": "drugMisuse",
+        "crimNeedsSubKey": "drug",
+        "assessmentKey": "drug_use",
+        "goalRoute": "drug-use",
+        "upperBound": 8
+      }
+    ],
+    "needScore": {
+      "doesNotHaveNeedScore": "This area does not have a need score",
+      "needScoreNotAvailable": "The score for this area is not available yet"
     }
   }
 }

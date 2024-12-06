@@ -1,0 +1,29 @@
+{% from "components/need-score-indicator/macro.njk" import needsScoreIndicator %}
+
+{% set scoreLabelClass = 'needs-score-label-wrapper needs-score-label-wrapper--position-'+needsScore.score %}
+
+{% set barTypeClass = 'needs-score-bar--small-' + needsScore.score + ' needs-score-bar--small-tenths' %}
+
+<div class="needs-score govuk-body">
+    <div class="{{ scoreLabelClass }}">
+        {{ needsScoreIndicator(needsScore) }}
+    </div>
+    <div class="{{ barTypeClass }}">
+        {% for i in range(0, needsScore.upperBound) -%}
+            {% set classes = [] %}
+            {%- if i == needsScore.thresholdValue - 1 %}
+                {% set classes = classes.concat('thresholdmarker-leftside') %}
+            {%- elif i == needsScore.thresholdValue %}
+                {% set classes = classes.concat('thresholdmarker-rightside') %}
+            {%- endif %}
+            {%- if needsScore.score > needsScore.thresholdValue and i < needsScore.score %}
+                {% set classes = classes.concat('highscoring') %}
+            {%- elif needsScore.score <= needsScore.thresholdValue and i < needsScore.score %}
+                {% set classes = classes.concat('lowscoring') %}
+            {%- endif %}
+            <div class="{{ classes | join(' ') }}">
+                <span></span>
+            </div>
+        {% endfor %}
+    </div>
+</div>

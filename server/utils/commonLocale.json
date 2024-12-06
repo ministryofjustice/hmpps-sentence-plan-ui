@@ -3,12 +3,13 @@
     "header": {
       "serviceName": "{{ applicationName }}",
       "managedInOasysText": "OASys User",
-      "signOutLink": "Sign out"
+      "signOutLink": "Sign out",
+      "returnToOasysButton": "Return to OASys"
     },
     "primaryNavigation": {
       "planLinkText": "{{ subject.possessiveName }} plan",
       "aboutPopText": "About {{ subject.givenName }}",
-      "planHistoryLink": "Plan history"
+      "planHistoryText": "Plan history"
     },
     "planHeader": {
       "mini": {
@@ -18,7 +19,11 @@
         "dateOfBirthLabel": "Date of birth:"
       },
       "extended": {
-        "title": "{{ subject.possessiveName }} plan",
+        "createGoalButton": "Create goal",
+        "agreePlanButton": "Agree plan"
+      },
+      "about": {
+        "title": "About {{ subject.givenName }}",
         "createGoalButton": "Create goal",
         "agreePlanButton": "Agree plan"
       }
@@ -26,8 +31,9 @@
     "goalSummaryCard": {
       "info": {
         "aimToAchieveDate": "Aim to achieve this by {{ targetDate }}.",
+        "removedDate": "Removed on {{ lastStatusChangeDate }}",
         "aimToAchieveSentence": "Aim to achieve this by the end of {{ subject.possessiveName }} sentence.",
-        "goalAchievedDate": "Marked as achieved on {{ achievedDate }}.",
+        "achievedDate": "Marked as achieved on {{ lastStatusChangeDate }}.",
         "thisIsAFutureGoal": "This is a future goal."
       },
       "stepsList": {
@@ -70,7 +76,13 @@
     },
     "buttons": {},
     "links": {},
-    "footer": {}
+    "footer": {},
+    "sentence": {
+      "year": "year",
+      "month": "month",
+      "day": "day",
+      "conjunction": "and"
+    }
   },
   "cy": {}
 }

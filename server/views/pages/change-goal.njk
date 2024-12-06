@@ -28,7 +28,8 @@
 {% set mainClasses = "app-container govuk-body" %}
 
 {% block content %}
-    <a href="#" class="govuk-back-link">Back</a>
+    {{ super() }}
+    <a href="{{ data.returnLink }}" class="govuk-back-link">{{ locale.common.backLink.text }}</a>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
             {{ errorSummary({

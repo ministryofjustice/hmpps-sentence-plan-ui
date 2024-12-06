@@ -2,6 +2,8 @@ import { NextFunction, Request, Response } from 'express'
 import locale from './locale.json'
 import { GoalStatus } from '../../@types/GoalType'
 import URLs from '../URLs'
+import { requireAccessMode } from '../../middleware/authorisationMiddleware'
+import { AccessMode } from '../../@types/Handover'
 
 export default class ViewGoalDetailsController {
   private render = async (req: Request, res: Response, next: NextFunction) => {
@@ -31,5 +33,5 @@ export default class ViewGoalDetailsController {
     }
   }
 
-  get = this.render
+  get = [requireAccessMode(AccessMode.READ_WRITE), this.render]
 }

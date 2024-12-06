@@ -1,8 +1,10 @@
 import { RoshData } from '../@types/Rosh'
 import { parsedRoshData, roSHData, unComplitedRoSH } from '../testutils/data/roshData'
+
 import {
   convertToTitleCase,
   dateToISOFormat,
+  dateWithYear,
   formatDate,
   formatRoSHData,
   goalStatusToTabName,
@@ -189,5 +191,15 @@ describe('format dates correctly', () => {
   it('should format date correctly', () => {
     expect(dateToISOFormat('31/3/2023')).toEqual('2023-03-31')
     expect(dateToISOFormat('1/3/2023')).toEqual('2023-03-01')
+    expect(dateToISOFormat('  1/3/2023')).toEqual('2023-03-01')
+  })
+})
+
+describe('format date with year', () => {
+  it.each([
+    ['2024-11-04T10:17:00.217158', '4 November 2024'],
+    [undefined, undefined],
+  ])('%s maps to %s', (date: string, expected: string) => {
+    expect(dateWithYear(date)).toEqual(expected)
   })
 })

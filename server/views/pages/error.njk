@@ -1,12 +1,39 @@
 {% extends "../partials/layout.njk" %}
 
-{% set pageTitle = applicationName + " - Error" %}
+{% set locale = interpolate(locale, {
+  oasysReturnUrl: data.oasysReturnUrl
+}) %}
+
+{% block pageTitle %}
+  {{ locale.page.title }}
+{% endblock %}
+
 {% set mainClasses = "app-container govuk-body" %}
 
+{% block header %}
+  {% include "../partials/header.njk" %}
+{% endblock %}
+
 {% block content %}
+  {{ super() }}
 
-  <h1>{{ message }}</h1>
-  <h2>{{ status }}</h2>
-  <pre>{{ stack }}</pre>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-l">{{ locale.mainHeading.title }}</h1>
+      {% for suggestion in locale.suggestions %}
+        <p class="govuk-body">{{ suggestion }}</p>
+      {% endfor %}
+      {{ locale.resolution | safe }}
+    </div>
+  </div>
 
+  {% if stack %}
+    <div class="govuk-grid-row govuk-!-margin-top-4">
+      <div class="govuk-grid-column-full">
+        <code class="code-block">
+          <pre>{{ stack }}</pre>
+        </code>
+      </div>
+    </div>
+  {% endif %}
 {% endblock %}

@@ -11,6 +11,12 @@ import { toKebabCase } from '../../utils/utils'
 import URLs from '../URLs'
 import { StepStatus } from '../../@types/StepType'
 
+jest.mock('../../middleware/authorisationMiddleware', () => ({
+  requireAccessMode: jest.fn(() => (req: Request, res: Response, next: NextFunction) => {
+    return next()
+  }),
+}))
+
 jest.mock('../../services/sentence-plan/stepsService', () => {
   return jest.fn().mockImplementation(() => ({
     getSteps: jest.fn().mockResolvedValue([
@@ -51,6 +57,7 @@ describe('AddStepsController', () => {
       popData: handoverData.subject,
       areaOfNeed: toKebabCase(testGoal.areaOfNeed.name),
       goal: testGoal,
+      returnLink: '/plan?status=success',
       form: {
         steps: [
           {
@@ -74,7 +81,7 @@ describe('AddStepsController', () => {
 
   describe('get', () => {
     it('should render without validation errors', async () => {
-      await controller.get(req, res, next)
+      await runMiddlewareChain(controller.get, req, res, next)
 
       expect(res.render).toHaveBeenCalledWith('pages/add-steps', viewData)
     })
@@ -91,7 +98,7 @@ describe('AddStepsController', () => {
         errors,
       }
 
-      await controller.get(req, res, next)
+      await runMiddlewareChain(controller.get, req, res, next)
 
       expect(res.render).toHaveBeenCalledWith('pages/add-steps', expectedViewData)
     })
@@ -100,7 +107,7 @@ describe('AddStepsController', () => {
       const error = new Error('no goal')
       req.services.goalService.getGoal = jest.fn().mockRejectedValue(error)
 
-      await controller.get(req as Request, res as Response, next)
+      await runMiddlewareChain(controller.get, req, res, next)
 
       expect(next).toHaveBeenCalledWith(error)
     })
@@ -167,7 +174,7 @@ describe('AddStepsController', () => {
             status: StepStatus.IN_PROGRESS,
           },
           {
-            actor: 'Buster',
+            actor: 'Choose someone',
             description: '',
             status: StepStatus.NOT_STARTED,
           },
@@ -228,6 +235,7 @@ describe('AddStepsController', () => {
           popData: viewData.data.popData,
           areaOfNeed: viewData.data.areaOfNeed,
           goal: viewData.data.goal,
+          returnLink: viewData.data.returnLink,
           form: {
             action: 'save',
             'step-actor-1': 'Batman',

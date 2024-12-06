@@ -2,13 +2,41 @@
   "en": {
     "page": {
       "title": "Plan history - {{ applicationName }}",
-      "errorTitle": "Error: Plan history - {{ applicationName }}"
+      "errorTitle": "Error: Plan history - {{ applicationName }}",
+      "noPlanIntroduction": "Once {{ subject.possessiveName }} plan has been agreed, you'll be able to view updates here.",
+      "ifPlanIntroduction": "View all updates and changes made to this plan."
     },
-    "mainHeading": {
-      "title": "Plan history"
+    "linkType": {
+      "direct": "View goal",
+      "latest": "View latest version"
     },
-    "header": {
-      "returnToOasysButton": "Return to OASys"
+    "who": {
+      "practitionerOnly": "on {{ noteCreatedDate }} by {{ noteCreatedBy }}",
+      "practitionerAndSubject": "on {{ noteCreatedDate }} by {{ noteCreatedBy }} and {{ subject.givenName }}"
+    },
+    "subjectResponse": {
+      "agreed": "{{ subject.givenName }} agreed to this plan.",
+      "didNotAgree": "{{ subject.givenName }} did not agree to this plan.",
+      "couldNotAgree": "{{ subject.givenName }} could not agree to this plan."
+    },
+    "ariaText": {
+      "direct": "View {{ hiddenText }}",
+      "latest": "View latest version of {{ hiddenText }}"
+    },
+    "note": {
+      "status": {
+        "plan": {
+          "agreed": "Plan agreed",
+          "created": "Plan created"
+        },
+        "goal": {
+          "created": "Goal created",
+          "addedBackToPlan": "Goal added back to plan",
+          "removed": "Goal removed",
+          "updated": "Goal updated",
+          "achieved": "Goal marked as achieved"
+        }
+      }
     }
   }
 }

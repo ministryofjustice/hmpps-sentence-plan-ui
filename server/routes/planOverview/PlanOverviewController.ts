@@ -85,11 +85,11 @@ export default class PlanOverviewController {
     const hasErrors = Object.values(req.errors).some(errorCategory => Object.keys(errorCategory).length)
 
     if (hasErrors) {
-      if (req.errors.query?.type) {
+      if (req.query?.type) {
         delete req.query.type
       }
 
-      if (req.errors.query?.status) {
+      if (req.query?.status) {
         delete req.query.status
       }
 

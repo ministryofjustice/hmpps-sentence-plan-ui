@@ -1,3 +1,6 @@
+import { DateTime } from 'luxon'
+// eslint-disable-next-line import/no-extraneous-dependencies
+import camelCase from 'camelcase'
 import { Person } from '../@types/Person'
 import { RoshData } from '../@types/Rosh'
 import { NewStep, StepStatus } from '../@types/StepType'
@@ -6,7 +9,7 @@ import { GoalStatus } from '../@types/GoalType'
 const properCase = (word: string): string =>
   word.length >= 1 ? word[0].toUpperCase() + word.toLowerCase().slice(1) : word
 
-const isBlank = (str: string): boolean => !str || /^\s*$/.test(str)
+export const isBlank = (str: string): boolean => !str || /^\s*$/.test(str)
 
 /**
  * Converts a name (first name, last name, middle name, etc.) to proper case equivalent, handling double-barreled names
@@ -54,13 +57,28 @@ export function formatDate(date: string): string {
   })
 }
 
+export const motivationText = (optionResult?: string): string => {
+  if (optionResult === undefined || optionResult === null) {
+    return undefined
+  }
+  return camelCase(optionResult)
+}
+
+export const dateWithYear = (datetimeString: string): string | null => {
+  if (!datetimeString || isBlank(datetimeString)) return undefined
+  return DateTime.fromISO(datetimeString).toFormat('d MMMM yyyy')
+}
+
 export function formatDateWithStyle(isoDate: string, style: 'short' | 'full' | 'long' | 'medium' = 'long'): string {
   return new Date(isoDate).toLocaleDateString('en-gb', { dateStyle: style })
 }
 
 export function dateToISOFormat(date: string): string {
-  const [day, month, year] = date.split('/')
-  return [year, padToTwoDigits(month), padToTwoDigits(day)].join('-')
+  if (date != null && date.indexOf('/') > -1) {
+    const [day, month, year] = date.split('/')
+    return [year.trim(), padToTwoDigits(month.trim()), padToTwoDigits(day.trim())].join('-')
+  }
+  return date
 }
 
 function padToTwoDigits(value: string): string {
@@ -91,7 +109,7 @@ export function moveGoal(goals: Array<any>, gUuid: string, operation: string) {
   return orderedGoals.map(({ uuid: goalUuid, goalOrder }) => ({ goalUuid, goalOrder }))
 }
 
-export function getAchieveDateOptions(date: Date, dateOptionsInMonths = [3, 6, 12, 24]) {
+export function getAchieveDateOptions(date: Date, dateOptionsInMonths = [3, 6, 12]) {
   return dateOptionsInMonths.map(option => {
     const achieveDate = new Date(date)
     achieveDate.setMonth(date.getMonth() + option)

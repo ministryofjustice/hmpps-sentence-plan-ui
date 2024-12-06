@@ -7,14 +7,31 @@ describe('Create a new Goal', () => {
   beforeEach(() => {
     cy.createSentencePlan().then(planDetails => {
       cy.wrap(planDetails).as('planDetails')
+      cy.wrap(planDetails.oasysAssessmentPk).as('oasysAssessmentPk')
       cy.openSentencePlan(planDetails.oasysAssessmentPk)
-      cy.visit('/about-pop')
     })
+  })
+
+  describe('Security', () => {
+    it('Should display authorisation error if user does not have READ_WRITE role', () => {
+      cy.get<string>('@oasysAssessmentPk').then(oasysAssessmentPk => {
+        cy.openSentencePlan(oasysAssessmentPk, 'READ_ONLY')
+      })
+
+      cy.visit(`/create-goal/accommodation`, { failOnStatusCode: false })
+      cy.checkAccessibility(true, ['scrollable-region-focusable'])
+    })
+  })
+
+  it('Checks the back link is correct', () => {
+    createGoalPage.createGoal('accommodation')
+    cy.get('.govuk-back-link').should('have.attr', 'href', '/plan?type=current')
+    cy.checkAccessibility()
   })
 
   it('Creates a new goal with errors', () => {
     createGoalPage.createGoal('accommodation')
-    createGoalPage.selectGoalAutocompleteOption('acc', 'Accommodation Goal 1')
+    createGoalPage.selectGoalAutocompleteOption('I w', 'I will comply with the conditions of my tenancy agreement')
     createGoalPage.selectStartWorkingRadio('yes')
     createGoalPage.selectAchievementDateSomethingElse('{backspace}')
     createGoalPage.clickButton('Add steps')
@@ -22,10 +39,11 @@ describe('Create a new Goal', () => {
     cy.url().should('include', '/create-goal/accommodation')
     cy.get('.govuk-error-summary')
       .should('contain', 'Select yes if this goal is related to any other area of need')
-      .should('contain', 'Select a date')
+      .should('contain', 'Date must be today or in the future')
     cy.contains('#related-area-of-need-radio-error', 'Select yes if this goal is related to any other area of need')
-    cy.contains('.hmpps-datepicker', 'Select a date')
+    cy.contains('.hmpps-datepicker', 'Date must be today or in the future')
     cy.title().should('contain', 'Error:')
+    cy.checkAccessibility()
   })
 
   it('Creates a new goal with errors', () => {
@@ -44,11 +62,25 @@ describe('Create a new Goal', () => {
     cy.title().should('contain', 'Error:')
 
     cy.get('#goal-input-autocomplete').invoke('val').should('contain', lorem)
+    cy.checkAccessibility()
+  })
+
+  it('Creates a new goal without steps with padded target date field', () => {
+    createGoalPage.createGoal('accommodation')
+    createGoalPage.selectGoalAutocompleteOption('I w', 'I will comply with the conditions of my tenancy agreement')
+    createGoalPage.selectRelatedAreasOfNeedRadio('no')
+    createGoalPage.selectStartWorkingRadio('yes')
+    createGoalPage.selectAchievementDateSomethingElse('  4/4/3036')
+    createGoalPage.clickButton('Save without steps')
+
+    cy.url().should('contain', '/plan?status=added&type=current')
+    cy.get('#goal-list').children().should('have.length', 1)
+    cy.checkAccessibility()
   })
 
   it('Creates a new goal without steps', () => {
     createGoalPage.createGoal('accommodation')
-    createGoalPage.selectGoalAutocompleteOption('acc', 'Accommodation Goal 1')
+    createGoalPage.selectGoalAutocompleteOption('I w', 'I will comply with the conditions of my tenancy agreement')
     createGoalPage.selectRelatedAreasOfNeedRadio('yes')
     createGoalPage.selectRelatedAreasOfNeed(['Employment and education', 'Drug use'])
     createGoalPage.selectStartWorkingRadio('yes')
@@ -62,16 +94,16 @@ describe('Create a new Goal', () => {
       .children()
       .first()
       .within(() => {
-        cy.get('.govuk-summary-card__title').should('contain', 'Accommodation Goal 1')
+        cy.get('.govuk-summary-card__title').should(
+          'contain',
+          'I will comply with the conditions of my tenancy agreement',
+        )
         cy.get('.goal-summary-card__areas-of-need').should('contain', 'Area of need: accommodation')
         cy.get('.goal-summary-card__areas-of-need').should(
           'contain',
           'Also relates to: drug use, employment and education',
         )
       })
-  })
-
-  it.skip('Should have no accessibility violations', () => {
     cy.checkAccessibility()
   })
 })

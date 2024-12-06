@@ -46,7 +46,8 @@
         createdDate: data.plan.createdDate | formatSimpleDate,
         updatedDate: data.plan.updatedDate | formatSimpleDate,
         updatedBy: data.plan.updatedBy.username | title
-    }
+    },
+    subject: data.popData
 }) %}
 
 {% block pageTitle %}
@@ -59,7 +60,8 @@
 
 {% set mainClasses = "app-container govuk-body" %}
 {% set header = {
-    type: "extended",
+    type: "plan-extended",
+    heading: locale.common.primaryNavigation.planLinkText,
     items: [
     {
         text: locale.header.returnToOasysButton,
@@ -75,6 +77,7 @@
 {% endblock %}
 
 {% block content %}
+    {{ super() }}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
             {% if errors.domain %}
@@ -123,7 +126,7 @@
                     text: locale.subNavigation.removedGoals,
                     href: '/plan?type=removed',
                     active: data.type === 'removed'
-                } if removedGoals.length > 0]
+                } if removedGoals.length > 0] | reject('string')
             }) }}
 
             {% if data.type == 'future' %}

@@ -12,6 +12,12 @@ import URLs from '../URLs'
 import { testStep } from '../../testutils/data/stepData'
 import { StepStatus } from '../../@types/StepType'
 
+jest.mock('../../middleware/authorisationMiddleware', () => ({
+  requireAccessMode: jest.fn(() => (req: Request, res: Response, next: NextFunction) => {
+    return next()
+  }),
+}))
+
 jest.mock('../../services/sentence-plan/referentialDataService', () => {
   return jest.fn().mockImplementation(() => ({
     getSortedAreasOfNeed: jest.fn().mockReturnValue(AreaOfNeed),
@@ -29,6 +35,7 @@ jest.mock('../../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
     getSubjectDetails: jest.fn().mockReturnValue(handoverData.subject),
     setReturnLink: jest.fn(),
+    getReturnLink: jest.fn().mockReturnValue('/some-return-link'),
   }))
 })
 
@@ -54,6 +61,7 @@ describe('UpdateGoalController', () => {
       popData: handoverData.subject,
       mainAreaOfNeed: AreaOfNeed.find(x => x.name === testGoal.areaOfNeed.name),
       relatedAreasOfNeed: testGoal.relatedAreasOfNeed.map(x => x.name),
+      returnLink: '/some-return-link',
     },
     errors: {},
   }
@@ -71,7 +79,7 @@ describe('UpdateGoalController', () => {
 
   describe('get', () => {
     it('should render without validation errors', async () => {
-      await controller.get(req, res, next)
+      await runMiddlewareChain(controller.get, req, res, next)
 
       expect(res.render).toHaveBeenCalledWith('pages/update-goal', viewData)
     })

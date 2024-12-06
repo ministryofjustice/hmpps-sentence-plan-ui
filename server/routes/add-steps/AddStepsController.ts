@@ -7,14 +7,18 @@ import AddStepsPostModel, { StepModel } from './models/AddStepsPostModel'
 import transformRequest from '../../middleware/transformMiddleware'
 import { StepStatus } from '../../@types/StepType'
 import { NewGoal } from '../../@types/NewGoalType'
+import { requireAccessMode } from '../../middleware/authorisationMiddleware'
+import { AccessMode } from '../../@types/Handover'
 
 export default class AddStepsController {
   private render = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { errors } = req
+      const { type } = req.query
       const popData = await req.services.sessionService.getSubjectDetails()
       const goal = await req.services.goalService.getGoal(req.params.uuid)
       const steps = await req.services.stepService.getSteps(req.params.uuid)
+      const returnLink = req.services.sessionService.getReturnLink() ?? `${URLs.PLAN_OVERVIEW}?type=${type}`
 
       if (!req.body.steps || req.body.steps.length === 0) {
         req.body.steps = steps.map(step => ({
@@ -30,6 +34,7 @@ export default class AddStepsController {
           goal,
           popData,
           areaOfNeed: toKebabCase(goal.areaOfNeed.name),
+          returnLink,
           form: req.body,
         },
         errors,
@@ -50,13 +55,17 @@ export default class AddStepsController {
       steps: updatedSteps,
     }
 
-    await req.services.stepService.saveAllSteps(goalData, req.params.uuid)
+    try {
+      await req.services.stepService.saveAllSteps(goalData, req.params.uuid)
 
-    // TODO: this is wrong... we should be able to add steps only, or add steps after adding a (current or future) goal, and get a success banner...
-    const link = req.services.sessionService.getReturnLink() ?? `${URLs.PLAN_OVERVIEW}?status=success`
-    req.services.sessionService.setReturnLink(null)
+      // TODO: this is wrong... we should be able to add steps only, or add steps after adding a (current or future) goal, and get a success banner...
+      const link = req.services.sessionService.getReturnLink() ?? `${URLs.PLAN_OVERVIEW}?status=success`
+      req.services.sessionService.setReturnLink(null)
 
-    return res.redirect(link)
+      return res.redirect(link)
+    } catch (e) {
+      return next(e)
+    }
   }
 
   private handleRemoveStep = (req: Request, res: Response, next: NextFunction) => {
@@ -79,11 +88,27 @@ export default class AddStepsController {
     return next()
   }
 
+  private handleClearStep = (req: Request, res: Response, next: NextFunction) => {
+    if (req.body.action.startsWith('clear-step-')) {
+      const defaultStepValue = {
+        actor: 'Choose someone',
+        description: '',
+        status: StepStatus.NOT_STARTED,
+      }
+
+      req.body.steps.splice(0, 1, defaultStepValue)
+
+      return this.render(req, res, next)
+    }
+
+    return next()
+  }
+
   private handleAddStep = (req: Request, res: Response, next: NextFunction) => {
     if (req.body.action === 'add-step') {
       delete req.body.action
       req.body.steps.push({
-        actor: req.services.sessionService.getSubjectDetails().givenName,
+        actor: 'Choose someone',
         description: '',
         status: StepStatus.NOT_STARTED,
       })
@@ -100,16 +125,18 @@ export default class AddStepsController {
     return next()
   }
 
+  get = [requireAccessMode(AccessMode.READ_WRITE), this.render]
+
   post = [
+    requireAccessMode(AccessMode.READ_WRITE),
     transformRequest({
       body: AddStepsPostModel,
     }),
     this.handleRemoveStep,
+    this.handleClearStep,
     this.handleAddStep,
     validateRequest(),
     this.handleValidationErrors,
     this.saveAndRedirect,
   ]
-
-  get = this.render
 }

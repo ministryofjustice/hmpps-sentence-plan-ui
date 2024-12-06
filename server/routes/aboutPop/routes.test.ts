@@ -6,23 +6,37 @@ import URLs from '../URLs'
 import testPopData from '../../testutils/data/popData'
 import ReferentialDataService from '../../services/sentence-plan/referentialDataService'
 import { roSHData } from '../../testutils/data/roshData'
-import handoverData from '../../testutils/data/handoverData'
 import { AreaOfNeed } from '../../testutils/data/referenceData'
+import testPlan from '../../testutils/data/planData'
+import testHandoverContext from '../../testutils/data/handoverData'
+import { assessmentData, crimNeedsSubset } from '../../testutils/data/assessmentData'
 
 jest.mock('../../services/sentence-plan/referentialDataService', () => {
   return jest.fn().mockImplementation(() => ({
     getAreasOfNeed: jest.fn().mockResolvedValue(AreaOfNeed),
   }))
 })
+
+jest.mock('../../services/sentence-plan/assessmentService', () => {
+  return jest.fn().mockImplementation(() => ({
+    getAssessmentByUuid: jest.fn().mockReturnValue(assessmentData),
+  }))
+})
+
 jest.mock('../../services/sentence-plan/infoService', () => {
   return jest.fn().mockImplementation(() => ({
     getPopData: jest.fn().mockResolvedValue(testPopData),
     getRoSHData: jest.fn().mockResolvedValue(roSHData),
   }))
 })
+
 jest.mock('../../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
-    getSubjectDetails: jest.fn().mockReturnValue(handoverData.subject),
+    getPlanUUID: jest.fn().mockReturnValue(testPlan.uuid),
+    getPrincipalDetails: jest.fn().mockReturnValue(testHandoverContext.principal),
+    getSubjectDetails: jest.fn().mockReturnValue(testHandoverContext.subject),
+    getCriminogenicNeeds: jest.fn().mockReturnValue(crimNeedsSubset),
+    getOasysReturnUrl: jest.fn().mockReturnValue('http://mock-return-url'),
   }))
 })
 

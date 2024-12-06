@@ -5,6 +5,8 @@
 {%- from "moj/components/banner/macro.njk" import mojBanner -%}
 {% from "../components/summary-card/goal-summary-card.njk" import goalSummaryCard %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "../components/error-summary/error-summary.njk" import errorSummary %}
+{% from "govuk/components/error-message/macro.njk" import govukErrorMessage %}
 
 {% set currentGoals = [] %}
 {% set futureGoals = [] %}
@@ -47,7 +49,8 @@
         createdDate: data.plan.createdDate | formatSimpleDate,
         updatedDate: data.plan.updatedDate | formatSimpleDate,
         updatedBy: data.plan.updatedBy.username | title
-    }
+    },
+    subject: data.popData
 }) %}
 
 {% block pageTitle %}
@@ -60,7 +63,8 @@
 
 {% set mainClasses = "app-container govuk-body" %}
 {% set header = {
-    type: "extended",
+    type: "plan-extended",
+    heading: locale.common.primaryNavigation.planLinkText,
     items: [
         {
             text: locale.header.returnToOasysButton,
@@ -87,18 +91,30 @@
 {% endblock %}
 
 {% block content %}
+    {{ super() }}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
+
+            {% set errorList = [] %}
+            {% if errors.domain['goals'] %}
+                {% set errorList = errorList.concat({
+                    text: locale.errors['goals'].arrayNotEmpty,
+                    href: "#goal-list"
+                }) %}
+            {% endif %}
+            {% for id, errorObj in errors.domain %}
+                {% if '.steps' in id %}
+                    {% set errorList = errorList.concat({
+                        text: locale.errors['steps'].arrayNotEmpty,
+                        href: "#goal-list"
+                    }) %}
+                {% endif %}
+            {% endfor %}
 
             {% if errors.domain %}
                 {{ govukErrorSummary({
                     titleText: "There is a problem",
-                    errorList: [
-                        {
-                            text: locale.errors['goal-summary-card'].arrayNotEmpty,
-                            href: "#goal-list"
-                        }
-                    ]
+                    errorList: errorList
                 }) }}
             {% endif %}
 
@@ -144,7 +160,7 @@
                     text: locale.subNavigation.removedGoals,
                     href: '/plan?type=removed',
                     active: data.type === 'removed'
-                } if removedGoals.length > 0]
+                } if removedGoals.length > 0 ] | reject('string')
             }) }}
 
             {% if data.type == 'future' %}
@@ -188,7 +204,7 @@
                     {% if errors.domain['goals.' + item.index + '.steps'].arrayNotEmpty %}
                         {% set errorMessage = {
                             id: 'goal-summary-card-' + item.index,
-                            text: locale.errors['goal-summary-card'].arrayNotEmpty,
+                            text: locale.errors['steps'].arrayNotEmptyShortened,
                             state: locale.goalSummaryCard.state.incomplete
                         } %}
                     {% endif %}
@@ -237,12 +253,12 @@
                                 {
                                     href: '/view-removed-goal/' + goal.uuid,
                                     text: locale.goalSummaryCard.actions.removed.viewDetails
-                                },
-                                {
-                                    href: '#',
-                                    text: locale.goalSummaryCard.actions.removed.addToPlan
                                 }
                             ] %}
+                                {#  TODO:SP2-598 {
+                                    href: '#',
+                                    text: locale.goalSummaryCard.actions.removed.addToPlan
+                                }#}
                         {% endif %}
                     {% endif %}
 
@@ -260,11 +276,14 @@
             {% endif %}
 
             {% if goalType == 'current' and goals.length == 0 %}
-                <p>{{ locale.ifNoCurrentGoals.text }}</p>
-                <ul>
-                    <li><a href="/create-goal/accommodation" class="govuk-link govuk-link--no-visited-state">{{ locale.ifNoCurrentGoals.action1 }}</a></li>
-                    <li><a href="/about-pop" class="govuk-link govuk-link--no-visited-state">{{ locale.ifNoCurrentGoals.action2 }}</a></li>
-                </ul>
+                <div id="goal-list" class="{% if errors.domain %}govuk-form-group--error{% endif %}">
+                    {% if errors.domain %}
+                        {{ govukErrorMessage({
+                            text: locale.errors['goals'].arrayNotEmpty
+                        }) }}
+                    {% endif %}
+                <p>{{ locale.ifNoCurrentGoals.text }} <a href="/create-goal/accommodation" class="govuk-link govuk-link--no-visited-state">{{ locale.ifNoCurrentGoals.action1 }}</a>.</p>
+                </div>
             {% elseif goalType == 'future' and goals.length == 0 %}
                 <p>{{ locale.ifNoFutureGoals.text }}</p>
             {% endif %}

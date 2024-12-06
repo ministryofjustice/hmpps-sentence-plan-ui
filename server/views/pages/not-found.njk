@@ -1,0 +1,23 @@
+{% extends "../partials/layout.njk" %}
+
+{% block pageTitle %}
+  {{ locale.page.title }}
+{% endblock %}
+
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block header %}
+  {% include "../partials/header.njk" %}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-l">{{ locale.mainHeading.title }}</h1>
+      {% for suggestion in locale.suggestions %}
+        <p class="govuk-body">{{ suggestion }}</p>
+      {% endfor %}
+      <a class="govuk-link govuk-link--no-visited-state" href="/plan">{{ locale.returnToPlan }}</a>
+    </div>
+  </div>
+{% endblock %}

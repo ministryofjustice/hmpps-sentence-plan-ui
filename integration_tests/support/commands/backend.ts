@@ -35,7 +35,7 @@ function createHandoverContext(apiToken, oasysAssessmentPk, accessMode, sentence
     auth: { bearer: apiToken },
     body: {
       oasysAssessmentPk,
-      planVersion: sentencePlanVersion,
+      sentencePlanVersion,
       user: {
         identifier: 123,
         displayName: 'Cypress User',
@@ -52,17 +52,84 @@ function createHandoverContext(apiToken, oasysAssessmentPk, accessMode, sentence
         location: 'COMMUNITY',
         sexuallyMotivatedOffenceHistory: 'NO',
       },
+      criminogenicNeedsData: {
+        accommodation: {
+          accLinkedToHarm: 'NO',
+          accLinkedToReoffending: 'YES',
+          accStrengths: 'NO',
+          accOtherWeightedScore: '6',
+          accThreshold: 'YES',
+        },
+        educationTrainingEmployability: {
+          eteLinkedToHarm: 'NO',
+          eteLinkedToReoffending: 'YES',
+          eteStrengths: 'YES',
+          eteOtherWeightedScore: '2',
+          eteThreshold: 'YES',
+        },
+        finance: {
+          financeLinkedToHarm: 'NO',
+          financeLinkedToReoffending: 'NO',
+          financeStrengths: 'NO',
+          financeOtherWeightedScore: 'N/A',
+          financeThreshold: 'N/A',
+        },
+        drugMisuse: {
+          drugLinkedToHarm: 'NO',
+          drugLinkedToReoffending: 'NO',
+          drugStrengths: 'NO',
+          drugOtherWeightedScore: '0',
+          drugThreshold: 'NO',
+        },
+        alcoholMisuse: {
+          alcoholLinkedToHarm: 'NO',
+          alcoholLinkedToReoffending: 'YES',
+          alcoholStrengths: 'YES',
+          alcoholOtherWeightedScore: '3',
+          alcoholThreshold: 'YES',
+        },
+        healthAndWellbeing: {
+          emoLinkedToHarm: 'NO',
+          emoLinkedToReoffending: 'NO',
+          emoStrengths: 'NO',
+          emoOtherWeightedScore: 'N/A',
+          emoThreshold: 'N/A',
+        },
+        personalRelationshipsAndCommunity: {
+          relLinkedToHarm: 'NO',
+          relLinkedToReoffending: 'NO',
+          relStrengths: 'NO',
+          relOtherWeightedScore: '6',
+          relThreshold: 'YES',
+        },
+        thinkingBehaviourAndAttitudes: {
+          thinkLinkedToHarm: 'NO',
+          thinkLinkedToReoffending: 'NO',
+          thinkStrengths: 'NO',
+          thinkOtherWeightedScore: '10',
+          thinkThreshold: 'YES',
+        },
+        lifestyleAndAssociates: {
+          lifestyleLinkedToHarm: 'N/A',
+          lifestyleLinkedToReoffending: 'N/A',
+          lifestyleStrengths: 'N/A',
+          lifestyleOtherWeightedScore: '6',
+          lifestyleThreshold: 'YES',
+        },
+      },
     },
   }
 }
 
-export const openSentencePlan = (oasysAssessmentPk, accessMode, sentencePlanVersion) => {
-  cy.session(oasysAssessmentPk, () =>
+export const openSentencePlan = (
+  oasysAssessmentPk,
+  accessMode = AccessMode.READ_WRITE,
+  sentencePlanVersion = undefined,
+) => {
+  cy.session(`${oasysAssessmentPk}_${accessMode}`, () =>
     getApiToken().then(apiToken =>
       cy
-        .request(
-          createHandoverContext(apiToken, oasysAssessmentPk, accessMode ?? AccessMode.READ_WRITE, sentencePlanVersion),
-        )
+        .request(createHandoverContext(apiToken, oasysAssessmentPk, accessMode, sentencePlanVersion))
         .then(handoverResponse =>
           cy.visit(`${handoverResponse.body.handoverLink}?clientId=${Cypress.env('ARNS_HANDOVER_CLIENT_ID')}`),
         ),
