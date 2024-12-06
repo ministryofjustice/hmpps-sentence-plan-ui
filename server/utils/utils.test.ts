@@ -2,6 +2,7 @@ import { RoshData } from '../@types/Rosh'
 import { parsedRoshData, roSHData, unComplitedRoSH } from '../testutils/data/roshData'
 
 import {
+  generateOauthClientToken,
   convertToTitleCase,
   dateToISOFormat,
   dateWithYear,
@@ -201,5 +202,18 @@ describe('format date with year', () => {
     [undefined, undefined],
   ])('%s maps to %s', (date: string, expected: string) => {
     expect(dateWithYear(date)).toEqual(expected)
+  })
+})
+
+describe('generateOauthClientToken', () => {
+  it('Token can be generated', () => {
+    expect(generateOauthClientToken('bob', 'password1')).toBe('Basic Ym9iOnBhc3N3b3JkMQ==')
+  })
+
+  it('Token can be generated with special characters', () => {
+    const value = generateOauthClientToken('bob', "p@'s&sw/o$+ rd1")
+    const decoded = Buffer.from(value.substring(6), 'base64').toString('utf-8')
+
+    expect(decoded).toBe("bob:p@'s&sw/o$+ rd1")
   })
 })
