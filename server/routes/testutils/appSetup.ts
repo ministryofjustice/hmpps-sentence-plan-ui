@@ -20,6 +20,7 @@ const testAppInfo: ApplicationInfo = {
   gitRef: 'long ref',
   gitShortHash: 'short ref',
   branchName: 'main',
+  productId: '123',
 }
 
 export const user = {
