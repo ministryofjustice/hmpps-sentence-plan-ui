@@ -4,7 +4,7 @@ import superagent from 'superagent'
 
 import logger from '../../logger'
 import config from '../config'
-import generateOauthClientToken from '../authentication/clientCredentials'
+import { generateOauthClientToken } from '../utils/utils'
 import { Token } from '../@types/Token'
 
 const timeoutSpec = config.apis.hmppsAuth.timeout
