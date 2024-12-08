@@ -37,7 +37,7 @@ export default class CreateGoal {
 
   selectAchievementDateSomethingElse = (value: string) => {
     cy.get('.govuk-radios').last().contains('Set another date').click()
-    cy.get('.hmpps-js-datepicker-input').type(value)
+    cy.get('.moj-js-datepicker-input').type(value)
   }
 
   clickButton = (value: string) => {
