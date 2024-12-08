@@ -41,7 +41,7 @@ describe('Create a new Goal', () => {
       .should('contain', 'Select yes if this goal is related to any other area of need')
       .should('contain', 'Date must be today or in the future')
     cy.contains('#related-area-of-need-radio-error', 'Select yes if this goal is related to any other area of need')
-    cy.contains('.hmpps-datepicker', 'Date must be today or in the future')
+    cy.contains('.moj-datepicker', 'Date must be today or in the future')
     cy.title().should('contain', 'Error:')
     cy.checkAccessibility()
   })
