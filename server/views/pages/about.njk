@@ -75,7 +75,7 @@
                 </tr>
 
                 {% for sentence in data.deliusData.sentences %}
-                    <tr class="govuk-table__row govuk-body-l {% if data.deliusData.sentences.length == 1 %}single-sentence{% endif %}">
+                    <tr class="govuk-table__row govuk-body-l {{ 'single-sentence' if data.deliusData.sentences.length == 1 }}">
                         <td class = "govuk-table__cell govuk-padding-bottom--25 ">{{ sentence.description }} <br/> {{ sentenceLength(sentence.startDate, sentence.endDate, locale.common.sentence) }}</td>
                         <td class = "govuk-table__cell govuk-padding-bottom--25">{{ sentence.endDate | formatSimpleDate }}</td>
                         <td class = "govuk-table__cell govuk-padding-bottom--25">
