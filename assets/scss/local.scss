@@ -25,10 +25,8 @@
 }
 
 .plan-navigation {
-  .moj-sub-navigation__list {
-    & > *:last-child {
-      float: right;
-    }
+  .moj-sub-navigation__list > li:has(> a[href="/plan?type=removed"]) {
+    float: right;
   }
 }
 .sp-badge {
@@ -49,9 +47,12 @@
   bottom: 25px
 }
 
-
 .govuk-margin-top--60 {
   margin-top: 60px!important;
+}
+
+.app-container {
+  padding-top: 0;
 }
 
 .sp-accordion-header {

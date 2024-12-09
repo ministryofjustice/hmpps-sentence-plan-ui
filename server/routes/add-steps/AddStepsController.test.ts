@@ -174,7 +174,7 @@ describe('AddStepsController', () => {
             status: StepStatus.IN_PROGRESS,
           },
           {
-            actor: 'Buster',
+            actor: 'Choose someone',
             description: '',
             status: StepStatus.NOT_STARTED,
           },

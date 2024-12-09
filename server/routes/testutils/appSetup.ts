@@ -4,7 +4,6 @@ import { v4 as uuidv4 } from 'uuid'
 
 import routes from '../index'
 import nunjucksSetup from '../../utils/nunjucksSetup'
-import * as auth from '../../authentication/auth'
 import { requestServices, Services } from '../../services'
 import type { ApplicationInfo } from '../../applicationInfo'
 import AuditService from '../../services/auditService'
@@ -20,6 +19,7 @@ const testAppInfo: ApplicationInfo = {
   gitRef: 'long ref',
   gitShortHash: 'short ref',
   branchName: 'main',
+  productId: '123',
 }
 
 export const user = {
@@ -75,6 +75,5 @@ export function appWithAllRoutes({
   services?: Partial<Services>
   userSupplier?: () => Express.User
 }): Express {
-  auth.default.authenticationMiddleware = () => (req, res, next) => next()
   return appSetup(services as Services, production, userSupplier)
 }

@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import locale from './locale.json'
-import { formatAssessmentData } from '../../utils/utils'
+
+import { formatAssessmentData } from '../../utils/assessmentUtils'
 
 export default class AboutPopController {
   constructor() {}

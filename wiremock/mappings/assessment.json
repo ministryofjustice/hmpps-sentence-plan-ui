@@ -2,6 +2,16 @@
   "mappings": [
     {
       "request": {
+        "urlPattern": "/health/ping",
+        "method": "GET"
+      },
+      "response": {
+        "status": 200,
+        "jsonBody": {}
+      }
+    },
+    {
+      "request": {
         "urlPattern": "/entity/NOTFOUND/ASSESSMENT",
         "method": "GET"
       },

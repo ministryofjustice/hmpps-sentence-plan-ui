@@ -27,24 +27,21 @@
           text: locale.common.primaryNavigation.planHistoryText,
           href: '/plan-history',
           active: data.pageId == 'plan-history'
-        },
-        {
-          text: locale.common.primaryNavigation.aboutPopText,
-          href: '/about',
-          active: data.pageId == 'about'
         }
       ]
     }) }}
-
-    {% if header.type == 'plan-extended' %}
-      {% include "./plan-header/plan-header-extended.njk" %}
-    {% else %}
-      {% include "./plan-header/plan-header-mini.njk" %}
-    {% endif %}
   {% endif  %}
 {% endblock %}
 
 {% block bodyStart %}{% endblock %}
+
+{% block content %}
+  {% if header.type == 'plan-extended' %}
+    {% include "./plan-header/plan-header-extended.njk" %}
+  {% else %}
+    {% include "./plan-header/plan-header-mini.njk" %}
+  {% endif %}
+{% endblock %}
 
 {% block bodyEnd %}
   <script type="module" src="/assets/js/app.js"></script>

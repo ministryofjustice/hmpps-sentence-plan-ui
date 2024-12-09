@@ -2,30 +2,20 @@ import { RoshData } from '../@types/Rosh'
 import { parsedRoshData, roSHData, unComplitedRoSH } from '../testutils/data/roshData'
 
 import {
+  generateOauthClientToken,
   convertToTitleCase,
   dateToISOFormat,
   dateWithYear,
-  formatAssessmentData,
   formatDate,
   formatRoSHData,
   goalStatusToTabName,
   initialiseName,
-  motivationText,
   moveGoal,
   sortSteps,
   toKebabCase,
-  yearsAndDaysElapsed,
 } from './utils'
 import { NewStep, StepStatus } from '../@types/StepType'
 import { GoalStatus } from '../@types/GoalType'
-import { AssessmentAreaConfig, AssessmentAreas, AssessmentResponse, CriminogenicNeedsData } from '../@types/Assessment'
-import {
-  assessmentData,
-  assessmentDataNoAssessments,
-  assessmentUndefined,
-  crimNeeds,
-} from '../testutils/data/assessmentData'
-import locale from '../routes/aboutPop/locale.json'
 
 describe('convert to title case', () => {
   it.each([
@@ -206,250 +196,6 @@ describe('format dates correctly', () => {
   })
 })
 
-describe('format assessment data', () => {
-  it.each([
-    [
-      crimNeeds,
-      assessmentUndefined,
-      locale.en.areas,
-      {
-        highScoring: [],
-        lowScoring: [],
-        other: [],
-        versionUpdatedAt: undefined,
-      },
-    ],
-    [
-      crimNeeds,
-      null,
-      locale.en.areas,
-      {
-        highScoring: [],
-        lowScoring: [],
-        other: [],
-        versionUpdatedAt: undefined,
-      },
-    ],
-    [
-      crimNeeds,
-      assessmentDataNoAssessments,
-      locale.en.areas,
-      {
-        highScoring: [
-          {
-            criminogenicNeedsScore: '6',
-            linkedtoReoffending: true,
-            linkedtoRoSH: false,
-            overallScore: '6',
-            riskOfReoffending: undefined,
-            thresholdValue: 1,
-            title: 'Accommodation',
-            goalRoute: 'accommodation',
-            upperBound: 6,
-          },
-        ],
-        lowScoring: [
-          {
-            criminogenicNeedsScore: '1',
-            linkedtoReoffending: true,
-            linkedtoRoSH: false,
-            overallScore: '1',
-            riskOfReoffending: undefined,
-            thresholdValue: 1,
-            title: 'Education and employment',
-            goalRoute: 'employment-and-education',
-            upperBound: 4,
-          },
-        ],
-        other: [
-          {
-            goalRoute: 'thinking-behaviours-and-attitudes',
-            linkedtoReoffending: undefined,
-            linkedtoRoSH: undefined,
-            riskOfReoffending: undefined,
-
-            thresholdValue: 2,
-            title: 'Thinking, behaviours and attitudes',
-            upperBound: 10,
-          },
-          {
-            criminogenicNeedsScore: undefined,
-            goalRoute: 'alcohol-use',
-            linkedtoReoffending: undefined,
-            linkedtoRoSH: undefined,
-            riskOfReoffending: undefined,
-            thresholdValue: 1,
-            title: 'Alcohol use',
-            upperBound: 4,
-          },
-          {
-            criminogenicNeedsScore: undefined,
-            goalRoute: 'health-and-wellbeing',
-            linkedtoReoffending: false,
-            linkedtoRoSH: false,
-            riskOfReoffending: undefined,
-            title: 'Health and wellbeing',
-            upperBound: null,
-          },
-          {
-            criminogenicNeedsScore: undefined,
-            goalRoute: 'finances',
-            linkedtoReoffending: undefined,
-            linkedtoRoSH: undefined,
-            riskOfReoffending: undefined,
-            title: 'Finances',
-            upperBound: null,
-          },
-          {
-            criminogenicNeedsScore: undefined,
-            goalRoute: 'personal-relationships-and-community',
-            linkedtoReoffending: undefined,
-            linkedtoRoSH: undefined,
-            riskOfReoffending: undefined,
-            thresholdValue: 1,
-            title: 'Personal relationships and community',
-            upperBound: 6,
-          },
-          {
-            criminogenicNeedsScore: undefined,
-            goalRoute: 'drug-use',
-            linkedtoReoffending: undefined,
-            linkedtoRoSH: undefined,
-            riskOfReoffending: undefined,
-            thresholdValue: 0,
-            title: 'Drug use',
-            upperBound: 8,
-          },
-        ],
-        versionUpdatedAt: '2024-10-04T15:22:31.453096',
-      },
-    ],
-    [
-      crimNeeds,
-      assessmentData,
-      locale.en.areas,
-      {
-        highScoring: [
-          {
-            criminogenicNeedsScore: '6',
-            linkedtoReoffending: true,
-            linkedtoRoSH: false,
-            motivationToMakeChanges: 'thinkingAboutMakingChanges',
-            overallScore: '6',
-            riskOfReoffending: undefined,
-            goalRoute: 'accommodation',
-            thresholdValue: 1,
-            title: 'Accommodation',
-            upperBound: 6,
-          },
-        ],
-        lowScoring: [
-          {
-            criminogenicNeedsScore: '1',
-            linkedtoReoffending: true,
-            linkedtoRoSH: false,
-            motivationToMakeChanges: 'needsHelpToMakeChanges',
-            overallScore: '1',
-            riskOfReoffending: undefined,
-            thresholdValue: 1,
-            title: 'Education and employment',
-            goalRoute: 'employment-and-education',
-            upperBound: 4,
-          },
-        ],
-        other: [
-          {
-            criminogenicNeedsScore: undefined,
-            goalRoute: 'thinking-behaviours-and-attitudes',
-            linkedtoReoffending: undefined,
-            linkedtoRoSH: undefined,
-            riskOfReoffending: undefined,
-            thresholdValue: 2,
-            title: 'Thinking, behaviours and attitudes',
-            upperBound: 10,
-          },
-          {
-            criminogenicNeedsScore: undefined,
-            goalRoute: 'alcohol-use',
-            linkedtoReoffending: undefined,
-            linkedtoRoSH: undefined,
-            riskOfReoffending: undefined,
-            thresholdValue: 1,
-            title: 'Alcohol use',
-            upperBound: 4,
-          },
-          {
-            criminogenicNeedsScore: undefined,
-            goalRoute: 'health-and-wellbeing',
-            linkedtoReoffending: false,
-            linkedtoRoSH: false,
-            riskOfReoffending: undefined,
-            title: 'Health and wellbeing',
-            upperBound: null,
-          },
-          {
-            criminogenicNeedsScore: undefined,
-            goalRoute: 'finances',
-            linkedtoReoffending: undefined,
-            linkedtoRoSH: undefined,
-            riskOfReoffending: undefined,
-            title: 'Finances',
-            upperBound: null,
-          },
-          {
-            criminogenicNeedsScore: undefined,
-            goalRoute: 'personal-relationships-and-community',
-            linkedtoReoffending: undefined,
-            linkedtoRoSH: undefined,
-            riskOfReoffending: undefined,
-            thresholdValue: 1,
-            title: 'Personal relationships and community',
-            upperBound: 6,
-          },
-          {
-            criminogenicNeedsScore: undefined,
-            goalRoute: 'drug-use',
-            linkedtoReoffending: undefined,
-            linkedtoRoSH: undefined,
-            riskOfReoffending: undefined,
-            thresholdValue: 0,
-            title: 'Drug use',
-            upperBound: 8,
-          },
-        ],
-        versionUpdatedAt: '2024-10-04T15:22:31.453096',
-      },
-    ],
-  ])(
-    '%s formatAssessmentData(%s, %s, %s, %s',
-    (
-      criminogenicNeedsData: CriminogenicNeedsData,
-      assessment: AssessmentResponse,
-      areas: AssessmentAreaConfig[],
-      expected: AssessmentAreas,
-    ) => {
-      expect(formatAssessmentData(criminogenicNeedsData, assessment, areas)).toEqual(expected)
-    },
-  )
-})
-
-describe('replace motivation text', () => {
-  it.each([
-    ['MADE_CHANGES', 'madeChanges'],
-    ['MAKING_CHANGES', 'makingChanges'],
-    ['WANT_TO_MAKE_CHANGES', 'wantToMakeChanges'],
-    ['NEEDS_HELP_TO_MAKE_CHANGES', 'needsHelpToMakeChanges'],
-    ['THINKING_ABOUT_MAKING_CHANGES', 'thinkingAboutMakingChanges'],
-    ['DOES_NOT_WANT_TO_MAKE_CHANGES', 'doesNotWantToMakeChanges'],
-    ['DOES_NOT_WANT_TO_ANSWER', 'doesNotWantToAnswer'],
-    ['NOT_PRESENT', 'notPresent'],
-    ['NOT_APPLICABLE', 'notApplicable'],
-    [undefined, undefined],
-  ])('%s %s maps to %s', (optionResult: string, expected: string) => {
-    expect(motivationText(optionResult)).toEqual(expected)
-  })
-})
-
 describe('format date with year', () => {
   it.each([
     ['2024-11-04T10:17:00.217158', '4 November 2024'],
@@ -459,11 +205,15 @@ describe('format date with year', () => {
   })
 })
 
-describe('years and days elapsed', () => {
-  it.each([
-    ['2024-11-06', '2029-01-12', '(4 years and 67 days)'],
-    [undefined, undefined, undefined],
-  ])('%s maps to %s', (from: string, to: string, expected: string) => {
-    expect(yearsAndDaysElapsed(from, to)).toEqual(expected)
+describe('generateOauthClientToken', () => {
+  it('Token can be generated', () => {
+    expect(generateOauthClientToken('bob', 'password1')).toBe('Basic Ym9iOnBhc3N3b3JkMQ==')
+  })
+
+  it('Token can be generated with special characters', () => {
+    const value = generateOauthClientToken('bob', "p@'s&sw/o$+ rd1")
+    const decoded = Buffer.from(value.substring(6), 'base64').toString('utf-8')
+
+    expect(decoded).toBe("bob:p@'s&sw/o$+ rd1")
   })
 })

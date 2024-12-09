@@ -54,7 +54,7 @@ FROM base AS production
 COPY --from=build --chown=appuser:appgroup /app/package.json /app/package-lock.json ./
 COPY --from=build --chown=appuser:appgroup /app/dist ./dist
 COPY --from=build --chown=appuser:appgroup /app/node_modules ./node_modules
-EXPOSE 3000 3001
+EXPOSE 3000
 ENV NODE_ENV='production'
 USER 2000
 CMD ["npm", "start"]

@@ -5,7 +5,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "../components/error-summary/error-summary.njk" import errorSummary %}
-{% from "hmpps/components/date-picker/macro.njk" import hmppsDatePicker %}
+{% from "moj/components/date-picker/macro.njk" import mojDatePicker %}
 {% from "moj/components/side-navigation/macro.njk" import mojSideNavigation %}
 
 {% set locale = interpolate(locale, {
@@ -28,6 +28,7 @@
 {% set mainClasses = "app-container govuk-body" %}
 
 {% block content %}
+    {{ super() }}
     <a href="{{ data.returnLink }}" class="govuk-back-link">{{ locale.common.backLink.text }}</a>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
@@ -112,7 +113,7 @@
                 }) }}
 
                 {% set customDateHtml %}
-                    {{ hmppsDatePicker({
+                    {{ mojDatePicker({
                         id: "date-selection-custom",
                         name: "date-selection-custom",
                         errorMessage: getFormattedError(errors, locale, 'date-selection-custom'),

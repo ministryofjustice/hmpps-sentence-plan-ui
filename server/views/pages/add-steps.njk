@@ -5,7 +5,6 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
-{% from "hmpps/components/date-picker/macro.njk" import hmppsDatePicker %}
 {% from "moj/components/side-navigation/macro.njk" import mojSideNavigation %}
 {% from "../components/error-summary/error-summary.njk" import errorSummary %}
 
@@ -22,6 +21,8 @@
     </style>
 {% endblock %}
 
+{% set mainClasses = "app-container govuk-body" %}
+
 {% block pageTitle %}
     {% if not errors %}
         {{ locale.page.title }}
@@ -31,27 +32,12 @@
 {% endblock %}
 
 {% block content %}
+{{ super() }}
 <a class="govuk-back-link" href="{{ data.returnLink }}">{{ locale.common.backLink.text }}</a>
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
         <span class="govuk-caption-l">{{ locale.mainHeading.caption }}</span>
         <h1 class="govuk-heading-l">{{ locale.mainHeading.title }}</h1>
-
-        {% set summaryContentHtml %}
-            <h3 class="govuk-heading-s">{{ locale.detail.header1 }}</h3>
-            <p class="govuk-body">{{ locale.detail.detail1 }}</p>
-            <h3 class="govuk-heading-s">{{ locale.detail.header2 }}</h3>
-            <p class="govuk-body">{{ locale.detail.detail2 }}</p>
-            <h3 class="govuk-heading-s">{{ locale.detail.header3 }}</h3>
-            <p class="govuk-body">{{ locale.detail.detail3 }}</p>
-            <h3 class="govuk-heading-s">{{ locale.detail.header4 }}</h3>
-            <p class="govuk-body">{{ locale.detail.detail4 }}</p>
-        {% endset %}
-
-        {{ govukDetails({
-            summaryText: locale.detail.heading,
-            html: summaryContentHtml
-        }) }}
     </div>
 </div>
 
@@ -59,6 +45,8 @@
     <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
     <input type="hidden" id="_areaOfNeed" value="{{ data.areaOfNeed }}"/>
     {% set steps = data.form.steps if data.form.steps and data.form.steps.length > 0 else [{}] %}
+
+    <button aria-hidden="true" tabindex="-1" value="add-step" type="submit" name="action" class="govuk-visually-hidden">Visually hidden add another step</button>
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
@@ -69,7 +57,7 @@
                         <span class="govuk-hint">{{ locale.step.actor.hint }}</span>
                     </dt>
                     <dt class="govuk-summary-list__value govuk-visually-hidden--mobile">
-                        <label class="govuk-label">{{ locale.step.description.label }}</label>
+                        <label id="step-descriptions-label" class="govuk-label">{{ locale.step.description.label }}</label>
                         <span class="govuk-hint">{{ locale.step.description.hint }}</span>
                     </dt>
                 </div>
@@ -85,6 +73,14 @@
                                 }) %}
                             {% endfor %}
 
+                            {% set errorMessage = false %}
+
+                            {% if errors.body['steps.' + loop.index0 + '.actor' ].notContains %}
+                                {% set errorMessage = {
+                                    'text': locale.errors['step-actor'].notContains
+                                } %}
+                            {% endif %}
+
                             {{ govukSelect({
                                 id: "step-actor-" + loop.index,
                                 name: "step-actor-" + loop.index,
@@ -96,7 +92,8 @@
                                     text: locale.step.actor.hint,
                                     classes: 'govuk-visually-hidden--desktop'
                                 },
-                                items: actorItemsList
+                                items: actorItemsList,
+                                errorMessage: errorMessage
                             }) }}
                         </dt>
                         <dt class="govuk-summary-list__value">
@@ -138,9 +135,15 @@
                             }) }}
                         </dt>
                         <dt class="govuk-summary-list__value">
-                            <button value="remove-step-{{ loop.index }}" type="submit" name="action" class="govuk-link govuk-!-margin-bottom-0" data-module="govuk-button">
-                                {{ locale.removeStepLinkButton }}
+                            {% if steps|length > 1 %}
+                              <button value="remove-step-{{ loop.index }}" type="submit" name="action" class="govuk-link govuk-!-margin-bottom-0" data-module="govuk-button">
+                                  {{ locale.removeStepLinkButton }}
+                              </button>
+                            {% else %}
+                            <button value="clear-step-{{ loop.index }}" type="submit" name="action" class="govuk-link govuk-!-margin-bottom-0" data-module="govuk-button">
+                              {{ locale.clearStepLinkButton }}
                             </button>
+                            {% endif %}
                         </dt>
                     </div>
                 {% endfor %}

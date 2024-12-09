@@ -71,6 +71,7 @@ jobs:
       image: ubuntu-2204:current
       resource_class: medium
     working_directory: ~/app
+    parallelism: 3
     steps:
       - checkout
       - attach_workspace:
@@ -138,7 +139,7 @@ workflows:
           filters:
             branches:
               only:
-                - main
+                - deployment-build
       - hmpps/deploy_env:
           name: deploy_dev
           env: "dev"
@@ -149,7 +150,7 @@ workflows:
           filters:
             branches:
               only:
-                - main
+                - deployment-build
           requires:
             - helm_lint
             - publish_docker
@@ -159,7 +160,7 @@ workflows:
           filters:
             branches:
               only:
-                - main
+                - deployment-build
           requires:
             - deploy_dev
       - hmpps/deploy_env:
@@ -175,7 +176,7 @@ workflows:
           filters:
             branches:
               only:
-                - main
+                - deployment-build
           requires:
             - request-preprod-approval
           helm_timeout: 5m
@@ -184,7 +185,7 @@ workflows:
           filters:
             branches:
               only:
-                - main
+                - deployment-build
           requires:
             - deploy_preprod
       - hmpps/deploy_env:
@@ -202,7 +203,7 @@ workflows:
           filters:
             branches:
               only:
-                - main
+                - deployment-build
           requires:
             - request-prod-approval
           helm_timeout: 5m
@@ -238,6 +239,36 @@ workflows:
           context:
             - hmpps-common-vars
             - hmpps-sentence-plan-test
+          requires:
+            - publish_docker
+          helm_timeout: 5m
+
+  deploy-to-dev-env:
+    when:
+      and:
+        - equal: [ "dev", << pipeline.parameters.deploy >> ]
+    jobs:
+      - hmpps/build_docker:
+          name: build_docker
+          publish: false
+          persist_container_image: true
+          jira_update: true
+          pipeline_id: << pipeline.id >>
+          pipeline_number: << pipeline.number >>
+          context: hmpps-common-vars
+      - hmpps/publish_docker:
+          name: publish_docker
+          publish_latest_tag: false
+          context: hmpps-common-vars
+          requires:
+            - build_docker
+      - hmpps/deploy_env:
+          name: deploy_dev
+          env: "dev"
+          jira_update: true
+          pipeline_id: << pipeline.id >>
+          pipeline_number: << pipeline.number >>
+          context: hmpps-common-vars
           requires:
             - publish_docker
           helm_timeout: 5m
