@@ -22,8 +22,22 @@ describe('Rendering', () => {
       })
   })
 
-  it('Should check if the entries are displayed correctly', () => {
-    cy.visit('/about')
-    cy.get('.sentence-info').invoke('text').should('not.be.empty') // check table contents are not empty until we can check for specifics
+  it('Should check if the hard-coded entries are displayed correctly', () => {
+    cy.get('tbody > :nth-child(2)')
+      .invoke('text')
+      .then(text => {
+        expect(text).to.include('Custodial Sentence  (4 years, 2 months and 6 days)')
+        expect(text).to.include('12 January 2029')
+        expect(text).to.include('10 hours')
+        expect(text).to.include('3 days')
+      })
+    cy.get('tbody > :nth-child(3)')
+      .invoke('text')
+      .then(text => {
+        expect(text).to.include('ORA Community Order  (5 months and 29 days)')
+        expect(text).to.include('18 May 2025')
+        expect(text).to.include('No')
+        expect(text).to.include('No')
+      })
   })
 })
