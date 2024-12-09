@@ -130,3 +130,7 @@ integration_tests/screenshots/
 .run
 
 cypress/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
