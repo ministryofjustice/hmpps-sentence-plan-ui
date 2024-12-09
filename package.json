@@ -100,6 +100,7 @@
     "nunjucks": "^3.2.4",
     "passport": "^0.7.0",
     "passport-oauth2": "^1.8.0",
+    "@playwright/test": "^1.49.0",
     "redis": "^4.7.0",
     "reflect-metadata": "^0.2.2",
     "superagent": "^10.1.1",
@@ -109,7 +110,6 @@
   "devDependencies": {
     "@faker-js/faker": "^9.2.0",
     "@jgoz/esbuild-plugin-typecheck": "^4.0.2",
-    "@playwright/test": "^1.49.0",
     "@ministryofjustice/eslint-config-hmpps": "^0.0.1-beta.1",
     "@types/bunyan": "^1.8.11",
     "@types/bunyan-format": "^0.2.9",
