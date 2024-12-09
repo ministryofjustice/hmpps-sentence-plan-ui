@@ -22,7 +22,7 @@
       }
     },
     "startWorking": {
-      "label": "Can {{ subject.givenName }} start working on this goal now?",
+      "label": "Can bob start working on this goal now?",
       "options": {
         "yes": "Yes",
         "no": "No, it is a future goal"
