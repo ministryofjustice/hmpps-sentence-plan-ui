@@ -87,3 +87,7 @@
   background-color: govuk-colour('light-grey');
   @include govuk-responsive-padding(4);
 }
+
+.sentence-info .single-sentence .govuk-table__cell {
+  border-bottom: 0;
+}

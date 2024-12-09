@@ -3,12 +3,11 @@ describe('Rendering', () => {
     cy.createSentencePlan().then(planDetails => {
       cy.wrap(planDetails).as('plan')
       cy.openSentencePlan(planDetails.oasysAssessmentPk)
-      // UNCOMMENTED WHEN ABOUT LINKS ARE RE-ADDED cy.get('.moj-primary-navigation__container').contains('a', 'About').click()
+      cy.get('.moj-primary-navigation__container').contains('a', 'About').click()
     })
   })
 
   it('Should check the page rendered correctly', () => {
-    cy.visit('/about')
     cy.url().should('include', '/about')
     cy.get('h1').should('include.text', 'About')
     cy.get('h2').contains('Sentence information')
@@ -25,6 +24,6 @@ describe('Rendering', () => {
 
   it('Should check if the entries are displayed correctly', () => {
     cy.visit('/about')
-    cy.get('.about-table-body').invoke('text').should('not.be.empty') // check table contents are not empty until we can check for specifics
+    cy.get('.sentence-info').invoke('text').should('not.be.empty') // check table contents are not empty until we can check for specifics
   })
 })

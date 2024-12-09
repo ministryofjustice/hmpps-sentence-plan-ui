@@ -65,7 +65,7 @@
 
             {% if data.deliusData.sentences.length > 0 %}
             <h2 class="govuk-heading-m">Sentence information</h2>
-            <table class="govuk-table govuk-!-margin-bottom-4 about-table-header" >
+            <table class="govuk-table govuk-!-margin-bottom-4 sentence-info" >
 
                 <tr class="govuk-body-s">
                     <td class="govuk-padding-right--25">{{ locale.detail.sentenceHeading }}</td>
@@ -75,7 +75,7 @@
                 </tr>
 
                 {% for sentence in data.deliusData.sentences %}
-                    <tr class="govuk-table__row govuk-body-l about-table-body">
+                    <tr class="govuk-table__row govuk-body-l {{ 'single-sentence' if data.deliusData.sentences.length == 1 }}">
                         <td class = "govuk-table__cell govuk-padding-bottom--25 ">{{ sentence.description }} <br/> {{ sentenceLength(sentence.startDate, sentence.endDate, locale.common.sentence) }}</td>
                         <td class = "govuk-table__cell govuk-padding-bottom--25">{{ sentence.endDate | formatSimpleDate }}</td>
                         <td class = "govuk-table__cell govuk-padding-bottom--25">
