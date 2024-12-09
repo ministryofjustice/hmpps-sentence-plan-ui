@@ -1,21 +1,23 @@
 import { test, expect } from '@playwright/test'
+import { createSentencePlan, openSentencePlan } from './sentencePlanSession.setup'
 
 test('test', async ({ page }) => {
-  await page.goto('http://localhost:7072/')
-  await page.getByLabel('Target service').selectOption('sentence-plan')
-  await page.getByRole('button', { name: 'Create handover link' }).click()
-  const page1Promise = page.waitForEvent('popup')
-  await page.getByRole('button', { name: 'Open' }).click()
-  const page1 = await page1Promise
-  await page1.getByRole('button', { name: 'Create goal' }).click()
-  await page1.getByLabel(/What goal should/).click()
-  await page1.getByLabel(/What goal should/).fill('This is the goal title')
-  await page1.getByLabel('No', { exact: true }).check()
-  await page1
+  const sentencePlan = await createSentencePlan()
+  const sentencePlanPage = await openSentencePlan(sentencePlan.oasysAssessmentPk)
+
+  await sentencePlanPage.goto('http://localhost:3000/plan')
+  await expect(sentencePlanPage.locator('h1')).toContainText('plan')
+
+  await sentencePlanPage.getByRole('button', { name: 'Create goal' }).click()
+  await sentencePlanPage.getByLabel(/What goal should/).click()
+  await sentencePlanPage.getByLabel(/What goal should/).fill('This is the goal title')
+  await sentencePlanPage.getByLabel('No', { exact: true }).check()
+  await sentencePlanPage
     .getByRole('group', { name: /start working on this goal now/ })
     .getByLabel('Yes')
     .check()
-  await page1.getByLabel(/In 3 months/).check()
-  await page1.getByRole('button', { name: 'Save without steps' }).click()
-  await expect(page1.locator('h2')).toContainText('This is the goal title')
+  await sentencePlanPage.getByLabel(/In 3 months/).check()
+  await sentencePlanPage.getByRole('button', { name: 'Save without steps' }).click()
+  await expect(sentencePlanPage.locator('h2')).toContainText('This is the goal title')
+  await sentencePlanPage.screenshot({ path: 'test-results/create-goal.png' })
 })
