@@ -131,7 +131,7 @@ workflows:
             - build_docker
       - hmpps/publish_docker:
           name: publish_docker
-          publish_latest_tag: true
+          publish_latest_tag: false
           context: hmpps-common-vars
           requires:
             - unit_test
@@ -139,7 +139,7 @@ workflows:
           filters:
             branches:
               only:
-                - deployment-build
+                - main
       - hmpps/deploy_env:
           name: deploy_dev
           env: "dev"
@@ -150,19 +150,28 @@ workflows:
           filters:
             branches:
               only:
-                - deployment-build
+                - main
           requires:
             - helm_lint
             - publish_docker
           helm_timeout: 5m
+      - hmpps/publish_docker:
+          name: publish_docker_latest
+          publish_latest_tag: true
+          context: hmpps-common-vars
+          requires:
+            - unit_test
+            - e2e_test
+          filters:
+            branches:
+              only:
+                - production
       - request-preprod-approval:
           type: approval
           filters:
             branches:
               only:
-                - deployment-build
-          requires:
-            - deploy_dev
+                - production
       - hmpps/deploy_env:
           name: deploy_preprod
           env: "preprod"
@@ -176,16 +185,17 @@ workflows:
           filters:
             branches:
               only:
-                - deployment-build
+                - production
           requires:
             - request-preprod-approval
+            - publish_docker_latest
           helm_timeout: 5m
       - request-prod-approval:
           type: approval
           filters:
             branches:
               only:
-                - deployment-build
+                - production
           requires:
             - deploy_preprod
       - hmpps/deploy_env:
@@ -203,9 +213,10 @@ workflows:
           filters:
             branches:
               only:
-                - deployment-build
+                - production
           requires:
             - request-prod-approval
+            - publish_docker_latest
           helm_timeout: 5m
 
   deploy-to-test-env:
@@ -239,36 +250,6 @@ workflows:
           context:
             - hmpps-common-vars
             - hmpps-sentence-plan-test
-          requires:
-            - publish_docker
-          helm_timeout: 5m
-
-  deploy-to-dev-env:
-    when:
-      and:
-        - equal: [ "dev", << pipeline.parameters.deploy >> ]
-    jobs:
-      - hmpps/build_docker:
-          name: build_docker
-          publish: false
-          persist_container_image: true
-          jira_update: true
-          pipeline_id: << pipeline.id >>
-          pipeline_number: << pipeline.number >>
-          context: hmpps-common-vars
-      - hmpps/publish_docker:
-          name: publish_docker
-          publish_latest_tag: false
-          context: hmpps-common-vars
-          requires:
-            - build_docker
-      - hmpps/deploy_env:
-          name: deploy_dev
-          env: "dev"
-          jira_update: true
-          pipeline_id: << pipeline.id >>
-          pipeline_number: << pipeline.number >>
-          context: hmpps-common-vars
           requires:
             - publish_docker
           helm_timeout: 5m
