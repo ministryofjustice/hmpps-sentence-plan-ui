@@ -1,13 +1,9 @@
-import { RoshData } from '../@types/Rosh'
-import { parsedRoshData, roSHData, unComplitedRoSH } from '../testutils/data/roshData'
-
 import {
   generateOauthClientToken,
   convertToTitleCase,
   dateToISOFormat,
   dateWithYear,
   formatDate,
-  formatRoSHData,
   goalStatusToTabName,
   initialiseName,
   moveGoal,
@@ -62,12 +58,6 @@ describe('toKebabCase', () => {
   })
 })
 
-describe('to return formated RoSH data', () => {
-  expect(formatRoSHData(roSHData)).toEqual(parsedRoshData)
-})
-describe('to return uncompleted ', () => {
-  expect(formatRoSHData({} as RoshData)).toEqual(unComplitedRoSH)
-})
 describe('to return formated date ', () => {
   expect(formatDate('2000-05-09')).toEqual('9 May 2000')
 })
