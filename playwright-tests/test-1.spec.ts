@@ -5,7 +5,7 @@ test('test', async () => {
   const sentencePlan = await createSentencePlan()
   const sentencePlanPage = await openSentencePlan(sentencePlan.oasysAssessmentPk)
 
-  await sentencePlanPage.goto('http://localhost:3000/plan')
+  await sentencePlanPage.goto('/plan')
   await expect(sentencePlanPage.locator('h1')).toContainText('plan')
 
   await sentencePlanPage.getByRole('button', { name: 'Create goal' }).click()

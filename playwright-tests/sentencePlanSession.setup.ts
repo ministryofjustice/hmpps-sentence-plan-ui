@@ -6,8 +6,6 @@ import { AccessMode } from '../server/@types/Handover'
 // import { AccessMode } from '../../../server/@types/Handover'
 
 // Load environment variables from playwright.env
-dotenv.config({ path: 'playwright.env' })
-
 export const createSentencePlan = async () => {
   const oasysAssessmentPk = Math.random().toString().substring(2, 9)
 

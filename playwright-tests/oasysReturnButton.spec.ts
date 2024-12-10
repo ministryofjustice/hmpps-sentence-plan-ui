@@ -2,8 +2,6 @@ import { test, expect } from '@playwright/test'
 import dotenv from 'dotenv'
 import { createSentencePlan, openSentencePlan } from './sentencePlanSession.setup'
 
-dotenv.config({ path: 'playwright.env' })
-
 let sentencePlanPage: any
 
 test.beforeAll(async () => {

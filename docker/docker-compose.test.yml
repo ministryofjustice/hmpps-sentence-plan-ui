@@ -16,18 +16,18 @@ services:
       OASYS_BASE_URL: http://oastub:3000
       OASYS_RETURN_URLS: http://oastub:3000
 
-  cypress:
-    image: cypress/included
+  playwright:
+    image: mcr.microsoft.com/playwright:v1.49.1-noble
     environment:
-      CYPRESS_BASE_URL: http://ui:3000
-      CYPRESS_ARNS_HANDOVER_URL: http://arns-handover:7070
-      CYPRESS_HMPPS_AUTH_URL: http://hmpps-auth:9090
-      CYPRESS_SP_API_URL: http://api:8080
-      CYPRESS_OASTUB_URL: http://oastub:3000
-      CYPRESS_COORDINATOR_API_URL: http://coordinator-api:8080
+      BASE_URL: http://ui:3000
+      ARNS_HANDOVER_URL: http://arns-handover:7070
+      HMPPS_AUTH_URL: http://hmpps-auth:9090
+      SP_API_URL: http://api:8080
+      OASTUB_URL: http://oastub:3000
+      COORDINATOR_API_URL: http://coordinator-api:8080
     volumes:
-      - ../:/integration_tests
-    working_dir: /integration_tests
+      - ../:/playwright-tests
+    working_dir: /playwright-tests
 
 volumes:
   test_results:

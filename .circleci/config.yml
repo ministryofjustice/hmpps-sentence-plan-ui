@@ -94,11 +94,11 @@ jobs:
           command: make save-logs OUTPUT_LOGS_DIR=~/docker-logs PROJECT_NAME="hmpps-sentence-plan-test"
           when: on_fail
       - store_test_results:
-          path: test_results
+          path: playwright-report
       - store_artifacts:
-          path: cypress/videos
+          path: playwright-report/videos
       - store_artifacts:
-          path: integration_tests/screenshots
+          path: playwright-report/screenshots
       - store_artifacts:
           path: ~/docker-logs
 
