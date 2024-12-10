@@ -3,7 +3,6 @@ import flash from 'connect-flash'
 import { Router } from 'express'
 import { Strategy } from 'passport-oauth2'
 import config from '../config'
-import tokenVerifier from '../data/tokenVerification'
 import { generateOauthClientToken } from '../utils/utils'
 import URLs from '../routes/URLs'
 
@@ -76,15 +75,6 @@ export default function setupAuthentication() {
         return req.session.destroy(() => res.redirect(authSignOutUrl))
       })
     } else res.redirect(authSignOutUrl)
-  })
-
-  router.use(async (req, res, next) => {
-    if (req.isAuthenticated() && (await tokenVerifier(req))) {
-      return next()
-    }
-
-    req.session.returnTo = req.originalUrl
-    return res.redirect('/sign-in')
   })
 
   router.use((req, res, next) => {
