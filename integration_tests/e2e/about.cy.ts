@@ -22,8 +22,10 @@ describe('Rendering', () => {
       })
   })
 
-  it('Should check if the entries are displayed correctly', () => {
-    cy.visit('/about')
-    cy.get('.sentence-info').invoke('text').should('not.be.empty') // check table contents are not empty until we can check for specifics
+  it('Should check if the hard-coded entries in Sentence information are displayed correctly', () => {
+    cy.get('tbody > :nth-child(2) > :nth-child(1)').contains('Custodial Sentence (4 years, 2 months and 6 days)') // this will select the first cell in the first row
+    cy.get('tbody > :nth-child(2) > :nth-child(2)').contains('12 January 2029')
+    cy.get('tbody > :nth-child(2) > :nth-child(3)').contains('10 hours')
+    cy.get('tbody > :nth-child(2) > :nth-child(4)').contains('3 days')
   })
 })
