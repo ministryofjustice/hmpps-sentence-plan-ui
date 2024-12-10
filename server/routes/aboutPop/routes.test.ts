@@ -5,7 +5,6 @@ import locale from './locale.json'
 import URLs from '../URLs'
 import testPopData from '../../testutils/data/popData'
 import ReferentialDataService from '../../services/sentence-plan/referentialDataService'
-import { roSHData } from '../../testutils/data/roshData'
 import { AreaOfNeed } from '../../testutils/data/referenceData'
 import testPlan from '../../testutils/data/planData'
 import testHandoverContext from '../../testutils/data/handoverData'
@@ -26,7 +25,6 @@ jest.mock('../../services/sentence-plan/assessmentService', () => {
 jest.mock('../../services/sentence-plan/infoService', () => {
   return jest.fn().mockImplementation(() => ({
     getPopData: jest.fn().mockResolvedValue(testPopData),
-    getRoSHData: jest.fn().mockResolvedValue(roSHData),
   }))
 })
 
