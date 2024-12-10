@@ -156,7 +156,7 @@ workflows:
             - publish_docker
           helm_timeout: 5m
       - hmpps/publish_docker:
-          name: publish_docker
+          name: publish_docker_latest
           publish_latest_tag: true
           context: hmpps-common-vars
           requires:
@@ -188,6 +188,7 @@ workflows:
                 - production
           requires:
             - request-preprod-approval
+            - publish_docker_latest
           helm_timeout: 5m
       - request-prod-approval:
           type: approval
@@ -215,6 +216,7 @@ workflows:
                 - production
           requires:
             - request-prod-approval
+            - publish_docker_latest
           helm_timeout: 5m
 
   deploy-to-test-env:
