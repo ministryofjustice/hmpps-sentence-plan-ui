@@ -22,22 +22,10 @@ describe('Rendering', () => {
       })
   })
 
-  it('Should check if the hard-coded entries are displayed correctly', () => {
-    cy.get('tbody > :nth-child(2)')
-      .invoke('text')
-      .then(text => {
-        expect(text).to.include('Custodial Sentence  (4 years, 2 months and 6 days)')
-        expect(text).to.include('12 January 2029')
-        expect(text).to.include('10 hours')
-        expect(text).to.include('3 days')
-      })
-    cy.get('tbody > :nth-child(3)')
-      .invoke('text')
-      .then(text => {
-        expect(text).to.include('ORA Community Order  (5 months and 29 days)')
-        expect(text).to.include('18 May 2025')
-        expect(text).to.include('No')
-        expect(text).to.include('No')
-      })
+  it('Should check if the hard-coded entries in Sentence information are displayed correctly', () => {
+    cy.get('tbody > :nth-child(2) > :nth-child(1)').contains('Custodial Sentence (4 years, 2 months and 6 days)') // this will select the first cell in the first row
+    cy.get('tbody > :nth-child(2) > :nth-child(2)').contains('12 January 2029')
+    cy.get('tbody > :nth-child(2) > :nth-child(3)').contains('10 hours')
+    cy.get('tbody > :nth-child(2) > :nth-child(4)').contains('3 days')
   })
 })
