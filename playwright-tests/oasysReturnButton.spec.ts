@@ -1,8 +1,8 @@
-import { test, expect } from '@playwright/test'
+import { test, expect, Page } from '@playwright/test'
 import { createSentencePlan, openSentencePlan } from './sentencePlanSession.setup'
 
 test.describe('OASys Return Button', () => {
-  let sentencePlanPage
+  let sentencePlanPage: Page
 
   test.beforeAll(async () => {
     const sentencePlan = await createSentencePlan()
