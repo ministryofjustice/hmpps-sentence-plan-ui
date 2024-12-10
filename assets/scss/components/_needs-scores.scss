@@ -14,11 +14,12 @@ $white-needs-score-background-colour: #ffffff;
 }
 
 .needs-score {
-  max-width: map-get($govuk-grid-widths, 'full');
+  width: map-get($govuk-grid-widths, 'full');
   @include govuk-media-query($from: "desktop") {
-    max-width: map-get($govuk-grid-widths, 'one-third');
+    // We don't want this to resize when at desktop sizes
+    width: 350px;
   }
-  padding: 10px 0px 10px;
+  padding: 10px 0 10px;
   box-sizing: border-box;
 }
 
@@ -30,13 +31,14 @@ $white-needs-score-background-colour: #ffffff;
 
 @for $i from 0 through 10 {
   .needs-score-label-wrapper--position-#{$i} {
-    margin-left: ($i - 1) * 10%;
+    // set the left margin at the score position minus half the width of the needs-score-label__card below
+    margin-left: calc(($i * 10%) - 40px);
   }
 }
 
 .needs-score-label__card {
   width: 76px;
-  margin: 0 auto;
+  margin: 0;
   background-color: govuk-colour("white");
   border: 1px solid govuk-colour("black");
 
@@ -174,7 +176,7 @@ $white-needs-score-background-colour: #ffffff;
 }
 
 .needs-score-bar--small-tenths {
-  & > div:last-child{
+  & > div:last-child {
     border-right: 1px solid govuk-colour("black");
   }
 
