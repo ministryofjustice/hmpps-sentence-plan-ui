@@ -54,7 +54,7 @@ export const openSentencePlan = async (
   const handoverResponse = await response.json()
   await page.goto(`${handoverResponse.handoverLink}?clientId=${process.env.ARNS_HANDOVER_CLIENT_ID}`)
 
-  await page.goto('http://localhost:3000/')
+  await page.goto('/')
   return page
 }
 
