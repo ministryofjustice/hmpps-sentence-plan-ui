@@ -1,5 +1,4 @@
 import { chromium, Page, request } from '@playwright/test'
-import dotenv from 'dotenv'
 import { AccessMode } from '../server/@types/Handover'
 // import { NewGoal } from '../../../server/@types/NewGoalType'
 // import { NewStep } from '../../../server/@types/StepType'

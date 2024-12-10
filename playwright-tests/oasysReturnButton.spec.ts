@@ -1,5 +1,4 @@
 import { test, expect } from '@playwright/test'
-import dotenv from 'dotenv'
 import { createSentencePlan, openSentencePlan } from './sentencePlanSession.setup'
 
 let sentencePlanPage: any
