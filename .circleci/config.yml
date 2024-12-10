@@ -131,7 +131,7 @@ workflows:
             - build_docker
       - hmpps/publish_docker:
           name: publish_docker
-          publish_latest_tag: true
+          publish_latest_tag: false
           context: hmpps-common-vars
           requires:
             - unit_test
@@ -139,7 +139,7 @@ workflows:
           filters:
             branches:
               only:
-                - deployment-build
+                - main
       - hmpps/deploy_env:
           name: deploy_dev
           env: "dev"
@@ -155,6 +155,17 @@ workflows:
             - helm_lint
             - publish_docker
           helm_timeout: 5m
+      - hmpps/publish_docker:
+          name: publish_docker
+          publish_latest_tag: true
+          context: hmpps-common-vars
+          requires:
+            - unit_test
+            - e2e_test
+          filters:
+            branches:
+              only:
+                - production
       - request-preprod-approval:
           type: approval
           filters:
