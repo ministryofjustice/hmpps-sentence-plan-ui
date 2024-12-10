@@ -4,7 +4,6 @@ import { appWithAllRoutes } from '../testutils/appSetup'
 import URLs from '../URLs'
 import testPopData from '../../testutils/data/popData'
 import ReferentialDataService from '../../services/sentence-plan/referentialDataService'
-import { roSHData } from '../../testutils/data/roshData'
 import handoverData from '../../testutils/data/handoverData'
 import { testGoal } from '../../testutils/data/goalData'
 
@@ -21,7 +20,6 @@ jest.mock('../../services/sessionService', () => {
 jest.mock('../../services/sentence-plan/infoService', () => {
   return jest.fn().mockImplementation(() => ({
     getPopData: jest.fn().mockResolvedValue(testPopData),
-    getRoSHData: jest.fn().mockResolvedValue(roSHData),
   }))
 })
 
