@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test'
 import { createSentencePlan, openSentencePlan } from './sentencePlanSession.setup'
 
-test('test', async ({ page }) => {
+test('test', async () => {
   const sentencePlan = await createSentencePlan()
   const sentencePlanPage = await openSentencePlan(sentencePlan.oasysAssessmentPk)
 

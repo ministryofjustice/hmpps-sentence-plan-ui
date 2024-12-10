@@ -11,7 +11,7 @@ test.beforeAll(async () => {
   sentencePlanPage = await openSentencePlan(sentencePlan.oasysAssessmentPk)
 })
 
-test('Displays and references the button correctly on the plan overview page', async ({ page }) => {
+test('Displays and references the button correctly on the plan overview page', async () => {
   const returnButton = await sentencePlanPage.getByRole('button', { name: 'Return to OASys' })
   await expect(returnButton).toBeVisible()
   const buttonHref = await returnButton.getAttribute('href')
