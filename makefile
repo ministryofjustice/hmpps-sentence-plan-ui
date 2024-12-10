@@ -39,7 +39,7 @@ test: ## Runs the unit test suite.
 	docker compose ${DEV_COMPOSE_FILES} run --rm --no-deps ui npm run test
 
 BASE_URL ?= "http://localhost:3000"
-e2e: ## Run the end-to-end tests locally in the Cypress app. Override the default base URL with BASE_URL=...
+e2e: ## Run the end-to-end tests locally in Playwright. Override the default base URL with BASE_URL=...
 	@make install-node-modules
 	docker compose ${DEV_COMPOSE_FILES} up --no-recreate --wait
 	npm i
@@ -47,7 +47,7 @@ e2e: ## Run the end-to-end tests locally in the Cypress app. Override the defaul
 
 BASE_URL_CI ?= "http://ui:3000"
 e2e-ci: ## Run the end-to-end tests in parallel in a headless browser. Used in CI. Override the default base URL with BASE_URL_CI=...
-	docker compose ${TEST_COMPOSE_FILES} -p ${PROJECT_NAME}-test run --rm -e BASE_URL=${BASE_URL_CI} playwright
+	docker compose ${TEST_COMPOSE_FILES} -p ${PROJECT_NAME}-test run --rm -e BASE_URL=${BASE_URL_CI} playwright npx playwright test
 
 test-up: ## Stands up a test environment.
 	docker compose --progress plain ${LOCAL_COMPOSE_FILES} pull --policy missing
