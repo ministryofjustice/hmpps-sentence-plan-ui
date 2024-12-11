@@ -46,8 +46,9 @@ e2e: ## Run the end-to-end tests locally in Playwright. Override the default bas
 	npx playwright test
 
 BASE_URL_CI ?= "http://ui:3000"
+CI ?= true
 e2e-ci: ## Run the end-to-end tests in parallel in a headless browser. Used in CI. Override the default base URL with BASE_URL_CI=...
-	docker compose ${TEST_COMPOSE_FILES} -p ${PROJECT_NAME}-test run --rm -e BASE_URL=${BASE_URL_CI} playwright npx playwright test
+	docker compose ${TEST_COMPOSE_FILES} -p ${PROJECT_NAME}-test run --rm -e BASE_URL=${BASE_URL_CI} CI=${CI} playwright npx playwright test
 
 test-up: ## Stands up a test environment.
 	docker compose --progress plain ${LOCAL_COMPOSE_FILES} pull --policy missing
