@@ -14,6 +14,8 @@ test.describe('Simple create goal test', () => {
     await expect(sentencePlanPage.locator('h1')).toContainText('plan')
 
     await sentencePlanPage.getByRole('button', { name: 'Create goal' }).click()
+    await expect(sentencePlanPage).toHaveURL(/create-goal/)
+
     await sentencePlanPage.getByLabel(/What goal should/).click()
     await sentencePlanPage.getByLabel(/What goal should/).fill('This is the goal title')
     await sentencePlanPage.getByLabel('No', { exact: true }).check()
