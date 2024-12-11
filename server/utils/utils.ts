@@ -2,7 +2,6 @@ import { DateTime } from 'luxon'
 // eslint-disable-next-line import/no-extraneous-dependencies
 import camelCase from 'camelcase'
 import { Person } from '../@types/Person'
-import { RoshData } from '../@types/Rosh'
 import { NewStep, StepStatus } from '../@types/StepType'
 import { GoalStatus } from '../@types/GoalType'
 import config from '../config'
@@ -33,18 +32,6 @@ export const initialiseName = (fullName?: string): string | null => {
 
 export const toKebabCase = (string: string) =>
   isBlank(string) ? '' : string.trim().replace(/ /g, '-').toLowerCase().replace(',', '')
-
-export function formatRoSHData(data: RoshData) {
-  const { overallRisk, assessedOn, riskInCommunity } = data
-  if ([overallRisk, assessedOn, riskInCommunity].includes(undefined)) {
-    return { hasBeenCompleted: false }
-  }
-  return {
-    hasBeenCompleted: true,
-    riskInCommunity,
-    lastUpdated: formatDate(assessedOn),
-  }
-}
 
 export function formatPOPData(data: Person): Person {
   return { ...data, doB: formatDate(data.doB) }
