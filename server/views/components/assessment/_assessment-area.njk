@@ -68,17 +68,12 @@
                             <h3 class="govuk-heading-s">{{ assessment.title }} need score</h3>
                             <p class="govuk-body">{{ assessment.criminogenicNeedsScore }} out
                                 of {{ assessment.upperBound }}.
-                                 (Scores above
-                                {{ assessment.thresholdValue }} are high-scoring.)</p>
-                            <div class="govuk-grid-row">
-                                <div class="govuk-grid-column-full">
-                                    {{ needsScore({
-                                        "score": assessment.criminogenicNeedsScore,
-                                        "upperBound": assessment.upperBound,
-                                        "thresholdValue": assessment.thresholdValue
-                                    }) }}
-                                </div>
-                            </div>
+                                (Scores above {{ assessment.thresholdValue }} are high-scoring.)</p>
+                                {{ needsScore({
+                                    "score": assessment.criminogenicNeedsScore,
+                                    "upperBound": assessment.upperBound,
+                                    "thresholdValue": assessment.thresholdValue
+                                }) }}
                         </div>
                     {% else %}
                         {% if assessment.title in ['Finances', 'Health and wellbeing'] %}
