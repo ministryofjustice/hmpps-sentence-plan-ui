@@ -1,22 +1,22 @@
 {% extends "./plan-header-mini.njk" %}
-{% from "moj/components/button-menu/macro.njk" import mojButtonMenu %}
 {% from "moj/components/page-header-actions/macro.njk" import mojPageHeaderActions %}
 
 {% block extension %}
+    {% set buttonItems = [] %}
+    {% for item in header.items %}
+        {% if item !== "" %}
+            {% set buttonItems = buttonItems.concat(item) %}
+        {% endif %}
+    {% endfor %}
 
-            {% set buttonItems = [] %}
-            {% for item in header.items %}
-                {% if item !== "" %}
-                    {% set buttonItems = buttonItems.concat(item) %}
-                {% endif %}
-            {% endfor %}
-
-
-        {{ mojPageHeaderActions({
-            heading: {
-                text: header.heading
-            },
-            items: buttonItems
-        }) }}
-
+<form method="post">
+  <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+    {{ mojPageHeaderActions({
+      heading: {
+        text: header.heading,
+        classes: "govuk-heading-l govuk-!-margin-bottom-0"
+      },
+      items: buttonItems
+    }) }}
+  </form>
 {% endblock %}
