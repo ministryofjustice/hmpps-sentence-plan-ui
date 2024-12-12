@@ -54,7 +54,7 @@
 }) %}
 
 {% block pageTitle %}
-    {% if not errors.domain %}
+    {% if not (errors.domain | length) %}
         {{ locale.page.title }}
     {% else %}
         {{ locale.page.errorTitle }}
@@ -95,6 +95,9 @@
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
 
+          <p>{{ errors.domain | dump }}</p>
+          <p>{{ errors.domain | length > 0 }}</p>
+
             {% set errorList = [] %}
             {% if errors.domain['goals'] %}
                 {% set errorList = errorList.concat({
@@ -111,7 +114,7 @@
                 {% endif %}
             {% endfor %}
 
-            {% if errors.domain %}
+            {% if errors.domain | length > 0 %}
                 {{ govukErrorSummary({
                     titleText: "There is a problem",
                     errorList: errorList
@@ -202,9 +205,15 @@
 
                     {% set errorMessage = false %}
                     {% if errors.domain['goals.' + item.index + '.steps'].arrayNotEmpty %}
+                        {% if data.plan.agreementStatus === 'DRAFT' %}
+                          {% set errorText = locale.errors['steps'].arrayNotEmptyShortened %}
+                        {% else %}
+                          {% set errorText = locale.errors['steps'].arrayNotEmpty %}
+                        {% endif %}
+
                         {% set errorMessage = {
                             id: 'goal-summary-card-' + item.index,
-                            text: locale.errors['steps'].arrayNotEmptyShortened,
+                            text: errorText,
                             state: locale.goalSummaryCard.state.incomplete
                         } %}
                     {% endif %}
@@ -276,8 +285,8 @@
             {% endif %}
 
             {% if goalType == 'current' and goals.length == 0 %}
-                <div id="goal-list" class="{% if errors.domain %}govuk-form-group--error{% endif %}">
-                    {% if errors.domain %}
+                <div id="goal-list" class="{% if errors.domain['goals'] %}govuk-form-group--error{% endif %}">
+                    {% if errors.domain | length > 0 %}
                         {{ govukErrorMessage({
                             text: locale.errors['goals'].arrayNotEmpty
                         }) }}

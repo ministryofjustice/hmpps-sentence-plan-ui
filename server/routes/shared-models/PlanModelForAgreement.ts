@@ -1,14 +1,17 @@
-import { ArrayNotEmpty, IsDateString, IsEnum, Validate, ValidateNested } from 'class-validator'
+import { ArrayNotEmpty, IsDateString, IsEnum, Validate, ValidateIf, ValidateNested } from 'class-validator'
 import { Type } from 'class-transformer'
 import GoalModel from './GoalModel'
-import { PlanStatus } from '../../@types/PlanType'
+import { PlanAgreementStatus, PlanStatus } from '../../@types/PlanType'
 import AtLeastOneCurrentGoal from '../validators/AtLeastOneCurrentGoal'
 
-export default class PlanModel {
+export default class PlanModelForAgreement {
   uuid: string
 
   @IsEnum(PlanStatus)
   status: PlanStatus
+
+  @IsEnum(PlanAgreementStatus)
+  agreementStatus: PlanAgreementStatus
 
   @IsDateString()
   createdDate: string
