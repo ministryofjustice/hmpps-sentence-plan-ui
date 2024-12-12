@@ -47,6 +47,7 @@ describe('Rendering', () => {
       .then($red => $red.toArray().map(el => el.innerText.trim())) // trim whitespace
       .should('deep.equal', expectedText)
   })
+
   it('Should check the hard-coded labels appear next to the correct, predetermined areas in correct order', () => {
     cy.get('.govuk-accordion__section-summary-focus').eq(1).contains('Risk of reoffending')
     cy.get('.govuk-accordion__section-summary-focus').eq(3).contains('Risk of reoffending')
@@ -99,8 +100,9 @@ describe('Rendering', () => {
   it('Should check if the hard-coded data for high-scoring areas are displayed correctly and in order', () => {
     cy.get('h3.govuk-heading-s').eq(0).contains('This area is not linked to RoSH (risk of serious harm)')
     cy.get('h3.govuk-heading-s').eq(1).contains('This area is not linked to risk of reoffending')
-    cy.get('h3.govuk-heading-s').eq(2).contains('Motivation to make changes in this area')
-    cy.get('div.motivation').eq(0).contains('Sam wants to make changes but needs help')
+    cy.get('div.motivation')
+      .eq(0)
+      .contains('Motivation to make changes in this area Sam wants to make changes but needs help.')
     cy.get('h3.govuk-heading-s').eq(3).contains('There are no strengths or protective factors related to this area')
     cy.get('h3.govuk-heading-s').eq(4).contains('Thinking, behaviours and attitudes need score')
     cy.get('p.govuk-body').eq(2).contains('10 out of 10. (Scores above 2 are high-scoring')
