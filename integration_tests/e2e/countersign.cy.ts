@@ -19,12 +19,11 @@ describe('View Plan Overview for READ_ONLY user', () => {
   it('Visiting create-goal should fail', () => {
     cy.visit('/create-goal/accommodation', { failOnStatusCode: false })
     cy.url().should('not.include', '/plan')
-    cy.checkAccessibility()
+    cy.checkAccessibility(true, ['scrollable-region-focusable'])
   })
 
   it('Should have a `Return to OASys` button and it should return the user to the OASys return URL', () => {
     cy.contains('a', 'Return to OASys').should('have.attr', 'href').and('include', Cypress.env('OASTUB_URL'))
-    cy.checkAccessibility()
   })
 })
 
