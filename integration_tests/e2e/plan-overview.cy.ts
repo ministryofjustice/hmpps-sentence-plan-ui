@@ -151,7 +151,7 @@ describe('View Plan Overview for READ_WRITE user', () => {
 
     cy.get('.govuk-error-summary').should('contain', 'You must add steps to the goals')
     cy.get('.goal-summary-card--error').should('contain', 'Incomplete')
-    cy.get('p.govuk-error-message').should('contain', 'You must add steps to the goals!')
+    cy.get('p.govuk-error-message').should('contain', 'You must add steps to the goals')
   })
 
   it('Creates three new goals, and moves the middle goal up', () => {
