@@ -1,8 +1,7 @@
-import { ArrayNotEmpty, IsDateString, IsEnum, Validate, ValidateIf, ValidateNested } from 'class-validator'
+import { ArrayNotEmpty, ValidateIf, ValidateNested } from 'class-validator'
 import { Type } from 'class-transformer'
 import GoalModel from './GoalModel'
-import { PlanAgreementStatus, PlanStatus } from '../../@types/PlanType'
-import AtLeastOneCurrentGoal from '../validators/AtLeastOneCurrentGoal'
+import { PlanAgreementStatus } from '../../@types/PlanType'
 
 export default class AgreedPlanModel {
   @ValidateIf(o => o.agreementStatus !== PlanAgreementStatus.DRAFT)
