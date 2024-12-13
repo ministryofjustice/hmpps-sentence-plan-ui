@@ -8,7 +8,6 @@ import runMiddlewareChain from '../../testutils/runMiddlewareChain'
 import testHandoverContext from '../../testutils/data/handoverData'
 import { AccessMode } from '../../@types/Handover'
 import { PlanAgreementStatus, PlanType } from '../../@types/PlanType'
-import URLs from '../URLs'
 
 const oasysReturnUrl = 'https://oasys.return.url'
 
