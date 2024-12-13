@@ -138,6 +138,22 @@ describe('View Plan Overview for READ_WRITE user', () => {
     cy.get('.goal-date-and-notes > :nth-child(2)').contains('Removed during cypress test')
   })
 
+  it('Agreed plan shows validation error when goal has no steps', () => {
+    cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
+      cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal({ title: 'Test Accommodation 1' })).then(goal => {
+        cy.addStepToGoal(goal.uuid, DataGenerator.generateStep())
+        planOverview.agreePlan()
+        cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal({ title: 'Test Accommodation 2' }))
+      })
+    })
+
+    cy.visit('/plan')
+
+    cy.get('.govuk-error-summary').should('contain', 'You must add steps to the goals')
+    cy.get('.goal-summary-card--error').should('contain', 'Incomplete')
+    cy.get('p.govuk-error-message').should('contain', 'You must add steps to the goals!')
+  })
+
   it('Creates three new goals, and moves the middle goal up', () => {
     cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
       ;[1, 2, 3].forEach(i => {
