@@ -4,7 +4,7 @@ import locale from './locale.json'
 import { moveGoal } from '../../utils/utils'
 import URLs from '../URLs'
 import validateRequest, { getValidationErrors } from '../../middleware/validationMiddleware'
-import PlanModelForAgreement from '../shared-models/PlanModelForAgreement'
+import PlanReadyForAgreementModel from '../shared-models/PlanReadyForAgreementModel'
 import AgreedPlanModel from '../shared-models/AgreedPlanModel'
 import transformRequest from '../../middleware/transformMiddleware'
 import PlanOverviewQueryModel from './models/PlanOverviewQueryModel'
@@ -78,7 +78,7 @@ export default class PlanOverviewController {
       let validationModel
 
       if (req.method === 'POST' && plan.agreementStatus === PlanAgreementStatus.DRAFT) {
-        validationModel = PlanModelForAgreement
+        validationModel = PlanReadyForAgreementModel
       } else if (req.method === 'GET' && plan.agreementStatus !== PlanAgreementStatus.DRAFT) {
         validationModel = AgreedPlanModel
       }

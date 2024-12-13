@@ -10,7 +10,7 @@ import runMiddlewareChain from '../../testutils/runMiddlewareChain'
 import AgreePlanPostModel from './models/AgreePlanPostModel'
 import URLs from '../URLs'
 import { PlanAgreementStatus, PlanType } from '../../@types/PlanType'
-import PlanModelForAgreement from '../shared-models/PlanModelForAgreement'
+import PlanReadyForAgreementModel from '../shared-models/PlanReadyForAgreementModel'
 import { testGoal } from '../../testutils/data/goalData'
 import testHandoverContext from '../../testutils/data/handoverData'
 
@@ -64,7 +64,7 @@ describe('AgreePlanController', () => {
         it('should add error if no goals', () => {
           const badPlanData: PlanType = { ...testPlan, goals: [] }
 
-          const dataToBeValidated = plainToInstance(PlanModelForAgreement, badPlanData)
+          const dataToBeValidated = plainToInstance(PlanReadyForAgreementModel, badPlanData)
           const errors = getValidationErrors(dataToBeValidated)
 
           expect(errors).toMatchObject({
@@ -80,7 +80,7 @@ describe('AgreePlanController', () => {
             goals: [{ ...testGoal, steps: [] }],
           }
 
-          const dataToBeValidated = plainToInstance(PlanModelForAgreement, badPlanData)
+          const dataToBeValidated = plainToInstance(PlanReadyForAgreementModel, badPlanData)
           const errors = getValidationErrors(dataToBeValidated)
 
           expect(errors).toMatchObject({
