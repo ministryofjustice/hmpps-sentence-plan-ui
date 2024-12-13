@@ -79,7 +79,7 @@ describe('PlanOverviewController', () => {
       expect(res.render).toHaveBeenCalledWith('pages/countersign', viewData)
     })
 
-    it('should have validation errors if viewing Agreed Plan when Goal has no Steps', async () => {
+    it('should have validation error if viewing Agreed Plan when Goal has no Steps', async () => {
       const badPlanData: PlanType = {
         ...testPlan,
         agreementStatus: PlanAgreementStatus.AGREED,
