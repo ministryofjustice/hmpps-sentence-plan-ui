@@ -7,6 +7,8 @@ import testPlan from '../../testutils/data/planData'
 import runMiddlewareChain from '../../testutils/runMiddlewareChain'
 import testHandoverContext from '../../testutils/data/handoverData'
 import { AccessMode } from '../../@types/Handover'
+import { PlanAgreementStatus, PlanType } from '../../@types/PlanType'
+import URLs from '../URLs'
 
 const oasysReturnUrl = 'https://oasys.return.url'
 
@@ -75,6 +77,37 @@ describe('PlanOverviewController', () => {
       await runMiddlewareChain(controller.get, req, res, next)
 
       expect(res.render).toHaveBeenCalledWith('pages/countersign', viewData)
+    })
+
+    it('should have validation errors if viewing Agreed Plan when Goal has no Steps', async () => {
+      const badPlanData: PlanType = {
+        ...testPlan,
+        agreementStatus: PlanAgreementStatus.AGREED,
+        goals: [
+          {
+            ...testPlan.goals[0],
+            steps: [],
+          },
+        ],
+      }
+
+      req.method = 'GET'
+      req.services.planService.getPlanByUuid = jest.fn().mockResolvedValue(badPlanData)
+      await runMiddlewareChain(controller.get, req, res, next)
+
+      const viewDataWithValidationError = {
+        ...viewData,
+        data: {
+          ...viewData.data,
+          plan: badPlanData,
+        },
+        errors: {
+          ...viewData.errors,
+          domain: { 'goals.0.steps': { arrayNotEmpty: true } },
+        },
+      }
+
+      expect(res.render).toHaveBeenCalledWith('pages/plan', viewDataWithValidationError)
     })
 
     it('should permit valid type and status parameters', async () => {
