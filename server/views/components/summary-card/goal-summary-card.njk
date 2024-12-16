@@ -1,6 +1,6 @@
 {% from "./summary-card.njk" import summaryCard %}
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
-{% from "moj/components/button-menu/macro.njk" import mojButtonMenu %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/tag/macro.njk" import govukTag %}
 {% from "govuk/components/error-message/macro.njk" import govukErrorMessage %}
 
@@ -109,10 +109,15 @@
             </p>
 
             {% if params.buttons and params.buttons.length > 0 %}
-                {{ mojButtonMenu({
-                    items: params.buttons,
-                    classes: "goal-summary-card__buttons"
-                }) }}
+                <div class="govuk-button-group">
+                  {% for button in params.buttons %}
+                    {{ govukButton({
+                      text: button.text,
+                      href: button.href,
+                      classes: button.classes
+                    }) }}
+                  {% endfor %}
+                </div>
             {% endif %}
         {% endcall %}
     </div>
