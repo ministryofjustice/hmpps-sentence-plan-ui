@@ -92,11 +92,24 @@
 
 {% block content %}
     {{ super() }}
+
+    {% if data.plan.agreementStatus === 'AGREED' %}
+      {#                {% if data.plan.updatedDate > data.plan.agreementDate %}#TODO: SP2-836#}
+      <p class="govuk-body govuk-!-margin-top-5">{{ locale.lastUpdatedPlan }}</p>
+      {#                {% else %}#}
+      {#                    <p class="govuk-body">{{ locale.agreePlan }}</p>#}
+      {#                {% endif %}#}
+    {% elseif data.plan.agreementStatus === 'DO_NOT_AGREE' %}
+      <p class="govuk-body govuk-!-margin-top-5">{{ locale.notAgreePlan }}</p>
+    {% elseif data.plan.agreementStatus === 'DRAFT' %}
+      <p class="govuk-body govuk-!-margin-top-5">{{ locale.addStepSuggestion }}</p>
+    {% endif %}
+
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
 
-          <p>{{ errors.domain | dump }}</p>
-          <p>{{ errors.domain | length > 0 }}</p>
+{#          <p>{{ errors.domain | dump }}</p>#}
+{#          <p>{{ errors.domain | length > 0 }}</p>#}
 
             {% set errorList = [] %}
             {% if errors.domain['goals'] %}
@@ -127,18 +140,6 @@
                     text: locale.notificationBanner[data.status+'Goal'],
                     iconFallbackText: 'Success'
                 }) }}
-            {% endif %}
-
-            {% if data.plan.agreementStatus === 'AGREED' %}
-{#                {% if data.plan.updatedDate > data.plan.agreementDate %}#TODO: SP2-836#}
-                    <p class="govuk-body">{{ locale.lastUpdatedPlan }}</p>
-{#                {% else %}#}
-{#                    <p class="govuk-body">{{ locale.agreePlan }}</p>#}
-{#                {% endif %}#}
-            {% elseif data.plan.agreementStatus === 'DO_NOT_AGREE' %}
-                <p class="govuk-body">{{ locale.notAgreePlan }}</p>
-            {% elseif data.plan.agreementStatus === 'DRAFT' %}
-                <p class="govuk-body">{{ locale.addStepSuggestion }}</p>
             {% endif %}
 
             {{ mojSubNavigation({
