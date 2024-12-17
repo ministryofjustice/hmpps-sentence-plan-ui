@@ -87,40 +87,27 @@ describe('Rendering', () => {
       .and('include', '/create-goal/health-and-wellbeing')
   })
 
-  it('Should check if the hard-coded data for (high-scoring) thinking behaviour and attitudes are displayed correctly and in order', () => {
+  it('Should check if the data for (high-scoring) thinking behaviour and attitudes are displayed correctly and in order', () => {
+    const expectedHeadings = [
+      'This area is not linked to RoSH (risk of serious harm) ' +
+        'This area is not linked to risk of reoffending ' +
+        'Motivation to make changes in this area Sam wants to make changes but needs help. ' +
+        'There are no strengths or protective factors related to this area ' +
+        'Thinking, behaviours and attitudes need score ' +
+        '10 out of 10. (Scores above 2 are high-scoring.) ' +
+        '10 out of 10 ' +
+        'Lifestyle and associates need score ' +
+        '6 out of 6. (Scores above 1 are high-scoring.) ' +
+        '6 out of 6 ' +
+        'Create thinking, behaviours and attitudes goal',
+    ]
     cy.get('.govuk-accordion__show-all').first().click() // click show all in high-scoring assessment section
-    cy.contains('.govuk-accordion__section', 'Thinking, behaviours and attitudes')
-      .find('h3.govuk-heading-s')
-      .contains('This area is not linked to RoSH (risk of serious harm)')
-    cy.contains('.govuk-accordion__section', 'Thinking, behaviours and attitudes')
-      .find('h3.govuk-heading-s')
-      .contains('This area is not linked to risk of reoffending')
-    cy.contains('.govuk-accordion__section', 'Thinking, behaviours and attitudes')
-      .find('h3.govuk-heading-s')
-      .contains('There are no strengths or protective factors related to this area')
-    cy.contains('.govuk-accordion__section', 'Thinking, behaviours and attitudes')
-      .find('h3.govuk-heading-s')
-      .contains('Thinking, behaviours and attitudes need score')
-    cy.contains('.govuk-accordion__section', 'Thinking, behaviours and attitudes')
-      .find('h3.govuk-heading-s')
-      .contains('Lifestyle and associates need score')
-    cy.contains('.govuk-accordion__section', 'Thinking, behaviours and attitudes')
-      .find('div.motivation')
-      .contains('Motivation to make changes in this area Sam wants to make changes but needs help.')
-    cy.contains('.govuk-accordion__section', 'Thinking, behaviours and attitudes')
-      .find('.assessment-score') // class where the scores are rendered
-      .should('have.length', 2) // hard-coded to have 2 scores
-    cy.contains('.govuk-accordion__section', 'Thinking, behaviours and attitudes')
-      .find('.assessment-score')
-      .contains('p.govuk-body', '10 out of 10. (Scores above 2 are high-scoring')
-    cy.contains('.govuk-accordion__section', 'Thinking, behaviours and attitudes')
-      .find('.assessment-score')
-      .contains('.needs-score-label__card', '10 out of 10')
-    cy.contains('.govuk-accordion__section', 'Thinking, behaviours and attitudes')
-      .find('.assessment-score')
-      .contains('p.govuk-body', '6 out of 6. (Scores above 1 are high-scoring')
-    cy.contains('.govuk-accordion__section', 'Thinking, behaviours and attitudes')
-      .find('.assessment-score')
-      .contains('.needs-score-label__card', '6 out of 6')
+    cy.get('#accordion-default-content-1')
+      .eq(0) // grab the first accordion
+      .invoke('text')
+      .then(text => {
+        const trimText = text.trim().replace(/\s+/g, ' ') // regex to catch and replace excessive newlines to single whitespace
+        expect(trimText).to.include(expectedHeadings)
+      })
   })
 })
