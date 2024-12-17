@@ -13,7 +13,7 @@ export default class CreateGoal {
   }
 
   createGoal = (goalType: string) => {
-    cy.get(`.moj-button-menu a[href='/create-goal/${goalType}']`).click()
+    cy.get(`.moj-button-group a[href='/create-goal/${goalType}']`).click()
     cy.url().should('include', `/create-goal/${goalType}`)
   }
 
