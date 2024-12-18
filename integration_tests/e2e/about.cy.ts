@@ -88,22 +88,21 @@ describe('Rendering', () => {
   })
 
   it('Should check if the data for (high-scoring area) thinking behaviour and attitudes are displayed correctly and in order', () => {
-    const expectedHeadings = [
+    const expectedHeadings =
       'This area is not linked to RoSH (risk of serious harm) ' +
-        'This area is not linked to risk of reoffending ' +
-        'Motivation to make changes in this area Sam wants to make changes but needs help. ' +
-        'There are no strengths or protective factors related to this area ' +
-        'Thinking, behaviours and attitudes need score ' +
-        '10 out of 10. (Scores above 2 are high-scoring.) ' +
-        '10 out of 10 ' +
-        'Lifestyle and associates need score ' +
-        '6 out of 6. (Scores above 1 are high-scoring.) ' +
-        '6 out of 6 ' +
-        'Create thinking, behaviours and attitudes goal',
-    ]
+      'This area is not linked to risk of reoffending ' +
+      'Motivation to make changes in this area Sam wants to make changes but needs help. ' +
+      'There are no strengths or protective factors related to this area ' +
+      'Thinking, behaviours and attitudes need score ' +
+      '10 out of 10. (Scores above 2 are high-scoring.) ' +
+      '10 out of 10 ' +
+      'Lifestyle and associates need score ' +
+      '6 out of 6. (Scores above 1 are high-scoring.) ' +
+      '6 out of 6 ' +
+      'Create thinking, behaviours and attitudes goal'
     cy.get('.govuk-accordion__show-all').first().click() // click show all in high-scoring assessment section
-    cy.get('#accordion-default-content-1')
-      .eq(0) // grab the first accordion
+    cy.contains('.govuk-accordion__section', 'Thinking, behaviours and attitudes')
+      .find('#accordion-default-content-1')
       .invoke('text')
       .then(text => {
         const trimText = text.trim().replace(/\s+/g, ' ') // regex to catch and replace excessive newlines to single whitespace
@@ -112,18 +111,16 @@ describe('Rendering', () => {
   })
 
   it('Should check if the data for (low-scoring area) drug use are displayed correctly and in order', () => {
-    const expectedHeadings = [
+    const expectedHeadings =
       'This area is not linked to RoSH (risk of serious harm) ' +
-        'This area is not linked to risk of reoffending ' +
-        'There are no strengths or protective factors related to this area ' +
-        'Drug use need score ' +
-        '0 out of 8. (Scores above 0 are high-scoring.) ' +
-        '0 out of 8 ' +
-        'Create drug use goal',
-    ]
+      'This area is not linked to risk of reoffending ' +
+      'There are no strengths or protective factors related to this area ' +
+      'Drug use need score ' +
+      '0 out of 8. (Scores above 0 are high-scoring.) ' +
+      '0 out of 8 ' +
+      'Create drug use goal'
     cy.get('.govuk-accordion__show-all').eq(1).click()
-    cy.get('.govuk-accordion__section')
-      .eq(5)
+    cy.contains('.govuk-accordion__section', 'Drug use')
       .find('#accordion-default-content-1')
       .invoke('text')
       .then(text => {
@@ -133,18 +130,16 @@ describe('Rendering', () => {
   })
 
   it('Should check if the data for (non-scoring area) health and wellbeing are displayed correctly and in order', () => {
-    const expectedHeadings = [
+    const expectedHeadings =
       'This area is not linked to RoSH (risk of serious harm) ' +
-        'This area is not linked to risk of reoffending ' +
-        'Motivation to make changes in this area ' +
-        'This question was not applicable. ' +
-        'There are no strengths or protective factors related to this area ' +
-        'This area does not have a need score ' +
-        'Create health and wellbeing goal',
-    ]
+      'This area is not linked to risk of reoffending ' +
+      'Motivation to make changes in this area ' +
+      'This question was not applicable. ' +
+      'There are no strengths or protective factors related to this area ' +
+      'This area does not have a need score ' +
+      'Create health and wellbeing goal'
     cy.get('.govuk-accordion__show-all').eq(2).click()
-    cy.get('.govuk-accordion__section')
-      .eq(7)
+    cy.contains('.govuk-accordion__section', 'Health and wellbeing')
       .find('#accordion-default-content-2')
       .invoke('text')
       .then(text => {
