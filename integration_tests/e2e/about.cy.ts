@@ -108,6 +108,12 @@ describe('Rendering', () => {
         const trimText = text.trim().replace(/\s+/g, ' ') // regex to catch and replace excessive newlines to single whitespace
         expect(trimText).to.include(expectedHeadings)
       })
+    cy.contains('.govuk-accordion__section', 'Thinking, behaviours and attitudes')
+      .find('.govuk-heading-s')
+      .should('have.length', 6)
+    cy.contains('.govuk-accordion__section', 'Thinking, behaviours and attitudes')
+      .find('.govuk-body')
+      .should('have.length', 6)
   })
 
   it('Should check if the data for (low-scoring area) drug use are displayed correctly and in order', () => {
@@ -127,6 +133,8 @@ describe('Rendering', () => {
         const trimText = text.trim().replace(/\s+/g, ' ') // regex to catch and replace excessive newlines to single whitespace
         expect(trimText).to.include(expectedHeadings)
       })
+    cy.contains('.govuk-accordion__section', 'Drug use').find('.govuk-heading-s').should('have.length', 4)
+    cy.contains('.govuk-accordion__section', 'Drug use').find('.govuk-body').should('have.length', 3)
   })
 
   it('Should check if the data for (non-scoring area) health and wellbeing are displayed correctly and in order', () => {
@@ -146,5 +154,7 @@ describe('Rendering', () => {
         const trimText = text.trim().replace(/\s+/g, ' ') // regex to catch and replace excessive newlines to single whitespace
         expect(trimText).to.include(expectedHeadings)
       })
+    cy.contains('.govuk-accordion__section', 'Health and wellbeing').find('.govuk-heading-s').should('have.length', 5)
+    cy.contains('.govuk-accordion__section', 'Health and wellbeing').find('.govuk-body').should('have.length', 2)
   })
 })
