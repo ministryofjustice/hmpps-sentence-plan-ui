@@ -33,7 +33,7 @@ describe('Update goal', () => {
       })
 
       cy.get<Goal>('@updateableGoal').then(goal => {
-        cy.visit(`/update-goal/${goal.uuid}`, { failOnStatusCode: false })
+        cy.visit(`/update-goal-steps/${goal.uuid}`, { failOnStatusCode: false })
         cy.get('.govuk-body').should('contain', 'You do not have permission to perform this action')
       })
       cy.checkAccessibility(true, ['scrollable-region-focusable'])
@@ -42,7 +42,7 @@ describe('Update goal', () => {
     it('Can select and update a step status', () => {
       cy.url().should('satisfy', url => url.endsWith('/plan')) // check we're back to plan-overview
       cy.contains('a', 'Update').click() // click update link
-      cy.url().should('include', '/update-goal') // check url is update goal
+      cy.url().should('include', '/update-goal-steps') // check url is update goal
       cy.get('.govuk-table__body > .govuk-table__row > :nth-child(3)').contains(
         'Not started' || 'In progress' || 'Cannot be done yet' || 'No longer needed' || 'Completed',
       ) // check contains not started status
@@ -51,7 +51,7 @@ describe('Update goal', () => {
       cy.url().should('include', '/plan') // check we're back to plan-overview
       cy.get('.govuk-table__body > .govuk-table__row > :nth-child(3)').contains('Not started') // check contains not started status
       cy.contains('a', 'Update').click() // click update link
-      cy.url().should('include', '/update-goal') // check url is update goal
+      cy.url().should('include', '/update-goal-steps') // check url is update goal
       cy.get('.govuk-table__body > .govuk-table__row > :nth-child(3)').contains('In progress') // check contains not started status
       cy.get('#step-status-1').select('In progress') // select not started status
       cy.get('.govuk-button').contains('Save goal and steps').click()
@@ -66,14 +66,14 @@ describe('Update goal', () => {
       cy.url().should('include', '/change-goal/')
       cy.url().then(url => {
         const goalUuid = url.substring(url.lastIndexOf('/') + 1)
-        cy.contains('a', 'Back').should('have.attr', 'href', `/update-goal/${goalUuid}`)
+        cy.contains('a', 'Back').should('have.attr', 'href', `/update-goal-steps/${goalUuid}`)
       })
       cy.checkAccessibility()
     })
 
     it('Clicking Back link does not save', () => {
       cy.contains('a', 'Update').click() // click update link
-      cy.url().should('include', '/update-goal') // check url is update goal
+      cy.url().should('include', '/update-goal-steps') // check url is update goal
       cy.get('.govuk-table__body > .govuk-table__row > :nth-child(3)').contains(
         'Not started' || 'In progress' || 'Cannot be done yet' || 'No longer needed' || 'Completed',
       ) // check contains not started status
@@ -101,7 +101,7 @@ describe('Update goal', () => {
     it('Entering a long progress note diplays an error', () => {
       const lorem = faker.lorem.paragraphs(40)
       cy.contains('a', 'Update').click() // click update link
-      cy.url().should('include', '/update-goal')
+      cy.url().should('include', '/update-goal-steps')
       cy.get('#more-detail').invoke('val', lorem)
       cy.get('.govuk-button').contains('Save goal and steps').click()
 

@@ -94,7 +94,7 @@
               {% elseif note.goalStatus == 'ACHIEVED' %}
                   {%  set goalLink = '/view-achieved-goal/' + note.goalUuid  %}
               {% else %}
-                  {% set goalLink = '/update-goal/' + note.goalUuid  %}
+                  {% set goalLink = '/update-goal-steps/' + note.goalUuid  %}
                   {% set goalText = locale.linkType.latest %}
                   {% set hiddenAriaText = locale.ariaText.latest %}
               {% endif %}

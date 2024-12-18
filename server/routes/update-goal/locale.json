@@ -2,7 +2,8 @@
   "en": {
     "page": {
       "title": "Update Goal - {{ applicationName }}",
-      "errorTitle": "Error: Update Goal - {{ applicationName }}"
+      "errorTitle": "Error: Update Goal - {{ applicationName }}",
+      "heading": "Update goals and steps"
     },
     "errors": {
       "more-detail": {
@@ -18,7 +19,7 @@
     "saveGoalAndSteps": "Save goal and steps",
     "removeGoalFromPlan": "Remove goal from plan",
     "reviewSteps": "Review steps",
-    "noGoalNotes": "There are no notes on this goal yet.",
-    "markAsAchieved": "Mark as achieved"
+    "markAsAchieved": "Mark as achieved",
+    "goalHeading": "Goal: {{ goal.title }}"
   }
 }
