@@ -67,15 +67,15 @@
                 <div class="govuk-grid-column-three-quarters">
                     <span class="govuk-caption-l">{{ data.mainAreaOfNeed.name }}
                         {% if data.relatedAreasOfNeed | length %}
-                            (and {{ data.relatedAreasOfNeed | sort | join(', ') | lower }}){% endif %}</span>
+                            (and {{ data.relatedAreasOfNeed | sort | join('; ') | lower }}){% endif %}</span>
                     <h1 class="govuk-heading-l">{{ locale.page.heading }}</h1>
-                    <h2 class="govuk-heading-m">{{ locale.goalHeading }}</h2>
+                    <h2 class="govuk-heading-m">{{ locale.page.goalHeading }}</h2>
                 </div>
             </div>
 
             <p>
                 {% if data.goal.targetDate %}{{ locale.aimToAchieveBy }}{% else %}{{ locale.common.goalSummaryCard.info.thisIsAFutureGoal }}{% endif %}
-                <a href="/change-goal/{{ data.goal.uuid }}" class="govuk-link govuk-link--no-visited-state">{{ locale.updateGoalDetails }}</a>
+                <a href="/change-goal/{{ data.goal.uuid }}" class="govuk-link govuk-link--no-visited-state">{{ locale.changeGoalDetails }}</a>
             </p>
 
             <h2 class="govuk-heading-m">{{ locale.reviewSteps }}</h2>
@@ -120,20 +120,19 @@
                         {% endfor %}
                         </tbody>
                     </table>
+
+                    <p>
+                      <a href="/goal/{{ data.goal.uuid }}/add-steps"
+                         class="govuk-link govuk-link--no-visited-state">{{ locale.addOrChangeSteps }}</a>
+                    </p>
                 {% else %}
                     <div class="goal-summary-card__steps--empty-no-shadow">
-                        <strong>{{ locale.common.goalSummaryCard.stepsList.noStepsAdded }}</strong>
-                        {% if data.actions.length > 0 %}
-                            <a href="/goal/{{ data.goal.uuid }}/add-steps">{{ locale.common.goalSummaryCard.stepsList.addSteps }}</a>
-                        {% endif %}
+                        <p>{{ locale.common.goalSummaryCard.stepsList.noStepsAdded }}.
+                          <a href="/goal/{{ data.goal.uuid }}/add-steps">{{ locale.common.goalSummaryCard.stepsList.addSteps }}</a>
+                        </p>
                     </div>
                 {% endif %}
 
-                <p>
-                    <a href="/goal/{{ data.goal.uuid }}/add-steps"
-                       class="govuk-link govuk-link--no-visited-state">{{ locale.addOrChangeSteps }}</a>
-                </p>
-                <br>
                 <div class="govuk-grid-row">
                     <div class="govuk-grid-column-two-thirds">
                         <div class="govuk-form-group">

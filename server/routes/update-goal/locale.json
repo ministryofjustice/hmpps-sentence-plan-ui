@@ -1,9 +1,10 @@
 {
   "en": {
     "page": {
-      "title": "Update Goal - {{ applicationName }}",
-      "errorTitle": "Error: Update Goal - {{ applicationName }}",
-      "heading": "Update goals and steps"
+      "title": "Update goal and steps - {{ applicationName }}",
+      "errorTitle": "Error: Update goal and steps - {{ applicationName }}",
+      "heading": "Update goals and steps",
+      "goalHeading": "Goal: {{ goal.title }}"
     },
     "errors": {
       "more-detail": {
@@ -14,12 +15,11 @@
     "moreDetailHint": "For example, how {{ subject.givenName }} feels about their progress, any strengths or protective factors they have developed, or any support they need.",
     "addSteps": "Add steps",
     "addOrChangeSteps": "Add or change steps",
-    "updateGoalDetails": "Update goal details",
+    "changeGoalDetails": "Change goal details",
     "optionalProgressNotes": "Add notes about progress (optional)",
     "saveGoalAndSteps": "Save goal and steps",
     "removeGoalFromPlan": "Remove goal from plan",
     "reviewSteps": "Review steps",
-    "markAsAchieved": "Mark as achieved",
-    "goalHeading": "Goal: {{ goal.title }}"
+    "markAsAchieved": "Mark as achieved"
   }
 }
