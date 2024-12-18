@@ -9,7 +9,8 @@
 {% set locale = interpolate(locale, {
     subject: data.popData,
     goal: {
-        targetDate: data.goal.targetDate | formatSimpleDate
+        targetDate: data.goal.targetDate | formatSimpleDate,
+        title: data.goal.title
     }
 }) %}
 
@@ -67,7 +68,8 @@
                     <span class="govuk-caption-l">{{ data.mainAreaOfNeed.name }}
                         {% if data.relatedAreasOfNeed | length %}
                             (and {{ data.relatedAreasOfNeed | sort | join(', ') | lower }}){% endif %}</span>
-                    <h1 class="govuk-heading-l">{{ data.goal.title }}</h1>
+                    <h1 class="govuk-heading-l">{{ locale.page.heading }}</h1>
+                    <h2 class="govuk-heading-m">{{ locale.goalHeading }}</h2>
                 </div>
             </div>
 
@@ -76,11 +78,10 @@
                 <a href="/change-goal/{{ data.goal.uuid }}" class="govuk-link govuk-link--no-visited-state">{{ locale.updateGoalDetails }}</a>
             </p>
 
+            <h2 class="govuk-heading-m">{{ locale.reviewSteps }}</h2>
+
             <form id="update-goal-form" method="POST">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
-                <label class="govuk-label govuk-label--m">
-                    {{ locale.reviewSteps }}
-                </label>
                 {% if data.goal.steps and data.goal.steps.length > 0 %}
                     <table class="govuk-table goal-summary-card__steps">
                         <thead class="govuk-table__head">

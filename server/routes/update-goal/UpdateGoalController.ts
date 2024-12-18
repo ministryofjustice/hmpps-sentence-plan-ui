@@ -29,7 +29,7 @@ export default class UpdateGoalController {
       const relatedAreasOfNeed = goal.relatedAreasOfNeed.map(need => need.name)
 
       const returnLink = req.services.sessionService.getReturnLink()
-      req.services.sessionService.setReturnLink(`/update-goal/${uuid}`)
+      req.services.sessionService.setReturnLink(`/update-goal-steps/${uuid}`)
 
       return res.render('pages/update-goal', {
         locale: locale.en,

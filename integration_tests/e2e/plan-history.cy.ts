@@ -53,7 +53,7 @@ describe('Rendering', () => {
     cy.get('.plan-status').contains('Plan agreed')
     cy.visit('/plan')
     cy.contains('a', 'Update').click() // click update link
-    cy.url().should('include', '/update-goal') // check url is update goal
+    cy.url().should('include', '/update-goal-steps') // check url is update goal
     cy.get('#step-status-1').select('Not started') // select not started status
     cy.get('textarea#more-detail').type('Updated goal to not started')
     cy.get('.govuk-button').contains('Save goal and steps').click()

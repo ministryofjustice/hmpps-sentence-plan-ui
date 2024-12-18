@@ -50,7 +50,7 @@ describe(`GET ${URLs.UPDATE_GOAL}`, () => {
       .get(`${URLs.UPDATE_GOAL}?type=current`)
       .expect('Content-Type', /html/)
       .expect(res => {
-        expect(res.text).toContain('Test goal</h1>')
+        expect(res.text).toContain('Test goal</h2>')
       })
   })
 })

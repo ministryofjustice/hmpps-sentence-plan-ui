@@ -346,7 +346,7 @@ describe('ChangeGoalController', () => {
       expect(next).toHaveBeenCalledWith(error)
     })
 
-    it('should redirect to update-goal if Plan is agreed and goal.type==current ', async () => {
+    it('should redirect to update-goal-steps if Plan is agreed and goal.type==current ', async () => {
       const draftPlanData: PlanType = { ...testPlan, agreementStatus: PlanAgreementStatus.AGREED }
       req.services.planService.getPlanByUuid = jest.fn().mockResolvedValue(draftPlanData)
 
@@ -373,12 +373,12 @@ describe('ChangeGoalController', () => {
       await runMiddlewareChain(controller.post, req, res, next)
 
       expect(req.services.goalService.replaceGoal).toHaveBeenCalledWith(updatedGoal, testGoal.uuid)
-      expect(res.redirect).toHaveBeenCalledWith(`/update-goal/${testGoal.uuid}`)
+      expect(res.redirect).toHaveBeenCalledWith(`/update-goal-steps/${testGoal.uuid}`)
       expect(res.render).not.toHaveBeenCalled()
       expect(next).not.toHaveBeenCalled()
     })
 
-    it('should redirect to update-goal if Plan is agreed and future goal has steps', async () => {
+    it('should redirect to update-goal-steps if Plan is agreed and future goal has steps', async () => {
       const draftPlanData: PlanType = { ...testPlan, agreementStatus: PlanAgreementStatus.AGREED }
       req.services.planService.getPlanByUuid = jest.fn().mockResolvedValue(draftPlanData)
 
@@ -394,7 +394,7 @@ describe('ChangeGoalController', () => {
       req.params.uuid = testGoal.uuid
 
       await runMiddlewareChain(controller.post, req, res, next)
-      expect(res.redirect).toHaveBeenCalledWith(`/update-goal/${testGoal.uuid}`)
+      expect(res.redirect).toHaveBeenCalledWith(`/update-goal-steps/${testGoal.uuid}`)
     })
 
     it('should redirect to add-steps if Plan is agreed and current goal has no steps', async () => {
