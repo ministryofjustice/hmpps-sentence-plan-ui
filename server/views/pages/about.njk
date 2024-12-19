@@ -36,7 +36,7 @@
             href: "/create-goal/accommodation",
             classes: "govuk-button--secondary",
             type: 'button'
-        }
+        } if data.readWrite === true
     ]
 } %}
 
@@ -99,17 +99,17 @@
 
             {% if data.assessmentAreas.highScoring.length > 0 %}
                 <h2 class="govuk-heading-m">High-scoring areas from the assessment</h2>
-                {{ renderAssessment(data.assessmentAreas.highScoring, locale) }}
+                {{ renderAssessment(data.assessmentAreas.highScoring, locale, data.readWrite) }}
             {% endif %}
 
             {% if data.assessmentAreas.lowScoring.length > 0 %}
                 <h2 class="govuk-heading-m">Low-scoring areas from the assessment</h2>
-                {{ renderAssessment(data.assessmentAreas.lowScoring, locale) }}
+                {{ renderAssessment(data.assessmentAreas.lowScoring, locale, data.readWrite) }}
             {% endif %}
 
             {% if data.assessmentAreas.other.length > 0 %}
                 <h2 class="govuk-heading-m">Areas without a need score</h2>
-                {{ renderAssessment(data.assessmentAreas.other, locale) }}
+                {{ renderAssessment(data.assessmentAreas.other, locale, data.readWrite) }}
             {% endif %}
 
         </div>

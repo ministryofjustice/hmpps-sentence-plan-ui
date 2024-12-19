@@ -9,6 +9,7 @@ import { AreaOfNeed } from '../../testutils/data/referenceData'
 import testPlan from '../../testutils/data/planData'
 import testHandoverContext from '../../testutils/data/handoverData'
 import { assessmentData, crimNeedsSubset } from '../../testutils/data/assessmentData'
+import { AccessMode } from '../../@types/Handover'
 
 jest.mock('../../services/sentence-plan/referentialDataService', () => {
   return jest.fn().mockImplementation(() => ({
@@ -35,6 +36,7 @@ jest.mock('../../services/sessionService', () => {
     getSubjectDetails: jest.fn().mockReturnValue(testHandoverContext.subject),
     getCriminogenicNeeds: jest.fn().mockReturnValue(crimNeedsSubset),
     getOasysReturnUrl: jest.fn().mockReturnValue('http://mock-return-url'),
+    getAccessMode: jest.fn().mockReturnValue(AccessMode.READ_WRITE),
   }))
 })
 
@@ -52,10 +54,10 @@ afterEach(() => {
   jest.resetAllMocks()
 })
 
-describe(`GET ${URLs.ABOUT_POP}`, () => {
+describe(`GET ${URLs.ABOUT_PERSON}`, () => {
   it('should render about pop page', () => {
     return request(app)
-      .get(URLs.ABOUT_POP)
+      .get(URLs.ABOUT_PERSON)
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain(

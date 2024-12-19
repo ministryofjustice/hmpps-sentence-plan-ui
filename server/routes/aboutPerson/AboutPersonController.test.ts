@@ -1,6 +1,6 @@
 import mockRes from '../../testutils/preMadeMocks/mockRes'
 import mockReq from '../../testutils/preMadeMocks/mockReq'
-import AboutPopController from './AboutPopController'
+import AboutPersonController from './AboutPersonController'
 import locale from './locale.json'
 import { AreaOfNeed } from '../../testutils/data/referenceData'
 import testPlan from '../../testutils/data/planData'
@@ -10,6 +10,7 @@ import { assessmentData, crimNeedsSubset } from '../../testutils/data/assessment
 import { AssessmentAreas } from '../../@types/Assessment'
 
 import { formatAssessmentData } from '../../utils/assessmentUtils'
+import { AccessMode } from '../../@types/Handover'
 
 const oasysReturnUrl = 'https://oasys.return.url'
 
@@ -32,6 +33,7 @@ jest.mock('../../services/sessionService', () => {
     getPrincipalDetails: jest.fn().mockReturnValue(testHandoverContext.principal),
     getSubjectDetails: jest.fn().mockReturnValue(testHandoverContext.subject),
     getCriminogenicNeeds: jest.fn().mockReturnValue(crimNeedsSubset),
+    getAccessMode: jest.fn().mockReturnValue(AccessMode.READ_WRITE),
   }))
 })
 
@@ -41,12 +43,12 @@ jest.mock('../../services/sentence-plan/infoService', () => {
   }))
 })
 
-describe('AboutPopController', () => {
-  let controller: AboutPopController
+describe('AboutPersonController', () => {
+  let controller: AboutPersonController
   const assessmentAreas: AssessmentAreas = formatAssessmentData(crimNeedsSubset, assessmentData, locale.en.areas)
 
   beforeEach(() => {
-    controller = new AboutPopController()
+    controller = new AboutPersonController()
   })
 
   describe('get', () => {
@@ -63,6 +65,7 @@ describe('AboutPopController', () => {
           pageId: 'about',
           deliusData: popData,
           assessmentAreas,
+          readWrite: true,
         },
         errors: {},
       }
