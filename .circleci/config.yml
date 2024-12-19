@@ -19,7 +19,7 @@ parameters:
 
   node-version:
     type: string
-    default: 20.11-browsers
+    default: 22.10-browsers
 
   deploy:
     description: Trigger a manual deployment
