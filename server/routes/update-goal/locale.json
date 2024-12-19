@@ -14,6 +14,7 @@
     "aimToAchieveBy": "Aim to achieve this by {{ goal.targetDate }}. ",
     "moreDetailHint": "For example, how {{ subject.givenName }} feels about their progress, any strengths or protective factors they have developed, or any support they need.",
     "addSteps": "Add steps",
+    "noStepsAdded": "No steps added.",
     "addOrChangeSteps": "Add or change steps",
     "changeGoalDetails": "Change goal details",
     "optionalProgressNotes": "Add notes about progress (optional)",
