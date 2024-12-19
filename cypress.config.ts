@@ -1,4 +1,5 @@
 import { defineConfig } from 'cypress'
+import getCompareSnapshotsPlugin from 'cypress-image-diff-js/plugin'
 import { resetStubs } from './integration_tests/mockApis/wiremock'
 import auth from './integration_tests/mockApis/auth'
 
@@ -13,7 +14,7 @@ export default defineConfig({
   },
   taskTimeout: 60000,
   e2e: {
-    setupNodeEvents(on) {
+    setupNodeEvents(on, config) {
       on('task', {
         reset: resetStubs,
         ...auth,
@@ -23,6 +24,9 @@ export default defineConfig({
           return null
         },
       })
+
+      // Add the visual regression plugin
+      return getCompareSnapshotsPlugin(on, config)
     },
     baseUrl: 'http://localhost:6789',
     excludeSpecPattern: '**/!(*.cy).ts',

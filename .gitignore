@@ -130,3 +130,4 @@ integration_tests/screenshots/
 .run
 
 cypress/
+/cypress-image-diff-screenshots/comparison/
