@@ -20,7 +20,7 @@
     "rebuild": "npm run clean && npm i && npm run build"
   },
   "engines": {
-    "node": "^20",
+    "node": "^22",
     "npm": "^10"
   },
   "jest": {
@@ -109,6 +109,7 @@
     "@faker-js/faker": "^9.2.0",
     "@jgoz/esbuild-plugin-typecheck": "^4.0.2",
     "@ministryofjustice/eslint-config-hmpps": "^0.0.1-beta.1",
+    "@tsconfig/node22": "^22.0.0",
     "@types/bunyan": "^1.8.11",
     "@types/bunyan-format": "^0.2.9",
     "@types/compression": "^1.7.5",
@@ -120,7 +121,7 @@
     "@types/jest": "^29.5.14",
     "@types/jsonwebtoken": "^9.0.7",
     "@types/luxon": "^3.4.2",
-    "@types/node": "^20.17.9",
+    "@types/node": "^22.10.2",
     "@types/nunjucks": "^3.2.6",
     "@types/passport": "^1.0.17",
     "@types/passport-oauth2": "^1.4.17",
