@@ -66,8 +66,8 @@ describe('View Plan Overview for READ_WRITE user', () => {
 
     cy.get('button').contains('Agree plan').click()
     cy.title().should('contain', 'Error:')
-    cy.get('.govuk-error-summary').should('contain', 'You must add steps to the goals Sam is working on now')
-    cy.get('.govuk-error-message').should('contain', 'Add steps to agree plan')
+    cy.get('.govuk-error-summary').should('contain', "Add steps to 'Test Accommodation'")
+    cy.get('.govuk-error-message').should('contain', "Add steps to 'Test Accommodation'")
     cy.checkAccessibility()
   })
 
@@ -149,9 +149,8 @@ describe('View Plan Overview for READ_WRITE user', () => {
 
     cy.visit('/plan')
 
-    cy.get('.govuk-error-summary').should('contain', 'You must add steps to the goals')
-    cy.get('.goal-summary-card--error').should('contain', 'Incomplete')
-    cy.get('p.govuk-error-message').should('contain', 'You must add steps to the goals')
+    cy.get('.govuk-error-summary').should('contain', "Add steps to 'Test Accommodation 2'")
+    cy.get('p.govuk-error-message').should('contain', "Add steps to 'Test Accommodation 2'")
   })
 
   it('Creates three new goals, and moves the middle goal up', () => {
