@@ -119,12 +119,14 @@
 
             {% for id, errorObj in errors.domain %}
                 {% if '.steps' in id %}
+                    {# id is of the form `goals.n.steps` and we extract which goal had the error #}
+                    {% set goalWithError = id[6] | int %}
                     {% set goalLocale = interpolate(locale, {
-                       goalTitle: data.plan.goals[loop.index0].title
+                       goalTitle: data.plan.goals[goalWithError].title
                     }) %}
                     {% set errorList = errorList.concat({
                         text: goalLocale.errors['steps'].arrayNotEmpty,
-                        href: "#goal-summary-card-" + loop.index
+                        href: "#goal-summary-card-" + [goalWithError, 1] | sum
                     }) %}
                 {% endif %}
             {% endfor %}
