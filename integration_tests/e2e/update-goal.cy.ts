@@ -19,7 +19,7 @@ describe('Update goal', () => {
       const planOverview = new PlanOverview()
       cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
         cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal()).then(goal => {
-          cy.wrap(goal).as('updateableGoal')
+          cy.wrap(goal).as('updatableGoal')
           cy.addStepToGoal(goal.uuid, DataGenerator.generateStep())
         })
 
@@ -32,7 +32,7 @@ describe('Update goal', () => {
         cy.openSentencePlan(oasysAssessmentPk, 'READ_ONLY')
       })
 
-      cy.get<Goal>('@updateableGoal').then(goal => {
+      cy.get<Goal>('@updatableGoal').then(goal => {
         cy.visit(`/update-goal-steps/${goal.uuid}`, { failOnStatusCode: false })
         cy.get('.govuk-body').should('contain', 'You do not have permission to perform this action')
       })
@@ -60,9 +60,19 @@ describe('Update goal', () => {
       cy.checkAccessibility()
     })
 
+    it('Updating all step status to complete and saving goes to the achieve goal page', () => {
+      cy.get<Goal>('@updatableGoal').then(goal => {
+        cy.visit(`/update-goal-steps/${goal.uuid}`)
+        cy.get('#step-status-1').select('Completed')
+        cy.get('.govuk-button').contains('Save goal and steps').click()
+        cy.url().should('include', `/confirm-achieved-goal/${goal.uuid}`)
+      })
+      cy.checkAccessibility()
+    })
+
     it('Can visit change goal and back link is correct', () => {
       cy.contains('a', 'Update').click()
-      cy.contains('a', 'Update goal details').click()
+      cy.contains('a', 'Change goal details').click()
       cy.url().should('include', '/change-goal/')
       cy.url().then(url => {
         const goalUuid = url.substring(url.lastIndexOf('/') + 1)
@@ -98,7 +108,7 @@ describe('Update goal', () => {
       cy.checkAccessibility()
     })
 
-    it('Entering a long progress note diplays an error', () => {
+    it('Entering a long progress note displays an error', () => {
       const lorem = faker.lorem.paragraphs(40)
       cy.contains('a', 'Update').click() // click update link
       cy.url().should('include', '/update-goal-steps')
