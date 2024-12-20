@@ -1,6 +1,6 @@
 import mockRes from '../../testutils/preMadeMocks/mockRes'
 import mockReq from '../../testutils/preMadeMocks/mockReq'
-import AboutPopController from './AboutPopController'
+import AboutPersonController from './AboutPersonController'
 import locale from './locale.json'
 import { AreaOfNeed } from '../../testutils/data/referenceData'
 import testPlan from '../../testutils/data/planData'
@@ -10,6 +10,7 @@ import { assessmentData, crimNeedsSubset } from '../../testutils/data/assessment
 import { AssessmentAreas } from '../../@types/Assessment'
 
 import { formatAssessmentData } from '../../utils/assessmentUtils'
+import { AccessMode } from '../../@types/Handover'
 
 const oasysReturnUrl = 'https://oasys.return.url'
 
@@ -32,6 +33,7 @@ jest.mock('../../services/sessionService', () => {
     getPrincipalDetails: jest.fn().mockReturnValue(testHandoverContext.principal),
     getSubjectDetails: jest.fn().mockReturnValue(testHandoverContext.subject),
     getCriminogenicNeeds: jest.fn().mockReturnValue(crimNeedsSubset),
+    getAccessMode: jest.fn().mockReturnValue(AccessMode.READ_WRITE),
   }))
 })
 
@@ -41,15 +43,15 @@ jest.mock('../../services/sentence-plan/infoService', () => {
   }))
 })
 
-describe('AboutPopController', () => {
-  let controller: AboutPopController
+describe('AboutPersonController', () => {
+  let controller: AboutPersonController
   const assessmentAreas: AssessmentAreas = formatAssessmentData(crimNeedsSubset, assessmentData, locale.en.areas)
 
   beforeEach(() => {
-    controller = new AboutPopController()
+    controller = new AboutPersonController()
   })
 
-  describe('get', () => {
+  describe('Get About Person READ_WRITE', () => {
     it('should render when no exceptions thrown', async () => {
       const req = mockReq()
       const res = mockRes()
@@ -63,9 +65,37 @@ describe('AboutPopController', () => {
           pageId: 'about',
           deliusData: popData,
           assessmentAreas,
+          readWrite: true,
         },
         errors: {},
       }
+
+      expect(res.render).toHaveBeenCalledWith('pages/about', payload)
+    })
+  })
+
+  describe('Get About Person READ_ONLY', () => {
+    it('should render when no exceptions thrown', async () => {
+      const req = mockReq()
+      const res = mockRes()
+      const next = jest.fn()
+
+      req.services.sessionService.getAccessMode = jest.fn().mockReturnValue(AccessMode.READ_ONLY)
+
+      await controller.get(req, res, next)
+
+      const payload = {
+        locale: locale.en,
+        data: {
+          oasysReturnUrl,
+          pageId: 'about',
+          deliusData: popData,
+          assessmentAreas,
+          readWrite: false,
+        },
+        errors: {},
+      }
+
       expect(res.render).toHaveBeenCalledWith('pages/about', payload)
     })
   })
