@@ -11,7 +11,6 @@ import { AssessmentAreas } from '../../@types/Assessment'
 
 import { formatAssessmentData } from '../../utils/assessmentUtils'
 import { AccessMode } from '../../@types/Handover'
-import testNoteData from '../../testutils/data/noteData'
 
 const oasysReturnUrl = 'https://oasys.return.url'
 
