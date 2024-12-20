@@ -6,11 +6,11 @@ describe('Rendering READ_WRITE', () => {
       cy.wrap(planDetails).as('plan')
       cy.openSentencePlan(planDetails.oasysAssessmentPk)
       cy.get('.moj-primary-navigation__container').contains('a', 'About').click()
+      cy.url().should('include', '/about')
     })
   })
 
   it('Should check the page rendered correctly', () => {
-    cy.url().should('include', '/about')
     cy.get('h1').should('include.text', 'About')
     cy.get('h2').eq(0).contains('Sentence information')
     cy.get('h2').eq(1).contains('High-scoring areas from the assessment')
@@ -162,7 +162,6 @@ describe('Rendering READ_ONLY', () => {
   })
 
   it('Should check the page rendered correctly with no Create Goal button', () => {
-    cy.url().should('include', '/about')
     cy.get('h1').should('include.text', 'About')
     cy.get('h2').eq(0).contains('Sentence information')
     cy.get('h2').eq(1).contains('High-scoring areas from the assessment')
