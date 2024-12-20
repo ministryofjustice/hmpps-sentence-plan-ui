@@ -18,12 +18,13 @@
         lastStatusChangeDate: (params.goal.statusDate | formatSimpleDate) if params.goal.statusDate
     }) %}
 
-    <div class="goal-summary-card {%- if params.errorMessage %} goal-summary-card--error {% endif %}">
+    <div class="goal-summary-card {%- if params.errorMessage %} goal-summary-card--error {% endif %}" id="goal-summary-card-{{ params.index }}">
         {% if params.errorMessage %}
-            {{govukTag({
-                text: params.errorMessage.state,
-                classes: "goal-summary-card__state-tag govuk-tag--red"
-            })}}
+          <div class="goal-error-message">
+            {{ govukErrorMessage({
+              text: params.errorMessage.text
+            }) }}
+          </div>
         {% endif %}
 
         {% call summaryCard({
@@ -52,13 +53,6 @@
                 <p>{{ locale.info.goallastStatusChangeDate }}</p>
             {% endif %}
             </div>
-            {% if params.errorMessage %}
-                <div class="goal-error-message">
-                {{ govukErrorMessage({
-                    text: params.errorMessage.text
-                }) }}
-                </div>
-            {% endif %}
         </div>
 
         {% if params.goal.steps and params.goal.steps.length > 0 %}

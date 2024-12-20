@@ -64,8 +64,7 @@
     },
     "errors": {
       "steps": {
-        "arrayNotEmpty": "You must add steps to the goals {{ subject.givenName }} is working on now",
-        "arrayNotEmptyShortened": "Add steps to agree plan"
+        "arrayNotEmpty": "Add steps to '{{ goalTitle }}'"
       },
       "goals": {
         "arrayNotEmpty": "To agree the plan, create a goal to work on now"

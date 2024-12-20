@@ -66,8 +66,8 @@ describe('View Plan Overview for READ_WRITE user', () => {
 
     cy.get('button').contains('Agree plan').click()
     cy.title().should('contain', 'Error:')
-    cy.get('.govuk-error-summary').should('contain', 'You must add steps to the goals Sam is working on now')
-    cy.get('.govuk-error-message').should('contain', 'Add steps to agree plan')
+    cy.get('.govuk-error-summary').should('contain', "Add steps to 'Test Accommodation'")
+    cy.get('.govuk-error-message').should('contain', "Add steps to 'Test Accommodation'")
     cy.checkAccessibility()
   })
 
@@ -136,6 +136,21 @@ describe('View Plan Overview for READ_WRITE user', () => {
     cy.get('button').contains('Confirm').click()
     cy.get('.goal-date-and-notes > :nth-child(1)').contains('Removed on')
     cy.get('.goal-date-and-notes > :nth-child(2)').contains('Removed during cypress test')
+  })
+
+  it('Agreed plan shows validation error when goal has no steps', () => {
+    cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
+      cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal({ title: 'Test Accommodation 1' })).then(goal => {
+        cy.addStepToGoal(goal.uuid, DataGenerator.generateStep())
+        planOverview.agreePlan()
+        cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal({ title: 'Test Accommodation 2' }))
+      })
+    })
+
+    cy.visit('/plan')
+
+    cy.get('.govuk-error-summary').should('contain', "Add steps to 'Test Accommodation 2'")
+    cy.get('p.govuk-error-message').should('contain', "Add steps to 'Test Accommodation 2'")
   })
 
   it('Creates three new goals, and moves the middle goal up', () => {
