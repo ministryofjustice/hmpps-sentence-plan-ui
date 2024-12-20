@@ -131,3 +131,5 @@ integration_tests/screenshots/
 
 cypress/
 /cypress-image-diff-screenshots/comparison/
+/cypress-image-diff-screenshots/diff/
+/cypress-image-diff-html-report/
