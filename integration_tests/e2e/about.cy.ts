@@ -1,4 +1,4 @@
-describe('Rendering', () => {
+describe('Rendering READ_WRITE', () => {
   beforeEach(() => {
     cy.createSentencePlan().then(planDetails => {
       cy.wrap(planDetails).as('plan')
@@ -10,8 +10,11 @@ describe('Rendering', () => {
   it('Should check the page rendered correctly', () => {
     cy.url().should('include', '/about')
     cy.get('h1').should('include.text', 'About')
-    cy.get('h2').contains('Sentence information')
-    cy.get('h2').contains('High-scoring areas from the assessment')
+    cy.get('h2').eq(0).contains('Sentence information')
+    cy.get('h2').eq(1).contains('High-scoring areas from the assessment')
+    cy.get('[role="button"]').should('have.length', 2)
+    cy.get('[role="button"]').eq(1).should('contain', 'Create goal')
+
     cy.get('.govuk-body-s')
       .invoke('text')
       .then(text => {
