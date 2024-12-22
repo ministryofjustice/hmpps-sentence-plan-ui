@@ -45,13 +45,13 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
   )
 
   /** FILTERS * */
-  njkEnv.addGlobal('merge', merge)
   njkEnv.addFilter('initialiseName', initialiseName)
   njkEnv.addFilter('convertToTitleCase', convertToTitleCase)
   njkEnv.addFilter('formatSimpleDate', date => formatDate(date, 'simple'))
   njkEnv.addFilter('formatISODate', date => formatDate(date, 'iso'))
 
   /** GLOBALS * */
+  njkEnv.addGlobal('merge', merge)
   njkEnv.addGlobal('sentenceLength', sentenceLength)
   njkEnv.addGlobal('interpolate', localeInterpolation)
   njkEnv.addGlobal('getFormattedError', toFormattedError)
