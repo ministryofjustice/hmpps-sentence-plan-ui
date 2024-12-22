@@ -66,16 +66,9 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
 
   njkEnv.addFilter('initialiseName', initialiseName)
   njkEnv.addFilter('convertToTitleCase', convertToTitleCase)
-  njkEnv.addFilter('dateWithYear', dateWithYear)
+
   njkEnv.addGlobal('sentenceLength', sentenceLength)
 
-  // Filter to format date as 'Month YYYY'
-  njkEnv.addFilter('formatMonthYear', date => {
-    return new Date(date).toLocaleDateString('en-GB', {
-      month: 'long',
-      year: 'numeric',
-    })
-  })
 
   // Filter to format date as 'DD MMMMM YYYY'
   njkEnv.addFilter('formatSimpleDate', date => {
