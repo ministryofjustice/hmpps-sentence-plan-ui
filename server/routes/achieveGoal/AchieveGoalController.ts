@@ -7,6 +7,7 @@ import transformRequest from '../../middleware/transformMiddleware'
 import AchieveGoalPostModel from './models/AchieveGoalPostModel'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
 import { AccessMode } from '../../@types/Handover'
+import { HttpError } from '../../utils/HttpError'
 
 export default class AchieveGoalController {
   constructor() {}
@@ -32,7 +33,7 @@ export default class AchieveGoalController {
         errors,
       })
     } catch (e) {
-      return next(e)
+      return next(HttpError(500, e.message))
     }
   }
 
@@ -49,7 +50,7 @@ export default class AchieveGoalController {
       await req.services.goalService.updateGoal(goalData, goalUuid)
       return res.redirect(`/plan?type=achieved&status=achieved`)
     } catch (e) {
-      return next(e)
+      return next(HttpError(500, e.message))
     }
   }
 
