@@ -9,6 +9,7 @@ import { StepStatus } from '../../@types/StepType'
 import { NewGoal } from '../../@types/NewGoalType'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
 import { AccessMode } from '../../@types/Handover'
+import { HttpError } from '../../utils/HttpError'
 
 export default class AddStepsController {
   private render = async (req: Request, res: Response, next: NextFunction) => {
@@ -40,7 +41,7 @@ export default class AddStepsController {
         errors,
       })
     } catch (e) {
-      return next(e)
+      return next(HttpError(500, e.message))
     }
   }
 
@@ -64,7 +65,7 @@ export default class AddStepsController {
 
       return res.redirect(link)
     } catch (e) {
-      return next(e)
+      return next(HttpError(500, e.message))
     }
   }
 

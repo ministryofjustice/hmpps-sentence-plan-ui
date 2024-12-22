@@ -9,6 +9,7 @@ import transformRequest from '../../middleware/transformMiddleware'
 import PlanOverviewQueryModel from './models/PlanOverviewQueryModel'
 import { AccessMode } from '../../@types/Handover'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
+import { HttpError } from '../../utils/HttpError'
 
 export default class PlanOverviewController {
   private render = async (req: Request, res: Response, next: NextFunction) => {
@@ -49,7 +50,7 @@ export default class PlanOverviewController {
         errors,
       })
     } catch (e) {
-      return next(e)
+      return next(HttpError(500, e.message))
     }
   }
 
@@ -63,7 +64,7 @@ export default class PlanOverviewController {
       await req.services.goalService.changeGoalOrder(reorderedList)
       return res.redirect(`${URLs.PLAN_OVERVIEW}?type=${type}`)
     } catch (e) {
-      return next(e)
+      return next(HttpError(500, e.message))
     }
   }
 
@@ -77,7 +78,7 @@ export default class PlanOverviewController {
 
       return next()
     } catch (e) {
-      return next(e)
+      return next(HttpError(500, e.message))
     }
   }
 

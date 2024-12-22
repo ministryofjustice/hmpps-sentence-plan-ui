@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import locale from './locale.json'
-
 import { formatAssessmentData } from '../../utils/assessmentUtils'
+import { HttpError } from '../../utils/HttpError'
 
 export default class AboutPopController {
   constructor() {}
@@ -40,7 +40,7 @@ export default class AboutPopController {
         errors,
       })
     } catch (e) {
-      return next(e)
+      return next(HttpError(500, e.message))
     }
   }
 }
