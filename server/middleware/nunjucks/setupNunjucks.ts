@@ -59,11 +59,6 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
     return mergeDeep(...args)
   })
 
-  njkEnv.addFilter('possessive', (value: string) => {
-    if (!value) return value
-    return new nunjucks.runtime.SafeString(value.endsWith('s') ? `${value}'` : `${value}'s`)
-  })
-
   njkEnv.addFilter('initialiseName', initialiseName)
   njkEnv.addFilter('convertToTitleCase', convertToTitleCase)
 
