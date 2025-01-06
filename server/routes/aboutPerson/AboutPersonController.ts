@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import locale from './locale.json'
-
 import { formatAssessmentData } from '../../utils/assessmentUtils'
+import { HttpError } from '../../utils/HttpError'
 import { AccessMode } from '../../@types/Handover'
 
 export default class AboutPersonController {
@@ -44,7 +44,7 @@ export default class AboutPersonController {
         errors,
       })
     } catch (e) {
-      return next(e)
+      return next(HttpError(500, e.message))
     }
   }
 }
