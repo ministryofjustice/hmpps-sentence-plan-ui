@@ -77,12 +77,12 @@
             href: "/create-goal/accommodation",
             classes: "govuk-button--secondary",
             type: 'button'
-        },
+        } if data.readWrite === true,
         {
             text: locale.header.agreePlanButton,
             type: 'submit',
             value: 'agree-plan'
-        } if data.plan.agreementStatus === 'DRAFT'
+        } if data.readWrite === true and data.plan.agreementStatus === 'DRAFT'
     ]
 } %}
 
@@ -192,20 +192,22 @@
                     {% set buttons = [] %}
                     {% set actions = [] %}
 
-                    {% if not loop.first %}
-                        {% set buttons = buttons.concat({
-                            text: locale.goalSummaryCard.buttons.moveUpButton,
-                            href: "/goals/" + goalType + "/" + goal.uuid + "/up",
-                            classes: "govuk-button--secondary"
-                        }) %}
-                    {% endif %}
+                    {% if data.readWrite === true %}
+                      {% if not loop.first %}
+                          {% set buttons = buttons.concat({
+                              text: locale.goalSummaryCard.buttons.moveUpButton,
+                              href: "/goals/" + goalType + "/" + goal.uuid + "/up",
+                              classes: "govuk-button--secondary"
+                          }) %}
+                      {% endif %}
 
-                    {% if not loop.last %}
-                        {% set buttons = buttons.concat({
-                            text: locale.goalSummaryCard.buttons.moveDownButton,
-                            href: "/goals/" + goalType + "/" + goal.uuid + "/down",
-                            classes: "govuk-button--secondary"
-                        }) %}
+                      {% if not loop.last %}
+                          {% set buttons = buttons.concat({
+                              text: locale.goalSummaryCard.buttons.moveDownButton,
+                              href: "/goals/" + goalType + "/" + goal.uuid + "/down",
+                              classes: "govuk-button--secondary"
+                          }) %}
+                      {% endif %}
                     {% endif %}
 
                     {% set errorMessage = false %}
@@ -220,7 +222,7 @@
                         } %}
                     {% endif %}
 
-                    {% if data.plan.agreementStatus === 'DRAFT' %}
+                    {% if data.readWrite === true and data.plan.agreementStatus === 'DRAFT' %}
                         {% set actions = [
                             {
                                 href: "/change-goal/" + goal.uuid,
@@ -235,7 +237,7 @@
                                 text: locale.goalSummaryCard.actions.draft.deleteGoal
                             }
                         ] %}
-                    {% else %}
+                    {% elif data.readWrite === true %}
                         {% if goal.status === 'ACTIVE' or goal.status === 'FUTURE' %}
                             {% set actions = [
                                 {
@@ -287,7 +289,7 @@
             </ol>
             {% endif %}
 
-            {% if goalType == 'current' and goals.length == 0 %}
+            {% if data.readWrite === true and goalType == 'current' and goals.length == 0 %}
                 <div id="goal-list" class="{% if errors.domain['goals'] %}govuk-form-group--error{% endif %}">
                     {% if errors.domain | length > 0 %}
                         {{ govukErrorMessage({
