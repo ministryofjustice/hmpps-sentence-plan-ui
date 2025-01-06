@@ -103,11 +103,14 @@
                         <br>
                     {% endif %}
                 {% endif %}
+              {% if readWrite === true %}
                 <div>
-                    <p class='goal-link'><a href='/create-goal/{{ assessment.goalRoute }}'
-                                            class="govuk-link govuk-link--no-visited-state">Create {{ assessment.title | lower }}
-                            goal</a></p>
+                    <p class='goal-link'>
+                      <a href='/create-goal/{{ assessment.goalRoute }}'
+                         class="govuk-link govuk-link--no-visited-state">Create {{ assessment.title | lower }} goal</a>
+                    </p>
                 </div>
+              {% endif %}
             </div>
         </div>
     {% endfor %}

@@ -6,7 +6,7 @@ import {
   crimNeedsOrdered,
 } from '../testutils/data/assessmentData'
 import commonLocale from './commonLocale.json'
-import locale from '../routes/aboutPop/locale.json'
+import locale from '../routes/aboutPerson/locale.json'
 import {
   AssessmentArea,
   AssessmentAreaConfig,

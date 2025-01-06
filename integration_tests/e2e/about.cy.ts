@@ -1,17 +1,23 @@
-describe('Rendering', () => {
+import { AccessMode } from '../../server/@types/Handover'
+
+describe('Rendering READ_WRITE', () => {
   beforeEach(() => {
     cy.createSentencePlan().then(planDetails => {
       cy.wrap(planDetails).as('plan')
       cy.openSentencePlan(planDetails.oasysAssessmentPk)
       cy.get('.moj-primary-navigation__container').contains('a', 'About').click()
+      cy.url().should('include', '/about')
     })
   })
 
   it('Should check the page rendered correctly', () => {
-    cy.url().should('include', '/about')
     cy.get('h1').should('include.text', 'About')
-    cy.get('h2').contains('Sentence information')
-    cy.get('h2').contains('High-scoring areas from the assessment')
+    cy.get('h2').eq(0).contains('Sentence information')
+    cy.get('h2').eq(1).contains('High-scoring areas from the assessment')
+    cy.get('[role="button"]').should('have.length', 2)
+    cy.get('[role="button"]').eq(0).should('contain', 'Return to OASys')
+    cy.get('[role="button"]').eq(1).should('contain', 'Create goal')
+
     cy.get('.govuk-body-s')
       .invoke('text')
       .then(text => {
@@ -53,38 +59,25 @@ describe('Rendering', () => {
 
   it('Should check all hard-coded links in each assessment section are in the expected order', () => {
     cy.get('.govuk-accordion__show-all').click({ multiple: true })
-    cy.contains('.govuk-accordion__section', 'Thinking, behaviours and attitudes')
-      .contains('Create thinking, behaviours and attitudes goal')
-      .should('have.attr', 'href')
-      .and('include', '/create-goal/thinking-behaviours-and-attitudes')
-    cy.contains('.govuk-accordion__section', 'Accommodation')
-      .contains('Create accommodation goal')
-      .should('have.attr', 'href')
-      .and('include', '/create-goal/accommodation')
-    cy.contains('.govuk-accordion__section', 'Personal relationships and community')
-      .contains('Create personal relationships and community goal')
-      .should('have.attr', 'href')
-      .and('include', '/create-goal/personal-relationships-and-community')
-    cy.contains('.govuk-accordion__section', 'Alcohol use')
-      .contains('Create alcohol use goal')
-      .should('have.attr', 'href')
-      .and('include', '/create-goal/alcohol-use')
-    cy.contains('.govuk-accordion__section', 'Employment and education')
-      .contains('Create employment and education goal')
-      .should('have.attr', 'href')
-      .and('include', '/create-goal/employment-and-education')
-    cy.contains('.govuk-accordion__section', 'Drug use')
-      .contains('Create drug use goal')
-      .should('have.attr', 'href')
-      .and('include', '/create-goal/drug-use')
-    cy.contains('.govuk-accordion__section', 'Finances')
-      .contains('Create finances goal')
-      .should('have.attr', 'href')
-      .and('include', '/create-goal/finances')
-    cy.contains('.govuk-accordion__section', 'Health and wellbeing')
-      .contains('Create health and wellbeing goal')
-      .should('have.attr', 'href')
-      .and('include', '/create-goal/health-and-wellbeing')
+
+    const areas = [
+      { text: 'Create thinking, behaviours and attitudes goal', href: 'thinking-behaviours-and-attitudes' },
+      { text: 'Create accommodation goal', href: 'accommodation' },
+      { text: 'Create personal relationships and community goal', href: 'personal-relationships-and-community' },
+      { text: 'Create alcohol use goal', href: 'alcohol-use' },
+      { text: 'Create employment and education goal', href: 'employment-and-education' },
+      { text: 'Create drug use goal', href: 'drug-use' },
+      { text: 'Create finances goal', href: 'finances' },
+      { text: 'Create health and wellbeing goal', href: 'health-and-wellbeing' },
+    ]
+
+    areas.forEach((area, index) => {
+      cy.get('p.goal-link')
+        .eq(index)
+        .contains(area.text)
+        .should('have.attr', 'href')
+        .and('include', `/create-goal/${area.href}`)
+    })
   })
 
   it('Should check if the data for (high-scoring area) thinking behaviour and attitudes are displayed correctly and in order', () => {
@@ -156,5 +149,30 @@ describe('Rendering', () => {
       })
     cy.contains('.govuk-accordion__section', 'Health and wellbeing').find('.govuk-heading-s').should('have.length', 5)
     cy.contains('.govuk-accordion__section', 'Health and wellbeing').find('.govuk-body').should('have.length', 2)
+  })
+})
+
+describe('Rendering READ_ONLY', () => {
+  beforeEach(() => {
+    cy.createSentencePlan().then(planDetails => {
+      cy.wrap(planDetails).as('plan')
+      cy.openSentencePlan(planDetails.oasysAssessmentPk, AccessMode.READ_ONLY)
+      cy.get('.moj-primary-navigation__container').contains('a', 'About').click()
+    })
+  })
+
+  it('Should check the page rendered correctly with no Create Goal button', () => {
+    cy.get('h1').should('include.text', 'About')
+    cy.get('h2').eq(0).contains('Sentence information')
+    cy.get('h2').eq(1).contains('High-scoring areas from the assessment')
+    cy.get('[role="button"]').should('have.length', 1)
+    cy.get('[role="button"]').eq(0).should('contain', 'Return to OASys')
+  })
+
+  it('Should check there are no links to create goal', () => {
+    cy.get('a[href]').each(link => {
+      const href = link.attr('href')
+      expect(href).not.to.contain('create-goal')
+    })
   })
 })
