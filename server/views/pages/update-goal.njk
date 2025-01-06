@@ -83,7 +83,7 @@
             <form id="update-goal-form" method="POST">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
                 {% if data.goal.steps and data.goal.steps.length > 0 %}
-                    <table class="govuk-table goal-summary-card__steps">
+                    <table class="govuk-table goal-summary-card__steps update-goal-table">
                         <thead class="govuk-table__head">
                         <tr class="govuk-table__row">
                             <th scope="col"
@@ -96,27 +96,26 @@
                         </thead>
                         <tbody class="govuk-table__body">
                         {% for step in data.goal.steps %}
-                            <tr class="govuk-table__row">
-                                <td class="govuk-table__cell">{{ step.actor }}</td>
-                                <td id="step-description-{{ loop.index }}"
-                                    class="govuk-table__cell">{{ step.description }}</td>
-                                <td class="govuk-table__cell">
-                                    {{ govukSelect({
-                                        id: "step-status-" + loop.index,
-                                        name: "step-status-" + loop.index,
-                                        items: items,
-                                        value: step.status,
-                                        classes: "govuk-select--auto-width",
-                                        formGroup: {
-                                            classes: "govuk-!-margin-bottom-0"
-                                        },
-                                        attributes: {
-                                            'aria-label': locale.common.goalSummaryCard.stepsList.statusHeader
-                                        }
-                                    }) }}
-                                    <input name="step-uuid-{{ loop.index }}" type="hidden" value="{{ step.uuid }}"/>
-                                </td>
-                            </tr>
+                          <tr class="govuk-table__row">
+                            <td class="govuk-table__cell" data-header="{{ locale.common.goalSummaryCard.stepsList.whoHeader }}">{{ step.actor }}</td> {# Add data-header attribute #}
+                            <td id="step-description-{{ loop.index }}" class="govuk-table__cell" data-header="{{ locale.common.goalSummaryCard.stepsList.whatHeader }}">{{ step.description }}</td> {# Add data-header attribute #}
+                            <td class="govuk-table__cell" data-header="{{ locale.common.goalSummaryCard.stepsList.statusHeader }}">
+                              {{ govukSelect({
+                                id: "step-status-" + loop.index,
+                                name: "step-status-" + loop.index,
+                                items: items,
+                                value: step.status,
+                                classes: "govuk-select--auto-width",
+                                formGroup: {
+                                  classes: "govuk-!-margin-bottom-0"
+                                },
+                                attributes: {
+                                  'aria-label': locale.common.goalSummaryCard.stepsList.statusHeader
+                                }
+                              }) }}
+                              <input name="step-uuid-{{ loop.index }}" type="hidden" value="{{ step.uuid }}"/>
+                            </td>
+                          </tr>
                         {% endfor %}
                         </tbody>
                     </table>
