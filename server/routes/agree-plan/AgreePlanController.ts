@@ -3,7 +3,7 @@ import { plainToInstance } from 'class-transformer'
 import locale from './locale.json'
 import URLs from '../URLs'
 import validateRequest, { getValidationErrors } from '../../middleware/validationMiddleware'
-import PlanModel from '../shared-models/PlanModel'
+import PlanReadyForAgreementModel from '../shared-models/PlanReadyForAgreementModel'
 import transformRequest from '../../middleware/transformMiddleware'
 import AgreePlanPostModel from './models/AgreePlanPostModel'
 import { PlanAgreementStatus } from '../../@types/PlanType'
@@ -66,7 +66,7 @@ export default class AgreePlanController {
     try {
       const planUuid = req.services.sessionService.getPlanUUID()
       const plan = await req.services.planService.getPlanByUuid(planUuid)
-      const domainErrors = getValidationErrors(plainToInstance(PlanModel, plan)) ?? {}
+      const domainErrors = getValidationErrors(plainToInstance(PlanReadyForAgreementModel, plan)) ?? {}
 
       if (plan.agreementStatus !== PlanAgreementStatus.DRAFT) {
         domainErrors.plan = {
