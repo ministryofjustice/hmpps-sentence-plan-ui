@@ -2,8 +2,9 @@ import { NextFunction, Request, Response } from 'express'
 import locale from './locale.json'
 
 import { formatAssessmentData } from '../../utils/assessmentUtils'
+import { AccessMode } from '../../@types/Handover'
 
-export default class AboutPopController {
+export default class AboutPersonController {
   constructor() {}
 
   get = async (req: Request, res: Response, next: NextFunction) => {
@@ -29,6 +30,8 @@ export default class AboutPopController {
 
       const assessmentAreas = formatAssessmentData(criminogenicNeedsData, assessmentData, locale.en.areas)
       const pageId = 'about'
+      const readWrite = req.services.sessionService.getAccessMode() === AccessMode.READ_WRITE
+
       return res.render('pages/about', {
         locale: locale.en,
         data: {
@@ -36,6 +39,7 @@ export default class AboutPopController {
           pageId,
           deliusData,
           assessmentAreas,
+          readWrite,
         },
         errors,
       })
