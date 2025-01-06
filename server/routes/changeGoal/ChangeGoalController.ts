@@ -11,6 +11,7 @@ import validateRequest from '../../middleware/validationMiddleware'
 import { PlanAgreementStatus } from '../../@types/PlanType'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
 import { AccessMode } from '../../@types/Handover'
+import { HttpError } from '../../utils/HttpError'
 
 export default class ChangeGoalController {
   constructor(private readonly referentialDataService: ReferentialDataService) {}
@@ -42,7 +43,7 @@ export default class ChangeGoalController {
         errors,
       })
     } catch (e) {
-      return next(e)
+      return next(HttpError(500, e.message))
     }
   }
 
@@ -73,7 +74,7 @@ export default class ChangeGoalController {
 
       return res.redirect(redirectTarget)
     } catch (e) {
-      return next(e)
+      return next(HttpError(500, e.message))
     }
   }
 
