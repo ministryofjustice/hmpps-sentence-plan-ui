@@ -55,7 +55,7 @@ export const toFormattedError = (errors: any, locale: any, fieldName: string) =>
   return false
 }
 
-export const formatDate = (date, format) => {
+export const formatDate = (date: string, format: 'iso' | 'simple') => {
   const parsedDate = new Date(date)
 
   if (Number.isNaN(parsedDate.getTime())) {
