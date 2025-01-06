@@ -100,7 +100,7 @@ describe('Rendering', () => {
       '6 out of 6. (Scores above 1 are high-scoring.) ' +
       '6 out of 6 ' +
       'Create thinking, behaviours and attitudes goal'
-    cy.get('.govuk-accordion__show-all').first().click() // click show all in high-scoring assessment section
+    cy.get('.govuk-accordion__show-all').eq(0).click() // click show all in high-scoring assessment section
     cy.contains('.govuk-accordion__section', 'Thinking, behaviours and attitudes')
       .find('#accordion-default-content-1')
       .invoke('text')
@@ -116,6 +116,16 @@ describe('Rendering', () => {
       .should('have.length', 6)
   })
 
+  it('Should check if the score graph for (high-scoring area) thinking behaviour and attitudes is displayed correctly', () => {
+    cy.get('.govuk-accordion__show-all').eq(0).click()
+    cy.contains('.assessment-score', 'Thinking, behaviours and attitudes need score')
+      .find('.highscoring')
+      .should('have.length', 10)
+    cy.contains('.assessment-score', 'Lifestyle and associates need score')
+      .find('.highscoring')
+      .should('have.length', 6)
+  })
+
   it('Should check if the data for (low-scoring area) drug use are displayed correctly and in order', () => {
     const expectedHeadings =
       'This area is not linked to RoSH (risk of serious harm) ' +
@@ -125,7 +135,7 @@ describe('Rendering', () => {
       '0 out of 8. (Scores above 0 are high-scoring.) ' +
       '0 out of 8 ' +
       'Create drug use goal'
-    cy.get('.govuk-accordion__show-all').eq(1).click()
+    cy.get('.govuk-accordion__show-all').eq(1).click() // click show all in low-scoring assessment section
     cy.contains('.govuk-accordion__section', 'Drug use')
       .find('#accordion-default-content-1')
       .invoke('text')
@@ -137,6 +147,11 @@ describe('Rendering', () => {
     cy.contains('.govuk-accordion__section', 'Drug use').find('.govuk-body').should('have.length', 3)
   })
 
+  it('Should check if the score graph for (low-scoring area) drug use is displayed correctly', () => {
+    cy.get('.govuk-accordion__show-all').eq(1).click()
+    cy.contains('.assessment-score', '0 out of 8').find('.highscoring').should('have.length', 0)
+  })
+
   it('Should check if the data for (non-scoring area) health and wellbeing are displayed correctly and in order', () => {
     const expectedHeadings =
       'This area is not linked to RoSH (risk of serious harm) ' +
@@ -146,7 +161,7 @@ describe('Rendering', () => {
       'There are no strengths or protective factors related to this area ' +
       'This area does not have a need score ' +
       'Create health and wellbeing goal'
-    cy.get('.govuk-accordion__show-all').eq(2).click()
+    cy.get('.govuk-accordion__show-all').eq(2).click() // click show all in non-scoring assessment section
     cy.contains('.govuk-accordion__section', 'Health and wellbeing')
       .find('#accordion-default-content-2')
       .invoke('text')
