@@ -13,6 +13,7 @@ import { NewGoal } from '../../@types/NewGoalType'
 import { Goal } from '../../@types/GoalType'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
 import { AccessMode } from '../../@types/Handover'
+import { HttpError } from '../../utils/HttpError'
 
 export default class UpdateGoalController {
   constructor(private readonly referentialDataService: ReferentialDataService) {}
@@ -44,7 +45,7 @@ export default class UpdateGoalController {
         errors,
       })
     } catch (e) {
-      return next(e)
+      return next(HttpError(500, e.message))
     }
   }
 
@@ -87,7 +88,7 @@ export default class UpdateGoalController {
       req.services.sessionService.setReturnLink(null)
       return res.redirect(`${URLs.PLAN_OVERVIEW}?type=${goalType}`)
     } catch (e) {
-      return next(e)
+      return next(HttpError(500, e.message))
     }
   }
 

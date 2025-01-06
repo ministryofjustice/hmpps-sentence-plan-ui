@@ -1,6 +1,6 @@
 import { RequestHandler } from 'express'
-import createError from 'http-errors'
 import { AccessMode } from '../@types/Handover'
+import { HttpError } from '../utils/HttpError'
 
 export default function authorisationMiddleware(): RequestHandler {
   return (req, res, next) => {
@@ -15,16 +15,12 @@ export default function authorisationMiddleware(): RequestHandler {
 
 export function requireAccessMode(requiredAccessMode: AccessMode): RequestHandler {
   return (req, res, next) => {
-    try {
-      const currentAccessMode = req.services.sessionService.getAccessMode()
+    const currentAccessMode = req.services.sessionService.getAccessMode()
 
-      if (requiredAccessMode === AccessMode.READ_WRITE && currentAccessMode === AccessMode.READ_ONLY) {
-        return next(createError(403))
-      }
-
-      return next()
-    } catch (error) {
-      return next(error)
+    if (requiredAccessMode === AccessMode.READ_WRITE && currentAccessMode === AccessMode.READ_ONLY) {
+      return next(HttpError(403, 'User is READ_ONLY'))
     }
+
+    return next()
   }
 }

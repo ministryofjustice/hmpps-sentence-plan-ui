@@ -10,6 +10,7 @@ import transformRequest from '../../middleware/transformMiddleware'
 import PlanOverviewQueryModel from './models/PlanOverviewQueryModel'
 import { AccessMode } from '../../@types/Handover'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
+import { HttpError } from '../../utils/HttpError'
 import { PlanAgreementStatus } from '../../@types/PlanType'
 
 export default class PlanOverviewController {
@@ -51,7 +52,7 @@ export default class PlanOverviewController {
         errors,
       })
     } catch (e) {
-      return next(e)
+      return next(HttpError(500, e.message))
     }
   }
 
@@ -65,7 +66,7 @@ export default class PlanOverviewController {
       await req.services.goalService.changeGoalOrder(reorderedList)
       return res.redirect(`${URLs.PLAN_OVERVIEW}?type=${type}`)
     } catch (e) {
-      return next(e)
+      return next(HttpError(500, e.message))
     }
   }
 
@@ -89,7 +90,7 @@ export default class PlanOverviewController {
 
       return next()
     } catch (e) {
-      return next(e)
+      return next(HttpError(500, e.message))
     }
   }
 

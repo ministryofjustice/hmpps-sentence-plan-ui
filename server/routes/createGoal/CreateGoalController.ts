@@ -9,6 +9,7 @@ import CreateGoalPostModel from './models/CreateGoalPostModel'
 import validateRequest from '../../middleware/validationMiddleware'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
 import { AccessMode } from '../../@types/Handover'
+import { HttpError } from '../../utils/HttpError'
 
 export default class CreateGoalController {
   constructor(private readonly referentialDataService: ReferentialDataService) {}
@@ -27,7 +28,7 @@ export default class CreateGoalController {
 
       return res.redirect(`${URLs.PLAN_OVERVIEW}?status=added&type=${type}`)
     } catch (e) {
-      return next(e)
+      return next(HttpError(500, e.message))
     }
   }
 
