@@ -3,7 +3,7 @@ import cookieSession from 'cookie-session'
 import { v4 as uuidv4 } from 'uuid'
 
 import routes from '../index'
-import nunjucksSetup from '../../utils/nunjucksSetup'
+import nunjucksSetup from '../../middleware/nunjucks/nunjucksSetup'
 import { requestServices, Services } from '../../services'
 import type { ApplicationInfo } from '../../applicationInfo'
 import AuditService from '../../services/auditService'
