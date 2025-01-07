@@ -1,5 +1,5 @@
 import express from 'express'
-import nunjucksSetup from './utils/nunjucksSetup'
+import nunjucksSetup from './middleware/nunjucks/nunjucksSetup'
 import { appInsightsMiddleware } from './utils/azureAppInsights'
 import setUpCsrf from './middleware/setUpCsrf'
 import setUpHealthChecks from './middleware/setUpHealthChecks'

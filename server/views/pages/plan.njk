@@ -77,12 +77,12 @@
             href: "/create-goal/accommodation",
             classes: "govuk-button--secondary",
             type: 'button'
-        },
+        } if data.readWrite === true,
         {
             text: locale.header.agreePlanButton,
             type: 'submit',
             value: 'agree-plan'
-        } if data.plan.agreementStatus === 'DRAFT'
+        } if data.readWrite === true and data.plan.agreementStatus === 'DRAFT'
     ]
 } %}
 
@@ -131,7 +131,7 @@
                 {% endif %}
             {% endfor %}
 
-            {% if errors.domain | length > 0 %}
+            {% if data.readWrite == true and errors.domain | length > 0 %}
                 {{ govukErrorSummary({
                     titleText: "There is a problem",
                     errorList: errorList
@@ -192,84 +192,86 @@
                     {% set buttons = [] %}
                     {% set actions = [] %}
 
-                    {% if not loop.first %}
-                        {% set buttons = buttons.concat({
-                            text: locale.goalSummaryCard.buttons.moveUpButton,
-                            href: "/goals/" + goalType + "/" + goal.uuid + "/up",
-                            classes: "govuk-button--secondary"
-                        }) %}
-                    {% endif %}
+                    {% if data.readWrite === true %}
+                        {% if not loop.first %}
+                            {% set buttons = buttons.concat({
+                                text: locale.goalSummaryCard.buttons.moveUpButton,
+                                href: "/goals/" + goalType + "/" + goal.uuid + "/up",
+                                classes: "govuk-button--secondary"
+                            }) %}
+                        {% endif %}
 
-                    {% if not loop.last %}
-                        {% set buttons = buttons.concat({
-                            text: locale.goalSummaryCard.buttons.moveDownButton,
-                            href: "/goals/" + goalType + "/" + goal.uuid + "/down",
-                            classes: "govuk-button--secondary"
-                        }) %}
-                    {% endif %}
+                        {% if not loop.last %}
+                            {% set buttons = buttons.concat({
+                                text: locale.goalSummaryCard.buttons.moveDownButton,
+                                href: "/goals/" + goalType + "/" + goal.uuid + "/down",
+                                classes: "govuk-button--secondary"
+                            }) %}
+                        {% endif %}
 
-                    {% set errorMessage = false %}
-                    {% if errors.domain['goals.' + item.index + '.steps'].arrayNotEmpty %}
-                        {% set goalLocale = interpolate(locale, {
-                           goalTitle: goal.title
-                        }) %}
+                        {% set errorMessage = false %}
+                        {% if errors.domain['goals.' + item.index + '.steps'].arrayNotEmpty %}
+                            {% set goalLocale = interpolate(locale, {
+                               goalTitle: goal.title
+                            }) %}
 
-                        {% set errorMessage = {
-                            id: 'goal-summary-card-' + item.index,
-                            text: goalLocale.errors.steps.arrayNotEmpty
-                        } %}
-                    {% endif %}
+                            {% set errorMessage = {
+                                id: 'goal-summary-card-' + item.index,
+                                text: goalLocale.errors.steps.arrayNotEmpty
+                            } %}
+                        {% endif %}
 
-                    {% if data.plan.agreementStatus === 'DRAFT' %}
-                        {% set actions = [
-                            {
-                                href: "/change-goal/" + goal.uuid,
-                                text: locale.goalSummaryCard.actions.draft.changeGoal
-                            },
-                            {
-                                href: "/goal/" + goal.uuid + '/add-steps',
-                                text: locale.goalSummaryCard.actions.draft.addOrChangeSteps
-                            },
-                            {
-                                href: "/confirm-delete-goal/" + goal.uuid + "?type=current",
-                                text: locale.goalSummaryCard.actions.draft.deleteGoal
-                            }
-                        ] %}
-                    {% else %}
-                        {% if goal.status === 'ACTIVE' or goal.status === 'FUTURE' %}
+                        {% if data.plan.agreementStatus === 'DRAFT' %}
                             {% set actions = [
                                 {
-                                    href: "/update-goal/" + goal.uuid,
-                                    text: locale.goalSummaryCard.actions.active.update
+                                    href: "/change-goal/" + goal.uuid,
+                                    text: locale.goalSummaryCard.actions.draft.changeGoal
                                 },
                                 {
-                                    href: "/confirm-achieved-goal/" + goal.uuid + "?type=current",
-                                    text: locale.goalSummaryCard.actions.active.markAsAchieved
+                                    href: "/goal/" + goal.uuid + '/add-steps',
+                                    text: locale.goalSummaryCard.actions.draft.addOrChangeSteps
                                 },
                                 {
-                                    href: "/remove-goal/" + goal.uuid + "?type=current",
-                                    text: locale.goalSummaryCard.actions.active.removeGoal
+                                    href: "/confirm-delete-goal/" + goal.uuid + "?type=current",
+                                    text: locale.goalSummaryCard.actions.draft.deleteGoal
                                 }
                             ] %}
-                        {% elseif goal.status === 'ACHIEVED' %}
-                            {% set actions = [
-                                {
-                                    href: '/view-achieved-goal/' + goal.uuid,
-                                    text: locale.goalSummaryCard.actions.achieved.viewDetails
-                                }
-                            ] %}
-                            {% set buttons = [] %}
-                        {% elseif goal.status === 'REMOVED' %}
-                            {% set actions = [
-                                {
-                                    href: '/view-removed-goal/' + goal.uuid,
-                                    text: locale.goalSummaryCard.actions.removed.viewDetails
-                                }
-                            ] %}
-                                {#  TODO:SP2-598 {
-                                    href: '#',
-                                    text: locale.goalSummaryCard.actions.removed.addToPlan
-                                }#}
+                        {% else %}
+                            {% if goal.status === 'ACTIVE' or goal.status === 'FUTURE' %}
+                                {% set actions = [
+                                    {
+                                        href: "/update-goal/" + goal.uuid,
+                                        text: locale.goalSummaryCard.actions.active.update
+                                    },
+                                    {
+                                        href: "/confirm-achieved-goal/" + goal.uuid + "?type=current",
+                                        text: locale.goalSummaryCard.actions.active.markAsAchieved
+                                    },
+                                    {
+                                        href: "/remove-goal/" + goal.uuid + "?type=current",
+                                        text: locale.goalSummaryCard.actions.active.removeGoal
+                                    }
+                                ] %}
+                            {% elseif goal.status === 'ACHIEVED' %}
+                                {% set actions = [
+                                    {
+                                        href: '/view-achieved-goal/' + goal.uuid,
+                                        text: locale.goalSummaryCard.actions.achieved.viewDetails
+                                    }
+                                ] %}
+                                {% set buttons = [] %}
+                            {% elseif goal.status === 'REMOVED' %}
+                                {% set actions = [
+                                    {
+                                        href: '/view-removed-goal/' + goal.uuid,
+                                        text: locale.goalSummaryCard.actions.removed.viewDetails
+                                    }
+                                ] %}
+                                    {#  TODO:SP2-598 {
+                                        href: '#',
+                                        text: locale.goalSummaryCard.actions.removed.addToPlan
+                                    }#}
+                            {% endif %}
                         {% endif %}
                     {% endif %}
 
@@ -287,7 +289,7 @@
             </ol>
             {% endif %}
 
-            {% if goalType == 'current' and goals.length == 0 %}
+            {% if data.readWrite === true and goalType == 'current' and goals.length == 0 %}
                 <div id="goal-list" class="{% if errors.domain['goals'] %}govuk-form-group--error{% endif %}">
                     {% if errors.domain | length > 0 %}
                         {{ govukErrorMessage({

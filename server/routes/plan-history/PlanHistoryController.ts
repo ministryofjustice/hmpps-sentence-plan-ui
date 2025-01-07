@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import locale from './locale.json'
+import { AccessMode } from '../../@types/Handover'
+import { HttpError } from '../../utils/HttpError'
 
 export default class PlanHistoryController {
   private render = async (req: Request, res: Response, next: NextFunction) => {
@@ -9,6 +11,7 @@ export default class PlanHistoryController {
       const planUuid = req.services.sessionService.getPlanUUID()
       const oasysReturnUrl = req.services.sessionService.getOasysReturnUrl()
       const notes = await req.services.planService.getNotes(planUuid)
+      const readWrite = req.services.sessionService.getAccessMode() === AccessMode.READ_WRITE
 
       const pageId = 'plan-history'
 
@@ -18,11 +21,12 @@ export default class PlanHistoryController {
           notes,
           oasysReturnUrl,
           pageId,
+          readWrite,
         },
         errors,
       })
     } catch (e) {
-      return next(e)
+      return next(HttpError(500, e.message))
     }
   }
 

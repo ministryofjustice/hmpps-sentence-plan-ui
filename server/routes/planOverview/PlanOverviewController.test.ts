@@ -49,6 +49,7 @@ describe('PlanOverviewController', () => {
         plan: testPlan,
         type: 'current',
         oasysReturnUrl,
+        readWrite: true,
       },
       errors: {
         body: {},
@@ -75,7 +76,10 @@ describe('PlanOverviewController', () => {
       ;(req.services.sessionService.getAccessMode as jest.Mock).mockReturnValue(AccessMode.READ_ONLY)
       await runMiddlewareChain(controller.get, req, res, next)
 
-      expect(res.render).toHaveBeenCalledWith('pages/countersign', viewData)
+      const viewDataReadOnly = { ...viewData }
+      viewDataReadOnly.data.readWrite = false
+
+      expect(res.render).toHaveBeenCalledWith('pages/plan', viewDataReadOnly)
     })
 
     it('should have validation error if viewing Agreed Plan when Goal has no Steps', async () => {

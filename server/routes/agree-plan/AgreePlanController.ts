@@ -10,6 +10,7 @@ import { PlanAgreementStatus } from '../../@types/PlanType'
 import { PlanAgreement } from '../../@types/PlanAgreement'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
 import { AccessMode } from '../../@types/Handover'
+import { HttpError } from '../../utils/HttpError'
 
 export default class AgreePlanController {
   private render = async (req: Request, res: Response) => {
@@ -80,7 +81,7 @@ export default class AgreePlanController {
 
       return next()
     } catch (e) {
-      return next(e)
+      return next(HttpError(500, e.message))
     }
   }
 

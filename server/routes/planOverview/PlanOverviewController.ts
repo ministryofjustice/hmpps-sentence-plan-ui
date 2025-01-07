@@ -10,6 +10,7 @@ import transformRequest from '../../middleware/transformMiddleware'
 import PlanOverviewQueryModel from './models/PlanOverviewQueryModel'
 import { AccessMode } from '../../@types/Handover'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
+import { HttpError } from '../../utils/HttpError'
 import { PlanAgreementStatus } from '../../@types/PlanType'
 
 export default class PlanOverviewController {
@@ -34,24 +35,23 @@ export default class PlanOverviewController {
 
       req.services.sessionService.setReturnLink(`/plan?type=${type ?? 'current'}`)
 
-      let pageToRender = 'pages/plan'
+      const readWrite = req.services.sessionService.getAccessMode() === AccessMode.READ_WRITE
 
-      if (req.services.sessionService.getAccessMode() === AccessMode.READ_ONLY) {
-        pageToRender = 'pages/countersign'
-      }
+      const page = 'pages/plan'
 
-      return res.render(pageToRender, {
+      return res.render(page, {
         locale: locale.en,
         data: {
           plan,
           type,
           status,
           oasysReturnUrl,
+          readWrite,
         },
         errors,
       })
     } catch (e) {
-      return next(e)
+      return next(HttpError(500, e.message))
     }
   }
 
@@ -65,7 +65,7 @@ export default class PlanOverviewController {
       await req.services.goalService.changeGoalOrder(reorderedList)
       return res.redirect(`${URLs.PLAN_OVERVIEW}?type=${type}`)
     } catch (e) {
-      return next(e)
+      return next(HttpError(500, e.message))
     }
   }
 
@@ -89,7 +89,7 @@ export default class PlanOverviewController {
 
       return next()
     } catch (e) {
-      return next(e)
+      return next(HttpError(500, e.message))
     }
   }
 
