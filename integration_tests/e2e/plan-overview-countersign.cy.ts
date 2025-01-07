@@ -18,8 +18,7 @@ describe('View Plan Overview for READ_ONLY user', () => {
 
   it('Visiting create-goal should fail', () => {
     cy.visit('/create-goal/accommodation', { failOnStatusCode: false })
-    cy.url().should('not.include', '/plan')
-    cy.checkAccessibility()
+    cy.get('main h1').should('include.text', 'You do not have permission to perform this action')
   })
 
   it('Should have a `Return to OASys` button and it should return the user to the OASys return URL', () => {

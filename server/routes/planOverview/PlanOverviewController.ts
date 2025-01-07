@@ -35,19 +35,18 @@ export default class PlanOverviewController {
 
       req.services.sessionService.setReturnLink(`/plan?type=${type ?? 'current'}`)
 
-      let pageToRender = 'pages/plan'
+      const readWrite = req.services.sessionService.getAccessMode() === AccessMode.READ_WRITE
 
-      if (req.services.sessionService.getAccessMode() === AccessMode.READ_ONLY) {
-        pageToRender = 'pages/countersign'
-      }
+      const page = 'pages/plan'
 
-      return res.render(pageToRender, {
+      return res.render(page, {
         locale: locale.en,
         data: {
           plan,
           type,
           status,
           oasysReturnUrl,
+          readWrite,
         },
         errors,
       })
