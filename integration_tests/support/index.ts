@@ -1,4 +1,11 @@
-import { addGoalToPlan, addStepToGoal, createSentencePlan, lockPlan, openSentencePlan } from './commands/backend'
+import {
+  addGoalToPlan,
+  addStepToGoal,
+  removeGoalFromPlan,
+  createSentencePlan,
+  lockPlan,
+  openSentencePlan,
+} from './commands/backend'
 import { checkAccessibility } from './commands/accessibility'
 import 'cypress-axe'
 
@@ -9,6 +16,7 @@ Cypress.Commands.add('createSentencePlan', createSentencePlan)
 // API
 Cypress.Commands.add('addGoalToPlan', addGoalToPlan)
 Cypress.Commands.add('addStepToGoal', addStepToGoal)
+Cypress.Commands.add('removeGoalFromPlan', removeGoalFromPlan)
 
 Cypress.Commands.add('lockPlan', lockPlan)
 
