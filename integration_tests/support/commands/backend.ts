@@ -1,6 +1,7 @@
 import { NewGoal } from '../../../server/@types/NewGoalType'
 import { NewStep } from '../../../server/@types/StepType'
 import { AccessMode } from '../../../server/@types/Handover'
+import { GoalStatus } from '../../../server/@types/GoalType'
 
 const getApiToken = () => {
   const apiToken = Cypress.env('API_TOKEN')
@@ -192,6 +193,24 @@ export const addGoalToPlan = (planUUid: string, goal: NewGoal) => {
       .request({
         url: `${Cypress.env('SP_API_URL')}/plans/${planUUid}/goals`,
         method: 'POST',
+        auth: { bearer: apiToken },
+        body: goal,
+      })
+      .then(createResponse => createResponse.body),
+  )
+}
+
+export const removeGoalFromPlan = (goalUuid: string, note: string) => {
+  const goal: Partial<NewGoal> = {
+    status: GoalStatus.REMOVED,
+    note,
+  }
+
+  return getApiToken().then(apiToken =>
+    cy
+      .request({
+        url: `${Cypress.env('SP_API_URL')}/goals/${goalUuid}`,
+        method: 'PATCH',
         auth: { bearer: apiToken },
         body: goal,
       })

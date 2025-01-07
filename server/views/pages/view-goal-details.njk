@@ -72,13 +72,12 @@
             }) }}
 
             {% if data.goal.status == 'REMOVED' %}
-{#               TODO:SP2-598#}
-{#                {{ govukButton(}#}
-{#                    text: locale.addToPlan,#}
-{#                    name: "action",#}
-{#                    value: "#",#}
-{#                    classes: "govuk-button--secondary"#}
-{#                }) }}#}
+                {{ govukButton({
+                    text: locale.addToPlan,
+                    name: "action",
+                    value: "#",
+                    classes: "govuk-button--secondary"
+                }) }}
             {% endif %}
 
         </div>
