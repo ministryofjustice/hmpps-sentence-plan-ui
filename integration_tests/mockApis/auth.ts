@@ -1,8 +1,7 @@
 import jwt from 'jsonwebtoken'
 import type { Response } from 'superagent'
 
-import { stubFor, getMatchingRequests } from './wiremock'
-import tokenVerification from './tokenVerification'
+import { getMatchingRequests, stubFor } from './wiremock'
 
 const createToken = (roles: string[] = []) => {
   // authorities in the session are always prefixed by ROLE.
@@ -123,6 +122,6 @@ export default {
   getSignInUrl,
   stubAuthPing: ping,
   stubAuthManageDetails: manageDetails,
-  stubSignIn: (roles: string[]): Promise<[Response, Response, Response, Response, Response]> =>
-    Promise.all([favicon(), redirect(), signOut(), token(roles), tokenVerification.stubVerifyToken()]),
+  stubSignIn: (roles: string[]): Promise<[Response, Response, Response, Response]> =>
+    Promise.all([favicon(), redirect(), signOut(), token(roles)]),
 }
