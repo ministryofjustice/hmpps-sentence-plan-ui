@@ -88,16 +88,18 @@
 
             {% set goalText = locale.linkType.direct %}
             {% set hiddenAriaText = locale.ariaText.direct %}
-            {% if note.goalStatus == 'REMOVED' %}
-                {%  set goalLink = '/view-removed-goal/' + note.goalUuid %}
-            {% elseif note.goalStatus == 'ACHIEVED' %}
-                {%  set goalLink = '/view-achieved-goal/' + note.goalUuid  %}
-            {% else %}
-                {% set goalLink = '/update-goal/' + note.goalUuid  %}
-                {% set goalText = locale.linkType.latest %}
-                {% set hiddenAriaText = locale.ariaText.latest %}
+            {% if data.readWrite === true %}
+              {% if note.goalStatus == 'REMOVED' %}
+                  {%  set goalLink = '/view-removed-goal/' + note.goalUuid %}
+              {% elseif note.goalStatus == 'ACHIEVED' %}
+                  {%  set goalLink = '/view-achieved-goal/' + note.goalUuid  %}
+              {% else %}
+                  {% set goalLink = '/update-goal/' + note.goalUuid  %}
+                  {% set goalText = locale.linkType.latest %}
+                  {% set hiddenAriaText = locale.ariaText.latest %}
+              {% endif %}
+              <p class='goal-link'><a aria-label= '{{ hiddenAriaText }}' href='{{ goalLink }}' class="govuk-link govuk-link--no-visited-state">{{ goalText }}</a></p>
             {% endif %}
-            <p class='goal-link'><a aria-label= '{{ hiddenAriaText }}' href='{{ goalLink }}' class="govuk-link govuk-link--no-visited-state">{{ goalText }}</a></p>
         {% endif %}
     {% endfor %}
 

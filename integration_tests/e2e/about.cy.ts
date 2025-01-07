@@ -152,7 +152,7 @@ describe('Rendering READ_WRITE', () => {
   })
 })
 
-describe('Rendering READ_ONLY', () => {
+describe('Rendering About Person in READ_ONLY', () => {
   beforeEach(() => {
     cy.createSentencePlan().then(planDetails => {
       cy.wrap(planDetails).as('plan')
