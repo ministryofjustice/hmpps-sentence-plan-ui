@@ -37,9 +37,9 @@ describe('Rendering READ_WRITE', () => {
 
   it('Should check if main titles of hard-coded high-scoring areas from the assessment are displayed correctly and in order with the correct risk marker', () => {
     const expectedText = [
-      'Thinking, behaviours and attitudes',
       'Accommodation',
       'Personal relationships and community',
+      'Thinking, behaviours and attitudes',
       'Alcohol use',
       'Employment and education',
       'Drug use',
@@ -61,9 +61,9 @@ describe('Rendering READ_WRITE', () => {
     cy.get('.govuk-accordion__show-all').click({ multiple: true })
 
     const areas = [
-      { text: 'Create thinking, behaviours and attitudes goal', href: 'thinking-behaviours-and-attitudes' },
       { text: 'Create accommodation goal', href: 'accommodation' },
       { text: 'Create personal relationships and community goal', href: 'personal-relationships-and-community' },
+      { text: 'Create thinking, behaviours and attitudes goal', href: 'thinking-behaviours-and-attitudes' },
       { text: 'Create alcohol use goal', href: 'alcohol-use' },
       { text: 'Create employment and education goal', href: 'employment-and-education' },
       { text: 'Create drug use goal', href: 'drug-use' },
@@ -87,15 +87,15 @@ describe('Rendering READ_WRITE', () => {
       'Motivation to make changes in this area Sam wants to make changes but needs help. ' +
       'There are no strengths or protective factors related to this area ' +
       'Thinking, behaviours and attitudes need score ' +
-      '10 out of 10. (Scores above 2 are high-scoring.) ' +
-      '10 out of 10 ' +
+      '1 out of 10. (Scores above 2 are high-scoring.) ' +
+      '1 out of 10 ' +
       'Lifestyle and associates need score ' +
       '6 out of 6. (Scores above 1 are high-scoring.) ' +
       '6 out of 6 ' +
       'Create thinking, behaviours and attitudes goal'
     cy.get('.govuk-accordion__show-all').eq(0).click() // click show all in high-scoring assessment section
     cy.contains('.govuk-accordion__section', 'Thinking, behaviours and attitudes')
-      .find('#accordion-default-content-1')
+      .find('#accordion-default-content-3')
       .invoke('text')
       .then(text => {
         const trimText = text.trim().replace(/\s+/g, ' ') // regex to catch and replace excessive newlines to single whitespace
@@ -112,8 +112,8 @@ describe('Rendering READ_WRITE', () => {
   it('Should check if the score graph for (high-scoring area) thinking behaviour and attitudes is displayed correctly', () => {
     cy.get('.govuk-accordion__show-all').eq(0).click()
     cy.contains('.assessment-score', 'Thinking, behaviours and attitudes need score')
-      .find('.highscoring')
-      .should('have.length', 10)
+      .find('.lowscoring')
+      .should('have.length', 1)
     cy.contains('.assessment-score', 'Lifestyle and associates need score')
       .find('.highscoring')
       .should('have.length', 6)
