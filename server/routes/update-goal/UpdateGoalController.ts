@@ -85,9 +85,9 @@ export default class UpdateGoalController {
       const goalType: string = goalStatusToTabName(goal.status)
 
       await this.updateSteps(req, goal, steps, note)
-      req.services.sessionService.setReturnLink(null)
 
       if (steps.length === 0 || steps.some((step: { status: string }) => step.status !== 'COMPLETED')) {
+        req.services.sessionService.setReturnLink(null)
         return res.redirect(`${URLs.PLAN_OVERVIEW}?type=${goalType}`)
       }
       return res.redirect(`${URLs.ACHIEVE_GOAL.replace(':uuid', uuid)}`)
