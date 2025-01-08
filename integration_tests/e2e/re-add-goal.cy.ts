@@ -19,8 +19,15 @@ describe('Re-add a goal to a Plan after it has been removed', () => {
     })
   })
 
-  it('visit plan page', () => {
+  it('Remove goal details page contains button to re-add goal to plan OK', () => {
     cy.visit(`/view-removed-goal/${removedGoal.uuid}`)
-    cy.get('button.govuk-button--secondary').last().should('contain.text', 'Add to plan')
+    cy.get('a.add-to-plan').should('contain.text', 'Add to plan')
+  })
+
+  it('Clicking re-add goal to plan loads confirmation page', () => {
+    cy.visit(`/view-removed-goal/${removedGoal.uuid}`)
+    cy.get('a.add-to-plan').click()
+    cy.url().should('contain', `/confirm-add-goal/${removedGoal.uuid}`)
+    cy.title().should('contain', 'Confirm you want to add this goal back into the plan')
   })
 })
