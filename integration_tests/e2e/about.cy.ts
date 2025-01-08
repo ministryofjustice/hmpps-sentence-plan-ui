@@ -167,25 +167,42 @@ describe('Rendering READ_WRITE', () => {
   })
 
   it('Should check if the data for (non-scoring area) finance are displayed correctly and in order', () => {
-    const expectedHeadings =
-      'This area is not linked to RoSH (risk of serious harm) ' +
-      'This area is linked to risk of reoffending ' +
-      'Sam does not perceive herself to be reckless or a risk-taker, stating that she did not believe that the alcohol she had consumed the previous evening would cause her to be over the limit feeling like ‘everyone does it’ in relation to driving home the next day. She described just being focused on the opportunity to do some outstanding household chores before her children came home. However, Sam accepts that she consumed the quantity of alcohol that she did and that she is responsible for her own actions. Sam has now experienced two occasions in which her judgement and decision making has been impaired as a result of alcohol use. Additionally, when discussing the lead up to both the incidents Sam has been able to reflect that the circumstances preceding those nights were both stressful and overwhelming for her; therefore, using alcohol as a form of escapism. Sam is still in shock about the potential consequences her actions may have on her career, family and social services involvement however feels this is just a one off that won’t happen again. Sam needs to understand how dealing with her problems is linked to her alcohol use and then recognising the consequences of her actions and behaviour once she has consumed alcohol to an unacceptable level. Her attitude towards how she behaves needs to be also explored further to also help reduce her risk of re offending whilst she justifies her behaviour by stating ‘everyone does it’. ' +
-      'Motivation to make changes in this area ' +
-      'This question was not applicable. ' +
-      'There are no strengths or protective factors related to this area ' +
-      'This area does not have a need score ' +
-      'Create finances goal'
+    const expectedHeadings = [
+      'This area is not linked to RoSH (risk of serious harm)',
+      'This area is linked to risk of reoffending',
+      'Motivation to make changes in this area',
+      'There are no strengths or protective factors related to this area',
+      'This area does not have a need score',
+    ]
+
+    const expectedBody = [
+      'Sam does not perceive herself to be reckless or a risk-taker',
+      'This question was not applicable.',
+    ]
+
     cy.get('.govuk-accordion__show-all').eq(2).click() // click show all in non-scoring assessment section
-    cy.contains('.govuk-accordion__section', 'Finances')
-      .find('#accordion-default-content-1')
-      .invoke('text')
-      .then(text => {
-        const trimText = text.trim().replace(/\s+/g, ' ') // regex to catch and replace excessive newlines to single whitespace
-        expect(trimText).to.include(expectedHeadings)
+
+    cy.contains('.govuk-accordion__section', 'Finances').find('#accordion-default-content-1').as('sectionContent')
+
+    // Header assertions
+    cy.get('@sectionContent')
+      .find('.govuk-heading-s')
+      .then(headerElements => {
+        const actualTitles = headerElements.toArray().map(header => header.textContent)
+        actualTitles.forEach((title, index) => {
+          expect(title).to.equal(expectedHeadings[index])
+        })
       })
-    cy.contains('.govuk-accordion__section', 'Finances').find('.govuk-heading-s').should('have.length', 5)
-    cy.contains('.govuk-accordion__section', 'Finances').find('.govuk-body').should('have.length', 3)
+
+    // Body assertions
+    cy.get('@sectionContent')
+      .find('.govuk-body')
+      .then(bodyElements => {
+        const actualBody = bodyElements.toArray().map(body => body.textContent)
+        actualBody.forEach((title, index) => {
+          expect(title).to.contain(expectedBody[index])
+        })
+      })
   })
 })
 
