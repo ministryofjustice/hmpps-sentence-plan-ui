@@ -96,7 +96,7 @@
         "area": "Finances",
         "crimNeedsKey": "finance",
         "crimNeedsSubKey": "finance",
-        "assessmentKey": "finance_debt",
+        "assessmentKey": "finance",
         "goalRoute": "finances",
         "upperBound": null
       },
