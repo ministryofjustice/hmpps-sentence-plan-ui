@@ -165,6 +165,45 @@ describe('Rendering READ_WRITE', () => {
     cy.contains('.govuk-accordion__section', 'Health and wellbeing').find('.govuk-heading-s').should('have.length', 5)
     cy.contains('.govuk-accordion__section', 'Health and wellbeing').find('.govuk-body').should('have.length', 2)
   })
+
+  it('Should check if the data for (non-scoring area) finance are displayed correctly and in order', () => {
+    const expectedHeadings = [
+      'This area is not linked to RoSH (risk of serious harm)',
+      'This area is linked to risk of reoffending',
+      'Motivation to make changes in this area',
+      'There are no strengths or protective factors related to this area',
+      'This area does not have a need score',
+    ]
+
+    const expectedBody = [
+      'Sam does not perceive herself to be reckless or a risk-taker',
+      'This question was not applicable.',
+    ]
+
+    cy.get('.govuk-accordion__show-all').eq(2).click() // click show all in non-scoring assessment section
+
+    cy.contains('.govuk-accordion__section', 'Finances').find('#accordion-default-content-1').as('sectionContent')
+
+    // Header assertions
+    cy.get('@sectionContent')
+      .find('.govuk-heading-s')
+      .then(headerElements => {
+        const actualTitles = headerElements.toArray().map(header => header.textContent)
+        actualTitles.forEach((title, index) => {
+          expect(title).to.equal(expectedHeadings[index])
+        })
+      })
+
+    // Body assertions
+    cy.get('@sectionContent')
+      .find('.govuk-body')
+      .then(bodyElements => {
+        const actualBody = bodyElements.toArray().map(body => body.textContent)
+        actualBody.forEach((title, index) => {
+          expect(title).to.contain(expectedBody[index])
+        })
+      })
+  })
 })
 
 describe('Rendering About Person in READ_ONLY', () => {
