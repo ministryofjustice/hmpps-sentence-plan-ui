@@ -1,9 +1,7 @@
 import DataGenerator from '../support/DataGenerator'
-import PlanOverview from '../pages/plan-overview'
 import { Goal } from '../../server/@types/GoalType'
 
 describe('Re-add a goal to a Plan after it has been removed', () => {
-  const planOverview = new PlanOverview()
   let removedGoal: Goal
 
   beforeEach(() => {
@@ -12,7 +10,7 @@ describe('Re-add a goal to a Plan after it has been removed', () => {
 
       cy.addGoalToPlan(planDetails.plan.uuid, DataGenerator.generateGoal()).then(goal => {
         cy.addStepToGoal(goal.uuid, DataGenerator.generateStep())
-        planOverview.agreePlan()
+        cy.agreePlan(planDetails.plan.uuid)
         cy.removeGoalFromPlan(goal.uuid, 'A removal note')
         removedGoal = goal
       })

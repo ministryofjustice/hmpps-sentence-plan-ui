@@ -205,8 +205,10 @@ export const addGoalToPlan = (planUUid: string, goal: NewGoal) => {
 export const agreePlan = (planUUid: string) => {
   const agreement: PlanAgreement = {
     agreementStatus: PlanAgreementStatus.AGREED,
-    practitionerName: '',
-    personName: '',
+    practitionerName: 'Practitioner', // TODO real value
+    personName: 'Person', // TODO real value
+    agreementStatusNote: 'Plan was agreed',
+    optionalNote: '',
   }
 
   return getApiToken().then(apiToken =>
