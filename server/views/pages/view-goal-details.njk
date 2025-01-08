@@ -74,9 +74,8 @@
             {% if data.goal.status == 'REMOVED' %}
                 {{ govukButton({
                     text: locale.addToPlan,
-                    name: "action",
-                    value: "#",
-                    classes: "govuk-button--secondary"
+                    href: '/confirm-add-goal/' + data.goal.uuid,
+                    classes: "govuk-button--secondary add-to-plan"
                 }) }}
             {% endif %}
 
