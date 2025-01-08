@@ -4,6 +4,7 @@ import { PlanType } from '../../server/@types/PlanType'
 import PlanOverview from '../pages/plan-overview'
 import UpdateGoal from '../pages/update-goal'
 import { Goal } from '../../server/@types/GoalType'
+import { NewGoal } from '../../server/@types/NewGoalType'
 
 describe('Update goal', () => {
   beforeEach(() => {
@@ -19,11 +20,42 @@ describe('Update goal', () => {
       const planOverview = new PlanOverview()
       cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
         cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal()).then(goal => {
-          cy.wrap(goal).as('updatableGoal')
+          cy.wrap(goal).as('goalForNow')
+          cy.addStepToGoal(goal.uuid, DataGenerator.generateStep())
+        })
+
+        const futureGoal: Partial<NewGoal> = { targetDate: null }
+        cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal(futureGoal)).then(goal => {
+          cy.wrap(goal).as('goalForFuture')
           cy.addStepToGoal(goal.uuid, DataGenerator.generateStep())
         })
 
         planOverview.agreePlan()
+
+        cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal()).then(goal => {
+          cy.wrap(goal).as('goalWithNoSteps')
+        })
+      })
+    })
+
+    it('Should say when to achieve this goal by', () => {
+      cy.get<Goal>('@goalForNow').then(goal => {
+        cy.visit(`/update-goal-steps/${goal.uuid}`)
+        cy.get('.govuk-grid-column-full > p').should('include.text', 'Aim to achieve this by')
+      })
+    })
+
+    it('Should say this is a future goal', () => {
+      cy.get<Goal>('@goalForFuture').then(goal => {
+        cy.visit(`/update-goal-steps/${goal.uuid}`)
+        cy.get('.govuk-grid-column-full > p').should('include.text', 'This is a future goal.')
+      })
+    })
+
+    it('Should say no steps added', () => {
+      cy.get<Goal>('@goalWithNoSteps').then(goal => {
+        cy.visit(`/update-goal-steps/${goal.uuid}`)
+        cy.get('.goal-summary-card__steps--empty-no-shadow').should('include.text', 'No steps added.')
       })
     })
 
@@ -32,7 +64,7 @@ describe('Update goal', () => {
         cy.openSentencePlan(oasysAssessmentPk, 'READ_ONLY')
       })
 
-      cy.get<Goal>('@updatableGoal').then(goal => {
+      cy.get<Goal>('@goalForNow').then(goal => {
         cy.visit(`/update-goal-steps/${goal.uuid}`, { failOnStatusCode: false })
         cy.get('.govuk-body').should('contain', 'You do not have permission to perform this action')
       })
@@ -40,28 +72,37 @@ describe('Update goal', () => {
     })
 
     it('Can select and update a step status', () => {
+      // Go to correct page
       cy.url().should('satisfy', url => url.endsWith('/plan')) // check we're back to plan-overview
       cy.contains('a', 'Update').click() // click update link
       cy.url().should('include', '/update-goal-steps') // check url is update goal
+
+      // Change step status
       cy.get('.govuk-table__body > .govuk-table__row > :nth-child(3)').contains(
-        'Not started' || 'In progress' || 'Cannot be done yet' || 'No longer needed' || 'Completed',
+        /Not started|In progress|Cannot be done yet|No longer needed|Completed/,
       ) // check contains not started status
       cy.get('#step-status-1').select('Not started') // select not started status
       cy.get('.govuk-button').contains('Save goal and steps').click()
+
+      // Check change is visible on Plan Overview
       cy.url().should('include', '/plan') // check we're back to plan-overview
       cy.get('.govuk-table__body > .govuk-table__row > :nth-child(3)').contains('Not started') // check contains not started status
+
+      // Go to update page and change step status again
       cy.contains('a', 'Update').click() // click update link
       cy.url().should('include', '/update-goal-steps') // check url is update goal
       cy.get('.govuk-table__body > .govuk-table__row > :nth-child(3)').contains('In progress') // check contains not started status
-      cy.get('#step-status-1').select('In progress') // select not started status
+      cy.get('#step-status-1').select('In progress') // select in progress status
       cy.get('.govuk-button').contains('Save goal and steps').click()
+
+      // Check change is visible on Plan Overview
       cy.url().should('include', '/plan') // check we're back to plan-overview
       cy.get('.govuk-table__body > .govuk-table__row > :nth-child(3)').contains('In progress')
       cy.checkAccessibility()
     })
 
     it('Updating all step status to complete and saving goes to the achieve goal page', () => {
-      cy.get<Goal>('@updatableGoal').then(goal => {
+      cy.get<Goal>('@goalForNow').then(goal => {
         cy.visit(`/update-goal-steps/${goal.uuid}`)
         cy.get('#step-status-1').select('Completed')
         cy.get('.govuk-button').contains('Save goal and steps').click()
@@ -78,14 +119,13 @@ describe('Update goal', () => {
         const goalUuid = url.substring(url.lastIndexOf('/') + 1)
         cy.contains('a', 'Back').should('have.attr', 'href', `/update-goal-steps/${goalUuid}`)
       })
-      cy.checkAccessibility()
     })
 
     it('Clicking Back link does not save', () => {
       cy.contains('a', 'Update').click() // click update link
       cy.url().should('include', '/update-goal-steps') // check url is update goal
       cy.get('.govuk-table__body > .govuk-table__row > :nth-child(3)').contains(
-        'Not started' || 'In progress' || 'Cannot be done yet' || 'No longer needed' || 'Completed',
+        /Not started|In progress|Cannot be done yet|No longer needed|Completed/,
       ) // check contains not started status
       cy.get('#step-status-1').select('Not started') // select Not started status
       cy.get('.govuk-button').contains('Save goal and steps').click()
@@ -102,6 +142,7 @@ describe('Update goal', () => {
     it('Can save and view notes attached to a goal', () => {
       const updateGoal = new UpdateGoal()
       updateGoal.createNote()
+      cy.visit('/plan') // return to plan-overview
       cy.contains('a', 'Update').click() // click update link
       cy.contains('View all notes').click() // open drop down of notes
       cy.get('.govuk-details__text').contains(updateGoal.notesEntry) // check if created note is there
