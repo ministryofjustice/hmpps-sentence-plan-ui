@@ -25,10 +25,10 @@ export const formatAssessmentData = (
     .filter(areaConfig => areaConfig.crimNeedsKey in crimNeeds && crimNeeds[areaConfig.crimNeedsKey])
     .map(areaConfig => {
       let score
-      const linkedtoRoSH = crimNeeds[areaConfig.crimNeedsKey][`${areaConfig.crimNeedsSubKey}LinkedToHarm`] === 'YES'
-      const linkedtoReoffending =
+      const isLinkedtoRoSH = crimNeeds[areaConfig.crimNeedsKey][`${areaConfig.crimNeedsSubKey}LinkedToHarm`] === 'YES'
+      const isLinkedtoReoffending =
         crimNeeds[areaConfig.crimNeedsKey][`${areaConfig.crimNeedsSubKey}LinkedToReoffending`] === 'YES'
-      const linkedtoStrengthsOrProtectiveFactors =
+      const isLinkedtoStrengthsOrProtectiveFactors =
         crimNeeds[areaConfig.crimNeedsKey][`${areaConfig.crimNeedsSubKey}Strengths`] === 'YES'
       let subData: SubAreaData
       let overallScore
@@ -36,9 +36,9 @@ export const formatAssessmentData = (
         assessment.sanAssessmentData[`${areaConfig.assessmentKey}_changes`]?.value,
       )
 
-      const linkedToRoSHYesNo = linkedtoRoSH ? 'yes' : 'no'
-      const linkedToReoffendingYesNo = linkedtoReoffending ? 'yes' : 'no'
-      const linkedtoStrengthsOrProtectiveFactorsYesNo = linkedtoStrengthsOrProtectiveFactors ? 'yes' : 'no'
+      const linkedToRoSHYesNo = isLinkedtoRoSH ? 'yes' : 'no'
+      const linkedToReoffendingYesNo = isLinkedtoReoffending ? 'yes' : 'no'
+      const linkedtoStrengthsOrProtectiveFactorsYesNo = isLinkedtoStrengthsOrProtectiveFactors ? 'yes' : 'no'
 
       const riskOfSeriousHarmDetails =
         assessment.sanAssessmentData[
@@ -79,9 +79,9 @@ export const formatAssessmentData = (
       return {
         title: areaConfig.area,
         overallScore: overallScore ?? score,
-        linkedtoRoSH,
-        linkedtoReoffending,
-        linkedtoStrengthsOrProtectiveFactors,
+        isLinkedtoRoSH,
+        isLinkedtoReoffending,
+        isLinkedtoStrengthsOrProtectiveFactors,
         motivationToMakeChanges,
         riskOfSeriousHarmDetails,
         riskOfReoffendingDetails,
@@ -122,7 +122,7 @@ export const groupAndSortOtherAreas = (other: AssessmentArea[]): AssessmentArea[
 
   // group the areas by the sum of their risk counts, RoSH first
   other.forEach(area => {
-    const riskCount = (area.linkedtoRoSH ? 2 : 0) + (area.linkedtoReoffending ? 1 : 0)
+    const riskCount = (area.isLinkedtoRoSH ? 2 : 0) + (area.isLinkedtoReoffending ? 1 : 0)
     if (!groupedByRiskCount[riskCount]) {
       groupedByRiskCount[riskCount] = []
     }
