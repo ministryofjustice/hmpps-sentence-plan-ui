@@ -46,7 +46,7 @@
                             <h3 class="govuk-heading-s">{{ locale.detail.linkedToReoffending }}</h3>
                             <p class="sp-text-pre-wrap govuk-body">{{ riskOfReoffendingData }}</p>
                         </div>
-                    {% elif riskOfReoffendingData %}
+                    {% elseif riskOfReoffendingData %}
                         <h3 class="govuk-heading-s">{{ locale.detail.notLinkedToRiskOfReoffending }}</h3>
                         <p class="sp-text-pre-wrap govuk-body">{{ riskOfReoffendingData }}</p>
                     {% else %}
