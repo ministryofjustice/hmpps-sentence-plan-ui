@@ -30,7 +30,7 @@ export default class UpdateGoalController {
       const relatedAreasOfNeed = goal.relatedAreasOfNeed.map(need => need.name)
 
       const returnLink = req.services.sessionService.getReturnLink()
-      req.services.sessionService.setReturnLink(`/update-goal/${uuid}`)
+      req.services.sessionService.setReturnLink(`/update-goal-steps/${uuid}`)
 
       return res.render('pages/update-goal', {
         locale: locale.en,
@@ -85,8 +85,12 @@ export default class UpdateGoalController {
       const goalType: string = goalStatusToTabName(goal.status)
 
       await this.updateSteps(req, goal, steps, note)
-      req.services.sessionService.setReturnLink(null)
-      return res.redirect(`${URLs.PLAN_OVERVIEW}?type=${goalType}`)
+
+      if (steps.length === 0 || steps.some((step: { status: string }) => step.status !== 'COMPLETED')) {
+        req.services.sessionService.setReturnLink(null)
+        return res.redirect(`${URLs.PLAN_OVERVIEW}?type=${goalType}`)
+      }
+      return res.redirect(`${URLs.ACHIEVE_GOAL.replace(':uuid', uuid)}`)
     } catch (e) {
       return next(HttpError(500, e.message))
     }
