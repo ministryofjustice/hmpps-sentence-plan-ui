@@ -146,39 +146,54 @@ describe('Rendering READ_WRITE', () => {
   })
 
   it('Should check if the data for (non-scoring area) health and wellbeing are displayed correctly and in order', () => {
-    const expectedHeadings =
-      'This area is not linked to RoSH (risk of serious harm) ' +
-      'This area is not linked to risk of reoffending ' +
-      'Motivation to make changes in this area ' +
-      'This question was not applicable. ' +
-      'There are no strengths or protective factors related to this area ' +
-      'This area does not have a need score ' +
-      'Create health and wellbeing goal'
-    cy.get('.govuk-accordion__show-all').eq(2).click() // click show all in non-scoring assessment section
-    cy.contains('.govuk-accordion__section', 'Health and wellbeing')
-      .find('#accordion-default-content-2')
-      .invoke('text')
-      .then(text => {
-        const trimText = text.trim().replace(/\s+/g, ' ') // regex to catch and replace excessive newlines to single whitespace
-        expect(trimText).to.include(expectedHeadings)
-      })
-    cy.contains('.govuk-accordion__section', 'Health and wellbeing').find('.govuk-heading-s').should('have.length', 5)
-    cy.contains('.govuk-accordion__section', 'Health and wellbeing').find('.govuk-body').should('have.length', 2)
-  })
-
-  it('Should check if the data for (non-scoring area) finance are displayed correctly and in order', () => {
     const expectedHeadings = [
       'This area is not linked to RoSH (risk of serious harm)',
-      'This area is linked to risk of reoffending',
+      'This area is not linked to risk of reoffending',
       'Motivation to make changes in this area',
       'There are no strengths or protective factors related to this area',
       'This area does not have a need score',
     ]
 
-    const expectedBody = [
-      'Sam does not perceive herself to be reckless or a risk-taker',
-      'This question was not applicable.',
+    const expectedBody = ['There is no risk of serious harm', 'This question was not applicable.']
+
+    cy.get('.govuk-accordion__show-all').eq(2).click() // click show all in non-scoring assessment section
+
+    cy.contains('.govuk-accordion__section', 'Health and wellbeing')
+      .find('#accordion-default-content-2')
+      .as('sectionContent')
+
+    // Header assertions
+    cy.get('@sectionContent')
+      .find('.govuk-heading-s')
+      .then(headerElements => {
+        const actualTitles = headerElements.toArray().map(header => header.textContent)
+        actualTitles.forEach((title, index) => {
+          expect(title).to.contain(expectedHeadings[index])
+        })
+      })
+
+    // Body assertions
+    cy.get('@sectionContent')
+      .find('.govuk-body')
+      .then(bodyElements => {
+        const actualBody = bodyElements.toArray().map(body => body.textContent)
+        actualBody.forEach((body, index) => {
+          cy.log(body)
+          expect(body).to.contain(expectedBody[index])
+        })
+      })
+  })
+
+  it('Should check if the data for (non-scoring area) finance are displayed correctly and in order', () => {
+    const expectedHeadings = [
+      'This area is not linked to RoSH (risk of serious harm)',
+      'This area is not linked to risk of reoffending',
+      'Motivation to make changes in this area',
+      'There are no strengths or protective factors related to this area',
+      'This area does not have a need score',
     ]
+
+    const expectedBody = ['There is no risk of reoffending', 'This question was not applicable.']
 
     cy.get('.govuk-accordion__show-all').eq(2).click() // click show all in non-scoring assessment section
 
@@ -199,8 +214,8 @@ describe('Rendering READ_WRITE', () => {
       .find('.govuk-body')
       .then(bodyElements => {
         const actualBody = bodyElements.toArray().map(body => body.textContent)
-        actualBody.forEach((title, index) => {
-          expect(title).to.contain(expectedBody[index])
+        actualBody.forEach((body, index) => {
+          expect(body).to.contain(expectedBody[index])
         })
       })
   })

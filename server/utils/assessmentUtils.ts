@@ -33,13 +33,17 @@ export const formatAssessmentData = (
       const motivationToMakeChanges = motivationText(
         assessment.sanAssessmentData[`${areaConfig.assessmentKey}_changes`]?.value,
       )
+
+      const linkedToRoSHYesNo = linkedtoRoSH ? 'yes' : 'no'
+      const linkedToReoffendingYesNo = linkedtoReoffending ? 'yes' : 'no'
+
       const riskOfSeriousHarmDetails =
         assessment.sanAssessmentData[
-          `${areaConfig.assessmentKey}_practitioner_analysis_risk_of_serious_harm_yes_details`
+          `${areaConfig.assessmentKey}_practitioner_analysis_risk_of_serious_harm_${linkedToRoSHYesNo}_details`
         ]?.value
       const riskOfReoffendingDetails =
         assessment.sanAssessmentData[
-          `${areaConfig.assessmentKey}_practitioner_analysis_risk_of_reoffending_yes_details`
+          `${areaConfig.assessmentKey}_practitioner_analysis_risk_of_reoffending_${linkedToReoffendingYesNo}_details`
         ]?.value
       const strengthsOrProtectiveFactors =
         assessment.sanAssessmentData[

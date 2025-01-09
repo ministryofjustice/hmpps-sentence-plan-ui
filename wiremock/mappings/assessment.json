@@ -2476,6 +2476,14 @@
               "values": null,
               "collection": null
             },
+            "finance_practitioner_analysis_risk_of_reoffending_no_details": {
+              "type": "TEXT_AREA",
+              "description": "Give details (optional)",
+              "options": null,
+              "value": "There is no risk of reoffending",
+              "values": null,
+              "collection": null
+            },
             "health_wellbeing_is_no_physical_mental_health_user_submitted": {
               "type": "RADIO",
               "description": "Has the user submitted the page?",
@@ -2788,7 +2796,7 @@
               "type": "TEXT_AREA",
               "description": "Give details (optional)",
               "options": null,
-              "value": "",
+              "value": "There is no risk of serious harm",
               "values": null,
               "collection": null
             },
