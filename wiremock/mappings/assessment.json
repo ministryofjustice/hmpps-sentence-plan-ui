@@ -2838,7 +2838,7 @@
               "type": "TEXT_AREA",
               "description": "Give details (optional)",
               "options": null,
-              "value": "",
+              "value": "Nothing to add",
               "values": null,
               "collection": null
             },

@@ -193,7 +193,7 @@ describe('Rendering READ_WRITE', () => {
       'This area does not have a need score',
     ]
 
-    const expectedBody = ['There is no risk of reoffending', 'This question was not applicable.']
+    const expectedBody = ['There is no risk of reoffending', 'This question was not applicable.', 'Nothing to add']
 
     cy.get('.govuk-accordion__show-all').eq(2).click() // click show all in non-scoring assessment section
 

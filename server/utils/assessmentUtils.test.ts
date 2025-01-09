@@ -56,6 +56,7 @@ describe('format assessment data', () => {
             criminogenicNeedsScore: '6',
             linkedtoReoffending: true,
             linkedtoRoSH: false,
+            linkedtoStrengthsOrProtectiveFactors: false,
             overallScore: '6',
             riskOfReoffendingDetails: undefined,
             thresholdValue: 1,
@@ -69,6 +70,7 @@ describe('format assessment data', () => {
             criminogenicNeedsScore: '1',
             linkedtoReoffending: true,
             linkedtoRoSH: false,
+            linkedtoStrengthsOrProtectiveFactors: true,
             overallScore: '1',
             riskOfReoffendingDetails: undefined,
             thresholdValue: 1,
@@ -84,6 +86,7 @@ describe('format assessment data', () => {
             upperBound: null,
             linkedtoReoffending: false,
             linkedtoRoSH: false,
+            linkedtoStrengthsOrProtectiveFactors: false,
             riskOfReoffendingDetails: undefined,
           },
           {
@@ -92,6 +95,7 @@ describe('format assessment data', () => {
             criminogenicNeedMissing: true,
             linkedtoReoffending: undefined,
             linkedtoRoSH: undefined,
+            linkedtoStrengthsOrProtectiveFactors: undefined,
           },
           {
             goalRoute: 'drug-use',
@@ -99,6 +103,7 @@ describe('format assessment data', () => {
             criminogenicNeedMissing: true,
             linkedtoReoffending: undefined,
             linkedtoRoSH: undefined,
+            linkedtoStrengthsOrProtectiveFactors: undefined,
           },
           {
             goalRoute: 'finances',
@@ -106,6 +111,7 @@ describe('format assessment data', () => {
             criminogenicNeedMissing: true,
             linkedtoReoffending: undefined,
             linkedtoRoSH: undefined,
+            linkedtoStrengthsOrProtectiveFactors: undefined,
           },
           {
             goalRoute: 'personal-relationships-and-community',
@@ -113,6 +119,7 @@ describe('format assessment data', () => {
             criminogenicNeedMissing: true,
             linkedtoReoffending: undefined,
             linkedtoRoSH: undefined,
+            linkedtoStrengthsOrProtectiveFactors: undefined,
           },
           {
             goalRoute: 'thinking-behaviours-and-attitudes',
@@ -120,6 +127,7 @@ describe('format assessment data', () => {
             criminogenicNeedMissing: true,
             linkedtoReoffending: undefined,
             linkedtoRoSH: undefined,
+            linkedtoStrengthsOrProtectiveFactors: undefined,
           },
         ],
         versionUpdatedAt: '2024-10-04T15:22:31.453096',
@@ -135,6 +143,7 @@ describe('format assessment data', () => {
             criminogenicNeedsScore: '6',
             linkedtoReoffending: true,
             linkedtoRoSH: false,
+            linkedtoStrengthsOrProtectiveFactors: false,
             motivationToMakeChanges: 'thinkingAboutMakingChanges',
             overallScore: '6',
             riskOfReoffendingDetails: undefined,
@@ -149,6 +158,7 @@ describe('format assessment data', () => {
             criminogenicNeedsScore: '1',
             linkedtoReoffending: true,
             linkedtoRoSH: false,
+            linkedtoStrengthsOrProtectiveFactors: true,
             motivationToMakeChanges: 'needsHelpToMakeChanges',
             overallScore: '1',
             riskOfReoffendingDetails: undefined,
@@ -165,6 +175,7 @@ describe('format assessment data', () => {
             upperBound: null,
             linkedtoReoffending: false,
             linkedtoRoSH: false,
+            linkedtoStrengthsOrProtectiveFactors: false,
             riskOfReoffendingDetails: undefined,
           },
           {
@@ -173,6 +184,7 @@ describe('format assessment data', () => {
             criminogenicNeedMissing: true,
             linkedtoReoffending: undefined,
             linkedtoRoSH: undefined,
+            linkedtoStrengthsOrProtectiveFactors: undefined,
           },
           {
             goalRoute: 'drug-use',
@@ -180,6 +192,7 @@ describe('format assessment data', () => {
             criminogenicNeedMissing: true,
             linkedtoReoffending: undefined,
             linkedtoRoSH: undefined,
+            linkedtoStrengthsOrProtectiveFactors: undefined,
           },
           {
             goalRoute: 'finances',
@@ -187,6 +200,7 @@ describe('format assessment data', () => {
             criminogenicNeedMissing: true,
             linkedtoReoffending: undefined,
             linkedtoRoSH: undefined,
+            linkedtoStrengthsOrProtectiveFactors: undefined,
           },
           {
             goalRoute: 'personal-relationships-and-community',
@@ -194,6 +208,7 @@ describe('format assessment data', () => {
             criminogenicNeedMissing: true,
             linkedtoReoffending: undefined,
             linkedtoRoSH: undefined,
+            linkedtoStrengthsOrProtectiveFactors: undefined,
           },
           {
             goalRoute: 'thinking-behaviours-and-attitudes',
@@ -201,6 +216,7 @@ describe('format assessment data', () => {
             criminogenicNeedMissing: true,
             linkedtoReoffending: undefined,
             linkedtoRoSH: undefined,
+            linkedtoStrengthsOrProtectiveFactors: undefined,
           },
         ],
         versionUpdatedAt: '2024-10-04T15:22:31.453096',
@@ -217,6 +233,7 @@ describe('format assessment data', () => {
             goalRoute: 'drug-use',
             linkedtoReoffending: false,
             linkedtoRoSH: false,
+            linkedtoStrengthsOrProtectiveFactors: false,
             riskOfReoffendingDetails: undefined,
             overallScore: '4',
             thresholdValue: 0,
@@ -228,6 +245,7 @@ describe('format assessment data', () => {
             goalRoute: 'thinking-behaviours-and-attitudes',
             linkedtoReoffending: false,
             linkedtoRoSH: false,
+            linkedtoStrengthsOrProtectiveFactors: false,
             riskOfReoffendingDetails: undefined,
             overallScore: '5',
             thresholdValue: 2,
@@ -239,6 +257,7 @@ describe('format assessment data', () => {
             goalRoute: 'accommodation',
             linkedtoReoffending: false,
             linkedtoRoSH: false,
+            linkedtoStrengthsOrProtectiveFactors: false,
             riskOfReoffendingDetails: undefined,
             overallScore: '3',
             thresholdValue: 1,
@@ -254,6 +273,7 @@ describe('format assessment data', () => {
             criminogenicNeedMissing: true,
             linkedtoReoffending: undefined,
             linkedtoRoSH: undefined,
+            linkedtoStrengthsOrProtectiveFactors: undefined,
           },
           {
             goalRoute: 'employment-and-education',
@@ -261,6 +281,7 @@ describe('format assessment data', () => {
             criminogenicNeedMissing: true,
             linkedtoReoffending: undefined,
             linkedtoRoSH: undefined,
+            linkedtoStrengthsOrProtectiveFactors: undefined,
           },
           {
             goalRoute: 'finances',
@@ -268,6 +289,7 @@ describe('format assessment data', () => {
             criminogenicNeedMissing: true,
             linkedtoReoffending: undefined,
             linkedtoRoSH: undefined,
+            linkedtoStrengthsOrProtectiveFactors: undefined,
           },
           {
             goalRoute: 'health-and-wellbeing',
@@ -275,6 +297,7 @@ describe('format assessment data', () => {
             criminogenicNeedMissing: true,
             linkedtoReoffending: undefined,
             linkedtoRoSH: undefined,
+            linkedtoStrengthsOrProtectiveFactors: undefined,
           },
           {
             goalRoute: 'personal-relationships-and-community',
@@ -282,6 +305,7 @@ describe('format assessment data', () => {
             criminogenicNeedMissing: true,
             linkedtoReoffending: undefined,
             linkedtoRoSH: undefined,
+            linkedtoStrengthsOrProtectiveFactors: undefined,
           },
         ],
         versionUpdatedAt: '2024-10-04T15:22:31.453096',

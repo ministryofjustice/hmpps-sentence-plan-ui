@@ -15,6 +15,7 @@ export interface AssessmentArea {
   riskOfReoffendingDetails?: string
   linkedtoReoffending: boolean
   motivationToMakeChanges?: string
+  linkedtoStrengthsOrProtectiveFactors: boolean
   strengthsOrProtectiveFactors?: string
   criminogenicNeedsScore?: string
   goalRoute?: string

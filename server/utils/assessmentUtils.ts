@@ -28,6 +28,8 @@ export const formatAssessmentData = (
       const linkedtoRoSH = crimNeeds[areaConfig.crimNeedsKey][`${areaConfig.crimNeedsSubKey}LinkedToHarm`] === 'YES'
       const linkedtoReoffending =
         crimNeeds[areaConfig.crimNeedsKey][`${areaConfig.crimNeedsSubKey}LinkedToReoffending`] === 'YES'
+      const linkedtoStrengthsOrProtectiveFactors =
+        crimNeeds[areaConfig.crimNeedsKey][`${areaConfig.crimNeedsSubKey}Strengths`] === 'YES'
       let subData: SubAreaData
       let overallScore
       const motivationToMakeChanges = motivationText(
@@ -36,6 +38,7 @@ export const formatAssessmentData = (
 
       const linkedToRoSHYesNo = linkedtoRoSH ? 'yes' : 'no'
       const linkedToReoffendingYesNo = linkedtoReoffending ? 'yes' : 'no'
+      const linkedtoStrengthsOrProtectiveFactorsYesNo = linkedtoStrengthsOrProtectiveFactors ? 'yes' : 'no'
 
       const riskOfSeriousHarmDetails =
         assessment.sanAssessmentData[
@@ -45,9 +48,9 @@ export const formatAssessmentData = (
         assessment.sanAssessmentData[
           `${areaConfig.assessmentKey}_practitioner_analysis_risk_of_reoffending_${linkedToReoffendingYesNo}_details`
         ]?.value
-      const strengthsOrProtectiveFactors =
+      const strengthsOrProtectiveFactorsDetails =
         assessment.sanAssessmentData[
-          `${areaConfig.assessmentKey}_practitioner_analysis_strengths_or_protective_factors_yes_details`
+          `${areaConfig.assessmentKey}_practitioner_analysis_strengths_or_protective_factors_${linkedtoStrengthsOrProtectiveFactorsYesNo}_details`
         ]?.value
 
       score = crimNeeds[areaConfig.crimNeedsKey][`${areaConfig.crimNeedsSubKey}OtherWeightedScore`]
@@ -78,10 +81,11 @@ export const formatAssessmentData = (
         overallScore: overallScore ?? score,
         linkedtoRoSH,
         linkedtoReoffending,
+        linkedtoStrengthsOrProtectiveFactors,
         motivationToMakeChanges,
         riskOfSeriousHarmDetails,
         riskOfReoffendingDetails,
-        strengthsOrProtectiveFactors,
+        strengthsOrProtectiveFactorsDetails,
         criminogenicNeedsScore: score,
         goalRoute: areaConfig.goalRoute,
         upperBound: areaConfig.upperBound,
