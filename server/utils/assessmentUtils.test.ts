@@ -54,8 +54,9 @@ describe('format assessment data', () => {
         highScoring: [
           {
             criminogenicNeedsScore: '6',
-            linkedtoReoffending: true,
-            linkedtoRoSH: false,
+            isLinkedtoReoffending: true,
+            isLinkedtoRoSH: false,
+            isLinkedtoStrengthsOrProtectiveFactors: false,
             overallScore: '6',
             riskOfReoffendingDetails: undefined,
             thresholdValue: 1,
@@ -67,8 +68,9 @@ describe('format assessment data', () => {
         lowScoring: [
           {
             criminogenicNeedsScore: '1',
-            linkedtoReoffending: true,
-            linkedtoRoSH: false,
+            isLinkedtoReoffending: true,
+            isLinkedtoRoSH: false,
+            isLinkedtoStrengthsOrProtectiveFactors: true,
             overallScore: '1',
             riskOfReoffendingDetails: undefined,
             thresholdValue: 1,
@@ -82,44 +84,50 @@ describe('format assessment data', () => {
             goalRoute: 'health-and-wellbeing',
             title: 'Health and wellbeing',
             upperBound: null,
-            linkedtoReoffending: false,
-            linkedtoRoSH: false,
+            isLinkedtoReoffending: false,
+            isLinkedtoRoSH: false,
+            isLinkedtoStrengthsOrProtectiveFactors: false,
             riskOfReoffendingDetails: undefined,
           },
           {
             goalRoute: 'alcohol-use',
             title: 'Alcohol use',
             criminogenicNeedMissing: true,
-            linkedtoReoffending: undefined,
-            linkedtoRoSH: undefined,
+            isLinkedtoReoffending: undefined,
+            isLinkedtoRoSH: undefined,
+            isLinkedtoStrengthsOrProtectiveFactors: undefined,
           },
           {
             goalRoute: 'drug-use',
             title: 'Drug use',
             criminogenicNeedMissing: true,
-            linkedtoReoffending: undefined,
-            linkedtoRoSH: undefined,
+            isLinkedtoReoffending: undefined,
+            isLinkedtoRoSH: undefined,
+            isLinkedtoStrengthsOrProtectiveFactors: undefined,
           },
           {
             goalRoute: 'finances',
             title: 'Finances',
             criminogenicNeedMissing: true,
-            linkedtoReoffending: undefined,
-            linkedtoRoSH: undefined,
+            isLinkedtoReoffending: undefined,
+            isLinkedtoRoSH: undefined,
+            isLinkedtoStrengthsOrProtectiveFactors: undefined,
           },
           {
             goalRoute: 'personal-relationships-and-community',
             title: 'Personal relationships and community',
             criminogenicNeedMissing: true,
-            linkedtoReoffending: undefined,
-            linkedtoRoSH: undefined,
+            isLinkedtoReoffending: undefined,
+            isLinkedtoRoSH: undefined,
+            isLinkedtoStrengthsOrProtectiveFactors: undefined,
           },
           {
             goalRoute: 'thinking-behaviours-and-attitudes',
             title: 'Thinking, behaviours and attitudes',
             criminogenicNeedMissing: true,
-            linkedtoReoffending: undefined,
-            linkedtoRoSH: undefined,
+            isLinkedtoReoffending: undefined,
+            isLinkedtoRoSH: undefined,
+            isLinkedtoStrengthsOrProtectiveFactors: undefined,
           },
         ],
         versionUpdatedAt: '2024-10-04T15:22:31.453096',
@@ -133,8 +141,9 @@ describe('format assessment data', () => {
         highScoring: [
           {
             criminogenicNeedsScore: '6',
-            linkedtoReoffending: true,
-            linkedtoRoSH: false,
+            isLinkedtoReoffending: true,
+            isLinkedtoRoSH: false,
+            isLinkedtoStrengthsOrProtectiveFactors: false,
             motivationToMakeChanges: 'thinkingAboutMakingChanges',
             overallScore: '6',
             riskOfReoffendingDetails: undefined,
@@ -147,8 +156,9 @@ describe('format assessment data', () => {
         lowScoring: [
           {
             criminogenicNeedsScore: '1',
-            linkedtoReoffending: true,
-            linkedtoRoSH: false,
+            isLinkedtoReoffending: true,
+            isLinkedtoRoSH: false,
+            isLinkedtoStrengthsOrProtectiveFactors: true,
             motivationToMakeChanges: 'needsHelpToMakeChanges',
             overallScore: '1',
             riskOfReoffendingDetails: undefined,
@@ -163,44 +173,50 @@ describe('format assessment data', () => {
             goalRoute: 'health-and-wellbeing',
             title: 'Health and wellbeing',
             upperBound: null,
-            linkedtoReoffending: false,
-            linkedtoRoSH: false,
+            isLinkedtoReoffending: false,
+            isLinkedtoRoSH: false,
+            isLinkedtoStrengthsOrProtectiveFactors: false,
             riskOfReoffendingDetails: undefined,
           },
           {
             goalRoute: 'alcohol-use',
             title: 'Alcohol use',
             criminogenicNeedMissing: true,
-            linkedtoReoffending: undefined,
-            linkedtoRoSH: undefined,
+            isLinkedtoReoffending: undefined,
+            isLinkedtoRoSH: undefined,
+            isLinkedtoStrengthsOrProtectiveFactors: undefined,
           },
           {
             goalRoute: 'drug-use',
             title: 'Drug use',
             criminogenicNeedMissing: true,
-            linkedtoReoffending: undefined,
-            linkedtoRoSH: undefined,
+            isLinkedtoReoffending: undefined,
+            isLinkedtoRoSH: undefined,
+            isLinkedtoStrengthsOrProtectiveFactors: undefined,
           },
           {
             goalRoute: 'finances',
             title: 'Finances',
             criminogenicNeedMissing: true,
-            linkedtoReoffending: undefined,
-            linkedtoRoSH: undefined,
+            isLinkedtoReoffending: undefined,
+            isLinkedtoRoSH: undefined,
+            isLinkedtoStrengthsOrProtectiveFactors: undefined,
           },
           {
             goalRoute: 'personal-relationships-and-community',
             title: 'Personal relationships and community',
             criminogenicNeedMissing: true,
-            linkedtoReoffending: undefined,
-            linkedtoRoSH: undefined,
+            isLinkedtoReoffending: undefined,
+            isLinkedtoRoSH: undefined,
+            isLinkedtoStrengthsOrProtectiveFactors: undefined,
           },
           {
             goalRoute: 'thinking-behaviours-and-attitudes',
             title: 'Thinking, behaviours and attitudes',
             criminogenicNeedMissing: true,
-            linkedtoReoffending: undefined,
-            linkedtoRoSH: undefined,
+            isLinkedtoReoffending: undefined,
+            isLinkedtoRoSH: undefined,
+            isLinkedtoStrengthsOrProtectiveFactors: undefined,
           },
         ],
         versionUpdatedAt: '2024-10-04T15:22:31.453096',
@@ -215,8 +231,9 @@ describe('format assessment data', () => {
           {
             criminogenicNeedsScore: '4',
             goalRoute: 'drug-use',
-            linkedtoReoffending: false,
-            linkedtoRoSH: false,
+            isLinkedtoReoffending: false,
+            isLinkedtoRoSH: false,
+            isLinkedtoStrengthsOrProtectiveFactors: false,
             riskOfReoffendingDetails: undefined,
             overallScore: '4',
             thresholdValue: 0,
@@ -226,8 +243,9 @@ describe('format assessment data', () => {
           {
             criminogenicNeedsScore: '5',
             goalRoute: 'thinking-behaviours-and-attitudes',
-            linkedtoReoffending: false,
-            linkedtoRoSH: false,
+            isLinkedtoReoffending: false,
+            isLinkedtoRoSH: false,
+            isLinkedtoStrengthsOrProtectiveFactors: false,
             riskOfReoffendingDetails: undefined,
             overallScore: '5',
             thresholdValue: 2,
@@ -237,8 +255,9 @@ describe('format assessment data', () => {
           {
             criminogenicNeedsScore: '3',
             goalRoute: 'accommodation',
-            linkedtoReoffending: false,
-            linkedtoRoSH: false,
+            isLinkedtoReoffending: false,
+            isLinkedtoRoSH: false,
+            isLinkedtoStrengthsOrProtectiveFactors: false,
             riskOfReoffendingDetails: undefined,
             overallScore: '3',
             thresholdValue: 1,
@@ -252,36 +271,41 @@ describe('format assessment data', () => {
             goalRoute: 'alcohol-use',
             title: 'Alcohol use',
             criminogenicNeedMissing: true,
-            linkedtoReoffending: undefined,
-            linkedtoRoSH: undefined,
+            isLinkedtoReoffending: undefined,
+            isLinkedtoRoSH: undefined,
+            isLinkedtoStrengthsOrProtectiveFactors: undefined,
           },
           {
             goalRoute: 'employment-and-education',
             title: 'Employment and education',
             criminogenicNeedMissing: true,
-            linkedtoReoffending: undefined,
-            linkedtoRoSH: undefined,
+            isLinkedtoReoffending: undefined,
+            isLinkedtoRoSH: undefined,
+            isLinkedtoStrengthsOrProtectiveFactors: undefined,
           },
           {
             goalRoute: 'finances',
             title: 'Finances',
             criminogenicNeedMissing: true,
-            linkedtoReoffending: undefined,
-            linkedtoRoSH: undefined,
+            isLinkedtoReoffending: undefined,
+            isLinkedtoRoSH: undefined,
+            isLinkedtoStrengthsOrProtectiveFactors: undefined,
           },
           {
             goalRoute: 'health-and-wellbeing',
             title: 'Health and wellbeing',
             criminogenicNeedMissing: true,
-            linkedtoReoffending: undefined,
-            linkedtoRoSH: undefined,
+            isLinkedtoReoffending: undefined,
+            isLinkedtoRoSH: undefined,
+            isLinkedtoStrengthsOrProtectiveFactors: undefined,
           },
           {
             goalRoute: 'personal-relationships-and-community',
             title: 'Personal relationships and community',
             criminogenicNeedMissing: true,
-            linkedtoReoffending: undefined,
-            linkedtoRoSH: undefined,
+            isLinkedtoReoffending: undefined,
+            isLinkedtoRoSH: undefined,
+            isLinkedtoStrengthsOrProtectiveFactors: undefined,
           },
         ],
         versionUpdatedAt: '2024-10-04T15:22:31.453096',
@@ -348,19 +372,19 @@ describe('sentence length', () => {
 describe('groupAndSortOtherAreas', () => {
   it('groups and sorts areas by risk count', () => {
     const areas: AssessmentArea[] = [
-      { title: 'Area D', linkedtoRoSH: false, linkedtoReoffending: false } as AssessmentArea,
-      { title: 'Area A', linkedtoRoSH: true, linkedtoReoffending: true } as AssessmentArea,
-      { title: 'Area B', linkedtoRoSH: true, linkedtoReoffending: false } as AssessmentArea,
-      { title: 'Area C', linkedtoRoSH: false, linkedtoReoffending: true } as AssessmentArea,
+      { title: 'Area D', isLinkedtoRoSH: false, isLinkedtoReoffending: false } as AssessmentArea,
+      { title: 'Area A', isLinkedtoRoSH: true, isLinkedtoReoffending: true } as AssessmentArea,
+      { title: 'Area B', isLinkedtoRoSH: true, isLinkedtoReoffending: false } as AssessmentArea,
+      { title: 'Area C', isLinkedtoRoSH: false, isLinkedtoReoffending: true } as AssessmentArea,
     ]
 
     const result = groupAndSortOtherAreas(areas)
 
     expect(result).toEqual([
-      { title: 'Area A', linkedtoRoSH: true, linkedtoReoffending: true },
-      { title: 'Area B', linkedtoRoSH: true, linkedtoReoffending: false },
-      { title: 'Area C', linkedtoRoSH: false, linkedtoReoffending: true },
-      { title: 'Area D', linkedtoRoSH: false, linkedtoReoffending: false },
+      { title: 'Area A', isLinkedtoRoSH: true, isLinkedtoReoffending: true },
+      { title: 'Area B', isLinkedtoRoSH: true, isLinkedtoReoffending: false },
+      { title: 'Area C', isLinkedtoRoSH: false, isLinkedtoReoffending: true },
+      { title: 'Area D', isLinkedtoRoSH: false, isLinkedtoReoffending: false },
     ])
   })
 
@@ -374,29 +398,29 @@ describe('groupAndSortOtherAreas', () => {
 
   it('sorts areas alphabetically within the same risk count', () => {
     const areas: AssessmentArea[] = [
-      { title: 'Area B', linkedtoRoSH: true, linkedtoReoffending: false } as AssessmentArea,
-      { title: 'Area A', linkedtoRoSH: true, linkedtoReoffending: false } as AssessmentArea,
+      { title: 'Area B', isLinkedtoRoSH: true, isLinkedtoReoffending: false } as AssessmentArea,
+      { title: 'Area A', isLinkedtoRoSH: true, isLinkedtoReoffending: false } as AssessmentArea,
     ]
 
     const result = groupAndSortOtherAreas(areas)
 
     expect(result).toEqual([
-      { title: 'Area A', linkedtoRoSH: true, linkedtoReoffending: false },
-      { title: 'Area B', linkedtoRoSH: true, linkedtoReoffending: false },
+      { title: 'Area A', isLinkedtoRoSH: true, isLinkedtoReoffending: false },
+      { title: 'Area B', isLinkedtoRoSH: true, isLinkedtoReoffending: false },
     ])
   })
 
   it('handles areas with undefined risk values', () => {
     const areas: AssessmentArea[] = [
-      { title: 'Area A', linkedtoRoSH: undefined, linkedtoReoffending: undefined } as AssessmentArea,
-      { title: 'Area B', linkedtoRoSH: true, linkedtoReoffending: undefined } as AssessmentArea,
+      { title: 'Area A', isLinkedtoRoSH: undefined, isLinkedtoReoffending: undefined } as AssessmentArea,
+      { title: 'Area B', isLinkedtoRoSH: true, isLinkedtoReoffending: undefined } as AssessmentArea,
     ]
 
     const result = groupAndSortOtherAreas(areas)
 
     expect(result).toEqual([
-      { title: 'Area B', linkedtoRoSH: true, linkedtoReoffending: undefined },
-      { title: 'Area A', linkedtoRoSH: undefined, linkedtoReoffending: undefined },
+      { title: 'Area B', isLinkedtoRoSH: true, isLinkedtoReoffending: undefined },
+      { title: 'Area A', isLinkedtoRoSH: undefined, isLinkedtoReoffending: undefined },
     ])
   })
 })
