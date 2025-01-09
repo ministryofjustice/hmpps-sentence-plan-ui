@@ -62,7 +62,7 @@ export default class ChangeGoalController {
       const plan = await req.services.planService.getPlanByUuid(planUuid)
 
       if (plan.agreementStatus === PlanAgreementStatus.AGREED) {
-        redirectTarget = `/update-goal/${goalUuid}`
+        redirectTarget = `/update-goal-steps/${goalUuid}`
 
         if (type === 'current') {
           const goal = await req.services.goalService.getGoal(goalUuid)
