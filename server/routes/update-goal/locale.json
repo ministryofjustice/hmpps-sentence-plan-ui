@@ -3,7 +3,7 @@
     "page": {
       "title": "Update goal and steps - {{ applicationName }}",
       "errorTitle": "Error: Update goal and steps - {{ applicationName }}",
-      "heading": "Update goals and steps",
+      "heading": "Update goal and steps",
       "goalHeading": "Goal: {{ goal.title }}"
     },
     "errors": {
