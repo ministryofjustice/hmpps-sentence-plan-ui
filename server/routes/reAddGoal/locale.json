@@ -1,0 +1,21 @@
+{
+  "en": {
+    "page": {
+      "title": "Confirm you want to add this goal back into the plan - {{ applicationName }}",
+      "errorTitle": "Error: you want to add this goal back into the plan - {{ applicationName }}"
+    },
+    "mainHeading": {
+      "title": "Confirm you want to add this goal back into {{ subject.possessiveName }} plan"
+    },
+    "notes": {
+      "label": "How has achieving this goal helped {{ subject.givenName }}? (optional)"
+    },
+    "errors": {
+      "goal-achievement-helped": {
+        "maxLength": "How achieving this goal has helped must be 4,000 characters or less"
+      }
+    },
+    "confirmGoalAchievedButton": "Confirm",
+    "doNotMarkAsAchievedLink": "Do not mark as achieved"
+  }
+}
