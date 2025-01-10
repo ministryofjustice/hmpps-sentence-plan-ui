@@ -82,7 +82,7 @@
                     formGroup: {
                         classes: "goal-input-autocomplete-wrapper"
                     },
-                    errorMessage: getFormattedError(errors, locale, 'goal-input-autocomplete'),
+                    errorMessage: getFormattedError(errors, locale, "goal-input-autocomplete"),
                     id: "goal-input",
                     name: "goal-input-autocomplete",
                     value: data.form['goal-input-autocomplete']
@@ -115,14 +115,14 @@
                     name: "related-area-of-need-radio",
                     fieldset: {
                         legend: {
-                            text: locale.relatedAreaOfNeed.label,
+                            text: locale.relatedAreaOfNeedRadio.label,
                             classes: "govuk-fieldset__legend--m"
                         }
                     },
                     errorMessage: getFormattedError(errors, locale, 'related-area-of-need-radio'),
                     items: [
                         {
-                            text: locale.relatedAreaOfNeed.options.yes,
+                            text: locale.relatedAreaOfNeedRadio.options.yes,
                             value: "yes",
                             checked: data.form['related-area-of-need-radio'] == 'yes',
                             conditional: {
@@ -130,7 +130,7 @@
                             }
                         },
                         {
-                            text: locale.relatedAreaOfNeed.options.no,
+                            text: locale.relatedAreaOfNeedRadio.options.no,
                             value: "no",
                             checked: data.form['related-area-of-need-radio'] == 'no'
                         }
