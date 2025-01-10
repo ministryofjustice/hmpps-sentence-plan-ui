@@ -1,6 +1,4 @@
 import { DateTime } from 'luxon'
-// eslint-disable-next-line import/no-extraneous-dependencies
-import camelCase from 'camelcase'
 import { Person } from '../@types/Person'
 import { NewStep, StepStatus } from '../@types/StepType'
 import { GoalStatus } from '../@types/GoalType'
@@ -43,13 +41,6 @@ export function formatDate(date: string): string {
     month: 'long',
     year: 'numeric',
   })
-}
-
-export const motivationText = (optionResult?: string): string => {
-  if (optionResult === undefined || optionResult === null) {
-    return undefined
-  }
-  return camelCase(optionResult)
 }
 
 export const dateWithYear = (datetimeString: string): string | null => {

@@ -7,7 +7,7 @@ import ReAddGoalPostModel from './models/ReAddGoalPostModel'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
 import { AccessMode } from '../../@types/Handover'
 import { HttpError } from '../../utils/HttpError'
-import { dateToISOFormat, getAchieveDateOptions } from '../../utils/utils'
+import { dateToISOFormat, getAchieveDateOptions, goalStatusToTabName } from '../../utils/utils'
 import { NewGoal } from '../../@types/NewGoalType'
 
 export default class ReAddGoalController {
@@ -68,13 +68,11 @@ export default class ReAddGoalController {
         : null
 
     // set new status
-    newGoal.status = goal.targetDate === null ? GoalStatus.FUTURE : GoalStatus.ACTIVE
+    newGoal.status = newGoal.targetDate === null ? GoalStatus.FUTURE : GoalStatus.ACTIVE
 
     try {
-      // probably need to use replaceGoal here - updateGoal is only good for status changes - should rename that function in GoalService.ts
       await req.services.goalService.replaceGoal(newGoal, goalUuid)
-      // TODO where does this go?
-      return res.redirect(`/plan`)
+      return res.redirect(`/plan?type=${goalStatusToTabName(newGoal.status)}`)
     } catch (e) {
       return next(HttpError(500, e.message))
     }
