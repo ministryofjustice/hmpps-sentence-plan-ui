@@ -137,7 +137,8 @@
                       ]
                 }) }}
 
-                {% set customDateHtml %}
+              {# START HERE #}
+              {% set customDateHtml %}
                     {{ mojDatePicker({
                         id: "date-selection-custom",
                         name: "date-selection-custom",
@@ -235,6 +236,7 @@
                         classes: "govuk-button--secondary"
                     }) }}
                 </div>
+              {# END HERE, buttons need to be a parameter #}
             </form>
         </div>
     </div>
