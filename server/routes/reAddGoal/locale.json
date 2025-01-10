@@ -16,7 +16,7 @@
         "maxLength": "The reason for adding this goal back into the plan must be 4,000 characters or less"
       },
       "start-working-goal-radio": {
-        "isNotEmpty": "Select yes if they can start working on this goal now"
+        "isNotEmpty": "We do not want to see this message"
       },
       "date-selection-radio": {
         "isNotEmpty": "Select when they should aim to achieve this goal"

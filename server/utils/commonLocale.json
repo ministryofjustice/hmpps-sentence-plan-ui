@@ -78,7 +78,7 @@
       },
       "errors": {
         "start-working-goal-radio": {
-          "isNotEmpty": "Select yes if they can start working on this goal now"
+          "isNotEmpty": "This is the error message that should appear"
         },
         "date-selection-radio": {
           "isNotEmpty": "Select when they should aim to achieve this goal"
