@@ -4,12 +4,20 @@ import { Expose, plainToInstance, Transform } from 'class-transformer'
 import { StepStatus } from '../../../@types/StepType'
 
 export class StepModel {
-  @IsNotEmpty()
-  @NotContains('Choose someone')
+  @IsNotEmpty({
+    message: 'locale.step.actor.errors.isEmpty',
+  })
+  @NotContains('Choose someone', {
+    message: 'locale.step.actor.errors.isEmpty',
+  })
   actor: string
 
-  @IsNotEmpty()
-  @MaxLength(4000)
+  @IsNotEmpty({
+    message: 'locale.step.description.errors.isEmpty',
+  })
+  @MaxLength(4000, {
+    message: 'locale.step.description.errors.maxLength',
+  })
   description: string
 
   @IsEnum(StepStatus)

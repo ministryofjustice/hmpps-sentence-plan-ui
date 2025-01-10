@@ -73,14 +73,6 @@
                                 }) %}
                             {% endfor %}
 
-                            {% set errorMessage = false %}
-
-                            {% if errors.body['steps.' + loop.index0 + '.actor' ].notContains %}
-                                {% set errorMessage = {
-                                    'text': locale.errors['step-actor'].notContains
-                                } %}
-                            {% endif %}
-
                             {{ govukSelect({
                                 id: "step-actor-" + loop.index,
                                 name: "step-actor-" + loop.index,
@@ -93,7 +85,7 @@
                                     classes: 'govuk-visually-hidden--desktop'
                                 },
                                 items: actorItemsList,
-                                errorMessage: errorMessage
+                                errorMessage: getFormattedError(errors, locale, 'steps.' + loop.index0 + '.actor')
                             }) }}
                         </dt>
                         <dt class="govuk-summary-list__value">
@@ -101,20 +93,6 @@
                                    id="step-status-{{ loop.index }}"
                                    name="step-status-{{ loop.index }}"
                                    value="{{ step.status | default('NOT_STARTED') }}"/>
-
-                            {% set errorMessage = false %}
-
-                            {% if errors.body['steps.' + loop.index0 + '.description' ].isNotEmpty %}
-                                {% set errorMessage = {
-                                    'text': locale.errors['step-description'].isNotEmpty
-                                } %}
-                            {% endif %}
-
-                            {% if errors.body['steps.' + loop.index0 + '.description' ].maxLength %}
-                                {% set errorMessage = {
-                                    'text': locale.errors['step-description'].maxLength
-                                } %}
-                            {% endif %}
 
                             {{ govukInput({
                                 formGroup: {
@@ -128,7 +106,7 @@
                                     text: locale.step.description.hint,
                                     classes: 'govuk-visually-hidden--desktop'
                                 },
-                                errorMessage: errorMessage,
+                                errorMessage: getFormattedError(errors, locale, 'steps.' + loop.index0 + '.description'),
                                 id: "step-description-" + loop.index,
                                 name: "step-description-" + loop.index,
                                 value: step.description
