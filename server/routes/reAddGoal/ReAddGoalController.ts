@@ -8,6 +8,7 @@ import ReAddGoalPostModel from './models/ReAddGoalPostModel'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
 import { AccessMode } from '../../@types/Handover'
 import { HttpError } from '../../utils/HttpError'
+import { getAchieveDateOptions } from '../../utils/utils'
 
 export default class ReAddGoalController {
   constructor() {}
@@ -21,6 +22,7 @@ export default class ReAddGoalController {
 
       const goal = await req.services.goalService.getGoal(uuid)
       const returnLink = req.services.sessionService.getReturnLink()
+      const dateOptions = this.getDateOptions()
 
       req.services.sessionService.setReturnLink(`/plan?type=removed`)
 
@@ -29,6 +31,7 @@ export default class ReAddGoalController {
         data: {
           form: req.body,
           type,
+          dateOptions,
           returnLink,
           goal,
         },
@@ -41,15 +44,21 @@ export default class ReAddGoalController {
 
   private saveAndRedirect = async (req: Request, res: Response, next: NextFunction) => {
     const goalUuid = req.params.uuid
-    const note = req.body['goal-achievement-helped']
+    const note = req.body['re-add-goal-reason']
 
+    // retrieve full goal
+    // set new targetDate
+    // set new status
+    // add a note (is this supported?)
     const goalData: Partial<NewGoal> = {
-      status: GoalStatus.ACHIEVED,
+      status: GoalStatus.REMOVED,
       note,
     }
 
     try {
+      // probably need to use replaceGoal here - updateGoal is only good for status changes - should rename that function in GoalService.ts
       await req.services.goalService.updateGoal(goalData, goalUuid)
+      // TODO where does this go?
       return res.redirect(`/plan?type=achieved&status=achieved`)
     } catch (e) {
       return next(HttpError(500, e.message))
@@ -61,6 +70,12 @@ export default class ReAddGoalController {
       return this.render(req, res, next)
     }
     return next()
+  }
+
+  // todo duplicated from creategoalcontroller and changegoalcontroller
+  private getDateOptions = () => {
+    const today = new Date()
+    return getAchieveDateOptions(today)
   }
 
   get = [requireAccessMode(AccessMode.READ_WRITE), this.render]
