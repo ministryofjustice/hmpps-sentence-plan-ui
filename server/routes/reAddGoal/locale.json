@@ -7,15 +7,26 @@
     "mainHeading": {
       "title": "Confirm you want to add this goal back into {{ subject.possessiveName }} plan"
     },
-    "notes": {
-      "label": "How has achieving this goal helped {{ subject.givenName }}? (optional)"
+    "reason": {
+      "label": "Why do you want to add this goal back into {{ subject.possessiveName }} plan?"
     },
     "errors": {
-      "goal-achievement-helped": {
-        "maxLength": "How achieving this goal has helped must be 4,000 characters or less"
+      "re-add-goal-reason": {
+        "isNotEmpty": "Enter why you want to add this goal back into their plan",
+        "maxLength": "The reason for adding this goal back into the plan must be 4,000 characters or less"
+      },
+      "start-working-goal-radio": {
+        "isNotEmpty": "Select yes if they can start working on this goal now"
+      },
+      "date-selection-radio": {
+        "isNotEmpty": "Select when they should aim to achieve this goal"
+      },
+      "date-selection-custom": {
+        "isNotEmpty": "Select a date",
+        "GoalDateMustBeTodayOrFuture": "Date must be today or in the future"
       }
     },
     "confirmGoalAchievedButton": "Confirm",
-    "doNotMarkAsAchievedLink": "Do not mark as achieved"
+    "doNotMarkAsAchievedLink": "Do not add goal back into plan"
   }
 }
