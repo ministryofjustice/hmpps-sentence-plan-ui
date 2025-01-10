@@ -3,7 +3,6 @@ import locale from './locale.json'
 import URLs from '../URLs'
 import ReferentialDataService from '../../services/sentence-plan/referentialDataService'
 import { dateToISOFormat, formatDateWithStyle, getAchieveDateOptions } from '../../utils/utils'
-import { NewGoal } from '../../@types/NewGoalType'
 import { Goal, GoalStatus } from '../../@types/GoalType'
 import transformRequest from '../../middleware/transformMiddleware'
 import ChangeGoalPostModel from './models/ChangeGoalPostModel'
@@ -12,6 +11,7 @@ import { PlanAgreementStatus } from '../../@types/PlanType'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
 import { AccessMode } from '../../@types/Handover'
 import { HttpError } from '../../utils/HttpError'
+import { NewGoal } from '../../@types/NewGoalType'
 
 export default class ChangeGoalController {
   constructor(private readonly referentialDataService: ReferentialDataService) {}
@@ -49,7 +49,7 @@ export default class ChangeGoalController {
 
   private saveAndRedirect = async (req: Request, res: Response, next: NextFunction) => {
     const goalUuid = req.params.uuid
-    const processedData: NewGoal = this.processGoalData(req.body)
+    const processedData: Partial<NewGoal> = this.processGoalData(req.body)
 
     const type = processedData.targetDate === null ? 'future' : 'current'
 
@@ -110,7 +110,7 @@ export default class ChangeGoalController {
     }
   }
 
-  private processGoalData(body: any) {
+  private processGoalData(body: any): Partial<NewGoal> {
     const title = body['goal-input-autocomplete']
     const targetDate =
       // eslint-disable-next-line no-nested-ternary

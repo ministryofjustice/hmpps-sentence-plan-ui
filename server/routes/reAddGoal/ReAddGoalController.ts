@@ -1,6 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
-import { NewGoal } from '../../@types/NewGoalType'
-import { GoalStatus } from '../../@types/GoalType'
+import { Goal, GoalStatus } from '../../@types/GoalType'
 import locale from './locale.json'
 import validateRequest from '../../middleware/validationMiddleware'
 import transformRequest from '../../middleware/transformMiddleware'
@@ -8,7 +7,8 @@ import ReAddGoalPostModel from './models/ReAddGoalPostModel'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
 import { AccessMode } from '../../@types/Handover'
 import { HttpError } from '../../utils/HttpError'
-import { getAchieveDateOptions } from '../../utils/utils'
+import { dateToISOFormat, getAchieveDateOptions } from '../../utils/utils'
+import { NewGoal } from '../../@types/NewGoalType'
 
 export default class ReAddGoalController {
   constructor() {}
@@ -44,22 +44,37 @@ export default class ReAddGoalController {
 
   private saveAndRedirect = async (req: Request, res: Response, next: NextFunction) => {
     const goalUuid = req.params.uuid
-    const note = req.body['re-add-goal-reason']
 
     // retrieve full goal
-    // set new targetDate
-    // set new status
-    // add a note (is this supported?)
-    const goalData: Partial<NewGoal> = {
-      status: GoalStatus.REMOVED,
-      note,
+    const goal: Goal = await req.services.goalService.getGoal(goalUuid)
+
+    const newGoal: NewGoal = {
+      title: goal.title,
+      areaOfNeed: goal.areaOfNeed.name,
+      relatedAreasOfNeed: goal.relatedAreasOfNeed.map(aon => aon.name),
     }
+
+    // set note
+    newGoal.note = req.body['re-add-goal-reason']
+
+    // set new targetDate
+    // TODO this is now in three files - extract it
+    newGoal.targetDate =
+      // eslint-disable-next-line no-nested-ternary
+      req.body['start-working-goal-radio'] === 'yes'
+        ? req.body['date-selection-radio'] === 'custom'
+          ? dateToISOFormat(req.body['date-selection-custom'])
+          : req.body['date-selection-radio']
+        : null
+
+    // set new status
+    newGoal.status = goal.targetDate === null ? GoalStatus.FUTURE : GoalStatus.ACTIVE
 
     try {
       // probably need to use replaceGoal here - updateGoal is only good for status changes - should rename that function in GoalService.ts
-      await req.services.goalService.updateGoal(goalData, goalUuid)
+      await req.services.goalService.replaceGoal(newGoal, goalUuid)
       // TODO where does this go?
-      return res.redirect(`/plan?type=achieved&status=achieved`)
+      return res.redirect(`/plan`)
     } catch (e) {
       return next(HttpError(500, e.message))
     }
