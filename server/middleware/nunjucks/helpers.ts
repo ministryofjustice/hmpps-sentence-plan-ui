@@ -39,20 +39,22 @@ export const localeInterpolation = (locale: object, replacements: Record<string,
   return interpolateObject(locale)
 }
 
-export const toFormattedError = (errors: any, locale: any, fieldName: string) => {
-  const fieldErrors = errors?.body?.[fieldName]
+export const getFormattedError = (errors: any, locale: any, fieldName: string) => {
+  const localePath = errors?.body?.[fieldName]?.messages?.[0]
 
-  if (errors?.body?.[fieldName]) {
-    const errorType = Object.keys(fieldErrors)[0]
-
-    if (errorType) {
-      return {
-        text: locale.errors[fieldName][errorType],
-        href: `#${fieldName}`,
-      }
-    }
+  if (!localePath) {
+    return false
   }
-  return false
+
+  const errorMessage = localePath
+    .replace(/^locale\./, '')
+    .split('.')
+    .reduce((obj, key) => obj?.[key], locale)
+
+  return {
+    text: errorMessage ?? localePath,
+    href: `#${fieldName}`,
+  }
 }
 
 export const formatDate = (date: string, format: 'iso' | 'simple') => {

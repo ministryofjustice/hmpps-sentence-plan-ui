@@ -7,7 +7,7 @@ import config from '../../config'
 import { initialiseName, mergeDeep, convertToTitleCase } from '../../utils/utils'
 import commonLocale from '../../utils/commonLocale.json'
 import { sentenceLength } from '../../utils/assessmentUtils'
-import { formatDate, localeInterpolation, merge, toFormattedError } from './helpers'
+import { formatDate, getFormattedError, localeInterpolation, merge } from './helpers'
 
 const production = process.env.NODE_ENV === 'production'
 
@@ -54,7 +54,7 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
   njkEnv.addGlobal('merge', merge)
   njkEnv.addGlobal('sentenceLength', sentenceLength)
   njkEnv.addGlobal('interpolate', localeInterpolation)
-  njkEnv.addGlobal('getFormattedError', toFormattedError)
+  njkEnv.addGlobal('getFormattedError', getFormattedError)
 
   app.use((req, res, next) => {
     res.render = new Proxy(res.render, {
