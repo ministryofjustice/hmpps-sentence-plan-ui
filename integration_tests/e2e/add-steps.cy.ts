@@ -264,7 +264,7 @@ describe('Add Steps', () => {
         'What they should do to achieve the goal must be 4,000 characters or less',
       )
 
-      cy.get(`#step-description-1-autocomplete`).invoke('val').should('contain', firstStep.description)
+      cy.get(`#step-description-1`).invoke('val').should('contain', firstStep.description)
       cy.checkAccessibility()
     })
   })

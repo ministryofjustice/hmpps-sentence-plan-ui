@@ -1,10 +1,10 @@
 export default class AddSteps {
   addStepAutocompleteText = (position: number, text: string) => {
-    cy.get(`#step-description-${position}-autocomplete`).type(text)
+    cy.get(`#step-description-${position}`).type(text)
   }
 
   putStepAutocompleteText = (position: number, text: string) => {
-    cy.get(`#step-description-${position}-autocomplete`).invoke('val', text)
+    cy.get(`#step-description-${position}`).invoke('val', text)
   }
 
   selectStepActor = (position: number, text: string) => {
@@ -24,7 +24,7 @@ export default class AddSteps {
   }
 
   AddAnotherStepPressingEnter = (position: number) => {
-    cy.get(`#step-description-${position}-autocomplete`).type('{enter}')
+    cy.get(`#step-description-${position}`).type('{enter}')
   }
 
   removeStep(position: number) {
