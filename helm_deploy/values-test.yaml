@@ -28,6 +28,7 @@ generic-service:
     capita-developers-vms-five: 85.115.54.180/32
     capita-developers-vms-six: 85.115.54.200/29
     krupal-app-sec: 80.195.27.199/32
+    kieran-accessibility: 5.181.59.114/32
       
 generic-prometheus-alerts:
   alertSeverity: hmpps-sentence-plan-notifications
