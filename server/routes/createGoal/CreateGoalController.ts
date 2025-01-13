@@ -22,6 +22,8 @@ export default class CreateGoalController {
     try {
       const { uuid } = await req.services.goalService.saveGoal(processedData, planUuid)
 
+      req.services.sessionService.setReturnLink(`/change-goal/${uuid}/`)
+
       if (req.body.action === 'addStep') {
         return res.redirect(`${URLs.ADD_STEPS.replace(':uuid', uuid)}?type=${type}`)
       }
