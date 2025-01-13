@@ -7,8 +7,9 @@ import ReAddGoalPostModel from './models/ReAddGoalPostModel'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
 import { AccessMode } from '../../@types/Handover'
 import { HttpError } from '../../utils/HttpError'
-import { dateToISOFormat, getAchieveDateOptions, goalStatusToTabName } from '../../utils/utils'
+import { getAchieveDateOptions, goalStatusToTabName } from '../../utils/utils'
 import { NewGoal } from '../../@types/NewGoalType'
+import { getGoalTargetDate } from '../../utils/goalTargetDateUtils'
 
 export default class ReAddGoalController {
   constructor() {}
@@ -59,13 +60,11 @@ export default class ReAddGoalController {
 
     // set new targetDate
     // TODO this is now in three files - extract it
-    newGoal.targetDate =
-      // eslint-disable-next-line no-nested-ternary
-      req.body['start-working-goal-radio'] === 'yes'
-        ? req.body['date-selection-radio'] === 'custom'
-          ? dateToISOFormat(req.body['date-selection-custom'])
-          : req.body['date-selection-radio']
-        : null
+    newGoal.targetDate = getGoalTargetDate(
+      req.body['start-working-goal-radio'],
+      req.body['date-selection-radio'],
+      req.body['date-selection-custom'],
+    )
 
     // set new status
     newGoal.status = newGoal.targetDate === null ? GoalStatus.FUTURE : GoalStatus.ACTIVE

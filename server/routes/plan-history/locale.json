@@ -31,7 +31,7 @@
         },
         "goal": {
           "created": "Goal created",
-          "addedBackToPlan": "Goal added back to plan",
+          "addedBackToPlan": "Goal added back into plan",
           "removed": "Goal removed",
           "updated": "Goal updated",
           "achieved": "Goal marked as achieved"
