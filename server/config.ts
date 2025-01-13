@@ -121,4 +121,5 @@ export default {
   },
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
   environmentName: get('ENVIRONMENT_NAME', ''),
+  announcementMessage: get('ANNOUNCEMENT_MESSAGE', false),
 }
