@@ -91,8 +91,7 @@ describe('View Plan Overview for READ_WRITE user', () => {
     const firstStep = DataGenerator.generateStep()
 
     cy.get(`#step-actor-1`).select(firstStep.actor)
-    cy.get('#step-description-1-autocomplete').type('Accommodation')
-
+    cy.get('#step-description-1').type('Accommodation')
     cy.get('button').contains('Save and continue').click()
     cy.url().should('include', '/plan?type=current')
     cy.get('.goal-summary-card')
@@ -115,8 +114,7 @@ describe('View Plan Overview for READ_WRITE user', () => {
     const firstStep = DataGenerator.generateStep()
 
     cy.get(`#step-actor-1`).select(firstStep.actor)
-    cy.get(`#step-description-1-autocomplete`).type('Accommodation')
-
+    cy.get(`#step-description-1`).type('Accommodation')
     cy.get('button').contains('Save and continue').click()
     cy.get('button').contains('Agree plan').click()
     cy.url().should('include', '/agree-plan')
