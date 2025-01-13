@@ -59,8 +59,7 @@ export default class AddStepsController {
     try {
       await req.services.stepService.saveAllSteps(goalData, req.params.uuid)
 
-      // TODO: this is wrong... we should be able to add steps only, or add steps after adding a (current or future) goal, and get a success banner...
-      const link = req.services.sessionService.getReturnLink() ?? `${URLs.PLAN_OVERVIEW}?status=success`
+      const link = `${URLs.PLAN_OVERVIEW}?type=current`
       req.services.sessionService.setReturnLink(null)
 
       return res.redirect(link)

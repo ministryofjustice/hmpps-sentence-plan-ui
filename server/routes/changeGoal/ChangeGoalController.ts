@@ -61,6 +61,11 @@ export default class ChangeGoalController {
       const planUuid = req.services.sessionService.getPlanUUID()
       const plan = await req.services.planService.getPlanByUuid(planUuid)
 
+      // Check if the user has came back from the add-goals page
+      if (req.services.sessionService.getReturnLink() === `/change-goal/${goalUuid}/`) {
+        req.services.sessionService.setReturnLink(null)
+        redirectTarget = `/goal/${goalUuid}/add-steps`
+      }
       if (plan.agreementStatus === PlanAgreementStatus.AGREED) {
         redirectTarget = `/update-goal-steps/${goalUuid}`
 
