@@ -3,32 +3,37 @@ import { NextFunction, Request, Response } from 'express'
 import RequestDataSources from '../@types/RequestDataSources'
 import 'reflect-metadata'
 
-export function getValidationErrors(data: object) {
-  function buildPrettyError(errorsInner: ValidationError[], path: string = ''): Record<string, any> {
-    return errorsInner.reduce((accumulator, error) => {
-      const currentPath = path ? `${path}.${error.property}` : error.property
+interface FlatValidationError {
+  constraintsNotMet: string[]
+  messages: string[]
+}
 
-      const updatedAccumulator = {
-        ...accumulator,
-        ...(error.constraints && {
-          [currentPath]: Object.keys(error.constraints).reduce(
-            (constraintAccumulator, key) => ({ ...constraintAccumulator, [key]: true }),
-            {} as Record<string, boolean>,
-          ),
-        }),
+function flattenValidationErrors(errors: ValidationError[], path = ''): Record<string, FlatValidationError> {
+  return errors.reduce(
+    (acc, error) => {
+      const propertyPath = path ? `${path}.${error.property}` : error.property
+
+      if (error.constraints) {
+        const { constraints } = error
+        acc[propertyPath] = {
+          constraintsNotMet: Object.keys(constraints),
+          messages: Object.values(constraints),
+        }
       }
 
       if (error.children && error.children.length > 0) {
-        const childErrors = buildPrettyError(error.children, currentPath)
-        return { ...updatedAccumulator, ...childErrors }
+        const childMap = flattenValidationErrors(error.children, propertyPath)
+        Object.assign(acc, childMap)
       }
+      return acc
+    },
+    {} as Record<string, FlatValidationError>,
+  )
+}
 
-      return updatedAccumulator
-    }, {})
-  }
-
+export function getValidationErrors(data: object) {
   const errors = validateSync(data)
-  return buildPrettyError(errors)
+  return flattenValidationErrors(errors)
 }
 
 export default function validateRequest() {
