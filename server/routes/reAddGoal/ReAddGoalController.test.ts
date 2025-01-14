@@ -8,6 +8,7 @@ import ReAddGoalController from './ReAddGoalController'
 import { testGoal } from '../../testutils/data/goalData'
 import { GoalStatus } from '../../@types/GoalType'
 import runMiddlewareChain from '../../testutils/runMiddlewareChain'
+import { goalStatusToTabName } from '../../utils/utils'
 
 jest.mock('../../middleware/authorisationMiddleware', () => ({
   requireAccessMode: jest.fn(() => (req: Request, res: Response, next: NextFunction) => {
@@ -46,13 +47,25 @@ describe('AchieveGoalController', () => {
   let next: NextFunction
   const viewData = {
     data: {
+      dateOptions: [
+        new Date('2024-04-01T00:00:00.000Z'),
+        new Date('2024-07-01T00:00:00.000Z'),
+        new Date('2025-01-01T00:00:00.000Z'),
+      ],
       returnLink: '/some-return-link',
-      form: {},
       goal: testGoal,
     },
     errors: {},
     locale: locale.en,
   }
+
+  beforeAll(() => {
+    jest.useFakeTimers().setSystemTime(new Date('2024-01-01'))
+  })
+
+  afterAll(() => {
+    jest.useRealTimers()
+  })
 
   beforeEach(() => {
     req = mockReq()
@@ -91,21 +104,26 @@ describe('AchieveGoalController', () => {
     it('should mark goal as achieved with optional note details', async () => {
       req.params = {
         uuid: 'some-uuid',
-        'goal-achievement-helped': 'Detail on how this goal helped',
       }
-      req.body['goal-achievement-helped'] = 'Note body'
+      req.body = {
+        're-add-goal-reason': 'Re-added goal because...',
+        'start-working-goal-radio': 'yes',
+        'date-selection-radio': testGoal.targetDate,
+      }
 
       req.method = 'POST'
 
       const expectedPartialNewGoal = {
-        status: GoalStatus.ACHIEVED,
-        note: 'Note body',
+        status: GoalStatus.ACTIVE,
+        note: 'Re-added goal because...',
+        targetDate: testGoal.targetDate,
       }
 
       await runMiddlewareChain(controller.post, req, res, next)
 
-      expect(req.services.goalService.updateGoal).toHaveBeenCalledWith(expectedPartialNewGoal, 'some-uuid')
-      expect(res.redirect).toHaveBeenCalledWith('/plan?type=achieved&status=achieved')
+      expect(req.services.goalService.updateGoal).toHaveBeenCalledWith(expectedPartialNewGoal, req.params.uuid)
+      // todo use utils function to work out redirect location from goal.type
+      expect(res.redirect).toHaveBeenCalledWith(`/plan?type=${goalStatusToTabName(expectedPartialNewGoal.status)}`)
       expect(next).not.toHaveBeenCalled()
     })
   })
