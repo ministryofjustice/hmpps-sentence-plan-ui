@@ -18,7 +18,6 @@ export default class ReAddGoalController {
     const { errors } = req
 
     try {
-      const type = req.query?.type
       const { uuid } = req.params
 
       const goal = await req.services.goalService.getGoal(uuid)
@@ -30,8 +29,6 @@ export default class ReAddGoalController {
       return res.render('pages/confirm-re-add-goal', {
         locale: locale.en,
         data: {
-          form: req.body,
-          type,
           dateOptions,
           returnLink,
           goal,
@@ -49,11 +46,7 @@ export default class ReAddGoalController {
     // retrieve full goal
     const goal: Goal = await req.services.goalService.getGoal(goalUuid)
 
-    const newGoal: NewGoal = {
-      title: goal.title,
-      areaOfNeed: goal.areaOfNeed.name,
-      relatedAreasOfNeed: goal.relatedAreasOfNeed.map(aon => aon.name),
-    }
+    const newGoal: Partial<NewGoal> = {}
 
     // set note
     newGoal.note = req.body['re-add-goal-reason']
@@ -84,7 +77,7 @@ export default class ReAddGoalController {
     return next()
   }
 
-  // todo duplicated from creategoalcontroller and changegoalcontroller
+  // TODO duplicated from creategoalcontroller and changegoalcontroller
   private getDateOptions = () => {
     const today = new Date()
     return getAchieveDateOptions(today)
