@@ -98,7 +98,7 @@
                         {% for step in data.goal.steps %}
                             <tr class="govuk-table__row">
                               <td class="govuk-table__cell" data-header="{{ locale.common.goalSummaryCard.stepsList.whoHeader }}">{{ step.actor }}</td>
-                              <td id="step-description-{{ loop.index }}" class="govuk-table__cell" data-header="{{ locale.common.goalSummaryCard.stepsList.whatHeader }}">{{ step.description }}</td>
+                              <td id="step-description-{{ loop.index }}" class="govuk-table__cell" data-header="{{ locale.common.goalSummaryCard.stepsList.stepHeader }}">{{ step.description }}</td>
                               <td class="govuk-table__cell" data-header="{{ locale.common.goalSummaryCard.stepsList.statusHeader }}">
                                 {{ govukSelect({
                                   id: "step-status-" + loop.index,
