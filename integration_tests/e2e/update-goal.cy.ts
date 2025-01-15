@@ -189,5 +189,14 @@ describe('Update goal', () => {
       })
       cy.checkAccessibility()
     })
+
+    it('Renders correctly on tablet', () => {
+      cy.viewport('ipad-2')
+      cy.get<Goal>('@goalForNow').then(goal => {
+        cy.visit(`/update-goal-steps/${goal.uuid}`)
+        cy.get('.govuk-table__head').should('be.visible')
+      })
+      cy.checkAccessibility()
+    })
   })
 })
