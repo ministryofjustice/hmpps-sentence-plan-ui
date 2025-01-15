@@ -151,49 +151,70 @@ describe('View Plan Overview for READ_WRITE user', () => {
     cy.get('p.govuk-error-message').should('contain', "Add steps to 'Test Accommodation 2'")
   })
 
-  it('Creates three new goals, and moves the middle goal up', () => {
+  it('Agreed plan does not show validation error when removed goal has no steps', () => {
     cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
-      ;[1, 2, 3].forEach(i => {
-        cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal({ title: `Test Accommodation ${i}` }))
+      cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal({ title: 'Test Accommodation 1' })).then(goal => {
+        cy.addStepToGoal(goal.uuid, DataGenerator.generateStep())
+        planOverview.agreePlan()
       })
-      cy.visit('/plan')
+
+      const secondGoal = DataGenerator.generateGoal({ title: 'Test Accommodation 2' })
+      cy.addGoalToPlan(plan.uuid, secondGoal).then(goal => {
+        cy.removeGoalFromPlan(goal.uuid, 'Reason for removing goal')
+      })
     })
 
-    planOverview.clickUpOnSummaryCard(1)
+    cy.visit('/plan')
 
-    planOverview
-      .getSummaryCard(0)
-      .should('contain', 'Test Accommodation 2')
-      .and('contain', 'Move goal down')
-      .and('not.contain', 'Move goal up')
-    planOverview
-      .getSummaryCard(1)
-      .should('contain', 'Test Accommodation 1')
-      .and('contain', 'Move goal down')
-      .and('contain', 'Move goal up')
-    cy.checkAccessibility()
+    cy.get('.govuk-error-summary').should('not.exist')
+    cy.get('p.govuk-error-message').should('not.exist')
   })
 
-  it('Creates three new goals, and moves the middle goal down', () => {
-    cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
-      ;[1, 2, 3].forEach(i => {
-        cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal({ title: `Test Accommodation ${i}` }))
+  describe('Tests moving goals up and down', () => {
+    it('Creates three new goals, and moves the middle goal up', () => {
+      cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
+        ;[1, 2, 3].forEach(i => {
+          cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal({ title: `Test Accommodation ${i}` }))
+        })
+        cy.visit('/plan')
       })
-      cy.visit('/plan')
+
+      planOverview.clickUpOnSummaryCard(1)
+
+      planOverview
+        .getSummaryCard(0)
+        .should('contain', 'Test Accommodation 2')
+        .and('contain', 'Move goal down')
+        .and('not.contain', 'Move goal up')
+      planOverview
+        .getSummaryCard(1)
+        .should('contain', 'Test Accommodation 1')
+        .and('contain', 'Move goal down')
+        .and('contain', 'Move goal up')
+      cy.checkAccessibility()
     })
 
-    planOverview.clickDownOnSummaryCard(1)
+    it('Creates three new goals, and moves the middle goal down', () => {
+      cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
+        ;[1, 2, 3].forEach(i => {
+          cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal({ title: `Test Accommodation ${i}` }))
+        })
+        cy.visit('/plan')
+      })
 
-    planOverview
-      .getSummaryCard(1)
-      .should('contain', 'Test Accommodation 3')
-      .and('contain', 'Move goal down')
-      .and('contain', 'Move goal up')
-    planOverview
-      .getSummaryCard(2)
-      .should('contain', 'Test Accommodation 2')
-      .and('contain', 'Move goal up')
-      .and('not.contain', 'Move goal down')
-    cy.checkAccessibility()
+      planOverview.clickDownOnSummaryCard(1)
+
+      planOverview
+        .getSummaryCard(1)
+        .should('contain', 'Test Accommodation 3')
+        .and('contain', 'Move goal down')
+        .and('contain', 'Move goal up')
+      planOverview
+        .getSummaryCard(2)
+        .should('contain', 'Test Accommodation 2')
+        .and('contain', 'Move goal up')
+        .and('not.contain', 'Move goal down')
+      cy.checkAccessibility()
+    })
   })
 })
