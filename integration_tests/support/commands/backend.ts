@@ -4,6 +4,7 @@ import { AccessMode } from '../../../server/@types/Handover'
 import { GoalStatus } from '../../../server/@types/GoalType'
 import { PlanAgreement } from '../../../server/@types/PlanAgreement'
 import { PlanAgreementStatus } from '../../../server/@types/PlanType'
+import handoverData from '../../../server/testutils/data/handoverData'
 
 const getApiToken = () => {
   const apiToken = Cypress.env('API_TOKEN')
@@ -205,8 +206,8 @@ export const addGoalToPlan = (planUUid: string, goal: NewGoal) => {
 export const agreePlan = (planUUid: string) => {
   const agreement: PlanAgreement = {
     agreementStatus: PlanAgreementStatus.AGREED,
-    practitionerName: 'Practitioner', // TODO PGW real value
-    personName: 'Person', // TODO PGW real value
+    practitionerName: handoverData.principal.displayName,
+    personName: handoverData.subject.givenName,
     agreementStatusNote: 'Plan was agreed',
     optionalNote: '',
   }
