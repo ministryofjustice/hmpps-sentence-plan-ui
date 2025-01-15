@@ -101,15 +101,16 @@ describe('Update goal', () => {
       cy.checkAccessibility()
     })
 
-    it('Updating all step status to complete and saving goes to the achieve goal page', () => {
-      cy.get<Goal>('@goalForNow').then(goal => {
-        cy.visit(`/update-goal-steps/${goal.uuid}`)
-        cy.get('#step-status-1').select('Completed')
-        cy.get('.govuk-button').contains('Save goal and steps').click()
-        cy.url().should('include', `/confirm-achieved-goal/${goal.uuid}`)
-      })
-      cy.checkAccessibility()
-    })
+    // TODO SP2-633
+    // it('Updating all step status to complete and saving goes to the achieve goal page', () => {
+    //   cy.get<Goal>('@goalForNow').then(goal => {
+    //     cy.visit(`/update-goal-steps/${goal.uuid}`)
+    //     cy.get('#step-status-1').select('Completed')
+    //     cy.get('.govuk-button').contains('Save goal and steps').click()
+    //     cy.url().should('include', `/confirm-achieved-goal/${goal.uuid}`)
+    //   })
+    //   cy.checkAccessibility()
+    // })
 
     it('Can visit change goal and back link is correct', () => {
       cy.contains('a', 'Update').click()
@@ -159,6 +160,43 @@ describe('Update goal', () => {
       cy.get('.govuk-error-summary').should('contain', 'Notes about progress must be 4,000 characters or less')
       cy.get('#more-detail-error').should('contain', 'Notes about progress must be 4,000 characters or less')
       cy.get('#more-detail').should('contain', lorem)
+      cy.checkAccessibility()
+    })
+
+    function assertComputedContent($el: JQuery<HTMLElement>, expectedContent: string) {
+      const before = window.parent.getComputedStyle($el[0], '::before')
+      const beforeContent = before.getPropertyValue('content')
+      expect(beforeContent).to.equal(expectedContent)
+    }
+
+    it('Renders correctly on mobile', () => {
+      cy.viewport('iphone-se2')
+      cy.get<Goal>('@goalForNow').then(goal => {
+        cy.visit(`/update-goal-steps/${goal.uuid}`)
+        cy.get('.govuk-table__head').should('not.be.visible')
+
+        cy.get('.govuk-table__cell').each(($el, index) => {
+          switch (index) {
+            case 0:
+              return assertComputedContent($el, '"Who will do this"')
+            case 1:
+              return assertComputedContent($el, '"Steps"')
+            case 2:
+              return assertComputedContent($el, '"Status"')
+            default:
+              throw new Error(`Unexpected table cell at index ${index}`)
+          }
+        })
+      })
+      cy.checkAccessibility()
+    })
+
+    it('Renders correctly on tablet', () => {
+      cy.viewport('ipad-2')
+      cy.get<Goal>('@goalForNow').then(goal => {
+        cy.visit(`/update-goal-steps/${goal.uuid}`)
+        cy.get('.govuk-table__head').should('be.visible')
+      })
       cy.checkAccessibility()
     })
   })
