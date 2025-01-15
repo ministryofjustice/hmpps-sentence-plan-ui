@@ -63,7 +63,6 @@ export default class ChangeGoalController {
 
       // Check if the user has came back from the add-goals page
       if (req.services.sessionService.getReturnLink() === `/change-goal/${goalUuid}/`) {
-        req.services.sessionService.setReturnLink(null)
         redirectTarget = `/goal/${goalUuid}/add-steps`
       }
       if (plan.agreementStatus === PlanAgreementStatus.AGREED) {

@@ -59,8 +59,10 @@ export default class AddStepsController {
     try {
       await req.services.stepService.saveAllSteps(goalData, req.params.uuid)
 
-      const link = `${URLs.PLAN_OVERVIEW}?type=current`
-      req.services.sessionService.setReturnLink(null)
+      const link =
+        req.services.sessionService.getReturnLink() === `/change-goal/${req.params.uuid}/`
+          ? `${URLs.PLAN_OVERVIEW}?type=current`
+          : req.services.sessionService.getReturnLink()
 
       return res.redirect(link)
     } catch (e) {
