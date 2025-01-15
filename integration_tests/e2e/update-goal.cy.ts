@@ -180,7 +180,7 @@ describe('Update goal', () => {
             case 0:
               return assertComputedContent($el, '"Who will do this"')
             case 1:
-              return assertComputedContent($el, '"Steps"')
+              return assertComputedContent($el, '"Step"')
             case 2:
               return assertComputedContent($el, '"Status"')
             default:

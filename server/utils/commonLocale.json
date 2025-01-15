@@ -39,6 +39,7 @@
       "stepsList": {
         "whoHeader": "Who will do this",
         "whatHeader": "Steps",
+        "stepHeader": "Step",
         "statusHeader": "Status",
         "noStepsAdded": "No steps added",
         "addSteps": "Add steps",
