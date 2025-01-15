@@ -11,9 +11,11 @@ import PlanOverviewQueryModel from './models/PlanOverviewQueryModel'
 import { AccessMode } from '../../@types/Handover'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
 import { HttpError } from '../../utils/HttpError'
-import { PlanAgreementStatus } from '../../@types/PlanType'
+import { PlanAgreementStatus, PlanType } from '../../@types/PlanType'
 
 export default class PlanOverviewController {
+  plan: PlanType
+
   private render = async (req: Request, res: Response, next: NextFunction) => {
     const { errors } = req
 
@@ -21,12 +23,10 @@ export default class PlanOverviewController {
       const planUuid = req.services.sessionService.getPlanUUID()
       const planVersionNumber = req.services.sessionService.getPlanVersionNumber()
 
-      let plan
-
       if (planVersionNumber != null) {
-        plan = await req.services.planService.getPlanByUuidAndVersionNumber(planUuid, planVersionNumber)
+        this.plan = await req.services.planService.getPlanByUuidAndVersionNumber(planUuid, planVersionNumber)
       } else {
-        plan = await req.services.planService.getPlanByUuid(planUuid)
+        this.plan = await req.services.planService.getPlanByUuid(planUuid)
       }
 
       const oasysReturnUrl = req.services.sessionService.getOasysReturnUrl()
@@ -42,7 +42,7 @@ export default class PlanOverviewController {
       return res.render(page, {
         locale: locale.en,
         data: {
-          plan,
+          plan: this.plan,
           type,
           status,
           oasysReturnUrl,
@@ -72,19 +72,19 @@ export default class PlanOverviewController {
   private validatePlan = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const planUuid = req.services.sessionService.getPlanUUID()
-      const plan = await req.services.planService.getPlanByUuid(planUuid)
+      this.plan = await req.services.planService.getPlanByUuid(planUuid)
       req.errors = { ...req.errors }
 
       let validationModel
 
-      if (req.method === 'POST' && plan.agreementStatus === PlanAgreementStatus.DRAFT) {
+      if (req.method === 'POST' && this.plan.agreementStatus === PlanAgreementStatus.DRAFT) {
         validationModel = PlanReadyForAgreementModel
-      } else if (req.method === 'GET' && plan.agreementStatus !== PlanAgreementStatus.DRAFT) {
+      } else if (req.method === 'GET' && this.plan.agreementStatus !== PlanAgreementStatus.DRAFT) {
         validationModel = AgreedPlanModel
       }
 
       if (validationModel) {
-        req.errors.domain = getValidationErrors(plainToInstance(validationModel, plan))
+        req.errors.domain = getValidationErrors(plainToInstance(validationModel, this.plan))
       }
 
       return next()
@@ -96,7 +96,7 @@ export default class PlanOverviewController {
   private handleValidationErrors = (req: Request, res: Response, next: NextFunction) => {
     const hasErrors = Object.values(req.errors).some(errorCategory => Object.keys(errorCategory).length)
 
-    if (hasErrors) {
+    if (hasErrors && this.plan.agreementStatus === PlanAgreementStatus.DRAFT) {
       if (req.query?.type) {
         delete req.query.type
       }
