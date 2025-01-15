@@ -2,7 +2,7 @@ import PlanOverview from '../pages/plan-overview'
 import DataGenerator from '../support/DataGenerator'
 import { AccessMode } from '../../server/@types/Handover'
 
-describe('Rendering READ_WRITE', () => {
+describe('Rendering Plan History for READ_WRITE user', () => {
   const planOverview = new PlanOverview()
 
   beforeEach(() => {
@@ -104,7 +104,7 @@ describe('Rendering READ_WRITE', () => {
   })
 })
 
-describe('Rendering READ_ONLY', () => {
+describe('Rendering Plan History for READ_ONLY user', () => {
   const planOverview = new PlanOverview()
 
   beforeEach(() => {

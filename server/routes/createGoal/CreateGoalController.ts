@@ -3,14 +3,14 @@ import ReferentialDataService from '../../services/sentence-plan/referentialData
 import locale from './locale.json'
 import URLs from '../URLs'
 import { NewGoal } from '../../@types/NewGoalType'
-import { formatDateWithStyle, getAchieveDateOptions } from '../../utils/utils'
+import { formatDateWithStyle } from '../../utils/utils'
 import transformRequest from '../../middleware/transformMiddleware'
 import CreateGoalPostModel from './models/CreateGoalPostModel'
 import validateRequest from '../../middleware/validationMiddleware'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
 import { AccessMode } from '../../@types/Handover'
 import { HttpError } from '../../utils/HttpError'
-import { getGoalTargetDate } from '../../utils/goalTargetDateUtils'
+import { getDateOptions, getGoalTargetDate } from '../../utils/goalTargetDateUtils'
 
 export default class CreateGoalController {
   constructor(private readonly referentialDataService: ReferentialDataService) {}
@@ -40,7 +40,7 @@ export default class CreateGoalController {
     const areasOfNeed = this.referentialDataService.getAreasOfNeed()
     const sortedAreasOfNeed = this.referentialDataService.getSortedAreasOfNeed()
 
-    const dateOptions = this.getDateOptions()
+    const dateOptions = getDateOptions()
     const selectedAreaOfNeed = areasOfNeed.find(areaOfNeed => areaOfNeed.url === req.params.areaOfNeed)
     const minimumDatePickerDate = formatDateWithStyle(new Date().toISOString(), 'short')
 
@@ -77,11 +77,6 @@ export default class CreateGoalController {
       targetDate,
       relatedAreasOfNeed,
     }
-  }
-
-  private getDateOptions = () => {
-    const today = new Date()
-    return getAchieveDateOptions(today)
   }
 
   private handleValidationErrors = (req: Request, res: Response, next: NextFunction) => {

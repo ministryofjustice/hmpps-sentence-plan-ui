@@ -7,9 +7,9 @@ import ReAddGoalPostModel from './models/ReAddGoalPostModel'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
 import { AccessMode } from '../../@types/Handover'
 import { HttpError } from '../../utils/HttpError'
-import { getAchieveDateOptions, goalStatusToTabName } from '../../utils/utils'
+import { goalStatusToTabName } from '../../utils/utils'
 import { NewGoal } from '../../@types/NewGoalType'
-import { getGoalTargetDate } from '../../utils/goalTargetDateUtils'
+import { getDateOptions, getGoalTargetDate } from '../../utils/goalTargetDateUtils'
 
 export default class ReAddGoalController {
   constructor() {}
@@ -22,7 +22,7 @@ export default class ReAddGoalController {
 
       const goal = await req.services.goalService.getGoal(uuid)
       const returnLink = req.services.sessionService.getReturnLink()
-      const dateOptions = this.getDateOptions()
+      const dateOptions = getDateOptions()
 
       req.services.sessionService.setReturnLink(`/plan?type=removed`)
 
@@ -52,7 +52,6 @@ export default class ReAddGoalController {
     newGoal.note = req.body['re-add-goal-reason']
 
     // set new targetDate
-    // TODO this is now in three files - extract it
     newGoal.targetDate = getGoalTargetDate(
       req.body['start-working-goal-radio'],
       req.body['date-selection-radio'],
@@ -75,12 +74,6 @@ export default class ReAddGoalController {
       return this.render(req, res, next)
     }
     return next()
-  }
-
-  // TODO duplicated from creategoalcontroller and changegoalcontroller
-  private getDateOptions = () => {
-    const today = new Date()
-    return getAchieveDateOptions(today)
   }
 
   get = [requireAccessMode(AccessMode.READ_WRITE), this.render]
