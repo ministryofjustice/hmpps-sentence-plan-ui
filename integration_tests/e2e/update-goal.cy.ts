@@ -162,5 +162,42 @@ describe('Update goal', () => {
       cy.get('#more-detail').should('contain', lorem)
       cy.checkAccessibility()
     })
+
+    function assertComputedContent($el: JQuery<HTMLElement>, expectedContent: string) {
+      const before = window.parent.getComputedStyle($el[0], '::before')
+      const beforeContent = before.getPropertyValue('content')
+      expect(beforeContent).to.equal(expectedContent)
+    }
+
+    it('Renders correctly on mobile', () => {
+      cy.viewport('iphone-se2')
+      cy.get<Goal>('@goalForNow').then(goal => {
+        cy.visit(`/update-goal-steps/${goal.uuid}`)
+        cy.get('.govuk-table__head').should('not.be.visible')
+
+        cy.get('.govuk-table__cell').each(($el, index) => {
+          switch (index) {
+            case 0:
+              return assertComputedContent($el, '"Who will do this"')
+            case 1:
+              return assertComputedContent($el, '"Steps"')
+            case 2:
+              return assertComputedContent($el, '"Status"')
+            default:
+              throw new Error(`Unexpected table cell at index ${index}`)
+          }
+        })
+      })
+      cy.checkAccessibility()
+    })
+
+    it('Renders correctly on tablet', () => {
+      cy.viewport('ipad-2')
+      cy.get<Goal>('@goalForNow').then(goal => {
+        cy.visit(`/update-goal-steps/${goal.uuid}`)
+        cy.get('.govuk-table__head').should('be.visible')
+      })
+      cy.checkAccessibility()
+    })
   })
 })

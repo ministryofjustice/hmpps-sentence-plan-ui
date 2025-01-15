@@ -1,6 +1,10 @@
 .govuk-select {
 
   &--auto-width {
+    @include govuk-media-query($from: tablet, $until: desktop) {
+      @include govuk-typography-responsive($size: 16, $override-line-height: 1);
+    }
+
     min-width: auto
   }
 
