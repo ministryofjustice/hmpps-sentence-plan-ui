@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express'
 import locale from './locale.json'
 import URLs from '../URLs'
 import ReferentialDataService from '../../services/sentence-plan/referentialDataService'
-import { dateToISOFormat, formatDateWithStyle, getAchieveDateOptions } from '../../utils/utils'
+import { formatDateWithStyle, getAchieveDateOptions } from '../../utils/utils'
 import { Goal, GoalStatus } from '../../@types/GoalType'
 import transformRequest from '../../middleware/transformMiddleware'
 import ChangeGoalPostModel from './models/ChangeGoalPostModel'
@@ -12,6 +12,7 @@ import { requireAccessMode } from '../../middleware/authorisationMiddleware'
 import { AccessMode } from '../../@types/Handover'
 import { HttpError } from '../../utils/HttpError'
 import { NewGoal } from '../../@types/NewGoalType'
+import { getGoalTargetDate } from '../../utils/goalTargetDateUtils'
 
 export default class ChangeGoalController {
   constructor(private readonly referentialDataService: ReferentialDataService) {}
@@ -112,13 +113,11 @@ export default class ChangeGoalController {
 
   private processGoalData(body: any): Partial<NewGoal> {
     const title = body['goal-input-autocomplete']
-    const targetDate =
-      // eslint-disable-next-line no-nested-ternary
-      body['start-working-goal-radio'] === 'yes'
-        ? body['date-selection-radio'] === 'custom'
-          ? dateToISOFormat(body['date-selection-custom'])
-          : body['date-selection-radio']
-        : null
+    const targetDate = getGoalTargetDate(
+      body['start-working-goal-radio'],
+      body['date-selection-radio'],
+      body['date-selection-custom'],
+    )
     const areaOfNeed = body['area-of-need']
     const relatedAreasOfNeed = body['related-area-of-need-radio'] === 'yes' ? body['related-area-of-need'] : undefined
     const status = targetDate === null ? GoalStatus.FUTURE : undefined
