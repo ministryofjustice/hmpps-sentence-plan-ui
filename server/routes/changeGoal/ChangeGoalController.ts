@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express'
 import locale from './locale.json'
 import URLs from '../URLs'
 import ReferentialDataService from '../../services/sentence-plan/referentialDataService'
-import { formatDateWithStyle, getAchieveDateOptions } from '../../utils/utils'
+import { formatDateWithStyle } from '../../utils/utils'
 import { Goal, GoalStatus } from '../../@types/GoalType'
 import transformRequest from '../../middleware/transformMiddleware'
 import ChangeGoalPostModel from './models/ChangeGoalPostModel'
@@ -12,7 +12,7 @@ import { requireAccessMode } from '../../middleware/authorisationMiddleware'
 import { AccessMode } from '../../@types/Handover'
 import { HttpError } from '../../utils/HttpError'
 import { NewGoal } from '../../@types/NewGoalType'
-import { getGoalTargetDate } from '../../utils/goalTargetDateUtils'
+import { getDateOptions, getGoalTargetDate } from '../../utils/goalTargetDateUtils'
 
 export default class ChangeGoalController {
   constructor(private readonly referentialDataService: ReferentialDataService) {}
@@ -23,7 +23,7 @@ export default class ChangeGoalController {
 
     const sortedAreasOfNeed = this.referentialDataService.getSortedAreasOfNeed()
     const returnLink = req.services.sessionService.getReturnLink()
-    const dateOptions = this.getDateOptions()
+    const dateOptions = getDateOptions()
     const minimumDatePickerDate = formatDateWithStyle(new Date().toISOString(), 'short')
 
     try {
@@ -79,17 +79,12 @@ export default class ChangeGoalController {
     }
   }
 
-  private getDateOptions = () => {
-    const today = new Date()
-    return getAchieveDateOptions(today)
-  }
-
   private mapGoalToForm = (goal: Goal) => {
     let isCustomTargetDate = false
     let formattedTargetDate
 
     if (goal.targetDate) {
-      isCustomTargetDate = !this.getDateOptions().some(
+      isCustomTargetDate = !getDateOptions().some(
         dateOption => dateOption.toISOString().substring(0, 10) === goal.targetDate.substring(0, 10),
       )
 

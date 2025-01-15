@@ -73,7 +73,7 @@ describe('Re-add a goal to a Plan after it has been removed', () => {
 
     // add a second goal
     // confirm that the one to remove is first
-    // TODO
+    // TODO PGW
 
     cy.visit(`/view-removed-goal/${removedGoal.uuid}`)
     cy.get('a.add-to-plan').click()
@@ -81,7 +81,7 @@ describe('Re-add a goal to a Plan after it has been removed', () => {
     cy.get('input[name="start-working-goal-radio"][value="no"]').click()
     cy.get('button').contains('Confirm').click()
 
-    // todo
+    // todo PGW
     // visit plan overview
     // check order
   })

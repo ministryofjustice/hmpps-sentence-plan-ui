@@ -122,7 +122,6 @@ describe('AchieveGoalController', () => {
       await runMiddlewareChain(controller.post, req, res, next)
 
       expect(req.services.goalService.updateGoal).toHaveBeenCalledWith(expectedPartialNewGoal, req.params.uuid)
-      // todo use utils function to work out redirect location from goal.type
       expect(res.redirect).toHaveBeenCalledWith(`/plan?type=${goalStatusToTabName(expectedPartialNewGoal.status)}`)
       expect(next).not.toHaveBeenCalled()
     })

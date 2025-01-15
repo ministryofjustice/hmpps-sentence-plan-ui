@@ -88,14 +88,6 @@ export function moveGoal(goals: Array<any>, gUuid: string, operation: string) {
   return orderedGoals.map(({ uuid: goalUuid, goalOrder }) => ({ goalUuid, goalOrder }))
 }
 
-export function getAchieveDateOptions(date: Date, dateOptionsInMonths = [3, 6, 12]) {
-  return dateOptionsInMonths.map(option => {
-    const achieveDate = new Date(date)
-    achieveDate.setMonth(date.getMonth() + option)
-    return achieveDate
-  })
-}
-
 export function mergeDeep(...objects: Record<string, any>[]): Record<string, any> {
   const isObject = (obj: any) => obj && typeof obj === 'object'
 

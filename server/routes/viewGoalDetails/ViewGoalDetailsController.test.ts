@@ -61,7 +61,6 @@ describe('ViewGoalDetailsController', () => {
   })
 
   describe('get', () => {
-    // todo: change the array so it passes in the redirect location as well as the status and then assert that
     test.each([
       [GoalStatus.ACHIEVED, URLs.PLAN_OVERVIEW],
       [GoalStatus.REMOVED, `/view-removed-goal/${testGoal.uuid}`],
