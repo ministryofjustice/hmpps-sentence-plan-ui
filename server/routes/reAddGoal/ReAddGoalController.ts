@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
-import { Goal, GoalStatus } from '../../@types/GoalType'
+import { GoalStatus } from '../../@types/GoalType'
 import locale from './locale.json'
 import validateRequest from '../../middleware/validationMiddleware'
 import transformRequest from '../../middleware/transformMiddleware'
@@ -42,9 +42,6 @@ export default class ReAddGoalController {
 
   private saveAndRedirect = async (req: Request, res: Response, next: NextFunction) => {
     const goalUuid = req.params.uuid
-
-    // retrieve full goal
-    const goal: Goal = await req.services.goalService.getGoal(goalUuid)
 
     const newGoal: Partial<NewGoal> = {}
 
