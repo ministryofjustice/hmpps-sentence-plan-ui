@@ -140,18 +140,19 @@ describe('UpdateGoalController', () => {
       expect(next).not.toHaveBeenCalled()
     })
 
-    it('should redirect to the achieve goal page when saved when all steps are completed', async () => {
-      req.body = {
-        'step-status-1': StepStatus.COMPLETED,
-        'step-uuid-1': testStep.uuid,
-        'more-detail': '',
-      }
-
-      await runMiddlewareChain(controller.post, req, res, next)
-
-      expect(res.redirect).toHaveBeenCalledWith(`${URLs.ACHIEVE_GOAL.replace(':uuid', testGoal.uuid)}`)
-      expect(next).not.toHaveBeenCalled()
-    })
+    // TODO SP2-633
+    // it('should redirect to the achieve goal page when saved when all steps are completed', async () => {
+    //   req.body = {
+    //     'step-status-1': StepStatus.COMPLETED,
+    //     'step-uuid-1': testStep.uuid,
+    //     'more-detail': '',
+    //   }
+    //
+    //   await runMiddlewareChain(controller.post, req, res, next)
+    //
+    //   expect(res.redirect).toHaveBeenCalledWith(`${URLs.ACHIEVE_GOAL.replace(':uuid', testGoal.uuid)}`)
+    //   expect(next).not.toHaveBeenCalled()
+    // })
 
     it('should redirect to the same page when a validation error occurs', async () => {
       req.body = {

@@ -86,11 +86,14 @@ export default class UpdateGoalController {
 
       await this.updateSteps(req, goal, steps, note)
 
-      if (steps.length === 0 || steps.some((step: { status: string }) => step.status !== 'COMPLETED')) {
-        req.services.sessionService.setReturnLink(null)
-        return res.redirect(`${URLs.PLAN_OVERVIEW}?type=${goalType}`)
-      }
-      return res.redirect(`${URLs.ACHIEVE_GOAL.replace(':uuid', uuid)}`)
+      return res.redirect(`${URLs.PLAN_OVERVIEW}?type=${goalType}`)
+
+      // TODO SP2-633
+      // if (steps.length === 0 || steps.some((step: { status: string }) => step.status !== 'COMPLETED')) {
+      //   req.services.sessionService.setReturnLink(null)
+      //   return res.redirect(`${URLs.PLAN_OVERVIEW}?type=${goalType}`)
+      // }
+      // return res.redirect(`${URLs.ACHIEVE_GOAL.replace(':uuid', uuid)}`)
     } catch (e) {
       return next(HttpError(500, e.message))
     }
