@@ -203,6 +203,24 @@ export const addGoalToPlan = (planUUid: string, goal: NewGoal) => {
   )
 }
 
+export const removeGoalFromPlan = (goalUuid: string, note: string) => {
+  const goal: Partial<NewGoal> = {
+    status: GoalStatus.REMOVED,
+    note,
+  }
+
+  return getApiToken().then(apiToken =>
+    cy
+      .request({
+        url: `${Cypress.env('SP_API_URL')}/goals/${goalUuid}`,
+        method: 'PATCH',
+        auth: { bearer: apiToken },
+        body: goal,
+      })
+      .then(createResponse => createResponse.body),
+  )
+}
+
 export const agreePlan = (planUUid: string) => {
   const agreement: PlanAgreement = {
     agreementStatus: PlanAgreementStatus.AGREED,
@@ -219,24 +237,6 @@ export const agreePlan = (planUUid: string) => {
         method: 'POST',
         auth: { bearer: apiToken },
         body: agreement,
-      })
-      .then(createResponse => createResponse.body),
-  )
-}
-
-export const removeGoalFromPlan = (goalUuid: string, note: string) => {
-  const goal: Partial<NewGoal> = {
-    status: GoalStatus.REMOVED,
-    note,
-  }
-
-  return getApiToken().then(apiToken =>
-    cy
-      .request({
-        url: `${Cypress.env('SP_API_URL')}/goals/${goalUuid}`,
-        method: 'PATCH',
-        auth: { bearer: apiToken },
-        body: goal,
       })
       .then(createResponse => createResponse.body),
   )

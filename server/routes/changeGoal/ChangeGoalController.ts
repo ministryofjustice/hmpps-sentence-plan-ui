@@ -11,8 +11,8 @@ import { PlanAgreementStatus } from '../../@types/PlanType'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
 import { AccessMode } from '../../@types/Handover'
 import { HttpError } from '../../utils/HttpError'
-import { NewGoal } from '../../@types/NewGoalType'
 import { getDateOptions, getGoalTargetDate } from '../../utils/goalTargetDateUtils'
+import { NewGoal } from '../../@types/NewGoalType'
 
 export default class ChangeGoalController {
   constructor(private readonly referentialDataService: ReferentialDataService) {}
@@ -22,7 +22,10 @@ export default class ChangeGoalController {
     const { errors } = req
 
     const sortedAreasOfNeed = this.referentialDataService.getSortedAreasOfNeed()
-    const returnLink = req.services.sessionService.getReturnLink()
+    const returnLink =
+      req.services.sessionService.getReturnLink() === `/change-goal/${uuid}/`
+        ? URLs.PLAN_OVERVIEW
+        : req.services.sessionService.getReturnLink()
     const dateOptions = getDateOptions()
     const minimumDatePickerDate = formatDateWithStyle(new Date().toISOString(), 'short')
 
@@ -62,6 +65,10 @@ export default class ChangeGoalController {
       const planUuid = req.services.sessionService.getPlanUUID()
       const plan = await req.services.planService.getPlanByUuid(planUuid)
 
+      // Check if the user has came back from the add-goals page
+      if (req.services.sessionService.getReturnLink() === `/change-goal/${goalUuid}/`) {
+        redirectTarget = `/goal/${goalUuid}/add-steps`
+      }
       if (plan.agreementStatus === PlanAgreementStatus.AGREED) {
         redirectTarget = `/update-goal-steps/${goalUuid}`
 
