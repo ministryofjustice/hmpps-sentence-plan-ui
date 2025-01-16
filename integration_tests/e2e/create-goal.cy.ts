@@ -78,7 +78,7 @@ describe('Create a new Goal', () => {
     cy.checkAccessibility()
   })
 
-  it('Creates a new goal - checking back links work as expected', () => {
+  it('Creates a new goal and checks back link on add steps page is correct', () => {
     createGoalPage.createGoal('accommodation')
     createGoalPage.selectGoalAutocompleteOption('I w', 'I will comply with the conditions of my tenancy agreement')
     createGoalPage.selectRelatedAreasOfNeedRadio('no')

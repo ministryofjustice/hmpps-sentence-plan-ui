@@ -33,7 +33,7 @@ export default class GoalModel {
   @Min(0)
   goalOrder: number
 
-  @ValidateIf(o => o.targetDate != null)
+  @ValidateIf(o => o.targetDate != null && o.status === 'ACTIVE')
   @ValidateNested()
   @Type(() => StepModel)
   @ArrayNotEmpty()
