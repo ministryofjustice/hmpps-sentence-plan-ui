@@ -89,6 +89,9 @@ describe('Create a new Goal', () => {
     cy.url().should('contain', '/add-steps?type=current')
 
     cy.get('.govuk-back-link').should('have.attr', 'href').and('include', '/change-goal')
+    cy.get('.govuk-back-link').click()
+    cy.get('.govuk-back-link').should('have.attr', 'href').and('include', '/plan')
+
     cy.checkAccessibility()
   })
 
