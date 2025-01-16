@@ -25,6 +25,7 @@ export default class UpdateGoalController {
     try {
       const sortedAreasOfNeed = this.referentialDataService.getSortedAreasOfNeed()
       const goal = await req.services.goalService.getGoal(uuid)
+      const goalType: string = goalStatusToTabName(goal.status)
       const popData = req.services.sessionService.getSubjectDetails()
       const mainAreaOfNeed = sortedAreasOfNeed.find(areaOfNeed => areaOfNeed.name === goal.areaOfNeed.name)
       const relatedAreasOfNeed = goal.relatedAreasOfNeed.map(need => need.name)
@@ -41,6 +42,7 @@ export default class UpdateGoalController {
           mainAreaOfNeed,
           relatedAreasOfNeed,
           returnLink,
+          goalType,
         },
         errors,
       })

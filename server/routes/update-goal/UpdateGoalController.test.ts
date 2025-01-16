@@ -62,6 +62,7 @@ describe('UpdateGoalController', () => {
       mainAreaOfNeed: AreaOfNeed.find(x => x.name === testGoal.areaOfNeed.name),
       relatedAreasOfNeed: testGoal.relatedAreasOfNeed.map(x => x.name),
       returnLink: '/some-return-link',
+      goalType: 'current',
     },
     errors: {},
   }

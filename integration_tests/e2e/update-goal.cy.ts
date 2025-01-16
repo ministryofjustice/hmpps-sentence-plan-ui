@@ -52,6 +52,22 @@ describe('Update goal', () => {
       })
     })
 
+    it('Back link on a current goal returns to correct tab on plan overview', () => {
+      cy.get<Goal>('@goalForNow').then(goal => {
+        cy.visit(`/update-goal-steps/${goal.uuid}`)
+        cy.contains('a', 'Back').click()
+        cy.url().should('include', '/plan?type=current')
+      })
+    })
+
+    it('Back link on a future goal returns to correct tab on plan overview', () => {
+      cy.get<Goal>('@goalForFuture').then(goal => {
+        cy.visit(`/update-goal-steps/${goal.uuid}`)
+        cy.contains('a', 'Back').click()
+        cy.url().should('include', '/plan?type=future')
+      })
+    })
+
     it('Should say no steps added', () => {
       cy.get<Goal>('@goalWithNoSteps').then(goal => {
         cy.visit(`/update-goal-steps/${goal.uuid}`)

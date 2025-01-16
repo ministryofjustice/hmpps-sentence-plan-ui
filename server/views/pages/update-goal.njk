@@ -53,7 +53,7 @@
 
 {% block content %}
     {{ super() }}
-    <a href="/plan" class="govuk-back-link">{{ locale.common.backLink.text }}</a>
+    <a href="/plan?type={{ data.goalType }}" class="govuk-back-link">{{ locale.common.backLink.text }}</a>
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
