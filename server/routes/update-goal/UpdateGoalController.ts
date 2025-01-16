@@ -30,7 +30,7 @@ export default class UpdateGoalController {
       const mainAreaOfNeed = sortedAreasOfNeed.find(areaOfNeed => areaOfNeed.name === goal.areaOfNeed.name)
       const relatedAreasOfNeed = goal.relatedAreasOfNeed.map(need => need.name)
 
-      const returnLink = req.services.sessionService.getReturnLink()
+      const returnLink = `/plan?type=${goalType}`
       req.services.sessionService.setReturnLink(`/update-goal-steps/${uuid}`)
 
       return res.render('pages/update-goal', {
@@ -42,7 +42,6 @@ export default class UpdateGoalController {
           mainAreaOfNeed,
           relatedAreasOfNeed,
           returnLink,
-          goalType,
         },
         errors,
       })
