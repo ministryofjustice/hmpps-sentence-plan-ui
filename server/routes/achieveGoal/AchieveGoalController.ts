@@ -47,7 +47,7 @@ export default class AchieveGoalController {
     }
 
     try {
-      await req.services.goalService.updateGoal(goalData, goalUuid)
+      await req.services.goalService.updateGoalStatus(goalData, goalUuid)
       return res.redirect(`/plan?type=achieved&status=achieved`)
     } catch (e) {
       return next(HttpError(500, e.message))

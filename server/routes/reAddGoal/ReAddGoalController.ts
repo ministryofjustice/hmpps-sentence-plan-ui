@@ -59,7 +59,7 @@ export default class ReAddGoalController {
     newGoal.status = newGoal.targetDate === null ? GoalStatus.FUTURE : GoalStatus.ACTIVE
 
     try {
-      await req.services.goalService.updateGoal(newGoal, goalUuid)
+      await req.services.goalService.updateGoalStatus(newGoal, goalUuid)
       return res.redirect(`/plan?type=${goalStatusToTabName(newGoal.status)}`)
     } catch (e) {
       return next(HttpError(500, e.message))

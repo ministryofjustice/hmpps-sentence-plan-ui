@@ -29,7 +29,7 @@ jest.mock('../../services/sessionService', () => {
 jest.mock('../../services/sentence-plan/goalService', () => {
   return jest.fn().mockImplementation(() => ({
     getGoal: jest.fn().mockReturnValue(testGoal),
-    updateGoal: jest.fn().mockReturnValue(testGoal),
+    updateGoalStatus: jest.fn().mockReturnValue(testGoal),
   }))
 })
 
@@ -121,7 +121,7 @@ describe('AchieveGoalController', () => {
 
       await runMiddlewareChain(controller.post, req, res, next)
 
-      expect(req.services.goalService.updateGoal).toHaveBeenCalledWith(expectedPartialNewGoal, req.params.uuid)
+      expect(req.services.goalService.updateGoalStatus).toHaveBeenCalledWith(expectedPartialNewGoal, req.params.uuid)
       expect(res.redirect).toHaveBeenCalledWith(`/plan?type=${goalStatusToTabName(expectedPartialNewGoal.status)}`)
       expect(next).not.toHaveBeenCalled()
     })
