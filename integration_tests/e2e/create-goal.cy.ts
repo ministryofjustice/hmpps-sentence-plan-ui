@@ -78,7 +78,7 @@ describe('Create a new Goal', () => {
     cy.checkAccessibility()
   })
 
-  it('Creates a new goal and checks back link on add steps page is correct', () => {
+  it('Creates a new goal - checking back links work as expected', () => {
     createGoalPage.createGoal('accommodation')
     createGoalPage.selectGoalAutocompleteOption('I w', 'I will comply with the conditions of my tenancy agreement')
     createGoalPage.selectRelatedAreasOfNeedRadio('no')
@@ -89,6 +89,9 @@ describe('Create a new Goal', () => {
     cy.url().should('contain', '/add-steps?type=current')
 
     cy.get('.govuk-back-link').should('have.attr', 'href').and('include', '/change-goal')
+    cy.get('.govuk-back-link').click()
+    cy.get('.govuk-back-link').should('have.attr', 'href').and('include', '/plan')
+
     cy.checkAccessibility()
   })
 

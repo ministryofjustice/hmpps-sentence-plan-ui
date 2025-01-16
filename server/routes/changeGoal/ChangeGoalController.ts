@@ -21,7 +21,10 @@ export default class ChangeGoalController {
     const { errors } = req
 
     const sortedAreasOfNeed = this.referentialDataService.getSortedAreasOfNeed()
-    const returnLink = req.services.sessionService.getReturnLink()
+    const returnLink =
+      req.services.sessionService.getReturnLink() === `/change-goal/${uuid}/`
+        ? URLs.PLAN_OVERVIEW
+        : req.services.sessionService.getReturnLink()
     const dateOptions = this.getDateOptions()
     const minimumDatePickerDate = formatDateWithStyle(new Date().toISOString(), 'short')
 
