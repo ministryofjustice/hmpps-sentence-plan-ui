@@ -1,0 +1,11 @@
+@media print {
+  .printing-hidden {
+    content: none;
+    visibility: hidden;
+  }
+
+  .govuk-footer__meta {
+    display: none;
+    visibility: hidden;
+  }
+}

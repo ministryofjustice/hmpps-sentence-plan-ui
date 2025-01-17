@@ -69,16 +69,17 @@
         {
             text: locale.header.returnToOasysButton,
             href: data.oasysReturnUrl,
-            classes: "govuk-button--secondary",
+            classes: "govuk-button--secondary printing-hidden",
             type: 'button'
         },
         {
             text: locale.header.createGoalButton,
             href: "/create-goal/accommodation",
-            classes: "govuk-button--secondary",
+            classes: "govuk-button--secondary printing-hidden",
             type: 'button'
         } if data.readWrite === true,
         {
+            classes: "printing-hidden",
             text: locale.header.agreePlanButton,
             type: 'submit',
             value: 'agree-plan'
@@ -148,7 +149,7 @@
 
             {{ mojSubNavigation({
                 label: 'Sub navigation',
-                classes: 'plan-navigation',
+                classes: 'plan-navigation printing-hidden',
                 items: [{
                     text: locale.subNavigation.currentGoals,
                     href: '/plan?type=current',
@@ -197,7 +198,7 @@
                             {% set buttons = buttons.concat({
                                 text: locale.goalSummaryCard.buttons.moveUpButton,
                                 href: "/goals/" + goalType + "/" + goal.uuid + "/up",
-                                classes: "govuk-button--secondary"
+                                classes: "govuk-button--secondary printing-hidden"
                             }) %}
                         {% endif %}
 
@@ -205,7 +206,7 @@
                             {% set buttons = buttons.concat({
                                 text: locale.goalSummaryCard.buttons.moveDownButton,
                                 href: "/goals/" + goalType + "/" + goal.uuid + "/down",
-                                classes: "govuk-button--secondary"
+                                classes: "govuk-button--secondary printing-hidden"
                             }) %}
                         {% endif %}
 
@@ -225,15 +226,18 @@
                             {% set actions = [
                                 {
                                     href: "/change-goal/" + goal.uuid,
-                                    text: locale.goalSummaryCard.actions.draft.changeGoal
+                                    text: locale.goalSummaryCard.actions.draft.changeGoal,
+                                    classes: "printing-hidden"
                                 },
                                 {
                                     href: "/goal/" + goal.uuid + '/add-steps',
-                                    text: locale.goalSummaryCard.actions.draft.addOrChangeSteps
+                                    text: locale.goalSummaryCard.actions.draft.addOrChangeSteps,
+                                    classes: "printing-hidden"
                                 },
                                 {
                                     href: "/confirm-delete-goal/" + goal.uuid + "?type=current",
-                                    text: locale.goalSummaryCard.actions.draft.deleteGoal
+                                    text: locale.goalSummaryCard.actions.draft.deleteGoal,
+                                    classes: "printing-hidden"
                                 }
                             ] %}
                         {% else %}
@@ -241,22 +245,26 @@
                                 {% set actions = [
                                     {
                                         href: "/update-goal-steps/" + goal.uuid,
-                                        text: locale.goalSummaryCard.actions.active.update
+                                        text: locale.goalSummaryCard.actions.active.update,
+                                        classes: "printing-hidden"
                                     },
                                     {
                                         href: "/confirm-achieved-goal/" + goal.uuid + "?type=current",
-                                        text: locale.goalSummaryCard.actions.active.markAsAchieved
+                                        text: locale.goalSummaryCard.actions.active.markAsAchieved,
+                                        classes: "printing-hidden"
                                     },
                                     {
                                         href: "/remove-goal/" + goal.uuid + "?type=current",
-                                        text: locale.goalSummaryCard.actions.active.removeGoal
+                                        text: locale.goalSummaryCard.actions.active.removeGoal,
+                                        classes: "printing-hidden"
                                     }
                                 ] %}
                             {% elseif goal.status === 'ACHIEVED' %}
                                 {% set actions = [
                                     {
                                         href: '/view-achieved-goal/' + goal.uuid,
-                                        text: locale.goalSummaryCard.actions.achieved.viewDetails
+                                        text: locale.goalSummaryCard.actions.achieved.viewDetails,
+                                        classes: "printing-hidden"
                                     }
                                 ] %}
                                 {% set buttons = [] %}
@@ -264,12 +272,14 @@
                                 {% set actions = [
                                     {
                                         href: '/view-removed-goal/' + goal.uuid,
-                                        text: locale.goalSummaryCard.actions.removed.viewDetails
+                                        text: locale.goalSummaryCard.actions.removed.viewDetails,
+                                        classes: "printing-hidden"
                                     }
                                 ] %}
                                     {#  TODO:SP2-598 {
                                         href: '#',
-                                        text: locale.goalSummaryCard.actions.removed.addToPlan
+                                        text: locale.goalSummaryCard.actions.removed.addToPlan,
+                                        classes: "printing-hidden"
                                     }#}
                             {% endif %}
                         {% endif %}
@@ -296,9 +306,9 @@
                             text: locale.errors['goals'].arrayNotEmpty
                         }) }}
                     {% endif %}
-                <p>{{ locale.ifNoCurrentGoals.text }}</p>
-                <ul>
-                    <li><a href="/create-goal/accommodation" class="govuk-link govuk-link--no-visited-state">{{ locale.ifNoCurrentGoals.action1 }}</a></li>
+                <p class="printing-hidden">{{ locale.ifNoCurrentGoals.text }}</p>
+                <ul class="printing-hidden">
+                    <li><a href="/create-goal/accommodation" class="govuk-link govuk-link--no-visited-state ">{{ locale.ifNoCurrentGoals.action1 }}</a></li>
                     <li><a href="/about" class="govuk-link govuk-link--no-visited-state">{{ locale.ifNoCurrentGoals.action2 }}</a></li>
                 </ul>
                 </div>
@@ -306,7 +316,9 @@
                 <p>{{ locale.ifNoFutureGoals.text }}</p>
             {% endif %}
 
+            <div class="printing-hidden">
             {% include "../partials/back-to-top-link.njk" %}
+            </div>
         </div>
     </div>
 {% endblock %}
