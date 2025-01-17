@@ -73,7 +73,8 @@ describe('Achieve goal', () => {
 
         planOverview.agreePlan()
         cy.get<Goal>('@newGoal').then(goal => {
-          cy.visit(`/confirm-achieved-goal/${goal.uuid}`)
+          cy.visit(`/update-goal-steps/${goal.uuid}`)
+          cy.get('button').contains('Mark as achieved').click()
         })
       })
     })
@@ -126,7 +127,7 @@ describe('Achieve goal', () => {
 
     it('Cancel goal achieved and redirect successfully', () => {
       cy.get('a').contains('Do not mark as achieved').click()
-      cy.url().should('include', 'plan?type=current')
+      cy.url().should('include', 'update-goal-steps/')
       cy.checkAccessibility()
     })
   })
