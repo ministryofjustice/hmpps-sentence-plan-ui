@@ -4,6 +4,10 @@
     visibility: hidden;
   }
 
+  .govuk-summary-card__title {
+    white-space: nowrap;
+  }
+
   .moj-sub-navigation__link {
     color: black !important;
   }
