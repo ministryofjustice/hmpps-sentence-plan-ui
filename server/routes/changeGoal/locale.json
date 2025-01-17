@@ -20,27 +20,6 @@
         "no": "No"
       }
     },
-    "startWorking": {
-      "label": "Can {{ subject.givenName }} start working on this goal now?",
-      "options": {
-        "yes": "Yes",
-        "no": "No, it is a future goal"
-      }
-    },
-    "dateSelection": {
-      "label": "When should {{ subject.givenName }} aim to achieve this goal?",
-      "hint": "Select one option.",
-      "options": {
-        "threeMonths": "In 3 months ({{ dateOptions.threeMonths }})",
-        "sixMonths": "In 6 months ({{ dateOptions.sixMonths }})",
-        "twelveMonths": "In 12 months ({{ dateOptions.twelveMonths }})",
-        "custom": "Set another date"
-      }
-    },
-    "datePicker": {
-      "label": "Select a date",
-      "hint": "For example, 31/3/2024."
-    },
     "saveButtonText": "Save goal",
     "addStepsButton": "Add steps",
     "saveWithoutStepsButton": "Save without steps",

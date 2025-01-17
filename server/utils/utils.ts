@@ -1,6 +1,4 @@
 import { DateTime } from 'luxon'
-// eslint-disable-next-line import/no-extraneous-dependencies
-import camelCase from 'camelcase'
 import { Person } from '../@types/Person'
 import { NewStep, StepStatus } from '../@types/StepType'
 import { GoalStatus } from '../@types/GoalType'
@@ -43,13 +41,6 @@ export function formatDate(date: string): string {
     month: 'long',
     year: 'numeric',
   })
-}
-
-export const motivationText = (optionResult?: string): string => {
-  if (optionResult === undefined || optionResult === null) {
-    return undefined
-  }
-  return camelCase(optionResult)
 }
 
 export const dateWithYear = (datetimeString: string): string | null => {
@@ -95,14 +86,6 @@ export function moveGoal(goals: Array<any>, gUuid: string, operation: string) {
     orderedGoals[index].goalOrder = targetGoalOrder
   }
   return orderedGoals.map(({ uuid: goalUuid, goalOrder }) => ({ goalUuid, goalOrder }))
-}
-
-export function getAchieveDateOptions(date: Date, dateOptionsInMonths = [3, 6, 12]) {
-  return dateOptionsInMonths.map(option => {
-    const achieveDate = new Date(date)
-    achieveDate.setMonth(date.getMonth() + option)
-    return achieveDate
-  })
 }
 
 export function mergeDeep(...objects: Record<string, any>[]): Record<string, any> {
