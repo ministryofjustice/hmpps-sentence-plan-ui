@@ -3,13 +3,14 @@ import ReferentialDataService from '../../services/sentence-plan/referentialData
 import locale from './locale.json'
 import URLs from '../URLs'
 import { NewGoal } from '../../@types/NewGoalType'
-import { dateToISOFormat, formatDateWithStyle, getAchieveDateOptions } from '../../utils/utils'
+import { formatDateWithStyle } from '../../utils/utils'
 import transformRequest from '../../middleware/transformMiddleware'
 import CreateGoalPostModel from './models/CreateGoalPostModel'
 import validateRequest from '../../middleware/validationMiddleware'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
 import { AccessMode } from '../../@types/Handover'
 import { HttpError } from '../../utils/HttpError'
+import { getDateOptions, getGoalTargetDate } from '../../utils/goalTargetDateUtils'
 
 export default class CreateGoalController {
   constructor(private readonly referentialDataService: ReferentialDataService) {}
@@ -41,7 +42,7 @@ export default class CreateGoalController {
     const areasOfNeed = this.referentialDataService.getAreasOfNeed()
     const sortedAreasOfNeed = this.referentialDataService.getSortedAreasOfNeed()
 
-    const dateOptions = this.getDateOptions()
+    const dateOptions = getDateOptions()
     const selectedAreaOfNeed = areasOfNeed.find(areaOfNeed => areaOfNeed.url === req.params.areaOfNeed)
     const minimumDatePickerDate = formatDateWithStyle(new Date().toISOString(), 'short')
 
@@ -64,13 +65,11 @@ export default class CreateGoalController {
 
   private processGoalData(body: any) {
     const title = body['goal-input-autocomplete']
-    let targetDate =
-      body['date-selection-radio'] === 'custom' && body['start-working-goal-radio'] === 'yes'
-        ? dateToISOFormat(body['date-selection-custom'])
-        : body['date-selection-radio']
-    if (body['start-working-goal-radio'] === 'no') {
-      targetDate = null
-    }
+    const targetDate = getGoalTargetDate(
+      body['start-working-goal-radio'],
+      body['date-selection-radio'],
+      body['date-selection-custom'],
+    )
     const areaOfNeed = body['area-of-need']
     const relatedAreasOfNeed = body['related-area-of-need-radio'] === 'yes' ? body['related-area-of-need'] : undefined
 
@@ -80,11 +79,6 @@ export default class CreateGoalController {
       targetDate,
       relatedAreasOfNeed,
     }
-  }
-
-  private getDateOptions = () => {
-    const today = new Date()
-    return getAchieveDateOptions(today)
   }
 
   private handleValidationErrors = (req: Request, res: Response, next: NextFunction) => {

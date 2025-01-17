@@ -119,10 +119,10 @@
                         errorMessage: getFormattedError(errors, locale, 'date-selection-custom'),
                         classes: "govuk-input--width-10",
                         hint: {
-                            text: locale.datePicker.hint
+                            text: locale.common.goalEditing.datePicker.hint
                         },
                         label: {
-                            text: locale.datePicker.label,
+                            text: locale.common.goalEditing.datePicker.label,
                             classes: "govuk-fieldset__legend--s"
                         },
                         value: data.form['date-selection-custom'],
@@ -135,35 +135,35 @@
                         name: "date-selection-radio",
                         fieldset: {
                             legend: {
-                                text: locale.dateSelection.label,
+                                text: locale.common.goalEditing.dateSelection.label,
                                 isPageHeading: false,
                                 classes: "govuk-fieldset__legend--m"
                             }
                         },
                         hint: {
-                            text: locale.dateSelection.hint
+                            text: locale.common.goalEditing.dateSelection.hint
                         },
                         errorMessage: getFormattedError(errors, locale, 'date-selection-radio'),
                         value: data.form['date-selection-radio'],
                         items: [
                             {
                                 value: data.dateOptions[0] | formatISODate,
-                                text: locale.dateSelection.options.threeMonths
+                                text: locale.common.goalEditing.dateSelection.options.threeMonths
                             },
                             {
                                 value: data.dateOptions[1] | formatISODate,
-                                text: locale.dateSelection.options.sixMonths
+                                text: locale.common.goalEditing.dateSelection.options.sixMonths
                             },
                             {
                                 value: data.dateOptions[2] | formatISODate,
-                                text: locale.dateSelection.options.twelveMonths
+                                text: locale.common.goalEditing.dateSelection.options.twelveMonths
                             },
                             {
-                                divider: "or"
+                                divider: locale.common.radio.divider
                             },
                             {
                                 value: "custom",
-                                text: locale.dateSelection.options.custom,
+                                text: locale.common.goalEditing.dateSelection.options.custom,
                                 conditional: {
                                 html: customDateHtml
                             }
@@ -176,7 +176,7 @@
                     name: "start-working-goal-radio",
                     fieldset: {
                         legend: {
-                            text: locale.startWorking.label,
+                            text: locale.common.goalEditing.startWorking.label,
                             isPageHeading: false,
                             classes: "govuk-fieldset__legend--m"
                         }
@@ -184,7 +184,7 @@
                     errorMessage: getFormattedError(errors, locale, 'start-working-goal-radio'),
                     items: [
                         {
-                            text: locale.startWorking.options.yes,
+                            text: locale.common.goalEditing.startWorking.options.yes,
                             value: "yes",
                             checked: data.form['start-working-goal-radio'] == 'yes',
                             conditional: {
@@ -192,7 +192,7 @@
                             }
                         },
                         {
-                            text: locale.startWorking.options.no,
+                            text: locale.common.goalEditing.startWorking.options.no,
                             value: "no",
                             checked: data.form['start-working-goal-radio'] == 'no'
                         }
