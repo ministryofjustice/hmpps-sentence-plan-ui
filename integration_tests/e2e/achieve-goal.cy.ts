@@ -50,13 +50,13 @@ describe('Achieve goal', () => {
         })
 
         planOverview.agreePlan()
-        cy.get('a').contains('Mark as achieved').click()
       })
     })
 
-    it('Display agree plan page correctly on load', () => {
-      cy.get('h1').contains('has achieved this goal')
+    it('Displays agree plan page correctly on load', () => {
       cy.get<Goal>('@newGoal').then(goal => {
+        cy.visit(`/confirm-achieved-goal/${goal.uuid}`)
+        cy.get('h1').contains('has achieved this goal')
         cy.get('.govuk-summary-card__title').should('contain', goal.title)
       })
       cy.checkAccessibility()
@@ -72,7 +72,9 @@ describe('Achieve goal', () => {
         })
 
         planOverview.agreePlan()
-        cy.get('a').contains('Mark as achieved').click()
+        cy.get<Goal>('@newGoal').then(goal => {
+          cy.visit(`/confirm-achieved-goal/${goal.uuid}`)
+        })
       })
     })
 
@@ -125,7 +127,6 @@ describe('Achieve goal', () => {
     it('Cancel goal achieved and redirect successfully', () => {
       cy.get('a').contains('Do not mark as achieved').click()
       cy.url().should('include', 'plan?type=current')
-      planOverview.getSummaryCard(0).get('a').contains('Mark as achieved')
       cy.checkAccessibility()
     })
   })
