@@ -72,6 +72,10 @@
                 <p class='goal-status'><strong>{{ locale.note.status.goal.removed }}</strong> {{ locale.who.practitionerOnly }}</p>
                 <p class='goal-title'><strong>{{ note.goalTitle }}</strong></p>
                 <p class='goal-note'>{{ note.note }}</p>
+              {% elseif note.noteType == 'READDED'%}
+                <p class='goal-status'><strong>{{ locale.note.status.goal.addedBackToPlan }}</strong> {{ locale.who.practitionerOnly }}</p>
+                <p class='goal-title'><strong>{{ note.goalTitle }}</strong></p>
+                <p class='goal-note'>{{ note.note }}</p>
             {% elseif note.noteType == 'ACHIEVED'%}
                 <p class='goal-status'><strong>{{ locale.note.status.goal.achieved }}</strong> {{ locale.who.practitionerOnly }}</p>
                 <p class='goal-title'><strong>{{ note.goalTitle }}</strong></p>

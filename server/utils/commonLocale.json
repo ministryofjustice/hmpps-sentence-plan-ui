@@ -56,6 +56,28 @@
         "relatedAreasOfNeed": "Also relates to: {{ relatedAreasOfNeed }}"
       }
     },
+    "goalEditing": {
+      "startWorking": {
+        "label": "Can {{ subject.givenName }} start working on this goal now?",
+        "options": {
+          "yes": "Yes",
+          "no": "No, it is a future goal"
+        }
+      },
+      "dateSelection": {
+        "label": "When should {{ subject.givenName }} aim to achieve this goal?",
+        "options": {
+          "threeMonths": "In 3 months ({{ dateOptions.threeMonths }})",
+          "sixMonths": "In 6 months ({{ dateOptions.sixMonths }})",
+          "twelveMonths": "In 12 months ({{ dateOptions.twelveMonths }})",
+          "custom": "Set another date"
+        }
+      },
+      "datePicker": {
+        "label": "Select a date",
+        "hint": "For example, 31/3/2023."
+      }
+    },
     "noteList": {
       "viewAllNotes": "View all notes",
       "noGoalNotes": "There are no notes on this goal yet.",

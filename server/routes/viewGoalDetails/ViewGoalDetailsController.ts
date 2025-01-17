@@ -21,6 +21,10 @@ export default class ViewGoalDetailsController {
         return next()
       }
 
+      if (goal.status === GoalStatus.REMOVED) {
+        req.services.sessionService.setReturnLink(`/view-removed-goal/${goal.uuid}`)
+      }
+
       return res.render('pages/view-goal-details', {
         locale: locale.en,
         data: {

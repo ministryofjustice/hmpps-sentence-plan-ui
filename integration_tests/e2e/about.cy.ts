@@ -1,6 +1,6 @@
 import { AccessMode } from '../../server/@types/Handover'
 
-describe('Rendering READ_WRITE', () => {
+describe('Rendering About Person for READ_WRITE user', () => {
   beforeEach(() => {
     cy.createSentencePlan().then(planDetails => {
       cy.wrap(planDetails).as('plan')
