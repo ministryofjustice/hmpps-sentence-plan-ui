@@ -120,7 +120,8 @@ describe('Rendering READ_ONLY', () => {
       cy.get('.moj-primary-navigation__container').contains('Plan history').click()
       cy.get('.plan-status').contains('Plan agreed')
       cy.visit('/plan')
-      cy.contains('a', 'Mark as achieved').click()
+      cy.contains('a', 'Update').click()
+      cy.contains('button', 'Mark as achieved').click()
       cy.url().should('include', '/confirm-achieved-goal') // check url
       cy.get('textarea#goal-achievement-helped').type('Updated goal to achieved status')
       cy.get('.govuk-button').contains('Confirm').click()
