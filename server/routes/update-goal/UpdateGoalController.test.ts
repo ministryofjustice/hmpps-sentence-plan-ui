@@ -61,7 +61,7 @@ describe('UpdateGoalController', () => {
       popData: handoverData.subject,
       mainAreaOfNeed: AreaOfNeed.find(x => x.name === testGoal.areaOfNeed.name),
       relatedAreasOfNeed: testGoal.relatedAreasOfNeed.map(x => x.name),
-      returnLink: '/some-return-link',
+      returnLink: '/plan?type=current',
     },
     errors: {},
   }
