@@ -145,13 +145,12 @@
           }) }}
 
           <div class="govuk-button-group">
-{#            todo: change button locale lookup name for confirm #}
               {{ govukButton({
-                  text: locale.confirmGoalAchievedButton,
+                  text: locale.confirmGoalReAddToPlan,
                   name: "action",
                   value: "confirm"
               }) }}
-              <a class="govuk-link govuk-link--no-visited-state" href="/plan?type={{ data.type }}">{{ locale.doNotMarkAsAchievedLink }}</a>
+              <a class="govuk-link govuk-link--no-visited-state" href="/view-removed-goal/{{ data.goal.uuid }}">{{ locale.doNotReAddGoalToPlan }}</a>
           </div>
         </form>
     </div>

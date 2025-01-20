@@ -23,6 +23,7 @@ export default class ReAddGoalController {
       const goal = await req.services.goalService.getGoal(uuid)
       const returnLink = req.services.sessionService.getReturnLink()
       const dateOptions = getDateOptions()
+      const form = errors ? req.body : null
 
       req.services.sessionService.setReturnLink(`/plan?type=removed`)
 
@@ -32,6 +33,7 @@ export default class ReAddGoalController {
           dateOptions,
           returnLink,
           goal,
+          form,
         },
         errors,
       })

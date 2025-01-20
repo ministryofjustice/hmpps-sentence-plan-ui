@@ -26,7 +26,7 @@
         "GoalDateMustBeTodayOrFuture": "Date must be today or in the future"
       }
     },
-    "confirmGoalAchievedButton": "Confirm",
-    "doNotMarkAsAchievedLink": "Do not add goal back into plan"
+    "confirmGoalReAddToPlan": "Confirm",
+    "doNotReAddGoalToPlan": "Do not add goal back into plan"
   }
 }
