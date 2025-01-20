@@ -40,7 +40,7 @@ jest.mock('../../services/sentence-plan/planService', () => {
   }))
 })
 
-describe('AchieveGoalController', () => {
+describe('ReAddGoalController', () => {
   let controller: ReAddGoalController
   let req: Request
   let res: Response
@@ -54,6 +54,7 @@ describe('AchieveGoalController', () => {
       ],
       returnLink: '/some-return-link',
       goal: testGoal,
+      form: {},
     },
     errors: {},
     locale: locale.en,
@@ -84,7 +85,7 @@ describe('AchieveGoalController', () => {
 
     it('should render with validation errors', async () => {
       const errors = {
-        body: { 'goal-achievement-helped': { maxLength: true } },
+        body: { 're-add-goal-reason': { isNotEmpty: true } },
         params: {},
         query: {},
       }
@@ -101,7 +102,7 @@ describe('AchieveGoalController', () => {
   })
 
   describe('post', () => {
-    it('should mark goal as achieved with optional note details', async () => {
+    it('should mark goal as re-added with note details', async () => {
       req.params = {
         uuid: 'some-uuid',
       }
