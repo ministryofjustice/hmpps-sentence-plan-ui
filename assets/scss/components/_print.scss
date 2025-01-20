@@ -1,0 +1,19 @@
+@media print {
+  .govuk-summary-card__title {
+    white-space: nowrap;
+  }
+
+  .moj-sub-navigation__link {
+    color: black !important;
+  }
+
+  .moj-sub-navigation__link[href]:after {
+    content: none;
+    visibility: hidden;
+  }
+
+  .govuk-footer__meta {
+    display: none;
+    visibility: hidden;
+  }
+}
