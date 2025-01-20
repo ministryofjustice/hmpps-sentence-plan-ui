@@ -69,16 +69,17 @@
         {
             text: locale.header.returnToOasysButton,
             href: data.oasysReturnUrl,
-            classes: "govuk-button--secondary",
+            classes: "govuk-button--secondary govuk-!-display-none-print",
             type: 'button'
         },
         {
             text: locale.header.createGoalButton,
             href: "/create-goal/accommodation",
-            classes: "govuk-button--secondary",
+            classes: "govuk-button--secondary govuk-!-display-none-print",
             type: 'button'
         } if data.readWrite === true,
         {
+            classes: "govuk-!-display-none-print",
             text: locale.header.agreePlanButton,
             type: 'submit',
             value: 'agree-plan'
@@ -197,7 +198,7 @@
                             {% set buttons = buttons.concat({
                                 text: locale.goalSummaryCard.buttons.moveUpButton,
                                 href: "/goals/" + goalType + "/" + goal.uuid + "/up",
-                                classes: "govuk-button--secondary"
+                                classes: "govuk-button--secondary govuk-!-display-none-print"
                             }) %}
                         {% endif %}
 
@@ -205,7 +206,7 @@
                             {% set buttons = buttons.concat({
                                 text: locale.goalSummaryCard.buttons.moveDownButton,
                                 href: "/goals/" + goalType + "/" + goal.uuid + "/down",
-                                classes: "govuk-button--secondary"
+                                classes: "govuk-button--secondary govuk-!-display-none-print"
                             }) %}
                         {% endif %}
 
@@ -225,15 +226,18 @@
                             {% set actions = [
                                 {
                                     href: "/change-goal/" + goal.uuid,
-                                    text: locale.goalSummaryCard.actions.draft.changeGoal
+                                    text: locale.goalSummaryCard.actions.draft.changeGoal,
+                                    classes: "govuk-!-display-none-print"
                                 },
                                 {
                                     href: "/goal/" + goal.uuid + '/add-steps',
-                                    text: locale.goalSummaryCard.actions.draft.addOrChangeSteps
+                                    text: locale.goalSummaryCard.actions.draft.addOrChangeSteps,
+                                    classes: "govuk-!-display-none-print"
                                 },
                                 {
                                     href: "/confirm-delete-goal/" + goal.uuid + "?type=current",
-                                    text: locale.goalSummaryCard.actions.draft.deleteGoal
+                                    text: locale.goalSummaryCard.actions.draft.deleteGoal,
+                                    classes: "govuk-!-display-none-print"
                                 }
                             ] %}
                         {% else %}
@@ -241,22 +245,26 @@
                                 {% set actions = [
                                     {
                                         href: "/update-goal-steps/" + goal.uuid,
-                                        text: locale.goalSummaryCard.actions.active.update
+                                        text: locale.goalSummaryCard.actions.active.update,
+                                        classes: "govuk-!-display-none-print"
                                     },
                                     {
                                         href: "/confirm-achieved-goal/" + goal.uuid + "?type=current",
-                                        text: locale.goalSummaryCard.actions.active.markAsAchieved
+                                        text: locale.goalSummaryCard.actions.active.markAsAchieved,
+                                        classes: "govuk-!-display-none-print"
                                     },
                                     {
                                         href: "/remove-goal/" + goal.uuid + "?type=current",
-                                        text: locale.goalSummaryCard.actions.active.removeGoal
+                                        text: locale.goalSummaryCard.actions.active.removeGoal,
+                                        classes: "govuk-!-display-none-print"
                                     }
                                 ] %}
                             {% elseif goal.status === 'ACHIEVED' %}
                                 {% set actions = [
                                     {
                                         href: '/view-achieved-goal/' + goal.uuid,
-                                        text: locale.goalSummaryCard.actions.achieved.viewDetails
+                                        text: locale.goalSummaryCard.actions.achieved.viewDetails,
+                                        classes: "govuk-!-display-none-print"
                                     }
                                 ] %}
                                 {% set buttons = [] %}
@@ -264,12 +272,14 @@
                                 {% set actions = [
                                     {
                                         href: '/view-removed-goal/' + goal.uuid,
-                                        text: locale.goalSummaryCard.actions.removed.viewDetails
+                                        text: locale.goalSummaryCard.actions.removed.viewDetails,
+                                        classes: "govuk-!-display-none-print"
                                     }
                                 ] %}
                                     {#  TODO:SP2-598 {
                                         href: '#',
-                                        text: locale.goalSummaryCard.actions.removed.addToPlan
+                                        text: locale.goalSummaryCard.actions.removed.addToPlan,
+                                        classes: "govuk-!-display-none-print"
                                     }#}
                             {% endif %}
                         {% endif %}
@@ -296,9 +306,9 @@
                             text: locale.errors['goals'].arrayNotEmpty
                         }) }}
                     {% endif %}
-                <p>{{ locale.ifNoCurrentGoals.text }}</p>
-                <ul>
-                    <li><a href="/create-goal/accommodation" class="govuk-link govuk-link--no-visited-state">{{ locale.ifNoCurrentGoals.action1 }}</a></li>
+                <p class="govuk-!-display-none-print">{{ locale.ifNoCurrentGoals.text }}</p>
+                <ul class="govuk-!-display-none-print">
+                    <li><a href="/create-goal/accommodation" class="govuk-link govuk-link--no-visited-state ">{{ locale.ifNoCurrentGoals.action1 }}</a></li>
                     <li><a href="/about" class="govuk-link govuk-link--no-visited-state">{{ locale.ifNoCurrentGoals.action2 }}</a></li>
                 </ul>
                 </div>
@@ -306,7 +316,9 @@
                 <p>{{ locale.ifNoFutureGoals.text }}</p>
             {% endif %}
 
+            <div class="govuk-!-display-none-print">
             {% include "../partials/back-to-top-link.njk" %}
+            </div>
         </div>
     </div>
 {% endblock %}
