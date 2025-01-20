@@ -74,7 +74,7 @@ function createHandoverContext(apiToken, oasysAssessmentPk, accessMode, sentence
         finance: {
           financeLinkedToHarm: 'NO',
           financeLinkedToReoffending: 'NO',
-          financeStrengths: 'NO',
+          financeStrengths: 'NULL',
           financeOtherWeightedScore: 'N/A',
           financeThreshold: 'N/A',
         },
