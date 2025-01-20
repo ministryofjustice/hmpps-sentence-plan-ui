@@ -83,7 +83,8 @@
       "noGoalNotes": "There are no notes on this goal yet.",
       "noteHeading": "{{ noteDate }} by {{ noteAuthor }}",
       "goalAchievedNote": "Goal marked as achieved on {{ noteDate }}.",
-      "goalRemovedNote": "Goal removed on {{ noteDate }}."
+      "goalRemovedNote": "Goal removed on {{ noteDate }}.",
+      "goalReAddedNote": "Goal added back into plan on {{ noteDate }}."
     },
     "backLink": {
       "text": "Back"
