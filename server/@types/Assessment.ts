@@ -11,11 +11,11 @@ export interface AssessmentArea {
   title: string
   overallScore?: string
   riskOfSeriousHarmDetails?: string
-  linkedtoHarm?: string
+  linkedtoHarm: string
   riskOfReoffendingDetails?: string
-  linkedtoReoffending?: string
+  linkedtoReoffending: string
   motivationToMakeChanges?: string
-  linkedtoStrengthsOrProtectiveFactors?: string
+  linkedtoStrengthsOrProtectiveFactors: string
   strengthsOrProtectiveFactors?: string
   criminogenicNeedsScore?: string
   goalRoute?: string
