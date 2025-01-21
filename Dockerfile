@@ -1,4 +1,4 @@
-FROM node:22.13-bookworm-slim as base
+FROM node:22.13-bookworm-slim AS base
 
 ARG BUILD_NUMBER
 ARG GIT_REF
@@ -30,7 +30,7 @@ RUN apt-get update && \
     apt-get install -y make python3 g++ curl && \
     rm -rf /var/lib/apt/lists/*
 
-FROM base as development
+FROM base AS development
 ARG BUILD_NUMBER
 ARG GIT_REF
 ARG GIT_BRANCH
@@ -39,7 +39,7 @@ ENV BUILD_NUMBER ${BUILD_NUMBER}
 ENV GIT_REF ${GIT_REF}
 ENV NODE_ENV='development'
 
-FROM base as build
+FROM base AS build
 ARG BUILD_NUMBER
 ARG GIT_REF
 ARG GIT_BRANCH
