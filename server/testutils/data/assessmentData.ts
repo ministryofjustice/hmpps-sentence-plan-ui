@@ -1,11 +1,4 @@
-import {
-  AssessmentResponse,
-  CriminogenicNeedsData,
-  DrugMisuse,
-  Finance,
-  PersonalRelationshipsAndCommunity,
-  ThinkingBehaviourAndAttitudes,
-} from '../../@types/Assessment'
+import { AssessmentResponse, CriminogenicNeedsData } from '../../@types/Assessment'
 
 export const assessmentDataNoAssessments: AssessmentResponse = {
   lastUpdatedTimestampSAN: '2024-10-04T15:22:31.453096',
