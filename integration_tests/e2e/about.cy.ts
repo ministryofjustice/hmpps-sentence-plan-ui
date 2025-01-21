@@ -189,11 +189,15 @@ describe('Rendering About Person for READ_WRITE user', () => {
       'This area is not linked to RoSH (risk of serious harm)',
       'This area is not linked to risk of reoffending',
       'Motivation to make changes in this area',
-      'There are no strengths or protective factors related to this area',
+      'The information is not available yet',
       'This area does not have a need score',
     ]
 
-    const expectedBody = ['There is no risk of reoffending', 'This question was not applicable.', 'Nothing to add']
+    const expectedBody = [
+      'There is no risk of reoffending',
+      'This question was not applicable.',
+      'This question has not been answered.',
+    ]
 
     cy.get('.govuk-accordion__show-all').eq(2).click() // click show all in non-scoring assessment section
 

@@ -1,4 +1,11 @@
-import { AssessmentResponse, CriminogenicNeedsData } from '../../@types/Assessment'
+import {
+  AssessmentResponse,
+  CriminogenicNeedsData,
+  DrugMisuse,
+  Finance,
+  PersonalRelationshipsAndCommunity,
+  ThinkingBehaviourAndAttitudes,
+} from '../../@types/Assessment'
 
 export const assessmentDataNoAssessments: AssessmentResponse = {
   lastUpdatedTimestampSAN: '2024-10-04T15:22:31.453096',
@@ -57,12 +64,21 @@ export const crimNeedsSubset: CriminogenicNeedsData = {
 // Test data for the criminogenic needs that need ordering by difference between score and Need threshold
 export const crimNeedsOrdered: CriminogenicNeedsData = {
   accommodation: {
+    accLinkedToHarm: 'NULL',
+    accLinkedToReoffending: 'NULL',
+    accStrengths: 'NULL',
     accOtherWeightedScore: '3',
   },
   drugMisuse: {
+    drugLinkedToHarm: 'NULL',
+    drugLinkedToReoffending: 'NULL',
+    drugStrengths: 'NULL',
     drugOtherWeightedScore: '4',
   },
   thinkingBehaviourAndAttitudes: {
+    thinkLinkedToHarm: 'NULL',
+    thinkLinkedToReoffending: 'NULL',
+    thinkStrengths: 'NULL',
     thinkOtherWeightedScore: '5',
   },
 }

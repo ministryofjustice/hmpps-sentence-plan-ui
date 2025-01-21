@@ -25,17 +25,12 @@ export const formatAssessmentData = (
     .filter(areaConfig => areaConfig.crimNeedsKey in crimNeeds && crimNeeds[areaConfig.crimNeedsKey])
     .map(areaConfig => {
       let score
-      const linkedtoHarm = (
-        crimNeeds[areaConfig.crimNeedsKey]?.[`${areaConfig.crimNeedsSubKey}LinkedToHarm`] ?? 'NULL'
-      ).toLowerCase()
 
-      const linkedtoReoffending = (
-        crimNeeds[areaConfig.crimNeedsKey]?.[`${areaConfig.crimNeedsSubKey}LinkedToReoffending`] ?? 'NULL'
-      ).toLowerCase()
-
-      const linkedtoStrengthsOrProtectiveFactors = (
-        crimNeeds[areaConfig.crimNeedsKey]?.[`${areaConfig.crimNeedsSubKey}Strengths`] ?? 'NULL'
-      ).toLowerCase()
+      const linkedtoHarm = crimNeeds[areaConfig.crimNeedsKey][`${areaConfig.crimNeedsSubKey}LinkedToHarm`].toLowerCase()
+      const linkedtoReoffending =
+        crimNeeds[areaConfig.crimNeedsKey][`${areaConfig.crimNeedsSubKey}LinkedToReoffending`].toLowerCase()
+      const linkedtoStrengthsOrProtectiveFactors =
+        crimNeeds[areaConfig.crimNeedsKey][`${areaConfig.crimNeedsSubKey}Strengths`].toLowerCase()
 
       let subData: SubAreaData
       let overallScore
