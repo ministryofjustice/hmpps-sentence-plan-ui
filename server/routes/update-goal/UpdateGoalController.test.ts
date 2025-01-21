@@ -117,6 +117,22 @@ describe('UpdateGoalController', () => {
       expect(next).not.toHaveBeenCalled()
     })
 
+    it('should submit the updated fields and redirect to the remove goal page if remove goal from plan clicked', async () => {
+      req.body = {
+        'step-status-1': StepStatus.IN_PROGRESS,
+        'step-uuid-1': testStep.uuid,
+        'more-detail': 'A note',
+        action: 'remove',
+      }
+
+      await runMiddlewareChain(controller.post, req, res, next)
+
+      expect(req.services.stepService.saveAllSteps).toHaveBeenCalled()
+      expect(res.redirect).toHaveBeenCalledWith('/remove-goal/a-un1qu3-t3st-Uu1d')
+      expect(res.render).not.toHaveBeenCalled()
+      expect(next).not.toHaveBeenCalled()
+    })
+
     it('should call next with an error if saveAllSteps fails', async () => {
       req.body = {
         'step-status-1': StepStatus.IN_PROGRESS,
