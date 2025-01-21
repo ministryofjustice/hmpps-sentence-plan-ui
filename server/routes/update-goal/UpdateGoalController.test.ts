@@ -101,6 +101,22 @@ describe('UpdateGoalController', () => {
       expect(next).not.toHaveBeenCalled()
     })
 
+    it('should submit the updated fields and redirect to the mark as achieved page if mark as achieved clicked', async () => {
+      req.body = {
+        'step-status-1': StepStatus.IN_PROGRESS,
+        'step-uuid-1': testStep.uuid,
+        'more-detail': '',
+        action: 'mark-as-achieved',
+      }
+
+      await runMiddlewareChain(controller.post, req, res, next)
+
+      expect(req.services.stepService.saveAllSteps).toHaveBeenCalled()
+      expect(res.redirect).toHaveBeenCalledWith('/confirm-achieved-goal/a-un1qu3-t3st-Uu1d')
+      expect(res.render).not.toHaveBeenCalled()
+      expect(next).not.toHaveBeenCalled()
+    })
+
     it('should call next with an error if saveAllSteps fails', async () => {
       req.body = {
         'step-status-1': StepStatus.IN_PROGRESS,
