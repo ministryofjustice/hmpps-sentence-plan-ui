@@ -91,6 +91,10 @@ export default class UpdateGoalController {
         return res.redirect(`${URLs.ACHIEVE_GOAL.replace(':uuid', uuid)}`)
       }
 
+      if (req.body.action === 'remove') {
+        return res.redirect(`${URLs.REMOVE_GOAL.replace(':uuid', uuid)}`)
+      }
+
       return res.redirect(`${URLs.PLAN_OVERVIEW}?type=${goalType}`)
 
       // TODO SP2-633
