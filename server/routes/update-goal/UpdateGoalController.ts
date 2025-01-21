@@ -87,6 +87,10 @@ export default class UpdateGoalController {
 
       await this.updateSteps(req, goal, steps, note)
 
+      if (req.body.action === 'mark-as-achieved') {
+        return res.redirect(`${URLs.ACHIEVE_GOAL.replace(':uuid', uuid)}`)
+      }
+
       return res.redirect(`${URLs.PLAN_OVERVIEW}?type=${goalType}`)
 
       // TODO SP2-633
