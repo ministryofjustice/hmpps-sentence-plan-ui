@@ -130,7 +130,7 @@ describe('View Plan Overview for READ_WRITE user', () => {
     })
     planOverview.agreePlan()
     cy.contains('a', 'Update').click()
-    cy.contains('a', 'Remove goal from plan').click()
+    cy.contains('button', 'Remove goal from plan').click()
     cy.get('#goal-removal-note').type('Removed during cypress test')
     cy.get('button').contains('Confirm').click()
     cy.get('.goal-date-and-notes > :nth-child(1)').contains('Removed on')

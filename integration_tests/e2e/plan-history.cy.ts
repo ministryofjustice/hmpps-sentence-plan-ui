@@ -93,7 +93,7 @@ describe('Rendering Plan History for READ_WRITE user', () => {
     cy.get('.plan-status').contains('Plan agreed')
     cy.visit('/plan')
     cy.contains('a', 'Update').click()
-    cy.contains('a', 'Remove goal from plan').click()
+    cy.contains('button', 'Remove goal from plan').click()
     cy.url().should('include', '/remove-goal')
     cy.get('textarea#goal-removal-note').type('Updated goal to removed status')
     cy.get('.govuk-button').contains('Confirm').click()

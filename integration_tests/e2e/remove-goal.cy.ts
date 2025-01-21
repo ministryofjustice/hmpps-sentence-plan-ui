@@ -120,7 +120,7 @@ describe('Remove a goal from a Plan after it has been agreed', () => {
         cy.contains('a', 'Update').click()
       })
 
-      cy.contains('a', 'Remove goal from plan').click()
+      cy.contains('button', 'Remove goal from plan').click()
 
       // Check we've landed on confirm goal remove page
       cy.get<Goal>('@goal').then(goal => {
@@ -150,7 +150,7 @@ describe('Remove a goal from a Plan after it has been agreed', () => {
         cy.contains('a', 'Update').click()
       })
 
-      cy.contains('a', 'Remove goal from plan').click()
+      cy.contains('button', 'Remove goal from plan').click()
 
       // Check we've landed on confirm goal remove page
       cy.get<Goal>('@goal').then(goal => {
@@ -181,7 +181,7 @@ describe('Remove a goal from a Plan after it has been agreed', () => {
         cy.contains('a', 'Update').click()
       })
 
-      cy.contains('a', 'Remove goal from plan').click()
+      cy.contains('button', 'Remove goal from plan').click()
 
       // Add note text
       cy.get('#goal-removal-note').invoke('val', lorem)
@@ -214,7 +214,7 @@ describe('Remove a goal from a Plan after it has been agreed', () => {
         cy.contains('a', 'Update').click()
       })
 
-      cy.contains('a', 'Remove goal from plan').click()
+      cy.contains('button', 'Remove goal from plan').click()
 
       // Add note text
       cy.get('#goal-removal-note').type('Some optional text in the note field')
