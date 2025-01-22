@@ -63,6 +63,7 @@ describe('format assessment data', () => {
             title: 'Accommodation',
             goalRoute: 'accommodation',
             upperBound: 6,
+            isMissingInformation: false,
           },
         ],
         lowScoring: [
@@ -77,6 +78,7 @@ describe('format assessment data', () => {
             title: 'Employment and education',
             goalRoute: 'employment-and-education',
             upperBound: 4,
+            isMissingInformation: false,
           },
         ],
         other: [
@@ -88,6 +90,7 @@ describe('format assessment data', () => {
             linkedtoHarm: 'no',
             linkedtoStrengthsOrProtectiveFactors: 'no',
             riskOfReoffendingDetails: undefined,
+            isMissingInformation: false,
           },
           {
             goalRoute: 'alcohol-use',
@@ -96,6 +99,7 @@ describe('format assessment data', () => {
             linkedtoReoffending: undefined,
             linkedtoHarm: undefined,
             linkedtoStrengthsOrProtectiveFactors: undefined,
+            isMissingInformation: undefined,
           },
           {
             goalRoute: 'drug-use',
@@ -104,6 +108,7 @@ describe('format assessment data', () => {
             linkedtoReoffending: undefined,
             linkedtoHarm: undefined,
             linkedtoStrengthsOrProtectiveFactors: undefined,
+            isMissingInformation: undefined,
           },
           {
             goalRoute: 'finances',
@@ -112,6 +117,7 @@ describe('format assessment data', () => {
             linkedtoReoffending: undefined,
             linkedtoHarm: undefined,
             linkedtoStrengthsOrProtectiveFactors: undefined,
+            isMissingInformation: undefined,
           },
           {
             goalRoute: 'personal-relationships-and-community',
@@ -120,6 +126,7 @@ describe('format assessment data', () => {
             linkedtoReoffending: undefined,
             linkedtoHarm: undefined,
             linkedtoStrengthsOrProtectiveFactors: undefined,
+            isMissingInformation: undefined,
           },
           {
             goalRoute: 'thinking-behaviours-and-attitudes',
@@ -128,6 +135,7 @@ describe('format assessment data', () => {
             linkedtoReoffending: undefined,
             linkedtoHarm: undefined,
             linkedtoStrengthsOrProtectiveFactors: undefined,
+            isMissingInformation: undefined,
           },
         ],
         versionUpdatedAt: '2024-10-04T15:22:31.453096',
@@ -151,6 +159,7 @@ describe('format assessment data', () => {
             thresholdValue: 1,
             title: 'Accommodation',
             upperBound: 6,
+            isMissingInformation: false,
           },
         ],
         lowScoring: [
@@ -166,6 +175,7 @@ describe('format assessment data', () => {
             title: 'Employment and education',
             goalRoute: 'employment-and-education',
             upperBound: 4,
+            isMissingInformation: false,
           },
         ],
         other: [
@@ -177,6 +187,7 @@ describe('format assessment data', () => {
             linkedtoHarm: 'no',
             linkedtoStrengthsOrProtectiveFactors: 'no',
             riskOfReoffendingDetails: undefined,
+            isMissingInformation: false,
           },
           {
             goalRoute: 'alcohol-use',
@@ -185,6 +196,7 @@ describe('format assessment data', () => {
             linkedtoReoffending: undefined,
             linkedtoHarm: undefined,
             linkedtoStrengthsOrProtectiveFactors: undefined,
+            isMissingInformation: undefined,
           },
           {
             goalRoute: 'drug-use',
@@ -193,6 +205,7 @@ describe('format assessment data', () => {
             linkedtoReoffending: undefined,
             linkedtoHarm: undefined,
             linkedtoStrengthsOrProtectiveFactors: undefined,
+            isMissingInformation: undefined,
           },
           {
             goalRoute: 'finances',
@@ -201,6 +214,7 @@ describe('format assessment data', () => {
             linkedtoReoffending: undefined,
             linkedtoHarm: undefined,
             linkedtoStrengthsOrProtectiveFactors: undefined,
+            isMissingInformation: undefined,
           },
           {
             goalRoute: 'personal-relationships-and-community',
@@ -209,6 +223,7 @@ describe('format assessment data', () => {
             linkedtoReoffending: undefined,
             linkedtoHarm: undefined,
             linkedtoStrengthsOrProtectiveFactors: undefined,
+            isMissingInformation: undefined,
           },
           {
             goalRoute: 'thinking-behaviours-and-attitudes',
@@ -217,6 +232,7 @@ describe('format assessment data', () => {
             linkedtoReoffending: undefined,
             linkedtoHarm: undefined,
             linkedtoStrengthsOrProtectiveFactors: undefined,
+            isMissingInformation: undefined,
           },
         ],
         versionUpdatedAt: '2024-10-04T15:22:31.453096',
@@ -234,13 +250,11 @@ describe('format assessment data', () => {
             linkedtoReoffending: 'null',
             linkedtoHarm: 'null',
             linkedtoStrengthsOrProtectiveFactors: 'null',
-            riskOfReoffendingDetails: 'This question has not been answered.',
-            riskOfSeriousHarmDetails: 'This question has not been answered.',
-            strengthsOrProtectiveFactorsDetails: 'This question has not been answered.',
             overallScore: '4',
             thresholdValue: 0,
             title: 'Drug use',
             upperBound: 8,
+            isMissingInformation: true,
           },
           {
             criminogenicNeedsScore: '5',
@@ -248,13 +262,11 @@ describe('format assessment data', () => {
             linkedtoReoffending: 'null',
             linkedtoHarm: 'null',
             linkedtoStrengthsOrProtectiveFactors: 'null',
-            riskOfReoffendingDetails: 'This question has not been answered.',
-            riskOfSeriousHarmDetails: 'This question has not been answered.',
-            strengthsOrProtectiveFactorsDetails: 'This question has not been answered.',
             overallScore: '5',
             thresholdValue: 2,
             title: 'Thinking, behaviours and attitudes',
             upperBound: 10,
+            isMissingInformation: true,
           },
           {
             criminogenicNeedsScore: '3',
@@ -262,9 +274,7 @@ describe('format assessment data', () => {
             linkedtoReoffending: 'null',
             linkedtoHarm: 'null',
             linkedtoStrengthsOrProtectiveFactors: 'null',
-            riskOfReoffendingDetails: 'This question has not been answered.',
-            riskOfSeriousHarmDetails: 'This question has not been answered.',
-            strengthsOrProtectiveFactorsDetails: 'This question has not been answered.',
+            isMissingInformation: true,
             overallScore: '3',
             thresholdValue: 1,
             title: 'Accommodation',
@@ -280,6 +290,7 @@ describe('format assessment data', () => {
             linkedtoReoffending: undefined,
             linkedtoHarm: undefined,
             linkedtoStrengthsOrProtectiveFactors: undefined,
+            isMissingInformation: undefined,
           },
           {
             goalRoute: 'employment-and-education',
@@ -288,6 +299,7 @@ describe('format assessment data', () => {
             linkedtoReoffending: undefined,
             linkedtoHarm: undefined,
             linkedtoStrengthsOrProtectiveFactors: undefined,
+            isMissingInformation: undefined,
           },
           {
             goalRoute: 'finances',
@@ -296,6 +308,7 @@ describe('format assessment data', () => {
             linkedtoReoffending: undefined,
             linkedtoHarm: undefined,
             linkedtoStrengthsOrProtectiveFactors: undefined,
+            isMissingInformation: undefined,
           },
           {
             goalRoute: 'health-and-wellbeing',
@@ -304,6 +317,7 @@ describe('format assessment data', () => {
             linkedtoReoffending: undefined,
             linkedtoHarm: undefined,
             linkedtoStrengthsOrProtectiveFactors: undefined,
+            isMissingInformation: undefined,
           },
           {
             goalRoute: 'personal-relationships-and-community',
@@ -312,6 +326,7 @@ describe('format assessment data', () => {
             linkedtoReoffending: undefined,
             linkedtoHarm: undefined,
             linkedtoStrengthsOrProtectiveFactors: undefined,
+            isMissingInformation: undefined,
           },
         ],
         versionUpdatedAt: '2024-10-04T15:22:31.453096',

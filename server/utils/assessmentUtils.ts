@@ -38,26 +38,29 @@ export const formatAssessmentData = (
         assessment.sanAssessmentData[`${areaConfig.assessmentKey}_changes`]?.value,
       )
 
+      const isMissingInformation =
+        linkedtoHarm === 'null' || linkedtoReoffending === 'null' || linkedtoStrengthsOrProtectiveFactors === 'null'
+
       const riskOfSeriousHarmDetails =
-        linkedtoHarm === 'null'
-          ? 'This question has not been answered.'
-          : assessment.sanAssessmentData[
+        linkedtoHarm !== 'null'
+          ? assessment.sanAssessmentData[
               `${areaConfig.assessmentKey}_practitioner_analysis_risk_of_serious_harm_${linkedtoHarm}_details`
             ]?.value
+          : undefined
 
       const riskOfReoffendingDetails =
-        linkedtoReoffending === 'null'
-          ? 'This question has not been answered.'
-          : assessment.sanAssessmentData[
+        linkedtoReoffending !== 'null'
+          ? assessment.sanAssessmentData[
               `${areaConfig.assessmentKey}_practitioner_analysis_risk_of_reoffending_${linkedtoReoffending}_details`
             ]?.value
+          : undefined
 
       const strengthsOrProtectiveFactorsDetails =
-        linkedtoStrengthsOrProtectiveFactors === 'null'
-          ? 'This question has not been answered.'
-          : assessment.sanAssessmentData[
+        linkedtoStrengthsOrProtectiveFactors !== 'null'
+          ? assessment.sanAssessmentData[
               `${areaConfig.assessmentKey}_practitioner_analysis_strengths_or_protective_factors_${linkedtoStrengthsOrProtectiveFactors}_details`
             ]?.value
+          : undefined
 
       score = crimNeeds[areaConfig.crimNeedsKey][`${areaConfig.crimNeedsSubKey}OtherWeightedScore`]
       if (Number.isNaN(Number(score))) {
@@ -88,6 +91,7 @@ export const formatAssessmentData = (
         linkedtoHarm,
         linkedtoReoffending,
         linkedtoStrengthsOrProtectiveFactors,
+        isMissingInformation,
         motivationToMakeChanges,
         riskOfSeriousHarmDetails,
         riskOfReoffendingDetails,

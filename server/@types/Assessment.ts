@@ -13,6 +13,7 @@ export interface AssessmentArea {
   riskOfSeriousHarmDetails?: string
   linkedtoHarm: string
   riskOfReoffendingDetails?: string
+  isMissingInformation: boolean
   linkedtoReoffending: string
   motivationToMakeChanges?: string
   linkedtoStrengthsOrProtectiveFactors: string
