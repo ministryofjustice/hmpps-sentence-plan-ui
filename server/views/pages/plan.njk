@@ -47,8 +47,8 @@
     plan: {
         agreementDate: data.plan.agreementDate | formatSimpleDate,
         createdDate: data.plan.createdDate | formatSimpleDate,
-        updatedDate: data.plan.updatedDate | formatSimpleDate,
-        updatedBy: data.plan.updatedBy.username | title
+        mostRecentUpdateDate: data.plan.mostRecentUpdateDate | formatSimpleDate,
+        mostRecentUpdateByName: data.plan.mostRecentUpdateByName | convertToTitleCase
     },
     subject: data.popData
 }) %}
@@ -95,12 +95,15 @@
     {{ super() }}
 
     {% if data.plan.agreementStatus === 'AGREED' %}
-      {#                {% if data.plan.updatedDate > data.plan.agreementDate %}#TODO: SP2-836#}
-      <p class="govuk-body govuk-!-margin-top-5">{{ locale.lastUpdatedPlan }}</p>
-      {#                {% else %}#}
-      {#                    <p class="govuk-body">{{ locale.agreePlan }}</p>#}
-      {#                {% endif %}#}
-    {% elseif data.plan.agreementStatus === 'DO_NOT_AGREE' %}
+      <p class="govuk-body govuk-!-margin-top-5">
+      {%- if data.plan.mostRecentUpdateDate > data.plan.agreementDate %}
+          {{ locale.lastUpdatedPlan }}
+      {%- else %}
+          {{ locale.agreePlan }}
+      {%- endif %}
+        <a href="/plan-history" class="govuk-link govuk-link--no-visited-state">{{ locale.viewPlanHistory }}</a>
+      </p>
+    {% elseif data.plan.agreementStatus === 'DO_NOT_AGREE' or data.plan.agreementStatus === 'COULD_NOT_ANSWER' %}
       <p class="govuk-body govuk-!-margin-top-5">{{ locale.notAgreePlan }}</p>
     {% elseif data.plan.agreementStatus === 'DRAFT' %}
       <p class="govuk-body govuk-!-margin-top-5">{{ locale.addStepSuggestion }}</p>
