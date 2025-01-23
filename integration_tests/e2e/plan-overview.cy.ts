@@ -182,6 +182,10 @@ describe('View Plan Overview for READ_WRITE user', () => {
           cy.visit('/plan')
           planOverview.agreePlan()
 
+          // we need to make sure the update comes 1 second after agreement for there to be a difference in the timestamps
+          // eslint-disable-next-line cypress/no-unnecessary-waiting
+          cy.wait(1000)
+
           // take any action on a goal that updates lastUpdated field
           cy.removeGoalFromPlan(goal.uuid, 'A removal note')
 
