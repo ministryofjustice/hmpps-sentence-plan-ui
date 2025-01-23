@@ -1,0 +1,107 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "moj/components/sub-navigation/macro.njk" import mojSubNavigation %}
+{% from "moj/components/button-menu/macro.njk" import mojButtonMenu %}
+{%- from "moj/components/banner/macro.njk" import mojBanner -%}
+{% from "../components/assessment/assessment.njk" import renderAssessment %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+
+{% set print = true %}
+{% set locale = interpolate(locale, {
+    subject: data.popData,
+    lastUpdatedDate: data.assessmentAreas.versionUpdatedAt | formatSimpleDate
+}) %}
+
+{% block pageTitle %}
+    {% if not errors %}
+        {{ locale.page.title }}
+    {% else %}
+        {{ locale.page.errorTitle }}
+    {% endif %}
+{% endblock %}
+
+{% set mainClasses = "app-container govuk-body" %}
+{% set header = {
+    type: "plan-extended",
+    heading: locale.mainHeading.title,
+    items: [
+        {
+            text: locale.common.header.returnToOasysButton,
+            href: data.oasysReturnUrl,
+            classes: "govuk-button--secondary",
+            type: 'button'
+        }
+    ]
+} %}
+
+{% block bodyStart %}
+    <div id="top"></div>
+{% endblock %}
+
+{% block content %}
+    {{ super() }}
+    {% if data.assessmentAreas.versionUpdatedAt %}
+        <p class="govuk-body govuk-!-margin-top-5">{{ locale.detail.lastUpdated }}</p>
+    {% endif %}
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            {% if errors.domain %}
+            {%  set errorList = [] %}
+            {%  for error in errors.domain %}
+                {%  set errorList = (errorList.push({ text: locale.errors[error]}), errorList)    %}
+            {%  endfor %}
+                {{ govukErrorSummary({
+                    titleText: "There is a problem",
+                    errorList: errorList
+                }) }}
+            {% endif %}
+
+            {% if data.deliusData.sentences.length > 0 %}
+            <h2 class="govuk-heading-m">Sentence information</h2>
+            <table class="govuk-table govuk-!-margin-bottom-6 sentence-info">
+
+                <tr class="govuk-body-s">
+                    <td class="govuk-padding-right--25">{{ locale.detail.sentenceHeading }}</td>
+                    <td class="govuk-padding-right--25">{{ locale.detail.endDateHeading }}</td>
+                    <td class="govuk-padding-right--25">{{ locale.detail.unpaidWorkHeading }}</td>
+                    <td class="govuk-padding-right--25">{{ locale.detail.rarHeading }}</td>
+                </tr>
+
+                {% for sentence in data.deliusData.sentences %}
+                    <tr class="govuk-table__row govuk-body-l {{ 'single-sentence' if data.deliusData.sentences.length == 1 }}">
+                        <td class = "govuk-table__cell govuk-padding-bottom--25">{{ sentence.description }} <br/> {{ sentenceLength(sentence.startDate, sentence.endDate, locale.common.sentence) }}</td>
+                        <td class = "govuk-table__cell govuk-padding-bottom--25">{{ sentence.endDate | formatSimpleDate }}</td>
+                        <td class = "govuk-table__cell govuk-padding-bottom--25">
+                            {% if sentence.unpaidWorkHoursOrdered > 0 %}
+                                {{ sentence.unpaidWorkHoursOrdered }} hours
+                            {% else %}
+                                No
+                            {% endif %}
+                        </td>
+                        <td class = "govuk-table__cell govuk-padding-bottom--25">
+                            {% if sentence.rarDaysOrdered > 0 %}
+                                {{ sentence.rarDaysOrdered }} days
+                            {% else %}
+                                No
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor  %}
+            </table>
+            {% endif %}
+
+            <div class="govuk-warning-text">
+            <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+              <strong class="govuk-warning-text__text">
+                <span class="govuk-visually-hidden">Warning</span>
+                  This information is not available yet because the assessment has not been completed. You can <a href="{{data.oasysReturnUrl}}">view the summary screen in OASys</a> instead.
+              </strong>
+            </div>
+
+            <h2 class="govuk-warning-text"> </h2>
+        </div>
+
+    </div>
+
+{% endblock %}

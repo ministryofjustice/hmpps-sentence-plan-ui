@@ -123,6 +123,8 @@ describe('Rendering About Person for READ_WRITE user', () => {
     const expectedHeadings =
       'This area is not linked to RoSH (risk of serious harm) ' +
       'This area is not linked to risk of reoffending ' +
+      'Motivation to make changes in this area ' +
+      'Sam is actively making changes. ' +
       'There are no strengths or protective factors related to this area ' +
       'Drug use need score ' +
       '0 out of 8. (Scores above 0 are high-scoring.) ' +
@@ -136,8 +138,8 @@ describe('Rendering About Person for READ_WRITE user', () => {
         const trimText = text.trim().replace(/\s+/g, ' ') // regex to catch and replace excessive newlines to single whitespace
         expect(trimText).to.include(expectedHeadings)
       })
-    cy.contains('.govuk-accordion__section', 'Drug use').find('.govuk-heading-s').should('have.length', 4)
-    cy.contains('.govuk-accordion__section', 'Drug use').find('.govuk-body').should('have.length', 3)
+    cy.contains('.govuk-accordion__section', 'Drug use').find('.govuk-heading-s').should('have.length', 5)
+    cy.contains('.govuk-accordion__section', 'Drug use').find('.govuk-body').should('have.length', 4)
   })
 
   it('Should check if the score graph for (low-scoring area) drug use is displayed correctly', () => {
@@ -189,15 +191,11 @@ describe('Rendering About Person for READ_WRITE user', () => {
       'This area is not linked to RoSH (risk of serious harm)',
       'This area is not linked to risk of reoffending',
       'Motivation to make changes in this area',
+      'There are no strengths or protective factors related to this area',
       'This area does not have a need score',
-      'Missing information',
     ]
 
-    const expectedBody = [
-      'There is no risk of reoffending',
-      'This question was not applicable.',
-      'Strengths or protective factors',
-    ]
+    const expectedBody = ['There is no risk of reoffending', 'This question was not applicable.', 'Nothing to add']
 
     cy.get('.govuk-accordion__show-all').eq(2).click() // click show all in non-scoring assessment section
 

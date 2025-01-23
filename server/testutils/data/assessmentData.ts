@@ -1,4 +1,4 @@
-import { AssessmentResponse, CriminogenicNeedsData } from '../../@types/Assessment'
+import { AlcoholMisuse, AssessmentResponse, CriminogenicNeedsData } from '../../@types/Assessment'
 
 export const assessmentDataNoAssessments: AssessmentResponse = {
   lastUpdatedTimestampSAN: '2024-10-04T15:22:31.453096',
@@ -16,6 +16,11 @@ export const assessmentData: AssessmentResponse = {
     },
     accommodation_changes: {
       value: 'THINKING_ABOUT_MAKING_CHANGES',
+      values: null,
+      collection: null,
+    },
+    health_wellbeing_changes: {
+      value: 'NEEDS_HELP_TO_MAKE_CHANGES',
       values: null,
       collection: null,
     },
@@ -50,6 +55,38 @@ export const crimNeedsSubset: CriminogenicNeedsData = {
     emoStrengths: 'NO',
     emoOtherWeightedScore: 'N/A',
     emoThreshold: 'N/A',
+  },
+  AlcoholMisuse: {
+    alcoholLinkedToHarm: 'NO',
+    alcoholLinkedToReoffending: 'NO',
+    alcoholStrengths: 'NO',
+    alcoholOtherWeightedScore: 'N/A',
+    alcoholThreshold: 'N/A',
+  },
+  DrugMisuse: {
+    drugLinkedToHarm: 'NO',
+    drugLinkedToReoffending: 'NO',
+    drugStrengths: 'NO',
+    drugOtherWeightedScore: 'N/A',
+    drugThreshold: 'N/A',
+  },
+  thinkingBehaviourAndAttitudes: null,
+}
+
+export const crimNeedsMissing: CriminogenicNeedsData = {
+  accommodation: {
+    accLinkedToHarm: 'NO',
+    accLinkedToReoffending: 'YES',
+    accStrengths: 'NO',
+    accOtherWeightedScore: '6', // out of 6
+    accThreshold: 'YES',
+  },
+  educationTrainingEmployability: {
+    eteLinkedToHarm: 'NO',
+    eteLinkedToReoffending: 'YES',
+    eteStrengths: 'YES',
+    eteOtherWeightedScore: '1', // out of 4
+    eteThreshold: 'YES',
   },
   thinkingBehaviourAndAttitudes: null,
 }

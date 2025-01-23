@@ -119,23 +119,6 @@
                     {% endif %}
                 {% endif %}
 
-                {% if assessment.isMissingInformation %}
-                        <div id="missing-information-{{ loop.index }}">
-                        <h3 class="govuk-heading-s">{{ locale.detail.missingInformation }}</h3>
-                        <ul>
-                            {% if assessment.linkedtoHarm === 'null' %}
-                                    <li class="govuk-body">{{ locale.detail.RoSH }}</li>
-                            {% endif %}
-                            {% if assessment.linkedtoReoffending === 'null' %}
-                                <li class="sp-text-pre-wrap govuk-body">{{ locale.detail.riskOfReoffending }}</li>
-                             {% endif %}
-                            {% if assessment.linkedtoStrengthsOrProtectiveFactors === 'null' %}
-                                <li class="sp-text-pre-wrap govuk-body">{{ locale.detail.strengthsOrProtectiveFactorsMissing }}</li>
-                            {% endif %}
-                           </ul>
-                        </div>
-                    {% endif %}
-
               {% if readWrite === true %}
                 <div>
                     <p class='goal-link'>

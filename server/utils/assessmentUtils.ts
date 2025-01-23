@@ -38,9 +38,6 @@ export const formatAssessmentData = (
         assessment.sanAssessmentData[`${areaConfig.assessmentKey}_changes`]?.value,
       )
 
-      const isMissingInformation =
-        linkedtoHarm === 'null' || linkedtoReoffending === 'null' || linkedtoStrengthsOrProtectiveFactors === 'null'
-
       const riskOfSeriousHarmDetails =
         linkedtoHarm !== 'null'
           ? assessment.sanAssessmentData[
@@ -63,6 +60,14 @@ export const formatAssessmentData = (
           : undefined
 
       score = crimNeeds[areaConfig.crimNeedsKey][`${areaConfig.crimNeedsSubKey}OtherWeightedScore`]
+
+      const isMissingInformation =
+        linkedtoHarm === 'null' ||
+        linkedtoReoffending === 'null' ||
+        linkedtoStrengthsOrProtectiveFactors === 'null' ||
+        score === undefined ||
+        motivationToMakeChanges === undefined
+
       if (Number.isNaN(Number(score))) {
         score = undefined
       } else if (score > areaConfig.upperBound) {

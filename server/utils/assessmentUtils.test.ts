@@ -63,7 +63,7 @@ describe('format assessment data', () => {
             title: 'Accommodation',
             goalRoute: 'accommodation',
             upperBound: 6,
-            isMissingInformation: false,
+            isMissingInformation: true,
           },
         ],
         lowScoring: [
@@ -78,7 +78,7 @@ describe('format assessment data', () => {
             title: 'Employment and education',
             goalRoute: 'employment-and-education',
             upperBound: 4,
-            isMissingInformation: false,
+            isMissingInformation: true,
           },
         ],
         other: [
@@ -90,7 +90,7 @@ describe('format assessment data', () => {
             linkedtoHarm: 'no',
             linkedtoStrengthsOrProtectiveFactors: 'no',
             riskOfReoffendingDetails: undefined,
-            isMissingInformation: false,
+            isMissingInformation: true,
           },
           {
             goalRoute: 'alcohol-use',
@@ -183,6 +183,7 @@ describe('format assessment data', () => {
             goalRoute: 'health-and-wellbeing',
             title: 'Health and wellbeing',
             upperBound: null,
+            motivationToMakeChanges: 'needsHelpToMakeChanges',
             linkedtoReoffending: 'no',
             linkedtoHarm: 'no',
             linkedtoStrengthsOrProtectiveFactors: 'no',
