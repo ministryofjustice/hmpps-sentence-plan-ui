@@ -19,6 +19,11 @@ export const assessmentData: AssessmentResponse = {
       values: null,
       collection: null,
     },
+    health_wellbeing_changes: {
+      value: 'NEEDS_HELP_TO_MAKE_CHANGES',
+      values: null,
+      collection: null,
+    },
   },
   sanOasysEquivalent: {},
 }
@@ -51,18 +56,59 @@ export const crimNeedsSubset: CriminogenicNeedsData = {
     emoOtherWeightedScore: 'N/A',
     emoThreshold: 'N/A',
   },
+  AlcoholMisuse: {
+    alcoholLinkedToHarm: 'NO',
+    alcoholLinkedToReoffending: 'NO',
+    alcoholStrengths: 'NO',
+    alcoholOtherWeightedScore: 'N/A',
+    alcoholThreshold: 'N/A',
+  },
+  DrugMisuse: {
+    drugLinkedToHarm: 'NO',
+    drugLinkedToReoffending: 'NO',
+    drugStrengths: 'NO',
+    drugOtherWeightedScore: 'N/A',
+    drugThreshold: 'N/A',
+  },
+  thinkingBehaviourAndAttitudes: null,
+}
+
+export const crimNeedsMissing: CriminogenicNeedsData = {
+  accommodation: {
+    accLinkedToHarm: 'NO',
+    accLinkedToReoffending: 'NULL',
+    accStrengths: 'NO',
+    accOtherWeightedScore: '6', // out of 6
+    accThreshold: 'YES',
+  },
+  educationTrainingEmployability: {
+    eteLinkedToHarm: 'NO',
+    eteLinkedToReoffending: 'YES',
+    eteStrengths: 'YES',
+    eteOtherWeightedScore: '1', // out of 4
+    eteThreshold: 'YES',
+  },
   thinkingBehaviourAndAttitudes: null,
 }
 
 // Test data for the criminogenic needs that need ordering by difference between score and Need threshold
 export const crimNeedsOrdered: CriminogenicNeedsData = {
   accommodation: {
+    accLinkedToHarm: 'NULL',
+    accLinkedToReoffending: 'NULL',
+    accStrengths: 'NULL',
     accOtherWeightedScore: '3',
   },
   drugMisuse: {
+    drugLinkedToHarm: 'NULL',
+    drugLinkedToReoffending: 'NULL',
+    drugStrengths: 'NULL',
     drugOtherWeightedScore: '4',
   },
   thinkingBehaviourAndAttitudes: {
+    thinkLinkedToHarm: 'NULL',
+    thinkLinkedToReoffending: 'NULL',
+    thinkStrengths: 'NULL',
     thinkOtherWeightedScore: '5',
   },
 }

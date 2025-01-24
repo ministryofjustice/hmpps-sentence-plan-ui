@@ -14,9 +14,9 @@
       "lastUpdated": "Last updated on {{ lastUpdatedDate }}.",
       "RoSH": "RoSH (Risk of Serious Harm)",
       "riskOfReoffending": "Risk of reoffending",
-      "linkedToRoSH": "This area is linked to RoSH (risk of serious harm)",
-      "notLinkedToRoSH": "This area is not linked to RoSH (risk of serious harm)",
-      "linkedToReoffending": "This area is linked to risk of reoffending",
+      "linkedToHarm": "This area is linked to RoSH (risk of serious harm)",
+      "notlinkedToHarm": "This area is not linked to RoSH (risk of serious harm)",
+      "linkedtoReoffending": "This area is linked to risk of reoffending",
       "notLinkedToRiskOfReoffending": "This area is not linked to risk of reoffending",
       "motivationToMakeChanges": "Motivation to make changes in this area",
       "strengthsOrProtectiveFactors": "There are strengths or protective factors related to this area",
@@ -35,6 +35,9 @@
       "createGoalLink": "Create goal",
       "viewPreviousGoalsLink": "View previous goals",
       "noPreviousGoals": "No previous goals"
+    },
+    "assessmentIncomplete": {
+      "paragraphWithLink": "This information is not available yet because the assessment has not been completed. You can <a class='govuk-link govuk-link--no-visited-state' href='{{ oasysReturnUrl }}'>check the summary screen in OASys</a> instead."
     },
     "subNav": {
       "about": "About",
