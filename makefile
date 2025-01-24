@@ -28,7 +28,7 @@ dev-up: ## Starts/restarts the UI in a development container. A remote debugger 
 	docker compose ${DEV_COMPOSE_FILES} up ui --wait --no-recreate
 
 dev-build: ## Builds a development image of the UI and installs Node dependencies.
-	make install-node-modules
+	@make install-node-modules
 	docker compose ${DEV_COMPOSE_FILES} build ui
 
 dev-down: ## Stops and removes all dev containers.
