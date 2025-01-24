@@ -73,7 +73,7 @@ install-node-modules: ## Installs Node modules into the Docker volume.
 	  -v ./package-lock.json:/package-lock.json \
 	  -v ~/.npm:/npm_cache \
 	  -v ${PROJECT_NAME}_node_modules:/node_modules \
-	  node:20-bullseye-slim \
+	  node:22.13-bookworm-slim \
 	  /bin/bash -c 'if [ ! -f /node_modules/.last-updated ] || [ /package.json -nt /node_modules/.last-updated ]; then \
 	    echo "Running npm ci as container node_modules is outdated or missing."; \
 	    npm ci --cache /npm_cache --prefer-offline; \
