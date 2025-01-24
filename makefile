@@ -42,7 +42,6 @@ BASE_URL ?= "http://localhost:3000"
 e2e: ## Run the end-to-end tests locally in the Cypress app. Override the default base URL with BASE_URL=...
 	@make install-node-modules
 	docker compose ${DEV_COMPOSE_FILES} up --no-recreate --wait
-	npm i
 	npx cypress install
 	npx cypress open --e2e -c baseUrl=$(BASE_URL),experimentalInteractiveRunEvents=true
 
@@ -66,6 +65,8 @@ lint-fix: ## Automatically fixes linting issues.
 	docker compose ${DEV_COMPOSE_FILES} run --rm --no-deps ui npm run lint-fix
 
 install-node-modules: ## Installs Node modules into the Docker volume.
+	@echo "Running npm install locally..."
+	@npm i
 	@docker run --rm \
 	  -e CYPRESS_INSTALL_BINARY=0 \
 	  -v ./package.json:/package.json \
@@ -88,7 +89,6 @@ clean: ## Stops and removes all project containers. Deletes local build/cache di
 
 update: ## Downloads the latest versions of container images.
 	docker compose ${LOCAL_COMPOSE_FILES} pull
-	npm i
 
 save-logs: ## Saves docker container logs in a directory defined by OUTPUT_LOGS_DIR=
 	docker system info
