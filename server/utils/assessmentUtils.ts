@@ -26,7 +26,8 @@ export const formatAssessmentData = (
     .map(areaConfig => {
       let score
 
-      const linkedtoHarm = crimNeeds[areaConfig.crimNeedsKey][`${areaConfig.crimNeedsSubKey}LinkedToHarm`].toLowerCase()
+      // Values can be 'YES', 'NO' or 'NULL' (as a string)
+      const linkedToHarm = crimNeeds[areaConfig.crimNeedsKey][`${areaConfig.crimNeedsSubKey}LinkedToHarm`].toLowerCase()
       const linkedtoReoffending =
         crimNeeds[areaConfig.crimNeedsKey][`${areaConfig.crimNeedsSubKey}LinkedToReoffending`].toLowerCase()
       const linkedtoStrengthsOrProtectiveFactors =
@@ -39,9 +40,9 @@ export const formatAssessmentData = (
       )
 
       const riskOfSeriousHarmDetails =
-        linkedtoHarm !== 'null'
+        linkedToHarm !== 'null'
           ? assessment.sanAssessmentData[
-              `${areaConfig.assessmentKey}_practitioner_analysis_risk_of_serious_harm_${linkedtoHarm}_details`
+              `${areaConfig.assessmentKey}_practitioner_analysis_risk_of_serious_harm_${linkedToHarm}_details`
             ]?.value
           : undefined
 
@@ -62,7 +63,7 @@ export const formatAssessmentData = (
       score = crimNeeds[areaConfig.crimNeedsKey][`${areaConfig.crimNeedsSubKey}OtherWeightedScore`]
 
       const isMissingInformation =
-        linkedtoHarm === 'null' ||
+        linkedToHarm === 'null' ||
         linkedtoReoffending === 'null' ||
         linkedtoStrengthsOrProtectiveFactors === 'null' ||
         score === undefined ||
@@ -93,7 +94,7 @@ export const formatAssessmentData = (
       return {
         title: areaConfig.area,
         overallScore: overallScore ?? score,
-        linkedtoHarm,
+        linkedToHarm,
         linkedtoReoffending,
         linkedtoStrengthsOrProtectiveFactors,
         isMissingInformation,
@@ -137,7 +138,7 @@ export const groupAndSortOtherAreas = (other: AssessmentArea[]): AssessmentArea[
 
   // group the areas by the sum of their risk counts, RoSH first
   other.forEach(area => {
-    const riskCount = (area.linkedtoHarm === 'yes' ? 2 : 0) + (area.linkedtoReoffending === 'yes' ? 1 : 0)
+    const riskCount = (area.linkedToHarm === 'yes' ? 2 : 0) + (area.linkedtoReoffending === 'yes' ? 1 : 0)
     if (!groupedByRiskCount[riskCount]) {
       groupedByRiskCount[riskCount] = []
     }

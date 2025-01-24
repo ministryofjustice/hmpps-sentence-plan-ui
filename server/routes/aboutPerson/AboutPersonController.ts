@@ -33,24 +33,14 @@ export default class AboutPersonController {
       const readWrite = req.services.sessionService.getAccessMode() === AccessMode.READ_WRITE
 
       const areas = [...assessmentAreas.lowScoring, ...assessmentAreas.highScoring, ...assessmentAreas.other]
-
+      let returnPage = 'pages/about'
       for (const area of areas) {
         if (area.isMissingInformation) {
-          return res.render('pages/about-not-complete', {
-            locale: locale.en,
-            data: {
-              oasysReturnUrl,
-              pageId,
-              deliusData,
-              assessmentAreas,
-              readWrite,
-            },
-            errors,
-          })
+          returnPage = 'pages/about-not-complete'
         }
       }
 
-      return res.render('pages/about', {
+      return res.render(returnPage, {
         locale: locale.en,
         data: {
           oasysReturnUrl,

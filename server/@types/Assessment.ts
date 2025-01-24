@@ -11,7 +11,7 @@ export interface AssessmentArea {
   title: string
   overallScore?: string
   riskOfSeriousHarmDetails?: string
-  linkedtoHarm: string
+  linkedToHarm: string
   riskOfReoffendingDetails?: string
   isMissingInformation: boolean
   linkedtoReoffending: string

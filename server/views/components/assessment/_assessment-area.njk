@@ -16,7 +16,7 @@
                 </h2>
                 <div class="govuk-accordion__section-summary govuk-body sp-accordion-tags"
                      id="accordion-with-summary-sections-summary-{{ loop.index }}">
-                    {% if assessment.linkedtoHarm === 'yes' %}
+                    {% if assessment.linkedToHarm === 'yes' %}
                         <span class="moj-badge moj-badge--large moj-badge--purple sp-badge">{{ locale.detail.RoSH }}</span>
                     {% endif %}
                     {% if assessment.linkedtoReoffending === 'yes' %}
@@ -28,18 +28,18 @@
                 {% if assessment.criminogenicNeedMissing %}
                     <p>This information isn't currently available, please check in OASys.</p>
                 {% else %}
-                    {% if assessment.linkedtoHarm === 'yes' %}
+                    {% if assessment.linkedToHarm === 'yes' %}
                         <div class="rosh">
-                            <h3 class="govuk-heading-s">{{ locale.detail.linkedtoHarm }}</h3>
+                            <h3 class="govuk-heading-s">{{ locale.detail.linkedToHarm }}</h3>
                             <p class="govuk-body">{{ riskOfSeriousHarmData }}</p>
                         </div>
-                    {% elseif assessment.linkedtoHarm === 'no' and riskOfSeriousHarmData %}
+                    {% elseif assessment.linkedToHarm === 'no' and riskOfSeriousHarmData %}
                         <div class="rosh">
-                            <h3 class="govuk-heading-s">{{ locale.detail.notlinkedtoHarm }}</h3>
+                            <h3 class="govuk-heading-s">{{ locale.detail.notlinkedToHarm }}</h3>
                             <p class="govuk-body">{{ riskOfSeriousHarmData }}</p>
                         </div>
                     {% else %}
-                        <h3 class="govuk-heading-s">{{ locale.detail.notlinkedtoHarm }}</h3>
+                        <h3 class="govuk-heading-s">{{ locale.detail.notlinkedToHarm }}</h3>
                     {% endif %}
 
 

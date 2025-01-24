@@ -55,7 +55,7 @@ describe('format assessment data', () => {
           {
             criminogenicNeedsScore: '6',
             linkedtoReoffending: 'yes',
-            linkedtoHarm: 'no',
+            linkedToHarm: 'no',
             linkedtoStrengthsOrProtectiveFactors: 'no',
             overallScore: '6',
             riskOfReoffendingDetails: undefined,
@@ -70,7 +70,7 @@ describe('format assessment data', () => {
           {
             criminogenicNeedsScore: '1',
             linkedtoReoffending: 'yes',
-            linkedtoHarm: 'no',
+            linkedToHarm: 'no',
             linkedtoStrengthsOrProtectiveFactors: 'yes',
             overallScore: '1',
             riskOfReoffendingDetails: undefined,
@@ -87,7 +87,7 @@ describe('format assessment data', () => {
             title: 'Health and wellbeing',
             upperBound: null,
             linkedtoReoffending: 'no',
-            linkedtoHarm: 'no',
+            linkedToHarm: 'no',
             linkedtoStrengthsOrProtectiveFactors: 'no',
             riskOfReoffendingDetails: undefined,
             isMissingInformation: true,
@@ -97,7 +97,7 @@ describe('format assessment data', () => {
             title: 'Alcohol use',
             criminogenicNeedMissing: true,
             linkedtoReoffending: undefined,
-            linkedtoHarm: undefined,
+            linkedToHarm: undefined,
             linkedtoStrengthsOrProtectiveFactors: undefined,
             isMissingInformation: undefined,
           },
@@ -106,7 +106,7 @@ describe('format assessment data', () => {
             title: 'Drug use',
             criminogenicNeedMissing: true,
             linkedtoReoffending: undefined,
-            linkedtoHarm: undefined,
+            linkedToHarm: undefined,
             linkedtoStrengthsOrProtectiveFactors: undefined,
             isMissingInformation: undefined,
           },
@@ -115,7 +115,7 @@ describe('format assessment data', () => {
             title: 'Finances',
             criminogenicNeedMissing: true,
             linkedtoReoffending: undefined,
-            linkedtoHarm: undefined,
+            linkedToHarm: undefined,
             linkedtoStrengthsOrProtectiveFactors: undefined,
             isMissingInformation: undefined,
           },
@@ -124,7 +124,7 @@ describe('format assessment data', () => {
             title: 'Personal relationships and community',
             criminogenicNeedMissing: true,
             linkedtoReoffending: undefined,
-            linkedtoHarm: undefined,
+            linkedToHarm: undefined,
             linkedtoStrengthsOrProtectiveFactors: undefined,
             isMissingInformation: undefined,
           },
@@ -133,7 +133,7 @@ describe('format assessment data', () => {
             title: 'Thinking, behaviours and attitudes',
             criminogenicNeedMissing: true,
             linkedtoReoffending: undefined,
-            linkedtoHarm: undefined,
+            linkedToHarm: undefined,
             linkedtoStrengthsOrProtectiveFactors: undefined,
             isMissingInformation: undefined,
           },
@@ -150,7 +150,7 @@ describe('format assessment data', () => {
           {
             criminogenicNeedsScore: '6',
             linkedtoReoffending: 'yes',
-            linkedtoHarm: 'no',
+            linkedToHarm: 'no',
             linkedtoStrengthsOrProtectiveFactors: 'no',
             motivationToMakeChanges: 'thinkingAboutMakingChanges',
             overallScore: '6',
@@ -166,7 +166,7 @@ describe('format assessment data', () => {
           {
             criminogenicNeedsScore: '1',
             linkedtoReoffending: 'yes',
-            linkedtoHarm: 'no',
+            linkedToHarm: 'no',
             linkedtoStrengthsOrProtectiveFactors: 'yes',
             motivationToMakeChanges: 'needsHelpToMakeChanges',
             overallScore: '1',
@@ -185,7 +185,7 @@ describe('format assessment data', () => {
             upperBound: null,
             motivationToMakeChanges: 'needsHelpToMakeChanges',
             linkedtoReoffending: 'no',
-            linkedtoHarm: 'no',
+            linkedToHarm: 'no',
             linkedtoStrengthsOrProtectiveFactors: 'no',
             riskOfReoffendingDetails: undefined,
             isMissingInformation: false,
@@ -195,7 +195,7 @@ describe('format assessment data', () => {
             title: 'Alcohol use',
             criminogenicNeedMissing: true,
             linkedtoReoffending: undefined,
-            linkedtoHarm: undefined,
+            linkedToHarm: undefined,
             linkedtoStrengthsOrProtectiveFactors: undefined,
             isMissingInformation: undefined,
           },
@@ -204,7 +204,7 @@ describe('format assessment data', () => {
             title: 'Drug use',
             criminogenicNeedMissing: true,
             linkedtoReoffending: undefined,
-            linkedtoHarm: undefined,
+            linkedToHarm: undefined,
             linkedtoStrengthsOrProtectiveFactors: undefined,
             isMissingInformation: undefined,
           },
@@ -213,7 +213,7 @@ describe('format assessment data', () => {
             title: 'Finances',
             criminogenicNeedMissing: true,
             linkedtoReoffending: undefined,
-            linkedtoHarm: undefined,
+            linkedToHarm: undefined,
             linkedtoStrengthsOrProtectiveFactors: undefined,
             isMissingInformation: undefined,
           },
@@ -222,7 +222,7 @@ describe('format assessment data', () => {
             title: 'Personal relationships and community',
             criminogenicNeedMissing: true,
             linkedtoReoffending: undefined,
-            linkedtoHarm: undefined,
+            linkedToHarm: undefined,
             linkedtoStrengthsOrProtectiveFactors: undefined,
             isMissingInformation: undefined,
           },
@@ -231,7 +231,7 @@ describe('format assessment data', () => {
             title: 'Thinking, behaviours and attitudes',
             criminogenicNeedMissing: true,
             linkedtoReoffending: undefined,
-            linkedtoHarm: undefined,
+            linkedToHarm: undefined,
             linkedtoStrengthsOrProtectiveFactors: undefined,
             isMissingInformation: undefined,
           },
@@ -249,7 +249,7 @@ describe('format assessment data', () => {
             criminogenicNeedsScore: '4',
             goalRoute: 'drug-use',
             linkedtoReoffending: 'null',
-            linkedtoHarm: 'null',
+            linkedToHarm: 'null',
             linkedtoStrengthsOrProtectiveFactors: 'null',
             overallScore: '4',
             thresholdValue: 0,
@@ -261,7 +261,7 @@ describe('format assessment data', () => {
             criminogenicNeedsScore: '5',
             goalRoute: 'thinking-behaviours-and-attitudes',
             linkedtoReoffending: 'null',
-            linkedtoHarm: 'null',
+            linkedToHarm: 'null',
             linkedtoStrengthsOrProtectiveFactors: 'null',
             overallScore: '5',
             thresholdValue: 2,
@@ -273,7 +273,7 @@ describe('format assessment data', () => {
             criminogenicNeedsScore: '3',
             goalRoute: 'accommodation',
             linkedtoReoffending: 'null',
-            linkedtoHarm: 'null',
+            linkedToHarm: 'null',
             linkedtoStrengthsOrProtectiveFactors: 'null',
             isMissingInformation: true,
             overallScore: '3',
@@ -289,7 +289,7 @@ describe('format assessment data', () => {
             title: 'Alcohol use',
             criminogenicNeedMissing: true,
             linkedtoReoffending: undefined,
-            linkedtoHarm: undefined,
+            linkedToHarm: undefined,
             linkedtoStrengthsOrProtectiveFactors: undefined,
             isMissingInformation: undefined,
           },
@@ -298,7 +298,7 @@ describe('format assessment data', () => {
             title: 'Employment and education',
             criminogenicNeedMissing: true,
             linkedtoReoffending: undefined,
-            linkedtoHarm: undefined,
+            linkedToHarm: undefined,
             linkedtoStrengthsOrProtectiveFactors: undefined,
             isMissingInformation: undefined,
           },
@@ -307,7 +307,7 @@ describe('format assessment data', () => {
             title: 'Finances',
             criminogenicNeedMissing: true,
             linkedtoReoffending: undefined,
-            linkedtoHarm: undefined,
+            linkedToHarm: undefined,
             linkedtoStrengthsOrProtectiveFactors: undefined,
             isMissingInformation: undefined,
           },
@@ -316,7 +316,7 @@ describe('format assessment data', () => {
             title: 'Health and wellbeing',
             criminogenicNeedMissing: true,
             linkedtoReoffending: undefined,
-            linkedtoHarm: undefined,
+            linkedToHarm: undefined,
             linkedtoStrengthsOrProtectiveFactors: undefined,
             isMissingInformation: undefined,
           },
@@ -325,7 +325,7 @@ describe('format assessment data', () => {
             title: 'Personal relationships and community',
             criminogenicNeedMissing: true,
             linkedtoReoffending: undefined,
-            linkedtoHarm: undefined,
+            linkedToHarm: undefined,
             linkedtoStrengthsOrProtectiveFactors: undefined,
             isMissingInformation: undefined,
           },
@@ -394,19 +394,19 @@ describe('sentence length', () => {
 describe('groupAndSortOtherAreas', () => {
   it('groups and sorts areas by risk count', () => {
     const areas: AssessmentArea[] = [
-      { title: 'Area D', linkedtoHarm: 'no', linkedtoReoffending: 'no' } as AssessmentArea,
-      { title: 'Area A', linkedtoHarm: 'yes', linkedtoReoffending: 'yes' } as AssessmentArea,
-      { title: 'Area B', linkedtoHarm: 'yes', linkedtoReoffending: 'no' } as AssessmentArea,
-      { title: 'Area C', linkedtoHarm: 'no', linkedtoReoffending: 'yes' } as AssessmentArea,
+      { title: 'Area D', linkedToHarm: 'no', linkedtoReoffending: 'no' } as AssessmentArea,
+      { title: 'Area A', linkedToHarm: 'yes', linkedtoReoffending: 'yes' } as AssessmentArea,
+      { title: 'Area B', linkedToHarm: 'yes', linkedtoReoffending: 'no' } as AssessmentArea,
+      { title: 'Area C', linkedToHarm: 'no', linkedtoReoffending: 'yes' } as AssessmentArea,
     ]
 
     const result = groupAndSortOtherAreas(areas)
 
     expect(result).toEqual([
-      { title: 'Area A', linkedtoHarm: 'yes', linkedtoReoffending: 'yes' },
-      { title: 'Area B', linkedtoHarm: 'yes', linkedtoReoffending: 'no' },
-      { title: 'Area C', linkedtoHarm: 'no', linkedtoReoffending: 'yes' },
-      { title: 'Area D', linkedtoHarm: 'no', linkedtoReoffending: 'no' },
+      { title: 'Area A', linkedToHarm: 'yes', linkedtoReoffending: 'yes' },
+      { title: 'Area B', linkedToHarm: 'yes', linkedtoReoffending: 'no' },
+      { title: 'Area C', linkedToHarm: 'no', linkedtoReoffending: 'yes' },
+      { title: 'Area D', linkedToHarm: 'no', linkedtoReoffending: 'no' },
     ])
   })
 
@@ -420,29 +420,29 @@ describe('groupAndSortOtherAreas', () => {
 
   it('sorts areas alphabetically within the same risk count', () => {
     const areas: AssessmentArea[] = [
-      { title: 'Area B', linkedtoHarm: 'yes', linkedtoReoffending: 'no' } as AssessmentArea,
-      { title: 'Area A', linkedtoHarm: 'yes', linkedtoReoffending: 'no' } as AssessmentArea,
+      { title: 'Area B', linkedToHarm: 'yes', linkedtoReoffending: 'no' } as AssessmentArea,
+      { title: 'Area A', linkedToHarm: 'yes', linkedtoReoffending: 'no' } as AssessmentArea,
     ]
 
     const result = groupAndSortOtherAreas(areas)
 
     expect(result).toEqual([
-      { title: 'Area A', linkedtoHarm: 'yes', linkedtoReoffending: 'no' },
-      { title: 'Area B', linkedtoHarm: 'yes', linkedtoReoffending: 'no' },
+      { title: 'Area A', linkedToHarm: 'yes', linkedtoReoffending: 'no' },
+      { title: 'Area B', linkedToHarm: 'yes', linkedtoReoffending: 'no' },
     ])
   })
 
   it('handles areas with undefined risk values', () => {
     const areas: AssessmentArea[] = [
-      { title: 'Area A', linkedtoHarm: undefined, linkedtoReoffending: undefined } as AssessmentArea,
-      { title: 'Area B', linkedtoHarm: 'yes', linkedtoReoffending: undefined } as AssessmentArea,
+      { title: 'Area A', linkedToHarm: undefined, linkedtoReoffending: undefined } as AssessmentArea,
+      { title: 'Area B', linkedToHarm: 'yes', linkedtoReoffending: undefined } as AssessmentArea,
     ]
 
     const result = groupAndSortOtherAreas(areas)
 
     expect(result).toEqual([
-      { title: 'Area B', linkedtoHarm: 'yes', linkedtoReoffending: undefined },
-      { title: 'Area A', linkedtoHarm: undefined, linkedtoReoffending: undefined },
+      { title: 'Area B', linkedToHarm: 'yes', linkedtoReoffending: undefined },
+      { title: 'Area A', linkedToHarm: undefined, linkedtoReoffending: undefined },
     ])
   })
 })

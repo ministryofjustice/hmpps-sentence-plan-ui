@@ -1,5 +1,6 @@
 {% extends "../partials/layout.njk" %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 {% from "moj/components/sub-navigation/macro.njk" import mojSubNavigation %}
 {% from "moj/components/button-menu/macro.njk" import mojButtonMenu %}
 {%- from "moj/components/banner/macro.njk" import mojBanner -%}
@@ -30,7 +31,13 @@
             href: data.oasysReturnUrl,
             classes: "govuk-button--secondary",
             type: 'button'
-        }
+        },
+        {
+                    text: locale.common.planHeader.extended.createGoalButton,
+                    href: "/create-goal/accommodation",
+                    classes: "govuk-button--secondary",
+                    type: 'button'
+        } if data.readWrite === true
     ]
 } %}
 
@@ -91,15 +98,11 @@
             </table>
             {% endif %}
 
-            <div class="govuk-warning-text">
-            <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
-              <strong class="govuk-warning-text__text">
-                <span class="govuk-visually-hidden">Warning</span>
-                  This information is not available yet because the assessment has not been completed. You can <a href="{{data.oasysReturnUrl}}">check the summary screen in OASys</a> instead.
-              </strong>
-            </div>
+            {{ govukWarningText({
+              html: '<strong>This information is not available yet because the assessment has not been completed. You can <a href="{{ data.oasysReturnUrl }}">check the summary screen in OASys</a> instead.</strong>',
+              iconFallbackText: "Warning"
+            }) }}
 
-            <h2 class="govuk-warning-text"> </h2>
         </div>
 
     </div>

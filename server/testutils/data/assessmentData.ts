@@ -76,7 +76,7 @@ export const crimNeedsSubset: CriminogenicNeedsData = {
 export const crimNeedsMissing: CriminogenicNeedsData = {
   accommodation: {
     accLinkedToHarm: 'NO',
-    accLinkedToReoffending: 'YES',
+    accLinkedToReoffending: 'NULL',
     accStrengths: 'NO',
     accOtherWeightedScore: '6', // out of 6
     accThreshold: 'YES',
