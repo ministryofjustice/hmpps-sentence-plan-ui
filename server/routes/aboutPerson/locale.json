@@ -37,9 +37,7 @@
       "noPreviousGoals": "No previous goals"
     },
     "assessmentIncomplete": {
-      "para1": "This information is not available yet because the assessment has not been completed. You can",
-      "para2": "instead.",
-      "link": "check the summary screen in OASys"
+      "paragraphWithLink": "This information is not available yet because the assessment has not been completed. You can <a class='govuk-link govuk-link--no-visited-state' href='{{ oasysReturnUrl }}'>check the summary screen in OASys</a> instead."
     },
     "subNav": {
       "about": "About",

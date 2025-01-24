@@ -10,7 +10,8 @@
 {% set print = true %}
 {% set locale = interpolate(locale, {
     subject: data.popData,
-    lastUpdatedDate: data.assessmentAreas.versionUpdatedAt | formatSimpleDate
+    lastUpdatedDate: data.assessmentAreas.versionUpdatedAt | formatSimpleDate,
+    oasysReturnUrl: data.oasysReturnUrl
 }) %}
 
 {% block pageTitle %}
@@ -99,11 +100,7 @@
             {% endif %}
 
            {{ govukWarningText({
-             html: '<strong>' + locale.assessmentIncomplete.para1 +
-                   ' <a href="' + data.oasysReturnUrl + '">' +
-                   locale.assessmentIncomplete.link +
-                   '</a> ' + locale.assessmentIncomplete.para2 +
-                   '</strong>',
+             html: '<strong>' + locale.assessmentIncomplete.paragraphWithLink + '</strong>',
              iconFallbackText: "Warning"
            }) }}
 
