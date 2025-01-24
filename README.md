@@ -18,8 +18,8 @@ In order to run this project, the following software is required:
 > - This service and all of its dependencies are run in Docker containers
 > - Every command can be printed using `make`
 > - Due to requiring authentication through the ARNS Handover Service,
-    to access the Sentence Plan UI (for both `Production` and `Development`), you
-    can create a handover through the OAStub hosted at http://localhost:7072 and select `Sentence Plan` as the target service.
+    to access the Sentence Plan UI, you can create a handover through the
+    OAStub hosted at http://localhost:7072 and select `Sentence Plan` as the target service.
 
 ### Production
 
