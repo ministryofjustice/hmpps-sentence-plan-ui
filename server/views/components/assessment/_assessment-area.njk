@@ -16,10 +16,10 @@
                 </h2>
                 <div class="govuk-accordion__section-summary govuk-body sp-accordion-tags"
                      id="accordion-with-summary-sections-summary-{{ loop.index }}">
-                    {% if assessment.isLinkedtoRoSH === true %}
+                    {% if assessment.linkedToHarm === 'yes' %}
                         <span class="moj-badge moj-badge--large moj-badge--purple sp-badge">{{ locale.detail.RoSH }}</span>
                     {% endif %}
-                    {% if assessment.isLinkedtoReoffending === true %}
+                    {% if assessment.linkedtoReoffending === 'yes' %}
                         <span class="moj-badge moj-badge--large moj-badge--bright-purple sp-badge">{{ locale.detail.riskOfReoffending }}</span>
                     {% endif %}
                 </div>
@@ -28,26 +28,27 @@
                 {% if assessment.criminogenicNeedMissing %}
                     <p>This information isn't currently available, please check in OASys.</p>
                 {% else %}
-                    {% if assessment.isLinkedtoRoSH %}
+                    {% if assessment.linkedToHarm === 'yes' %}
                         <div class="rosh">
-                            <h3 class="govuk-heading-s">{{ locale.detail.linkedToRoSH }}</h3>
+                            <h3 class="govuk-heading-s">{{ locale.detail.linkedToHarm }}</h3>
                             <p class="govuk-body">{{ riskOfSeriousHarmData }}</p>
                         </div>
-                    {% elseif riskOfSeriousHarmData  %}
+                    {% elseif assessment.linkedToHarm === 'no' and riskOfSeriousHarmData %}
                         <div class="rosh">
-                            <h3 class="govuk-heading-s">{{ locale.detail.notLinkedToRoSH }}</h3>
+                            <h3 class="govuk-heading-s">{{ locale.detail.notlinkedToHarm }}</h3>
                             <p class="govuk-body">{{ riskOfSeriousHarmData }}</p>
                         </div>
                     {% else %}
-                        <h3 class="govuk-heading-s">{{ locale.detail.notLinkedToRoSH }}</h3>
+                        <h3 class="govuk-heading-s">{{ locale.detail.notlinkedToHarm }}</h3>
                     {% endif %}
 
-                    {% if assessment.isLinkedtoReoffending %}
+
+                    {% if assessment.linkedtoReoffending === 'yes' %}
                         <div class="ror">
-                            <h3 class="govuk-heading-s">{{ locale.detail.linkedToReoffending }}</h3>
+                            <h3 class="govuk-heading-s">{{ locale.detail.linkedtoReoffending }}</h3>
                             <p class="sp-text-pre-wrap govuk-body">{{ riskOfReoffendingData }}</p>
                         </div>
-                    {% elseif riskOfReoffendingData %}
+                    {% elseif assessment.linkedtoReoffending === 'no' and riskOfReoffendingData %}
                         <div class="ror">
                             <h3 class="govuk-heading-s">{{ locale.detail.notLinkedToRiskOfReoffending }}</h3>
                             <p class="sp-text-pre-wrap govuk-body">{{ riskOfReoffendingData }}</p>
@@ -63,12 +64,12 @@
                         </div>
                     {% endif %}
 
-                    {% if assessment.isLinkedtoStrengthsOrProtectiveFactors %}
+                    {% if assessment.linkedtoStrengthsOrProtectiveFactors === 'yes' %}
                         <div class="strengths">
                             <h3 class="govuk-heading-s">{{ locale.detail.strengthsOrProtectiveFactors }}</h3>
                             <p class="sp-text-pre-wrap govuk-body">{{ strengthsOrProtectiveFactorsData }}</p>
                         </div>
-                    {% elseif strengthsOrProtectiveFactorsData %}
+                    {% elseif assessment.linkedtoStrengthsOrProtectiveFactors === 'no' and strengthsOrProtectiveFactorsData %}
                         <div class="strengths">
                           <h3 class="govuk-heading-s">{{ locale.detail.noStrengthsOrProtectiveFactors }}</h3>
                           <p class="sp-text-pre-wrap govuk-body">{{ strengthsOrProtectiveFactorsData }}</p>
@@ -117,6 +118,7 @@
                         <br>
                     {% endif %}
                 {% endif %}
+
               {% if readWrite === true %}
                 <div>
                     <p class='goal-link'>
