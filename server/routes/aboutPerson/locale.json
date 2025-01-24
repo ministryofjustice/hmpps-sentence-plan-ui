@@ -36,6 +36,11 @@
       "viewPreviousGoalsLink": "View previous goals",
       "noPreviousGoals": "No previous goals"
     },
+    "assessmentIncomplete": {
+      "para1": "This information is not available yet because the assessment has not been completed. You can",
+      "para2": "instead.",
+      "link": "check the summary screen in OASys"
+    },
     "subNav": {
       "about": "About",
       "summary": "Plan summary"

@@ -98,10 +98,14 @@
             </table>
             {% endif %}
 
-            {{ govukWarningText({
-              html: '<strong>This information is not available yet because the assessment has not been completed. You can <a href="{{ data.oasysReturnUrl }}">check the summary screen in OASys</a> instead.</strong>',
-              iconFallbackText: "Warning"
-            }) }}
+           {{ govukWarningText({
+             html: '<strong>' + locale.assessmentIncomplete.para1 +
+                   ' <a href="' + data.oasysReturnUrl + '">' +
+                   locale.assessmentIncomplete.link +
+                   '</a> ' + locale.assessmentIncomplete.para2 +
+                   '</strong>',
+             iconFallbackText: "Warning"
+           }) }}
 
         </div>
 
