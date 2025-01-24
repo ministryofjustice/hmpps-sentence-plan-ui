@@ -5,22 +5,26 @@
 This project aims to enhance the current process of creating and managing 
 sentence plans for individuals on probation or in prison.
 
-## Prerequisites
-- Docker
-- Node.js
+## Pre-requisites
+In order to run this project, the following software is required:
+
+- **Make** - A command line interface tool for summerising common function calls
+- **Docker** - An open-source application packager for platform agnostic deployable software
+- **Node.js** - A JavaScript runtime environment and library for running web based applications
 
 ## Running the application
-This service and all of its dependencies are run in Docker containers.
 
-Before starting, run `make install-node-modules`.
-
-**Note:** Every command can be printed using `make`
-
-**Note:** Due to requiring authentication through the ARNS Handover Service,
-to access the Sentence Plan UI - you can create a handover through the OAStub 
-hosted at http://localhost:7072 and select `Sentence Plan` as the target service.
+> **Note:**
+> - This service and all of its dependencies are run in Docker containers
+> - Every command can be printed using `make`
+> - Due to requiring authentication through the ARNS Handover Service,
+    to access the Sentence Plan UI (for both `Production` and `Development`), you
+    can create a handover through the OAStub hosted at http://localhost:7072 and select `Sentence Plan` as the target service.
 
 ### Production
+
+> **Note:** Before starting, run `make install-node-modules` to install dependencies.
+
 1. To start a production version of the application, run `make up`
     - The service will start on http://localhost:3000
     - To check the health status, go to http://localhost:3000/health
@@ -32,14 +36,14 @@ hosted at http://localhost:7072 and select `Sentence Plan` as the target service
     - A debugger session will be accessible on http://localhost:9229
     - To check the health status, go to http://localhost:3000/health
 2. The application will live-reload as you make changes to the code.
-3. Each time you change or update your node dependencies, run `make install-node-modules` to have these
-   reflected in your Docker container.
+
+> **Note:** Each time you change or update your node dependencies, run `make install-node-modules` to have these reflected in your Docker container.
 
 You can connect to the remote debugger session on http://localhost:9229 like so
 [![API docs](https://github.com/ministryofjustice/hmpps-strengths-based-needs-assessments-ui/blob/main/.readme/debugger.png?raw=true)]()
 
 ### Testing
-The test suite can be ran using `make test`
+The test suite can be run using `make test`
 
 ### Linting
-Linting can be ran using `make lint` and `make lint-fix`
+Linting can be run using `make lint` and `make lint-fix`
