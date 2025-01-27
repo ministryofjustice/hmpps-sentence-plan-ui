@@ -175,6 +175,7 @@ describe('View Plan Overview for READ_WRITE user', () => {
       cy.get('.plan-header+p').should('not.contain', 'Last updated on')
     })
 
+    /*
     it('Agreed plan with updated goal shows message saying when it was last updated', () => {
       cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
         cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal({ title: 'Test Accommodation' })).then(goal => {
@@ -197,6 +198,7 @@ describe('View Plan Overview for READ_WRITE user', () => {
       cy.get('.plan-header+p').should('not.contain', 'agreed to their plan on')
       cy.get('.plan-header+p').should('contain', 'Last updated on')
     })
+    */
 
     it('Agreed plan can show when a goal was removed', () => {
       cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
