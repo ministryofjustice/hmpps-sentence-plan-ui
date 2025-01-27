@@ -94,20 +94,20 @@
 {% block content %}
     {{ super() }}
 
-    {% if data.plan.agreementStatus === 'AGREED' %}
-      <p class="govuk-body govuk-!-margin-top-5">
-      {%- if data.plan.mostRecentUpdateDate > data.plan.agreementDate %}
-          {{ locale.lastUpdatedPlan }}
+  <p class="govuk-body govuk-!-margin-top-5">
+      {%- if data.plan.agreementDate !== null %}
+          {%- if data.isUpdatedAfterAgreement %}
+              {{ locale.lastUpdatedPlan }}
+          {%- elseif data.plan.agreementStatus === 'AGREED' %}
+              {{ locale.agreePlan }}
+          {%- elseif data.plan.agreementStatus === 'DO_NOT_AGREE' or data.plan.agreementStatus === 'COULD_NOT_ANSWER' %}
+              {{ locale.notAgreePlan }}
+          {%- endif %}
+          <a href="/plan-history" class="govuk-link govuk-link--no-visited-state">{{ locale.viewPlanHistory }}</a>
       {%- else %}
-          {{ locale.agreePlan }}
+          {{ locale.addStepSuggestion }}
       {%- endif %}
-        <a href="/plan-history" class="govuk-link govuk-link--no-visited-state">{{ locale.viewPlanHistory }}</a>
-      </p>
-    {% elseif data.plan.agreementStatus === 'DO_NOT_AGREE' or data.plan.agreementStatus === 'COULD_NOT_ANSWER' %}
-      <p class="govuk-body govuk-!-margin-top-5">{{ locale.notAgreePlan }}</p>
-    {% elseif data.plan.agreementStatus === 'DRAFT' %}
-      <p class="govuk-body govuk-!-margin-top-5">{{ locale.addStepSuggestion }}</p>
-    {% endif %}
+  </p>
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">

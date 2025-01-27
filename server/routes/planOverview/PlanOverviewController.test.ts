@@ -47,6 +47,7 @@ describe('PlanOverviewController', () => {
       locale: locale.en,
       data: {
         plan: testPlan,
+        isUpdatedAfterAgreement: false,
         type: 'current',
         oasysReturnUrl,
         readWrite: true,
