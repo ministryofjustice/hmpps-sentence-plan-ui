@@ -11,7 +11,6 @@ import {
   SubAreaData,
 } from '../@types/Assessment'
 import getAssessmentAreaThreshold from '../services/sentence-plan/assessmentAreaThresholds'
-import logger from '../../logger'
 
 export const formatAssessmentData = (
   crimNeeds: CriminogenicNeedsData,
