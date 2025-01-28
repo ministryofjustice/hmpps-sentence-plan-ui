@@ -11,6 +11,7 @@ import {
   SubAreaData,
 } from '../@types/Assessment'
 import getAssessmentAreaThreshold from '../services/sentence-plan/assessmentAreaThresholds'
+import logger from '../../logger'
 
 export const formatAssessmentData = (
   crimNeeds: CriminogenicNeedsData,
@@ -72,6 +73,11 @@ export const formatAssessmentData = (
         linkedtoStrengthsOrProtectiveFactors === 'null' ||
         score === undefined ||
         motivationToMakeChanges === undefined
+
+      // todo: remove logger after testing complete.
+      logger.info(
+        `isMissingInformation ${isMissingInformation}, linkedToHarm ${linkedToHarm}, linkedtoReoffending ${linkedtoReoffending}, linkedtoStrengthsOrProtectiveFactors ${linkedtoStrengthsOrProtectiveFactors}, score ${score}, motivationToMakeChanges ${motivationToMakeChanges}`,
+      )
 
       if (Number.isNaN(Number(score))) {
         score = undefined
