@@ -2,7 +2,7 @@ import PlanOverview from '../pages/plan-overview'
 import DataGenerator from '../support/DataGenerator'
 import { AccessMode } from '../../server/@types/Handover'
 
-describe('Rendering READ_WRITE', () => {
+describe('Rendering Plan History for READ_WRITE user', () => {
   const planOverview = new PlanOverview()
 
   beforeEach(() => {
@@ -73,7 +73,8 @@ describe('Rendering READ_WRITE', () => {
     cy.get('.moj-primary-navigation__container').contains('Plan history').click()
     cy.get('.plan-status').contains('Plan agreed')
     cy.visit('/plan')
-    cy.contains('a', 'Mark as achieved').click()
+    cy.contains('a', 'Update').click()
+    cy.contains('button', 'Mark as achieved').click()
     cy.url().should('include', '/confirm-achieved-goal') // check url
     cy.get('textarea#goal-achievement-helped').type('Updated goal to achieved status')
     cy.get('.govuk-button').contains('Confirm').click()
@@ -91,7 +92,8 @@ describe('Rendering READ_WRITE', () => {
     cy.get('.moj-primary-navigation__container').contains('Plan history').click()
     cy.get('.plan-status').contains('Plan agreed')
     cy.visit('/plan')
-    cy.contains('a', 'Remove').click()
+    cy.contains('a', 'Update').click()
+    cy.contains('button', 'Remove goal from plan').click()
     cy.url().should('include', '/remove-goal')
     cy.get('textarea#goal-removal-note').type('Updated goal to removed status')
     cy.get('.govuk-button').contains('Confirm').click()
@@ -104,7 +106,7 @@ describe('Rendering READ_WRITE', () => {
   })
 })
 
-describe('Rendering READ_ONLY', () => {
+describe('Rendering Plan History for READ_ONLY user', () => {
   const planOverview = new PlanOverview()
 
   beforeEach(() => {
@@ -119,7 +121,8 @@ describe('Rendering READ_ONLY', () => {
       cy.get('.moj-primary-navigation__container').contains('Plan history').click()
       cy.get('.plan-status').contains('Plan agreed')
       cy.visit('/plan')
-      cy.contains('a', 'Mark as achieved').click()
+      cy.contains('a', 'Update').click()
+      cy.contains('button', 'Mark as achieved').click()
       cy.url().should('include', '/confirm-achieved-goal') // check url
       cy.get('textarea#goal-achievement-helped').type('Updated goal to achieved status')
       cy.get('.govuk-button').contains('Confirm').click()

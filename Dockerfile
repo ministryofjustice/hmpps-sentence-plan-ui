@@ -1,4 +1,4 @@
-FROM node:22.10-bullseye-slim as base
+FROM node:22.13-bookworm-slim AS base
 
 ARG BUILD_NUMBER
 ARG GIT_REF
@@ -27,10 +27,10 @@ ENV GIT_BRANCH=${GIT_BRANCH}
 RUN apt-get update && \
     apt-get upgrade -y && \
     apt-get autoremove -y && \
-    apt-get install -y make python g++ curl && \
+    apt-get install -y make g++ curl && \
     rm -rf /var/lib/apt/lists/*
 
-FROM base as development
+FROM base AS development
 ARG BUILD_NUMBER
 ARG GIT_REF
 ARG GIT_BRANCH
@@ -39,7 +39,7 @@ ENV BUILD_NUMBER ${BUILD_NUMBER}
 ENV GIT_REF ${GIT_REF}
 ENV NODE_ENV='development'
 
-FROM base as build
+FROM base AS build
 ARG BUILD_NUMBER
 ARG GIT_REF
 ARG GIT_BRANCH

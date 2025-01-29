@@ -41,7 +41,7 @@ jest.mock('../../services/sentence-plan/goalService', () => {
     deleteGoal: jest.fn().mockReturnValue({ status: 204 }),
     removeGoal: jest.fn().mockReturnValue(testGoal),
     getGoal: jest.fn().mockReturnValue(testGoal),
-    updateGoal: jest.fn().mockReturnValue(testGoal),
+    updateGoalStatus: jest.fn().mockReturnValue(testGoal),
   }))
 })
 
@@ -135,7 +135,7 @@ describe('Test Removing Goal', () => {
 
       await runMiddlewareChain(controller.post, req, res, next)
 
-      expect(req.services.goalService.updateGoal).toHaveBeenCalled()
+      expect(req.services.goalService.updateGoalStatus).toHaveBeenCalled()
       expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_OVERVIEW}?type=removed&status=removed`)
     })
 
@@ -144,7 +144,7 @@ describe('Test Removing Goal', () => {
 
       await runMiddlewareChain(controller.post, req, res, next)
 
-      expect(req.services.goalService.updateGoal).not.toHaveBeenCalled()
+      expect(req.services.goalService.updateGoalStatus).not.toHaveBeenCalled()
       expect(res.render).toHaveBeenCalled()
     })
   })

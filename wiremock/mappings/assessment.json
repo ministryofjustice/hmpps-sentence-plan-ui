@@ -1204,6 +1204,96 @@
               "values": null,
               "collection": null
             },
+            "alcohol_use_changes": {
+              "type": "RADIO",
+              "description": "Does [subject] want to make changes to their alcohol use?",
+              "options": [
+                {
+                  "value": "MADE_CHANGES",
+                  "text": "I have already made positive changes and want to maintain them"
+                },
+                {
+                  "value": "MAKING_CHANGES",
+                  "text": "I am actively making changes"
+                },
+                {
+                  "value": "WANT_TO_MAKE_CHANGES",
+                  "text": "I want to make changes and know how to"
+                },
+                {
+                  "value": "NEEDS_HELP_TO_MAKE_CHANGES",
+                  "text": "I want to make changes but need help"
+                },
+                {
+                  "value": "THINKING_ABOUT_MAKING_CHANGES",
+                  "text": "I am thinking about making changes"
+                },
+                {
+                  "value": "DOES_NOT_WANT_TO_MAKE_CHANGES",
+                  "text": "I do not want to make changes"
+                },
+                {
+                  "value": "DOES_NOT_WANT_TO_ANSWER",
+                  "text": "I do not want to answer"
+                },
+                {
+                  "value": "NOT_PRESENT",
+                  "text": "[subject] is not present"
+                },
+                {
+                  "value": "NOT_APPLICABLE",
+                  "text": "Not applicable"
+                }
+              ],
+              "value": "MAKING_CHANGES",
+              "values": null,
+              "collection": null
+            },
+            "drug_use_changes": {
+              "type": "RADIO",
+              "description": "Does [subject] want to make changes to their drug use?",
+              "options": [
+                {
+                  "value": "MADE_CHANGES",
+                  "text": "I have already made positive changes and want to maintain them"
+                },
+                {
+                  "value": "MAKING_CHANGES",
+                  "text": "I am actively making changes"
+                },
+                {
+                  "value": "WANT_TO_MAKE_CHANGES",
+                  "text": "I want to make changes and know how to"
+                },
+                {
+                  "value": "NEEDS_HELP_TO_MAKE_CHANGES",
+                  "text": "I want to make changes but need help"
+                },
+                {
+                  "value": "THINKING_ABOUT_MAKING_CHANGES",
+                  "text": "I am thinking about making changes"
+                },
+                {
+                  "value": "DOES_NOT_WANT_TO_MAKE_CHANGES",
+                  "text": "I do not want to make changes"
+                },
+                {
+                  "value": "DOES_NOT_WANT_TO_ANSWER",
+                  "text": "I do not want to answer"
+                },
+                {
+                  "value": "NOT_PRESENT",
+                  "text": "[subject] is not present"
+                },
+                {
+                  "value": "NOT_APPLICABLE",
+                  "text": "Not applicable"
+                }
+              ],
+              "value": "MAKING_CHANGES",
+              "values": null,
+              "collection": null
+            },
             "employment_education_section_complete": {
               "type": "RADIO",
               "description": "Is the Employment and education section complete?",

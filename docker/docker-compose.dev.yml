@@ -11,6 +11,10 @@ services:
       - ../:/app:cached
       - node_modules:/app/node_modules
 
+  hmpps-auth:
+    environment:
+      JAVA_TOOL_OPTIONS: "-XX:UseSVE=0"
+
 volumes:
   node_modules:
     external: true

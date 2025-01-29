@@ -25,11 +25,12 @@ export default class UpdateGoalController {
     try {
       const sortedAreasOfNeed = this.referentialDataService.getSortedAreasOfNeed()
       const goal = await req.services.goalService.getGoal(uuid)
+      const goalType: string = goalStatusToTabName(goal.status)
       const popData = req.services.sessionService.getSubjectDetails()
       const mainAreaOfNeed = sortedAreasOfNeed.find(areaOfNeed => areaOfNeed.name === goal.areaOfNeed.name)
       const relatedAreasOfNeed = goal.relatedAreasOfNeed.map(need => need.name)
 
-      const returnLink = req.services.sessionService.getReturnLink()
+      const returnLink = `/plan?type=${goalType}`
       req.services.sessionService.setReturnLink(`/update-goal-steps/${uuid}`)
 
       return res.render('pages/update-goal', {
@@ -85,6 +86,14 @@ export default class UpdateGoalController {
       const goalType: string = goalStatusToTabName(goal.status)
 
       await this.updateSteps(req, goal, steps, note)
+
+      if (req.body.action === 'mark-as-achieved') {
+        return res.redirect(`${URLs.ACHIEVE_GOAL.replace(':uuid', uuid)}`)
+      }
+
+      if (req.body.action === 'remove') {
+        return res.redirect(`${URLs.REMOVE_GOAL.replace(':uuid', uuid)}`)
+      }
 
       return res.redirect(`${URLs.PLAN_OVERVIEW}?type=${goalType}`)
 

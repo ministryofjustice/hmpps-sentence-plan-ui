@@ -75,7 +75,7 @@ export default class RemoveGoalController {
         }
 
         try {
-          await req.services.goalService.updateGoal(goalData, goalUuid)
+          await req.services.goalService.updateGoalStatus(goalData, goalUuid)
           return res.redirect(`${URLs.PLAN_OVERVIEW}?type=removed&status=removed`)
         } catch (e) {
           return next(e)

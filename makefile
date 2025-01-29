@@ -28,7 +28,7 @@ dev-up: ## Starts/restarts the UI in a development container. A remote debugger 
 	docker compose ${DEV_COMPOSE_FILES} up ui --wait --no-recreate
 
 dev-build: ## Builds a development image of the UI and installs Node dependencies.
-	make install-node-modules
+	@make install-node-modules
 	docker compose ${DEV_COMPOSE_FILES} build ui
 
 dev-down: ## Stops and removes all dev containers.
@@ -42,7 +42,6 @@ BASE_URL ?= "http://localhost:3000"
 e2e: ## Run the end-to-end tests locally in the Cypress app. Override the default base URL with BASE_URL=...
 	@make install-node-modules
 	docker compose ${DEV_COMPOSE_FILES} up --no-recreate --wait
-	npm i
 	npx cypress install
 	npx cypress open --e2e -c baseUrl=$(BASE_URL),experimentalInteractiveRunEvents=true
 
@@ -66,13 +65,15 @@ lint-fix: ## Automatically fixes linting issues.
 	docker compose ${DEV_COMPOSE_FILES} run --rm --no-deps ui npm run lint-fix
 
 install-node-modules: ## Installs Node modules into the Docker volume.
+	@echo "Running npm install locally..."
+	@npm i
 	@docker run --rm \
 	  -e CYPRESS_INSTALL_BINARY=0 \
 	  -v ./package.json:/package.json \
 	  -v ./package-lock.json:/package-lock.json \
 	  -v ~/.npm:/npm_cache \
 	  -v ${PROJECT_NAME}_node_modules:/node_modules \
-	  node:20-bullseye-slim \
+	  node:22.13-bookworm-slim \
 	  /bin/bash -c 'if [ ! -f /node_modules/.last-updated ] || [ /package.json -nt /node_modules/.last-updated ]; then \
 	    echo "Running npm ci as container node_modules is outdated or missing."; \
 	    npm ci --cache /npm_cache --prefer-offline; \
@@ -88,7 +89,6 @@ clean: ## Stops and removes all project containers. Deletes local build/cache di
 
 update: ## Downloads the latest versions of container images.
 	docker compose ${LOCAL_COMPOSE_FILES} pull
-	npm i
 
 save-logs: ## Saves docker container logs in a directory defined by OUTPUT_LOGS_DIR=
 	docker system info

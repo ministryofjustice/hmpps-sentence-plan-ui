@@ -32,7 +32,15 @@ export default class AboutPersonController {
       const pageId = 'about'
       const readWrite = req.services.sessionService.getAccessMode() === AccessMode.READ_WRITE
 
-      return res.render('pages/about', {
+      const areas = [...assessmentAreas.lowScoring, ...assessmentAreas.highScoring, ...assessmentAreas.other]
+      let returnPage = 'pages/about'
+      for (const area of areas) {
+        if (area.isMissingInformation) {
+          returnPage = 'pages/about-not-complete'
+        }
+      }
+
+      return res.render(returnPage, {
         locale: locale.en,
         data: {
           oasysReturnUrl,

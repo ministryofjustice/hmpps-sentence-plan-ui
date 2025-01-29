@@ -397,6 +397,31 @@ describe('ChangeGoalController', () => {
       expect(res.redirect).toHaveBeenCalledWith(`/update-goal-steps/${testGoal.uuid}`)
     })
 
+    it('should redirect to add-steps if came from add-steps and user clicked the back link', async () => {
+      const draftPlanData: PlanType = { ...testPlan, agreementStatus: PlanAgreementStatus.DRAFT }
+      req.services.planService.getPlanByUuid = jest.fn().mockResolvedValue(draftPlanData)
+
+      const testGoalWithNoSteps: Goal = { ...testGoal, steps: [] }
+      req.services.goalService.getGoal = jest.fn().mockReturnValue(testGoalWithNoSteps)
+      req.services.sessionService.getReturnLink = jest.fn().mockReturnValue(`/change-goal/${testGoal.uuid}/`)
+      req.services.sessionService.setReturnLink = jest.fn()
+
+      req.body = {
+        'goal-input-autocomplete': 'Goal for the future with no steps',
+        'area-of-need': testGoal.areaOfNeed.name,
+        'related-area-of-need-radio': 'no',
+        'start-working-goal-radio': 'yes',
+        'date-selection-radio': viewData.data.dateOptions[1].toISOString(),
+      }
+      req.errors = {
+        body: {},
+      }
+      req.params.uuid = testGoal.uuid
+
+      await runMiddlewareChain(controller.post, req, res, next)
+      expect(res.redirect).toHaveBeenCalledWith(`/goal/${testGoal.uuid}/add-steps`)
+    })
+
     it('should redirect to add-steps if Plan is agreed and current goal has no steps', async () => {
       const draftPlanData: PlanType = { ...testPlan, agreementStatus: PlanAgreementStatus.AGREED }
       req.services.planService.getPlanByUuid = jest.fn().mockResolvedValue(draftPlanData)

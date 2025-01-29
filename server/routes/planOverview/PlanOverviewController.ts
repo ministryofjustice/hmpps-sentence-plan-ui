@@ -32,6 +32,13 @@ export default class PlanOverviewController {
       const oasysReturnUrl = req.services.sessionService.getOasysReturnUrl()
       const type = req.query?.type ?? 'current'
       const status = req.query?.status
+      // was the plan updated more than 10s after the user agreed to it?
+      let isUpdatedAfterAgreement = false
+      if (this.plan.agreementDate !== null) {
+        const mostRecentUpdateDate = new Date(this.plan.mostRecentUpdateDate)
+        const agreementDate = new Date(this.plan.agreementDate)
+        isUpdatedAfterAgreement = Math.abs((mostRecentUpdateDate.getTime() - agreementDate.getTime()) / 1000) > 10
+      }
 
       req.services.sessionService.setReturnLink(`/plan?type=${type ?? 'current'}`)
 
@@ -43,6 +50,7 @@ export default class PlanOverviewController {
         locale: locale.en,
         data: {
           plan: this.plan,
+          isUpdatedAfterAgreement,
           type,
           status,
           oasysReturnUrl,

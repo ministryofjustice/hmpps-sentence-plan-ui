@@ -1,34 +1,39 @@
 import { NextFunction, Request, Response } from 'express'
-import { NewGoal } from '../../@types/NewGoalType'
 import { GoalStatus } from '../../@types/GoalType'
 import locale from './locale.json'
 import validateRequest from '../../middleware/validationMiddleware'
 import transformRequest from '../../middleware/transformMiddleware'
-import AchieveGoalPostModel from './models/AchieveGoalPostModel'
+import ReAddGoalPostModel from './models/ReAddGoalPostModel'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
 import { AccessMode } from '../../@types/Handover'
 import { HttpError } from '../../utils/HttpError'
+import { goalStatusToTabName } from '../../utils/utils'
+import { NewGoal } from '../../@types/NewGoalType'
+import { getDateOptions, getGoalTargetDate } from '../../utils/goalTargetDateUtils'
 
-export default class AchieveGoalController {
+export default class ReAddGoalController {
   constructor() {}
 
   private render = async (req: Request, res: Response, next: NextFunction) => {
     const { errors } = req
 
     try {
-      const type = req.query?.type
       const { uuid } = req.params
 
       const goal = await req.services.goalService.getGoal(uuid)
       const returnLink = req.services.sessionService.getReturnLink()
+      const dateOptions = getDateOptions()
+      const form = errors ? req.body : null
 
-      return res.render('pages/confirm-achieved-goal', {
+      req.services.sessionService.setReturnLink(`/plan?type=removed`)
+
+      return res.render('pages/confirm-re-add-goal', {
         locale: locale.en,
         data: {
-          form: req.body,
-          type,
+          dateOptions,
           returnLink,
           goal,
+          form,
         },
         errors,
       })
@@ -39,16 +44,25 @@ export default class AchieveGoalController {
 
   private saveAndRedirect = async (req: Request, res: Response, next: NextFunction) => {
     const goalUuid = req.params.uuid
-    const note = req.body['goal-achievement-helped']
 
-    const goalData: Partial<NewGoal> = {
-      status: GoalStatus.ACHIEVED,
-      note,
-    }
+    const newGoal: Partial<NewGoal> = {}
+
+    // set note
+    newGoal.note = req.body['re-add-goal-reason']
+
+    // set new targetDate
+    newGoal.targetDate = getGoalTargetDate(
+      req.body['start-working-goal-radio'],
+      req.body['date-selection-radio'],
+      req.body['date-selection-custom'],
+    )
+
+    // set new status
+    newGoal.status = newGoal.targetDate === null ? GoalStatus.FUTURE : GoalStatus.ACTIVE
 
     try {
-      await req.services.goalService.updateGoalStatus(goalData, goalUuid)
-      return res.redirect(`/plan?type=achieved&status=achieved`)
+      await req.services.goalService.updateGoalStatus(newGoal, goalUuid)
+      return res.redirect(`/plan?type=${goalStatusToTabName(newGoal.status)}`)
     } catch (e) {
       return next(HttpError(500, e.message))
     }
@@ -65,7 +79,7 @@ export default class AchieveGoalController {
 
   post = [
     requireAccessMode(AccessMode.READ_WRITE),
-    transformRequest({ body: AchieveGoalPostModel }),
+    transformRequest({ body: ReAddGoalPostModel }),
     validateRequest(),
     this.handleValidationErrors,
     this.saveAndRedirect,

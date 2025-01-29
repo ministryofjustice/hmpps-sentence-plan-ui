@@ -39,6 +39,7 @@
       "stepsList": {
         "whoHeader": "Who will do this",
         "whatHeader": "Steps",
+        "stepHeader": "Step",
         "statusHeader": "Status",
         "noStepsAdded": "No steps added",
         "addSteps": "Add steps",
@@ -55,12 +56,35 @@
         "relatedAreasOfNeed": "Also relates to: {{ relatedAreasOfNeed }}"
       }
     },
+    "goalEditing": {
+      "startWorking": {
+        "label": "Can {{ subject.givenName }} start working on this goal now?",
+        "options": {
+          "yes": "Yes",
+          "no": "No, it is a future goal"
+        }
+      },
+      "dateSelection": {
+        "label": "When should {{ subject.givenName }} aim to achieve this goal?",
+        "options": {
+          "threeMonths": "In 3 months ({{ dateOptions.threeMonths }})",
+          "sixMonths": "In 6 months ({{ dateOptions.sixMonths }})",
+          "twelveMonths": "In 12 months ({{ dateOptions.twelveMonths }})",
+          "custom": "Set another date"
+        }
+      },
+      "datePicker": {
+        "label": "Select a date",
+        "hint": "For example, 31/3/2023."
+      }
+    },
     "noteList": {
       "viewAllNotes": "View all notes",
       "noGoalNotes": "There are no notes on this goal yet.",
       "noteHeading": "{{ noteDate }} by {{ noteAuthor }}",
       "goalAchievedNote": "Goal marked as achieved on {{ noteDate }}.",
-      "goalRemovedNote": "Goal removed on {{ noteDate }}."
+      "goalRemovedNote": "Goal removed on {{ noteDate }}.",
+      "goalReAddedNote": "Goal added back into plan on {{ noteDate }}."
     },
     "backLink": {
       "text": "Back"
