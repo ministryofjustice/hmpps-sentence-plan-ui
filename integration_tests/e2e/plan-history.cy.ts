@@ -76,8 +76,9 @@ describe('Rendering Plan History for READ_WRITE user', () => {
     cy.contains('a', 'Update').click()
     cy.contains('button', 'Mark as achieved').click()
     cy.url().should('include', '/confirm-if-achieved') // check url
+    planOverview.isGoalAchievedRadio('yes')
     cy.get('textarea#goal-achievement-helped').type('Updated goal to achieved status')
-    cy.get('.govuk-button').contains('Confirm').click()
+    cy.get('.govuk-button').contains('Save and continue').click()
     cy.url().should('include', '/plan') // check we're back to plan-overview
     cy.get('.moj-primary-navigation__container').contains('Plan history').click()
     cy.get('.goal-status').contains('Goal marked as achieved')
@@ -124,8 +125,9 @@ describe('Rendering Plan History for READ_ONLY user', () => {
       cy.contains('a', 'Update').click()
       cy.contains('button', 'Mark as achieved').click()
       cy.url().should('include', '/confirm-if-achieved') // check url
+      planOverview.isGoalAchievedRadio('yes')
       cy.get('textarea#goal-achievement-helped').type('Updated goal to achieved status')
-      cy.get('.govuk-button').contains('Confirm').click()
+      cy.get('.govuk-button').contains('Save and continue').click()
       cy.url().should('include', '/plan') // check we're back to plan-overview
 
       cy.openSentencePlan(planDetails.oasysAssessmentPk, AccessMode.READ_ONLY)
