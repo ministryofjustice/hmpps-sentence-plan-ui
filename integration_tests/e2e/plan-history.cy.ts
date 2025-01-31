@@ -75,7 +75,7 @@ describe('Rendering Plan History for READ_WRITE user', () => {
     cy.visit('/plan')
     cy.contains('a', 'Update').click()
     cy.contains('button', 'Mark as achieved').click()
-    cy.url().should('include', '/confirm-achieved-goal') // check url
+    cy.url().should('include', '/confirm-if-achieved') // check url
     cy.get('textarea#goal-achievement-helped').type('Updated goal to achieved status')
     cy.get('.govuk-button').contains('Confirm').click()
     cy.url().should('include', '/plan') // check we're back to plan-overview
@@ -123,7 +123,7 @@ describe('Rendering Plan History for READ_ONLY user', () => {
       cy.visit('/plan')
       cy.contains('a', 'Update').click()
       cy.contains('button', 'Mark as achieved').click()
-      cy.url().should('include', '/confirm-achieved-goal') // check url
+      cy.url().should('include', '/confirm-if-achieved') // check url
       cy.get('textarea#goal-achievement-helped').type('Updated goal to achieved status')
       cy.get('.govuk-button').contains('Confirm').click()
       cy.url().should('include', '/plan') // check we're back to plan-overview

@@ -31,4 +31,8 @@ export default class PlanOverview {
   clickDownOnSummaryCard = (value: number) => {
     this.getSummaryCard(value).contains('.govuk-button', 'Move goal down').click()
   }
+
+  isGoalAchievedRadio = (value: string) => {
+    cy.get('input[name="is-goal-achieved-radio"]').check(value)
+  }
 }

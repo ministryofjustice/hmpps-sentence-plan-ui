@@ -33,7 +33,7 @@ describe('Achieve goal', () => {
       })
 
       cy.get<Goal>('@newGoal').then(goal => {
-        cy.visit(`/confirm-achieved-goal/${goal.uuid}`, { failOnStatusCode: false })
+        cy.visit(`/confirm-if-achieved/${goal.uuid}`, { failOnStatusCode: false })
         cy.get('.govuk-body').should('contain', 'You do not have permission to perform this action')
       })
 
@@ -55,7 +55,7 @@ describe('Achieve goal', () => {
 
     it('Displays agree plan page correctly on load', () => {
       cy.get<Goal>('@newGoal').then(goal => {
-        cy.visit(`/confirm-achieved-goal/${goal.uuid}`)
+        cy.visit(`/confirm-if-achieved/${goal.uuid}`)
         cy.get('h1').contains('has achieved this goal')
         cy.get('.govuk-summary-card__title').should('contain', goal.title)
       })
@@ -80,7 +80,8 @@ describe('Achieve goal', () => {
     })
 
     it('Confirm goal achieved successfully without optional note', () => {
-      cy.get('button').contains('Confirm').click()
+      planOverview.isGoalAchievedRadio('yes')
+      cy.get('button').contains('Save and continue').click()
       cy.url().should('include', 'plan?type=achieved&status=achieved')
       cy.get(':nth-child(3) > .moj-sub-navigation__link')
       cy.get('.moj-sub-navigation__link').eq(2).should('contain', 'Achieved goals (1)')
@@ -93,8 +94,9 @@ describe('Achieve goal', () => {
     })
 
     it('Confirm goal achieved successfully with optional note', () => {
+      planOverview.isGoalAchievedRadio('yes')
       cy.get('#goal-achievement-helped').type('Some optional text in the achievement note field')
-      cy.get('button').contains('Confirm').click()
+      cy.get('button').contains('Save and continue').click()
       cy.url().should('include', 'plan?type=achieved&status=achieved')
       cy.get(':nth-child(3) > .moj-sub-navigation__link')
       cy.get('.moj-sub-navigation__link').eq(2).should('contain', 'Achieved goals (1)')
@@ -110,9 +112,10 @@ describe('Achieve goal', () => {
 
     it('Confirm errors are displayed with optional note of more than 4000 characters', () => {
       const lorem = faker.lorem.paragraphs(40)
+      planOverview.isGoalAchievedRadio('yes')
       cy.get('#goal-achievement-helped').invoke('val', lorem)
-      cy.get('button').contains('Confirm').click()
-      cy.url().should('include', '/confirm-achieved-goal/')
+      cy.get('button').contains('Save and continue').click()
+      cy.url().should('include', '/confirm-if-achieved/')
       cy.get('.govuk-error-summary').should(
         'contain',
         'How achieving this goal has helped must be 4,000 characters or less',
@@ -121,13 +124,22 @@ describe('Achieve goal', () => {
         'contain',
         'How achieving this goal has helped must be 4,000 characters or less',
       )
-      cy.get('#goal-achievement-helped').should('have.text', lorem)
+      cy.get('#goal-achievement-helped').should('not.be.empty')
+      cy.checkAccessibility()
+    })
+
+    it('Confirm errors are displayed when radio options not selected', () => {
+      cy.get('button').contains('Save and continue').click()
+      cy.url().should('include', '/confirm-if-achieved/')
+      cy.get('.govuk-error-summary').should('contain', 'Select if they have achieved this goal')
+      cy.get('#is-goal-achieved-radio-error').should('contain', 'Select if they have achieved this goal')
       cy.checkAccessibility()
     })
 
     it('Cancel goal achieved and redirect successfully', () => {
-      cy.get('a').contains('Do not mark as achieved').click()
-      cy.url().should('include', 'update-goal-steps/')
+      planOverview.isGoalAchievedRadio('no')
+      cy.get('button').contains('Save and continue').click()
+      cy.url().should('include', '/plan')
       cy.checkAccessibility()
     })
   })

@@ -95,14 +95,12 @@ export default class UpdateGoalController {
         return res.redirect(`${URLs.REMOVE_GOAL.replace(':uuid', uuid)}`)
       }
 
-      return res.redirect(`${URLs.PLAN_OVERVIEW}?type=${goalType}`)
+      // redirect to plan overview if any step is not marked as completed
+      if (steps.length === 0 || steps.some((step: { status: string }) => step.status !== 'COMPLETED')) {
+        return res.redirect(`${URLs.PLAN_OVERVIEW}?type=${goalType}`)
+      }
 
-      // TODO SP2-633
-      // if (steps.length === 0 || steps.some((step: { status: string }) => step.status !== 'COMPLETED')) {
-      //   req.services.sessionService.setReturnLink(null)
-      //   return res.redirect(`${URLs.PLAN_OVERVIEW}?type=${goalType}`)
-      // }
-      // return res.redirect(`${URLs.ACHIEVE_GOAL.replace(':uuid', uuid)}`)
+      return res.redirect(`${URLs.ACHIEVE_GOAL.replace(':uuid', uuid)}`)
     } catch (e) {
       return next(HttpError(500, e.message))
     }
