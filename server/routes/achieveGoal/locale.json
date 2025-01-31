@@ -1,21 +1,27 @@
 {
   "en": {
     "page": {
-      "title": "Confirm they have achieved this goal - {{ applicationName }}",
-      "errorTitle": "Error: Confirm they have achieved this goal - {{ applicationName }}"
+      "title": "Confirm if they have achieved this goal - {{ applicationName }}",
+      "errorTitle": "Error: Confirm if they have achieved this goal - {{ applicationName }}"
     },
     "mainHeading": {
-      "title": "Confirm {{ subject.givenName }} has achieved this goal"
+      "title": "Confirm if {{ subject.givenName }} has achieved this goal",
+      "paragraph": "All steps have been completed. Check if this goal can now be marked as achieved."
     },
-    "notes": {
-      "label": "How has achieving this goal helped {{ subject.givenName }}? (optional)"
+    "markAchieved": {
+      "question": "Has {{ subject.givenName }} achieved this goal?",
+      "yes": "Yes, mark it as achieved",
+      "no": "No, go to {{ subject.givenName }}'s plan",
+      "yesDetails": "Enter how achieving this goal has helped {{ subject.givenName }} (optional)"
     },
     "errors": {
+      "is-goal-achieved-radio": {
+        "isNotEmpty": "Select if they have achieved this goal"
+      },
       "goal-achievement-helped": {
         "maxLength": "How achieving this goal has helped must be 4,000 characters or less"
       }
     },
-    "confirmGoalAchievedButton": "Confirm",
-    "doNotMarkAsAchievedLink": "Do not mark as achieved"
+    "confirmGoalAchievedButton": "Save and continue"
   }
 }

@@ -11,7 +11,7 @@ export default {
   DELETE_GOAL: '/confirm-delete-goal/:uuid',
   UPDATE_GOAL: '/update-goal-steps/:uuid',
   CHANGE_GOAL: '/change-goal/:uuid',
-  ACHIEVE_GOAL: '/confirm-achieved-goal/:uuid',
+  ACHIEVE_GOAL: '/confirm-if-achieved/:uuid',
   AGREE_PLAN: '/agree-plan',
   PLAN_HISTORY: '/plan-history',
   RE_ADD_GOAL: '/confirm-add-goal/:uuid',

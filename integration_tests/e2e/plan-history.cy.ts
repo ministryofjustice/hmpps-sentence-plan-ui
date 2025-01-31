@@ -1,9 +1,11 @@
 import PlanOverview from '../pages/plan-overview'
 import DataGenerator from '../support/DataGenerator'
 import { AccessMode } from '../../server/@types/Handover'
+import AchieveGoal from '../pages/achieve-goal'
 
 describe('Rendering Plan History for READ_WRITE user', () => {
   const planOverview = new PlanOverview()
+  const achieveGoal = new AchieveGoal()
 
   beforeEach(() => {
     cy.createSentencePlan().then(planDetails => {
@@ -75,9 +77,10 @@ describe('Rendering Plan History for READ_WRITE user', () => {
     cy.visit('/plan')
     cy.contains('a', 'Update').click()
     cy.contains('button', 'Mark as achieved').click()
-    cy.url().should('include', '/confirm-achieved-goal') // check url
+    cy.url().should('include', '/confirm-if-achieved') // check url
+    achieveGoal.isGoalAchievedRadio('yes')
     cy.get('textarea#goal-achievement-helped').type('Updated goal to achieved status')
-    cy.get('.govuk-button').contains('Confirm').click()
+    cy.get('.govuk-button').contains('Save and continue').click()
     cy.url().should('include', '/plan') // check we're back to plan-overview
     cy.get('.moj-primary-navigation__container').contains('Plan history').click()
     cy.get('.goal-status').contains('Goal marked as achieved')
@@ -108,6 +111,7 @@ describe('Rendering Plan History for READ_WRITE user', () => {
 
 describe('Rendering Plan History for READ_ONLY user', () => {
   const planOverview = new PlanOverview()
+  const achieveGoal = new AchieveGoal()
 
   beforeEach(() => {
     cy.createSentencePlan().then(planDetails => {
@@ -123,9 +127,10 @@ describe('Rendering Plan History for READ_ONLY user', () => {
       cy.visit('/plan')
       cy.contains('a', 'Update').click()
       cy.contains('button', 'Mark as achieved').click()
-      cy.url().should('include', '/confirm-achieved-goal') // check url
+      cy.url().should('include', '/confirm-if-achieved') // check url
+      achieveGoal.isGoalAchievedRadio('yes')
       cy.get('textarea#goal-achievement-helped').type('Updated goal to achieved status')
-      cy.get('.govuk-button').contains('Confirm').click()
+      cy.get('.govuk-button').contains('Save and continue').click()
       cy.url().should('include', '/plan') // check we're back to plan-overview
 
       cy.openSentencePlan(planDetails.oasysAssessmentPk, AccessMode.READ_ONLY)

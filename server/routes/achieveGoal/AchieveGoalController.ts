@@ -8,6 +8,8 @@ import AchieveGoalPostModel from './models/AchieveGoalPostModel'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
 import { AccessMode } from '../../@types/Handover'
 import { HttpError } from '../../utils/HttpError'
+import URLs from '../URLs'
+import { goalStatusToTabName } from '../../utils/utils'
 
 export default class AchieveGoalController {
   constructor() {}
@@ -22,7 +24,7 @@ export default class AchieveGoalController {
       const goal = await req.services.goalService.getGoal(uuid)
       const returnLink = req.services.sessionService.getReturnLink()
 
-      return res.render('pages/confirm-achieved-goal', {
+      return res.render('pages/confirm-if-achieved', {
         locale: locale.en,
         data: {
           form: req.body,
@@ -39,7 +41,19 @@ export default class AchieveGoalController {
 
   private saveAndRedirect = async (req: Request, res: Response, next: NextFunction) => {
     const goalUuid = req.params.uuid
+    const isAchieved = req.body['is-goal-achieved-radio'] === 'yes'
     const note = req.body['goal-achievement-helped']
+
+    if (!isAchieved) {
+      try {
+        const goal = await req.services.goalService.getGoal(goalUuid)
+        const goalType: string = goalStatusToTabName(goal.status)
+
+        return res.redirect(`${URLs.PLAN_OVERVIEW}?type=${goalType}`)
+      } catch (e) {
+        return next(HttpError(500, e.message))
+      }
+    }
 
     const goalData: Partial<NewGoal> = {
       status: GoalStatus.ACHIEVED,
