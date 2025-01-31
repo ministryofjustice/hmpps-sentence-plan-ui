@@ -3,9 +3,11 @@ import DataGenerator from '../support/DataGenerator'
 import { PlanType } from '../../server/@types/PlanType'
 import { Goal } from '../../server/@types/GoalType'
 import PlanOverview from '../pages/plan-overview'
+import AchieveGoal from '../pages/achieve-goal'
 
 describe('Achieve goal', () => {
   const planOverview = new PlanOverview()
+  const achieveGoal = new AchieveGoal()
 
   beforeEach(() => {
     cy.createSentencePlan().then(planDetails => {
@@ -80,7 +82,7 @@ describe('Achieve goal', () => {
     })
 
     it('Confirm goal achieved successfully without optional note', () => {
-      planOverview.isGoalAchievedRadio('yes')
+      achieveGoal.isGoalAchievedRadio('yes')
       cy.get('button').contains('Save and continue').click()
       cy.url().should('include', 'plan?type=achieved&status=achieved')
       cy.get(':nth-child(3) > .moj-sub-navigation__link')
@@ -94,7 +96,7 @@ describe('Achieve goal', () => {
     })
 
     it('Confirm goal achieved successfully with optional note', () => {
-      planOverview.isGoalAchievedRadio('yes')
+      achieveGoal.isGoalAchievedRadio('yes')
       cy.get('#goal-achievement-helped').type('Some optional text in the achievement note field')
       cy.get('button').contains('Save and continue').click()
       cy.url().should('include', 'plan?type=achieved&status=achieved')
@@ -112,7 +114,7 @@ describe('Achieve goal', () => {
 
     it('Confirm errors are displayed with optional note of more than 4000 characters', () => {
       const lorem = faker.lorem.paragraphs(40)
-      planOverview.isGoalAchievedRadio('yes')
+      achieveGoal.isGoalAchievedRadio('yes')
       cy.get('#goal-achievement-helped').invoke('val', lorem)
       cy.get('button').contains('Save and continue').click()
       cy.url().should('include', '/confirm-if-achieved/')
@@ -137,7 +139,7 @@ describe('Achieve goal', () => {
     })
 
     it('Cancel goal achieved and redirect successfully', () => {
-      planOverview.isGoalAchievedRadio('no')
+      achieveGoal.isGoalAchievedRadio('no')
       cy.get('button').contains('Save and continue').click()
       cy.url().should('include', '/plan')
       cy.checkAccessibility()
