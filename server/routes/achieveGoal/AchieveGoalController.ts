@@ -10,7 +10,6 @@ import { AccessMode } from '../../@types/Handover'
 import { HttpError } from '../../utils/HttpError'
 import URLs from '../URLs'
 import { goalStatusToTabName } from '../../utils/utils'
-import { PlanAgreementStatus } from '../../@types/PlanType'
 
 export default class AchieveGoalController {
   constructor() {}
