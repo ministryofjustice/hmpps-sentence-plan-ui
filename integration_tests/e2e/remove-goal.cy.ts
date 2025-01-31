@@ -44,9 +44,13 @@ describe('Remove a goal from a Plan after it has been agreed', () => {
       // Add goal and access remove page
       cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
         cy.addGoalToPlan(plan.uuid, goalData).then(goal => {
+          cy.agreePlan(plan.uuid)
           cy.visit(`/remove-goal/${goal.uuid}`)
         })
       })
+
+      cy.title().should('contain', 'Confirm you want to remove this goal')
+      cy.get('h1').should('include.text', 'Confirm you want to remove this goal')
 
       // Check goal data is rendered correctly
       cy.get('.goal-summary-card')
@@ -66,9 +70,13 @@ describe('Remove a goal from a Plan after it has been agreed', () => {
         cy.addGoalToPlan(plan.uuid, goalData).then(goal => {
           cy.addStepToGoal(goal.uuid, stepData[0])
           cy.addStepToGoal(goal.uuid, stepData[1])
-          cy.visit(`/confirm-delete-goal/${goal.uuid}`)
+          cy.agreePlan(plan.uuid)
+          cy.visit(`/remove-goal/${goal.uuid}`)
         })
       })
+
+      cy.title().should('contain', 'Confirm you want to remove this goal')
+      cy.get('h1').should('include.text', 'Confirm you want to remove this goal')
 
       // Check goal data is rendered correctly
       cy.get('.goal-summary-card')
