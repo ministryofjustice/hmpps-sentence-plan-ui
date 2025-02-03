@@ -205,4 +205,16 @@ describe('Change a goal', () => {
       cy.checkAccessibility()
     })
   })
+
+  describe('Back behaviour', () => {
+    it('should go back to delete goal page if we came from the delete goal page', () => {
+      cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
+        cy.addGoalToPlan(plan.uuid, goalData).then(goal => {
+          cy.visit(`/confirm-delete-goal/${goal.uuid}`)
+        })
+      })
+      cy.contains('a', 'change the goal').click()
+      cy.get('.govuk-back-link').should('have.attr', 'href').and('include', '/confirm-delete-goal/')
+    })
+  })
 })
