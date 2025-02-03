@@ -112,7 +112,7 @@ describe('UpdateGoalController', () => {
       await runMiddlewareChain(controller.post, req, res, next)
 
       expect(req.services.stepService.saveAllSteps).toHaveBeenCalled()
-      expect(res.redirect).toHaveBeenCalledWith('/confirm-if-achieved/a-un1qu3-t3st-Uu1d')
+      expect(res.redirect).toHaveBeenCalledWith('/confirm-achieved-goal/a-un1qu3-t3st-Uu1d')
       expect(res.render).not.toHaveBeenCalled()
       expect(next).not.toHaveBeenCalled()
     })
@@ -181,7 +181,7 @@ describe('UpdateGoalController', () => {
 
       await runMiddlewareChain(controller.post, req, res, next)
 
-      expect(res.redirect).toHaveBeenCalledWith(`${URLs.ACHIEVE_GOAL.replace(':uuid', testGoal.uuid)}`)
+      expect(res.redirect).toHaveBeenCalledWith(`${URLs.CONFIRM_ACHIEVE_GOAL.replace(':uuid', testGoal.uuid)}`)
       expect(next).not.toHaveBeenCalled()
     })
 
