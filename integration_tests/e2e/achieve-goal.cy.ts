@@ -87,6 +87,7 @@ describe('Achieve goal', () => {
       cy.url().should('include', 'plan?type=achieved&status=achieved')
       cy.get(':nth-child(3) > .moj-sub-navigation__link')
       cy.get('.moj-sub-navigation__link').eq(2).should('contain', 'Achieved goals (1)')
+      cy.get('.govuk-summary-card').should('contain', 'Marked as achieved on')
 
       cy.get<Goal>('@newGoal').then(goal => {
         cy.visit(`/view-achieved-goal/${goal.uuid}`)
