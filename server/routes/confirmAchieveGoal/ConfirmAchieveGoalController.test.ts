@@ -4,7 +4,7 @@ import mockReq from '../../testutils/preMadeMocks/mockReq'
 import mockRes from '../../testutils/preMadeMocks/mockRes'
 import locale from './locale.json'
 import testHandoverContext from '../../testutils/data/handoverData'
-import AchieveGoalController from './AchieveGoalController'
+import ConfirmAchieveGoalController from './ConfirmAchieveGoalController'
 import { testGoal } from '../../testutils/data/goalData'
 import { GoalStatus } from '../../@types/GoalType'
 import runMiddlewareChain from '../../testutils/runMiddlewareChain'
@@ -21,6 +21,7 @@ jest.mock('../../services/sessionService', () => {
     getPrincipalDetails: jest.fn().mockReturnValue(testHandoverContext.principal),
     getSubjectDetails: jest.fn().mockReturnValue(testHandoverContext.subject),
     getReturnLink: jest.fn().mockReturnValue('/some-return-link'),
+    getPlanVersionNumber: jest.fn().mockReturnValue(testPlan),
   }))
 })
 
@@ -35,11 +36,12 @@ jest.mock('../../services/sentence-plan/planService', () => {
   return jest.fn().mockImplementation(() => ({
     agreePlan: jest.fn().mockResolvedValue(testPlan),
     getPlanByUuid: jest.fn().mockResolvedValue(testPlan),
+    getPlanByUuidAndVersionNumber: jest.fn().mockResolvedValue(testPlan),
   }))
 })
 
 describe('AchieveGoalController', () => {
-  let controller: AchieveGoalController
+  let controller: ConfirmAchieveGoalController
   let req: Request
   let res: Response
   let next: NextFunction
@@ -58,19 +60,19 @@ describe('AchieveGoalController', () => {
     res = mockRes()
     next = jest.fn()
 
-    controller = new AchieveGoalController()
+    controller = new ConfirmAchieveGoalController()
   })
 
   describe('get', () => {
     it('should render OK', async () => {
       await runMiddlewareChain(controller.get, req, res, next)
 
-      expect(res.render).toHaveBeenCalledWith('pages/confirm-achieved-goal', viewData)
+      expect(res.render).toHaveBeenCalledWith('pages/confirm-if-achieved', viewData)
     })
 
     it('should render with validation errors', async () => {
       const errors = {
-        body: { 'goal-achievement-helped': { maxLength: true } },
+        body: { 'goal-achievement-helped': { maxLength: true }, 'is-goal-achieved-radio': { isNotEmpty: true } },
         params: {},
         query: {},
       }
@@ -82,7 +84,7 @@ describe('AchieveGoalController', () => {
 
       await runMiddlewareChain(controller.get, req, res, next)
 
-      expect(res.render).toHaveBeenCalledWith('pages/confirm-achieved-goal', expectedViewData)
+      expect(res.render).toHaveBeenCalledWith('pages/confirm-if-achieved', expectedViewData)
     })
   })
 
@@ -92,6 +94,7 @@ describe('AchieveGoalController', () => {
         uuid: 'some-uuid',
         'goal-achievement-helped': 'Detail on how this goal helped',
       }
+      req.body['is-goal-achieved-radio'] = 'yes'
       req.body['goal-achievement-helped'] = 'Note body'
 
       req.method = 'POST'
