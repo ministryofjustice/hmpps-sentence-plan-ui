@@ -1,11 +1,12 @@
-import { faker } from '@faker-js/faker'
 import DataGenerator from '../support/DataGenerator'
 import { PlanType } from '../../server/@types/PlanType'
 import { Goal } from '../../server/@types/GoalType'
 import PlanOverview from '../pages/plan-overview'
+import IntegrationUtils from '../integrationUtils'
 
 describe('Achieve goal', () => {
   const planOverview = new PlanOverview()
+  const integrationUtils = new IntegrationUtils()
 
   beforeEach(() => {
     cy.createSentencePlan().then(planDetails => {
@@ -82,7 +83,6 @@ describe('Achieve goal', () => {
     it('Confirm goal achieved successfully without optional note', () => {
       cy.get('button').contains('Confirm').click()
       cy.url().should('include', 'plan?type=achieved&status=achieved')
-      cy.get(':nth-child(3) > .moj-sub-navigation__link')
       cy.get('.moj-sub-navigation__link').eq(2).should('contain', 'Achieved goals (1)')
       cy.get('.govuk-summary-card').should('contain', 'Marked as achieved on')
 
@@ -110,7 +110,7 @@ describe('Achieve goal', () => {
     })
 
     it('Confirm errors are displayed with optional note of more than 4000 characters', () => {
-      const lorem = faker.lorem.paragraphs(40)
+      const lorem = integrationUtils.generateStringOfLength(4001)
       cy.get('#goal-achievement-helped').invoke('val', lorem)
       cy.get('button').contains('Confirm').click()
       cy.url().should('include', '/confirm-achieved-goal/')

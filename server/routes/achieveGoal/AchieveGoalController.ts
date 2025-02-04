@@ -9,6 +9,7 @@ import { requireAccessMode } from '../../middleware/authorisationMiddleware'
 import { AccessMode } from '../../@types/Handover'
 import { HttpError } from '../../utils/HttpError'
 
+// AchieveGoalController is accessed through the 'mark as achieved' button on the update goals page.
 export default class AchieveGoalController {
   constructor() {}
 

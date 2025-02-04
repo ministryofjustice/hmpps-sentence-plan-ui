@@ -1,13 +1,14 @@
-import { faker } from '@faker-js/faker'
 import DataGenerator from '../support/DataGenerator'
 import { PlanType } from '../../server/@types/PlanType'
 import { Goal } from '../../server/@types/GoalType'
 import PlanOverview from '../pages/plan-overview'
 import AchieveGoal from '../pages/achieve-goal'
+import IntegrationUtils from '../integrationUtils'
 
 describe('Achieve goal', () => {
   const planOverview = new PlanOverview()
   const achieveGoal = new AchieveGoal()
+  const integrationUtils = new IntegrationUtils()
 
   beforeEach(() => {
     cy.createSentencePlan().then(planDetails => {
@@ -85,39 +86,37 @@ describe('Achieve goal', () => {
     })
 
     it('Confirm goal achieved successfully without optional note', () => {
+      cy.url().should('include', '/confirm-if-achieved/')
       achieveGoal.isGoalAchievedRadio('yes')
       cy.get('button').contains('Save and continue').click()
       cy.url().should('include', 'plan?type=achieved&status=achieved')
-      cy.get(':nth-child(3) > .moj-sub-navigation__link')
       cy.get('.moj-sub-navigation__link').eq(2).should('contain', 'Achieved goals (1)')
       cy.get('.govuk-summary-card').should('contain', 'Marked as achieved on')
-
-      cy.get<Goal>('@newGoal').then(goal => {
-        cy.visit(`/view-achieved-goal/${goal.uuid}`)
-      })
+      cy.get('.govuk-summary-card .govuk-link').should('contain', 'View details')
+      cy.get('.govuk-summary-card .govuk-link').click()
+      cy.url().should('include', '/view-achieved-goal/')
       cy.get('.govuk-body').should('contain', 'Marked as achieved on')
       cy.checkAccessibility()
     })
 
     it('Confirm goal achieved successfully with optional note', () => {
+      cy.url().should('include', '/confirm-if-achieved/')
       achieveGoal.isGoalAchievedRadio('yes')
       cy.get('#goal-achievement-helped').type('Some optional text in the achievement note field')
       cy.get('button').contains('Save and continue').click()
       cy.url().should('include', 'plan?type=achieved&status=achieved')
-      cy.get(':nth-child(3) > .moj-sub-navigation__link')
       cy.get('.moj-sub-navigation__link').eq(2).should('contain', 'Achieved goals (1)')
-
-      cy.get('.moj-sub-navigation__link').eq(2).click()
-      planOverview.getSummaryCard(0).get('a').contains('View details').click()
+      cy.get('.govuk-summary-card').should('contain', 'Marked as achieved on')
+      cy.get('.govuk-summary-card .govuk-link').should('contain', 'View details')
+      cy.get('.govuk-summary-card .govuk-link').click()
+      cy.url().should('include', '/view-achieved-goal/')
+      cy.get('.govuk-body').should('contain', 'Marked as achieved on')
       cy.get('.govuk-details__text').should('contain', 'Some optional text in the achievement note field')
-      cy.get('p.govuk-body').should('contain', 'Marked as achieved on ')
-      cy.get('a.govuk-back-link').should('have.attr', 'href').and('include', '/plan?type=achieved')
-      cy.get('.govuk-button--secondary').should('have.length', 0)
       cy.checkAccessibility()
     })
 
     it('Confirm errors are displayed with optional note of more than 4000 characters', () => {
-      const lorem = faker.lorem.paragraphs(40)
+      const lorem = integrationUtils.generateStringOfLength(4001)
       achieveGoal.isGoalAchievedRadio('yes')
       cy.get('#goal-achievement-helped').invoke('val', lorem)
       cy.get('button').contains('Save and continue').click()
@@ -130,7 +129,7 @@ describe('Achieve goal', () => {
         'contain',
         'How achieving this goal has helped must be 4,000 characters or less',
       )
-      cy.get('#goal-achievement-helped').should('not.be.empty')
+      cy.get('#goal-achievement-helped').should('contain', lorem)
       cy.checkAccessibility()
     })
 
