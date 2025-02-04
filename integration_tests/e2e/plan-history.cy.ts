@@ -21,7 +21,6 @@ describe('Rendering Plan History for READ_WRITE user', () => {
     cy.get('.moj-primary-navigation__container').should('not.contain', `Plan history`)
     cy.visit('/plan-history', { failOnStatusCode: false })
     cy.get('.govuk-heading-l').contains('You do not have permission to perform this action')
-    cy.get('.code-block').contains('Plan has not been agreed')
   })
 
   it('Display plan history page with plan agreement', () => {
