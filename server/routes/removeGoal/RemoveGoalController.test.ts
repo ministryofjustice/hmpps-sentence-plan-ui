@@ -13,6 +13,7 @@ const mockGetPlanUUID = jest.fn().mockReturnValue(testPlan.uuid)
 const mockSessionService = jest.fn().mockImplementation(() => ({
   getPlanUUID: mockGetPlanUUID,
   getReturnLink: jest.fn().mockReturnValue(''),
+  setReturnLink: jest.fn(),
 }))
 
 jest.mock('../../middleware/authorisationMiddleware', () => ({
