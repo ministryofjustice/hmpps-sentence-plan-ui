@@ -64,7 +64,7 @@ export default class ChangeGoalController {
     try {
       await req.services.goalService.replaceGoal(processedData, goalUuid)
 
-      let redirectTarget = `${URLs.PLAN_OVERVIEW}?status=updated&type=${type}`
+      let redirectTarget = `${URLs.PLAN_OVERVIEW}?status=changed&type=${type}`
 
       const planUuid = req.services.sessionService.getPlanUUID()
       const plan = await req.services.planService.getPlanByUuid(planUuid)
