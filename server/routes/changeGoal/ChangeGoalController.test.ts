@@ -56,6 +56,7 @@ describe('ChangeGoalController', () => {
   let next: NextFunction
   const viewData = {
     data: {
+      planAgreementStatus: testPlan.agreementStatus,
       sortedAreasOfNeed: AreaOfNeed,
       returnLink: '/some-return-link',
       form: {},
@@ -322,7 +323,7 @@ describe('ChangeGoalController', () => {
       expect(res.render).toHaveBeenCalledWith('pages/change-goal', expectedViewData)
     })
 
-    it('should should return error page if there is an error saving the goal', async () => {
+    it('should return error page if there is an error saving the goal', async () => {
       const updatedGoal: NewGoal = {
         title: 'A new title for the test goal',
         areaOfNeed: testGoal.areaOfNeed.name,

@@ -34,9 +34,13 @@ export default class ChangeGoalController {
       const selectedAreaOfNeed = sortedAreasOfNeed.find(areaOfNeed => areaOfNeed.name === goal.areaOfNeed.name)
       const form = errors ? req.body : this.mapGoalToForm(goal)
 
+      const planUuid = req.services.sessionService.getPlanUUID()
+      const plan = await req.services.planService.getPlanByUuid(planUuid)
+
       return res.render('pages/change-goal', {
         locale: locale.en,
         data: {
+          planAgreementStatus: plan.agreementStatus,
           minimumDatePickerDate,
           sortedAreasOfNeed,
           selectedAreaOfNeed,

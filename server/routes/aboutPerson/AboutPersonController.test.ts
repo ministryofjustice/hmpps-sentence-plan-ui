@@ -26,6 +26,12 @@ jest.mock('../../services/sentence-plan/referentialDataService', () => {
   }))
 })
 
+jest.mock('../../services/sentence-plan/planService', () => {
+  return jest.fn().mockImplementation(() => ({
+    getPlanByUuid: jest.fn().mockResolvedValue(testPlan),
+  }))
+})
+
 jest.mock('../../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
     getPlanUUID: jest.fn().mockReturnValue(testPlan.uuid),
@@ -61,6 +67,7 @@ describe('AboutPersonController - assessment complete', () => {
       const payload = {
         locale: locale.en,
         data: {
+          planAgreementStatus: testPlan.agreementStatus,
           oasysReturnUrl,
           pageId: 'about',
           deliusData: popData,
@@ -87,6 +94,7 @@ describe('AboutPersonController - assessment complete', () => {
       const payload = {
         locale: locale.en,
         data: {
+          planAgreementStatus: testPlan.agreementStatus,
           oasysReturnUrl,
           pageId: 'about',
           deliusData: popData,
@@ -122,6 +130,7 @@ describe('AboutPersonController - assessment incomplete', () => {
       const payload = {
         locale: locale.en,
         data: {
+          planAgreementStatus: testPlan.agreementStatus,
           oasysReturnUrl,
           pageId: 'about',
           deliusData: popData,
@@ -150,6 +159,7 @@ describe('AboutPersonController - assessment incomplete', () => {
       const payload = {
         locale: locale.en,
         data: {
+          planAgreementStatus: testPlan.agreementStatus,
           oasysReturnUrl,
           pageId: 'about',
           deliusData: popData,

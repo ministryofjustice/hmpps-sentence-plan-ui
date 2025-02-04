@@ -103,7 +103,9 @@
           {%- elseif data.plan.agreementStatus === 'DO_NOT_AGREE' or data.plan.agreementStatus === 'COULD_NOT_ANSWER' %}
               {{ locale.notAgreePlan }}
           {%- endif %}
-          <a href="/plan-history" class="govuk-link govuk-link--no-visited-state">{{ locale.viewPlanHistory }}</a>
+          {%- if data.plan.agreementStatus !== 'DRAFT' %}
+              <a href="/plan-history" class="govuk-link govuk-link--no-visited-state">{{ locale.viewPlanHistory }}</a>
+          {%- endif %}
       {%- else %}
           {{ locale.addStepSuggestion }}
       {%- endif %}

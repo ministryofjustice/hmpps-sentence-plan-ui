@@ -52,6 +52,7 @@ describe('Remove Goal', () => {
   let next: NextFunction
   const viewData = {
     data: {
+      planAgreementStatus: testPlan.agreementStatus,
       form: {},
       returnLink: '',
       type: 'current',
@@ -98,6 +99,7 @@ describe('Test Removing Goal', () => {
   let next: NextFunction
   const viewData = {
     data: {
+      planAgreementStatus: agreedTestPlan.agreementStatus,
       form: {},
       returnLink: '',
       type: 'current',
