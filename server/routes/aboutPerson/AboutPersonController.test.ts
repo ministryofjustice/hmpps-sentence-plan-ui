@@ -2,6 +2,7 @@ import mockRes from '../../testutils/preMadeMocks/mockRes'
 import mockReq from '../../testutils/preMadeMocks/mockReq'
 import AboutPersonController from './AboutPersonController'
 import locale from './locale.json'
+import { areaConfigs } from './assessmentAreaConfig.json'
 import { AreaOfNeed } from '../../testutils/data/referenceData'
 import testPlan from '../../testutils/data/planData'
 import popData from '../../testutils/data/popData'
@@ -51,7 +52,7 @@ jest.mock('../../services/sentence-plan/infoService', () => {
 
 describe('AboutPersonController - assessment complete', () => {
   let controller: AboutPersonController
-  const assessmentAreas: AssessmentAreas = formatAssessmentData(crimNeedsSubset, assessmentData, locale.en.areas)
+  const assessmentAreas: AssessmentAreas = formatAssessmentData(crimNeedsSubset, assessmentData, areaConfigs)
 
   beforeEach(() => {
     controller = new AboutPersonController()
@@ -111,7 +112,7 @@ describe('AboutPersonController - assessment complete', () => {
 
 describe('AboutPersonController - assessment incomplete', () => {
   let controller: AboutPersonController
-  const assessmentAreas: AssessmentAreas = formatAssessmentData(crimNeedsMissing, assessmentData, locale.en.areas)
+  const assessmentAreas: AssessmentAreas = formatAssessmentData(crimNeedsMissing, assessmentData, areaConfigs)
 
   beforeEach(() => {
     controller = new AboutPersonController()
