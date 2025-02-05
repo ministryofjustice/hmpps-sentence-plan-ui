@@ -11,6 +11,8 @@ import { requireAccessMode } from '../../middleware/authorisationMiddleware'
 import { AccessMode } from '../../@types/Handover'
 import { HttpError } from '../../utils/HttpError'
 import { getDateOptions, getGoalTargetDate } from '../../utils/goalTargetDateUtils'
+import { areaConfigs } from '../../utils/assessmentAreaConfig.json'
+import { AssessmentAreaConfig } from '../../@types/Assessment'
 
 export default class CreateGoalController {
   constructor(private readonly referentialDataService: ReferentialDataService) {}
@@ -50,22 +52,42 @@ export default class CreateGoalController {
       const planUuid = req.services.sessionService.getPlanUUID()
       const plan = await req.services.planService.getPlanByUuid(planUuid)
 
+      const assessmentResponse = await req.services.assessmentService.getAssessmentByUuid(planUuid)
+      const assessmentData = assessmentResponse.sanAssessmentData
+
+      // 2. look up the is_complete field for this area of need
+      const areaConfig: AssessmentAreaConfig = areaConfigs.find(config => config.area === selectedAreaOfNeed?.name)
+      const assessmentAreaIsComplete = assessmentData[`${areaConfig.assessmentKey}_section_complete`].value === 'YES'
+
+      // 3. pass through just that field to the view
+
+      // 3a. get values from other required fields
+      // 3b. add field values to new assessmentArea object
+      // 3c. pass through object to the view
+
+      // 4. extract this to a function in a new class
+      // 5. write a test for the new class
+      // 6. write a cypress test for the view
+      // 7. think about what to do for test data variations
+
       req.services.sessionService.setReturnLink(null)
 
-      return res.render('pages/create-goal', {
-        locale: locale.en,
-        data: {
-          planAgreementStatus: plan.agreementStatus,
-          areasOfNeed,
-          sortedAreasOfNeed,
-          selectedAreaOfNeed,
-          dateOptions,
-          minimumDatePickerDate,
-          returnLink: `/plan?type=${type}`,
-          form: req.body,
-        },
-        errors,
-      })
+    return res.render('pages/create-goal', {
+      locale: locale.en,
+      data: {
+        planAgreementStatus: plan.agreementStatus,
+        areasOfNeed,
+        sortedAreasOfNeed,
+        selectedAreaOfNeed,
+        dateOptions,
+        minimumDatePickerDate,
+        assessmentAreaIsComplete,
+        returnLink: `/plan?type=${type}`,
+        form: req.body,
+      },
+      errors,
+    })
+
     } catch (e) {
       return next(HttpError(500, e.message))
     }

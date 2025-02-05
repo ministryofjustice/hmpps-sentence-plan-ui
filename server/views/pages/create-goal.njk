@@ -4,6 +4,7 @@
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 {% from "moj/components/side-navigation/macro.njk" import mojSideNavigation %}
 {% from "moj/components/date-picker/macro.njk" import mojDatePicker %}
 {% from "../components/error-summary/error-summary.njk" import errorSummary %}
@@ -61,6 +62,14 @@
                 errors: errors,
                 locale: locale
             }) }}
+
+            {% if data.assessmentAreaIsComplete != true %}
+              {{ govukWarningText({
+                text: locale.common.assessmentInfo.assessmentIncomplete,
+                iconFallbackText: "Warning"
+              }) }}
+              {# TODO still need to handle when there is no data at all #}
+            {% endif %}
 
             <span class="govuk-caption-l">{{ locale.mainHeading.caption }}</span>
             <h1 class="govuk-heading-l">{{ locale.mainHeading.title }}</h1>
