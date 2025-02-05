@@ -18,6 +18,7 @@ export default class AboutPersonController {
       const criminogenicNeedsData = req.services.sessionService.getCriminogenicNeeds()
       const assessmentData = await req.services.assessmentService.getAssessmentByUuid(planUuid)
       const errorMessages = []
+      const plan = await req.services.planService.getPlanByUuid(planUuid)
 
       if (assessmentData === null) {
         errorMessages.push('noAssessmentDataFound')
@@ -44,6 +45,7 @@ export default class AboutPersonController {
       return res.render(returnPage, {
         locale: locale.en,
         data: {
+          planAgreementStatus: plan.agreementStatus,
           oasysReturnUrl,
           pageId,
           deliusData,

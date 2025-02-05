@@ -14,6 +14,7 @@ describe('View Plan Overview for READ_WRITE user', () => {
 
   it('Should have a Create goal button and it should take to create goal', () => {
     cy.visit('/plan')
+    cy.get('.moj-primary-navigation__container').should('not.contain', `Plan history`)
     cy.contains('a', 'Create goal').click()
     cy.url().should('include', '/create-goal/')
     cy.checkAccessibility()

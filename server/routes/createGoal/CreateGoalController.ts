@@ -36,31 +36,39 @@ export default class CreateGoalController {
   }
 
   private render = async (req: Request, res: Response, next: NextFunction) => {
-    const { errors } = req
-    const type = req.query?.type ?? 'current'
+    try {
+      const { errors } = req
+      const type = req.query?.type ?? 'current'
 
-    const areasOfNeed = this.referentialDataService.getAreasOfNeed()
-    const sortedAreasOfNeed = this.referentialDataService.getSortedAreasOfNeed()
+      const areasOfNeed = this.referentialDataService.getAreasOfNeed()
+      const sortedAreasOfNeed = this.referentialDataService.getSortedAreasOfNeed()
 
-    const dateOptions = getDateOptions()
-    const selectedAreaOfNeed = areasOfNeed.find(areaOfNeed => areaOfNeed.url === req.params.areaOfNeed)
-    const minimumDatePickerDate = formatDateWithStyle(new Date().toISOString(), 'short')
+      const dateOptions = getDateOptions()
+      const selectedAreaOfNeed = areasOfNeed.find(areaOfNeed => areaOfNeed.url === req.params.areaOfNeed)
+      const minimumDatePickerDate = formatDateWithStyle(new Date().toISOString(), 'short')
 
-    req.services.sessionService.setReturnLink(null)
+      const planUuid = req.services.sessionService.getPlanUUID()
+      const plan = await req.services.planService.getPlanByUuid(planUuid)
 
-    return res.render('pages/create-goal', {
-      locale: locale.en,
-      data: {
-        areasOfNeed,
-        sortedAreasOfNeed,
-        selectedAreaOfNeed,
-        dateOptions,
-        minimumDatePickerDate,
-        returnLink: `/plan?type=${type}`,
-        form: req.body,
-      },
-      errors,
-    })
+      req.services.sessionService.setReturnLink(null)
+
+      return res.render('pages/create-goal', {
+        locale: locale.en,
+        data: {
+          planAgreementStatus: plan.agreementStatus,
+          areasOfNeed,
+          sortedAreasOfNeed,
+          selectedAreaOfNeed,
+          dateOptions,
+          minimumDatePickerDate,
+          returnLink: `/plan?type=${type}`,
+          form: req.body,
+        },
+        errors,
+      })
+    } catch (e) {
+      return next(HttpError(500, e.message))
+    }
   }
 
   private processGoalData(body: any) {

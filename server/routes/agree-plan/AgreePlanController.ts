@@ -13,19 +13,27 @@ import { AccessMode } from '../../@types/Handover'
 import { HttpError } from '../../utils/HttpError'
 
 export default class AgreePlanController {
-  private render = async (req: Request, res: Response) => {
-    const { errors } = req
+  private render = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { errors } = req
 
-    const returnLink = req.services.sessionService.getReturnLink()
+      const returnLink = req.services.sessionService.getReturnLink()
 
-    return res.render('pages/agree-plan', {
-      locale: locale.en,
-      data: {
-        returnLink,
-        form: req.body,
-      },
-      errors,
-    })
+      const planUuid = req.services.sessionService.getPlanUUID()
+      const plan = await req.services.planService.getPlanByUuid(planUuid)
+
+      return res.render('pages/agree-plan', {
+        locale: locale.en,
+        data: {
+          planAgreementStatus: plan.agreementStatus,
+          returnLink,
+          form: req.body,
+        },
+        errors,
+      })
+    } catch (e) {
+      return next(HttpError(500, e.message))
+    }
   }
 
   private agreePlanAndRedirect = async (req: Request, res: Response, next: NextFunction) => {
@@ -90,7 +98,7 @@ export default class AgreePlanController {
 
     if (hasErrors) {
       if (req.method === 'POST') {
-        return this.render(req, res)
+        return this.render(req, res, next)
       }
 
       return res.redirect(URLs.PLAN_OVERVIEW)

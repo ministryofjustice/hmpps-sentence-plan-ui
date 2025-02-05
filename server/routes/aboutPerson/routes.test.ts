@@ -29,6 +29,12 @@ jest.mock('../../services/sentence-plan/infoService', () => {
   }))
 })
 
+jest.mock('../../services/sentence-plan/planService', () => {
+  return jest.fn().mockImplementation(() => ({
+    getPlanByUuid: jest.fn().mockResolvedValue(testPlan),
+  }))
+})
+
 jest.mock('../../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
     getPlanUUID: jest.fn().mockReturnValue(testPlan.uuid),

@@ -11,6 +11,7 @@ import CreateGoalPostModel from './models/CreateGoalPostModel'
 import URLs from '../URLs'
 import { testGoal, testNewGoal } from '../../testutils/data/goalData'
 import runMiddlewareChain from '../../testutils/runMiddlewareChain'
+import testPlan from '../../testutils/data/planData'
 
 jest.mock('../../middleware/authorisationMiddleware', () => ({
   requireAccessMode: jest.fn(() => (req: Request, res: Response, next: NextFunction) => {
@@ -39,6 +40,12 @@ jest.mock('../../services/sentence-plan/goalService', () => {
   }))
 })
 
+jest.mock('../../services/sentence-plan/planService', () => {
+  return jest.fn().mockImplementation(() => ({
+    getPlanByUuid: jest.fn().mockResolvedValue(testPlan),
+  }))
+})
+
 describe('CreateGoalController', () => {
   let controller: CreateGoalController
   let mockReferentialDataService: jest.Mocked<ReferentialDataService>
@@ -47,6 +54,7 @@ describe('CreateGoalController', () => {
   let next: NextFunction
   const viewData = {
     data: {
+      planAgreementStatus: testPlan.agreementStatus,
       returnLink: '/plan?type=current',
       areasOfNeed: AreaOfNeed,
       sortedAreasOfNeed: AreaOfNeed,

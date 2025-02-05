@@ -46,6 +46,7 @@ export default class RemoveGoalController {
       return res.render('pages/remove-goal', {
         locale: localeType,
         data: {
+          planAgreementStatus: plan.agreementStatus,
           form: req.body,
           type,
           goal,
