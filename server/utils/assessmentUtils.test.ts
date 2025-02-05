@@ -2,11 +2,11 @@ import {
   assessmentData,
   assessmentDataNoAssessments,
   assessmentUndefined,
-  crimNeedsSubset,
   crimNeedsOrdered,
+  crimNeedsSubset,
 } from '../testutils/data/assessmentData'
 import commonLocale from './commonLocale.json'
-import locale from '../routes/aboutPerson/locale.json'
+import { areaConfigs } from '../routes/aboutPerson/assessmentAreaConfig.json'
 import {
   AssessmentArea,
   AssessmentAreaConfig,
@@ -27,7 +27,7 @@ describe('format assessment data', () => {
     [
       crimNeedsSubset,
       assessmentUndefined,
-      locale.en.areas,
+      areaConfigs,
       {
         highScoring: [],
         lowScoring: [],
@@ -38,7 +38,7 @@ describe('format assessment data', () => {
     [
       crimNeedsSubset,
       null,
-      locale.en.areas,
+      areaConfigs,
       {
         highScoring: [],
         lowScoring: [],
@@ -49,7 +49,7 @@ describe('format assessment data', () => {
     [
       crimNeedsSubset,
       assessmentDataNoAssessments,
-      locale.en.areas,
+      areaConfigs,
       {
         highScoring: [
           {
@@ -144,7 +144,7 @@ describe('format assessment data', () => {
     [
       crimNeedsSubset,
       assessmentData,
-      locale.en.areas,
+      areaConfigs,
       {
         highScoring: [
           {
@@ -242,7 +242,7 @@ describe('format assessment data', () => {
     [
       crimNeedsOrdered,
       assessmentDataNoAssessments,
-      locale.en.areas,
+      areaConfigs,
       {
         highScoring: [
           {
