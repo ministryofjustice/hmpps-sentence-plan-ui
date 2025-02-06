@@ -13,6 +13,7 @@ const mockGetPlanUUID = jest.fn().mockReturnValue(testPlan.uuid)
 const mockSessionService = jest.fn().mockImplementation(() => ({
   getPlanUUID: mockGetPlanUUID,
   getReturnLink: jest.fn().mockReturnValue(''),
+  setReturnLink: jest.fn(),
 }))
 
 jest.mock('../../middleware/authorisationMiddleware', () => ({
@@ -52,6 +53,7 @@ describe('Remove Goal', () => {
   let next: NextFunction
   const viewData = {
     data: {
+      planAgreementStatus: testPlan.agreementStatus,
       form: {},
       returnLink: '',
       type: 'current',
@@ -98,6 +100,7 @@ describe('Test Removing Goal', () => {
   let next: NextFunction
   const viewData = {
     data: {
+      planAgreementStatus: agreedTestPlan.agreementStatus,
       form: {},
       returnLink: '',
       type: 'current',

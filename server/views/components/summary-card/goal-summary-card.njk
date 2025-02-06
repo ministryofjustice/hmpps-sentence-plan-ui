@@ -40,6 +40,8 @@
             <div class="goal-date-and-notes">
             {% if params.goal.targetDate and params.goal.status != "ACHIEVED" and params.goal.status != "REMOVED" %}
                 <p>{{ locale.info.aimToAchieveDate }}</p>
+            {% elif params.goal.status == "ACHIEVED" %}
+                <p>{{ locale.info.achievedDate }}</p>
             {% elif params.goal.status == "REMOVED" %}
                 <p>{{ locale.info.removedDate }}</p>
                 {% set removedNoteDisplayed = false %}
@@ -49,9 +51,6 @@
                     {% set removedNoteDisplayed = true %}
                     {% endif %}
                 {% endfor %}
-            {% endif %}
-            {% if params.goal.status == "ACHIEVED" %}
-                <p>{{ locale.info.goallastStatusChangeDate }}</p>
             {% endif %}
             </div>
         </div>

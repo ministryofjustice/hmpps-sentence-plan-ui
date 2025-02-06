@@ -13,6 +13,7 @@ import setupAgreePlanRoutes from './agree-plan/routes'
 import URLs from './URLs'
 import setupAddStepsRoutes from './add-steps/routes'
 import setupAchieveGoalRoutes from './achieveGoal/routes'
+import setupConfirmAchieveGoalRoutes from './confirmAchieveGoal/routes'
 import setupUpdateGoalRoutes from './update-goal/routes'
 import setupViewGoalDetailsRoutes from './viewGoalDetails/routes'
 import setupPlanHistoryRoutes from './plan-history/routes'
@@ -36,6 +37,7 @@ export default function routes(services: Services): Router {
   setupChangeGoalRoutes(router, services)
   setupViewGoalDetailsRoutes(router)
   setupAchieveGoalRoutes(router)
+  setupConfirmAchieveGoalRoutes(router)
   setupAddStepsRoutes(router)
   setupUpdateGoalRoutes(router, services)
   setupReferenceDataRoutes(router, services)

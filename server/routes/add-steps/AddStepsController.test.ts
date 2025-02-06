@@ -10,6 +10,7 @@ import runMiddlewareChain from '../../testutils/runMiddlewareChain'
 import { toKebabCase } from '../../utils/utils'
 import URLs from '../URLs'
 import { StepStatus } from '../../@types/StepType'
+import testPlan from '../../testutils/data/planData'
 
 jest.mock('../../middleware/authorisationMiddleware', () => ({
   requireAccessMode: jest.fn(() => (req: Request, res: Response, next: NextFunction) => {
@@ -39,6 +40,12 @@ jest.mock('../../services/sessionService', () => {
   }))
 })
 
+jest.mock('../../services/sentence-plan/planService', () => {
+  return jest.fn().mockImplementation(() => ({
+    getPlanByUuid: jest.fn().mockResolvedValue(testPlan),
+  }))
+})
+
 jest.mock('../../services/sentence-plan/goalService', () => {
   return jest.fn().mockImplementation(() => ({
     getGoal: jest.fn().mockResolvedValue(testGoal),
@@ -54,6 +61,7 @@ describe('AddStepsController', () => {
   const viewData = {
     locale: locale.en,
     data: {
+      planAgreementStatus: testPlan.agreementStatus,
       popData: handoverData.subject,
       areaOfNeed: toKebabCase(testGoal.areaOfNeed.name),
       goal: testGoal,
@@ -232,6 +240,7 @@ describe('AddStepsController', () => {
       const expectedViewData = {
         locale: locale.en,
         data: {
+          planAgreementStatus: testPlan.agreementStatus,
           popData: viewData.data.popData,
           areaOfNeed: viewData.data.areaOfNeed,
           goal: viewData.data.goal,

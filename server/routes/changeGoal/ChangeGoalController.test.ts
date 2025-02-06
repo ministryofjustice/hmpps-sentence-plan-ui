@@ -56,6 +56,7 @@ describe('ChangeGoalController', () => {
   let next: NextFunction
   const viewData = {
     data: {
+      planAgreementStatus: testPlan.agreementStatus,
       sortedAreasOfNeed: AreaOfNeed,
       returnLink: '/some-return-link',
       form: {},
@@ -300,7 +301,7 @@ describe('ChangeGoalController', () => {
       await runMiddlewareChain(controller.post, req, res, next)
 
       expect(req.services.goalService.replaceGoal).toHaveBeenCalledWith(updatedGoal, testGoal.uuid)
-      expect(res.redirect).toHaveBeenCalledWith(`/plan?status=updated&type=current`)
+      expect(res.redirect).toHaveBeenCalledWith(`/plan?status=changed&type=current`)
       expect(res.render).not.toHaveBeenCalled()
       expect(next).not.toHaveBeenCalled()
     })
@@ -322,7 +323,7 @@ describe('ChangeGoalController', () => {
       expect(res.render).toHaveBeenCalledWith('pages/change-goal', expectedViewData)
     })
 
-    it('should should return error page if there is an error saving the goal', async () => {
+    it('should return error page if there is an error saving the goal', async () => {
       const updatedGoal: NewGoal = {
         title: 'A new title for the test goal',
         areaOfNeed: testGoal.areaOfNeed.name,
