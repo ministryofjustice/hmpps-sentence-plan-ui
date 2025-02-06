@@ -144,10 +144,22 @@
                 }) }}
             {% endif %}
 
-            {% if data.status and data.status in ['added', 'changed', 'removed', 'deleted', 'achieved'] %}
+            {% if data.status and data.status in ['added', 'changed', 'goal', 'removed', 'deleted', 'achieved'] %}
                 {{ mojBanner({
                     type: 'success',
                     text: locale.notificationBanner[data.status+'Goal'],
+                    iconFallbackText: 'Success'
+                }) }}
+            {% elif data.status and data.status in ['added', 'changed', 'steps'] %}
+                {{ mojBanner({
+                    type: 'success',
+                    text: locale.notificationBanner[data.status+'Steps'],
+                    iconFallbackText: 'Success'
+                }) }}
+            {% elif data.status and data.status in ['added', 'goal', 'steps'] %}
+                {{ mojBanner({
+                    type: 'success',
+                    text: locale.notificationBanner[data.status+'GoalSteps'],
                     iconFallbackText: 'Success'
                 }) }}
             {% endif %}
