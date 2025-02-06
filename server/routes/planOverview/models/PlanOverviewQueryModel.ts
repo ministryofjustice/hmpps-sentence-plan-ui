@@ -13,6 +13,8 @@ enum StatusTypes {
   REMOVED = 'removed',
   DELETED = 'deleted',
   ACHIEVED = 'achieved',
+  STEPS = 'steps',
+  GOAL = 'goal',
 }
 
 export default class PlanOverviewQueryModel {
