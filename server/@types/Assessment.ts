@@ -13,7 +13,7 @@ export interface AssessmentArea {
   riskOfSeriousHarmDetails?: string
   linkedToHarm: string
   riskOfReoffendingDetails?: string
-  isMissingInformation: boolean
+  isAssessmentSectionComplete: boolean
   linkedtoReoffending: string
   motivationToMakeChanges?: string
   linkedtoStrengthsOrProtectiveFactors: string
@@ -25,11 +25,14 @@ export interface AssessmentArea {
   criminogenicNeedMissing?: boolean
 }
 
-export interface AssessmentAreas {
-  lowScoring: AssessmentArea[]
-  highScoring: AssessmentArea[]
-  other: AssessmentArea[]
+export interface FormattedAssessment {
+  isAssessmentComplete: boolean
   versionUpdatedAt?: string
+  areas: {
+    lowScoring: AssessmentArea[]
+    highScoring: AssessmentArea[]
+    other: AssessmentArea[]
+  }
 }
 
 export interface AssessmentAreaConfig {
