@@ -7,8 +7,9 @@ orbs:
 
 not-test-cypress-split: &not-test-cypress-split
   filters:
-    ignore:
-      - test-cypress-split
+    branches:
+      ignore:
+        - test-cypress-split
 
 parameters:
   alerts-slack-channel:
