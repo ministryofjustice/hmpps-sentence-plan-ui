@@ -24,6 +24,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+        run: |
+          npm i
+
       - name: Bring up environment
         run: |
           make test-up
@@ -35,7 +43,8 @@ jobs:
           SPLIT: ${{ strategy.job-total }}
           SPLIT_INDEX: ${{ strategy.job-index }}
 
-      - name: Archive production artifacts
+      - name: Archive screenshots
+        if: success() || failure()
         uses: actions/upload-artifact@v4
         with:
           name: screenshots
