@@ -19,10 +19,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        containers: [1, 2, 3]
+        containers: [1]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Bring up environment
+        run: |
+          make test-up
 
       - name: Run split Cypress tests
         run: |
