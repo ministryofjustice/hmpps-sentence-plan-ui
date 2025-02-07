@@ -43,17 +43,13 @@ jobs:
           SPLIT: ${{ strategy.job-total }}
           SPLIT_INDEX: ${{ strategy.job-index }}
 
-      - name: ls
-        if: success() || failure()
-        run: ls -R
-
       - name: Archive screenshots
         if: success() || failure()
         uses: actions/upload-artifact@v4
         with:
           name: screenshots
           path: |
-            /integration_tests/screenshots/
+            /integration_tests/screenshots/**/*
 
       - name: Bring down environment
         if: success() || failure()
