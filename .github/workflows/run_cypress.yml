@@ -43,7 +43,9 @@ jobs:
           SPLIT: ${{ strategy.job-total }}
           SPLIT_INDEX: ${{ strategy.job-index }}
 
-      - run: ls -R
+      - name: ls
+        if: success() || failure()
+        run: ls -R
 
       - name: Archive screenshots
         if: success() || failure()
