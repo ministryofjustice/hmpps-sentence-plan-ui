@@ -1,6 +1,10 @@
 name: Parallel Cypress Tests
 
-on: [push]
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - 'test-cypress-split'
 
 jobs:
   test:
