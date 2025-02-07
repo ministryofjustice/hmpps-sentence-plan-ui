@@ -49,7 +49,7 @@ jobs:
         with:
           name: screenshots
           path: |
-            /integration_tests/integration_tests/screenshots/
+            /integration_tests/screenshots/
 
       - name: Bring down environment
         run: |
