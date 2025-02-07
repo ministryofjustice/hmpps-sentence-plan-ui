@@ -13,6 +13,7 @@ import { testGoal, testNewGoal } from '../../testutils/data/goalData'
 import runMiddlewareChain from '../../testutils/runMiddlewareChain'
 import testPlan from '../../testutils/data/planData'
 import { assessmentDataNoAssessments, crimNeedsSubset } from '../../testutils/data/assessmentData'
+import { crimNeedsSubset, incompleteAssessmentData } from '../../testutils/data/testAssessmentData'
 
 jest.mock('../../middleware/authorisationMiddleware', () => ({
   requireAccessMode: jest.fn(() => (req: Request, res: Response, next: NextFunction) => {
@@ -38,7 +39,7 @@ jest.mock('../../services/sessionService', () => {
 
 jest.mock('../../services/sentence-plan/assessmentService', () => {
   return jest.fn().mockImplementation(() => ({
-    getAssessmentByUuid: jest.fn().mockReturnValue(assessmentDataNoAssessments),
+    getAssessmentByUuid: jest.fn().mockReturnValue(incompleteAssessmentData),
   }))
 })
 
@@ -70,7 +71,8 @@ describe('CreateGoalController', () => {
       selectedAreaOfNeed: AreaOfNeed.find(x => x.url === 'accommodation'),
       minimumDatePickerDate: '01/01/2024',
       assessmentAreaInfo: {
-        assessmentAreaIsComplete: false,
+        assessmentAreaIsComplete: true,
+        motivationToMakeChanges: 'thinkingAboutMakingChanges',
         linkedToHarm: 'no',
         linkedtoReoffending: 'yes',
         linkedtoStrengthsOrProtectiveFactors: 'no',

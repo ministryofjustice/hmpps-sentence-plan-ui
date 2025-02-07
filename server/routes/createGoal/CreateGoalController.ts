@@ -80,11 +80,6 @@ export default class CreateGoalController {
         strengthsOrProtectiveFactorsDetails: assessmentDetails.strengthsOrProtectiveFactorsDetails,
       }
 
-      // _section_complete
-      // 3c. pass through object to the view
-
-      // 4. extract this to a function in a new class
-      // 5. write a test for the new class
       // 6. write a cypress test for the view
       // 7. think about what to do for test data variations
 
