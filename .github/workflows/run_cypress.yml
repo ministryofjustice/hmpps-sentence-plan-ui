@@ -49,4 +49,8 @@ jobs:
         with:
           name: screenshots
           path: |
-            /integration_tests/integration_tests/screenshots/**/*.png
+            /integration_tests/integration_tests/screenshots/
+
+      - name: Bring down environment
+        run: |
+          make test-down
