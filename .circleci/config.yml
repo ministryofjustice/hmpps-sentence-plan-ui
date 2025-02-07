@@ -118,6 +118,9 @@ workflows:
           filters:
             tags:
               ignore: /.*/
+            branches:
+              ignore:
+                - test-cypress-split
       - unit_test:
           <<: *not-test-cypress-split
           requires:
