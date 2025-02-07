@@ -1,11 +1,11 @@
 {
   "en": {
     "page": {
-      "title": "Add steps to goal - {{ applicationName }}",
-      "errorTitle": "Error: Add steps to goal - {{ applicationName }}"
+      "title": "Add or change steps - {{ applicationName }}",
+      "errorTitle": "Error: Add or change steps - {{ applicationName }}"
     },
     "mainHeading": {
-      "title": "Add steps to {{ subject.possessiveName }} goal",
+      "title": "Add or change steps to {{ subject.possessiveName }} goal",
       "caption": "{{ goal.title }}"
     },
     "step": {
@@ -15,7 +15,7 @@
         "autocompleteHint": "Select a suggested step or enter your own."
       },
       "actor": {
-        "label": "Who will do this step?",
+        "label": "Who will do the step?",
         "hint": "Add one person or agency.",
         "options": [
           "Choose someone",
@@ -34,7 +34,7 @@
     "clearStepLinkButton": "Clear",
     "errors": {
       "step-description": {
-        "isNotEmpty": "Select or enter what they should do to achieve the goal.",
+        "isNotEmpty": "Enter what they should do to achieve the goal",
         "maxLength": "What they should do to achieve the goal must be 4,000 characters or less"
       },
       "step-actor": {
