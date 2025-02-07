@@ -24,9 +24,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Bring up environment
-        run: |
-          make test-up
+#      - name: Bring up environment
+#        run: |
+#          make test-up
 
       - name: Run split Cypress tests
         run: |
