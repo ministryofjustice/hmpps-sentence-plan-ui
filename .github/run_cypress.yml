@@ -2,9 +2,6 @@ name: Parallel Cypress Tests
 
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - 'test-cypress-split'
 
 jobs:
   test:
@@ -15,7 +12,6 @@ jobs:
         options: --privileged --shm-size=2g
         volumes:
           - /var/run/docker.sock:/var/run/docker.sock:ro
-
     name: Cypress run
     strategy:
       fail-fast: false
