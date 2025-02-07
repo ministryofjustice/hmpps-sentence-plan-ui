@@ -47,7 +47,7 @@ jobs:
         if: success() || failure()
         uses: actions/upload-artifact@v4
         with:
-          name: screenshots
+          name: screenshots_${{ matrix.step }}
           path: |
             ./integration_tests/screenshots/**/*
 
