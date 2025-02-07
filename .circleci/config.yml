@@ -5,6 +5,11 @@ orbs:
   slack: circleci/slack@4.12.5
   mem: circleci/rememborb@0.0.2
 
+not-test-cypress-split: &not-test-cypress-split
+  filters:
+    ignore:
+      - test-cypress-split
+
 parameters:
   alerts-slack-channel:
     type: string
@@ -113,11 +118,14 @@ workflows:
             tags:
               ignore: /.*/
       - unit_test:
+          <<: *not-test-cypress-split
           requires:
             - lint
       - hmpps/helm_lint:
+          <<: *not-test-cypress-split
           name: helm_lint
       - hmpps/build_docker:
+          <<: *not-test-cypress-split
           name: build_docker
           publish: false
           persist_container_image: true
@@ -126,6 +134,7 @@ workflows:
           pipeline_number: << pipeline.number >>
           context: hmpps-common-vars
       - e2e_test:
+          <<: *not-test-cypress-split
           context: hmpps-common-vars
           requires:
             - build_docker
