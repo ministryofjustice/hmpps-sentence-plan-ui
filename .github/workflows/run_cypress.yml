@@ -24,10 +24,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Install Docker
-        run: |
-          apt-get update
-          apt-get install -y docker.io
+#      - name: Install Docker
+#        run: |
+#          apt-get update
+#          apt-get install -y docker.io
 
       - name: Run split Cypress tests
         run: |
