@@ -115,13 +115,29 @@ describe('Update goal', () => {
       cy.checkAccessibility()
     })
 
-    it('Updating all step status to complete and saving goes to the achieve goal page', () => {
+    it('Updating all step status to complete and saving goes to the achieve goal page, and updates the step counter', () => {
       cy.get<Goal>('@goalForNow').then(goal => {
         cy.visit(`/update-goal-steps/${goal.uuid}`)
         cy.get('#step-status-1').select('Completed')
         cy.get('.govuk-button').contains('Save goal and steps').click()
         cy.url().should('include', `/confirm-if-achieved/${goal.uuid}`)
       })
+      cy.get('.step-counter').contains('1 out of 1 step completed.')
+      cy.checkAccessibility()
+    })
+
+    it('Check compacted steps list link displays', () => {
+      cy.get<Goal>('@goalForNow').then(goal => {
+        cy.visit(`/update-goal-steps/${goal.uuid}`)
+        cy.get('#step-status-1').select('Completed')
+        cy.get('.govuk-button').contains('Save goal and steps').click()
+        cy.url().should('include', `/confirm-if-achieved/${goal.uuid}`)
+      })
+
+      cy.get('.govuk-table__head > .govuk-table__row > :nth-child(1)')
+        .should('have.text', 'Who will do this')
+        .parents('.govuk-details')
+        .should('exist')
       cy.checkAccessibility()
     })
 

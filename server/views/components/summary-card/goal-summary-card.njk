@@ -62,7 +62,13 @@
               {% set completedCount = completedCount + 1 %}
             {% endif %}
           {% endfor %}
-          {{ completedCount }}{{ locale.info.stepsCompleted }}
+          <div class="step-counter">
+            {% if params.goal.steps.length == 1 %}
+              {{ completedCount }}{{ locale.info.stepsCompletedSingular }}
+            {% else %}
+              {{ completedCount }}{{ locale.info.stepsCompletedPlural }}
+            {% endif %}
+          </div>
           <details class="govuk-details">
                 <summary class="govuk-details__summary">
                   <span class="govuk-details__summary-text">

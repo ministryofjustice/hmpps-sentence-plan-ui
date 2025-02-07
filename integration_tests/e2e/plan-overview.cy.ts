@@ -27,6 +27,7 @@ describe('View Plan Overview for READ_WRITE user', () => {
 
   it('Should not have `Agreed/Last updated/Created` text when Plan is not Agreed', () => {
     cy.visit('/plan')
+    cy.get('.back-to-top-link').should('not.exist')
     cy.get('.govuk-grid-column-full').should('not.contain', 'agreed to their plan on')
     cy.get('.govuk-grid-column-full').should('not.contain', 'Last updated')
     cy.get('.govuk-grid-column-full').should('not.contain', 'Plan created on')
@@ -38,6 +39,20 @@ describe('View Plan Overview for READ_WRITE user', () => {
     })
 
     cy.get('.govuk-grid-column-full').should('not.contain', 'Last updated')
+  })
+
+  it('Should only display back to top link when a current goal is present', () => {
+    cy.visit('/plan')
+    cy.get('.back-to-top-link').should('not.exist')
+
+    // also create a Goal and make sure the text still does not appear
+    cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
+      cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal({ title: 'Test Accommodation' }))
+      cy.visit('/plan')
+    })
+
+    cy.get('.moj-sub-navigation__list').should('contain', 'Goals to work on now (1)')
+    cy.get('.back-to-top-link').should('have.attr', 'href', '#top')
   })
 
   it('Should have text saying no goals to work on now on Goals for now tab', () => {
