@@ -12,14 +12,14 @@ jobs:
     services:
       docker:
         image: docker:dind
-        options: --privileged --shm-size=2g
+        options: --privileged --shm-size=4g
         volumes:
           - /var/run/docker.sock:/var/run/docker.sock:ro
     name: Cypress run
     strategy:
       fail-fast: false
       matrix:
-        containers: [1]
+        containers: [1, 2, 3]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
