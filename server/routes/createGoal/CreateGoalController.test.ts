@@ -12,6 +12,7 @@ import URLs from '../URLs'
 import { testGoal, testNewGoal } from '../../testutils/data/goalData'
 import runMiddlewareChain from '../../testutils/runMiddlewareChain'
 import testPlan from '../../testutils/data/planData'
+import { assessmentDataNoAssessments, crimNeedsSubset } from '../../testutils/data/assessmentData'
 
 jest.mock('../../middleware/authorisationMiddleware', () => ({
   requireAccessMode: jest.fn(() => (req: Request, res: Response, next: NextFunction) => {
@@ -29,8 +30,15 @@ jest.mock('../../services/sentence-plan/referentialDataService', () => {
 jest.mock('../../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
     getPlanUUID: jest.fn().mockReturnValue('some-plan-uuid'),
+    getCriminogenicNeeds: jest.fn().mockReturnValue(crimNeedsSubset),
     getReturnLink: jest.fn().mockReturnValue('/some-return-link'),
     setReturnLink: jest.fn(),
+  }))
+})
+
+jest.mock('../../services/sentence-plan/assessmentService', () => {
+  return jest.fn().mockImplementation(() => ({
+    getAssessmentByUuid: jest.fn().mockReturnValue(assessmentDataNoAssessments),
   }))
 })
 
@@ -61,6 +69,12 @@ describe('CreateGoalController', () => {
       form: {},
       selectedAreaOfNeed: AreaOfNeed.find(x => x.url === 'accommodation'),
       minimumDatePickerDate: '01/01/2024',
+      assessmentAreaInfo: {
+        assessmentAreaIsComplete: false,
+        linkedToHarm: 'no',
+        linkedtoReoffending: 'yes',
+        linkedtoStrengthsOrProtectiveFactors: 'no',
+      },
       dateOptions: [
         new Date('2024-04-01T00:00:00.000Z'),
         new Date('2024-07-01T00:00:00.000Z'),

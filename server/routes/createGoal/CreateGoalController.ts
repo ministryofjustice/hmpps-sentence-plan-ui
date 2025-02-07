@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import ReferentialDataService from '../../services/sentence-plan/referentialDataService'
 import locale from './locale.json'
+
 import URLs from '../URLs'
 import { NewGoal } from '../../@types/NewGoalType'
 import { formatDateWithStyle } from '../../utils/utils'
@@ -13,6 +14,7 @@ import { HttpError } from '../../utils/HttpError'
 import { getDateOptions, getGoalTargetDate } from '../../utils/goalTargetDateUtils'
 import { areaConfigs } from '../../utils/assessmentAreaConfig.json'
 import { AssessmentAreaConfig } from '../../@types/Assessment'
+import { getAssessmentDetailsForArea } from '../../utils/assessmentUtils'
 
 export default class CreateGoalController {
   constructor(private readonly referentialDataService: ReferentialDataService) {}
@@ -49,6 +51,9 @@ export default class CreateGoalController {
       const selectedAreaOfNeed = areasOfNeed.find(areaOfNeed => areaOfNeed.url === req.params.areaOfNeed)
       const minimumDatePickerDate = formatDateWithStyle(new Date().toISOString(), 'short')
 
+      // todo
+      // 1. get assessment data in the same way as aboutperson
+      const criminogenicNeedsData = req.services.sessionService.getCriminogenicNeeds()
       const planUuid = req.services.sessionService.getPlanUUID()
       const plan = await req.services.planService.getPlanByUuid(planUuid)
 
@@ -59,10 +64,23 @@ export default class CreateGoalController {
       const areaConfig: AssessmentAreaConfig = areaConfigs.find(config => config.area === selectedAreaOfNeed?.name)
       const assessmentAreaIsComplete = assessmentData[`${areaConfig.assessmentKey}_section_complete`].value === 'YES'
 
-      // 3. pass through just that field to the view
-
       // 3a. get values from other required fields
+      const assessmentDetails = getAssessmentDetailsForArea(criminogenicNeedsData, areaConfig, assessmentData)
+
       // 3b. add field values to new assessmentArea object
+      // make sure this is assessment section not whole section
+      const assessmentAreaInfo = {
+        assessmentAreaIsComplete,
+        linkedToHarm: assessmentDetails.linkedToHarm,
+        linkedtoReoffending: assessmentDetails.linkedtoReoffending,
+        linkedtoStrengthsOrProtectiveFactors: assessmentDetails.linkedtoStrengthsOrProtectiveFactors,
+        riskOfSeriousHarmDetails: assessmentDetails.riskOfSeriousHarmDetails,
+        riskOfReoffendingDetails: assessmentDetails.riskOfReoffendingDetails,
+        motivationToMakeChanges: assessmentDetails.motivationToMakeChanges,
+        strengthsOrProtectiveFactorsDetails: assessmentDetails.strengthsOrProtectiveFactorsDetails,
+      }
+
+      // _section_complete
       // 3c. pass through object to the view
 
       // 4. extract this to a function in a new class
@@ -72,22 +90,21 @@ export default class CreateGoalController {
 
       req.services.sessionService.setReturnLink(null)
 
-    return res.render('pages/create-goal', {
-      locale: locale.en,
-      data: {
-        planAgreementStatus: plan.agreementStatus,
-        areasOfNeed,
-        sortedAreasOfNeed,
-        selectedAreaOfNeed,
-        dateOptions,
-        minimumDatePickerDate,
-        assessmentAreaIsComplete,
-        returnLink: `/plan?type=${type}`,
-        form: req.body,
-      },
-      errors,
-    })
-
+      return res.render('pages/create-goal', {
+        locale: locale.en,
+        data: {
+          planAgreementStatus: plan.agreementStatus,
+          areasOfNeed,
+          sortedAreasOfNeed,
+          selectedAreaOfNeed,
+          dateOptions,
+          minimumDatePickerDate,
+          assessmentAreaInfo,
+          returnLink: `/plan?type=${type}`,
+          form: req.body,
+        },
+        errors,
+      })
     } catch (e) {
       return next(HttpError(500, e.message))
     }

@@ -63,7 +63,7 @@
                 locale: locale
             }) }}
 
-            {% if data.assessmentAreaIsComplete != true %}
+            {% if data.assessmentAreaInfo.assessmentAreaIsComplete != true %}
               {{ govukWarningText({
                 text: locale.common.assessmentInfo.assessmentIncomplete,
                 iconFallbackText: "Warning"
