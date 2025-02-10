@@ -8,7 +8,7 @@ import ReferentialDataService from '../../services/sentence-plan/referentialData
 import { AreaOfNeed } from '../../testutils/data/referenceData'
 import testPlan from '../../testutils/data/planData'
 import testHandoverContext from '../../testutils/data/handoverData'
-import { assessmentData, crimNeedsSubset } from '../../testutils/data/assessmentData'
+import { crimNeedsSubset, incompleteAssessmentData } from '../../testutils/data/testAssessmentData'
 import { AccessMode } from '../../@types/Handover'
 
 jest.mock('../../services/sentence-plan/referentialDataService', () => {
@@ -19,19 +19,13 @@ jest.mock('../../services/sentence-plan/referentialDataService', () => {
 
 jest.mock('../../services/sentence-plan/assessmentService', () => {
   return jest.fn().mockImplementation(() => ({
-    getAssessmentByUuid: jest.fn().mockReturnValue(assessmentData),
+    getAssessmentByUuid: jest.fn().mockReturnValue(incompleteAssessmentData),
   }))
 })
 
 jest.mock('../../services/sentence-plan/infoService', () => {
   return jest.fn().mockImplementation(() => ({
     getPopData: jest.fn().mockResolvedValue(testPopData),
-  }))
-})
-
-jest.mock('../../services/sentence-plan/planService', () => {
-  return jest.fn().mockImplementation(() => ({
-    getPlanByUuid: jest.fn().mockResolvedValue(testPlan),
   }))
 })
 

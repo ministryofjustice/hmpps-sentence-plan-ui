@@ -1,19 +1,13 @@
 import {
-  assessmentData,
-  assessmentDataNoAssessments,
   assessmentUndefined,
+  completeAssessmentData,
   crimNeedsOrdered,
-  crimNeedsSubset,
-} from '../testutils/data/assessmentData'
+  fullCrimNeeds,
+  incompleteAssessmentData,
+} from '../testutils/data/testAssessmentData'
 import commonLocale from './commonLocale.json'
-import { areaConfigs } from '../routes/aboutPerson/assessmentAreaConfig.json'
-import {
-  AssessmentArea,
-  AssessmentAreaConfig,
-  AssessmentAreas,
-  AssessmentResponse,
-  CriminogenicNeedsData,
-} from '../@types/Assessment'
+import { areaConfigs } from './assessmentAreaConfig.json'
+import { AssessmentArea } from '../@types/Assessment'
 import {
   formatAssessmentData,
   groupAndSortOtherAreas,
@@ -23,327 +17,72 @@ import {
 } from './assessmentUtils'
 
 describe('format assessment data', () => {
-  it.each([
-    [
-      crimNeedsSubset,
-      assessmentUndefined,
-      areaConfigs,
-      {
-        highScoring: [],
-        lowScoring: [],
-        other: [],
-        versionUpdatedAt: undefined,
-      },
-    ],
-    [
-      crimNeedsSubset,
-      null,
-      areaConfigs,
-      {
-        highScoring: [],
-        lowScoring: [],
-        other: [],
-        versionUpdatedAt: undefined,
-      },
-    ],
-    [
-      crimNeedsSubset,
-      assessmentDataNoAssessments,
-      areaConfigs,
-      {
-        highScoring: [
-          {
-            criminogenicNeedsScore: '6',
-            linkedtoReoffending: 'yes',
-            linkedToHarm: 'no',
-            linkedtoStrengthsOrProtectiveFactors: 'no',
-            overallScore: '6',
-            riskOfReoffendingDetails: undefined,
-            thresholdValue: 1,
-            title: 'Accommodation',
-            goalRoute: 'accommodation',
-            upperBound: 6,
-            isMissingInformation: false,
-          },
-        ],
-        lowScoring: [
-          {
-            criminogenicNeedsScore: '1',
-            linkedtoReoffending: 'yes',
-            linkedToHarm: 'no',
-            linkedtoStrengthsOrProtectiveFactors: 'yes',
-            overallScore: '1',
-            riskOfReoffendingDetails: undefined,
-            thresholdValue: 1,
-            title: 'Employment and education',
-            goalRoute: 'employment-and-education',
-            upperBound: 4,
-            isMissingInformation: false,
-          },
-        ],
-        other: [
-          {
-            goalRoute: 'health-and-wellbeing',
-            title: 'Health and wellbeing',
-            upperBound: null,
-            linkedtoReoffending: 'no',
-            linkedToHarm: 'no',
-            linkedtoStrengthsOrProtectiveFactors: 'no',
-            riskOfReoffendingDetails: undefined,
-            isMissingInformation: false,
-          },
-          {
-            goalRoute: 'alcohol-use',
-            title: 'Alcohol use',
-            criminogenicNeedMissing: true,
-            linkedtoReoffending: undefined,
-            linkedToHarm: undefined,
-            linkedtoStrengthsOrProtectiveFactors: undefined,
-            isMissingInformation: undefined,
-          },
-          {
-            goalRoute: 'drug-use',
-            title: 'Drug use',
-            criminogenicNeedMissing: true,
-            linkedtoReoffending: undefined,
-            linkedToHarm: undefined,
-            linkedtoStrengthsOrProtectiveFactors: undefined,
-            isMissingInformation: undefined,
-          },
-          {
-            goalRoute: 'finances',
-            title: 'Finances',
-            criminogenicNeedMissing: true,
-            linkedtoReoffending: undefined,
-            linkedToHarm: undefined,
-            linkedtoStrengthsOrProtectiveFactors: undefined,
-            isMissingInformation: undefined,
-          },
-          {
-            goalRoute: 'personal-relationships-and-community',
-            title: 'Personal relationships and community',
-            criminogenicNeedMissing: true,
-            linkedtoReoffending: undefined,
-            linkedToHarm: undefined,
-            linkedtoStrengthsOrProtectiveFactors: undefined,
-            isMissingInformation: undefined,
-          },
-          {
-            goalRoute: 'thinking-behaviours-and-attitudes',
-            title: 'Thinking, behaviours and attitudes',
-            criminogenicNeedMissing: true,
-            linkedtoReoffending: undefined,
-            linkedToHarm: undefined,
-            linkedtoStrengthsOrProtectiveFactors: undefined,
-            isMissingInformation: undefined,
-          },
-        ],
-        versionUpdatedAt: '2024-10-04T15:22:31.453096',
-      },
-    ],
-    [
-      crimNeedsSubset,
-      assessmentData,
-      areaConfigs,
-      {
-        highScoring: [
-          {
-            criminogenicNeedsScore: '6',
-            linkedtoReoffending: 'yes',
-            linkedToHarm: 'no',
-            linkedtoStrengthsOrProtectiveFactors: 'no',
-            motivationToMakeChanges: 'thinkingAboutMakingChanges',
-            overallScore: '6',
-            riskOfReoffendingDetails: undefined,
-            goalRoute: 'accommodation',
-            thresholdValue: 1,
-            title: 'Accommodation',
-            upperBound: 6,
-            isMissingInformation: false,
-          },
-        ],
-        lowScoring: [
-          {
-            criminogenicNeedsScore: '1',
-            linkedtoReoffending: 'yes',
-            linkedToHarm: 'no',
-            linkedtoStrengthsOrProtectiveFactors: 'yes',
-            motivationToMakeChanges: 'needsHelpToMakeChanges',
-            overallScore: '1',
-            riskOfReoffendingDetails: undefined,
-            thresholdValue: 1,
-            title: 'Employment and education',
-            goalRoute: 'employment-and-education',
-            upperBound: 4,
-            isMissingInformation: false,
-          },
-        ],
-        other: [
-          {
-            goalRoute: 'health-and-wellbeing',
-            title: 'Health and wellbeing',
-            upperBound: null,
-            motivationToMakeChanges: 'needsHelpToMakeChanges',
-            linkedtoReoffending: 'no',
-            linkedToHarm: 'no',
-            linkedtoStrengthsOrProtectiveFactors: 'no',
-            riskOfReoffendingDetails: undefined,
-            isMissingInformation: false,
-          },
-          {
-            goalRoute: 'alcohol-use',
-            title: 'Alcohol use',
-            criminogenicNeedMissing: true,
-            linkedtoReoffending: undefined,
-            linkedToHarm: undefined,
-            linkedtoStrengthsOrProtectiveFactors: undefined,
-            isMissingInformation: undefined,
-          },
-          {
-            goalRoute: 'drug-use',
-            title: 'Drug use',
-            criminogenicNeedMissing: true,
-            linkedtoReoffending: undefined,
-            linkedToHarm: undefined,
-            linkedtoStrengthsOrProtectiveFactors: undefined,
-            isMissingInformation: undefined,
-          },
-          {
-            goalRoute: 'finances',
-            title: 'Finances',
-            criminogenicNeedMissing: true,
-            linkedtoReoffending: undefined,
-            linkedToHarm: undefined,
-            linkedtoStrengthsOrProtectiveFactors: undefined,
-            isMissingInformation: undefined,
-          },
-          {
-            goalRoute: 'personal-relationships-and-community',
-            title: 'Personal relationships and community',
-            criminogenicNeedMissing: true,
-            linkedtoReoffending: undefined,
-            linkedToHarm: undefined,
-            linkedtoStrengthsOrProtectiveFactors: undefined,
-            isMissingInformation: undefined,
-          },
-          {
-            goalRoute: 'thinking-behaviours-and-attitudes',
-            title: 'Thinking, behaviours and attitudes',
-            criminogenicNeedMissing: true,
-            linkedtoReoffending: undefined,
-            linkedToHarm: undefined,
-            linkedtoStrengthsOrProtectiveFactors: undefined,
-            isMissingInformation: undefined,
-          },
-        ],
-        versionUpdatedAt: '2024-10-04T15:22:31.453096',
-      },
-    ],
-    [
-      crimNeedsOrdered,
-      assessmentDataNoAssessments,
-      areaConfigs,
-      {
-        highScoring: [
-          {
-            criminogenicNeedsScore: '4',
-            goalRoute: 'drug-use',
-            linkedtoReoffending: 'null',
-            linkedToHarm: 'null',
-            linkedtoStrengthsOrProtectiveFactors: 'null',
-            overallScore: '4',
-            thresholdValue: 0,
-            title: 'Drug use',
-            upperBound: 8,
-            isMissingInformation: true,
-          },
-          {
-            criminogenicNeedsScore: '5',
-            goalRoute: 'thinking-behaviours-and-attitudes',
-            linkedtoReoffending: 'null',
-            linkedToHarm: 'null',
-            linkedtoStrengthsOrProtectiveFactors: 'null',
-            overallScore: '5',
-            thresholdValue: 2,
-            title: 'Thinking, behaviours and attitudes',
-            upperBound: 10,
-            isMissingInformation: true,
-          },
-          {
-            criminogenicNeedsScore: '3',
-            goalRoute: 'accommodation',
-            linkedtoReoffending: 'null',
-            linkedToHarm: 'null',
-            linkedtoStrengthsOrProtectiveFactors: 'null',
-            isMissingInformation: true,
-            overallScore: '3',
-            thresholdValue: 1,
-            title: 'Accommodation',
-            upperBound: 6,
-          },
-        ],
-        lowScoring: [],
-        other: [
-          {
-            goalRoute: 'alcohol-use',
-            title: 'Alcohol use',
-            criminogenicNeedMissing: true,
-            linkedtoReoffending: undefined,
-            linkedToHarm: undefined,
-            linkedtoStrengthsOrProtectiveFactors: undefined,
-            isMissingInformation: undefined,
-          },
-          {
-            goalRoute: 'employment-and-education',
-            title: 'Employment and education',
-            criminogenicNeedMissing: true,
-            linkedtoReoffending: undefined,
-            linkedToHarm: undefined,
-            linkedtoStrengthsOrProtectiveFactors: undefined,
-            isMissingInformation: undefined,
-          },
-          {
-            goalRoute: 'finances',
-            title: 'Finances',
-            criminogenicNeedMissing: true,
-            linkedtoReoffending: undefined,
-            linkedToHarm: undefined,
-            linkedtoStrengthsOrProtectiveFactors: undefined,
-            isMissingInformation: undefined,
-          },
-          {
-            goalRoute: 'health-and-wellbeing',
-            title: 'Health and wellbeing',
-            criminogenicNeedMissing: true,
-            linkedtoReoffending: undefined,
-            linkedToHarm: undefined,
-            linkedtoStrengthsOrProtectiveFactors: undefined,
-            isMissingInformation: undefined,
-          },
-          {
-            goalRoute: 'personal-relationships-and-community',
-            title: 'Personal relationships and community',
-            criminogenicNeedMissing: true,
-            linkedtoReoffending: undefined,
-            linkedToHarm: undefined,
-            linkedtoStrengthsOrProtectiveFactors: undefined,
-            isMissingInformation: undefined,
-          },
-        ],
-        versionUpdatedAt: '2024-10-04T15:22:31.453096',
-      },
-    ],
-  ])(
-    '%s formatAssessmentData(%s, %s, %s, %s',
-    (
-      criminogenicNeedsData: CriminogenicNeedsData,
-      assessment: AssessmentResponse,
-      areas: AssessmentAreaConfig[],
-      expected: AssessmentAreas,
-    ) => {
-      expect(formatAssessmentData(criminogenicNeedsData, assessment, areas)).toEqual(expected)
-    },
-  )
+  it('returns empty arrays when assessment is null', () => {
+    const result = formatAssessmentData(fullCrimNeeds, null, areaConfigs)
+    expect(result).toEqual({ isAssessmentComplete: false, areas: { lowScoring: [], highScoring: [], other: [] } })
+  })
+
+  it('returns empty arrays when assessment has no SAN data', () => {
+    const result = formatAssessmentData(fullCrimNeeds, assessmentUndefined, areaConfigs)
+    expect(result).toEqual({ isAssessmentComplete: false, areas: { lowScoring: [], highScoring: [], other: [] } })
+  })
+
+  it('returns correctly grouped assessment areas and incomplete assessment', () => {
+    const result = formatAssessmentData(fullCrimNeeds, incompleteAssessmentData, areaConfigs)
+    expect(result.isAssessmentComplete).toEqual(false)
+
+    expect(result.areas.highScoring.length).toEqual(2)
+    expect(result.areas.highScoring[0].title).toEqual('Accommodation')
+    expect(result.areas.highScoring[0].overallScore).toEqual('6')
+    expect(result.areas.highScoring[0].isAssessmentSectionComplete).toEqual(true)
+    expect(result.areas.highScoring[1].title).toEqual('Personal relationships and community')
+    expect(result.areas.highScoring[1].overallScore).toEqual('6')
+    expect(result.areas.highScoring[1].isAssessmentSectionComplete).toEqual(false)
+
+    expect(result.areas.lowScoring.length).toEqual(2)
+    expect(result.areas.lowScoring[0].title).toEqual('Employment and education')
+    expect(result.areas.lowScoring[0].overallScore).toEqual('1')
+    expect(result.areas.lowScoring[0].isAssessmentSectionComplete).toEqual(true)
+    expect(result.areas.lowScoring[1].title).toEqual('Thinking, behaviours and attitudes')
+    expect(result.areas.lowScoring[1].overallScore).toEqual('1')
+    expect(result.areas.lowScoring[1].isAssessmentSectionComplete).toEqual(false)
+
+    expect(result.areas.other.length).toEqual(4)
+    expect(result.areas.other[0].title).toEqual('Alcohol use')
+    expect(result.areas.other[1].title).toEqual('Drug use')
+    expect(result.areas.other[2].title).toEqual('Finances')
+    expect(result.areas.other[3].title).toEqual('Health and wellbeing')
+
+    // Health and Wellbeing never has a score but should be marked as complete.
+    // Only this Finance behave like this. Others need the score _and_ the `section_complete` flag.
+    expect(result.areas.other[3].isAssessmentSectionComplete).toEqual(true)
+
+    result.areas.other.forEach(otherArea => {
+      expect(otherArea.overallScore).toBeUndefined()
+    })
+  })
+
+  it('returns education section not marked as complete when it does not have a score', () => {
+    fullCrimNeeds.educationTrainingEmployability.eteOtherWeightedScore = undefined
+    const result = formatAssessmentData(fullCrimNeeds, incompleteAssessmentData, areaConfigs)
+
+    expect(result.isAssessmentComplete).toEqual(false)
+    expect(result.areas.other[0].title).toEqual('Employment and education')
+    expect(result.areas.other[0].isAssessmentSectionComplete).toEqual(false)
+  })
+
+  it('returns correctly ordered assessments by score compared to threshold in high scoring section', () => {
+    const result = formatAssessmentData(crimNeedsOrdered, completeAssessmentData, areaConfigs)
+    expect(result.isAssessmentComplete).toEqual(true)
+
+    expect(result.areas.highScoring.length).toEqual(3)
+    expect(result.areas.highScoring[0].title).toEqual('Drug use')
+    expect(result.areas.highScoring[0].overallScore).toEqual('4')
+    expect(result.areas.highScoring[1].title).toEqual('Thinking, behaviours and attitudes')
+    expect(result.areas.highScoring[1].overallScore).toEqual('5')
+    expect(result.areas.highScoring[2].title).toEqual('Accommodation')
+    expect(result.areas.highScoring[2].overallScore).toEqual('3')
+  })
 })
 
 describe('replace motivation text', () => {

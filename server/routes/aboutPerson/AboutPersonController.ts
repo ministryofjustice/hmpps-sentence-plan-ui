@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import locale from './locale.json'
-import { areaConfigs } from './assessmentAreaConfig.json'
+import { areaConfigs } from '../../utils/assessmentAreaConfig.json'
 import { formatAssessmentData } from '../../utils/assessmentUtils'
 import { HttpError } from '../../utils/HttpError'
 import { AccessMode } from '../../@types/Handover'
@@ -18,7 +18,6 @@ export default class AboutPersonController {
       const criminogenicNeedsData = req.services.sessionService.getCriminogenicNeeds()
       const assessmentData = await req.services.assessmentService.getAssessmentByUuid(planUuid)
       const errorMessages = []
-      const plan = await req.services.planService.getPlanByUuid(planUuid)
 
       if (assessmentData === null) {
         errorMessages.push('noAssessmentDataFound')
@@ -30,26 +29,17 @@ export default class AboutPersonController {
         errors = { domain: errorMessages }
       }
 
-      const assessmentAreas = formatAssessmentData(criminogenicNeedsData, assessmentData, areaConfigs)
+      const formattedAssessmentInfo = formatAssessmentData(criminogenicNeedsData, assessmentData, areaConfigs)
       const pageId = 'about'
       const readWrite = req.services.sessionService.getAccessMode() === AccessMode.READ_WRITE
 
-      const areas = [...assessmentAreas.lowScoring, ...assessmentAreas.highScoring, ...assessmentAreas.other]
-      let returnPage = 'pages/about'
-      for (const area of areas) {
-        if (area.isMissingInformation) {
-          returnPage = 'pages/about-not-complete'
-        }
-      }
-
-      return res.render(returnPage, {
+      return res.render('pages/about', {
         locale: locale.en,
         data: {
-          planAgreementStatus: plan.agreementStatus,
           oasysReturnUrl,
           pageId,
           deliusData,
-          assessmentAreas,
+          formattedAssessmentInfo,
           readWrite,
         },
         errors,
