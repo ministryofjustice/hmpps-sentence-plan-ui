@@ -311,9 +311,11 @@
                 <p>{{ locale.ifNoFutureGoals.text }}</p>
             {% endif %}
 
-            <div class="govuk-!-display-none-print">
+          {% if goals.length > 0 %}
+          <div class="govuk-!-display-none-print">
             {% include "../partials/back-to-top-link.njk" %}
             </div>
+          {% endif %}
         </div>
     </div>
 {% endblock %}

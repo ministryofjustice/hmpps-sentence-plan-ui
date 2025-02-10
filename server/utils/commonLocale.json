@@ -34,7 +34,9 @@
         "removedDate": "Removed on {{ lastStatusChangeDate }}",
         "aimToAchieveSentence": "Aim to achieve this by the end of {{ subject.possessiveName }} sentence.",
         "achievedDate": "Marked as achieved on {{ lastStatusChangeDate }}.",
-        "thisIsAFutureGoal": "This is a future goal."
+        "thisIsAFutureGoal": "This is a future goal.",
+        "stepsCompletedSingular": " out of {{ totalSteps }} step completed.",
+        "stepsCompletedPlural": " out of {{ totalSteps }} steps completed."
       },
       "stepsList": {
         "whoHeader": "Who will do this",

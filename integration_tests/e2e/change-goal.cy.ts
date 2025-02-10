@@ -109,7 +109,7 @@ describe('Change a goal', () => {
       cy.get('.goal-summary-card')
         .should('contain', 'some goal')
         .and('contain', `Area of need: ${goalData.areaOfNeed.toLowerCase()}`)
-        .and('contain', 'Also relates to: alcohol use, employment and education, health and wellbeing')
+        .and('contain', 'Also relates to: alcohol use; employment and education; health and wellbeing')
 
       cy.checkAccessibility()
     })
@@ -193,6 +193,7 @@ describe('Change a goal', () => {
 
       // Check goal data is saved and rendered correctly
       cy.get('.moj-sub-navigation').and('contain', 'Future goals (1)')
+      cy.get('.back-to-top-link').should('have.attr', 'href', '#top')
 
       cy.checkAccessibility()
     })
