@@ -127,7 +127,7 @@
 
                 {# list out the missing information #}
                 {% if missingInformation.length > 0 %}
-                  {% if missingInformation.length == 4 %}
+                  {% if missingInformation.length == 4 && data.assessmentDetailsForArea.isAssessmentSectionComplete == false%}
                     {{ govukWarningText({
                       text: locale.common.assessmentInfo.assessmentNotStarted,
                       iconFallbackText: "Warning"

@@ -79,7 +79,7 @@ export default class CreateGoalController {
        * 2. [x] Assessment is complete and all information is available - no warning
        * 3. [x] Assessment is not complete and all information is available - warning: assessmentIncomplete
        * 4. [x] Assessment is not complete and some information is available - warning: assessmentIncomplete
-       * 5. [] Assessment is not complete and no information is available - warning: assessmentNotStarted
+       * 5. [x] Assessment is not complete and no information is available - warning: assessmentNotStarted
        */
 
       req.services.sessionService.setReturnLink(null)
