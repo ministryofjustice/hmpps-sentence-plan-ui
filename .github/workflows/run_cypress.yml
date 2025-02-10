@@ -36,7 +36,7 @@ jobs:
         run: |
           make test-up
         env:
-          APP_VERSION: 2025-02-03.12459.842df27
+          APP_VERSION: 2025-02-04.12548.c0ef072
 
       - name: Run split Cypress tests
         run: |
