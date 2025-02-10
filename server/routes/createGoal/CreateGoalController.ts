@@ -57,8 +57,7 @@ export default class CreateGoalController {
 
       let assessmentDetailsForArea = null
 
-      // todo move this out to a call to assessmentUtils
-      // 1. get assessment data in the same way as aboutperson
+      // get assessment data
       try {
         const assessmentResponse = await req.services.assessmentService.getAssessmentByUuid(planUuid)
         const assessmentData = assessmentResponse.sanAssessmentData
@@ -67,18 +66,19 @@ export default class CreateGoalController {
         const areaConfig: AssessmentAreaConfig = areaConfigs.find(config => config.area === selectedAreaOfNeed?.name)
         assessmentDetailsForArea = getAssessmentDetailsForArea(criminogenicNeedsData, areaConfig, assessmentData)
 
+        // todo: 5. move njk stuff to a component
         // todo: 6. write a cypress test for the view
         // todo: 7. think about what to do for test data variations
       } catch (e) {
-        /* empty */
+        /* swallow the error, missing data is handled in the template */
       }
 
       /**
        * Assessment info states:
        * 1. [x] Assessment API failure - warning: assessmentUnavailable
        * 2. [x] Assessment is complete and all information is available - no warning
-       * 3. [] Assessment is not complete and all information is available - warning: assessmentIncomplete
-       * 4. [] Assessment is not complete and some information is available - warning: assessmentIncomplete
+       * 3. [x] Assessment is not complete and all information is available - warning: assessmentIncomplete
+       * 4. [x] Assessment is not complete and some information is available - warning: assessmentIncomplete
        * 5. [] Assessment is not complete and no information is available - warning: assessmentNotStarted
        */
 

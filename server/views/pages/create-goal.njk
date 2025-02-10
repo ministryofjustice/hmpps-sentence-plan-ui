@@ -63,19 +63,6 @@
                 locale: locale
             }) }}
 
-          {% if data.assessmentDetailsForArea == null %}
-              {# Assessment API failure #}
-              {{ govukWarningText({
-                text: locale.common.assessmentInfo.assessmentUnavailable,
-                iconFallbackText: "Warning"
-              }) }}
-          {% elseif data.assessmentDetailsForArea.isAssessmentSectionComplete == false  %}
-              {{ govukWarningText({
-                text: locale.common.assessmentInfo.assessmentIncomplete,
-                iconFallbackText: "Warning"
-              }) }}
-          {% endif %}
-
           <details class="govuk-details">
             <summary class="govuk-details__summary">
               <span class="govuk-details__summary-text">
@@ -85,6 +72,19 @@
             <div class="govuk-details__text">
               {% if data.assessmentDetailsForArea != null %}
                 {% set missingInformation = [] %}
+
+                {% if data.assessmentDetailsForArea == null %}
+                  {# Assessment API failure #}
+                  {{ govukWarningText({
+                    text: locale.common.assessmentInfo.assessmentUnavailable,
+                    iconFallbackText: "Warning"
+                  }) }}
+                {% elseif data.assessmentDetailsForArea.isAssessmentSectionComplete == false  %}
+                  {{ govukWarningText({
+                    text: locale.common.assessmentInfo.assessmentIncomplete,
+                    iconFallbackText: "Warning"
+                  }) }}
+                {% endif %}
 
                 {# linked to serious harm section #}
                 {%- if data.assessmentDetailsForArea.linkedToHarm == 'YES' -%}
@@ -127,6 +127,12 @@
 
                 {# list out the missing information #}
                 {% if missingInformation.length > 0 %}
+                  {% if missingInformation.length == 4 %}
+                    {{ govukWarningText({
+                      text: locale.common.assessmentInfo.assessmentNotStarted,
+                      iconFallbackText: "Warning"
+                    }) }}
+                  {% endif %}
                   <p><strong>{{ locale.common.assessmentInfo.missingInformation }}</strong></p>
                   <p class="govuk-body">
                     <ul>
