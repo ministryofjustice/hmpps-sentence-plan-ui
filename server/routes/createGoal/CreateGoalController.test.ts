@@ -111,6 +111,17 @@ describe('CreateGoalController', () => {
       expect(res.render).toHaveBeenCalledWith('pages/create-goal', viewData)
     })
 
+    it('should render without errors when assessment info is not available', async () => {
+      req.services.assessmentService.getAssessmentByUuid = jest.fn().mockResolvedValue(null)
+
+      const viewDataWithoutAssessment = structuredClone(viewData)
+      viewDataWithoutAssessment.data.assessmentDetailsForArea = null
+
+      await runMiddlewareChain(controller.get, req, res, next)
+
+      expect(res.render).toHaveBeenCalledWith('pages/create-goal', viewDataWithoutAssessment)
+    })
+
     it('should render with validation errors', async () => {
       const errors = {
         body: { 'date-selection-radio': { isNotEmpty: true } },

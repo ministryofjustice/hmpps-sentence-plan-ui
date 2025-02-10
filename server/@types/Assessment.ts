@@ -8,21 +8,21 @@ export interface AssessmentResponse {
 }
 
 export interface AssessmentArea {
-  title: string
-  overallScore?: string
-  riskOfSeriousHarmDetails?: string
-  linkedToHarm: string
-  riskOfReoffendingDetails?: string
-  isAssessmentSectionComplete: boolean
-  linkedtoReoffending: string
-  motivationToMakeChanges?: string
-  linkedtoStrengthsOrProtectiveFactors: string
-  strengthsOrProtectiveFactors?: string
+  criminogenicNeedMissing?: boolean
   criminogenicNeedsScore?: string
   goalRoute?: string
+  isAssessmentSectionComplete: boolean
+  linkedToHarm: string
+  linkedtoReoffending: string
+  linkedtoStrengthsOrProtectiveFactors: string
+  motivationToMakeChanges?: string
+  overallScore?: string
+  riskOfReoffendingDetails?: string
+  riskOfSeriousHarmDetails?: string
+  strengthsOrProtectiveFactors?: string
   thresholdValue?: number
+  title: string
   upperBound?: number
-  criminogenicNeedMissing?: boolean
 }
 
 export interface FormattedAssessment {
