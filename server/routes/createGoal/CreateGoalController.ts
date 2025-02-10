@@ -72,15 +72,6 @@ export default class CreateGoalController {
         /* swallow the error, missing data is handled in the template */
       }
 
-      /**
-       * Assessment info states:
-       * 1. [x] Assessment API failure - warning: assessmentUnavailable
-       * 2. [x] Assessment is complete and all information is available - no warning
-       * 3. [x] Assessment is not complete and all information is available - warning: assessmentIncomplete
-       * 4. [x] Assessment is not complete and some information is available - warning: assessmentIncomplete
-       * 5. [x] Assessment is not complete and no information is available - warning: assessmentNotStarted
-       */
-
       req.services.sessionService.setReturnLink(null)
 
       return res.render('pages/create-goal', {
