@@ -1,5 +1,6 @@
 {% extends "../partials/layout.njk" %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 {% from "moj/components/sub-navigation/macro.njk" import mojSubNavigation %}
 {% from "moj/components/button-menu/macro.njk" import mojButtonMenu %}
 {%- from "moj/components/banner/macro.njk" import mojBanner -%}
@@ -9,7 +10,7 @@
 {% set print = true %}
 {% set locale = interpolate(locale, {
     subject: data.popData,
-    lastUpdatedDate: data.assessmentAreas.versionUpdatedAt | formatSimpleDate
+    lastUpdatedDate: data.formattedAssessmentInfo.versionUpdatedAt | formatSimpleDate
 }) %}
 
 {% block pageTitle %}
@@ -46,7 +47,7 @@
 
 {% block content %}
     {{ super() }}
-    {% if data.assessmentAreas.versionUpdatedAt %}
+    {% if data.formattedAssessmentInfo.versionUpdatedAt %}
         <p class="govuk-body govuk-!-margin-top-5">{{ locale.detail.lastUpdated }}</p>
     {% endif %}
 
@@ -97,20 +98,27 @@
             </table>
             {% endif %}
 
-            {% if data.assessmentAreas.highScoring.length > 0 %}
+          {% if data.formattedAssessmentInfo.isAssessmentComplete %}
+            {% if data.formattedAssessmentInfo.areas.highScoring.length > 0 %}
                 <h2 class="govuk-heading-m">High-scoring areas from the assessment</h2>
-                {{ renderAssessment(data.assessmentAreas.highScoring, locale, data.readWrite) }}
+                {{ renderAssessment(data.formattedAssessmentInfo.areas.highScoring, locale, data.readWrite) }}
             {% endif %}
 
-            {% if data.assessmentAreas.lowScoring.length > 0 %}
+            {% if data.formattedAssessmentInfo.areas.lowScoring.length > 0 %}
                 <h2 class="govuk-heading-m">Low-scoring areas from the assessment</h2>
-                {{ renderAssessment(data.assessmentAreas.lowScoring, locale, data.readWrite) }}
+                {{ renderAssessment(data.formattedAssessmentInfo.areas.lowScoring, locale, data.readWrite) }}
             {% endif %}
 
-            {% if data.assessmentAreas.other.length > 0 %}
+            {% if data.formattedAssessmentInfo.areas.other.length > 0 %}
                 <h2 class="govuk-heading-m">Areas without a need score</h2>
-                {{ renderAssessment(data.assessmentAreas.other, locale, data.readWrite) }}
+                {{ renderAssessment(data.formattedAssessmentInfo.areas.other, locale, data.readWrite) }}
             {% endif %}
+          {% else %}
+            {{ govukWarningText({
+              html: '<strong>' + locale.assessmentIncomplete.paragraphWithLink + '</strong>',
+              iconFallbackText: "Warning"
+            }) }}
+          {% endif %}
 
         </div>
 

@@ -108,6 +108,12 @@
       "month": "month",
       "day": "day",
       "conjunction": "and"
+    },
+    "assessmentInfo": {
+      "detailsSummary": "View information from {{ subject.possessiveName }} assessment",
+      "assessmentIncomplete": "This area has not been marked as complete in the assessment yet, but you can check the latest information available below.",
+      "noInformationAvailable": "No information is available yet as the assessment has not been started for this area.",
+      "missingInformation": "Missing information"
     }
   },
   "cy": {}

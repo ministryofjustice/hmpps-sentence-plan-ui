@@ -2,7 +2,7 @@
 {% from "components/need-score-indicator/macro.njk" import needsScoreIndicator %}
 
 <div class="govuk-accordion" data-module="govuk-accordion" id="accordion-default-{{ loop.index }}">
-    {% for assessment in assessmentAreas %}
+    {% for assessment in formattedAssessments %}
         {% set riskOfSeriousHarmData = assessment.riskOfSeriousHarmDetails %}
         {% set riskOfReoffendingData = assessment.riskOfReoffendingDetails %}
         {% set strengthsOrProtectiveFactorsData = assessment.strengthsOrProtectiveFactorsDetails %}
