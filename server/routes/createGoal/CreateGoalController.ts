@@ -68,7 +68,7 @@ export default class CreateGoalController {
 
         // todo: 6. write a cypress test for the view
         // todo: 7. think about what to do for test data variations
-      } catch (e) {
+      } catch {
         /* swallow the error, missing data is handled in the template */
       }
 
