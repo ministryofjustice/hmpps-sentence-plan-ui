@@ -133,19 +133,19 @@ describe('sentence length', () => {
 describe('groupAndSortOtherAreas', () => {
   it('groups and sorts areas by risk count', () => {
     const areas: AssessmentArea[] = [
-      { title: 'Area D', linkedToHarm: 'no', linkedtoReoffending: 'no' } as AssessmentArea,
-      { title: 'Area A', linkedToHarm: 'yes', linkedtoReoffending: 'yes' } as AssessmentArea,
-      { title: 'Area B', linkedToHarm: 'yes', linkedtoReoffending: 'no' } as AssessmentArea,
-      { title: 'Area C', linkedToHarm: 'no', linkedtoReoffending: 'yes' } as AssessmentArea,
+      { title: 'Area D', linkedToHarm: 'NO', linkedtoReoffending: 'NO' } as AssessmentArea,
+      { title: 'Area A', linkedToHarm: 'YES', linkedtoReoffending: 'YES' } as AssessmentArea,
+      { title: 'Area B', linkedToHarm: 'YES', linkedtoReoffending: 'NO' } as AssessmentArea,
+      { title: 'Area C', linkedToHarm: 'NO', linkedtoReoffending: 'YES' } as AssessmentArea,
     ]
 
     const result = groupAndSortOtherAreas(areas)
 
     expect(result).toEqual([
-      { title: 'Area A', linkedToHarm: 'yes', linkedtoReoffending: 'yes' },
-      { title: 'Area B', linkedToHarm: 'yes', linkedtoReoffending: 'no' },
-      { title: 'Area C', linkedToHarm: 'no', linkedtoReoffending: 'yes' },
-      { title: 'Area D', linkedToHarm: 'no', linkedtoReoffending: 'no' },
+      { title: 'Area A', linkedToHarm: 'YES', linkedtoReoffending: 'YES' },
+      { title: 'Area B', linkedToHarm: 'YES', linkedtoReoffending: 'NO' },
+      { title: 'Area C', linkedToHarm: 'NO', linkedtoReoffending: 'YES' },
+      { title: 'Area D', linkedToHarm: 'NO', linkedtoReoffending: 'NO' },
     ])
   })
 
@@ -159,28 +159,28 @@ describe('groupAndSortOtherAreas', () => {
 
   it('sorts areas alphabetically within the same risk count', () => {
     const areas: AssessmentArea[] = [
-      { title: 'Area B', linkedToHarm: 'yes', linkedtoReoffending: 'no' } as AssessmentArea,
-      { title: 'Area A', linkedToHarm: 'yes', linkedtoReoffending: 'no' } as AssessmentArea,
+      { title: 'Area B', linkedToHarm: 'YES', linkedtoReoffending: 'NO' } as AssessmentArea,
+      { title: 'Area A', linkedToHarm: 'YES', linkedtoReoffending: 'NO' } as AssessmentArea,
     ]
 
     const result = groupAndSortOtherAreas(areas)
 
     expect(result).toEqual([
-      { title: 'Area A', linkedToHarm: 'yes', linkedtoReoffending: 'no' },
-      { title: 'Area B', linkedToHarm: 'yes', linkedtoReoffending: 'no' },
+      { title: 'Area A', linkedToHarm: 'YES', linkedtoReoffending: 'NO' },
+      { title: 'Area B', linkedToHarm: 'YES', linkedtoReoffending: 'NO' },
     ])
   })
 
   it('handles areas with undefined risk values', () => {
     const areas: AssessmentArea[] = [
       { title: 'Area A', linkedToHarm: undefined, linkedtoReoffending: undefined } as AssessmentArea,
-      { title: 'Area B', linkedToHarm: 'yes', linkedtoReoffending: undefined } as AssessmentArea,
+      { title: 'Area B', linkedToHarm: 'YES', linkedtoReoffending: undefined } as AssessmentArea,
     ]
 
     const result = groupAndSortOtherAreas(areas)
 
     expect(result).toEqual([
-      { title: 'Area B', linkedToHarm: 'yes', linkedtoReoffending: undefined },
+      { title: 'Area B', linkedToHarm: 'YES', linkedtoReoffending: undefined },
       { title: 'Area A', linkedToHarm: undefined, linkedtoReoffending: undefined },
     ])
   })

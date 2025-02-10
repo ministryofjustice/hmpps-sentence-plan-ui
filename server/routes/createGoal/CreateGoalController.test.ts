@@ -69,8 +69,8 @@ describe('CreateGoalController', () => {
       form: {},
       selectedAreaOfNeed: AreaOfNeed.find(x => x.url === 'accommodation'),
       minimumDatePickerDate: '01/01/2024',
-      assessmentAreaInfo: {
-        assessmentAreaIsComplete: true,
+      assessmentDetailsForArea: {
+        isAssessmentSectionComplete: true,
         motivationToMakeChanges: 'thinkingAboutMakingChanges',
         linkedToHarm: 'NO',
         linkedtoReoffending: 'YES',
