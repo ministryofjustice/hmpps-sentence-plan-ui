@@ -76,57 +76,66 @@
               }) }}
           {% endif %}
 
-          {% if data.assessmentDetailsForArea != null %}
-            {% set missingInformation = [] %}
+          <details class="govuk-details">
+            <summary class="govuk-details__summary">
+              <span class="govuk-details__summary-text">
+                {{ locale.common.assessmentInfo.detailsSummary }}
+              </span>
+            </summary>
+            <div class="govuk-details__text">
+              {% if data.assessmentDetailsForArea != null %}
+                {% set missingInformation = [] %}
 
 
-            {%- if data.assessmentDetailsForArea.linkedToHarm == 'YES' -%}
-              <p><strong>This area is linked to RoSH (risk of serious harm)</strong></p>
-            {%- elseif data.assessmentDetailsForArea.linkedToHarm == 'NO' -%}
-              <p><strong>This area is not linked to RoSH (risk of serious harm)</strong></p>
-            {%- else -%}
-              {% set missingInformation = missingInformation.concat('linkedToHarm') -%}
-            {%- endif -%}
-            <p class="govuk-body">{{ data.assessmentDetailsForArea.riskOfSeriousHarmDetails }}</p>
+                {%- if data.assessmentDetailsForArea.linkedToHarm == 'YES' -%}
+                  <p><strong>This area is linked to RoSH (risk of serious harm)</strong></p>
+                {%- elseif data.assessmentDetailsForArea.linkedToHarm == 'NO' -%}
+                  <p><strong>This area is not linked to RoSH (risk of serious harm)</strong></p>
+                {%- else -%}
+                  {% set missingInformation = missingInformation.concat('linkedToHarm') -%}
+                {%- endif -%}
+                <p class="govuk-body">{{ data.assessmentDetailsForArea.riskOfSeriousHarmDetails }}</p>
 
-            {%- if data.assessmentDetailsForArea.linkedtoReoffending == 'YES' -%}
-              <p><strong>This area is linked to risk of reoffending</strong></p>
-            {%- elseif data.assessmentDetailsForArea.linkedtoReoffending == 'NO' -%}
-              <p><strong>This area is not linked to risk of reoffending</strong></p>
-            {%- else -%}
-              {% set missingInformation = missingInformation.concat('linkedToReoffending') -%}
-            {%- endif -%}
-            <p class="govuk-body">{{ data.assessmentDetailsForArea.riskOfReoffendingDetails }}</p>
+                {%- if data.assessmentDetailsForArea.linkedtoReoffending == 'YES' -%}
+                  <p><strong>This area is linked to risk of reoffending</strong></p>
+                {%- elseif data.assessmentDetailsForArea.linkedtoReoffending == 'NO' -%}
+                  <p><strong>This area is not linked to risk of reoffending</strong></p>
+                {%- else -%}
+                  {% set missingInformation = missingInformation.concat('linkedToReoffending') -%}
+                {%- endif -%}
+                <p class="govuk-body">{{ data.assessmentDetailsForArea.riskOfReoffendingDetails }}</p>
 
-            {%- if data.assessmentDetailsForArea.motivationToMakeChanges != undefined %}
-              <p><strong>Motivation to make changes in this area</strong></p>
-              <p class="govuk-body">{{ locale.common.assessmentInfo.motivationText[data.assessmentDetailsForArea.motivationToMakeChanges] }}</p>
-            {%- elseif data.assessmentDetailsForArea.isAssessmentSectionComplete == false %}
-              {# We only add motivation to the Missing Information section if the section is not complete #}
-              {%- set missingInformation = missingInformation.concat('motivationToMakeChanges') %}
-            {%- endif %}
+                {%- if data.assessmentDetailsForArea.motivationToMakeChanges != undefined %}
+                  <p><strong>Motivation to make changes in this area</strong></p>
+                  <p class="govuk-body">{{ locale.common.assessmentInfo.motivationText[data.assessmentDetailsForArea.motivationToMakeChanges] }}</p>
+                {%- elseif data.assessmentDetailsForArea.isAssessmentSectionComplete == false %}
+                  {# We only add motivation to the Missing Information section if the section is not complete #}
+                  {%- set missingInformation = missingInformation.concat('motivationToMakeChanges') %}
+                {%- endif %}
 
 
-            {%- if data.assessmentDetailsForArea.linkedtoStrengthsOrProtectiveFactors == 'YES' -%}
-              <p><strong>There are strengths or protective factors related to this area</strong></p>
-            {%- elseif data.assessmentDetailsForArea.linkedtoStrengthsOrProtectiveFactors == 'NO' -%}
-              <p><strong>There are no strengths or protective factors related to this area</strong></p>
-            {%- else -%}
-                {% set missingInformation = missingInformation.concat('linkedtoStrengthsOrProtectiveFactors') %}
-            {%- endif -%}
-            <p class="govuk-body">{{ data.assessmentDetailsForArea.strengthsOrProtectiveFactorsDetails }}</p>
+                {%- if data.assessmentDetailsForArea.linkedtoStrengthsOrProtectiveFactors == 'YES' -%}
+                  <p><strong>There are strengths or protective factors related to this area</strong></p>
+                {%- elseif data.assessmentDetailsForArea.linkedtoStrengthsOrProtectiveFactors == 'NO' -%}
+                  <p><strong>There are no strengths or protective factors related to this area</strong></p>
+                {%- else -%}
+                    {% set missingInformation = missingInformation.concat('linkedtoStrengthsOrProtectiveFactors') %}
+                {%- endif -%}
+                <p class="govuk-body">{{ data.assessmentDetailsForArea.strengthsOrProtectiveFactorsDetails }}</p>
 
-            {% if missingInformation.length > 0 %}
-              <p><strong>{{ locale.common.assessmentInfo.missingInformation }}</strong></p>
-              <p class="govuk-body">
-                <ul>
-                {% for info in missingInformation %}
-                  <li>{{ locale.common.assessmentInfo.missingInformationList[info] }}</li>
-                {% endfor %}
-                </ul>
-              </p>
-            {% endif %}
-          {% endif %}
+                {% if missingInformation.length > 0 %}
+                  <p><strong>{{ locale.common.assessmentInfo.missingInformation }}</strong></p>
+                  <p class="govuk-body">
+                    <ul>
+                    {% for info in missingInformation %}
+                      <li>{{ locale.common.assessmentInfo.missingInformationList[info] }}</li>
+                    {% endfor %}
+                    </ul>
+                  </p>
+                {% endif %}
+              {% endif %}
+            </div>
+          </details>
 
             <span class="govuk-caption-l">{{ locale.mainHeading.caption }}</span>
             <h1 class="govuk-heading-l">{{ locale.mainHeading.title }}</h1>
