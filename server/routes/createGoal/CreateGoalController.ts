@@ -66,7 +66,6 @@ export default class CreateGoalController {
         const areaConfig: AssessmentAreaConfig = areaConfigs.find(config => config.area === selectedAreaOfNeed?.name)
         assessmentDetailsForArea = getAssessmentDetailsForArea(criminogenicNeedsData, areaConfig, assessmentData)
 
-        // todo: 5. move njk stuff to a component
         // todo: 6. write a cypress test for the view
         // todo: 7. think about what to do for test data variations
       } catch (e) {
