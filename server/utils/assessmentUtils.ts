@@ -31,38 +31,34 @@ export function getAssessmentDetailsForArea(
   }
 
   // Values can be 'YES', 'NO' or 'NULL'
-  const linkedToHarm = (
-    crimNeeds[areaConfig.crimNeedsKey][`${areaConfig.crimNeedsSubKey}LinkedToHarm`] ?? 'NULL'
-  ).toLowerCase()
+  const linkedToHarm = crimNeeds[areaConfig.crimNeedsKey][`${areaConfig.crimNeedsSubKey}LinkedToHarm`] ?? 'NULL'
 
-  const linkedtoReoffending = (
+  const linkedtoReoffending =
     crimNeeds[areaConfig.crimNeedsKey][`${areaConfig.crimNeedsSubKey}LinkedToReoffending`] ?? 'NULL'
-  ).toLowerCase()
 
-  const linkedtoStrengthsOrProtectiveFactors = (
+  const linkedtoStrengthsOrProtectiveFactors =
     crimNeeds[areaConfig.crimNeedsKey][`${areaConfig.crimNeedsSubKey}Strengths`] ?? 'NULL'
-  ).toLowerCase()
 
   const riskOfSeriousHarmDetails =
-    linkedToHarm !== 'null'
+    linkedToHarm !== 'NULL'
       ? sanAssessmentData[
-          `${areaConfig.assessmentKey}_practitioner_analysis_risk_of_serious_harm_${linkedToHarm}_details`
+          `${areaConfig.assessmentKey}_practitioner_analysis_risk_of_serious_harm_${linkedToHarm.toLowerCase()}_details`
         ]?.value
       : undefined
 
   const riskOfReoffendingDetails =
-    linkedtoReoffending !== 'null'
+    linkedtoReoffending !== 'NULL'
       ? sanAssessmentData[
-          `${areaConfig.assessmentKey}_practitioner_analysis_risk_of_reoffending_${linkedtoReoffending}_details`
+          `${areaConfig.assessmentKey}_practitioner_analysis_risk_of_reoffending_${linkedtoReoffending.toLowerCase()}_details`
         ]?.value
       : undefined
 
   const motivationToMakeChanges = motivationText(sanAssessmentData[`${areaConfig.assessmentKey}_changes`]?.value)
 
   const strengthsOrProtectiveFactorsDetails =
-    linkedtoStrengthsOrProtectiveFactors !== 'null'
+    linkedtoStrengthsOrProtectiveFactors !== 'NULL'
       ? sanAssessmentData[
-          `${areaConfig.assessmentKey}_practitioner_analysis_strengths_or_protective_factors_${linkedtoStrengthsOrProtectiveFactors}_details`
+          `${areaConfig.assessmentKey}_practitioner_analysis_strengths_or_protective_factors_${linkedtoStrengthsOrProtectiveFactors.toLowerCase()}_details`
         ]?.value
       : undefined
   return {
@@ -194,7 +190,7 @@ export const groupAndSortOtherAreas = (other: AssessmentArea[]): AssessmentArea[
 
   // group the areas by the sum of their risk counts, RoSH first
   other.forEach(area => {
-    const riskCount = (area.linkedToHarm === 'yes' ? 2 : 0) + (area.linkedtoReoffending === 'yes' ? 1 : 0)
+    const riskCount = (area.linkedToHarm === 'YES' ? 2 : 0) + (area.linkedtoReoffending === 'YES' ? 1 : 0)
     if (!groupedByRiskCount[riskCount]) {
       groupedByRiskCount[riskCount] = []
     }

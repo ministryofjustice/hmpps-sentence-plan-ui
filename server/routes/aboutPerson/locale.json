@@ -43,17 +43,6 @@
       "about": "About",
       "summary": "Plan summary"
     },
-    "motivationText": {
-      "madeChanges": "{{ subject.givenName }} has already made positive changes and wants to maintain them.",
-      "makingChanges": "{{ subject.givenName }} is actively making changes.",
-      "wantToMakeChanges": "{{ subject.givenName }} wants to make changes and knows how to.",
-      "needsHelpToMakeChanges": "{{ subject.givenName }} wants to make changes but needs help.",
-      "thinkingAboutMakingChanges": "{{ subject.givenName }} is thinking about making changes.",
-      "doesNotWantToMakeChanges": "{{ subject.givenName }} does not want to make changes.",
-      "doesNotWantToAnswer": "{{ subject.givenName }} does not want to answer.",
-      "notPresent": "{{ subject.givenName }} was not present to answer this question.",
-      "notApplicable": "This question was not applicable."
-    },
     "needScore": {
       "doesNotHaveNeedScore": "This area does not have a need score",
       "needScoreNotAvailable": "The score for this area is not available yet"

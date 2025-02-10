@@ -12,7 +12,6 @@ import URLs from '../URLs'
 import { testGoal, testNewGoal } from '../../testutils/data/goalData'
 import runMiddlewareChain from '../../testutils/runMiddlewareChain'
 import testPlan from '../../testutils/data/planData'
-import { assessmentDataNoAssessments, crimNeedsSubset } from '../../testutils/data/assessmentData'
 import { crimNeedsSubset, incompleteAssessmentData } from '../../testutils/data/testAssessmentData'
 
 jest.mock('../../middleware/authorisationMiddleware', () => ({
@@ -73,9 +72,9 @@ describe('CreateGoalController', () => {
       assessmentAreaInfo: {
         assessmentAreaIsComplete: true,
         motivationToMakeChanges: 'thinkingAboutMakingChanges',
-        linkedToHarm: 'no',
-        linkedtoReoffending: 'yes',
-        linkedtoStrengthsOrProtectiveFactors: 'no',
+        linkedToHarm: 'NO',
+        linkedtoReoffending: 'YES',
+        linkedtoStrengthsOrProtectiveFactors: 'NO',
       },
       dateOptions: [
         new Date('2024-04-01T00:00:00.000Z'),

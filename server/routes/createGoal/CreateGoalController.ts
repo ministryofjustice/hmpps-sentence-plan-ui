@@ -51,37 +51,36 @@ export default class CreateGoalController {
       const selectedAreaOfNeed = areasOfNeed.find(areaOfNeed => areaOfNeed.url === req.params.areaOfNeed)
       const minimumDatePickerDate = formatDateWithStyle(new Date().toISOString(), 'short')
 
-      // todo
-      // 1. get assessment data in the same way as aboutperson
       const criminogenicNeedsData = req.services.sessionService.getCriminogenicNeeds()
       const planUuid = req.services.sessionService.getPlanUUID()
       const plan = await req.services.planService.getPlanByUuid(planUuid)
 
-      const assessmentResponse = await req.services.assessmentService.getAssessmentByUuid(planUuid)
-      const assessmentData = assessmentResponse.sanAssessmentData
+      let assessmentDetailsForArea = null
 
-      // 2. look up the is_complete field for this area of need
-      const areaConfig: AssessmentAreaConfig = areaConfigs.find(config => config.area === selectedAreaOfNeed?.name)
-      const assessmentAreaIsComplete = assessmentData[`${areaConfig.assessmentKey}_section_complete`].value === 'YES'
+      // todo move this out to a call to assessmentUtils
+      // 1. get assessment data in the same way as aboutperson
+      try {
+        const assessmentResponse = await req.services.assessmentService.getAssessmentByUuid(planUuid)
+        const assessmentData = assessmentResponse.sanAssessmentData
 
-      // 3a. get values from other required fields
-      const assessmentDetails = getAssessmentDetailsForArea(criminogenicNeedsData, areaConfig, assessmentData)
+        // 2. get the assessment details for the selected area of need
+        const areaConfig: AssessmentAreaConfig = areaConfigs.find(config => config.area === selectedAreaOfNeed?.name)
+        assessmentDetailsForArea = getAssessmentDetailsForArea(criminogenicNeedsData, areaConfig, assessmentData)
 
-      // 3b. add field values to new assessmentArea object
-      // make sure this is assessment section not whole section
-      const assessmentAreaInfo = {
-        assessmentAreaIsComplete,
-        linkedToHarm: assessmentDetails.linkedToHarm,
-        linkedtoReoffending: assessmentDetails.linkedtoReoffending,
-        linkedtoStrengthsOrProtectiveFactors: assessmentDetails.linkedtoStrengthsOrProtectiveFactors,
-        riskOfSeriousHarmDetails: assessmentDetails.riskOfSeriousHarmDetails,
-        riskOfReoffendingDetails: assessmentDetails.riskOfReoffendingDetails,
-        motivationToMakeChanges: assessmentDetails.motivationToMakeChanges,
-        strengthsOrProtectiveFactorsDetails: assessmentDetails.strengthsOrProtectiveFactorsDetails,
+        // todo: 6. write a cypress test for the view
+        // todo: 7. think about what to do for test data variations
+      } catch (e) {
+        /* empty */
       }
 
-      // 6. write a cypress test for the view
-      // 7. think about what to do for test data variations
+      /**
+       * Assessment info states:
+       * 1. [x] Assessment API failure - warning: assessmentUnavailable
+       * 2. [x] Assessment is complete and all information is available - no warning
+       * 3. [] Assessment is not complete and all information is available - warning: assessmentIncomplete
+       * 4. [] Assessment is not complete and some information is available - warning: assessmentIncomplete
+       * 5. [] Assessment is not complete and no information is available - warning: assessmentNotStarted
+       */
 
       req.services.sessionService.setReturnLink(null)
 
@@ -94,7 +93,7 @@ export default class CreateGoalController {
           selectedAreaOfNeed,
           dateOptions,
           minimumDatePickerDate,
-          assessmentAreaInfo,
+          assessmentDetailsForArea,
           returnLink: `/plan?type=${type}`,
           form: req.body,
         },

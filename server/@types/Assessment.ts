@@ -77,6 +77,9 @@ export interface SubAreaData {
   criminogenicNeedsScore: string
 }
 
+// criminogenicNeedsData definition is on
+// https://dsdmoj.atlassian.net/wiki/spaces/ARN/pages/5102404112/OASys+Integration+API+Sentence+Plan#:~:text=criminogenicNeedsData
+
 export interface Accommodation {
   [key: string]: any
   accLinkedToHarm?: string
