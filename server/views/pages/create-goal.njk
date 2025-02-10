@@ -86,7 +86,7 @@
               {% if data.assessmentDetailsForArea != null %}
                 {% set missingInformation = [] %}
 
-
+                {# linked to serious harm section #}
                 {%- if data.assessmentDetailsForArea.linkedToHarm == 'YES' -%}
                   <p><strong>This area is linked to RoSH (risk of serious harm)</strong></p>
                 {%- elseif data.assessmentDetailsForArea.linkedToHarm == 'NO' -%}
@@ -96,6 +96,7 @@
                 {%- endif -%}
                 <p class="govuk-body">{{ data.assessmentDetailsForArea.riskOfSeriousHarmDetails }}</p>
 
+                {# linked to reoffending section #}
                 {%- if data.assessmentDetailsForArea.linkedtoReoffending == 'YES' -%}
                   <p><strong>This area is linked to risk of reoffending</strong></p>
                 {%- elseif data.assessmentDetailsForArea.linkedtoReoffending == 'NO' -%}
@@ -105,6 +106,7 @@
                 {%- endif -%}
                 <p class="govuk-body">{{ data.assessmentDetailsForArea.riskOfReoffendingDetails }}</p>
 
+                {# motivation section #}
                 {%- if data.assessmentDetailsForArea.motivationToMakeChanges != undefined %}
                   <p><strong>Motivation to make changes in this area</strong></p>
                   <p class="govuk-body">{{ locale.common.assessmentInfo.motivationText[data.assessmentDetailsForArea.motivationToMakeChanges] }}</p>
@@ -113,7 +115,7 @@
                   {%- set missingInformation = missingInformation.concat('motivationToMakeChanges') %}
                 {%- endif %}
 
-
+                {# linked to strengths section #}
                 {%- if data.assessmentDetailsForArea.linkedtoStrengthsOrProtectiveFactors == 'YES' -%}
                   <p><strong>There are strengths or protective factors related to this area</strong></p>
                 {%- elseif data.assessmentDetailsForArea.linkedtoStrengthsOrProtectiveFactors == 'NO' -%}
@@ -123,6 +125,7 @@
                 {%- endif -%}
                 <p class="govuk-body">{{ data.assessmentDetailsForArea.strengthsOrProtectiveFactorsDetails }}</p>
 
+                {# list out the missing information #}
                 {% if missingInformation.length > 0 %}
                   <p><strong>{{ locale.common.assessmentInfo.missingInformation }}</strong></p>
                   <p class="govuk-body">
