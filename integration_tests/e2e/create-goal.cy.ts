@@ -26,6 +26,17 @@ describe('Create a new Goal', () => {
       cy.get('.govuk-details__text').should('contain', 'This area is not linked to RoSH')
       cy.get('.govuk-details__text').should('contain', 'This question was not applicable.')
     })
+
+    it('Checks that assessment info is not missing for Accommodation', () => {
+      cy.visit(`/create-goal/accommodation`)
+      cy.get('.govuk-details__text').should('not.contain', 'Missing information')
+    })
+
+    it('Checks that assessment info is missing for Personal Relationships and Community', () => {
+      cy.visit(`/create-goal/personal-relationships-and-community`)
+      cy.get('.govuk-details__text').should('contain', 'Missing information')
+      cy.get('.govuk-details__text').should('contain', 'whether this area is linked to RoSH (risk of serious harm)')
+    })
   })
 
   describe('Security', () => {
