@@ -153,12 +153,14 @@ describe('Agree plan', () => {
     })
 
     it('Submit successfully when Yes is selected and additional notes provided', () => {
+      cy.get('.moj-primary-navigation__container').should('not.contain', `Plan history`)
       cy.get('#agree-plan-radio').click()
       cy.get('#notes').type('abc')
 
       cy.get('.govuk-button').click()
 
       cy.url().should('satisfy', url => url.endsWith('/plan'))
+      cy.get('.moj-primary-navigation__container').contains(`Plan history`)
       cy.checkAccessibility()
     })
 
