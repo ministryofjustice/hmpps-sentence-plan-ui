@@ -8,13 +8,39 @@ on:
 
 jobs:
   # Might need a build step that doesn't push here? (That test then depends on?)
+  hadolint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: Dockerfile
+
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      network_id: ${{ steps.network_id.outputs.network_id }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Bring up environment
+        run: |
+          make test-up
+        env:
+          APP_VERSION: 2025-02-05.12613.294f9a9
+
+      - name: Get Docker network ID
+        id: network_id
+        run: echo "::set-output name=network_id::$(docker network ls --filter name=test_network -q)"
 
   test:
+    needs: setup
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        containers: [1, 2, 3, 4]
+        containers: [ 1, 2, 3, 4 ]
     name: Cypress run
     steps:
       - name: Checkout
@@ -29,11 +55,8 @@ jobs:
       - name: Run npm ci
         run: npm ci
 
-      - name: Bring up environment
-        run: |
-          make test-up
-        env:
-          APP_VERSION: 2025-02-05.12613.294f9a9
+      - name: Connect to Docker network
+        run: docker network connect ${{ needs.setup.outputs.network_id }} $(hostname)
 
       - name: Run split Cypress tests
         run: |
@@ -50,7 +73,7 @@ jobs:
           path: |
             ./integration_tests/screenshots/**/*
 
-      - name: Bring down environment
-        if: success() || failure()
-        run: |
-          make test-down
+#      - name: Bring down environment
+#        if: success() || failure()
+#        run: |
+#          make test-down
