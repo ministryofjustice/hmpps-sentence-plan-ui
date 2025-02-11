@@ -11,12 +11,6 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
-    services:
-      docker:
-        image: docker:dind
-        options: --privileged --shm-size=4g
-        volumes:
-          - /var/run/docker.sock:/var/run/docker.sock:ro
     strategy:
       fail-fast: false
       matrix:
