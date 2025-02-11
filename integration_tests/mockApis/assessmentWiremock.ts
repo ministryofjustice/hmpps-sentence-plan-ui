@@ -16,7 +16,7 @@ export async function findMappingIdByUrlPattern(urlPattern: string): Promise<str
     }
 
     return null
-  } catch (error) {
+  } catch {
     return null
   }
 }
@@ -27,7 +27,8 @@ export async function deleteMappingByUrlPattern(pattern: string): Promise<void> 
     if (mappingId) {
       await superagent.delete(`${url}/mappings/${mappingId}`)
     }
-  } catch (error) {
-    console.error(`Error deleting mapping for pattern: ${pattern}`)
+  } catch {
+    return null
   }
+  return null
 }
