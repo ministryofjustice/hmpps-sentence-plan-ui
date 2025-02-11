@@ -65,9 +65,6 @@ export default class CreateGoalController {
         // 2. get the assessment details for the selected area of need
         const areaConfig: AssessmentAreaConfig = areaConfigs.find(config => config.area === selectedAreaOfNeed?.name)
         assessmentDetailsForArea = getAssessmentDetailsForArea(criminogenicNeedsData, areaConfig, assessmentData)
-
-        // todo: 6. write a cypress test for the view
-        // todo: 7. think about what to do for test data variations
       } catch {
         /* swallow the error, missing data is handled in the template */
       }
