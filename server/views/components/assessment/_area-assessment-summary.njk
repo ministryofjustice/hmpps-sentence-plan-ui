@@ -13,44 +13,37 @@
   {% endif %}
 
   {# linked to serious harm section #}
-  {%- if assessmentDetailsForArea.linkedToHarm == 'YES' -%}
-    <p><strong>This area is linked to RoSH (risk of serious harm)</strong></p>
-  {%- elseif assessmentDetailsForArea.linkedToHarm == 'NO' -%}
-    <p><strong>This area is not linked to RoSH (risk of serious harm)</strong></p>
+  {%- if assessmentDetailsForArea.linkedToHarm in ['YES', 'NO'] -%}
+    <p><strong>{{ locale.common.assessmentInfo.linkedToHarm[assessmentDetailsForArea.linkedToHarm | lower] }}</strong></p>
   {%- else -%}
     {% set missingInformation = missingInformation.concat('linkedToHarm') -%}
   {%- endif -%}
-  <p class="govuk-body">{{ assessmentDetailsForArea.riskOfSeriousHarmDetails }}</p>
+  <p class="govuk-body sp-text-pre-wrap">{{ assessmentDetailsForArea.riskOfSeriousHarmDetails }}</p>
 
   {# linked to reoffending section #}
-  {%- if assessmentDetailsForArea.linkedtoReoffending == 'YES' -%}
-    <p><strong>This area is linked to risk of reoffending</strong></p>
-  {%- elseif assessmentDetailsForArea.linkedtoReoffending == 'NO' -%}
-    <p><strong>This area is not linked to risk of reoffending</strong></p>
+  {%- if assessmentDetailsForArea.linkedtoReoffending in ['YES', 'NO'] -%}
+    <p><strong>{{ locale.common.assessmentInfo.linkedToReoffending[assessmentDetailsForArea.linkedtoReoffending | lower] }}</strong></p>
   {%- else -%}
     {% set missingInformation = missingInformation.concat('linkedToReoffending') -%}
   {%- endif -%}
-  <p class="govuk-body">{{ assessmentDetailsForArea.riskOfReoffendingDetails }}</p>
+  <p class="govuk-body sp-text-pre-wrap">{{ assessmentDetailsForArea.riskOfReoffendingDetails }}</p>
 
   {# motivation section #}
   {%- if assessmentDetailsForArea.motivationToMakeChanges != undefined %}
-    <p><strong>Motivation to make changes in this area</strong></p>
-    <p
-      class="govuk-body">{{ locale.common.assessmentInfo.motivationText[assessmentDetailsForArea.motivationToMakeChanges] }}</p>
+    <p><strong>{{ locale.common.assessmentInfo.motivationToMakeChanges }}</strong></p>
+    <p class="govuk-body">{{ locale.common.assessmentInfo.motivationText[assessmentDetailsForArea.motivationToMakeChanges] }}</p>
   {%- elseif assessmentDetailsForArea.isAssessmentSectionComplete == false %}
     {# We only add motivation to the Missing Information section if the section is not complete #}
     {%- set missingInformation = missingInformation.concat('motivationToMakeChanges') %}
   {%- endif %}
 
   {# linked to strengths section #}
-  {%- if assessmentDetailsForArea.linkedtoStrengthsOrProtectiveFactors == 'YES' -%}
-    <p><strong>There are strengths or protective factors related to this area</strong></p>
-  {%- elseif assessmentDetailsForArea.linkedtoStrengthsOrProtectiveFactors == 'NO' -%}
-    <p><strong>There are no strengths or protective factors related to this area</strong></p>
+  {%- if assessmentDetailsForArea.linkedtoStrengthsOrProtectiveFactors in ['YES', 'NO'] -%}
+    <p><strong>{{ locale.common.assessmentInfo.linkedtoStrengthsOrProtectiveFactors[assessmentDetailsForArea.linkedtoStrengthsOrProtectiveFactors | lower] }}</strong></p>
   {%- else -%}
     {% set missingInformation = missingInformation.concat('linkedtoStrengthsOrProtectiveFactors') %}
   {%- endif -%}
-  <p class="govuk-body">{{ assessmentDetailsForArea.strengthsOrProtectiveFactorsDetails }}</p>
+  <p class="govuk-body sp-text-pre-wrap">{{ assessmentDetailsForArea.strengthsOrProtectiveFactorsDetails }}</p>
 
   {# list out the missing information #}
   {% if missingInformation.length > 0 %}

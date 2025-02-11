@@ -121,6 +121,7 @@
         "motivationToMakeChanges": "motivation to make changes",
         "linkedtoStrengthsOrProtectiveFactors": "strengths and protective factors"
       },
+      "motivationToMakeChanges": "Motivation to make changes in this area",
       "motivationText": {
         "madeChanges": "{{ subject.givenName }} has already made positive changes and wants to maintain them.",
         "makingChanges": "{{ subject.givenName }} is actively making changes.",
@@ -131,6 +132,18 @@
         "doesNotWantToAnswer": "{{ subject.givenName }} does not want to answer.",
         "notPresent": "{{ subject.givenName }} was not present to answer this question.",
         "notApplicable": "This question was not applicable."
+      },
+      "linkedToHarm": {
+        "yes": "This area is linked to RoSH (risk of serious harm)",
+        "no": "This area is not linked to RoSH (risk of serious harm)"
+      },
+      "linkedToReoffending": {
+        "yes": "This area is linked to risk of reoffending",
+        "no": "This area is not linked to risk of reoffending"
+      },
+      "linkedtoStrengthsOrProtectiveFactors": {
+        "yes": "There are strengths or protective factors related to this area",
+        "no": "There are no strengths or protective factors related to this area"
       }
     }
   },
