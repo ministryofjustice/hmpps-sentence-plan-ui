@@ -17,6 +17,7 @@ export default class AboutPersonController {
       const deliusData = await req.services.infoService.getPopData(popData.crn)
       const criminogenicNeedsData = req.services.sessionService.getCriminogenicNeeds()
       const assessmentData = await req.services.assessmentService.getAssessmentByUuid(planUuid)
+      const plan = await req.services.planService.getPlanByUuid(planUuid)
       const errorMessages = []
 
       if (assessmentData === null) {
@@ -36,6 +37,7 @@ export default class AboutPersonController {
       return res.render('pages/about', {
         locale: locale.en,
         data: {
+          planAgreementStatus: plan.agreementStatus,
           oasysReturnUrl,
           pageId,
           deliusData,
