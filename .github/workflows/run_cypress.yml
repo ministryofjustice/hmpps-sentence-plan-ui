@@ -7,6 +7,8 @@ on:
       - test-cypress-split
 
 jobs:
+  # Might need a build step that doesn't push here? (That test then depends on?)
+
   test:
     runs-on: ubuntu-latest
     services:
@@ -30,7 +32,8 @@ jobs:
           node-version: 22
           cache: 'npm'
 
-      - run: npm ci
+      - name: Run npm ci
+        run: npm ci
 
       - name: Bring up environment
         run: |
@@ -46,7 +49,7 @@ jobs:
           SPLIT_INDEX: ${{ strategy.job-index }}
 
       - name: Archive screenshots
-        if: success() || failure()
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: screenshots_${{ matrix.containers }}
