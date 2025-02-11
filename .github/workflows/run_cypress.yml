@@ -8,6 +8,20 @@ on:
 
 jobs:
   # Might need a build step that doesn't push here? (That test then depends on?)
+  env:
+    runs-on: ubuntu-latest
+    services:
+      docker:
+        image: docker:dind
+        options: --privileged --shm-size=4g
+        volumes:
+          - /var/run/docker.sock:/var/run/docker.sock:ro
+    steps:
+      - name: Bring up environment
+        run: |
+          make test-up
+        env:
+          APP_VERSION: 2025-02-05.12613.294f9a9
 
   test:
     runs-on: ubuntu-latest
@@ -17,11 +31,13 @@ jobs:
         options: --privileged --shm-size=4g
         volumes:
           - /var/run/docker.sock:/var/run/docker.sock:ro
-    name: Cypress run
     strategy:
       fail-fast: false
       matrix:
         containers: [1, 2, 3, 4]
+    name: Cypress run {{ matrix.containers }}
+    needs:
+      - env
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -34,12 +50,6 @@ jobs:
 
       - name: Run npm ci
         run: npm ci
-
-      - name: Bring up environment
-        run: |
-          make test-up
-        env:
-          APP_VERSION: 2025-02-05.12613.294f9a9
 
       - name: Run split Cypress tests
         run: |
@@ -56,6 +66,11 @@ jobs:
           path: |
             ./integration_tests/screenshots/**/*
 
+  env-down:
+    runs-on: ubuntu-latest
+    needs:
+      - env
+    steps:
       - name: Bring down environment
         if: success() || failure()
         run: |
