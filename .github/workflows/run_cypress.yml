@@ -21,7 +21,7 @@ jobs:
       fail-fast: false
       matrix:
         containers: [1, 2, 3, 4]
-    name: Cypress run {{ matrix.containers }}
+    name: Cypress run
     steps:
       - name: Checkout
         uses: actions/checkout@v4
