@@ -1,5 +1,6 @@
 import { faker } from '@faker-js/faker'
 import CreateGoal from '../pages/create-goal'
+import { deleteMappingByUrlPattern, resetStubs } from '../mockApis/assessmentWiremock'
 
 describe('Create a new Goal', () => {
   const createGoalPage = new CreateGoal()
@@ -20,6 +21,19 @@ describe('Create a new Goal', () => {
   })
 
   describe('Assessment information', () => {
+    // eslint-disable-next-line cypress/no-async-tests
+    it('Displays warning when assessment data is unavailable', async () => {
+      deleteMappingByUrlPattern('/entity/.*/ASSESSMENT')
+
+      cy.visit(`/create-goal/accommodation`)
+      cy.get('.govuk-warning-text__text').should(
+        'contain',
+        'There is a problem getting this information. Try reloading the page or try again later.',
+      )
+
+      await resetStubs()
+    })
+
     it('Check the assessment info details component is present', () => {
       cy.visit(`/create-goal/accommodation`)
       cy.get('.govuk-details__summary-text').should('contain', 'View information from')
