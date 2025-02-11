@@ -12,6 +12,8 @@
     }) }}
   {% endif %}
 
+  {% set missingInformation = [] %}
+
   {# linked to serious harm section #}
   {%- if assessmentDetailsForArea.linkedToHarm in ['YES', 'NO'] -%}
     <p><strong>{{ locale.common.assessmentInfo.linkedToHarm[assessmentDetailsForArea.linkedToHarm | lower] }}</strong></p>
