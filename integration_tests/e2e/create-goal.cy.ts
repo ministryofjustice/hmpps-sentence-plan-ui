@@ -23,13 +23,26 @@ describe('Create a new Goal', () => {
     it('Check the assessment info details component is present', () => {
       cy.visit(`/create-goal/accommodation`)
       cy.get('.govuk-details__summary-text').should('contain', 'View information from')
-      cy.get('.govuk-details__text').should('contain', 'This area is not linked to RoSH')
-      cy.get('.govuk-details__text').should('contain', 'This question was not applicable.')
+      cy.get('.govuk-details__text').within(() => {
+        cy.get('p').should('contain', 'This area is not linked to RoSH')
+        cy.get('p').should('contain', 'This area is linked to risk of reoffending')
+        cy.get('p').should('contain', 'Motivation to make changes in this area')
+        cy.get('p').should('contain', 'This question was not applicable.')
+        cy.get('p').should('contain', 'There are no strengths or protective factors related to this area')
+      })
     })
 
     it('Checks that assessment info is not missing for Accommodation', () => {
       cy.visit(`/create-goal/accommodation`)
       cy.get('.govuk-details__text').should('not.contain', 'Missing information')
+    })
+
+    it('Checks that warning for assessment section not complete is visible for Personal Relationships and Community', () => {
+      cy.visit(`/create-goal/personal-relationships-and-community`)
+      cy.get('.govuk-warning-text__text').should(
+        'contain',
+        'This area has not been marked as complete in the assessment yet, but you can check the latest information available below.',
+      )
     })
 
     it('Checks that assessment info is missing for Personal Relationships and Community', () => {
