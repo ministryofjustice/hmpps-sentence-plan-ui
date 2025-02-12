@@ -102,7 +102,7 @@
                   {% set goalText = locale.linkType.latest %}
                   {% set hiddenAriaText = locale.ariaText.latest %}
               {% endif %}
-              <p><a aria-label= '{{ hiddenAriaText }}' href='{{ goalLink }}'>{{ goalText }}</a></p>
+              <p class='goal-link'><a aria-label= '{{ hiddenAriaText }}' href='{{ goalLink }}'>{{ goalText }}</a></p>
             {% endif %}
         {% endif %}
     {% endfor %}
