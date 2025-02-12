@@ -48,7 +48,16 @@ jobs:
         with:
           name: screenshots_${{ matrix.containers }}
           path: |
-            ./integration_tests/screenshots/**/*
+            integration_tests/screenshots/**/*
+
+      - name: Upload test results
+        if: '!cancelled()'
+        uses: actions/upload-artifact@v4
+        with:
+          name: test_results
+          path: |
+            test_results/cypress/
+            ${{ runner.temp }}/docker-logs
 
       - name: Bring down environment
         if: success() || failure()
