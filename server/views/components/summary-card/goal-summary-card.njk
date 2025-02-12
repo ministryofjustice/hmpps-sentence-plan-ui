@@ -63,19 +63,25 @@
             {% endif %}
           {% endfor %}
           <div class="step-counter">
+            <p>
             {% if params.goal.steps.length == 1 %}
               {{ completedCount }}{{ locale.info.stepsCompletedSingular }}
             {% else %}
               {{ completedCount }}{{ locale.info.stepsCompletedPlural }}
             {% endif %}
+            </p>
           </div>
+          {% if params.plan.agreementStatus == 'AGREED' %}
           <details class="govuk-details">
                 <summary class="govuk-details__summary">
                   <span class="govuk-details__summary-text">
                     View steps
                   </span>
                 </summary>
-            <div class="govuk-details__text">
+            {% endif %}
+            <div class="{% if params.plan.agreementStatus == 'AGREED' %}govuk-details__text
+                        {% elseif params.plan.agreementStatus == 'DRAFT' %}govuk-details__text_inactive
+                        {% endif %}">
               <table class="govuk-table goal-summary-card__steps">
                       <thead class="govuk-table__head">
                       <tr class="govuk-table__row">
@@ -107,7 +113,8 @@
                     </tbody>
               </table>
             </div>
-          </details>
+          {% if params.plan.agreementStatus == 'DRAFT' %}
+          </details> {% endif %}
         {% else %}
             <div class="goal-summary-card__steps--empty">
                 <strong>{{ locale.stepsList.noStepsAdded }}</strong>
@@ -117,7 +124,9 @@
             </div>
         {% endif %}
 
-            <p class="goal-summary-card__areas-of-need">
+            <p class="{% if params.plan.agreementStatus == 'DRAFT' %}goal-summary-card__areas-of-need
+                      {% elseif params.plan.agreementStatus == 'AGREED' %}goal-summary-card__areas-of-need_agreed
+                      {% endif %}">
                 {{ locale.areaOfNeed.mainAreaOfNeed }}<br>
                 {% if params.goal.relatedAreasOfNeed.length > 0 %}
                     {{ locale.areaOfNeed.relatedAreasOfNeed }}
