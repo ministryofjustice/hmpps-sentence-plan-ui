@@ -46,8 +46,9 @@ jobs:
           SPLIT_INDEX: ${{ strategy.job-index }}
 
       - name: Export container logs
+        run: docker ps
 #        if: failure()
-        run: make save-logs OUTPUT_LOGS_DIR=${{ runner.temp }}/docker-logs PROJECT_NAME="hmpps-sentence-plan"
+#        run: make save-logs OUTPUT_LOGS_DIR=${{ runner.temp }}/docker-logs PROJECT_NAME="hmpps-sentence-plan"
 
       - name: Archive screenshots
         if: failure()
@@ -55,7 +56,7 @@ jobs:
         with:
           name: screenshots_${{ matrix.containers }}
           path: |
-            integration_tests/screenshots/**/*
+            ./integration_tests/screenshots/**/*
 
       - name: Upload test results
         if: '!cancelled()'
