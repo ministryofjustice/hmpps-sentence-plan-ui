@@ -1,6 +1,7 @@
 import superagent, { type Response } from 'superagent'
+import config from '../../server/config'
 
-const url = 'http://localhost:9094/__admin'
+const url = `${config.apis.coordinatorApi.url}/__admin`
 
 export const resetStubs = (): Promise<Response> => superagent.post(`${url}/mappings/reset`)
 

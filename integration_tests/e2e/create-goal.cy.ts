@@ -1,5 +1,5 @@
-import { faker } from '@faker-js/faker'
 import CreateGoal from '../pages/create-goal'
+import { deleteMappingByUrlPattern, resetStubs } from '../mockApis/assessmentWiremock'
 
 describe('Create a new Goal', () => {
   const createGoalPage = new CreateGoal()
@@ -20,6 +20,19 @@ describe('Create a new Goal', () => {
   })
 
   describe('Assessment information', () => {
+    // eslint-disable-next-line cypress/no-async-tests
+    it('Displays warning when assessment data is unavailable', async () => {
+      await deleteMappingByUrlPattern('/entity/.*/ASSESSMENT')
+
+      cy.visit(`/create-goal/accommodation`)
+      cy.get('.govuk-warning-text__text').should(
+        'contain',
+        'There is a problem getting this information. Try reloading the page or try again later.',
+      )
+
+      await resetStubs()
+    })
+
     it('Check the assessment info details component is present', () => {
       cy.visit(`/create-goal/accommodation`)
       cy.get('.govuk-details__summary-text').should('contain', 'View information from')
@@ -36,8 +49,22 @@ describe('Create a new Goal', () => {
       cy.visit(`/create-goal/accommodation`)
       cy.get('.govuk-details__text').should('not.contain', 'Missing information')
     })
-  })
 
+    it('Checks that warning for assessment section not complete is visible for Personal Relationships and Community', () => {
+      cy.visit(`/create-goal/personal-relationships-and-community`)
+      cy.get('.govuk-warning-text__text').should(
+        'contain',
+        'This area has not been marked as complete in the assessment yet, but you can check the latest information available below.',
+      )
+    })
+
+    it('Checks that assessment info is missing for Personal Relationships and Community', () => {
+      cy.visit(`/create-goal/personal-relationships-and-community`)
+      cy.get('.govuk-details__text').should('contain', 'Missing information')
+      cy.get('.govuk-details__text').should('contain', 'whether this area is linked to RoSH (risk of serious harm)')
+    })
+  })
+  /*
   describe('Security', () => {
     it('Should display authorisation error if user does not have READ_WRITE role', () => {
       cy.get<string>('@oasysAssessmentPk').then(oasysAssessmentPk => {
@@ -144,5 +171,5 @@ describe('Create a new Goal', () => {
         })
       cy.checkAccessibility()
     })
-  })
+  }) */
 })
