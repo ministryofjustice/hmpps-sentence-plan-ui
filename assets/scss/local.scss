@@ -1,5 +1,9 @@
 .capital:first-letter {text-transform: uppercase}
 
+a {
+  @extend .govuk-link--no-visited-state
+}
+
 .govuk-visually-hidden {
   &--mobile {
     @include govuk-media-query($until: tablet) {

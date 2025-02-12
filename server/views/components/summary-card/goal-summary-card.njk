@@ -112,7 +112,7 @@
             <div class="goal-summary-card__steps--empty">
                 <strong>{{ locale.stepsList.noStepsAdded }}</strong>
                 {% if params.actions.length > 0 %}
-                    <a class="govuk-!-display-none-print govuk-link--no-visited-state" href="/goal/{{ params.goal.uuid }}/add-steps">{{ locale.stepsList.addSteps }}</a>
+                    <a class="govuk-!-display-none-print" href="/goal/{{ params.goal.uuid }}/add-steps">{{ locale.stepsList.addSteps }}</a>
                 {% endif %}
             </div>
         {% endif %}

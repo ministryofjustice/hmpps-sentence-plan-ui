@@ -104,7 +104,7 @@
               {{ locale.notAgreePlan }}
           {%- endif %}
           {%- if data.plan.agreementStatus !== 'DRAFT' %}
-              <a href="/plan-history" class="govuk-link govuk-link--no-visited-state">{{ locale.viewPlanHistory }}</a>
+              <a href="/plan-history">{{ locale.viewPlanHistory }}</a>
           {%- endif %}
       {%- else %}
           {{ locale.addStepSuggestion }}
@@ -303,8 +303,8 @@
                     {% endif %}
                 <p class="govuk-!-display-none-print">{{ locale.ifNoCurrentGoals.text }}</p>
                 <ul class="govuk-!-display-none-print">
-                    <li><a href="/create-goal/accommodation" class="govuk-link govuk-link--no-visited-state ">{{ locale.ifNoCurrentGoals.action1 }}</a></li>
-                    <li><a href="/about" class="govuk-link govuk-link--no-visited-state">{{ locale.ifNoCurrentGoals.action2 }}</a></li>
+                    <li><a href="/create-goal/accommodation">{{ locale.ifNoCurrentGoals.action1 }}</a></li>
+                    <li><a href="/about" >{{ locale.ifNoCurrentGoals.action2 }}</a></li>
                 </ul>
                 </div>
             {% elseif goalType == 'future' and goals.length == 0 %}
