@@ -20,6 +20,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Printing something allegedly expands 'Show all jobs' automatically
+        run: echo "Running tests for ${{ matrix.containers }}"
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
