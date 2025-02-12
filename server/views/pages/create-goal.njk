@@ -7,6 +7,7 @@
 {% from "moj/components/side-navigation/macro.njk" import mojSideNavigation %}
 {% from "moj/components/date-picker/macro.njk" import mojDatePicker %}
 {% from "../components/error-summary/error-summary.njk" import errorSummary %}
+{% from "../components/assessment/area-assessment-summary.njk" import renderAreaAssessmentSummary %}
 
 {% set locale = interpolate(locale, {
     areaOfNeed: data.selectedAreaOfNeed.name,
@@ -64,6 +65,17 @@
 
             <span class="govuk-caption-l">{{ locale.mainHeading.caption }}</span>
             <h1 class="govuk-heading-l">{{ locale.mainHeading.title }}</h1>
+
+            <details class="govuk-details">
+              <summary class="govuk-details__summary">
+                <span class="govuk-details__summary-text">
+                  {{ locale.common.assessmentInfo.detailsSummary }}
+                </span>
+              </summary>
+              <div class="govuk-details__text">
+                {{ renderAreaAssessmentSummary(data.assessmentDetailsForArea, locale) }}
+              </div>
+            </details>
 
             <form id="create-goal-form" method="POST">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}">

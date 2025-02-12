@@ -100,7 +100,7 @@ function createHandoverContext(apiToken, oasysAssessmentPk, accessMode, sentence
           emoThreshold: 'N/A',
         },
         personalRelationshipsAndCommunity: {
-          relLinkedToHarm: 'NO',
+          relLinkedToHarm: 'NULL',
           relLinkedToReoffending: 'NO',
           relStrengths: 'NO',
           relOtherWeightedScore: '6',
