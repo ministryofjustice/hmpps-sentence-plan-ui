@@ -88,3 +88,7 @@ export const merge = (...args: object[]): object => {
 
   return mergeDeep(...args)
 }
+
+export const splitString = (input: string, delimeter: string) => {
+  return input.split(delimeter)
+}

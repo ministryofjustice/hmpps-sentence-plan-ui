@@ -7,7 +7,7 @@ import config from '../../config'
 import { initialiseName, mergeDeep, convertToTitleCase } from '../../utils/utils'
 import commonLocale from '../../utils/commonLocale.json'
 import { sentenceLength } from '../../utils/assessmentUtils'
-import { formatDate, localeInterpolation, merge, toFormattedError } from './helpers'
+import { formatDate, localeInterpolation, merge, splitString, toFormattedError } from './helpers'
 
 const production = process.env.NODE_ENV === 'production'
 
@@ -49,6 +49,7 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
   njkEnv.addFilter('convertToTitleCase', convertToTitleCase)
   njkEnv.addFilter('formatSimpleDate', date => formatDate(date, 'simple'))
   njkEnv.addFilter('formatISODate', date => formatDate(date, 'iso'))
+  njkEnv.addFilter('splitString', splitString)
 
   /** GLOBALS * */
   njkEnv.addGlobal('merge', merge)
