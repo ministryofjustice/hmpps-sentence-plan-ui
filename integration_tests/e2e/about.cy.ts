@@ -11,6 +11,7 @@ describe('Rendering About Person for READ_WRITE user', () => {
   })
 
   it('Should check the page rendered correctly', () => {
+    cy.get('.moj-primary-navigation__container').should('not.contain', `Plan history`)
     cy.get('h1').should('include.text', 'About')
     cy.get('h2').eq(0).contains('Sentence information')
     cy.get('h2').eq(1).contains('High-scoring areas from the assessment')

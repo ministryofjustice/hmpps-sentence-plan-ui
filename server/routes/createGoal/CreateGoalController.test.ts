@@ -12,6 +12,7 @@ import URLs from '../URLs'
 import { testGoal, testNewGoal } from '../../testutils/data/goalData'
 import runMiddlewareChain from '../../testutils/runMiddlewareChain'
 import testPlan from '../../testutils/data/planData'
+import { crimNeedsSubset, incompleteAssessmentData } from '../../testutils/data/testAssessmentData'
 
 jest.mock('../../middleware/authorisationMiddleware', () => ({
   requireAccessMode: jest.fn(() => (req: Request, res: Response, next: NextFunction) => {
@@ -29,8 +30,15 @@ jest.mock('../../services/sentence-plan/referentialDataService', () => {
 jest.mock('../../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
     getPlanUUID: jest.fn().mockReturnValue('some-plan-uuid'),
+    getCriminogenicNeeds: jest.fn().mockReturnValue(crimNeedsSubset),
     getReturnLink: jest.fn().mockReturnValue('/some-return-link'),
     setReturnLink: jest.fn(),
+  }))
+})
+
+jest.mock('../../services/sentence-plan/assessmentService', () => {
+  return jest.fn().mockImplementation(() => ({
+    getAssessmentByUuid: jest.fn().mockReturnValue(incompleteAssessmentData),
   }))
 })
 
@@ -61,6 +69,13 @@ describe('CreateGoalController', () => {
       form: {},
       selectedAreaOfNeed: AreaOfNeed.find(x => x.url === 'accommodation'),
       minimumDatePickerDate: '01/01/2024',
+      assessmentDetailsForArea: {
+        isAssessmentSectionComplete: true,
+        motivationToMakeChanges: 'thinkingAboutMakingChanges',
+        linkedToHarm: 'NO',
+        linkedtoReoffending: 'YES',
+        linkedtoStrengthsOrProtectiveFactors: 'NO',
+      },
       dateOptions: [
         new Date('2024-04-01T00:00:00.000Z'),
         new Date('2024-07-01T00:00:00.000Z'),
@@ -94,6 +109,17 @@ describe('CreateGoalController', () => {
       await runMiddlewareChain(controller.get, req, res, next)
 
       expect(res.render).toHaveBeenCalledWith('pages/create-goal', viewData)
+    })
+
+    it('should render without errors when assessment info is not available', async () => {
+      req.services.assessmentService.getAssessmentByUuid = jest.fn().mockResolvedValue(null)
+
+      const viewDataWithoutAssessment = structuredClone(viewData)
+      viewDataWithoutAssessment.data.assessmentDetailsForArea = null
+
+      await runMiddlewareChain(controller.get, req, res, next)
+
+      expect(res.render).toHaveBeenCalledWith('pages/create-goal', viewDataWithoutAssessment)
     })
 
     it('should render with validation errors', async () => {
