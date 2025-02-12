@@ -62,15 +62,13 @@
               {% set completedCount = completedCount + 1 %}
             {% endif %}
           {% endfor %}
-          <div class="step-counter">
-            <p>
+            <p class="step-counter">
             {% if params.goal.steps.length == 1 %}
               {{ completedCount }}{{ locale.info.stepsCompletedSingular }}
             {% else %}
               {{ completedCount }}{{ locale.info.stepsCompletedPlural }}
             {% endif %}
             </p>
-          </div>
           {% if params.plan.agreementStatus == 'AGREED' %}
           <details class="govuk-details">
                 <summary class="govuk-details__summary">
@@ -123,7 +121,6 @@
                 {% endif %}
             </div>
         {% endif %}
-
             <p class="{% if params.plan.agreementStatus == 'DRAFT' %}goal-summary-card__areas-of-need
                       {% elseif params.plan.agreementStatus == 'AGREED' %}goal-summary-card__areas-of-need_agreed
                       {% endif %}">
