@@ -20,9 +20,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Printing something allegedly expands 'Show all jobs' automatically
-        run: echo "Running tests for ${{ matrix.containers }}"
-
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -46,9 +43,8 @@ jobs:
           SPLIT_INDEX: ${{ strategy.job-index }}
 
       - name: Export container logs
-        run: docker ps
 #        if: failure()
-#        run: make save-logs OUTPUT_LOGS_DIR=${{ runner.temp }}/docker-logs PROJECT_NAME="hmpps-sentence-plan"
+        run: make save-logs OUTPUT_LOGS_DIR=${{ runner.temp }}/docker-logs PROJECT_NAME="hmpps-sentence-plan-test"
 
       - name: Archive screenshots
         if: failure()
