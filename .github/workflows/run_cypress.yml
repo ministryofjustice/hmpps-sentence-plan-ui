@@ -61,7 +61,6 @@ jobs:
           name: test_results_${{ matrix.containers }}
           path: |
             test_results/cypress/
-          # The below comes from the 'Export container logs' job above
             ${{ runner.temp }}/docker-logs
 
       - name: Bring down environment
