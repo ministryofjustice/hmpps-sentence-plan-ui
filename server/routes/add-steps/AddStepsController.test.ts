@@ -11,6 +11,7 @@ import { toKebabCase } from '../../utils/utils'
 import URLs from '../URLs'
 import { StepStatus } from '../../@types/StepType'
 import testPlan from '../../testutils/data/planData'
+import { crimNeedsSubset, incompleteAssessmentData } from '../../testutils/data/testAssessmentData'
 
 jest.mock('../../middleware/authorisationMiddleware', () => ({
   requireAccessMode: jest.fn(() => (req: Request, res: Response, next: NextFunction) => {
@@ -33,10 +34,17 @@ jest.mock('../../services/sentence-plan/stepsService', () => {
 
 jest.mock('../../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
+    getCriminogenicNeeds: jest.fn().mockReturnValue(crimNeedsSubset),
     getSubjectDetails: jest.fn().mockReturnValue(handoverData.subject),
     getPlanUUID: jest.fn().mockReturnValue('some-plan-uuid'),
     getReturnLink: jest.fn().mockReturnValue('/plan?status=success'),
     setReturnLink: jest.fn(),
+  }))
+})
+
+jest.mock('../../services/sentence-plan/assessmentService', () => {
+  return jest.fn().mockImplementation(() => ({
+    getAssessmentByUuid: jest.fn().mockReturnValue(incompleteAssessmentData),
   }))
 })
 
@@ -65,6 +73,13 @@ describe('AddStepsController', () => {
       popData: handoverData.subject,
       areaOfNeed: toKebabCase(testGoal.areaOfNeed.name),
       goal: testGoal,
+      assessmentDetailsForArea: {
+        isAssessmentSectionComplete: true,
+        motivationToMakeChanges: 'needsHelpToMakeChanges',
+        linkedToHarm: 'NO',
+        linkedtoReoffending: 'NO',
+        linkedtoStrengthsOrProtectiveFactors: 'NO',
+      },
       returnLink: '/plan?status=success',
       form: {
         steps: [
@@ -244,6 +259,13 @@ describe('AddStepsController', () => {
           popData: viewData.data.popData,
           areaOfNeed: viewData.data.areaOfNeed,
           goal: viewData.data.goal,
+          assessmentDetailsForArea: {
+            isAssessmentSectionComplete: true,
+            motivationToMakeChanges: 'needsHelpToMakeChanges',
+            linkedToHarm: 'NO',
+            linkedtoReoffending: 'NO',
+            linkedtoStrengthsOrProtectiveFactors: 'NO',
+          },
           returnLink: viewData.data.returnLink,
           form: {
             action: 'save',
