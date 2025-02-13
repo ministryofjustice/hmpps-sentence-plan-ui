@@ -126,21 +126,6 @@ describe('Update goal', () => {
       cy.checkAccessibility()
     })
 
-    it('Check compacted steps list link displays', () => {
-      cy.get<Goal>('@goalForNow').then(goal => {
-        cy.visit(`/update-goal-steps/${goal.uuid}`)
-        cy.get('#step-status-1').select('Completed')
-        cy.get('.govuk-button').contains('Save goal and steps').click()
-        cy.url().should('include', `/confirm-if-achieved/${goal.uuid}`)
-      })
-
-      cy.get('.govuk-table__head > .govuk-table__row > :nth-child(1)')
-        .should('have.text', 'Who will do this')
-        .parents('.govuk-details')
-        .should('exist')
-      cy.checkAccessibility()
-    })
-
     it('Can visit change goal and back link is correct', () => {
       cy.contains('a', 'Update').click()
       cy.contains('a', 'Change goal details').click()

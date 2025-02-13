@@ -62,20 +62,24 @@
               {% set completedCount = completedCount + 1 %}
             {% endif %}
           {% endfor %}
-          <div class="step-counter">
+            <p class="step-counter">
             {% if params.goal.steps.length == 1 %}
               {{ completedCount }}{{ locale.info.stepsCompletedSingular }}
             {% else %}
               {{ completedCount }}{{ locale.info.stepsCompletedPlural }}
             {% endif %}
-          </div>
+            </p>
+          {% if params.plan.agreementStatus == 'AGREED' %}
           <details class="govuk-details">
                 <summary class="govuk-details__summary">
                   <span class="govuk-details__summary-text">
                     View steps
                   </span>
                 </summary>
-            <div class="govuk-details__text">
+          {% endif %}
+            <div class="{% if params.plan.agreementStatus == 'AGREED' %}govuk-details__text
+                        {% elseif params.plan.agreementStatus == 'DRAFT' %}govuk-details__text_inactive
+                        {% endif %}">
               <table class="govuk-table goal-summary-card__steps">
                       <thead class="govuk-table__head">
                       <tr class="govuk-table__row">
@@ -116,8 +120,9 @@
                 {% endif %}
             </div>
         {% endif %}
-
-            <p class="goal-summary-card__areas-of-need">
+            <p class="{% if params.plan.agreementStatus == 'DRAFT' %}goal-summary-card__areas-of-need
+                      {% elseif params.plan.agreementStatus == 'AGREED' %}goal-summary-card__areas-of-need_agreed
+                      {% endif %}">
                 {{ locale.areaOfNeed.mainAreaOfNeed }}<br>
                 {% if params.goal.relatedAreasOfNeed.length > 0 %}
                     {{ locale.areaOfNeed.relatedAreasOfNeed }}
