@@ -13,12 +13,10 @@ describe('Rendering About Person for READ_WRITE user', () => {
   it('Should check the page rendered correctly', () => {
     cy.get('.moj-primary-navigation__container').should('not.contain', `Plan history`)
     cy.get('h1').should('include.text', 'About')
-    cy.get('h2').eq(0).contains('Sentence information')
-    cy.get('[id=last-updated]').contains('assessment was last updated on')
-    cy.get('h2').eq(1).contains('High-scoring areas from the assessment')
-    cy.get('[id=other-areas-paragraph]').contains(
-      'Health and wellbeing, and finances never have a need score. When other information is available for those areas, you can see it here.',
-    )
+    cy.get('h2.govuk-error-summary__title').eq(0).contains('Some areas have incomplete information')
+    cy.get('h2').eq(1).contains('Sentence information')
+    cy.get('h2').eq(2).contains('Incomplete information')
+    cy.get('h2').eq(3).contains('High-scoring areas from the assessment')
     cy.get('[role="button"]').should('have.length', 2)
     cy.get('[role="button"]').eq(0).should('contain', 'Return to OASys')
     cy.get('[role="button"]').eq(1).should('contain', 'Create goal')
@@ -42,8 +40,8 @@ describe('Rendering About Person for READ_WRITE user', () => {
 
   it('Should check if main titles of hard-coded high-scoring areas from the assessment are displayed correctly and in order with the correct risk marker', () => {
     const expectedText = [
-      'Accommodation',
       'Personal relationships and community',
+      'Accommodation',
       'Thinking, behaviours and attitudes',
       'Alcohol use',
       'Employment and education',
@@ -66,8 +64,8 @@ describe('Rendering About Person for READ_WRITE user', () => {
     cy.get('.govuk-accordion__show-all').click({ multiple: true })
 
     const areas = [
-      { text: 'Create accommodation goal', href: 'accommodation' },
       { text: 'Create personal relationships and community goal', href: 'personal-relationships-and-community' },
+      { text: 'Create accommodation goal', href: 'accommodation' },
       { text: 'Create thinking, behaviours and attitudes goal', href: 'thinking-behaviours-and-attitudes' },
       { text: 'Create alcohol use goal', href: 'alcohol-use' },
       { text: 'Create employment and education goal', href: 'employment-and-education' },

@@ -48,8 +48,11 @@
       "viewPreviousGoalsLink": "View previous goals",
       "noPreviousGoals": "No previous goals"
     },
-    "assessmentIncomplete": {
-      "paragraphWithLink": "This information is not available yet because the assessment has not been completed. You can <a href='{{ oasysReturnUrl }}'>check the summary sheet in OASys</a> instead."
+    "incompleteAssessment": {
+      "errorTitle": "Some areas have incomplete information",
+      "errorDescription": "This means the areas have not been marked as complete in the assessment, but you can still see the latest information available.",
+      "sectionHeading": "Incomplete information",
+      "sectionParagraph": "These areas have not been marked as complete in the assessment yet, but you can see the latest information available."
     },
     "subNav": {
       "about": "About",

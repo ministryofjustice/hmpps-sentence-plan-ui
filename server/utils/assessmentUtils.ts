@@ -81,7 +81,7 @@ export const formatAssessmentData = (
   if (!assessment || !assessment.sanAssessmentData) {
     return {
       isAssessmentComplete: false,
-      areas: { lowScoring: [], highScoring: [], other: [] },
+      areas: { incompleteAreas: [], highScoring: [], lowScoring: [], other: [] },
     }
   }
 
@@ -154,9 +154,19 @@ export const formatAssessmentData = (
     assessmentIsComplete = true
   }
 
-  const highScoring = filterAndSortAreas(all, (score, threshold) => score > threshold)
-  const lowScoring = filterAndSortAreas(all, (score, threshold) => score <= threshold)
-  const otherUnsorted = all.filter(area => area.criminogenicNeedsScore === undefined)
+  let incompleteAreas: AssessmentArea[] = []
+
+  if (!assessmentIsComplete) {
+    incompleteAreas = all
+      .filter(area => area.isAssessmentSectionComplete === false)
+      .sort((a, b) => a.title.localeCompare(b.title))
+  }
+
+  const completeAreas = all.filter(area => area.isAssessmentSectionComplete === true)
+
+  const highScoring = filterAndSortAreas(completeAreas, (score, threshold) => score > threshold)
+  const lowScoring = filterAndSortAreas(completeAreas, (score, threshold) => score <= threshold)
+  const otherUnsorted = completeAreas.filter(area => area.criminogenicNeedsScore === undefined)
 
   // emptyAreas are areas that are missing from the criminogenic needs data
   const emptyAreas = groupAndSortMissingAreas(areaConfigs, crimNeeds)
@@ -166,8 +176,9 @@ export const formatAssessmentData = (
     isAssessmentComplete: assessmentIsComplete,
     versionUpdatedAt: assessment.lastUpdatedTimestampSAN,
     areas: {
-      lowScoring,
+      incompleteAreas,
       highScoring,
+      lowScoring,
       other,
     },
   } as FormattedAssessment
