@@ -62,6 +62,7 @@
               {% set completedCount = completedCount + 1 %}
             {% endif %}
           {% endfor %}
+          {% if params.plan.agreementStatus == 'AGREED' %}
             <p class="step-counter">
             {% if params.goal.steps.length == 1 %}
               {{ completedCount }}{{ locale.info.stepsCompletedSingular }}
@@ -69,7 +70,6 @@
               {{ completedCount }}{{ locale.info.stepsCompletedPlural }}
             {% endif %}
             </p>
-          {% if params.plan.agreementStatus == 'AGREED' %}
           <details class="govuk-details">
                 <summary class="govuk-details__summary">
                   <span class="govuk-details__summary-text">
