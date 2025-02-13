@@ -76,7 +76,7 @@
                     View steps
                   </span>
                 </summary>
-            {% endif %}
+          {% endif %}
             <div class="{% if params.plan.agreementStatus == 'AGREED' %}govuk-details__text
                         {% elseif params.plan.agreementStatus == 'DRAFT' %}govuk-details__text_inactive
                         {% endif %}">
@@ -111,8 +111,7 @@
                     </tbody>
               </table>
             </div>
-          {% if params.plan.agreementStatus == 'DRAFT' %}
-          {% endif %}</details>
+          </details>
         {% else %}
             <div class="goal-summary-card__steps--empty">
                 <strong>{{ locale.stepsList.noStepsAdded }}</strong>
