@@ -13,6 +13,9 @@ import { AccessMode } from '../../@types/Handover'
 import { HttpError } from '../../utils/HttpError'
 import { getDateOptions, getGoalTargetDate } from '../../utils/goalTargetDateUtils'
 import { NewGoal } from '../../@types/NewGoalType'
+import { areaConfigs } from '../../utils/assessmentAreaConfig.json'
+import { AssessmentAreaConfig } from '../../@types/Assessment'
+import { getAssessmentDetailsForArea } from '../../utils/assessmentUtils'
 
 export default class ChangeGoalController {
   constructor(private readonly referentialDataService: ReferentialDataService) {}
@@ -34,8 +37,23 @@ export default class ChangeGoalController {
       const selectedAreaOfNeed = sortedAreasOfNeed.find(areaOfNeed => areaOfNeed.name === goal.areaOfNeed.name)
       const form = errors ? req.body : this.mapGoalToForm(goal)
 
+      const criminogenicNeedsData = req.services.sessionService.getCriminogenicNeeds()
       const planUuid = req.services.sessionService.getPlanUUID()
       const plan = await req.services.planService.getPlanByUuid(planUuid)
+
+      let assessmentDetailsForArea = null
+
+      // get assessment data
+      try {
+        const assessmentResponse = await req.services.assessmentService.getAssessmentByUuid(planUuid)
+        const assessmentData = assessmentResponse.sanAssessmentData
+
+        // 2. get the assessment details for the selected area of need
+        const areaConfig: AssessmentAreaConfig = areaConfigs.find(config => config.area === goal.areaOfNeed.name)
+        assessmentDetailsForArea = getAssessmentDetailsForArea(criminogenicNeedsData, areaConfig, assessmentData)
+      } catch {
+        /* swallow the error, missing data is handled in the template */
+      }
 
       return res.render('pages/change-goal', {
         locale: locale.en,
@@ -45,6 +63,7 @@ export default class ChangeGoalController {
           sortedAreasOfNeed,
           selectedAreaOfNeed,
           dateOptions,
+          assessmentDetailsForArea,
           returnLink,
           form,
         },
