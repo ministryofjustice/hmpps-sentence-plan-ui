@@ -28,10 +28,13 @@
         "agreePlanButton": "Agree plan"
       }
     },
+    "errorSummaryCard": {
+      "title": "There is a problem"
+    },
     "goalSummaryCard": {
       "info": {
         "aimToAchieveDate": "Aim to achieve this by {{ targetDate }}.",
-        "removedDate": "Removed on {{ lastStatusChangeDate }}.",
+        "removedDate": "Removed on {{ lastStatusChangeDate }}",
         "aimToAchieveSentence": "Aim to achieve this by the end of {{ subject.possessiveName }} sentence.",
         "achievedDate": "Marked as achieved on {{ lastStatusChangeDate }}.",
         "thisIsAFutureGoal": "This is a future goal.",
