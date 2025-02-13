@@ -29,6 +29,7 @@ export interface FormattedAssessment {
   isAssessmentComplete: boolean
   versionUpdatedAt?: string
   areas: {
+    incompleteAreas: AssessmentArea[]
     lowScoring: AssessmentArea[]
     highScoring: AssessmentArea[]
     other: AssessmentArea[]
