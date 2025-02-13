@@ -16,7 +16,7 @@ runs:
         APP_VERSION: ${{ inputs.app_version }}
 
     - uses: webiny/action-post-run@3.1.0
-      id: Bring down docker environment
+      name: Bring down docker environment
       if: always()
       with:
         run: make test-down
