@@ -49,12 +49,6 @@
 
   {# list out the missing information #}
   {% if missingInformation.length > 0 %}
-    {% if missingInformation.length == 4 and assessmentDetailsForArea.isAssessmentSectionComplete == false%}
-      {{ govukWarningText({
-      text: locale.common.assessmentInfo.assessmentNotStarted,
-      iconFallbackText: "Warning"
-    }) }}
-    {% endif %}
     <p><strong>{{ locale.common.assessmentInfo.missingInformation }}</strong></p>
     <p class="govuk-body">
     <ul>
