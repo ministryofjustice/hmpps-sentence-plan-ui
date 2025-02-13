@@ -1,0 +1,22 @@
+name: environment
+description: bring up and shut down makefile docker environment
+inputs:
+  app_version:
+    description: "version (and docker tag) of the app being deployed"
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Bring up docker environment
+      shell: bash
+      run: |
+        make test-up
+      env:
+        APP_VERSION: ${{ inputs.app_version }}
+
+    - uses: webiny/action-post-run@3.1.0
+      name: Bring down docker environment
+      if: always()
+      with:
+        run: make test-down
