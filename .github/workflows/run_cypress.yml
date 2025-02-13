@@ -30,7 +30,7 @@ jobs:
         run: npm ci
 
       - name: Bring up environment
-        uses: .github/actions/environment
+        uses: ./.github/actions/environment
         with:
           app_version: 2025-02-05.12613.294f9a9
 
