@@ -33,6 +33,7 @@
     "removeStepLinkButton": "Remove",
     "clearStepLinkButton": "Clear",
     "errors": {
+      "title": "There is a problem",
       "stepDescription": {
         "isNotEmpty": "Enter what they should do to achieve the goal",
         "maxLength": "What they should do to achieve the goal must be 4,000 characters or less"
