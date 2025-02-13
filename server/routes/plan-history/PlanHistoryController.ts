@@ -13,6 +13,10 @@ export default class PlanHistoryController {
       const notes = await req.services.planService.getNotes(planUuid)
       const readWrite = req.services.sessionService.getAccessMode() === AccessMode.READ_WRITE
 
+      if (notes.length === 0) {
+        return next(HttpError(403, 'Plan has not been agreed'))
+      }
+
       const pageId = 'plan-history'
 
       return res.render('pages/plan-history', {

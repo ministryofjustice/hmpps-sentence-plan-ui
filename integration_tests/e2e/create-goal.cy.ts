@@ -26,6 +26,7 @@ describe('Create a new Goal', () => {
   it('Checks the back link is correct', () => {
     createGoalPage.createGoal('accommodation')
     cy.get('.govuk-back-link').should('have.attr', 'href', '/plan?type=current')
+    cy.get('.moj-primary-navigation__container').should('not.contain', `Plan history`)
     cy.checkAccessibility()
   })
 

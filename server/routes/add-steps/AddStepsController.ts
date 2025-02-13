@@ -20,6 +20,8 @@ export default class AddStepsController {
       const goal = await req.services.goalService.getGoal(req.params.uuid)
       const steps = await req.services.stepService.getSteps(req.params.uuid)
       const returnLink = req.services.sessionService.getReturnLink() ?? `${URLs.PLAN_OVERVIEW}?type=${type}`
+      const planUuid = req.services.sessionService.getPlanUUID()
+      const plan = await req.services.planService.getPlanByUuid(planUuid)
 
       if (!req.body.steps || req.body.steps.length === 0) {
         req.body.steps = steps.map(step => ({
@@ -32,6 +34,7 @@ export default class AddStepsController {
       return res.render('pages/add-steps', {
         locale: locale.en,
         data: {
+          planAgreementStatus: plan.agreementStatus,
           goal,
           popData,
           areaOfNeed: toKebabCase(goal.areaOfNeed.name),

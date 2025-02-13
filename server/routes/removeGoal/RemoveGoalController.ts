@@ -29,11 +29,15 @@ export default class RemoveGoalController {
       const plan = await req.services.planService.getPlanByUuid(planUuid)
 
       const type = goalStatusToTabName(goal.status)
-      const returnLink = req.services.sessionService.getReturnLink()
+      const returnLink =
+        req.services.sessionService.getReturnLink() === `/confirm-delete-goal/${uuid}`
+          ? URLs.PLAN_OVERVIEW
+          : req.services.sessionService.getReturnLink()
 
       if (plan.agreementStatus === PlanAgreementStatus.DRAFT) {
         actionType = 'delete'
         localeType = localeDelete.en
+        req.services.sessionService.setReturnLink(`${URLs.DELETE_GOAL.replace(':uuid', uuid)}`)
       } else {
         actionType = 'remove'
         localeType = localeRemove.en
@@ -42,6 +46,7 @@ export default class RemoveGoalController {
       return res.render('pages/remove-goal', {
         locale: localeType,
         data: {
+          planAgreementStatus: plan.agreementStatus,
           form: req.body,
           type,
           goal,
@@ -88,7 +93,7 @@ export default class RemoveGoalController {
     }
   }
 
-  private handleValidationErrors = (req: Request, res: Response, next: NextFunction) => {
+  private readonly handleValidationErrors = (req: Request, res: Response, next: NextFunction) => {
     if (Object.keys(req.errors.body).length && req.body.action === 'remove') {
       return this.render(req, res, next)
     }

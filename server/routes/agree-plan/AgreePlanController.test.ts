@@ -43,6 +43,7 @@ describe('AgreePlanController', () => {
   let next: NextFunction
   const viewData = {
     data: {
+      planAgreementStatus: testPlan.agreementStatus,
       returnLink: '/some-return-link',
       form: {},
     },
@@ -170,6 +171,7 @@ describe('AgreePlanController', () => {
       const expectedViewData = {
         ...viewData,
         data: {
+          planAgreementStatus: testPlan.agreementStatus,
           returnLink: '/some-return-link',
           form: {
             'agree-plan-radio': 'no',

@@ -46,6 +46,7 @@ describe('PlanOverviewController', () => {
     viewData = {
       locale: locale.en,
       data: {
+        planAgreementStatus: testPlan.agreementStatus,
         plan: testPlan,
         isUpdatedAfterAgreement: false,
         type: 'current',
@@ -104,6 +105,7 @@ describe('PlanOverviewController', () => {
         data: {
           ...viewData.data,
           plan: badPlanData,
+          planAgreementStatus: badPlanData.agreementStatus,
         },
         errors: {
           ...viewData.errors,

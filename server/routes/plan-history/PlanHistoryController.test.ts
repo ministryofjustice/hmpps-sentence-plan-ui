@@ -19,7 +19,7 @@ jest.mock('../../services/sessionService', () => {
 
 jest.mock('../../services/sentence-plan/planService', () => {
   return jest.fn().mockImplementation(() => ({
-    getNotes: jest.fn().mockReturnValue([]),
+    getNotes: jest.fn().mockReturnValue([testNoteData]),
   }))
 })
 
@@ -35,7 +35,7 @@ describe('PlanHistoryController with READ_WRITE permissions', () => {
     viewData = {
       locale: locale.en,
       data: {
-        notes: [],
+        notes: [testNoteData],
         oasysReturnUrl,
         pageId: 'plan-history',
         readWrite: true,
@@ -51,23 +51,25 @@ describe('PlanHistoryController with READ_WRITE permissions', () => {
   })
 
   describe('get', () => {
-    it('should render without validation errors and no notes', async () => {
+    it('should render without validation errors and a plan agreement note', async () => {
       await controller.get(req, res, next)
 
       expect(res.render).toHaveBeenCalledWith('pages/plan-history', viewData)
     })
+    it('should return 403 when no notes exist', async () => {
+      req.services.planService.getNotes = jest.fn().mockReturnValue([]) // Set the notes to be empty
 
-    // render without errors and plan agreement note
-    it('should render without validation errors and a a plan agreement note', async () => {
-      // change the mock functionality to return a test note
-      req.services.planService.getNotes = jest.fn().mockReturnValue([testNoteData])
+      const nextMock = jest.fn()
 
-      // change the viewData to include the test note
-      viewData.data.notes = [testNoteData]
+      await controller.get(req, res, nextMock)
 
-      await controller.get(req, res, next)
-
-      expect(res.render).toHaveBeenCalledWith('pages/plan-history', viewData)
+      // Check that the next function was called with the expected HttpError
+      expect(nextMock).toHaveBeenCalledWith(
+        expect.objectContaining({
+          status: 403,
+          message: 'Plan has not been agreed',
+        }),
+      )
     })
   })
 })
@@ -84,7 +86,7 @@ describe('PlanHistoryController with READ_ONLY permissions', () => {
     viewData = {
       locale: locale.en,
       data: {
-        notes: [],
+        notes: [testNoteData],
         oasysReturnUrl,
         pageId: 'plan-history',
         readWrite: false,
@@ -112,9 +114,6 @@ describe('PlanHistoryController with READ_ONLY permissions', () => {
     it('should render without validation errors and a a plan agreement note', async () => {
       // change the mock functionality to return a test note
       req.services.planService.getNotes = jest.fn().mockReturnValue([testNoteData])
-
-      // change the viewData to include the test note
-      viewData.data.notes = [testNoteData]
 
       await controller.get(req, res, next)
 

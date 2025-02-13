@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import locale from './locale.json'
+import { areaConfigs } from './assessmentAreaConfig.json'
 import { formatAssessmentData } from '../../utils/assessmentUtils'
 import { HttpError } from '../../utils/HttpError'
 import { AccessMode } from '../../@types/Handover'
@@ -17,6 +18,7 @@ export default class AboutPersonController {
       const criminogenicNeedsData = req.services.sessionService.getCriminogenicNeeds()
       const assessmentData = await req.services.assessmentService.getAssessmentByUuid(planUuid)
       const errorMessages = []
+      const plan = await req.services.planService.getPlanByUuid(planUuid)
 
       if (assessmentData === null) {
         errorMessages.push('noAssessmentDataFound')
@@ -28,7 +30,7 @@ export default class AboutPersonController {
         errors = { domain: errorMessages }
       }
 
-      const assessmentAreas = formatAssessmentData(criminogenicNeedsData, assessmentData, locale.en.areas)
+      const assessmentAreas = formatAssessmentData(criminogenicNeedsData, assessmentData, areaConfigs)
       const pageId = 'about'
       const readWrite = req.services.sessionService.getAccessMode() === AccessMode.READ_WRITE
 
@@ -43,6 +45,7 @@ export default class AboutPersonController {
       return res.render(returnPage, {
         locale: locale.en,
         data: {
+          planAgreementStatus: plan.agreementStatus,
           oasysReturnUrl,
           pageId,
           deliusData,

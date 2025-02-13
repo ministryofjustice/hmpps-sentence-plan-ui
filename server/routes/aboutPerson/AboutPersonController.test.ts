@@ -2,6 +2,7 @@ import mockRes from '../../testutils/preMadeMocks/mockRes'
 import mockReq from '../../testutils/preMadeMocks/mockReq'
 import AboutPersonController from './AboutPersonController'
 import locale from './locale.json'
+import { areaConfigs } from './assessmentAreaConfig.json'
 import { AreaOfNeed } from '../../testutils/data/referenceData'
 import testPlan from '../../testutils/data/planData'
 import popData from '../../testutils/data/popData'
@@ -26,6 +27,12 @@ jest.mock('../../services/sentence-plan/referentialDataService', () => {
   }))
 })
 
+jest.mock('../../services/sentence-plan/planService', () => {
+  return jest.fn().mockImplementation(() => ({
+    getPlanByUuid: jest.fn().mockResolvedValue(testPlan),
+  }))
+})
+
 jest.mock('../../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
     getPlanUUID: jest.fn().mockReturnValue(testPlan.uuid),
@@ -45,7 +52,7 @@ jest.mock('../../services/sentence-plan/infoService', () => {
 
 describe('AboutPersonController - assessment complete', () => {
   let controller: AboutPersonController
-  const assessmentAreas: AssessmentAreas = formatAssessmentData(crimNeedsSubset, assessmentData, locale.en.areas)
+  const assessmentAreas: AssessmentAreas = formatAssessmentData(crimNeedsSubset, assessmentData, areaConfigs)
 
   beforeEach(() => {
     controller = new AboutPersonController()
@@ -61,6 +68,7 @@ describe('AboutPersonController - assessment complete', () => {
       const payload = {
         locale: locale.en,
         data: {
+          planAgreementStatus: testPlan.agreementStatus,
           oasysReturnUrl,
           pageId: 'about',
           deliusData: popData,
@@ -87,6 +95,7 @@ describe('AboutPersonController - assessment complete', () => {
       const payload = {
         locale: locale.en,
         data: {
+          planAgreementStatus: testPlan.agreementStatus,
           oasysReturnUrl,
           pageId: 'about',
           deliusData: popData,
@@ -103,7 +112,7 @@ describe('AboutPersonController - assessment complete', () => {
 
 describe('AboutPersonController - assessment incomplete', () => {
   let controller: AboutPersonController
-  const assessmentAreas: AssessmentAreas = formatAssessmentData(crimNeedsMissing, assessmentData, locale.en.areas)
+  const assessmentAreas: AssessmentAreas = formatAssessmentData(crimNeedsMissing, assessmentData, areaConfigs)
 
   beforeEach(() => {
     controller = new AboutPersonController()
@@ -122,6 +131,7 @@ describe('AboutPersonController - assessment incomplete', () => {
       const payload = {
         locale: locale.en,
         data: {
+          planAgreementStatus: testPlan.agreementStatus,
           oasysReturnUrl,
           pageId: 'about',
           deliusData: popData,
@@ -150,6 +160,7 @@ describe('AboutPersonController - assessment incomplete', () => {
       const payload = {
         locale: locale.en,
         data: {
+          planAgreementStatus: testPlan.agreementStatus,
           oasysReturnUrl,
           pageId: 'about',
           deliusData: popData,

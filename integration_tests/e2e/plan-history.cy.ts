@@ -15,11 +15,10 @@ describe('Rendering Plan History for READ_WRITE user', () => {
     })
   })
 
-  it('Display plan history page correctly on load with no plan agreed', () => {
-    cy.get('.moj-primary-navigation__container').contains('Plan history').click()
-    cy.get('h1').contains('Plan history')
-    cy.get('.plan-history-intro').should('include.text', "plan has been agreed, you'll be able to view updates here.")
-    cy.checkAccessibility()
+  it('Plan history link not displayed with no plan agreed - direct access causes 403 forbidden', () => {
+    cy.get('.moj-primary-navigation__container').should('not.contain', `Plan history`)
+    cy.visit('/plan-history', { failOnStatusCode: false })
+    cy.get('.govuk-heading-l').contains('You do not have permission to perform this action')
   })
 
   it('Display plan history page with plan agreement', () => {

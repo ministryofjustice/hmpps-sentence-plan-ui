@@ -1,6 +1,7 @@
 import AddSteps from '../pages/add-steps'
 import { PlanType } from '../../server/@types/PlanType'
 import DataGenerator from '../support/DataGenerator'
+import IntegrationUtils from '../integrationUtils'
 
 const selectStepDescriptionByIndex = (index: number) => {
   return cy.get(`table.goal-summary-card__steps .govuk-table__body > :nth-child(${index}) > :nth-child(2)`)
@@ -10,20 +11,9 @@ const selectStepActorByIndex = (index: number) => {
   return cy.get(`table.goal-summary-card__steps .govuk-table__body > :nth-child(${index}) > :nth-child(1)`)
 }
 
-function generateStringOfLength(length: number): string {
-  let result = ''
-  const characters = 'abcdefghijklmnopqrstuvwxyz'
-  const charactersLength = characters.length
-
-  for (let i = 0; i < length; i += 1) {
-    result += characters.charAt(Math.floor(Math.random() * charactersLength))
-  }
-
-  return result
-}
-
 describe('Add Steps', () => {
   const addStep = new AddSteps()
+  const integrationUtils = new IntegrationUtils()
 
   beforeEach(() => {
     cy.createSentencePlan().then(planDetails => {
@@ -205,7 +195,7 @@ describe('Add Steps', () => {
       cy.url().should('include', '/add-steps')
 
       const firstStep = DataGenerator.generateStep({})
-      firstStep.description = generateStringOfLength(4000)
+      firstStep.description = integrationUtils.generateStringOfLength(4000)
       addStep.putStepAutocompleteText(1, firstStep.description)
       addStep.selectStepActor(1, firstStep.actor)
       addStep.saveAndContinue()
@@ -254,7 +244,7 @@ describe('Add Steps', () => {
       cy.url().should('include', '/add-steps')
 
       const firstStep = DataGenerator.generateStep({})
-      firstStep.description = generateStringOfLength(4001)
+      firstStep.description = integrationUtils.generateStringOfLength(4001)
       addStep.putStepAutocompleteText(1, firstStep.description)
       addStep.selectStepActor(1, firstStep.actor)
       addStep.saveAndContinue()

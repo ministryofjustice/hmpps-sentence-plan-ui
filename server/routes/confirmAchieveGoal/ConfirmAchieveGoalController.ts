@@ -4,13 +4,15 @@ import { GoalStatus } from '../../@types/GoalType'
 import locale from './locale.json'
 import validateRequest from '../../middleware/validationMiddleware'
 import transformRequest from '../../middleware/transformMiddleware'
-import AchieveGoalPostModel from './models/AchieveGoalPostModel'
+import ConfirmAchieveGoalPostModel from './models/ConfirmAchieveGoalPostModel'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
 import { AccessMode } from '../../@types/Handover'
 import { HttpError } from '../../utils/HttpError'
+import URLs from '../URLs'
+import { goalStatusToTabName } from '../../utils/utils'
 
-// AchieveGoalController is accessed through the 'mark as achieved' button on the update goals page.
-export default class AchieveGoalController {
+// AchieveGoalController is accessed through the 'Save goal and steps' button on the update goals page, only when all steps of the goal have been marked as complete. This will provide the user with a prompt to whether the goal has been achieved or not
+export default class ConfirmAchieveGoalController {
   constructor() {}
 
   private render = async (req: Request, res: Response, next: NextFunction) => {
@@ -23,7 +25,7 @@ export default class AchieveGoalController {
       const goal = await req.services.goalService.getGoal(uuid)
       const returnLink = req.services.sessionService.getReturnLink()
 
-      return res.render('pages/confirm-achieved-goal', {
+      return res.render('pages/confirm-if-achieved', {
         locale: locale.en,
         data: {
           form: req.body,
@@ -40,7 +42,19 @@ export default class AchieveGoalController {
 
   private saveAndRedirect = async (req: Request, res: Response, next: NextFunction) => {
     const goalUuid = req.params.uuid
+    const isAchieved = req.body['is-goal-achieved-radio'] === 'yes'
     const note = req.body['goal-achievement-helped']
+
+    if (!isAchieved) {
+      try {
+        const goal = await req.services.goalService.getGoal(goalUuid)
+        const goalType: string = goalStatusToTabName(goal.status)
+
+        return res.redirect(`${URLs.PLAN_OVERVIEW}?type=${goalType}`)
+      } catch (e) {
+        return next(HttpError(500, e.message))
+      }
+    }
 
     const goalData: Partial<NewGoal> = {
       status: GoalStatus.ACHIEVED,
@@ -66,7 +80,7 @@ export default class AchieveGoalController {
 
   post = [
     requireAccessMode(AccessMode.READ_WRITE),
-    transformRequest({ body: AchieveGoalPostModel }),
+    transformRequest({ body: ConfirmAchieveGoalPostModel }),
     validateRequest(),
     this.handleValidationErrors,
     this.saveAndRedirect,

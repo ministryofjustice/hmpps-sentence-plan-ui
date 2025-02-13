@@ -49,6 +49,7 @@ export default class PlanOverviewController {
       return res.render(page, {
         locale: locale.en,
         data: {
+          planAgreementStatus: this.plan.agreementStatus, // required by layout.njk
           plan: this.plan,
           isUpdatedAfterAgreement,
           type,

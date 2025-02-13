@@ -34,9 +34,13 @@ export default class ChangeGoalController {
       const selectedAreaOfNeed = sortedAreasOfNeed.find(areaOfNeed => areaOfNeed.name === goal.areaOfNeed.name)
       const form = errors ? req.body : this.mapGoalToForm(goal)
 
+      const planUuid = req.services.sessionService.getPlanUUID()
+      const plan = await req.services.planService.getPlanByUuid(planUuid)
+
       return res.render('pages/change-goal', {
         locale: locale.en,
         data: {
+          planAgreementStatus: plan.agreementStatus,
           minimumDatePickerDate,
           sortedAreasOfNeed,
           selectedAreaOfNeed,
@@ -60,7 +64,7 @@ export default class ChangeGoalController {
     try {
       await req.services.goalService.replaceGoal(processedData, goalUuid)
 
-      let redirectTarget = `${URLs.PLAN_OVERVIEW}?status=updated&type=${type}`
+      let redirectTarget = `${URLs.PLAN_OVERVIEW}?status=changed&type=${type}`
 
       const planUuid = req.services.sessionService.getPlanUUID()
       const plan = await req.services.planService.getPlanByUuid(planUuid)

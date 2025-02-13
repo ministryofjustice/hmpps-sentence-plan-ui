@@ -115,16 +115,15 @@ describe('Update goal', () => {
       cy.checkAccessibility()
     })
 
-    // TODO SP2-633
-    // it('Updating all step status to complete and saving goes to the achieve goal page', () => {
-    //   cy.get<Goal>('@goalForNow').then(goal => {
-    //     cy.visit(`/update-goal-steps/${goal.uuid}`)
-    //     cy.get('#step-status-1').select('Completed')
-    //     cy.get('.govuk-button').contains('Save goal and steps').click()
-    //     cy.url().should('include', `/confirm-achieved-goal/${goal.uuid}`)
-    //   })
-    //   cy.checkAccessibility()
-    // })
+    it('Updating all step status to complete and saving goes to the achieve goal page', () => {
+      cy.get<Goal>('@goalForNow').then(goal => {
+        cy.visit(`/update-goal-steps/${goal.uuid}`)
+        cy.get('#step-status-1').select('Completed')
+        cy.get('.govuk-button').contains('Save goal and steps').click()
+        cy.url().should('include', `/confirm-if-achieved/${goal.uuid}`)
+      })
+      cy.checkAccessibility()
+    })
 
     it('Can visit change goal and back link is correct', () => {
       cy.contains('a', 'Update').click()
