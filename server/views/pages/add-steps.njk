@@ -6,7 +6,7 @@
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "moj/components/side-navigation/macro.njk" import mojSideNavigation %}
-{% from "../components/error-summary/error-summary.njk" import errorSummary %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "../components/assessment/area-assessment-summary.njk" import assessmentInformationForArea %}
 
 {% set locale = interpolate(locale, {
@@ -37,31 +37,37 @@
 <a class="govuk-back-link" href="{{ data.returnLink }}">{{ locale.common.backLink.text }}</a>
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-
         {% set errorList = [] %}
 
         {% for id, errorObj in errors.body %}
+          {% set deconstructedId = id | splitString('.') %}
+
           {% if '.actor' in id %}
             {% set errorList = errorList.concat({
                 text: locale.errors.stepActor.notContains,
-                href: "#step-actor-" + loop.index
+                href: "#step-actor-" + (deconstructedId[1] | int + 1)
             }) %}
           {% elseif '.description' in id %}
             {% if errorObj.isNotEmpty %}
               {% set errorList = errorList.concat({
                 text: locale.errors.stepDescription.isNotEmpty,
-                href: "#step-description-" + loop.index
+                href: "#step-description-" + (deconstructedId[1] | int + 1)
               }) %}
             {% else %}
               {% set errorList = errorList.concat({
                 text: locale.errors.stepDescription.maxLength,
-                href: "#step-description-" + loop.index
+                href: "#step-description-" + (deconstructedId[1] | int + 1)
               }) %}
             {% endif %}
           {% endif %}
         {% endfor %}
 
-        {{ errorList | dump(2) }}
+        {% if errorList.length %}
+            {{ govukErrorSummary({
+                titleText: locale.errors.title,
+                errorList: errorList
+            }) }}
+        {% endif %}
 
         <span class="govuk-caption-l">{{ locale.mainHeading.caption }}</span>
         <h1 class="govuk-heading-l">{{ locale.mainHeading.title }}</h1>
