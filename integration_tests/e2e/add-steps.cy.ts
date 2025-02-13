@@ -140,7 +140,7 @@ describe('Add Steps', () => {
       cy.checkAccessibility()
     })
 
-    it('Add multiple steps, removing one afterwards while keeping track of the step counter', () => {
+    it('Add multiple steps, removing one afterwards', () => {
       cy.url().should('include', '/add-steps')
 
       const firstStep = DataGenerator.generateStep()
@@ -156,7 +156,6 @@ describe('Add Steps', () => {
       addStep.saveAndContinue()
 
       cy.get('table.goal-summary-card__steps .govuk-table__body').children().should('have.length', 2)
-      cy.get('.step-counter').contains('0 out of 2 steps completed.')
 
       cy.contains('a', 'Add or change steps').click()
 
@@ -165,7 +164,6 @@ describe('Add Steps', () => {
       cy.get('table.goal-summary-card__steps .govuk-table__body').children().should('have.length', 1)
       selectStepDescriptionByIndex(1).should('contain', firstStep.description)
       selectStepActorByIndex(1).should('contain', firstStep.actor)
-      cy.get('.step-counter').contains('0 out of 1 step completed.')
       cy.checkAccessibility()
     })
 

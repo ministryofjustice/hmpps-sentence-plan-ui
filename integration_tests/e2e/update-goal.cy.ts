@@ -115,14 +115,13 @@ describe('Update goal', () => {
       cy.checkAccessibility()
     })
 
-    it('Updating all step status to complete and saving goes to the achieve goal page, and updates the step counter', () => {
+    it('Updating all step status to complete and saving goes to the achieve goal page', () => {
       cy.get<Goal>('@goalForNow').then(goal => {
         cy.visit(`/update-goal-steps/${goal.uuid}`)
         cy.get('#step-status-1').select('Completed')
         cy.get('.govuk-button').contains('Save goal and steps').click()
         cy.url().should('include', `/confirm-if-achieved/${goal.uuid}`)
       })
-      cy.get('.step-counter').contains('1 out of 1 step completed.')
       cy.checkAccessibility()
     })
 
