@@ -69,7 +69,7 @@ services:
       CLIENT_SP_HANDOVER_REDIRECT_URI: http://localhost:3000/sign-in
 
   oastub:
-    image: quay.io/hmpps/hmpps-assess-risks-and-needs-oastub-ui:latest
+    image: ghcr.io/ministryofjustice/hmpps-assess-risks-and-needs-oastub-ui:latest
     depends_on:
       - coordinator-api
     ports:

@@ -53,6 +53,7 @@ describe('Add Steps', () => {
 
     it('Add one step', () => {
       cy.url().should('include', '/add-steps')
+      cy.get('.moj-primary-navigation__container').should('not.contain', `Plan history`)
 
       const step = DataGenerator.generateStep()
       addStep.addStepAutocompleteText(1, step.description)

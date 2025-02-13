@@ -1,0 +1,6 @@
+{# used at the top of create-goal.njk #}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+
+{% macro renderAreaAssessmentSummary(assessmentDetailsForArea, locale) %}
+    {%- include "./_area-assessment-summary.njk" -%}
+{% endmacro %}

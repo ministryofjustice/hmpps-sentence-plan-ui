@@ -44,6 +44,7 @@ describe('Change a goal', () => {
       })
 
       cy.get('.govuk-back-link').should('have.attr', 'href', '/plan?type=current')
+      cy.get('.moj-primary-navigation__container').should('not.contain', `Plan history`)
 
       // Check goal data is populated correctly
       cy.contains('#goal-input-autocomplete__option--0', goalData.title)

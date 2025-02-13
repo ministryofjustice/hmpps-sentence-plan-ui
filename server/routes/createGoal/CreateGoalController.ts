@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import ReferentialDataService from '../../services/sentence-plan/referentialDataService'
 import locale from './locale.json'
+
 import URLs from '../URLs'
 import { NewGoal } from '../../@types/NewGoalType'
 import { formatDateWithStyle } from '../../utils/utils'
@@ -11,6 +12,9 @@ import { requireAccessMode } from '../../middleware/authorisationMiddleware'
 import { AccessMode } from '../../@types/Handover'
 import { HttpError } from '../../utils/HttpError'
 import { getDateOptions, getGoalTargetDate } from '../../utils/goalTargetDateUtils'
+import { areaConfigs } from '../../utils/assessmentAreaConfig.json'
+import { AssessmentAreaConfig } from '../../@types/Assessment'
+import { getAssessmentDetailsForArea } from '../../utils/assessmentUtils'
 
 export default class CreateGoalController {
   constructor(private readonly referentialDataService: ReferentialDataService) {}
@@ -47,8 +51,23 @@ export default class CreateGoalController {
       const selectedAreaOfNeed = areasOfNeed.find(areaOfNeed => areaOfNeed.url === req.params.areaOfNeed)
       const minimumDatePickerDate = formatDateWithStyle(new Date().toISOString(), 'short')
 
+      const criminogenicNeedsData = req.services.sessionService.getCriminogenicNeeds()
       const planUuid = req.services.sessionService.getPlanUUID()
       const plan = await req.services.planService.getPlanByUuid(planUuid)
+
+      let assessmentDetailsForArea = null
+
+      // get assessment data
+      try {
+        const assessmentResponse = await req.services.assessmentService.getAssessmentByUuid(planUuid)
+        const assessmentData = assessmentResponse.sanAssessmentData
+
+        // 2. get the assessment details for the selected area of need
+        const areaConfig: AssessmentAreaConfig = areaConfigs.find(config => config.area === selectedAreaOfNeed?.name)
+        assessmentDetailsForArea = getAssessmentDetailsForArea(criminogenicNeedsData, areaConfig, assessmentData)
+      } catch {
+        /* swallow the error, missing data is handled in the template */
+      }
 
       req.services.sessionService.setReturnLink(null)
 
@@ -61,6 +80,7 @@ export default class CreateGoalController {
           selectedAreaOfNeed,
           dateOptions,
           minimumDatePickerDate,
+          assessmentDetailsForArea,
           returnLink: `/plan?type=${type}`,
           form: req.body,
         },
