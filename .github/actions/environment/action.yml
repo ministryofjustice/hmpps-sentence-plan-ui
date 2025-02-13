@@ -15,8 +15,7 @@ runs:
       env:
         APP_VERSION: ${{ inputs.app_version }}
 
-  post:
-    - name: Bring down environment
-      shell: bash
-      run: |
-        make test-down
+    - uses: webiny/action-post-run@3.1.0
+      name: Bring down environment
+      with:
+        run: make test-down
