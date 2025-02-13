@@ -1,0 +1,22 @@
+name: environment
+description: bring up and shut down makefile docker environment
+inputs:
+  app_version:
+    description: "version (and docker tag) of the app being deployed"
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Bring up environment
+      shell: bash
+      run: |
+        make test-up
+      env:
+        APP_VERSION: ${{ inputs.app_version }}
+
+  post:
+    - name: Bring down environment
+      shell: bash
+      run: |
+        make test-down

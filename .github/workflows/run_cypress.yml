@@ -30,10 +30,9 @@ jobs:
         run: npm ci
 
       - name: Bring up environment
-        run: |
-          make test-up
-        env:
-          APP_VERSION: 2025-02-05.12613.294f9a9
+        uses: ./.github/actions/environment
+        with:
+          app_version: 2025-02-05.12613.294f9a9
 
       - name: Run split Cypress tests
         run: |
@@ -62,8 +61,3 @@ jobs:
           path: |
             test_results/cypress/
             ${{ runner.temp }}/docker-logs
-
-      - name: Bring down environment
-        if: success() || failure()
-        run: |
-          make test-down
