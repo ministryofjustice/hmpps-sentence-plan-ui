@@ -8,7 +8,7 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Bring up environment
+    - name: Bring up docker environment
       shell: bash
       run: |
         make test-up
@@ -16,6 +16,6 @@ runs:
         APP_VERSION: ${{ inputs.app_version }}
 
     - uses: webiny/action-post-run@3.1.0
-      name: Bring down environment
+      if: always()
       with:
         run: make test-down
