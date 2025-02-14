@@ -99,6 +99,8 @@
                     <p id="last-updated" class="govuk-body govuk-!-margin-top-5">{{ locale.detail.lastUpdated }}</p>
             {% endif %}
 
+          {% if data.formattedAssessmentInfo.isAssessmentComplete %}
+
             <h2 class="govuk-heading-m">{{ locale.highScoring.sectionHeading }}</h2>
             {% if data.formattedAssessmentInfo.areas.highScoring.length > 0 %}
                 {{ renderAssessment(data.formattedAssessmentInfo.areas.highScoring, locale, data.readWrite) }}
@@ -118,6 +120,12 @@
                 <p id="other-areas-paragraph" class="govuk-body">{{ locale.withoutScoring.sectionParagraph }}</h2>
                 {{ renderAssessment(data.formattedAssessmentInfo.areas.other, locale, data.readWrite) }}
             {% endif %}
+          {% else %}
+            {{ govukWarningText({
+              html: '<strong>' + locale.assessmentIncomplete.paragraphWithLink + '</strong>',
+              iconFallbackText: "Warning"
+            }) }}
+          {% endif %}
 
         </div>
 
