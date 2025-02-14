@@ -14,13 +14,19 @@
       "lastUpdated": "{{ subject.givenName }}'s assessment was last updated on {{ lastUpdatedDate }}.",
       "RoSH": "RoSH (Risk of Serious Harm)",
       "riskOfReoffending": "Risk of reoffending",
-      "linkedToHarm": "This area is linked to RoSH (risk of serious harm)",
-      "notlinkedToHarm": "This area is not linked to RoSH (risk of serious harm)",
-      "linkedtoReoffending": "This area is linked to risk of reoffending",
-      "notLinkedToRiskOfReoffending": "This area is not linked to risk of reoffending",
+      "linkedToHarm": {
+        "yes": "This area is linked to RoSH (risk of serious harm)",
+        "no": "This area is not linked to RoSH (risk of serious harm)"
+      },
+      "linkedtoReoffending": {
+        "yes": "This area is linked to risk of reoffending",
+        "no": "This area is not linked to risk of reoffending"
+      },
       "motivationToMakeChanges": "Motivation to make changes in this area",
-      "strengthsOrProtectiveFactors": "There are strengths or protective factors related to this area",
-      "noStrengthsOrProtectiveFactors": "There are no strengths or protective factors related to this area",
+      "strengthsOrProtectiveFactors": {
+        "yes": "There are strengths or protective factors related to this area",
+        "no": "There are no strengths or protective factors related to this area"
+      },
       "needScore": "need score",
       "lifestyleAndAssociatesNeedScore": "Lifestyle and associates need score"
     },

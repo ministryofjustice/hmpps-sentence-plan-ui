@@ -1,3 +1,5 @@
+import { AccessMode } from '../../server/@types/Handover'
+
 describe('Rendering About Person for READ_WRITE user', () => {
   beforeEach(() => {
     cy.createSentencePlan().then(planDetails => {
@@ -71,7 +73,7 @@ describe('Rendering About Person for READ_WRITE user', () => {
     cy.get('#finances .moj-badge').should('not.exist')
     cy.get('#health-and-wellbeing .moj-badge').should('not.exist')
   })
-  /*
+
   it('Should check all hard-coded links in each assessment section are in the expected order', () => {
     cy.get('.govuk-accordion__show-all').click({ multiple: true })
 
@@ -281,5 +283,4 @@ describe('Rendering About Person in READ_ONLY', () => {
       expect(href).not.to.contain('create-goal')
     })
   })
-  */
 })

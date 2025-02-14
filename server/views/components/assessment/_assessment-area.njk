@@ -3,16 +3,13 @@
 
 <div class="govuk-accordion" data-module="govuk-accordion" id="accordion-default-{{ loop.index }}">
     {% for assessment in formattedAssessments %}
-        {% set riskOfSeriousHarmData = assessment.riskOfSeriousHarmDetails %}
-        {% set riskOfReoffendingData = assessment.riskOfReoffendingDetails %}
-        {% set strengthsOrProtectiveFactorsData = assessment.strengthsOrProtectiveFactorsDetails %}
         <div class="govuk-accordion__section" id="{{ assessment.goalRoute }}">
             <div class="govuk-accordion__section-header">
                 <h3 class="govuk-accordion__section-heading">
-                      <span class="govuk-accordion__section-button sp-accordion-header"
-                            id="accordion-default-heading-{{ loop.index }}">
-                        {{ assessment.title }}
-                      </span>
+                    <span class="govuk-accordion__section-button sp-accordion-header"
+                          id="accordion-default-heading-{{ loop.index }}">
+                      {{ assessment.title }}
+                    </span>
                 </h3>
                 <div class="govuk-accordion__section-summary govuk-body sp-accordion-tags"
                      id="accordion-with-summary-sections-summary-{{ loop.index }}">
@@ -28,54 +25,37 @@
                 {% if assessment.criminogenicNeedMissing %}
                     <p>This information isn't currently available, please check in OASys.</p>
                 {% else %}
-                    {% if assessment.linkedToHarm === 'YES' %}
-                        <div class="rosh">
-                            <p class="govuk-!-font-weight-bold">{{ locale.detail.linkedToHarm }}</p>
-                            <p class="govuk-body">{{ riskOfSeriousHarmData }}</p>
-                        </div>
-                    {% elseif assessment.linkedToHarm === 'NO' and riskOfSeriousHarmData %}
-                        <div class="rosh">
-                            <p class="govuk-!-font-weight-bold">{{ locale.detail.notlinkedToHarm }}</p>
-                            <p class="govuk-body">{{ riskOfSeriousHarmData }}</p>
-                        </div>
-                    {% else %}
-                        <p class="govuk-!-font-weight-bold">{{ locale.detail.notlinkedToHarm }}</p>
+
+                    {# linked to harm #}
+                    {% if assessment.linkedToHarm in ['YES', 'NO'] %}
+                        <p class="govuk-!-font-weight-bold">{{ locale.detail.linkedToHarm[assessment.linkedToHarm | lower] }}</p>
+{#                   TODO else is null and add to missingInformation array   #}
+                    {% endif %}
+                    {% if assessment.riskOfSeriousHarmDetails.length > 0 %}
+                        <p class="sp-text-pre-wrap govuk-body">{{ assessment.riskOfSeriousHarmDetails }}</p>
                     {% endif %}
 
-
-                    {% if assessment.linkedtoReoffending === 'YES' %}
-                        <div class="ror">
-                            <p class="govuk-!-font-weight-bold">{{ locale.detail.linkedtoReoffending }}</p>
-                            <p class="sp-text-pre-wrap govuk-body">{{ riskOfReoffendingData }}</p>
-                        </div>
-                    {% elseif assessment.linkedtoReoffending === 'NO' and riskOfReoffendingData %}
-                        <div class="ror">
-                            <p class="govuk-!-font-weight-bold">{{ locale.detail.notLinkedToRiskOfReoffending }}</p>
-                            <p class="sp-text-pre-wrap govuk-body">{{ riskOfReoffendingData }}</p>
-                        </div>
-                    {% else %}
-                        <p class="govuk-!-font-weight-bold">{{ locale.detail.notLinkedToRiskOfReoffending }}</p>
+                    {# linked to reoffending #}
+                    {% if assessment.linkedtoReoffending in ['YES', 'NO'] %}
+                        <p class="govuk-!-font-weight-bold">{{ locale.detail.linkedtoReoffending[assessment.linkedtoReoffending | lower] }}</p>
+{#                   TODO else is null and add to missingInformation array   #}
+                    {% endif %}
+                    {% if assessment.riskOfReoffendingDetails.length > 0 %}
+                        <p class="sp-text-pre-wrap govuk-body">{{ assessment.riskOfReoffendingDetails }}</p>
                     {% endif %}
 
+                    {# motivation #}
                     {% if assessment.motivationToMakeChanges %}
-                        <div class="motivation">
-                            <p class="govuk-!-font-weight-bold">{{ locale.detail.motivationToMakeChanges }}</p>
-                            <p class="govuk-body">{{ locale.common.assessmentInfo.motivationText[assessment.motivationToMakeChanges] }}</p>
-                        </div>
+                        <p class="govuk-!-font-weight-bold">{{ locale.detail.motivationToMakeChanges }}</p>
+                        <p class="govuk-body">{{ locale.common.assessmentInfo.motivationText[assessment.motivationToMakeChanges] }}</p>
                     {% endif %}
 
-                    {% if assessment.linkedtoStrengthsOrProtectiveFactors === 'YES' %}
-                        <div class="strengths">
-                            <p class="govuk-!-font-weight-bold">{{ locale.detail.strengthsOrProtectiveFactors }}</p>
-                            <p class="sp-text-pre-wrap govuk-body">{{ strengthsOrProtectiveFactorsData }}</p>
-                        </div>
-                    {% elseif assessment.linkedtoStrengthsOrProtectiveFactors === 'NO' and strengthsOrProtectiveFactorsData %}
-                        <div class="strengths">
-                          <p class="govuk-!-font-weight-bold">{{ locale.detail.noStrengthsOrProtectiveFactors }}</p>
-                          <p class="sp-text-pre-wrap govuk-body">{{ strengthsOrProtectiveFactorsData }}</p>
-                        </div>
-                    {% else %}
-                        <p class="govuk-!-font-weight-bold">{{ locale.detail.noStrengthsOrProtectiveFactors }}</p>
+                    {% if assessment.linkedtoStrengthsOrProtectiveFactors in ['YES', 'NO'] %}
+                        <p class="govuk-!-font-weight-bold">{{ locale.detail.strengthsOrProtectiveFactors[assessment.linkedtoStrengthsOrProtectiveFactors | lower] }}</p>
+{#                      todo else missing info #}
+                    {% endif %}
+                    {% if assessment.strengthsOrProtectiveFactorsDetails.length > 0 %}
+                      <p class="sp-text-pre-wrap govuk-body">{{ assessment.strengthsOrProtectiveFactorsDetails }}</p>
                     {% endif %}
 
                     {% if assessment.criminogenicNeedsScore %}
@@ -99,7 +79,6 @@
                     {% endif %}
 
                     {% if assessment.subData %}
-                        <br>
                         <div class="assessment-score">
                             <p class="govuk-!-font-weight-bold">{{ locale.detail.lifestyleAndAssociatesNeedScore }}</p>
                             <p class="govuk-body">{{ assessment.subData.criminogenicNeedsScore }} out
@@ -115,17 +94,13 @@
                                 </div>
                             </div>
                         </div>
-                        <br>
                     {% endif %}
                 {% endif %}
 
               {% if readWrite === true %}
-                <div>
-                    <p class='goal-link'>
-                      <a href='/create-goal/{{ assessment.goalRoute }}'
-                        >Create {{ assessment.title | lower }} goal</a>
-                    </p>
-                </div>
+                  <p class='goal-link'>
+                    <a href='/create-goal/{{ assessment.goalRoute }}'>Create {{ assessment.title | lower }} goal</a>
+                  </p>
               {% endif %}
             </div>
         </div>
