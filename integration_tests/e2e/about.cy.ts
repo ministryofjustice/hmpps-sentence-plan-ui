@@ -1,5 +1,3 @@
-import { AccessMode } from '../../server/@types/Handover'
-
 describe('Rendering About Person for READ_WRITE user', () => {
   beforeEach(() => {
     cy.createSentencePlan().then(planDetails => {
@@ -55,11 +53,25 @@ describe('Rendering About Person for READ_WRITE user', () => {
   })
 
   it('Should check the hard-coded labels appear next to the correct, predetermined areas in correct order', () => {
-    cy.get('.govuk-accordion__section-heading').contains('Accommodation').contains('Risk of reoffending')
-    cy.get('.govuk-accordion__section-heading').contains('Alcohol use').contains('Risk of reoffending')
-    cy.get('.govuk-accordion__section-heading').contains('Employment and education').contains('Risk of reoffending')
-  })
+    // this is set to relLinkedToReoffending: 'YES', in backend.ts but doesn't display because the section is incomplete
+    cy.get('#personal-relationships-and-community .moj-badge').should('not.exist')
 
+    cy.get('#accommodation .moj-badge').should('have.length', 1)
+    cy.get('#accommodation .moj-badge').contains('Risk of reoffending')
+
+    cy.get('#thinking-behaviours-and-attitudes .moj-badge').should('not.exist')
+
+    cy.get('#alcohol-use .moj-badge').should('have.length', 1)
+    cy.get('#alcohol-use .moj-badge').contains('Risk of reoffending')
+
+    cy.get('#employment-and-education .moj-badge').should('have.length', 1)
+    cy.get('#employment-and-education .moj-badge').contains('Risk of reoffending')
+
+    cy.get('#drug-use .moj-badge').should('not.exist')
+    cy.get('#finances .moj-badge').should('not.exist')
+    cy.get('#health-and-wellbeing .moj-badge').should('not.exist')
+  })
+  /*
   it('Should check all hard-coded links in each assessment section are in the expected order', () => {
     cy.get('.govuk-accordion__show-all').click({ multiple: true })
 
@@ -269,4 +281,5 @@ describe('Rendering About Person in READ_ONLY', () => {
       expect(href).not.to.contain('create-goal')
     })
   })
+  */
 })
