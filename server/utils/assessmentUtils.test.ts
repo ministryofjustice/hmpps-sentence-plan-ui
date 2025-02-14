@@ -19,12 +19,18 @@ import {
 describe('format assessment data', () => {
   it('returns empty arrays when assessment is null', () => {
     const result = formatAssessmentData(fullCrimNeeds, null, areaConfigs)
-    expect(result).toEqual({ isAssessmentComplete: false, areas: { lowScoring: [], highScoring: [], other: [] } })
+    expect(result).toEqual({
+      isAssessmentComplete: false,
+      areas: { incompleteAreas: [], lowScoring: [], highScoring: [], other: [] },
+    })
   })
 
   it('returns empty arrays when assessment has no SAN data', () => {
     const result = formatAssessmentData(fullCrimNeeds, assessmentUndefined, areaConfigs)
-    expect(result).toEqual({ isAssessmentComplete: false, areas: { lowScoring: [], highScoring: [], other: [] } })
+    expect(result).toEqual({
+      isAssessmentComplete: false,
+      areas: { incompleteAreas: [], lowScoring: [], highScoring: [], other: [] },
+    })
   })
 
   it('returns correctly grouped assessment areas and incomplete assessment', () => {
@@ -70,8 +76,8 @@ describe('format assessment data', () => {
     const result = formatAssessmentData(fullCrimNeeds, incompleteAssessmentData, areaConfigs)
 
     expect(result.isAssessmentComplete).toEqual(false)
-    expect(result.areas.other[0].title).toEqual('Employment and education')
-    expect(result.areas.other[0].isAssessmentSectionComplete).toEqual(false)
+    expect(result.areas.incompleteAreas[2].title).toEqual('Employment and education')
+    expect(result.areas.incompleteAreas[2].isAssessmentSectionComplete).toEqual(false)
   })
 
   it('returns correctly ordered assessments by score compared to threshold in high scoring section', () => {
