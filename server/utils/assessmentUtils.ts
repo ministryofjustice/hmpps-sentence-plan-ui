@@ -239,11 +239,6 @@ export const motivationText = (optionResult?: string): string => {
   return camelCase(optionResult)
 }
 
-export const dateWithYear = (datetimeString: string): string | null => {
-  if (!datetimeString || isBlank(datetimeString)) return undefined
-  return DateTime.fromISO(datetimeString).toFormat('d MMMM yyyy')
-}
-
 export const yearsAndDaysElapsed = (datetimeStringFrom: string, datetimeStringTo: string): any => {
   return DateTime.fromISO(datetimeStringTo).diff(DateTime.fromISO(datetimeStringFrom), ['years', 'months', 'days'])
 }
