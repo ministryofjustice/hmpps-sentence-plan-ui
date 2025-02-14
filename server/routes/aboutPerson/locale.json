@@ -11,7 +11,7 @@
       "endDateHeading": "Expected end date",
       "unpaidWorkHeading": "Unpaid work",
       "rarHeading": "RAR (Rehabilitation activity requirement)",
-      "lastUpdated": "Last updated on {{ lastUpdatedDate }}.",
+      "lastUpdated": "{{ subject.givenName }}'s assessment was last updated on {{ lastUpdatedDate }}.",
       "RoSH": "RoSH (Risk of Serious Harm)",
       "riskOfReoffending": "Risk of reoffending",
       "linkedToHarm": "This area is linked to RoSH (risk of serious harm)",
@@ -23,6 +23,18 @@
       "noStrengthsOrProtectiveFactors": "There are no strengths or protective factors related to this area",
       "needScore": "need score",
       "lifestyleAndAssociatesNeedScore": "Lifestyle and associates need score"
+    },
+    "lowScoring": {
+      "sectionHeading": "Low-scoring areas from the assessment",
+      "sectionEmptyParagraph": "No low-scoring areas."
+    },
+    "highScoring": {
+      "sectionHeading": "High-scoring areas from the assessment",
+      "sectionEmptyParagraph": "No high-scoring areas."
+    },
+    "withoutScoring": {
+      "sectionHeading": "Areas without a need score",
+      "sectionParagraph": "Health and wellbeing, and finances never have a need score. When other information is available for those areas, you can see it here."
     },
     "errors": {
       "noAssessmentDataFound": "No assessment data found",
@@ -44,7 +56,7 @@
       "summary": "Plan summary"
     },
     "needScore": {
-      "doesNotHaveNeedScore": "This area does not have a need score",
+      "doesNotHaveNeedScore": "This area never has a need score",
       "needScoreNotAvailable": "The score for this area is not available yet"
     }
   }
