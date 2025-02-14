@@ -97,6 +97,16 @@ describe('Rendering About Person for READ_WRITE user', () => {
     })
   })
 
+  it('Should check the Missing Information section in Personal Relationships and Community is displayed correctly', () => {
+    cy.get('.govuk-inset-text').should('have.length', 1) // make sure there is only one missing information section
+
+    cy.get('#personal-relationships-and-community button').click() // click show all in Personal Relationships and Community assessment section
+    cy.get('#personal-relationships-and-community .govuk-inset-text li').should('have.length', 1)
+    cy.get('#personal-relationships-and-community .govuk-inset-text li')
+      .eq(0)
+      .contains('whether this area is linked to RoSH (risk of serious harm)')
+  })
+
   it('Should check if the data for Thinking behaviour and attitudes are displayed correctly and in order', () => {
     const expectedHeadings = [
       'This area is not linked to RoSH (risk of serious harm)',
