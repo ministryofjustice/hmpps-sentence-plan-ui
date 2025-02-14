@@ -100,19 +100,18 @@
             {% endif %}
 
           {% if data.formattedAssessmentInfo.isAssessmentComplete %}
+
+            <h2 class="govuk-heading-m">{{ locale.highScoring.sectionHeading }}</h2>
             {% if data.formattedAssessmentInfo.areas.highScoring.length > 0 %}
-                <h2 class="govuk-heading-m">{{ locale.highScoring.sectionHeading }}</h2>
                 {{ renderAssessment(data.formattedAssessmentInfo.areas.highScoring, locale, data.readWrite) }}
             {% else %}
-                <h2 class="govuk-heading-m">{{ locale.highScoring.sectionHeading }}</h2>
                 <p class="govuk-body">{{ locale.highScoring.sectionEmptyParagraph }}</h2>
             {% endif %}
 
+            <h2 class="govuk-heading-m">{{ locale.lowScoring.sectionHeading }}</h2>
             {% if data.formattedAssessmentInfo.areas.lowScoring.length > 0 %}
-                <h2 class="govuk-heading-m">{{ locale.lowScoring.sectionHeading }}</h2>
                 {{ renderAssessment(data.formattedAssessmentInfo.areas.lowScoring, locale, data.readWrite) }}
             {% else %}
-                <h2 class="govuk-heading-m">{{ locale.lowScoring.sectionHeading }}</h2>
                 <p class="govuk-body">{{ locale.lowScoring.sectionEmptyParagraph }}</h2>
             {% endif %}
 
