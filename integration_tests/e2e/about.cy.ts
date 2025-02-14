@@ -271,8 +271,8 @@ describe('Rendering About Person in READ_ONLY', () => {
 
   it('Should check the page rendered correctly with no Create Goal button', () => {
     cy.get('h1').should('include.text', 'About')
-    cy.get('h2').eq(0).contains('Sentence information')
-    cy.get('h2').eq(1).contains('High-scoring areas from the assessment')
+    cy.get('h2').eq(1).contains('Sentence information')
+    cy.get('h2').eq(3).contains('High-scoring areas from the assessment')
     cy.get('[role="button"]').should('have.length', 1)
     cy.get('[role="button"]').eq(0).should('contain', 'Return to OASys')
   })
