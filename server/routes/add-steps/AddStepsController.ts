@@ -26,20 +26,17 @@ export default class AddStepsController {
       const planUuid = req.services.sessionService.getPlanUUID()
       const plan = await req.services.planService.getPlanByUuid(planUuid)
 
-      let assessmentDetailsForArea = null
       const criminogenicNeedsData = req.services.sessionService.getCriminogenicNeeds()
 
-      // get assessment data
-      try {
-        const assessmentResponse = await req.services.assessmentService.getAssessmentByUuid(planUuid)
-        const assessmentData = assessmentResponse.sanAssessmentData
-
-        // 2. get the assessment details for the selected area of need
-        const areaConfig: AssessmentAreaConfig = areaConfigs.find(config => config.area === goal.areaOfNeed.name)
-        assessmentDetailsForArea = getAssessmentDetailsForArea(criminogenicNeedsData, areaConfig, assessmentData)
-      } catch {
-        /* swallow the error, missing data is handled in the template */
-      }
+      // get assessment data or swallow the service error and set to null so the template knows this data is missing
+      const assessmentDetailsForArea = await req.services.assessmentService
+        .getAssessmentByUuid(planUuid)
+        .then(assessmentResponse => {
+          const assessmentData = assessmentResponse.sanAssessmentData
+          const areaConfig: AssessmentAreaConfig = areaConfigs.find(config => config.area === goal.areaOfNeed.name)
+          return getAssessmentDetailsForArea(criminogenicNeedsData, areaConfig, assessmentData)
+        })
+        .catch((): null => null)
 
       if (!req.body.steps || req.body.steps.length === 0) {
         req.body.steps = steps.map(step => ({

@@ -39,7 +39,7 @@ jest.mock('../../services/sessionService', () => {
 
 jest.mock('../../services/sentence-plan/assessmentService', () => {
   return jest.fn().mockImplementation(() => ({
-    getAssessmentByUuid: jest.fn().mockReturnValue(incompleteAssessmentData),
+    getAssessmentByUuid: jest.fn().mockResolvedValue(incompleteAssessmentData),
   }))
 })
 
