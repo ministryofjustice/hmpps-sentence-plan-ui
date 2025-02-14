@@ -65,8 +65,7 @@
       "summary": "Plan summary"
     },
     "needScore": {
-      "doesNotHaveNeedScore": "This area never has a need score",
-      "needScoreNotAvailable": "The score for this area is not available yet"
+      "doesNotHaveNeedScore": "This area never has a need score"
     }
   }
 }
