@@ -85,7 +85,7 @@ describe('Rendering About Person for READ_WRITE user', () => {
     })
   })
 
-  it('Should check if the data for (high-scoring area) thinking behaviour and attitudes are displayed correctly and in order', () => {
+  it('Should check if the data for Thinking behaviour and attitudes are displayed correctly and in order', () => {
     const expectedHeadings = [
       'This area is not linked to RoSH (risk of serious harm)',
       'This area is not linked to risk of reoffending',
@@ -103,19 +103,16 @@ describe('Rendering About Person for READ_WRITE user', () => {
       '6 out of 6',
     ]
 
-    cy.get('.govuk-accordion__show-all').eq(0).click() // click show all in high-scoring assessment section
+    cy.get('#thinking-behaviours-and-attitudes button').click() // click show Thinking, behaviour and attitudes
 
-    cy.contains('.govuk-accordion__section', 'Thinking, behaviours and attitudes')
-      .find('#accordion-default-content-3')
-      .as('sectionContent')
+    cy.get('#thinking-behaviours-and-attitudes .govuk-accordion__section-content').as('sectionContent')
 
     // Header assertions
     cy.get('@sectionContent')
-      .find('.govuk-heading-s')
-      .then(headerElements => {
-        const actualTitles = headerElements.toArray().map(header => header.textContent)
-        actualTitles.forEach((title, index) => {
-          expect(title).to.equal(expectedHeadings[index])
+      .find('p.govuk-\\!-font-weight-bold')
+      .then(headings => {
+        headings.toArray().forEach((heading, index) => {
+          expect(heading.textContent).to.equal(expectedHeadings[index])
         })
       })
 
@@ -128,6 +125,14 @@ describe('Rendering About Person for READ_WRITE user', () => {
           expect(body).to.contain(expectedBody[index])
         })
       })
+  })
+
+  it('Should check if the score graph for Thinking behaviour and attitudes is displayed correctly', () => {
+    cy.get('#thinking-behaviours-and-attitudes .assessment-score').eq(0).find('.lowscoring').should('have.length', 1)
+  })
+
+  it('Should check if the score graph for Lifestyle and associates is displayed correctly', () => {
+    cy.get('#thinking-behaviours-and-attitudes .assessment-score').eq(1).find('.highscoring').should('have.length', 6)
   })
 
   it('Should check if the data for (low-scoring area) drug use are displayed correctly and in order', () => {
@@ -145,17 +150,16 @@ describe('Rendering About Person for READ_WRITE user', () => {
       '0 out of 8',
     ]
 
-    cy.get('.govuk-accordion__show-all').eq(1).click() // click show all in high-scoring assessment section
+    cy.get('#drug-use button').click() // click show all in Drug use assessment section
 
-    cy.contains('.govuk-accordion__section', 'Drug use').find('#accordion-default-content-1').as('sectionContent')
+    cy.get('#drug-use .govuk-accordion__section-content').as('sectionContent')
 
     // Header assertions
     cy.get('@sectionContent')
-      .find('.govuk-heading-s')
-      .then(headerElements => {
-        const actualTitles = headerElements.toArray().map(header => header.textContent)
-        actualTitles.forEach((title, index) => {
-          expect(title).to.equal(expectedHeadings[index])
+      .find('p.govuk-\\!-font-weight-bold')
+      .then(headings => {
+        headings.toArray().forEach((heading, index) => {
+          expect(heading.textContent).to.equal(expectedHeadings[index])
         })
       })
 
@@ -171,11 +175,11 @@ describe('Rendering About Person for READ_WRITE user', () => {
   })
 
   it('Should check if the score graph for (low-scoring area) drug use is displayed correctly', () => {
-    cy.get('.govuk-accordion__show-all').eq(1).click()
-    cy.contains('.assessment-score', '0 out of 8').find('.highscoring').should('have.length', 0)
+    cy.get('#drug-use button').click()
+    cy.get('#drug-use .assessment-score').find('.highscoring').should('have.length', 0)
   })
 
-  it('Should check if the data for (non-scoring area) health and wellbeing are displayed correctly and in order', () => {
+  it('Should check if the data for (non-scoring area) Health and wellbeing are displayed correctly and in order', () => {
     const expectedHeadings = [
       'This area is not linked to RoSH (risk of serious harm)',
       'This area is not linked to risk of reoffending',
@@ -186,19 +190,15 @@ describe('Rendering About Person for READ_WRITE user', () => {
 
     const expectedBody = ['There is no risk of serious harm', 'This question was not applicable.']
 
-    cy.get('.govuk-accordion__show-all').eq(2).click() // click show all in non-scoring assessment section
+    cy.get('#health-and-wellbeing button').click() // click show all in non-scoring assessment section
 
-    cy.contains('.govuk-accordion__section', 'Health and wellbeing')
-      .find('#accordion-default-content-2')
-      .as('sectionContent')
+    cy.get('#health-and-wellbeing .govuk-accordion__section-content').as('sectionContent') // Header assertions
 
-    // Header assertions
     cy.get('@sectionContent')
-      .find('.govuk-heading-s')
-      .then(headerElements => {
-        const actualTitles = headerElements.toArray().map(header => header.textContent)
-        actualTitles.forEach((title, index) => {
-          expect(title).to.contain(expectedHeadings[index])
+      .find('p.govuk-\\!-font-weight-bold')
+      .then(headings => {
+        headings.toArray().forEach((heading, index) => {
+          expect(heading.textContent).to.equal(expectedHeadings[index])
         })
       })
 
@@ -224,17 +224,15 @@ describe('Rendering About Person for READ_WRITE user', () => {
 
     const expectedBody = ['There is no risk of reoffending', 'This question was not applicable.', 'Nothing to add']
 
-    cy.get('.govuk-accordion__show-all').eq(2).click() // click show all in non-scoring assessment section
+    cy.get('#finances button').click() // click show all in non-scoring assessment section
 
-    cy.contains('.govuk-accordion__section', 'Finances').find('#accordion-default-content-1').as('sectionContent')
+    cy.get('#finances .govuk-accordion__section-content').as('sectionContent') // Header assertions
 
-    // Header assertions
     cy.get('@sectionContent')
-      .find('.govuk-heading-s')
-      .then(headerElements => {
-        const actualTitles = headerElements.toArray().map(header => header.textContent)
-        actualTitles.forEach((title, index) => {
-          expect(title).to.equal(expectedHeadings[index])
+      .find('p.govuk-\\!-font-weight-bold')
+      .then(headings => {
+        headings.toArray().forEach((heading, index) => {
+          expect(heading.textContent).to.equal(expectedHeadings[index])
         })
       })
 
