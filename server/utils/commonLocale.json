@@ -31,10 +31,12 @@
     "goalSummaryCard": {
       "info": {
         "aimToAchieveDate": "Aim to achieve this by {{ targetDate }}.",
-        "removedDate": "Removed on {{ lastStatusChangeDate }}",
+        "removedDate": "Removed on {{ lastStatusChangeDate }}.",
         "aimToAchieveSentence": "Aim to achieve this by the end of {{ subject.possessiveName }} sentence.",
         "achievedDate": "Marked as achieved on {{ lastStatusChangeDate }}.",
-        "thisIsAFutureGoal": "This is a future goal."
+        "thisIsAFutureGoal": "This is a future goal.",
+        "stepsCompletedSingular": " out of {{ totalSteps }} step completed.",
+        "stepsCompletedPlural": " out of {{ totalSteps }} steps completed."
       },
       "stepsList": {
         "whoHeader": "Who will do this",
@@ -106,6 +108,44 @@
       "month": "month",
       "day": "day",
       "conjunction": "and"
+    },
+    "assessmentInfo": {
+      "detailsSummary": "View information from {{ subject.possessiveName }} assessment",
+      "assessmentIncomplete": "This area has not been marked as complete in the assessment yet, but you can check the latest information available below.",
+      "assessmentNotStarted": "No information is available yet as the assessment has not been started for this area.",
+      "missingInformation": "Missing information",
+      "assessmentUnavailable": "There is a problem getting this information. Try reloading the page or try again later.",
+      "missingInformationList": {
+        "linkedToHarm": "whether this area is linked to RoSH (risk of serious harm)",
+        "linkedToReoffending": "whether this area is linked to risk of reoffending",
+        "motivationToMakeChanges": "motivation to make changes",
+        "linkedtoStrengthsOrProtectiveFactors": "strengths and protective factors",
+        "criminogenicNeedsScore": "the need score"
+      },
+      "motivationToMakeChanges": "Motivation to make changes in this area",
+      "motivationText": {
+        "madeChanges": "{{ subject.givenName }} has already made positive changes and wants to maintain them.",
+        "makingChanges": "{{ subject.givenName }} is actively making changes.",
+        "wantToMakeChanges": "{{ subject.givenName }} wants to make changes and knows how to.",
+        "needsHelpToMakeChanges": "{{ subject.givenName }} wants to make changes but needs help.",
+        "thinkingAboutMakingChanges": "{{ subject.givenName }} is thinking about making changes.",
+        "doesNotWantToMakeChanges": "{{ subject.givenName }} does not want to make changes.",
+        "doesNotWantToAnswer": "{{ subject.givenName }} does not want to answer.",
+        "notPresent": "{{ subject.givenName }} was not present to answer this question.",
+        "notApplicable": "This question was not applicable."
+      },
+      "linkedToHarm": {
+        "yes": "This area is linked to RoSH (risk of serious harm)",
+        "no": "This area is not linked to RoSH (risk of serious harm)"
+      },
+      "linkedToReoffending": {
+        "yes": "This area is linked to risk of reoffending",
+        "no": "This area is not linked to risk of reoffending"
+      },
+      "linkedtoStrengthsOrProtectiveFactors": {
+        "yes": "There are strengths or protective factors related to this area",
+        "no": "There are no strengths or protective factors related to this area"
+      }
     }
   },
   "cy": {}

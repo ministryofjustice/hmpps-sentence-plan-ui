@@ -11,9 +11,12 @@ describe('Rendering About Person for READ_WRITE user', () => {
   })
 
   it('Should check the page rendered correctly', () => {
+    cy.get('.moj-primary-navigation__container').should('not.contain', `Plan history`)
     cy.get('h1').should('include.text', 'About')
-    cy.get('h2').eq(0).contains('Sentence information')
-    cy.get('h2').eq(1).contains('High-scoring areas from the assessment')
+    cy.get('h2.govuk-error-summary__title').eq(0).contains('Some areas have incomplete information')
+    cy.get('h2').eq(1).contains('Sentence information')
+    cy.get('h2').eq(2).contains('Incomplete information')
+    cy.get('h2').eq(3).contains('High-scoring areas from the assessment')
     cy.get('[role="button"]').should('have.length', 2)
     cy.get('[role="button"]').eq(0).should('contain', 'Return to OASys')
     cy.get('[role="button"]').eq(1).should('contain', 'Create goal')
@@ -37,8 +40,8 @@ describe('Rendering About Person for READ_WRITE user', () => {
 
   it('Should check if main titles of hard-coded high-scoring areas from the assessment are displayed correctly and in order with the correct risk marker', () => {
     const expectedText = [
-      'Accommodation',
       'Personal relationships and community',
+      'Accommodation',
       'Thinking, behaviours and attitudes',
       'Alcohol use',
       'Employment and education',
@@ -52,17 +55,31 @@ describe('Rendering About Person for READ_WRITE user', () => {
   })
 
   it('Should check the hard-coded labels appear next to the correct, predetermined areas in correct order', () => {
-    cy.get('.govuk-accordion__section-heading').contains('Accommodation').contains('Risk of reoffending')
-    cy.get('.govuk-accordion__section-heading').contains('Alcohol use').contains('Risk of reoffending')
-    cy.get('.govuk-accordion__section-heading').contains('Employment and education').contains('Risk of reoffending')
+    // this is set to relLinkedToReoffending: 'YES', in backend.ts but doesn't display because the section is incomplete
+    cy.get('#personal-relationships-and-community .moj-badge').should('not.exist')
+
+    cy.get('#accommodation .moj-badge').should('have.length', 1)
+    cy.get('#accommodation .moj-badge').contains('Risk of reoffending')
+
+    cy.get('#thinking-behaviours-and-attitudes .moj-badge').should('not.exist')
+
+    cy.get('#alcohol-use .moj-badge').should('have.length', 1)
+    cy.get('#alcohol-use .moj-badge').contains('Risk of reoffending')
+
+    cy.get('#employment-and-education .moj-badge').should('have.length', 1)
+    cy.get('#employment-and-education .moj-badge').contains('Risk of reoffending')
+
+    cy.get('#drug-use .moj-badge').should('not.exist')
+    cy.get('#finances .moj-badge').should('not.exist')
+    cy.get('#health-and-wellbeing .moj-badge').should('not.exist')
   })
 
   it('Should check all hard-coded links in each assessment section are in the expected order', () => {
     cy.get('.govuk-accordion__show-all').click({ multiple: true })
 
     const areas = [
-      { text: 'Create accommodation goal', href: 'accommodation' },
       { text: 'Create personal relationships and community goal', href: 'personal-relationships-and-community' },
+      { text: 'Create accommodation goal', href: 'accommodation' },
       { text: 'Create thinking, behaviours and attitudes goal', href: 'thinking-behaviours-and-attitudes' },
       { text: 'Create alcohol use goal', href: 'alcohol-use' },
       { text: 'Create employment and education goal', href: 'employment-and-education' },
@@ -80,97 +97,130 @@ describe('Rendering About Person for READ_WRITE user', () => {
     })
   })
 
-  it('Should check if the data for (high-scoring area) thinking behaviour and attitudes are displayed correctly and in order', () => {
-    const expectedHeadings =
-      'This area is not linked to RoSH (risk of serious harm) ' +
-      'This area is not linked to risk of reoffending ' +
-      'Motivation to make changes in this area Sam wants to make changes but needs help. ' +
-      'There are no strengths or protective factors related to this area ' +
-      'Thinking, behaviours and attitudes need score ' +
-      '1 out of 10. (Scores above 2 are high-scoring.) ' +
-      '1 out of 10 ' +
-      'Lifestyle and associates need score ' +
-      '6 out of 6. (Scores above 1 are high-scoring.) ' +
-      '6 out of 6 ' +
-      'Create thinking, behaviours and attitudes goal'
-    cy.get('.govuk-accordion__show-all').eq(0).click() // click show all in high-scoring assessment section
-    cy.contains('.govuk-accordion__section', 'Thinking, behaviours and attitudes')
-      .find('#accordion-default-content-3')
-      .invoke('text')
-      .then(text => {
-        const trimText = text.trim().replace(/\s+/g, ' ') // regex to catch and replace excessive newlines to single whitespace
-        expect(trimText).to.include(expectedHeadings)
-      })
-    cy.contains('.govuk-accordion__section', 'Thinking, behaviours and attitudes')
-      .find('.govuk-heading-s')
-      .should('have.length', 6)
-    cy.contains('.govuk-accordion__section', 'Thinking, behaviours and attitudes')
-      .find('.govuk-body')
-      .should('have.length', 6)
+  it('Should check the Missing Information section in Personal Relationships and Community is displayed correctly', () => {
+    cy.get('.govuk-inset-text').should('have.length', 1) // make sure there is only one missing information section
+
+    cy.get('#personal-relationships-and-community button').click() // click show all in Personal Relationships and Community assessment section
+    cy.get('#personal-relationships-and-community .govuk-inset-text li').should('have.length', 1)
+    cy.get('#personal-relationships-and-community .govuk-inset-text li')
+      .eq(0)
+      .contains('whether this area is linked to RoSH (risk of serious harm)')
   })
 
-  it('Should check if the score graph for (high-scoring area) thinking behaviour and attitudes is displayed correctly', () => {
-    cy.get('.govuk-accordion__show-all').eq(0).click()
-    cy.contains('.assessment-score', 'Thinking, behaviours and attitudes need score')
-      .find('.lowscoring')
-      .should('have.length', 1)
-    cy.contains('.assessment-score', 'Lifestyle and associates need score')
-      .find('.highscoring')
-      .should('have.length', 6)
-  })
-
-  it('Should check if the data for (low-scoring area) drug use are displayed correctly and in order', () => {
-    const expectedHeadings =
-      'This area is not linked to RoSH (risk of serious harm) ' +
-      'This area is not linked to risk of reoffending ' +
-      'Motivation to make changes in this area ' +
-      'Sam is actively making changes. ' +
-      'There are no strengths or protective factors related to this area ' +
-      'Drug use need score ' +
-      '0 out of 8. (Scores above 0 are high-scoring.) ' +
-      '0 out of 8 ' +
-      'Create drug use goal'
-    cy.get('.govuk-accordion__show-all').eq(1).click() // click show all in low-scoring assessment section
-    cy.contains('.govuk-accordion__section', 'Drug use')
-      .find('#accordion-default-content-1')
-      .invoke('text')
-      .then(text => {
-        const trimText = text.trim().replace(/\s+/g, ' ') // regex to catch and replace excessive newlines to single whitespace
-        expect(trimText).to.include(expectedHeadings)
-      })
-    cy.contains('.govuk-accordion__section', 'Drug use').find('.govuk-heading-s').should('have.length', 5)
-    cy.contains('.govuk-accordion__section', 'Drug use').find('.govuk-body').should('have.length', 4)
-  })
-
-  it('Should check if the score graph for (low-scoring area) drug use is displayed correctly', () => {
-    cy.get('.govuk-accordion__show-all').eq(1).click()
-    cy.contains('.assessment-score', '0 out of 8').find('.highscoring').should('have.length', 0)
-  })
-
-  it('Should check if the data for (non-scoring area) health and wellbeing are displayed correctly and in order', () => {
+  it('Should check if the data for Thinking behaviour and attitudes are displayed correctly and in order', () => {
     const expectedHeadings = [
       'This area is not linked to RoSH (risk of serious harm)',
       'This area is not linked to risk of reoffending',
       'Motivation to make changes in this area',
       'There are no strengths or protective factors related to this area',
-      'This area does not have a need score',
+      'Thinking, behaviours and attitudes need score',
+      'Lifestyle and associates need score',
+    ]
+
+    const expectedBody = [
+      'Sam wants to make changes but needs help.',
+      '1 out of 10. (Scores above 2 are high-scoring.)',
+      '1 out of 10',
+      '6 out of 6. (Scores above 1 are high-scoring.)',
+      '6 out of 6',
+    ]
+
+    cy.get('#thinking-behaviours-and-attitudes button').click() // click show Thinking, behaviour and attitudes
+
+    cy.get('#thinking-behaviours-and-attitudes .govuk-accordion__section-content').as('sectionContent')
+
+    // Header assertions
+    cy.get('@sectionContent')
+      .find('p.govuk-\\!-font-weight-bold')
+      .then(headings => {
+        headings.toArray().forEach((heading, index) => {
+          expect(heading.textContent).to.equal(expectedHeadings[index])
+        })
+      })
+
+    // Body assertions
+    cy.get('@sectionContent')
+      .find('.govuk-body')
+      .then(bodyElements => {
+        const actualBody = bodyElements.toArray().map(body => body.textContent.replace(/\s+/g, ' '))
+        actualBody.forEach((body, index) => {
+          expect(body).to.contain(expectedBody[index])
+        })
+      })
+  })
+
+  it('Should check if the score graph for Thinking behaviour and attitudes is displayed correctly', () => {
+    cy.get('#thinking-behaviours-and-attitudes .assessment-score').eq(0).find('.lowscoring').should('have.length', 1)
+  })
+
+  it('Should check if the score graph for Lifestyle and associates is displayed correctly', () => {
+    cy.get('#thinking-behaviours-and-attitudes .assessment-score').eq(1).find('.highscoring').should('have.length', 6)
+  })
+
+  it('Should check if the data for (low-scoring area) drug use are displayed correctly and in order', () => {
+    const expectedHeadings = [
+      'This area is not linked to RoSH (risk of serious harm)',
+      'This area is not linked to risk of reoffending',
+      'Motivation to make changes in this area',
+      'There are no strengths or protective factors related to this area',
+      'Drug use need score',
+    ]
+
+    const expectedBody = [
+      'Sam is actively making changes.',
+      '0 out of 8. (Scores above 0 are high-scoring.)',
+      '0 out of 8',
+    ]
+
+    cy.get('#drug-use button').click() // click show all in Drug use assessment section
+
+    cy.get('#drug-use .govuk-accordion__section-content').as('sectionContent')
+
+    // Header assertions
+    cy.get('@sectionContent')
+      .find('p.govuk-\\!-font-weight-bold')
+      .then(headings => {
+        headings.toArray().forEach((heading, index) => {
+          expect(heading.textContent).to.equal(expectedHeadings[index])
+        })
+      })
+
+    // Body assertions
+    cy.get('@sectionContent')
+      .find('.govuk-body')
+      .then(bodyElements => {
+        const actualBody = bodyElements.toArray().map(body => body.textContent.replace(/\s+/g, ' '))
+        actualBody.forEach((body, index) => {
+          expect(body).to.contain(expectedBody[index])
+        })
+      })
+  })
+
+  it('Should check if the score graph for (low-scoring area) drug use is displayed correctly', () => {
+    cy.get('#drug-use button').click()
+    cy.get('#drug-use .assessment-score').find('.highscoring').should('have.length', 0)
+  })
+
+  it('Should check if the data for (non-scoring area) Health and wellbeing are displayed correctly and in order', () => {
+    const expectedHeadings = [
+      'This area is not linked to RoSH (risk of serious harm)',
+      'This area is not linked to risk of reoffending',
+      'Motivation to make changes in this area',
+      'There are no strengths or protective factors related to this area',
+      'This area never has a need score',
     ]
 
     const expectedBody = ['There is no risk of serious harm', 'This question was not applicable.']
 
-    cy.get('.govuk-accordion__show-all').eq(2).click() // click show all in non-scoring assessment section
+    cy.get('#health-and-wellbeing button').click() // click show all in non-scoring assessment section
 
-    cy.contains('.govuk-accordion__section', 'Health and wellbeing')
-      .find('#accordion-default-content-2')
-      .as('sectionContent')
+    cy.get('#health-and-wellbeing .govuk-accordion__section-content').as('sectionContent') // Header assertions
 
-    // Header assertions
     cy.get('@sectionContent')
-      .find('.govuk-heading-s')
-      .then(headerElements => {
-        const actualTitles = headerElements.toArray().map(header => header.textContent)
-        actualTitles.forEach((title, index) => {
-          expect(title).to.contain(expectedHeadings[index])
+      .find('p.govuk-\\!-font-weight-bold')
+      .then(headings => {
+        headings.toArray().forEach((heading, index) => {
+          expect(heading.textContent).to.equal(expectedHeadings[index])
         })
       })
 
@@ -180,7 +230,6 @@ describe('Rendering About Person for READ_WRITE user', () => {
       .then(bodyElements => {
         const actualBody = bodyElements.toArray().map(body => body.textContent)
         actualBody.forEach((body, index) => {
-          cy.log(body)
           expect(body).to.contain(expectedBody[index])
         })
       })
@@ -192,22 +241,20 @@ describe('Rendering About Person for READ_WRITE user', () => {
       'This area is not linked to risk of reoffending',
       'Motivation to make changes in this area',
       'There are no strengths or protective factors related to this area',
-      'This area does not have a need score',
+      'This area never has a need score',
     ]
 
     const expectedBody = ['There is no risk of reoffending', 'This question was not applicable.', 'Nothing to add']
 
-    cy.get('.govuk-accordion__show-all').eq(2).click() // click show all in non-scoring assessment section
+    cy.get('#finances button').click() // click show all in non-scoring assessment section
 
-    cy.contains('.govuk-accordion__section', 'Finances').find('#accordion-default-content-1').as('sectionContent')
+    cy.get('#finances .govuk-accordion__section-content').as('sectionContent') // Header assertions
 
-    // Header assertions
     cy.get('@sectionContent')
-      .find('.govuk-heading-s')
-      .then(headerElements => {
-        const actualTitles = headerElements.toArray().map(header => header.textContent)
-        actualTitles.forEach((title, index) => {
-          expect(title).to.equal(expectedHeadings[index])
+      .find('p.govuk-\\!-font-weight-bold')
+      .then(headings => {
+        headings.toArray().forEach((heading, index) => {
+          expect(heading.textContent).to.equal(expectedHeadings[index])
         })
       })
 
@@ -234,8 +281,8 @@ describe('Rendering About Person in READ_ONLY', () => {
 
   it('Should check the page rendered correctly with no Create Goal button', () => {
     cy.get('h1').should('include.text', 'About')
-    cy.get('h2').eq(0).contains('Sentence information')
-    cy.get('h2').eq(1).contains('High-scoring areas from the assessment')
+    cy.get('h2').eq(1).contains('Sentence information')
+    cy.get('h2').eq(3).contains('High-scoring areas from the assessment')
     cy.get('[role="button"]').should('have.length', 1)
     cy.get('[role="button"]').eq(0).should('contain', 'Return to OASys')
   })

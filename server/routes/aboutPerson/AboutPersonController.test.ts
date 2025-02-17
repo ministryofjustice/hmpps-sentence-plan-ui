@@ -2,24 +2,22 @@ import mockRes from '../../testutils/preMadeMocks/mockRes'
 import mockReq from '../../testutils/preMadeMocks/mockReq'
 import AboutPersonController from './AboutPersonController'
 import locale from './locale.json'
-import { areaConfigs } from './assessmentAreaConfig.json'
+import { areaConfigs } from '../../utils/assessmentAreaConfig.json'
 import { AreaOfNeed } from '../../testutils/data/referenceData'
 import testPlan from '../../testutils/data/planData'
 import popData from '../../testutils/data/popData'
 import testHandoverContext from '../../testutils/data/handoverData'
-import { assessmentData, crimNeedsMissing, crimNeedsSubset } from '../../testutils/data/assessmentData'
-import { AssessmentAreas } from '../../@types/Assessment'
+import {
+  completeAssessmentData,
+  fullCrimNeeds,
+  incompleteAssessmentData,
+} from '../../testutils/data/testAssessmentData'
+import { FormattedAssessment } from '../../@types/Assessment'
 
 import { formatAssessmentData } from '../../utils/assessmentUtils'
 import { AccessMode } from '../../@types/Handover'
 
 const oasysReturnUrl = 'https://oasys.return.url'
-
-jest.mock('../../services/sentence-plan/assessmentService', () => {
-  return jest.fn().mockImplementation(() => ({
-    getAssessmentByUuid: jest.fn().mockReturnValue(assessmentData),
-  }))
-})
 
 jest.mock('../../services/sentence-plan/referentialDataService', () => {
   return jest.fn().mockImplementation(() => ({
@@ -39,7 +37,7 @@ jest.mock('../../services/sessionService', () => {
     getOasysReturnUrl: jest.fn().mockReturnValue(oasysReturnUrl),
     getPrincipalDetails: jest.fn().mockReturnValue(testHandoverContext.principal),
     getSubjectDetails: jest.fn().mockReturnValue(testHandoverContext.subject),
-    getCriminogenicNeeds: jest.fn().mockReturnValue(crimNeedsSubset),
+    getCriminogenicNeeds: jest.fn().mockReturnValue(fullCrimNeeds),
     getAccessMode: jest.fn().mockReturnValue(AccessMode.READ_WRITE),
   }))
 })
@@ -52,16 +50,18 @@ jest.mock('../../services/sentence-plan/infoService', () => {
 
 describe('AboutPersonController - assessment complete', () => {
   let controller: AboutPersonController
-  const assessmentAreas: AssessmentAreas = formatAssessmentData(crimNeedsSubset, assessmentData, areaConfigs)
+  let assessmentAreas: FormattedAssessment
+  const req = mockReq()
+  const res = mockRes()
 
   beforeEach(() => {
     controller = new AboutPersonController()
+    req.services.assessmentService.getAssessmentByUuid = jest.fn().mockReturnValue(completeAssessmentData)
+    assessmentAreas = formatAssessmentData(fullCrimNeeds, completeAssessmentData, areaConfigs)
   })
 
   describe('Get About Person READ_WRITE', () => {
     it('should render when no exceptions thrown', async () => {
-      const req = mockReq()
-      const res = mockRes()
       const next = jest.fn()
       await controller.get(req, res, next)
 
@@ -72,7 +72,7 @@ describe('AboutPersonController - assessment complete', () => {
           oasysReturnUrl,
           pageId: 'about',
           deliusData: popData,
-          assessmentAreas,
+          formattedAssessmentInfo: assessmentAreas,
           readWrite: true,
         },
         errors: {},
@@ -84,8 +84,6 @@ describe('AboutPersonController - assessment complete', () => {
 
   describe('Get About Person READ_ONLY', () => {
     it('should render when no exceptions thrown', async () => {
-      const req = mockReq()
-      const res = mockRes()
       const next = jest.fn()
 
       req.services.sessionService.getAccessMode = jest.fn().mockReturnValue(AccessMode.READ_ONLY)
@@ -99,7 +97,7 @@ describe('AboutPersonController - assessment complete', () => {
           oasysReturnUrl,
           pageId: 'about',
           deliusData: popData,
-          assessmentAreas,
+          formattedAssessmentInfo: assessmentAreas,
           readWrite: false,
         },
         errors: {},
@@ -112,65 +110,63 @@ describe('AboutPersonController - assessment complete', () => {
 
 describe('AboutPersonController - assessment incomplete', () => {
   let controller: AboutPersonController
-  const assessmentAreas: AssessmentAreas = formatAssessmentData(crimNeedsMissing, assessmentData, areaConfigs)
+  const req = mockReq()
+  const res = mockRes()
+  let assessmentAreas: FormattedAssessment
 
   beforeEach(() => {
     controller = new AboutPersonController()
+    req.services.assessmentService.getAssessmentByUuid = jest.fn().mockReturnValue(incompleteAssessmentData)
+    assessmentAreas = formatAssessmentData(fullCrimNeeds, incompleteAssessmentData, areaConfigs)
   })
 
   describe('Get About Person READ_WRITE', () => {
     it('should render when no exceptions thrown', async () => {
-      const req = mockReq()
-      const res = mockRes()
-
-      req.services.sessionService.getCriminogenicNeeds = jest.fn().mockReturnValue(crimNeedsMissing)
+      req.services.sessionService.getCriminogenicNeeds = jest.fn().mockReturnValue(fullCrimNeeds)
 
       const next = jest.fn()
       await controller.get(req, res, next)
 
-      const payload = {
+      const expectedPayload = {
         locale: locale.en,
         data: {
           planAgreementStatus: testPlan.agreementStatus,
           oasysReturnUrl,
           pageId: 'about',
           deliusData: popData,
-          assessmentAreas,
+          formattedAssessmentInfo: assessmentAreas,
           readWrite: true,
         },
         errors: {},
       }
 
-      expect(res.render).toHaveBeenCalledWith('pages/about-not-complete', payload)
+      expect(res.render).toHaveBeenCalledWith('pages/about', expectedPayload)
     })
   })
 
   describe('Get About Person READ_ONLY', () => {
     it('should render when no exceptions thrown', async () => {
-      const req = mockReq()
-      const res = mockRes()
-
-      req.services.sessionService.getCriminogenicNeeds = jest.fn().mockReturnValue(crimNeedsMissing)
+      req.services.sessionService.getCriminogenicNeeds = jest.fn().mockReturnValue(fullCrimNeeds)
       req.services.sessionService.getAccessMode = jest.fn().mockReturnValue(AccessMode.READ_ONLY)
 
       const next = jest.fn()
 
       await controller.get(req, res, next)
 
-      const payload = {
+      const expectedPayload = {
         locale: locale.en,
         data: {
           planAgreementStatus: testPlan.agreementStatus,
           oasysReturnUrl,
           pageId: 'about',
           deliusData: popData,
-          assessmentAreas,
+          formattedAssessmentInfo: assessmentAreas,
           readWrite: false,
         },
         errors: {},
       }
 
-      expect(res.render).toHaveBeenCalledWith('pages/about-not-complete', payload)
+      expect(res.render).toHaveBeenCalledWith('pages/about', expectedPayload)
     })
   })
 })

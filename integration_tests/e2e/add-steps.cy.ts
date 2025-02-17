@@ -53,6 +53,7 @@ describe('Add Steps', () => {
 
     it('Add one step', () => {
       cy.url().should('include', '/add-steps')
+      cy.get('.moj-primary-navigation__container').should('not.contain', `Plan history`)
 
       const step = DataGenerator.generateStep()
       addStep.addStepAutocompleteText(1, step.description)
@@ -203,6 +204,14 @@ describe('Add Steps', () => {
       cy.get('table.goal-summary-card__steps .govuk-table__body').children().should('have.length', 1)
 
       selectStepDescriptionByIndex(1).should('contain', firstStep.description)
+    })
+
+    it('Should check if "Someone else (include who in the step)" is shortened to exclude brackets contents', () => {
+      cy.url().should('include', '/add-steps')
+      cy.get(`#step-description-1`).invoke('val', 1)
+      cy.get(`#step-actor-1`).select(6)
+      addStep.saveAndContinue()
+      selectStepActorByIndex(1).should('contain', 'Someone else')
     })
   })
 

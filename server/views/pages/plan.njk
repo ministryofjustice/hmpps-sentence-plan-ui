@@ -104,7 +104,7 @@
               {{ locale.notAgreePlan }}
           {%- endif %}
           {%- if data.plan.agreementStatus !== 'DRAFT' %}
-              <a href="/plan-history" class="govuk-link govuk-link--no-visited-state">{{ locale.viewPlanHistory }}</a>
+              <a href="/plan-history">{{ locale.viewPlanHistory }}</a>
           {%- endif %}
       {%- else %}
           {{ locale.addStepSuggestion }}
@@ -287,7 +287,8 @@
                             actions: actions,
                             errorMessage: errorMessage,
                             locale: locale,
-                            index: loop.index
+                            index: loop.index,
+                            plan: data.plan
                         }) }}
                     </li>
                 {% endfor %}
@@ -303,17 +304,19 @@
                     {% endif %}
                 <p class="govuk-!-display-none-print">{{ locale.ifNoCurrentGoals.text }}</p>
                 <ul class="govuk-!-display-none-print">
-                    <li><a href="/create-goal/accommodation" class="govuk-link govuk-link--no-visited-state ">{{ locale.ifNoCurrentGoals.action1 }}</a></li>
-                    <li><a href="/about" class="govuk-link govuk-link--no-visited-state">{{ locale.ifNoCurrentGoals.action2 }}</a></li>
+                    <li><a href="/create-goal/accommodation">{{ locale.ifNoCurrentGoals.action1 }}</a></li>
+                    <li><a href="/about" >{{ locale.ifNoCurrentGoals.action2 }}</a></li>
                 </ul>
                 </div>
             {% elseif goalType == 'future' and goals.length == 0 %}
                 <p>{{ locale.ifNoFutureGoals.text }}</p>
             {% endif %}
 
-            <div class="govuk-!-display-none-print">
+          {% if goals.length > 0 %}
+          <div class="govuk-!-display-none-print">
             {% include "../partials/back-to-top-link.njk" %}
             </div>
+          {% endif %}
         </div>
     </div>
 {% endblock %}
