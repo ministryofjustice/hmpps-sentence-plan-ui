@@ -19,43 +19,52 @@ import {
 describe('format assessment data', () => {
   it('returns empty arrays when assessment is null', () => {
     const result = formatAssessmentData(fullCrimNeeds, null, areaConfigs)
-    expect(result).toEqual({ isAssessmentComplete: false, areas: { lowScoring: [], highScoring: [], other: [] } })
+    expect(result).toEqual({
+      isAssessmentComplete: false,
+      areas: { incompleteAreas: [], lowScoring: [], highScoring: [], other: [] },
+    })
   })
 
   it('returns empty arrays when assessment has no SAN data', () => {
     const result = formatAssessmentData(fullCrimNeeds, assessmentUndefined, areaConfigs)
-    expect(result).toEqual({ isAssessmentComplete: false, areas: { lowScoring: [], highScoring: [], other: [] } })
+    expect(result).toEqual({
+      isAssessmentComplete: false,
+      areas: { incompleteAreas: [], lowScoring: [], highScoring: [], other: [] },
+    })
   })
 
   it('returns correctly grouped assessment areas and incomplete assessment', () => {
     const result = formatAssessmentData(fullCrimNeeds, incompleteAssessmentData, areaConfigs)
     expect(result.isAssessmentComplete).toEqual(false)
 
-    expect(result.areas.highScoring.length).toEqual(2)
+    expect(result.areas.incompleteAreas.length).toEqual(5)
+    expect(result.areas.incompleteAreas[0].title).toEqual('Alcohol use')
+    expect(result.areas.incompleteAreas[1].title).toEqual('Drug use')
+    expect(result.areas.incompleteAreas[2].title).toEqual('Finances')
+
+    expect(result.areas.incompleteAreas[3].title).toEqual('Personal relationships and community')
+    expect(result.areas.incompleteAreas[3].overallScore).toEqual('6')
+    expect(result.areas.incompleteAreas[3].isAssessmentSectionComplete).toEqual(false)
+    expect(result.areas.incompleteAreas[4].title).toEqual('Thinking, behaviours and attitudes')
+    expect(result.areas.incompleteAreas[4].overallScore).toEqual('1')
+    expect(result.areas.incompleteAreas[4].isAssessmentSectionComplete).toEqual(false)
+
+    expect(result.areas.highScoring.length).toEqual(1)
     expect(result.areas.highScoring[0].title).toEqual('Accommodation')
     expect(result.areas.highScoring[0].overallScore).toEqual('6')
     expect(result.areas.highScoring[0].isAssessmentSectionComplete).toEqual(true)
-    expect(result.areas.highScoring[1].title).toEqual('Personal relationships and community')
-    expect(result.areas.highScoring[1].overallScore).toEqual('6')
-    expect(result.areas.highScoring[1].isAssessmentSectionComplete).toEqual(false)
 
-    expect(result.areas.lowScoring.length).toEqual(2)
+    expect(result.areas.lowScoring.length).toEqual(1)
     expect(result.areas.lowScoring[0].title).toEqual('Employment and education')
     expect(result.areas.lowScoring[0].overallScore).toEqual('1')
     expect(result.areas.lowScoring[0].isAssessmentSectionComplete).toEqual(true)
-    expect(result.areas.lowScoring[1].title).toEqual('Thinking, behaviours and attitudes')
-    expect(result.areas.lowScoring[1].overallScore).toEqual('1')
-    expect(result.areas.lowScoring[1].isAssessmentSectionComplete).toEqual(false)
 
-    expect(result.areas.other.length).toEqual(4)
-    expect(result.areas.other[0].title).toEqual('Alcohol use')
-    expect(result.areas.other[1].title).toEqual('Drug use')
-    expect(result.areas.other[2].title).toEqual('Finances')
-    expect(result.areas.other[3].title).toEqual('Health and wellbeing')
+    expect(result.areas.other.length).toEqual(1)
+    expect(result.areas.other[0].title).toEqual('Health and wellbeing')
 
     // Health and Wellbeing never has a score but should be marked as complete.
     // Only this Finance behave like this. Others need the score _and_ the `section_complete` flag.
-    expect(result.areas.other[3].isAssessmentSectionComplete).toEqual(true)
+    expect(result.areas.other[0].isAssessmentSectionComplete).toEqual(true)
 
     result.areas.other.forEach(otherArea => {
       expect(otherArea.overallScore).toBeUndefined()
@@ -67,8 +76,8 @@ describe('format assessment data', () => {
     const result = formatAssessmentData(fullCrimNeeds, incompleteAssessmentData, areaConfigs)
 
     expect(result.isAssessmentComplete).toEqual(false)
-    expect(result.areas.other[0].title).toEqual('Employment and education')
-    expect(result.areas.other[0].isAssessmentSectionComplete).toEqual(false)
+    expect(result.areas.incompleteAreas[2].title).toEqual('Employment and education')
+    expect(result.areas.incompleteAreas[2].isAssessmentSectionComplete).toEqual(false)
   })
 
   it('returns correctly ordered assessments by score compared to threshold in high scoring section', () => {

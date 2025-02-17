@@ -50,12 +50,10 @@
   {# list out the missing information #}
   {% if missingInformation.length > 0 %}
     <p><strong>{{ locale.common.assessmentInfo.missingInformation }}</strong></p>
-    <p class="govuk-body">
     <ul>
       {% for info in missingInformation %}
         <li>{{ locale.common.assessmentInfo.missingInformationList[info] }}</li>
       {% endfor %}
     </ul>
-    </p>
   {% endif %}
 {% endif %}

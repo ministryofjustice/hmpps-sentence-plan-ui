@@ -119,7 +119,8 @@
         "linkedToHarm": "whether this area is linked to RoSH (risk of serious harm)",
         "linkedToReoffending": "whether this area is linked to risk of reoffending",
         "motivationToMakeChanges": "motivation to make changes",
-        "linkedtoStrengthsOrProtectiveFactors": "strengths and protective factors"
+        "linkedtoStrengthsOrProtectiveFactors": "strengths and protective factors",
+        "criminogenicNeedsScore": "the need score"
       },
       "motivationToMakeChanges": "Motivation to make changes in this area",
       "motivationText": {

@@ -13,12 +13,10 @@ describe('Rendering About Person for READ_WRITE user', () => {
   it('Should check the page rendered correctly', () => {
     cy.get('.moj-primary-navigation__container').should('not.contain', `Plan history`)
     cy.get('h1').should('include.text', 'About')
-    cy.get('h2').eq(0).contains('Sentence information')
-    cy.get('[id=last-updated]').contains('assessment was last updated on')
-    cy.get('h2').eq(1).contains('High-scoring areas from the assessment')
-    cy.get('[id=other-areas-paragraph]').contains(
-      'Health and wellbeing, and finances never have a need score. When other information is available for those areas, you can see it here.',
-    )
+    cy.get('h2.govuk-error-summary__title').eq(0).contains('Some areas have incomplete information')
+    cy.get('h2').eq(1).contains('Sentence information')
+    cy.get('h2').eq(2).contains('Incomplete information')
+    cy.get('h2').eq(3).contains('High-scoring areas from the assessment')
     cy.get('[role="button"]').should('have.length', 2)
     cy.get('[role="button"]').eq(0).should('contain', 'Return to OASys')
     cy.get('[role="button"]').eq(1).should('contain', 'Create goal')
@@ -42,8 +40,8 @@ describe('Rendering About Person for READ_WRITE user', () => {
 
   it('Should check if main titles of hard-coded high-scoring areas from the assessment are displayed correctly and in order with the correct risk marker', () => {
     const expectedText = [
-      'Accommodation',
       'Personal relationships and community',
+      'Accommodation',
       'Thinking, behaviours and attitudes',
       'Alcohol use',
       'Employment and education',
@@ -57,17 +55,31 @@ describe('Rendering About Person for READ_WRITE user', () => {
   })
 
   it('Should check the hard-coded labels appear next to the correct, predetermined areas in correct order', () => {
-    cy.get('.govuk-accordion__section-heading').contains('Accommodation').contains('Risk of reoffending')
-    cy.get('.govuk-accordion__section-heading').contains('Alcohol use').contains('Risk of reoffending')
-    cy.get('.govuk-accordion__section-heading').contains('Employment and education').contains('Risk of reoffending')
+    // this is set to relLinkedToReoffending: 'YES', in backend.ts but doesn't display because the section is incomplete
+    cy.get('#personal-relationships-and-community .moj-badge').should('not.exist')
+
+    cy.get('#accommodation .moj-badge').should('have.length', 1)
+    cy.get('#accommodation .moj-badge').contains('Risk of reoffending')
+
+    cy.get('#thinking-behaviours-and-attitudes .moj-badge').should('not.exist')
+
+    cy.get('#alcohol-use .moj-badge').should('have.length', 1)
+    cy.get('#alcohol-use .moj-badge').contains('Risk of reoffending')
+
+    cy.get('#employment-and-education .moj-badge').should('have.length', 1)
+    cy.get('#employment-and-education .moj-badge').contains('Risk of reoffending')
+
+    cy.get('#drug-use .moj-badge').should('not.exist')
+    cy.get('#finances .moj-badge').should('not.exist')
+    cy.get('#health-and-wellbeing .moj-badge').should('not.exist')
   })
 
   it('Should check all hard-coded links in each assessment section are in the expected order', () => {
     cy.get('.govuk-accordion__show-all').click({ multiple: true })
 
     const areas = [
-      { text: 'Create accommodation goal', href: 'accommodation' },
       { text: 'Create personal relationships and community goal', href: 'personal-relationships-and-community' },
+      { text: 'Create accommodation goal', href: 'accommodation' },
       { text: 'Create thinking, behaviours and attitudes goal', href: 'thinking-behaviours-and-attitudes' },
       { text: 'Create alcohol use goal', href: 'alcohol-use' },
       { text: 'Create employment and education goal', href: 'employment-and-education' },
@@ -83,6 +95,16 @@ describe('Rendering About Person for READ_WRITE user', () => {
         .should('have.attr', 'href')
         .and('include', `/create-goal/${area.href}`)
     })
+  })
+
+  it('Should check the Missing Information section in Personal Relationships and Community is displayed correctly', () => {
+    cy.get('.govuk-inset-text').should('have.length', 1) // make sure there is only one missing information section
+
+    cy.get('#personal-relationships-and-community button').click() // click show all in Personal Relationships and Community assessment section
+    cy.get('#personal-relationships-and-community .govuk-inset-text li').should('have.length', 1)
+    cy.get('#personal-relationships-and-community .govuk-inset-text li')
+      .eq(0)
+      .contains('whether this area is linked to RoSH (risk of serious harm)')
   })
 
   it('Should check if the data for Thinking behaviour and attitudes are displayed correctly and in order', () => {
@@ -259,8 +281,8 @@ describe('Rendering About Person in READ_ONLY', () => {
 
   it('Should check the page rendered correctly with no Create Goal button', () => {
     cy.get('h1').should('include.text', 'About')
-    cy.get('h2').eq(0).contains('Sentence information')
-    cy.get('h2').eq(1).contains('High-scoring areas from the assessment')
+    cy.get('h2').eq(1).contains('Sentence information')
+    cy.get('h2').eq(3).contains('High-scoring areas from the assessment')
     cy.get('[role="button"]').should('have.length', 1)
     cy.get('[role="button"]').eq(0).should('contain', 'Return to OASys')
   })

@@ -101,7 +101,7 @@ function createHandoverContext(apiToken, oasysAssessmentPk, accessMode, sentence
         },
         personalRelationshipsAndCommunity: {
           relLinkedToHarm: 'NULL',
-          relLinkedToReoffending: 'NO',
+          relLinkedToReoffending: 'YES',
           relStrengths: 'NO',
           relOtherWeightedScore: '6',
           relThreshold: 'YES',
