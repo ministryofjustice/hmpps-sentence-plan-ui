@@ -1,0 +1,63 @@
+name: Parallel Cypress Tests
+
+on:
+  workflow_dispatch:
+  push:
+    branch:
+      - test-cypress-split
+
+jobs:
+  # Might need a build step that doesn't push here? (That test then depends on?)
+
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        containers: [ 1, 2, 3, 4 ]
+    name: Cypress run
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+
+      - name: Run npm ci
+        run: npm ci
+
+      - name: Bring up environment
+        uses: ./.github/actions/environment
+        with:
+          app_version: 2025-02-05.12613.294f9a9
+
+      - name: Run split Cypress tests
+        run: |
+          make e2e-ci
+        env:
+          SPLIT: ${{ strategy.job-total }}
+          SPLIT_INDEX: ${{ strategy.job-index }}
+
+      - name: Export container logs
+#        if: failure()
+        run: make save-logs PROJECT_NAME="hmpps-sentence-plan-test" OUTPUT_LOGS_DIR=${{ runner.temp }}/docker-logs
+
+      - name: Archive screenshots
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots_${{ matrix.containers }}
+          path: |
+            ./integration_tests/screenshots/**/*
+
+      - name: Upload test results
+        if: '!cancelled()'
+        uses: actions/upload-artifact@v4
+        with:
+          name: test_results_${{ matrix.containers }}
+          path: |
+            test_results/cypress/
+            ${{ runner.temp }}/docker-logs
