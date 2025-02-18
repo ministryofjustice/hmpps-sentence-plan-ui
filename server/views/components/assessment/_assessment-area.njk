@@ -104,7 +104,10 @@
                     {% endif %}
                 {% endif %} {# end of if assessment.criminogenicNeedMissing #}
 
-                {% if missingInformation.length > 0 %}
+                {% if missingInformation.length == 5 %}
+                                    {# If all 5 displayed pieces of information are missing display a simplified message #}
+                                    <p class="govuk-!-font-weight-bold">{{ locale.incompleteAssessment.allInformationMissing }}</p>
+                {% elseif missingInformation.length > 0 %}
                     <div class="govuk-inset-text">
                         <p class="govuk-!-font-weight-bold">{{ locale.common.assessmentInfo.missingInformation }}</p>
                         <ul>
@@ -113,9 +116,6 @@
                         {% endfor %}
                         </ul>
                     </div>
-                {% elseif missingInformation.length == 5 %}
-                    {# If all 5 displayed pieces of information are missing display a simplified message #}
-                    <p class="govuk-!-font-weight-bold">{{ locale.incompleteAssessment.allInformationMissing }}</p>
                 {% endif %}
 
                 {% if readWrite === true %}
