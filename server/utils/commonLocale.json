@@ -28,6 +28,9 @@
         "agreePlanButton": "Agree plan"
       }
     },
+    "errorSummaryCard": {
+      "title": "There is a problem"
+    },
     "goalSummaryCard": {
       "info": {
         "aimToAchieveDate": "Aim to achieve this by {{ targetDate }}.",

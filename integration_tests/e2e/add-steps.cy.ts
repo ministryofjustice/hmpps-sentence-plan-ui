@@ -215,7 +215,7 @@ describe('Add Steps', () => {
     })
   })
 
-  describe('Error cases when adding steps', () => {
+  describe('Error cases when adding steps with displayed error banner', () => {
     beforeEach(() => {
       cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
         const goalData = DataGenerator.generateGoal()
@@ -225,16 +225,23 @@ describe('Add Steps', () => {
       })
     })
 
-    it('Save with no data throws error', () => {
+    it('Save with no step data throws error', () => {
       cy.url().should('include', '/add-steps')
 
       addStep.saveAndContinue()
 
-      cy.get('#step-description-1-error').should('contain', 'Select or enter what they should do to achieve the goal.')
+      cy.get('.govuk-error-summary').should('contain', 'Select who will do the step')
+      cy.get('a[href*="step-actor-1"]').click()
+      cy.get('#step-actor-1-error').should('contain', 'Select who will do the step')
+
+      cy.get('.govuk-error-summary').should('contain', 'Enter what they should do to achieve the goal')
+      cy.get('a[href*="step-description-1"]').click()
+      cy.get('#step-description-1-error').should('contain', 'Enter what they should do to achieve the goal')
+
       cy.checkAccessibility()
     })
 
-    it('Save with incomplete step throws error', () => {
+    it('Save with an incomplete step throws error', () => {
       cy.url().should('include', '/add-steps')
 
       const firstStep = DataGenerator.generateStep()
@@ -245,7 +252,15 @@ describe('Add Steps', () => {
 
       addStep.saveAndContinue()
 
-      cy.get('#step-description-2-error').should('contain', 'Select or enter what they should do to achieve the goal.')
+      cy.get('.govuk-error-summary').should('contain', 'Select who will do the step')
+      cy.get('.govuk-error-summary').should('contain', 'Enter what they should do to achieve the goal')
+
+      cy.get('a[href*="step-actor-2"]').click()
+      cy.get('#step-actor-2-error').should('contain', 'Select who will do the step')
+
+      cy.get('a[href*="step-description-2"]').click()
+      cy.get('#step-description-2-error').should('contain', 'Enter what they should do to achieve the goal')
+
       cy.checkAccessibility()
     })
 
@@ -256,14 +271,51 @@ describe('Add Steps', () => {
       firstStep.description = integrationUtils.generateStringOfLength(4001)
       addStep.putStepAutocompleteText(1, firstStep.description)
       addStep.selectStepActor(1, firstStep.actor)
+
       addStep.saveAndContinue()
 
+      cy.get('.govuk-error-summary').should(
+        'contain',
+        'What they should do to achieve the goal must be 4,000 characters or less',
+      )
+
+      cy.get('a[href*="step-description-1"]').click()
       cy.get('#step-description-1-error').should(
         'contain',
         'What they should do to achieve the goal must be 4,000 characters or less',
       )
 
       cy.get(`#step-description-1`).invoke('val').should('contain', firstStep.description)
+      cy.checkAccessibility()
+    })
+
+    it('Display individual errors for multiple incomplete steps', () => {
+      cy.url().should('include', '/add-steps')
+
+      addStep.addAnotherStepButton()
+      addStep.addAnotherStepButton()
+      addStep.saveAndContinue()
+
+      cy.get('.govuk-error-summary').should('contain', 'Select who will do the step')
+      cy.get('.govuk-error-summary').should('contain', 'Enter what they should do to achieve the goal')
+
+      cy.get('a[href*="step-actor-1"]').click()
+      cy.get('#step-actor-1-error').should('contain', 'Select who will do the step')
+
+      cy.get('a[href*="step-description-1"]').click()
+      cy.get('#step-description-1-error').should('contain', 'Enter what they should do to achieve the goal')
+
+      cy.get('a[href*="step-actor-2"]').click()
+      cy.get('#step-actor-2-error').should('contain', 'Select who will do the step')
+
+      cy.get('a[href*="step-description-2"]').click()
+      cy.get('#step-description-2-error').should('contain', 'Enter what they should do to achieve the goal')
+
+      cy.get('a[href*="step-actor-3"]').click()
+      cy.get('#step-actor-3-error').should('contain', 'Select who will do the step')
+
+      cy.get('a[href*="step-description-3"]').click()
+      cy.get('#step-description-3-error').should('contain', 'Enter what they should do to achieve the goal')
       cy.checkAccessibility()
     })
   })

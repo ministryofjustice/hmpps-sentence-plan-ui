@@ -6,7 +6,7 @@
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "moj/components/side-navigation/macro.njk" import mojSideNavigation %}
-{% from "../components/error-summary/error-summary.njk" import errorSummary %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "../components/assessment/area-assessment-summary.njk" import assessmentInformationForArea %}
 
 {% set locale = interpolate(locale, {
@@ -37,6 +37,38 @@
 <a class="govuk-back-link" href="{{ data.returnLink }}">{{ locale.common.backLink.text }}</a>
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
+        {% set errorList = [] %}
+
+        {% for id, errorObj in errors.body %}
+          {% set deconstructedId = id | splitString('.') %}
+
+          {% if '.actor' in id %}
+            {% set errorList = errorList.concat({
+                text: locale.errors.stepActor.notContains,
+                href: "#step-actor-" + (deconstructedId[1] | int + 1)
+            }) %}
+          {% elseif '.description' in id %}
+            {% if errorObj.isNotEmpty %}
+              {% set errorList = errorList.concat({
+                text: locale.errors.stepDescription.isNotEmpty,
+                href: "#step-description-" + (deconstructedId[1] | int + 1)
+              }) %}
+            {% else %}
+              {% set errorList = errorList.concat({
+                text: locale.errors.stepDescription.maxLength,
+                href: "#step-description-" + (deconstructedId[1] | int + 1)
+              }) %}
+            {% endif %}
+          {% endif %}
+        {% endfor %}
+
+        {% if errorList.length %}
+            {{ govukErrorSummary({
+                titleText: locale.common.errorSummaryCard.title,
+                errorList: errorList
+            }) }}
+        {% endif %}
+
         <span class="govuk-caption-l">{{ locale.mainHeading.caption }}</span>
         <h1 class="govuk-heading-l">{{ locale.mainHeading.title }}</h1>
 
@@ -81,7 +113,7 @@
 
                             {% if errors.body['steps.' + loop.index0 + '.actor' ].notContains %}
                                 {% set errorMessage = {
-                                    'text': locale.errors['step-actor'].notContains
+                                    'text': locale.errors.stepActor.notContains
                                 } %}
                             {% endif %}
 
@@ -110,13 +142,13 @@
 
                             {% if errors.body['steps.' + loop.index0 + '.description' ].isNotEmpty %}
                                 {% set errorMessage = {
-                                    'text': locale.errors['step-description'].isNotEmpty
+                                    'text': locale.errors.stepDescription.isNotEmpty
                                 } %}
                             {% endif %}
 
                             {% if errors.body['steps.' + loop.index0 + '.description' ].maxLength %}
                                 {% set errorMessage = {
-                                    'text': locale.errors['step-description'].maxLength
+                                    'text': locale.errors.stepDescription.maxLength
                                 } %}
                             {% endif %}
 
