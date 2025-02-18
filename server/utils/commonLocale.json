@@ -113,7 +113,7 @@
       "detailsSummary": "View information from {{ subject.possessiveName }} assessment",
       "assessmentIncomplete": "This area has not been marked as complete in the assessment yet, but you can check the latest information available below.",
       "assessmentNotStarted": "No information is available yet as the assessment has not been started for this area.",
-      "missingInformation": "Missing information",
+      "missingInformation": "Missing information:",
       "assessmentUnavailable": "There is a problem getting this information. Try reloading the page or try again later.",
       "missingInformationList": {
         "linkedToHarm": "whether this area is linked to RoSH (risk of serious harm)",
