@@ -13,7 +13,7 @@ describe('Rendering About Person for READ_WRITE user', () => {
   it('Should check the page rendered correctly', () => {
     cy.get('.moj-primary-navigation__container').should('not.contain', `Plan history`)
     cy.get('h1').should('include.text', 'About')
-    cy.get('h2.govuk-error-summary__title').eq(0).contains('Some areas have incomplete information')
+    cy.get('h2.govuk-heading-m').eq(0).contains('Some areas have incomplete information')
     cy.get('h2').eq(1).contains('Sentence information')
     cy.get('h2').eq(2).contains('Incomplete information')
     cy.get('h2').eq(3).contains('High-scoring areas from the assessment')

@@ -61,10 +61,18 @@
                     }) }}
             {% endif %}
 
+            {% set bannerContent = "
+                <h2 class='govuk-heading-m'>" ~ locale.incompleteAssessment.errorTitle ~ "</h2>
+                <p class='govuk-body'>" ~ locale.incompleteAssessment.errorDescription ~ "</p>
+            "%}
+
+
+
             {% if not data.formattedAssessmentInfo.isAssessmentComplete %}
-              {{ govukErrorSummary({
-                  titleText: locale.incompleteAssessment.errorTitle,
-                  descriptionText: locale.incompleteAssessment.errorDescription
+              {{ mojBanner({
+                type: 'warning',
+                html: bannerContent,
+                iconFallbackText: 'Warning'
               }) }}
             {% endif %}
 
@@ -126,9 +134,9 @@
                 <p class="govuk-body">{{ locale.lowScoring.sectionEmptyParagraph }}</h2>
             {% endif %}
 
+            <h2 class="govuk-heading-m">{{ locale.withoutScoring.sectionHeading }}</h2>
+            <p id="other-areas-paragraph" class="govuk-body">{{ locale.withoutScoring.sectionParagraph }}</h2>
             {% if data.formattedAssessmentInfo.areas.other.length > 0 %}
-                <h2 class="govuk-heading-m">{{ locale.withoutScoring.sectionHeading }}</h2>
-                <p id="other-areas-paragraph" class="govuk-body">{{ locale.withoutScoring.sectionParagraph }}</h2>
                 {{ renderAssessment(data.formattedAssessmentInfo.areas.other, locale, data.readWrite) }}
             {% endif %}
 
