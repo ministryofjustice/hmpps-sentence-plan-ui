@@ -40,7 +40,6 @@ jobs:
 
       - name: Stand up a test environment
         run: |
-          echo $APP_VERSION
           make test-up
 
       - name: Run split Cypress tests
