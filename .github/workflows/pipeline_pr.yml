@@ -41,7 +41,6 @@ jobs:
       docker_multiplatform: false
       upload_image_artifact: true
       image_artifact_retention_days: 2
-      ref: upload-image-to-artifacts
 
   e2e_test:
     needs: [build_docker]
