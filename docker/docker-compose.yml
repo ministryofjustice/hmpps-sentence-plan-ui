@@ -186,5 +186,5 @@ services:
     ports:
       - "9094:8080"
     volumes:
-      - ../wiremock/mappings:/home/wiremock/mappings
+      - ../wiremock:/home/wiremock
     entrypoint: ["/docker-entrypoint.sh", "--global-response-templating", "--disable-gzip", "--verbose"]
