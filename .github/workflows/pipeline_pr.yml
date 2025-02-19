@@ -53,3 +53,4 @@ jobs:
       app_version: ${{ needs.build_docker.outputs.app_version }}
       job-index: ${{ strategy.job-index }}
       job-total: ${{ strategy.job-total }}
+      matrix-container: ${{ matrix.containers }}

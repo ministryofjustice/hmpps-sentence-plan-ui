@@ -17,6 +17,11 @@ on:
         required: false
         type: number
         default: 1
+      matrix-container:
+        description: 'The matrix container description'
+        required: false
+        type: number
+        default: 1
 
 permissions:
   contents: read
@@ -67,7 +72,7 @@ jobs:
         if: '!cancelled()'
         uses: actions/upload-artifact@v4
         with:
-          name: test_results_${{ inputs.job-index }}
+          name: test_results_${{ inputs.matrix-container }}
           path: |
             test_results/cypress/
             ${{ runner.temp }}/docker-logs
