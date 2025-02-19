@@ -5,15 +5,24 @@
       iconFallbackText: "Warning"
     }) }}
 {% else %}
-  {% if assessmentDetailsForArea.isAssessmentSectionComplete == false %}
-    {{ govukWarningText({
-      text: locale.common.assessmentInfo.assessmentIncomplete,
-      iconFallbackText: "Warning"
-    }) }}
-  {% endif %}
+    {% if not assessmentDetailsForArea.isAssessmentSectionComplete and not assessmentDetailsForArea.isAssessmentSectionNotStarted  %}
+        {{ govukWarningText({
+          text: locale.common.assessmentInfo.assessmentIncomplete,
+          iconFallbackText: "Warning"
+        }) }}
+{% else %}
+   {% if assessmentDetailsForArea.isAssessmentSectionNotStarted %}
+        {{ govukWarningText({
+           text: locale.common.assessmentInfo.assessmentNotStarted,
+           iconFallbackText: "Warning"
+        }) }}
+   {% endif %}
+{% endif %}
 
   {% set missingInformation = [] %}
 
+
+ {% if not assessmentDetailsForArea.isAssessmentSectionNotStarted %}
   {# linked to serious harm section #}
   {%- if assessmentDetailsForArea.linkedToHarm in ['YES', 'NO'] -%}
     <p><strong>{{ locale.common.assessmentInfo.linkedToHarm[assessmentDetailsForArea.linkedToHarm | lower] }}</strong></p>
@@ -56,4 +65,5 @@
       {% endfor %}
     </ul>
   {% endif %}
+{% endif %}
 {% endif %}

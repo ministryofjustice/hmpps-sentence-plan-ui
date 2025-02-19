@@ -11,6 +11,7 @@ export interface AssessmentArea {
   criminogenicNeedMissing?: boolean
   criminogenicNeedsScore?: string
   goalRoute?: string
+  isAssessmentSectionNotStarted: boolean
   isAssessmentSectionComplete: boolean
   linkedToHarm: string
   linkedtoReoffending: string
