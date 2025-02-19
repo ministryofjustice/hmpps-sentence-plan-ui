@@ -8,9 +8,17 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  setup_node:
+    name: Setup Node
+    uses: actions/setup-node@v4
+    with:
+      node-version: 22
+      cache: 'npm'
+
   node_build:
     name: Build
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/node_build.yml@v2
+    needs: [setup_node]
     secrets: inherit
 
   node_unit_tests:
@@ -41,7 +49,6 @@ jobs:
       docker_multiplatform: false
       upload_image_artifact: true
       image_artifact_retention_days: 2
-
 
   e2e_test:
     needs: [build_docker]

@@ -45,10 +45,10 @@ jobs:
 
       - name: Run split Cypress tests
         run: |
-            make e2e-ci
-          env:
-            SPLIT: ${{ strategy.job-total }}
-            SPLIT_INDEX: ${{ strategy.job-index }}
+          make e2e-ci
+        env:
+          SPLIT: ${{ strategy.job-total }}
+          SPLIT_INDEX: ${{ strategy.job-index }}
 
       - name: Export container logs
         #        if: failure()
