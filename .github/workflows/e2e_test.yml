@@ -7,6 +7,16 @@ on:
         description: App version
         required: true
         type: string
+      job-index:
+        description: 'The index of the current job in the matrix'
+        required: false
+        type: number
+        default: 1
+      job-total:
+        description: 'The total number of jobs in the matrix'
+        required: false
+        type: number
+        default: 1
 
 permissions:
   contents: read
@@ -46,8 +56,8 @@ jobs:
         run: |
           make e2e-ci
         env:
-          SPLIT: ${{ strategy.job-total }}
-          SPLIT_INDEX: ${{ strategy.job-index }}
+          SPLIT: ${{ inputs.job-total }}
+          SPLIT_INDEX: ${{ inputs.job-index }}
 
       - name: Export container logs
         #        if: failure()
