@@ -1,0 +1,50 @@
+name: Build and test PR
+
+on:
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  node_build:
+    name: Build
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/node_build.yml@v2
+    secrets: inherit
+
+  node_unit_tests:
+    name: Unit tests
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/node_unit_tests.yml@v2
+    needs: [node_build]
+    secrets: inherit
+
+  helm_lint:
+    name: Helm lint
+    strategy:
+      matrix:
+        environments: ['dev', 'test', 'preprod', 'prod']
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/test_helm_lint.yml@v2
+    secrets: inherit
+    with:
+      environment: ${{ matrix.environments }}
+
+  build_docker:
+    name: Build docker image
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/docker_build.yml@upload-image-to-artifacts
+    with:
+      docker_registry: 'ghcr.io'
+      registry_org: 'ministryofjustice'
+      tag_latest: false
+      push: false
+      load: true
+      docker_multiplatform: false
+      upload_image_artifact: true
+      image_artifact_retention_days: 2
+
+
+  e2e_test:
+    needs: [build_docker]
+    uses: ministryofjustice/hmpps-assess-risks-and-needs-oastub-ui/.github/workflows/e2e_test.yml@add-e2e-to-pipeline
+    with:
+      app_version: ${{ needs.build_docker.outputs.app_version }}

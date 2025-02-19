@@ -1,0 +1,77 @@
+name: Main pipeline [build -> test -> deploy]
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+
+  node_build:
+    name: node build
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/node_build.yml@v2
+    secrets: inherit
+
+  node_unit_tests:
+    name: node unit tests
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/node_unit_tests.yml@v2
+    needs: node_build
+    secrets: inherit
+
+  helm_lint:
+    strategy:
+      matrix:
+        environments: ['dev', 'test', 'preprod', 'prod']
+    name: helm lint
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/test_helm_lint.yml@v2
+    secrets: inherit
+    with:
+      environment: ${{ matrix.environments }}
+
+  build_docker:
+    name: Build docker image
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/docker_build.yml@v2
+    with:
+      docker_registry: 'ghcr.io'
+      registry_org: 'ministryofjustice'
+      tag_latest: false
+      push: false
+      load: true
+      docker_multiplatform: false
+      upload_image_artifact: true
+
+  e2e_test:
+    needs: build_docker
+    uses: ministryofjustice/hmpps-assess-risks-and-needs-oastub-ui/.github/workflows/e2e_test.yml@add-e2e-to-pipeline
+    with:
+      app_version: ${{ needs.build_docker.outputs.app_version }}
+
+  publish_docker:
+    name: Publish docker image
+    needs:
+      - node_build
+      - node_unit_tests
+      - e2e_test
+      - helm_lint
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/docker_push.yml@upload-image-to-artifacts
+    with:
+      docker_registry: 'ghcr.io'
+      registry_org: 'ministryofjustice'
+      app_version: ${{ needs.build_docker.outputs.app_version }}
+
+  deploy_dev:
+    name: Deploy to the development environment
+    needs: publish_docker
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@v2
+    secrets: inherit
+    with:
+      environment: 'dev'
+      app_version: '${{ needs.build.outputs.app_version }}'
