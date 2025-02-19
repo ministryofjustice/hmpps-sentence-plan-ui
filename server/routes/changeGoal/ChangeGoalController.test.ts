@@ -69,6 +69,7 @@ describe('ChangeGoalController', () => {
       returnLink: '/some-return-link',
       form: {},
       assessmentDetailsForArea: {
+        isAssessmentSectionNotStarted: false,
         isAssessmentSectionComplete: true,
         motivationToMakeChanges: 'needsHelpToMakeChanges',
         linkedToHarm: 'NO',

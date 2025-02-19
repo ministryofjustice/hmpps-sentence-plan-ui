@@ -74,6 +74,7 @@ describe('AddStepsController', () => {
       areaOfNeed: toKebabCase(testGoal.areaOfNeed.name),
       goal: testGoal,
       assessmentDetailsForArea: {
+        isAssessmentSectionNotStarted: false,
         isAssessmentSectionComplete: true,
         motivationToMakeChanges: 'needsHelpToMakeChanges',
         linkedToHarm: 'NO',
@@ -260,6 +261,7 @@ describe('AddStepsController', () => {
           areaOfNeed: viewData.data.areaOfNeed,
           goal: viewData.data.goal,
           assessmentDetailsForArea: {
+            isAssessmentSectionNotStarted: false,
             isAssessmentSectionComplete: true,
             motivationToMakeChanges: 'needsHelpToMakeChanges',
             linkedToHarm: 'NO',
