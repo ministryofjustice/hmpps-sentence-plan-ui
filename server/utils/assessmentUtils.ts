@@ -61,7 +61,16 @@ export function getAssessmentDetailsForArea(
           `${areaConfig.assessmentKey}_practitioner_analysis_strengths_or_protective_factors_${linkedtoStrengthsOrProtectiveFactors.toLowerCase()}_details`
         ]?.value
       : undefined
+
+  const isAssessmentSectionNotStarted =
+    isAssessmentSectionComplete === false &&
+    linkedToHarm === 'NULL' &&
+    linkedtoReoffending === 'NULL' &&
+    linkedtoStrengthsOrProtectiveFactors === 'NULL' &&
+    motivationToMakeChanges === undefined
+
   return {
+    isAssessmentSectionNotStarted,
     isAssessmentSectionComplete,
     linkedToHarm,
     linkedtoReoffending,
@@ -96,6 +105,7 @@ export const formatAssessmentData = (
       score = crimNeeds[areaConfig.crimNeedsKey][`${areaConfig.crimNeedsSubKey}OtherWeightedScore`]
 
       const {
+        isAssessmentSectionNotStarted,
         isAssessmentSectionComplete,
         linkedToHarm,
         linkedtoReoffending,
@@ -134,6 +144,7 @@ export const formatAssessmentData = (
         linkedToHarm,
         linkedtoReoffending,
         linkedtoStrengthsOrProtectiveFactors,
+        isAssessmentSectionNotStarted,
         isAssessmentSectionComplete,
         motivationToMakeChanges,
         riskOfSeriousHarmDetails,

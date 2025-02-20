@@ -70,6 +70,7 @@ describe('CreateGoalController', () => {
       selectedAreaOfNeed: AreaOfNeed.find(x => x.url === 'accommodation'),
       minimumDatePickerDate: '01/01/2024',
       assessmentDetailsForArea: {
+        isAssessmentSectionNotStarted: false,
         isAssessmentSectionComplete: true,
         motivationToMakeChanges: 'thinkingAboutMakingChanges',
         linkedToHarm: 'NO',
