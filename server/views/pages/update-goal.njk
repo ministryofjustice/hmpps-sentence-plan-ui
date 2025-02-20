@@ -4,7 +4,7 @@
 {% from "../components/summary-card/goal-summary-card.njk" import goalSummaryCard %}
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 {% from "../components/note-list/note-list.njk" import noteList %}
-{% from "../components/error-summary/error-summary.njk" import errorSummary %}
+{% from "../components/error-summary/error-summary.njk" import errorSummary with context %}
 
 {% set locale = interpolate(locale, {
     subject: data.popData,
