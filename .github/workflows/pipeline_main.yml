@@ -61,11 +61,12 @@ jobs:
       - node_unit_tests
       - e2e_test
       - helm_lint
-    uses: ministryofjustice/hmpps-github-actions/.github/workflows/docker_push.yml@upload-image-to-artifacts
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/docker_push.yml@v2
     with:
       docker_registry: 'ghcr.io'
       registry_org: 'ministryofjustice'
       app_version: ${{ needs.build_docker.outputs.app_version }}
+      tag_latest: true
 
   deploy_dev:
     name: Deploy to the development environment
