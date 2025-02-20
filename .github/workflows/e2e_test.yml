@@ -68,6 +68,10 @@ jobs:
         #        if: failure()
         run: make save-logs PROJECT_NAME="hmpps-sentence-plan-test" OUTPUT_LOGS_DIR=${{ runner.temp }}/docker-logs
 
+      - name: ls
+        run: |
+          ls -R
+
       - name: Upload test results
         if: '!cancelled()'
         uses: actions/upload-artifact@v4
