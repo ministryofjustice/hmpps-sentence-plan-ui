@@ -61,9 +61,22 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       checks: write
+      pull-requests: write
     if: always()
 
     steps:
+      - name: Download Unit Test Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: unit_test_artifacts
+          pattern: npm_unit_test_artifacts
+
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        with:
+          files: "unit_test_artifacts/**/*.xml"
+          check_name: "Unit Test Results"
+
       - name: Download Artifacts
         uses: actions/download-artifact@v4
         with:
