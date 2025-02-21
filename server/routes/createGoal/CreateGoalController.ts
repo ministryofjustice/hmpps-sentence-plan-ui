@@ -13,6 +13,10 @@ import { areaConfigs } from '../../utils/assessmentAreaConfig.json'
 import { AssessmentAreaConfig } from '../../@types/Assessment'
 import { getAssessmentDetailsForArea } from '../../utils/assessmentUtils'
 import createGoalJourneyMachine, { getNextState } from './createGoalJourneyMachine'
+import transformRequest from '../../middleware/transformMiddleware'
+import CreateGoalPostModel from './models/CreateGoalPostModel'
+import validateRequest from '../../middleware/validationMiddleware'
+import runMiddlewareChain from '../../testutils/runMiddlewareChain'
 
 export default class CreateGoalController {
   constructor(private readonly referentialDataService: ReferentialDataService) {}
@@ -24,6 +28,10 @@ export default class CreateGoalController {
 
     try {
       const { uuid } = await req.services.goalService.saveGoal(processedData, planUuid)
+
+      return this.redirectToNextState(req, res)
+
+      // TODO work out how to manage the query parameter stuff
 
       req.services.sessionService.setReturnLink(`/change-goal/${uuid}/`)
 
@@ -110,7 +118,7 @@ export default class CreateGoalController {
     return next()
   }
 
-  private handleBack(req: Request, res: Response) {
+  private redirectToNextState(req: Request, res: Response) {
     const { action } = req.body
     const currentState: keyof typeof createGoalJourneyMachine.states = req.session.userJourney.state
 
@@ -123,31 +131,32 @@ export default class CreateGoalController {
     return res.redirect(`/${nextState}`)
   }
 
+  private handleSaveAction = (req: Request, res: Response, next: NextFunction) => {
+    return runMiddlewareChain(
+      [
+        requireAccessMode(AccessMode.READ_WRITE),
+        transformRequest({
+          body: CreateGoalPostModel,
+        }),
+        validateRequest(),
+        this.handleValidationErrors,
+        this.saveAndRedirect,
+      ],
+      req,
+      res,
+      next,
+    )
+  }
+
   private handleFormAction = (req: Request, res: Response, next: NextFunction) => {
-    switch (req.body.action) {
-      case 'back':
-        return this.handleBack(req, res)
-      case 'addStep':
-        return this.saveAndRedirect(req, res, next)
-      case 'saveWithoutSteps':
-        // todo actually needs to do a load of other stuff
-        return this.saveAndRedirect(req, res, next)
-      default:
-        return next() // todo: wrong.
+    if (req.body.action === 'back') {
+      return this.redirectToNextState(req, res)
     }
+
+    this.handleSaveAction(req, res, next)
   }
 
   get = [requireAccessMode(AccessMode.READ_WRITE), this.render]
 
   post = this.handleFormAction
-
-  // post = [
-  //   requireAccessMode(AccessMode.READ_WRITE),
-  //   transformRequest({
-  //     body: CreateGoalPostModel,
-  //   }),
-  //   validateRequest(),
-  //   this.handleValidationErrors,
-  //   this.saveAndRedirect,
-  // ]
 }
