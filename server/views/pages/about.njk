@@ -56,7 +56,7 @@
                     {%  set errorList = (errorList.push({ text: locale.errors[error]}), errorList)    %}
                 {%  endfor %}
                     {{ govukErrorSummary({
-                        titleText: "There is a problem",
+                        titleText: locale.common.errorSummaryCard.title,
                         errorList: errorList
                     }) }}
             {% endif %}

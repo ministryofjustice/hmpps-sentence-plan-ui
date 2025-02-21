@@ -5,7 +5,6 @@
 {%- from "moj/components/banner/macro.njk" import mojBanner -%}
 {% from "../components/summary-card/goal-summary-card.njk" import goalSummaryCard %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
-{% from "../components/error-summary/error-summary.njk" import errorSummary %}
 {% from "govuk/components/error-message/macro.njk" import govukErrorMessage %}
 
 {% set currentGoals = [] %}
@@ -139,7 +138,7 @@
 
             {% if data.readWrite == true and errors.domain | length > 0 %}
                 {{ govukErrorSummary({
-                    titleText: "There is a problem",
+                    titleText: locale.common.errorSummaryCard.title,
                     errorList: errorList
                 }) }}
             {% endif %}
