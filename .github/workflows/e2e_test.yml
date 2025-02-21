@@ -64,14 +64,6 @@ jobs:
           SPLIT: ${{ inputs.job-total }}
           SPLIT_INDEX: ${{ inputs.job-index }}
 
-      - name: Export container logs
-        #        if: failure()
-        run: make save-logs PROJECT_NAME="hmpps-sentence-plan-test" OUTPUT_LOGS_DIR=${{ runner.temp }}/docker-logs
-
-      - name: ls
-        run: |
-          ls -I node_modules -R
-
       - name: Upload test results
         if: '!cancelled()'
         uses: actions/upload-artifact@v4
@@ -79,4 +71,15 @@ jobs:
           name: test_results_${{ inputs.matrix-container }}
           path: |
             test_results/cypress/
+
+      - name: Export container logs
+        # if: failure()
+        run: make save-logs PROJECT_NAME="hmpps-sentence-plan-test" OUTPUT_LOGS_DIR=${{ runner.temp }}/docker-logs
+
+      - name: Upload docker logs
+        if: '!cancelled()'
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker_logs_${{ inputs.matrix-container }}
+          path: |
             ${{ runner.temp }}/docker-logs
