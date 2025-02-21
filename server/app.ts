@@ -14,6 +14,7 @@ import setUpAuth from './middleware/setUpAuthentication'
 import authorisationMiddleware from './middleware/authorisationMiddleware'
 import setupNotFoundRoute from './routes/not-found/routes'
 import setupErrorRoute from './routes/error/routes'
+import journeyMiddleware from './middleware/stateMachineMiddleware'
 
 export default function createApp(services: Services): express.Application {
   const app = express()
@@ -32,6 +33,7 @@ export default function createApp(services: Services): express.Application {
   app.use(setupRequestServices(requestServices(services)))
   app.use(setUpAuth())
   app.use(authorisationMiddleware())
+  app.use(journeyMiddleware)
   app.use(setUpCsrf())
 
   app.use(routes(services))

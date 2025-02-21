@@ -5,9 +5,6 @@ import locale from './locale.json'
 import URLs from '../URLs'
 import { NewGoal } from '../../@types/NewGoalType'
 import { formatDateWithStyle } from '../../utils/utils'
-import transformRequest from '../../middleware/transformMiddleware'
-import CreateGoalPostModel from './models/CreateGoalPostModel'
-import validateRequest from '../../middleware/validationMiddleware'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
 import { AccessMode } from '../../@types/Handover'
 import { HttpError } from '../../utils/HttpError'
@@ -15,6 +12,7 @@ import { getDateOptions, getGoalTargetDate } from '../../utils/goalTargetDateUti
 import { areaConfigs } from '../../utils/assessmentAreaConfig.json'
 import { AssessmentAreaConfig } from '../../@types/Assessment'
 import { getAssessmentDetailsForArea } from '../../utils/assessmentUtils'
+import createGoalJourneyMachine, { getNextState } from './createGoalJourneyMachine'
 
 export default class CreateGoalController {
   constructor(private readonly referentialDataService: ReferentialDataService) {}
@@ -112,15 +110,44 @@ export default class CreateGoalController {
     return next()
   }
 
+  private handleBack(req: Request, res: Response) {
+    const { action } = req.body
+    const currentState: keyof typeof createGoalJourneyMachine.states = req.session.userJourney.state
+
+    // Determine the next state
+    const nextState = getNextState(currentState, action)
+
+    // Store previous state before updating
+    req.session.userJourney.prevState = currentState
+    req.session.userJourney.state = nextState
+    return res.redirect(`/${nextState}`)
+  }
+
+  private handleFormAction = (req: Request, res: Response, next: NextFunction) => {
+    switch (req.body.action) {
+      case 'back':
+        return this.handleBack(req, res)
+      case 'addStep':
+        return this.saveAndRedirect(req, res, next)
+      case 'saveWithoutSteps':
+        // todo actually needs to do a load of other stuff
+        return this.saveAndRedirect(req, res, next)
+      default:
+        return next() // todo: wrong.
+    }
+  }
+
   get = [requireAccessMode(AccessMode.READ_WRITE), this.render]
 
-  post = [
-    requireAccessMode(AccessMode.READ_WRITE),
-    transformRequest({
-      body: CreateGoalPostModel,
-    }),
-    validateRequest(),
-    this.handleValidationErrors,
-    this.saveAndRedirect,
-  ]
+  post = this.handleFormAction
+
+  // post = [
+  //   requireAccessMode(AccessMode.READ_WRITE),
+  //   transformRequest({
+  //     body: CreateGoalPostModel,
+  //   }),
+  //   validateRequest(),
+  //   this.handleValidationErrors,
+  //   this.saveAndRedirect,
+  // ]
 }

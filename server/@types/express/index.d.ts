@@ -2,6 +2,7 @@ import { RequestServices } from '../../services'
 import { PlanType } from '../PlanType'
 import { HandoverContextData, HandoverPrincipal } from '../Handover'
 import { Token } from '../Token'
+import createGoalJourneyMachine from '../../routes/createGoal/createGoalJourneyMachine'
 
 export default {}
 
@@ -15,6 +16,10 @@ declare module 'express-session' {
     handover?: HandoverContextData
     token: Token
     returnLink: string
+    userJourney: {
+      state: keyof typeof createGoalJourneyMachine.states // TODO obviously this won't work beyond createGoal
+      prevState: keyof typeof createGoalJourneyMachine.states // TODO ditto
+    }
   }
 }
 
@@ -37,6 +42,7 @@ export declare global {
         domain?: any
       }
       services: RequestServices
+      journeyState: string
     }
 
     interface Locals {

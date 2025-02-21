@@ -121,7 +121,14 @@ export default class PlanOverviewController {
   }
 
   private handleSuccessRedirect = (req: Request, res: Response) => {
-    return res.redirect(URLs.AGREE_PLAN)
+    switch (req.body.action) {
+      case 'agree-plan':
+        return res.redirect(URLs.AGREE_PLAN)
+      case 'create-goal':
+        return res.redirect(URLs.CREATE_GOAL)
+      default:
+        return res.redirect(URLs.PLAN_OVERVIEW)
+    }
   }
 
   get = [
