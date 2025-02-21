@@ -14,6 +14,15 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  helm_lint:
+    strategy:
+      matrix:
+        environments: [ 'dev', 'test', 'preprod', 'prod' ]
+    name: helm lint
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/test_helm_lint.yml@v2
+    secrets: inherit
+    with:
+      environment: ${{ matrix.environments }}
 
   node_build:
     name: node build
@@ -25,16 +34,6 @@ jobs:
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/node_unit_tests.yml@v2
     needs: node_build
     secrets: inherit
-
-  helm_lint:
-    strategy:
-      matrix:
-        environments: ['dev', 'test', 'preprod', 'prod']
-    name: helm lint
-    uses: ministryofjustice/hmpps-github-actions/.github/workflows/test_helm_lint.yml@v2
-    secrets: inherit
-    with:
-      environment: ${{ matrix.environments }}
 
   build_docker:
     name: Build docker image
@@ -57,10 +56,10 @@ jobs:
   publish_docker:
     name: Publish docker image
     needs:
+      - helm_lint
       - node_build
       - node_unit_tests
       - e2e_test
-      - helm_lint
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/docker_push.yml@v2
     with:
       docker_registry: 'ghcr.io'
