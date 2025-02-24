@@ -43,7 +43,10 @@
   {%- if assessmentDetailsForArea.motivationToMakeChanges != undefined %}
     <p><strong>{{ locale.common.assessmentInfo.motivationToMakeChanges }}</strong></p>
     <p class="govuk-body">{{ locale.common.assessmentInfo.motivationText[assessmentDetailsForArea.motivationToMakeChanges] }}</p>
-  {%- elseif assessmentDetailsForArea.isAssessmentSectionComplete == false %}
+  {%- elseif assessmentDetailsForArea.isAssessmentSectionComplete == true %}
+    <p><strong>{{ locale.common.assessmentInfo.motivationToMakeChanges }}</strong></p>
+    <p class="govuk-body">{{ locale.common.assessmentInfo.motivationNotAnswered }}</p>
+  {%- else %}
     {# We only add motivation to the Missing Information section if the section is not complete #}
     {%- set missingInformation = missingInformation.concat('motivationToMakeChanges') %}
   {%- endif %}
