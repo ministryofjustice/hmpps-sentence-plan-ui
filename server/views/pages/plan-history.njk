@@ -51,7 +51,7 @@
                 <p class='plan-status'><strong>{{ noteLocale.note.status.plan.agreed }}</strong> {{ noteLocale.who.practitionerAndSubject }}</p>
                 <p class='subject-response'>{{ noteLocale.subjectResponse.agreed }}</p>
             {% elseif note.noteType == 'DO_NOT_AGREE' %}
-                <p class='plan-status'><strong>{{ noteLocale.note.status.plan.created }}</strong> by {{ noteLocale.who.practitionerOnly }}</p>
+                <p class='plan-status'><strong>{{ noteLocale.note.status.plan.created }}</strong> {{ noteLocale.who.practitionerOnly }}</p>
                 <p class='subject-response'>{{ noteLocale.subjectResponse.didNotAgree }}</p>
             {% elseif note.noteType == 'COULD_NOT_ANSWER' %}
                 <p class='plan-status'><strong>{{ noteLocale.note.status.plan.created }}</strong> {{ noteLocale.who.practitionerOnly }}</p>
