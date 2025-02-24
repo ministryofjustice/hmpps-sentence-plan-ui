@@ -126,6 +126,7 @@
         "criminogenicNeedsScore": "the need score"
       },
       "motivationToMakeChanges": "Motivation to make changes in this area",
+      "motivationNotAnswered": "{{ subject.givenName }} did not have to answer this question.",
       "motivationText": {
         "madeChanges": "{{ subject.givenName }} has already made positive changes and wants to maintain them.",
         "makingChanges": "{{ subject.givenName }} is actively making changes.",
