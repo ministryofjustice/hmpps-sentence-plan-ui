@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
-import createGoalJourneyMachine from '../routes/createGoal/createGoalJourneyMachine'
+import stateJourneyMachine from '../routes/createGoal/stateJourneyMachine'
 
 const journeyMiddleware = (req: Request, res: Response, next: NextFunction) => {
   if (!req.session.userJourney) {
@@ -8,7 +8,7 @@ const journeyMiddleware = (req: Request, res: Response, next: NextFunction) => {
 
   // Validate current state against the defined machine states
   // @ts-ignore
-  if (!createGoalJourneyMachine.states[req.session.userJourney.state]) {
+  if (!stateJourneyMachine.states[req.session.userJourney.state]) {
     req.session.userJourney.state = 'plan' // Reset if invalid
   }
 

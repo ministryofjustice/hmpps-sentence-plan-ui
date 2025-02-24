@@ -39,10 +39,7 @@
 
 {% block content %}
     {{ super() }}
-    <form id="back-form" method="POST">
-      <input type="hidden" name="_csrf" value="{{ csrfToken }}">
-      <button name="action" value="back" class="govuk-link govuk-back-link">{{ locale.common.backLink.text }}</button>
-    </form>
+    <a href="{{ data.returnLink }}" class="govuk-back-link">{{ locale.common.backLink.text }}</a>
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-one-third">
             {% set areaOfNeedNavigationLinks = [] %}

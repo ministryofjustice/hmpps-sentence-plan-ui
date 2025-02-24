@@ -2,7 +2,7 @@ import { RequestServices } from '../../services'
 import { PlanType } from '../PlanType'
 import { HandoverContextData, HandoverPrincipal } from '../Handover'
 import { Token } from '../Token'
-import createGoalJourneyMachine from '../../routes/createGoal/createGoalJourneyMachine'
+import stateJourneyMachine from '../../routes/createGoal/stateJourneyMachine'
 
 export default {}
 
@@ -17,8 +17,8 @@ declare module 'express-session' {
     token: Token
     returnLink: string
     userJourney: {
-      state: keyof typeof createGoalJourneyMachine.states // TODO obviously this won't work beyond createGoal
-      prevState: keyof typeof createGoalJourneyMachine.states // TODO ditto
+      state: keyof typeof stateJourneyMachine.states // TODO obviously this won't work beyond createGoal
+      prevState: keyof typeof stateJourneyMachine.states // TODO ditto
     }
   }
 }

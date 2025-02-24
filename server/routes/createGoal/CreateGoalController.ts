@@ -12,7 +12,7 @@ import { getDateOptions, getGoalTargetDate } from '../../utils/goalTargetDateUti
 import { areaConfigs } from '../../utils/assessmentAreaConfig.json'
 import { AssessmentAreaConfig } from '../../@types/Assessment'
 import { getAssessmentDetailsForArea } from '../../utils/assessmentUtils'
-import createGoalJourneyMachine, { getNextState } from './createGoalJourneyMachine'
+import stateJourneyMachine, { getNextState, stateUrlMap } from './stateJourneyMachine'
 import transformRequest from '../../middleware/transformMiddleware'
 import CreateGoalPostModel from './models/CreateGoalPostModel'
 import validateRequest from '../../middleware/validationMiddleware'
@@ -83,7 +83,7 @@ export default class CreateGoalController {
           dateOptions,
           minimumDatePickerDate,
           assessmentDetailsForArea,
-          returnLink: `/plan?type=${type}`,
+          returnLink: stateUrlMap[req.session.userJourney.prevState],
           form: req.body,
         },
         errors,
@@ -120,7 +120,7 @@ export default class CreateGoalController {
 
   private redirectToNextState(req: Request, res: Response) {
     const { action } = req.body
-    const currentState: keyof typeof createGoalJourneyMachine.states = req.session.userJourney.state
+    const currentState: keyof typeof stateJourneyMachine.states = req.session.userJourney.state
 
     // Determine the next state
     const nextState = getNextState(currentState, action)
@@ -128,7 +128,14 @@ export default class CreateGoalController {
     // Store previous state before updating
     req.session.userJourney.prevState = currentState
     req.session.userJourney.state = nextState
-    return res.redirect(`/${nextState}`)
+
+    const redirectUrl = stateUrlMap[nextState] || URLs.PLAN_OVERVIEW
+
+    if (redirectUrl.includes(':uuid')) {
+      redirectUrl.replace(':uuid', req.params.uuid) // TODO need to standardise this by extracting this method into something which just takes a state, an action and a uuid if it exists
+    }
+
+    return res.redirect(redirectUrl)
   }
 
   private handleSaveAction = (req: Request, res: Response, next: NextFunction) => {
