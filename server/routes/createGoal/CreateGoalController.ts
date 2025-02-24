@@ -12,7 +12,7 @@ import { getDateOptions, getGoalTargetDate } from '../../utils/goalTargetDateUti
 import { areaConfigs } from '../../utils/assessmentAreaConfig.json'
 import { AssessmentAreaConfig } from '../../@types/Assessment'
 import { getAssessmentDetailsForArea } from '../../utils/assessmentUtils'
-import stateJourneyMachine, { getNextState, stateUrlMap } from './stateJourneyMachine'
+import { redirectToNextState, stateUrlMap } from './stateJourneyMachine'
 import transformRequest from '../../middleware/transformMiddleware'
 import CreateGoalPostModel from './models/CreateGoalPostModel'
 import validateRequest from '../../middleware/validationMiddleware'
@@ -29,7 +29,7 @@ export default class CreateGoalController {
     try {
       const { uuid } = await req.services.goalService.saveGoal(processedData, planUuid)
 
-      return this.redirectToNextState(req, res)
+      return redirectToNextState(req, res)
 
       // TODO work out how to manage the query parameter stuff
 
@@ -118,26 +118,6 @@ export default class CreateGoalController {
     return next()
   }
 
-  private redirectToNextState(req: Request, res: Response) {
-    const { action } = req.body
-    const currentState: keyof typeof stateJourneyMachine.states = req.session.userJourney.state
-
-    // Determine the next state
-    const nextState = getNextState(currentState, action)
-
-    // Store previous state before updating
-    req.session.userJourney.prevState = currentState
-    req.session.userJourney.state = nextState
-
-    const redirectUrl = stateUrlMap[nextState] || URLs.PLAN_OVERVIEW
-
-    if (redirectUrl.includes(':uuid')) {
-      redirectUrl.replace(':uuid', req.params.uuid) // TODO need to standardise this by extracting this method into something which just takes a state, an action and a uuid if it exists
-    }
-
-    return res.redirect(redirectUrl)
-  }
-
   private handleSaveAction = (req: Request, res: Response, next: NextFunction) => {
     return runMiddlewareChain(
       [
@@ -157,7 +137,7 @@ export default class CreateGoalController {
 
   private handleFormAction = (req: Request, res: Response, next: NextFunction) => {
     if (req.body.action === 'back') {
-      return this.redirectToNextState(req, res)
+      return redirectToNextState(req, res)
     }
 
     this.handleSaveAction(req, res, next)

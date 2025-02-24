@@ -1,5 +1,6 @@
 import { createMachine, state, transition } from 'robot3'
 import URLs from '../URLs'
+import { Request, Response } from 'express'
 
 // Define the journey states
 // transitions are of the form (actionTaken, newState)
@@ -31,11 +32,31 @@ export const stateUrlMap: Record<string, string> = {
   agreePlan: URLs.AGREE_PLAN,
 }
 
+export function redirectToNextState(req: Request, res: Response) {
+  const { action } = req.body
+  const currentState: keyof typeof stateJourneyMachine.states = req.session.userJourney.state
+
+  // Determine the next state
+  const nextState = this.getNextState(currentState, action)
+
+  // Store previous state before updating
+  req.session.userJourney.prevState = currentState
+  req.session.userJourney.state = nextState
+
+  const redirectUrl = stateUrlMap[nextState] || URLs.PLAN_OVERVIEW
+
+  if (redirectUrl.includes(':uuid')) {
+    redirectUrl.replace(':uuid', req.params.uuid) // TODO need to standardise this by extracting this method into something which just takes a state, an action and a uuid if it exists
+  }
+
+  return res.redirect(redirectUrl)
+}
+
 // Function to compute the next state using Robot 3
-export const getNextState = (
+function getNextState(
   currentState: keyof typeof stateJourneyMachine.states,
   action: string,
-): keyof typeof stateJourneyMachine.states => {
+): keyof typeof stateJourneyMachine.states {
   // @ts-expect-error this is very cool
   return stateJourneyMachine.states[currentState]?.transitions[action]?.to || currentState
 }
