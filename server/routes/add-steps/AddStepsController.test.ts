@@ -213,10 +213,84 @@ describe('AddStepsController', () => {
       expect(next).not.toHaveBeenCalled()
     })
 
-    it('should save and redirect when action is not "add-step" or "remove-step"', async () => {
+    it('should save and redirect to plan current tab when adding steps during Create Goal', async () => {
+      req.services.sessionService.getReturnLink = jest.fn().mockReturnValue('/change-goal/some-goal-uuid/')
+
       req.body = {
         action: 'save',
         goalStatus: 'ACTIVE',
+        'step-actor-1': 'Test actor',
+        'step-description-1': 'a test step',
+        'step-status-1': StepStatus.NOT_STARTED,
+        'step-actor-2': 'Batman',
+        'step-description-2': 'test',
+        'step-status-2': StepStatus.IN_PROGRESS,
+      }
+      req.params = { uuid: 'some-goal-uuid' }
+
+      const expectedData = {
+        steps: [
+          {
+            description: 'a test step',
+            status: StepStatus.NOT_STARTED,
+            actor: 'Test actor',
+          },
+          {
+            description: 'test',
+            status: StepStatus.IN_PROGRESS,
+            actor: 'Batman',
+          },
+        ],
+      }
+
+      await runMiddlewareChain(controller.post, req, res, next)
+
+      expect(req.services.stepService.saveAllSteps).toHaveBeenCalledWith(expectedData, 'some-goal-uuid')
+      expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_OVERVIEW}?type=current`)
+      expect(next).not.toHaveBeenCalled()
+    })
+
+    it('should save and redirect to plan future tab when adding steps during Create Goal', async () => {
+      req.services.sessionService.getReturnLink = jest.fn().mockReturnValue('/change-goal/some-goal-uuid/')
+
+      req.body = {
+        action: 'save',
+        goalStatus: 'FUTURE',
+        'step-actor-1': 'Test actor',
+        'step-description-1': 'a test step',
+        'step-status-1': StepStatus.NOT_STARTED,
+        'step-actor-2': 'Batman',
+        'step-description-2': 'test',
+        'step-status-2': StepStatus.IN_PROGRESS,
+      }
+      req.params = { uuid: 'some-goal-uuid' }
+
+      const expectedData = {
+        steps: [
+          {
+            description: 'a test step',
+            status: StepStatus.NOT_STARTED,
+            actor: 'Test actor',
+          },
+          {
+            description: 'test',
+            status: StepStatus.IN_PROGRESS,
+            actor: 'Batman',
+          },
+        ],
+      }
+
+      await runMiddlewareChain(controller.post, req, res, next)
+
+      expect(req.services.stepService.saveAllSteps).toHaveBeenCalledWith(expectedData, 'some-goal-uuid')
+      expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_OVERVIEW}?type=future`)
+      expect(next).not.toHaveBeenCalled()
+    })
+
+    it('should save and redirect when action is not "add-step" or "remove-step"', async () => {
+      req.body = {
+        action: 'save',
+        goalStatus: 'FUTURE',
         'step-actor-1': 'Test actor',
         'step-description-1': 'a test step',
         'step-status-1': StepStatus.NOT_STARTED,
