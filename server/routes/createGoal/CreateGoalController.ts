@@ -12,7 +12,7 @@ import { getDateOptions, getGoalTargetDate } from '../../utils/goalTargetDateUti
 import { areaConfigs } from '../../utils/assessmentAreaConfig.json'
 import { AssessmentAreaConfig } from '../../@types/Assessment'
 import { getAssessmentDetailsForArea } from '../../utils/assessmentUtils'
-import { redirectToNextState, stateUrlMap } from './stateJourneyMachine'
+import { getBackUrlFromState, redirectToNextState } from './stateJourneyMachine'
 import transformRequest from '../../middleware/transformMiddleware'
 import CreateGoalPostModel from './models/CreateGoalPostModel'
 import validateRequest from '../../middleware/validationMiddleware'
@@ -71,8 +71,6 @@ export default class CreateGoalController {
         })
         .catch((): null => null)
 
-      req.services.sessionService.setReturnLink(null)
-
       return res.render('pages/create-goal', {
         locale: locale.en,
         data: {
@@ -83,7 +81,7 @@ export default class CreateGoalController {
           dateOptions,
           minimumDatePickerDate,
           assessmentDetailsForArea,
-          returnLink: stateUrlMap[req.session.userJourney.prevState],
+          returnLink: getBackUrlFromState(req.session.userJourney.state),
           form: req.body,
         },
         errors,

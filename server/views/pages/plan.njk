@@ -73,15 +73,17 @@
         },
         {
             text: locale.header.createGoalButton,
-            href: "/create-goal/accommodation",
             classes: "govuk-button--secondary govuk-!-display-none-print",
-            type: 'button'
+            type: 'submit',
+            name: 'action',
+            value: 'createGoal'
         } if data.readWrite === true,
         {
             classes: "govuk-!-display-none-print",
             text: locale.header.agreePlanButton,
             type: 'submit',
-            value: 'agree-plan'
+            name: 'action',
+            value: 'agreePlan'
         } if data.readWrite === true and data.plan.agreementStatus === 'DRAFT'
     ]
 } %}

@@ -12,6 +12,8 @@ import { AccessMode } from '../../@types/Handover'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
 import { HttpError } from '../../utils/HttpError'
 import { PlanAgreementStatus, PlanType } from '../../@types/PlanType'
+import { redirectToNextState } from '../createGoal/stateJourneyMachine'
+import runMiddlewareChain from '../../testutils/runMiddlewareChain'
 
 export default class PlanOverviewController {
   plan: PlanType
@@ -121,13 +123,26 @@ export default class PlanOverviewController {
   }
 
   private handleSuccessRedirect = (req: Request, res: Response) => {
-    switch (req.body.action) {
-      case 'agree-plan':
-        return res.redirect(URLs.AGREE_PLAN)
-      case 'create-goal':
-        return res.redirect(URLs.CREATE_GOAL)
-      default:
-        return res.redirect(URLs.PLAN_OVERVIEW)
+    return redirectToNextState(req, res)
+  }
+
+  private handleFormAction = (req: Request, res: Response, next: NextFunction) => {
+    if (req.body.action === 'createGoal') {
+      return redirectToNextState(req, res)
+    }
+
+    if (req.body.action === 'agreePlan') {
+      return runMiddlewareChain(
+        [
+          requireAccessMode(AccessMode.READ_WRITE),
+          this.validatePlan,
+          this.handleValidationErrors,
+          this.handleSuccessRedirect,
+        ],
+        req,
+        res,
+        next,
+      )
     }
   }
 
@@ -140,10 +155,5 @@ export default class PlanOverviewController {
     this.render,
   ]
 
-  post = [
-    requireAccessMode(AccessMode.READ_WRITE),
-    this.validatePlan,
-    this.handleValidationErrors,
-    this.handleSuccessRedirect,
-  ]
+  post = this.handleFormAction
 }
