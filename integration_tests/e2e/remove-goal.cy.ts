@@ -49,6 +49,7 @@ describe('Remove a goal from a Plan after it has been agreed', () => {
         })
       })
 
+      cy.get('.moj-primary-navigation__container').contains(`Plan history`)
       cy.title().should('contain', 'Confirm you want to remove this goal')
       cy.get('h1').should('include.text', 'Confirm you want to remove this goal')
 
@@ -175,6 +176,7 @@ describe('Remove a goal from a Plan after it has been agreed', () => {
       // Check goal has been removed
       cy.url().should('contain', '/plan?type=removed&status=removed')
       cy.get('.goal-list .goal-summary-card').should('have.length', 1).and('contain', goalData.title)
+      cy.get('.back-to-top-link').should('have.attr', 'href', '#top')
       cy.checkAccessibility()
     })
 

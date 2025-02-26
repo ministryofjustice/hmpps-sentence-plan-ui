@@ -1,5 +1,9 @@
 .capital:first-letter {text-transform: uppercase}
 
+a {
+  @extend .govuk-link--no-visited-state
+}
+
 .govuk-visually-hidden {
   &--mobile {
     @include govuk-media-query($until: tablet) {
@@ -90,6 +94,10 @@
 
 .sentence-info .single-sentence .govuk-table__cell {
   border-bottom: 0;
+}
+
+.assessment-score {
+  @include govuk-responsive-margin(6, "bottom");
 }
 
 @include govuk-media-query($until: tablet) {

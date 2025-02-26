@@ -12,7 +12,7 @@
 
     {% if errorList.length %}
         {{ govukErrorSummary({
-            titleText: "There is a problem",
+            titleText: locale.common.errorSummaryCard.title,
             errorList: errorList
         }) }}
     {% endif %}

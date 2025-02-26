@@ -4,9 +4,10 @@
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
-{% from "../components/error-summary/error-summary.njk" import errorSummary %}
+{% from "../components/error-summary/error-summary.njk" import errorSummary with context %}
 {% from "moj/components/date-picker/macro.njk" import mojDatePicker %}
 {% from "moj/components/side-navigation/macro.njk" import mojSideNavigation %}
+{% from "../components/assessment/area-assessment-summary.njk" import assessmentInformationForArea %}
 
 {% set locale = interpolate(locale, {
     areaOfNeed: data.selectedAreaOfNeed.name,
@@ -38,6 +39,8 @@
             }) }}
             <span class="govuk-caption-l">{{ locale.mainHeading.caption }}</span>
             <h1 class="govuk-heading-l">{{ locale.mainHeading.title }}</h1>
+
+            {{ assessmentInformationForArea(data.assessmentDetailsForArea, locale) }}
 
             <form id="change-goal-form" method="POST">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}">

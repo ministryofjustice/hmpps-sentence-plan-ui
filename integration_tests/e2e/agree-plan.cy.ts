@@ -43,6 +43,7 @@ describe('Agree plan', () => {
 
     it('Display agree plan page correctly on load', () => {
       cy.get('button[value="agree-plan"]').click()
+      cy.get('.moj-primary-navigation__container').should('not.contain', `Plan history`)
       cy.get('.govuk-fieldset__heading').contains('agree to this plan?')
       cy.get('.govuk-label').contains('Yes, I agree')
       cy.get('.govuk-label').contains('No, I do not agree')
@@ -152,12 +153,14 @@ describe('Agree plan', () => {
     })
 
     it('Submit successfully when Yes is selected and additional notes provided', () => {
+      cy.get('.moj-primary-navigation__container').should('not.contain', `Plan history`)
       cy.get('#agree-plan-radio').click()
       cy.get('#notes').type('abc')
 
       cy.get('.govuk-button').click()
 
       cy.url().should('satisfy', url => url.endsWith('/plan'))
+      cy.get('.moj-primary-navigation__container').contains(`Plan history`)
       cy.checkAccessibility()
     })
 

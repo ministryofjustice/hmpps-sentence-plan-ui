@@ -1,6 +1,6 @@
 import DataGenerator from '../support/DataGenerator'
 
-describe('Rendering', () => {
+describe('OASys Return Button Rendering', () => {
   beforeEach(() => {
     cy.createSentencePlan().then(planDetails => {
       cy.wrap(planDetails).as('plan')

@@ -11,18 +11,36 @@
       "endDateHeading": "Expected end date",
       "unpaidWorkHeading": "Unpaid work",
       "rarHeading": "RAR (Rehabilitation activity requirement)",
-      "lastUpdated": "Last updated on {{ lastUpdatedDate }}.",
+      "lastUpdated": "{{ subject.givenName }}'s assessment was last updated on {{ lastUpdatedDate }}.",
       "RoSH": "RoSH (Risk of Serious Harm)",
       "riskOfReoffending": "Risk of reoffending",
-      "linkedToHarm": "This area is linked to RoSH (risk of serious harm)",
-      "notlinkedToHarm": "This area is not linked to RoSH (risk of serious harm)",
-      "linkedtoReoffending": "This area is linked to risk of reoffending",
-      "notLinkedToRiskOfReoffending": "This area is not linked to risk of reoffending",
+      "linkedToHarm": {
+        "yes": "This area is linked to RoSH (risk of serious harm)",
+        "no": "This area is not linked to RoSH (risk of serious harm)"
+      },
+      "linkedtoReoffending": {
+        "yes": "This area is linked to risk of reoffending",
+        "no": "This area is not linked to risk of reoffending"
+      },
       "motivationToMakeChanges": "Motivation to make changes in this area",
-      "strengthsOrProtectiveFactors": "There are strengths or protective factors related to this area",
-      "noStrengthsOrProtectiveFactors": "There are no strengths or protective factors related to this area",
+      "strengthsOrProtectiveFactors": {
+        "yes": "There are strengths or protective factors related to this area",
+        "no": "There are no strengths or protective factors related to this area"
+      },
       "needScore": "need score",
       "lifestyleAndAssociatesNeedScore": "Lifestyle and associates need score"
+    },
+    "lowScoring": {
+      "sectionHeading": "Low-scoring areas from the assessment",
+      "sectionEmptyParagraph": "No low-scoring areas."
+    },
+    "highScoring": {
+      "sectionHeading": "High-scoring areas from the assessment",
+      "sectionEmptyParagraph": "No high-scoring areas."
+    },
+    "withoutScoring": {
+      "sectionHeading": "Areas without a need score",
+      "sectionParagraph": "Health and wellbeing, and finances never have a need score. When other information is available for those areas, you can see it here."
     },
     "errors": {
       "noAssessmentDataFound": "No assessment data found",
@@ -36,27 +54,19 @@
       "viewPreviousGoalsLink": "View previous goals",
       "noPreviousGoals": "No previous goals"
     },
-    "assessmentIncomplete": {
-      "paragraphWithLink": "This information is not available yet because the assessment has not been completed. You can <a class='govuk-link govuk-link--no-visited-state' href='{{ oasysReturnUrl }}'>check the summary sheet in OASys</a> instead."
+    "incompleteAssessment": {
+      "errorTitle": "Some areas have incomplete information",
+      "errorDescription": "This means the areas have not been marked as complete in the assessment, but you can still see the latest information available.",
+      "sectionHeading": "Incomplete information",
+      "sectionParagraph": "These areas have not been marked as complete in the assessment yet, but you can see the latest information available.",
+      "allInformationMissing": "No information is available yet"
     },
     "subNav": {
       "about": "About",
       "summary": "Plan summary"
     },
-    "motivationText": {
-      "madeChanges": "{{ subject.givenName }} has already made positive changes and wants to maintain them.",
-      "makingChanges": "{{ subject.givenName }} is actively making changes.",
-      "wantToMakeChanges": "{{ subject.givenName }} wants to make changes and knows how to.",
-      "needsHelpToMakeChanges": "{{ subject.givenName }} wants to make changes but needs help.",
-      "thinkingAboutMakingChanges": "{{ subject.givenName }} is thinking about making changes.",
-      "doesNotWantToMakeChanges": "{{ subject.givenName }} does not want to make changes.",
-      "doesNotWantToAnswer": "{{ subject.givenName }} does not want to answer.",
-      "notPresent": "{{ subject.givenName }} was not present to answer this question.",
-      "notApplicable": "This question was not applicable."
-    },
     "needScore": {
-      "doesNotHaveNeedScore": "This area does not have a need score",
-      "needScoreNotAvailable": "The score for this area is not available yet"
+      "doesNotHaveNeedScore": "This area never has a need score"
     }
   }
 }
