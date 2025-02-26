@@ -28,18 +28,19 @@ export default class CreateGoalController {
 
     try {
       const { uuid } = await req.services.goalService.saveGoal(processedData, planUuid)
+      req.body.type = type
 
       return redirectToNextState(req, res)
 
       // TODO work out how to manage the query parameter stuff
 
-      req.services.sessionService.setReturnLink(`/change-goal/${uuid}/`)
-
-      if (req.body.action === 'addStep') {
-        return res.redirect(`${URLs.ADD_STEPS.replace(':uuid', uuid)}?type=${type}`)
-      }
-
-      return res.redirect(`${URLs.PLAN_OVERVIEW}?status=added&type=${type}`)
+      // req.services.sessionService.setReturnLink(`/change-goal/${uuid}/`)
+      //
+      // if (req.body.action === 'addStep') {
+      //   return res.redirect(`${URLs.ADD_STEPS.replace(':uuid', uuid)}?type=${type}`)
+      // }
+      //
+      // return res.redirect(`${URLs.PLAN_OVERVIEW}?status=added&type=${type}`)
     } catch (e) {
       return next(HttpError(500, e.message))
     }

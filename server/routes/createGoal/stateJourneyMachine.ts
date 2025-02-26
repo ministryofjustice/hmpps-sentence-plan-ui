@@ -14,7 +14,7 @@ const stateJourneyMachine = createMachine({
   ),
   createGoal: state(
     transition('back', 'plan'),
-    transition('saveWithoutSteps', 'plan'),
+    transition('saveWithoutSteps', 'planWithType'),
     transition('addSteps', 'addStepsFromCreateGoal'),
   ),
   addStepsFromCreateGoal: state(transition('back', 'changeGoal'), transition('save', 'plan')),
@@ -24,6 +24,7 @@ const stateJourneyMachine = createMachine({
 // map states to URLs
 export const stateUrlMap: Record<string, string> = {
   plan: URLs.PLAN_OVERVIEW,
+  planWithType: URLs.PLAN_OVERVIEW_WITH_TYPE,
   createGoal: URLs.CREATE_GOAL,
   changeGoal: URLs.CHANGE_GOAL,
   deleteGoal: URLs.DELETE_GOAL,
@@ -49,6 +50,8 @@ export function redirectToNextState(req: Request, res: Response) {
     redirectUrl = redirectUrl.replace(':uuid', req.params.uuid) // TODO need to standardise this by extracting this method into something which just takes a state, an action and a uuid if it exists
   } else if (redirectUrl.includes(':areaOfNeed')) {
     redirectUrl = redirectUrl.replace(':areaOfNeed', req.body.areaOfNeed)
+  } else if (redirectUrl.includes(':type')) {
+    redirectUrl = redirectUrl.replace(':type', req.body.type)
   }
 
   return res.redirect(redirectUrl)
