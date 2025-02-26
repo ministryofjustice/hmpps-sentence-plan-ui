@@ -2,7 +2,6 @@ import { NextFunction, Request, Response } from 'express'
 import ReferentialDataService from '../../services/sentence-plan/referentialDataService'
 import locale from './locale.json'
 
-import URLs from '../URLs'
 import { NewGoal } from '../../@types/NewGoalType'
 import { formatDateWithStyle } from '../../utils/utils'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
@@ -28,19 +27,12 @@ export default class CreateGoalController {
 
     try {
       const { uuid } = await req.services.goalService.saveGoal(processedData, planUuid)
+
+      // we need to do URL substitution of parameters for the redirect so they need to be available to the redirectToNextState function
+      req.body.uuid = uuid
       req.body.type = type
 
       return redirectToNextState(req, res)
-
-      // TODO work out how to manage the query parameter stuff
-
-      // req.services.sessionService.setReturnLink(`/change-goal/${uuid}/`)
-      //
-      // if (req.body.action === 'addStep') {
-      //   return res.redirect(`${URLs.ADD_STEPS.replace(':uuid', uuid)}?type=${type}`)
-      // }
-      //
-      // return res.redirect(`${URLs.PLAN_OVERVIEW}?status=added&type=${type}`)
     } catch (e) {
       return next(HttpError(500, e.message))
     }
@@ -82,7 +74,7 @@ export default class CreateGoalController {
           dateOptions,
           minimumDatePickerDate,
           assessmentDetailsForArea,
-          returnLink: getBackUrlFromState(req.session.userJourney.state),
+          returnLink: getBackUrlFromState(req, res, req.session.userJourney.state),
           form: req.body,
         },
         errors,

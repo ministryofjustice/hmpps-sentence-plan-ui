@@ -17,7 +17,11 @@ const stateJourneyMachine = createMachine({
     transition('saveWithoutSteps', 'planWithType'),
     transition('addSteps', 'addStepsFromCreateGoal'),
   ),
-  addStepsFromCreateGoal: state(transition('back', 'changeGoal'), transition('save', 'plan')),
+  addStepsFromCreateGoal: state(
+    transition('back', 'changeGoal'),
+    transition('save', 'plan'),
+    transition('addAnotherStep', 'addStepsFromCreateGoal'),
+  ),
   addStepsFromPlan: state(transition('back', 'plan'), transition('save', 'plan')),
 })
 
@@ -33,6 +37,20 @@ export const stateUrlMap: Record<string, string> = {
   agreePlan: URLs.AGREE_PLAN,
 }
 
+function getUrlForState(req: Request, res: Response, nextState: keyof typeof stateJourneyMachine.states) {
+  let redirectUrl = stateUrlMap[nextState] || URLs.PLAN_OVERVIEW
+
+  if (redirectUrl.includes(':uuid')) {
+    redirectUrl = redirectUrl.replace(':uuid', req.body.uuid)
+  } else if (redirectUrl.includes(':areaOfNeed')) {
+    redirectUrl = redirectUrl.replace(':areaOfNeed', req.body.areaOfNeed)
+  } else if (redirectUrl.includes(':type')) {
+    redirectUrl = redirectUrl.replace(':type', req.body.type)
+  }
+
+  return redirectUrl
+}
+
 export function redirectToNextState(req: Request, res: Response) {
   const { action } = req.body
   const currentState: keyof typeof stateJourneyMachine.states = req.session.userJourney.state
@@ -44,15 +62,7 @@ export function redirectToNextState(req: Request, res: Response) {
   req.session.userJourney.prevState = currentState
   req.session.userJourney.state = nextState
 
-  let redirectUrl = stateUrlMap[nextState] || URLs.PLAN_OVERVIEW
-
-  if (redirectUrl.includes(':uuid')) {
-    redirectUrl = redirectUrl.replace(':uuid', req.params.uuid) // TODO need to standardise this by extracting this method into something which just takes a state, an action and a uuid if it exists
-  } else if (redirectUrl.includes(':areaOfNeed')) {
-    redirectUrl = redirectUrl.replace(':areaOfNeed', req.body.areaOfNeed)
-  } else if (redirectUrl.includes(':type')) {
-    redirectUrl = redirectUrl.replace(':type', req.body.type)
-  }
+  const redirectUrl = getUrlForState(req, res, nextState)
 
   return res.redirect(redirectUrl)
 }
@@ -70,8 +80,12 @@ function getNextState(
   return currentState
 }
 
-export function getBackUrlFromState(currentState: keyof typeof stateJourneyMachine.states) {
-  return getNextState(currentState, 'back')
+export function getBackUrlFromState(
+  req: Request,
+  res: Response,
+  currentState: keyof typeof stateJourneyMachine.states,
+) {
+  return getUrlForState(req, res, getNextState(currentState, 'back'))
 }
 
 export default stateJourneyMachine

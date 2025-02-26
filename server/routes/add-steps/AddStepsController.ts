@@ -13,6 +13,7 @@ import { HttpError } from '../../utils/HttpError'
 import { areaConfigs } from '../../utils/assessmentAreaConfig.json'
 import { AssessmentAreaConfig } from '../../@types/Assessment'
 import { getAssessmentDetailsForArea } from '../../utils/assessmentUtils'
+import { getBackUrlFromState } from '../createGoal/stateJourneyMachine'
 
 export default class AddStepsController {
   private render = async (req: Request, res: Response, next: NextFunction) => {
@@ -22,7 +23,7 @@ export default class AddStepsController {
       const popData = await req.services.sessionService.getSubjectDetails()
       const goal = await req.services.goalService.getGoal(req.params.uuid)
       const steps = await req.services.stepService.getSteps(req.params.uuid)
-      const returnLink = req.services.sessionService.getReturnLink() ?? `${URLs.PLAN_OVERVIEW}?type=${type}`
+      const returnLink = getBackUrlFromState(req, res, req.session.userJourney.state)
       const planUuid = req.services.sessionService.getPlanUUID()
       const plan = await req.services.planService.getPlanByUuid(planUuid)
 
@@ -126,7 +127,7 @@ export default class AddStepsController {
   }
 
   private handleAddStep = (req: Request, res: Response, next: NextFunction) => {
-    if (req.body.action === 'add-step') {
+    if (req.body.action === 'addAnotherStep') {
       delete req.body.action
       req.body.steps.push({
         actor: 'Choose someone',
