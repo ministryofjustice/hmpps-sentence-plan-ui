@@ -170,6 +170,7 @@ describe('AddStepsController', () => {
     it('should add a new step and re-render the page', async () => {
       req.body = {
         action: 'add-step',
+        goalStatus: 'ACTIVE',
         'step-actor-1': 'Test actor',
         'step-description-1': 'a test step',
         'step-status-1': StepStatus.NOT_STARTED,
@@ -180,6 +181,7 @@ describe('AddStepsController', () => {
 
       const expectedData = { ...viewData }
       expectedData.data.form = {
+        goalStatus: 'ACTIVE',
         'step-actor-1': 'Test actor',
         'step-description-1': 'a test step',
         'step-status-1': StepStatus.NOT_STARTED,
@@ -214,6 +216,7 @@ describe('AddStepsController', () => {
     it('should save and redirect when action is not "add-step" or "remove-step"', async () => {
       req.body = {
         action: 'save',
+        goalStatus: 'ACTIVE',
         'step-actor-1': 'Test actor',
         'step-description-1': 'a test step',
         'step-status-1': StepStatus.NOT_STARTED,
@@ -293,6 +296,7 @@ describe('AddStepsController', () => {
     it('should call next with an error if saveAllSteps fails', async () => {
       req.body = {
         action: 'save',
+        goalStatus: 'ACTIVE',
         'step-actor-1': 'Batman',
         'step-description-1': 'a test step',
         'step-status-1': StepStatus.NOT_STARTED,
