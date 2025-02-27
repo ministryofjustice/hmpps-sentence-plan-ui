@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import locale from './locale.json'
 import URLs from '../URLs'
-import { toKebabCase } from '../../utils/utils'
+import { goalStatusToTabName, toKebabCase } from '../../utils/utils'
 import validateRequest from '../../middleware/validationMiddleware'
 import AddStepsPostModel, { StepModel } from './models/AddStepsPostModel'
 import transformRequest from '../../middleware/transformMiddleware'
@@ -78,9 +78,11 @@ export default class AddStepsController {
     try {
       await req.services.stepService.saveAllSteps(goalData, req.params.uuid)
 
+      const type = goalStatusToTabName(req.body.goalStatus)
+
       const link =
         req.services.sessionService.getReturnLink() === `/change-goal/${req.params.uuid}/`
-          ? `${URLs.PLAN_OVERVIEW}?type=current`
+          ? `${URLs.PLAN_OVERVIEW}?type=${type}`
           : req.services.sessionService.getReturnLink()
 
       return res.redirect(link)
