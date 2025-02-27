@@ -49,7 +49,7 @@ jobs:
 
   e2e_test:
     needs: build_docker
-    uses: ministryofjustice/hmpps-sentence-plan-ui/.github/workflows/e2e_test.yml@SP2-1314_github_actions
+    uses: ./.github/workflows/e2e_test.yml
     with:
       app_version: ${{ needs.build_docker.outputs.app_version }}
 
