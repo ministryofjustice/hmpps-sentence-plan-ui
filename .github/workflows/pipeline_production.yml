@@ -3,7 +3,7 @@ name: Main pipeline [build -> test -> deploy]
 on:
   push:
     branches:
-      - main
+      - production
 
 permissions:
   contents: read
@@ -108,11 +108,33 @@ jobs:
       app_version: ${{ needs.build_docker.outputs.app_version }}
       tag_latest: true
 
-  deploy_dev:
-    name: Deploy to the development environment
-    needs: publish_docker
-    uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@v2
+  deploy_test:
+    name: Deploy to pre-production environment
+    needs:
+      - build_docker
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@v2 # WORKFLOW_VERSION
     secrets: inherit
     with:
-      environment: 'dev'
+      environment: 'test'
+      app_version: '${{ needs.build.outputs.app_version }}'
+
+  deploy_preprod:
+    name: Deploy to pre-production environment
+    needs:
+      - build_docker
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@v2 # WORKFLOW_VERSION
+    secrets: inherit
+    with:
+      environment: 'preprod'
+      app_version: '${{ needs.build.outputs.app_version }}'
+
+  deploy_prod:
+    name: Deploy to production environment
+    needs:
+      - build_docker
+      - deploy_preprod
+    uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@v2 # WORKFLOW_VERSION
+    secrets: inherit
+    with:
+      environment: 'prod'
       app_version: '${{ needs.build.outputs.app_version }}'
