@@ -1,4 +1,4 @@
-name: Main pipeline [build -> test -> deploy]
+name: Production pipeline [build -> test -> deploy]
 
 on:
   push:
@@ -109,14 +109,14 @@ jobs:
       tag_latest: true
 
   deploy_test:
-    name: Deploy to pre-production environment
+    name: Deploy to test environment
     needs:
       - build_docker
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@v2 # WORKFLOW_VERSION
     secrets: inherit
     with:
       environment: 'test'
-      app_version: '${{ needs.build.outputs.app_version }}'
+      app_version: '${{ needs.build_docker.outputs.app_version }}'
 
   deploy_preprod:
     name: Deploy to pre-production environment
@@ -126,7 +126,7 @@ jobs:
     secrets: inherit
     with:
       environment: 'preprod'
-      app_version: '${{ needs.build.outputs.app_version }}'
+      app_version: '${{ needs.build_docker.outputs.app_version }}'
 
   deploy_prod:
     name: Deploy to production environment
@@ -137,4 +137,4 @@ jobs:
     secrets: inherit
     with:
       environment: 'prod'
-      app_version: '${{ needs.build.outputs.app_version }}'
+      app_version: '${{ needs.build_docker.outputs.app_version }}'
