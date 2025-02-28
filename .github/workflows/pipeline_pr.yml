@@ -47,8 +47,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        containers: [ 1, 2, 3, 4 ]
-    uses: ministryofjustice/hmpps-sentence-plan-ui/.github/workflows/e2e_test.yml@SP2-1314_github_actions
+        containers: [ 1, 2, 3, 4, 5 ]
+    uses: ./.github/workflows/e2e_test.yml
     with:
       app_version: ${{ needs.build_docker.outputs.app_version }}
       job-index: ${{ strategy.job-index }}
@@ -57,7 +57,7 @@ jobs:
 
   publish-test-results:
     name: "Publish Tests Results"
-    needs: [e2e_test]
+    needs: [ e2e_test, node_unit_tests ]
     runs-on: ubuntu-latest
     permissions:
       checks: write
