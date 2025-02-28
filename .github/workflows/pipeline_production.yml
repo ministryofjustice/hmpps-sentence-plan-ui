@@ -101,6 +101,7 @@ jobs:
       - node_build
       - node_unit_tests
       - e2e_test
+      - build_docker
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/docker_push.yml@v2
     with:
       docker_registry: 'ghcr.io'
