@@ -11,7 +11,7 @@ export default class ErrorController {
   constructor(private production = process.env.NODE_ENV === 'production') {}
 
   private errorHandler = async (error: HttpError, req: Request, res: Response, next: NextFunction) => {
-    this.logError(error, req.originalUrl, res.locals.user)
+    this.logError(error, req.originalUrl, req.session.plan?.uuid)
 
     res.locals.stack = this.production ? null : error.stack
     res.status(error.status || 500)
@@ -26,8 +26,8 @@ export default class ErrorController {
     }
   }
 
-  private logError = (error: HttpError, url: string, user?: Express.User) => {
-    logger.error(`Error handling request for '${url}', user '${user?.identifier}'`, error)
+  private logError = (error: HttpError, url: string, planUuid: string) => {
+    logger.error(`Error handling request for '${url}', plan UUID '${planUuid}'`, error)
   }
 
   private handleBadRequestErrors = async (error: HttpError, req: Request, res: Response, next: NextFunction) => {
