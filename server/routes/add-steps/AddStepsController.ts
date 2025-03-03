@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import locale from './locale.json'
 import URLs from '../URLs'
-import { toKebabCase } from '../../utils/utils'
+import { goalStatusToTabName, toKebabCase } from '../../utils/utils'
 import validateRequest from '../../middleware/validationMiddleware'
 import AddStepsPostModel, { StepModel } from './models/AddStepsPostModel'
 import transformRequest from '../../middleware/transformMiddleware'
@@ -10,6 +10,9 @@ import { NewGoal } from '../../@types/NewGoalType'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
 import { AccessMode } from '../../@types/Handover'
 import { HttpError } from '../../utils/HttpError'
+import { areaConfigs } from '../../utils/assessmentAreaConfig.json'
+import { AssessmentAreaConfig } from '../../@types/Assessment'
+import { getAssessmentDetailsForArea } from '../../utils/assessmentUtils'
 
 export default class AddStepsController {
   private render = async (req: Request, res: Response, next: NextFunction) => {
@@ -22,6 +25,18 @@ export default class AddStepsController {
       const returnLink = req.services.sessionService.getReturnLink() ?? `${URLs.PLAN_OVERVIEW}?type=${type}`
       const planUuid = req.services.sessionService.getPlanUUID()
       const plan = await req.services.planService.getPlanByUuid(planUuid)
+
+      const criminogenicNeedsData = req.services.sessionService.getCriminogenicNeeds()
+
+      // get assessment data or swallow the service error and set to null so the template knows this data is missing
+      const assessmentDetailsForArea = await req.services.assessmentService
+        .getAssessmentByUuid(planUuid)
+        .then(assessmentResponse => {
+          const assessmentData = assessmentResponse.sanAssessmentData
+          const areaConfig: AssessmentAreaConfig = areaConfigs.find(config => config.area === goal.areaOfNeed.name)
+          return getAssessmentDetailsForArea(criminogenicNeedsData, areaConfig, assessmentData)
+        })
+        .catch((): null => null)
 
       if (!req.body.steps || req.body.steps.length === 0) {
         req.body.steps = steps.map(step => ({
@@ -38,6 +53,7 @@ export default class AddStepsController {
           goal,
           popData,
           areaOfNeed: toKebabCase(goal.areaOfNeed.name),
+          assessmentDetailsForArea,
           returnLink,
           form: req.body,
         },
@@ -62,9 +78,11 @@ export default class AddStepsController {
     try {
       await req.services.stepService.saveAllSteps(goalData, req.params.uuid)
 
+      const type = goalStatusToTabName(req.body.goalStatus)
+
       const link =
         req.services.sessionService.getReturnLink() === `/change-goal/${req.params.uuid}/`
-          ? `${URLs.PLAN_OVERVIEW}?type=current`
+          ? `${URLs.PLAN_OVERVIEW}?type=${type}`
           : req.services.sessionService.getReturnLink()
 
       return res.redirect(link)

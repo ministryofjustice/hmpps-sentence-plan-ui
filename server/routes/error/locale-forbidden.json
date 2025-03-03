@@ -6,6 +6,6 @@
     "mainHeading": {
       "title": "You do not have permission to perform this action"
     },
-    "resolution": "<a href='{{ oasysReturnUrl }}' class='govuk-link govuk-link--no-visited-state'>Go to the OASys homepage</a>"
+    "resolution": "<a href='{{ oasysReturnUrl }}'>Go to the OASys homepage</a>"
   }
 }

@@ -15,6 +15,7 @@ import testPlan from '../../testutils/data/planData'
 import { PlanAgreementStatus, PlanType } from '../../@types/PlanType'
 import { Goal } from '../../@types/GoalType'
 import CreateGoalPostModel from '../createGoal/models/CreateGoalPostModel'
+import { crimNeedsSubset, incompleteAssessmentData } from '../../testutils/data/testAssessmentData'
 
 jest.mock('../../middleware/authorisationMiddleware', () => ({
   requireAccessMode: jest.fn(() => (req: Request, res: Response, next: NextFunction) => {
@@ -30,8 +31,15 @@ jest.mock('../../services/sentence-plan/referentialDataService', () => {
 
 jest.mock('../../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
+    getCriminogenicNeeds: jest.fn().mockReturnValue(crimNeedsSubset),
     getPlanUUID: jest.fn().mockReturnValue(testPlan.uuid),
     getReturnLink: jest.fn().mockReturnValue('/some-return-link'),
+  }))
+})
+
+jest.mock('../../services/sentence-plan/assessmentService', () => {
+  return jest.fn().mockImplementation(() => ({
+    getAssessmentByUuid: jest.fn().mockResolvedValue(incompleteAssessmentData),
   }))
 })
 
@@ -60,6 +68,14 @@ describe('ChangeGoalController', () => {
       sortedAreasOfNeed: AreaOfNeed,
       returnLink: '/some-return-link',
       form: {},
+      assessmentDetailsForArea: {
+        isAssessmentSectionNotStarted: false,
+        isAssessmentSectionComplete: true,
+        motivationToMakeChanges: 'needsHelpToMakeChanges',
+        linkedToHarm: 'NO',
+        linkedtoReoffending: 'NO',
+        linkedtoStrengthsOrProtectiveFactors: 'NO',
+      },
       selectedAreaOfNeed: AreaOfNeed.find(x => x.name === testGoal.areaOfNeed.name),
       minimumDatePickerDate: '01/01/2024',
       dateOptions: [

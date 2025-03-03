@@ -122,9 +122,9 @@ export const fullCrimNeeds: CriminogenicNeedsData = {
     emoThreshold: 'N/A',
   },
   alcoholMisuse: {
-    alcoholLinkedToHarm: 'NO',
-    alcoholLinkedToReoffending: 'NO',
-    alcoholStrengths: 'NO',
+    alcoholLinkedToHarm: 'NULL',
+    alcoholLinkedToReoffending: 'NULL',
+    alcoholStrengths: 'NULL',
     alcoholOtherWeightedScore: 'N/A',
     alcoholThreshold: 'N/A',
   },

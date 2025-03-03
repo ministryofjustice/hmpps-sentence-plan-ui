@@ -31,41 +31,46 @@ export function getAssessmentDetailsForArea(
   }
 
   // Values can be 'YES', 'NO' or 'NULL'
-  const linkedToHarm = (
-    crimNeeds[areaConfig.crimNeedsKey][`${areaConfig.crimNeedsSubKey}LinkedToHarm`] ?? 'NULL'
-  ).toLowerCase()
+  const linkedToHarm = crimNeeds[areaConfig.crimNeedsKey][`${areaConfig.crimNeedsSubKey}LinkedToHarm`] ?? 'NULL'
 
-  const linkedtoReoffending = (
+  const linkedtoReoffending =
     crimNeeds[areaConfig.crimNeedsKey][`${areaConfig.crimNeedsSubKey}LinkedToReoffending`] ?? 'NULL'
-  ).toLowerCase()
 
-  const linkedtoStrengthsOrProtectiveFactors = (
+  const linkedtoStrengthsOrProtectiveFactors =
     crimNeeds[areaConfig.crimNeedsKey][`${areaConfig.crimNeedsSubKey}Strengths`] ?? 'NULL'
-  ).toLowerCase()
 
   const riskOfSeriousHarmDetails =
-    linkedToHarm !== 'null'
+    linkedToHarm !== 'NULL'
       ? sanAssessmentData[
-          `${areaConfig.assessmentKey}_practitioner_analysis_risk_of_serious_harm_${linkedToHarm}_details`
+          `${areaConfig.assessmentKey}_practitioner_analysis_risk_of_serious_harm_${linkedToHarm.toLowerCase()}_details`
         ]?.value
       : undefined
 
   const riskOfReoffendingDetails =
-    linkedtoReoffending !== 'null'
+    linkedtoReoffending !== 'NULL'
       ? sanAssessmentData[
-          `${areaConfig.assessmentKey}_practitioner_analysis_risk_of_reoffending_${linkedtoReoffending}_details`
+          `${areaConfig.assessmentKey}_practitioner_analysis_risk_of_reoffending_${linkedtoReoffending.toLowerCase()}_details`
         ]?.value
       : undefined
 
   const motivationToMakeChanges = motivationText(sanAssessmentData[`${areaConfig.assessmentKey}_changes`]?.value)
 
   const strengthsOrProtectiveFactorsDetails =
-    linkedtoStrengthsOrProtectiveFactors !== 'null'
+    linkedtoStrengthsOrProtectiveFactors !== 'NULL'
       ? sanAssessmentData[
-          `${areaConfig.assessmentKey}_practitioner_analysis_strengths_or_protective_factors_${linkedtoStrengthsOrProtectiveFactors}_details`
+          `${areaConfig.assessmentKey}_practitioner_analysis_strengths_or_protective_factors_${linkedtoStrengthsOrProtectiveFactors.toLowerCase()}_details`
         ]?.value
       : undefined
+
+  const isAssessmentSectionNotStarted =
+    isAssessmentSectionComplete === false &&
+    linkedToHarm === 'NULL' &&
+    linkedtoReoffending === 'NULL' &&
+    linkedtoStrengthsOrProtectiveFactors === 'NULL' &&
+    motivationToMakeChanges === undefined
+
   return {
+    isAssessmentSectionNotStarted,
     isAssessmentSectionComplete,
     linkedToHarm,
     linkedtoReoffending,
@@ -85,7 +90,7 @@ export const formatAssessmentData = (
   if (!assessment || !assessment.sanAssessmentData) {
     return {
       isAssessmentComplete: false,
-      areas: { lowScoring: [], highScoring: [], other: [] },
+      areas: { incompleteAreas: [], highScoring: [], lowScoring: [], other: [] },
     }
   }
 
@@ -100,6 +105,7 @@ export const formatAssessmentData = (
       score = crimNeeds[areaConfig.crimNeedsKey][`${areaConfig.crimNeedsSubKey}OtherWeightedScore`]
 
       const {
+        isAssessmentSectionNotStarted,
         isAssessmentSectionComplete,
         linkedToHarm,
         linkedtoReoffending,
@@ -138,6 +144,7 @@ export const formatAssessmentData = (
         linkedToHarm,
         linkedtoReoffending,
         linkedtoStrengthsOrProtectiveFactors,
+        isAssessmentSectionNotStarted,
         isAssessmentSectionComplete,
         motivationToMakeChanges,
         riskOfSeriousHarmDetails,
@@ -158,9 +165,19 @@ export const formatAssessmentData = (
     assessmentIsComplete = true
   }
 
-  const highScoring = filterAndSortAreas(all, (score, threshold) => score > threshold)
-  const lowScoring = filterAndSortAreas(all, (score, threshold) => score <= threshold)
-  const otherUnsorted = all.filter(area => area.criminogenicNeedsScore === undefined)
+  let incompleteAreas: AssessmentArea[] = []
+
+  if (!assessmentIsComplete) {
+    incompleteAreas = all
+      .filter(area => area.isAssessmentSectionComplete === false)
+      .sort((a, b) => a.title.localeCompare(b.title))
+  }
+
+  const completeAreas = all.filter(area => area.isAssessmentSectionComplete === true)
+
+  const highScoring = filterAndSortAreas(completeAreas, (score, threshold) => score > threshold)
+  const lowScoring = filterAndSortAreas(completeAreas, (score, threshold) => score <= threshold)
+  const otherUnsorted = completeAreas.filter(area => area.criminogenicNeedsScore === undefined)
 
   // emptyAreas are areas that are missing from the criminogenic needs data
   const emptyAreas = groupAndSortMissingAreas(areaConfigs, crimNeeds)
@@ -170,8 +187,9 @@ export const formatAssessmentData = (
     isAssessmentComplete: assessmentIsComplete,
     versionUpdatedAt: assessment.lastUpdatedTimestampSAN,
     areas: {
-      lowScoring,
+      incompleteAreas,
       highScoring,
+      lowScoring,
       other,
     },
   } as FormattedAssessment
@@ -194,7 +212,7 @@ export const groupAndSortOtherAreas = (other: AssessmentArea[]): AssessmentArea[
 
   // group the areas by the sum of their risk counts, RoSH first
   other.forEach(area => {
-    const riskCount = (area.linkedToHarm === 'yes' ? 2 : 0) + (area.linkedtoReoffending === 'yes' ? 1 : 0)
+    const riskCount = (area.linkedToHarm === 'YES' ? 2 : 0) + (area.linkedtoReoffending === 'YES' ? 1 : 0)
     if (!groupedByRiskCount[riskCount]) {
       groupedByRiskCount[riskCount] = []
     }
@@ -230,11 +248,6 @@ export const motivationText = (optionResult?: string): string => {
     return undefined
   }
   return camelCase(optionResult)
-}
-
-export const dateWithYear = (datetimeString: string): string | null => {
-  if (!datetimeString || isBlank(datetimeString)) return undefined
-  return DateTime.fromISO(datetimeString).toFormat('d MMMM yyyy')
 }
 
 export const yearsAndDaysElapsed = (datetimeStringFrom: string, datetimeStringTo: string): any => {

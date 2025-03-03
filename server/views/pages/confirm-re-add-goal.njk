@@ -6,7 +6,7 @@
 {% from "govuk/components/date-input/macro.njk" import govukDateInput %}
 {% from "moj/components/date-picker/macro.njk" import mojDatePicker %}
 {% from "../components/summary-card/goal-summary-card.njk" import goalSummaryCard %}
-{% from "../components/error-summary/error-summary.njk" import errorSummary %}
+{% from "../components/error-summary/error-summary.njk" import errorSummary with context %}
 
 {% set locale = interpolate(locale, {
   dateOptions: {
@@ -150,7 +150,7 @@
                   name: "action",
                   value: "confirm"
               }) }}
-              <a class="govuk-link govuk-link--no-visited-state" href="/view-removed-goal/{{ data.goal.uuid }}">{{ locale.doNotReAddGoalToPlan }}</a>
+              <a href="/view-removed-goal/{{ data.goal.uuid }}">{{ locale.doNotReAddGoalToPlan }}</a>
           </div>
         </form>
     </div>

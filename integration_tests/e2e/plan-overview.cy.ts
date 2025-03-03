@@ -78,7 +78,7 @@ describe('View Plan Overview for READ_WRITE user', () => {
     cy.checkAccessibility()
   })
 
-  it('Plan with goals and steps should have required links and status as not started', () => {
+  it('Plan with goals and steps should have required links, status as not started, with the correct step counter number, and no compacted format', () => {
     cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
       cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal({ title: 'Test Accommodation' }))
       cy.visit('/plan')
@@ -98,6 +98,10 @@ describe('View Plan Overview for READ_WRITE user', () => {
       cy.contains('a', 'Delete')
       cy.get('.govuk-tag').contains('Not started')
     })
+    cy.get('.govuk-table__head > .govuk-table__row > :nth-child(1)')
+      .should('have.text', 'Who will do this')
+      .parents('.govuk-details')
+      .should('not.exist')
     cy.checkAccessibility()
   })
 
@@ -155,7 +159,7 @@ describe('View Plan Overview for READ_WRITE user', () => {
   })
 
   describe('Tests for an Agreed Plan', () => {
-    it('Agreed plan shows message showing when it was agreed', () => {
+    it('Agreed plan shows message showing when it was agreed, and is formatted with the compact view', () => {
       cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
         cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal({ title: 'Test Accommodation' })).then(goal => {
           cy.addStepToGoal(goal.uuid, DataGenerator.generateStep())
@@ -165,6 +169,11 @@ describe('View Plan Overview for READ_WRITE user', () => {
       planOverview.agreePlan()
       cy.get('.plan-header+p').should('contain', 'agreed to their plan on')
       cy.get('.plan-header+p').should('not.contain', 'Last updated on')
+      cy.get('.step-counter').contains('step completed.')
+      cy.get('.govuk-table__head > .govuk-table__row > :nth-child(1)')
+        .should('have.text', 'Who will do this')
+        .parents('.govuk-details')
+        .should('exist')
     })
 
     it('Agreed plan with `did not agree` shows message showing when it was created', () => {
