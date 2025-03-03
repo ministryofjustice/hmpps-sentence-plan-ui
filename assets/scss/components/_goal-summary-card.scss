@@ -59,19 +59,10 @@
       padding-bottom: govuk-spacing(2);
       box-shadow: inset 0 -1px $govuk-border-colour;
     }
-  }
 
-  &__areas-of-need_agreed {
-    margin-bottom: 0;
-    padding-top: govuk-spacing(4);
-    @include govuk-font($size: 16, $weight: 'normal');
-    & {
-      color: $govuk-secondary-text-colour;
-    }
-
-
-    &:not(:last-child) {
-      box-shadow: inset 0 -1px $govuk-border-colour;
+    &_agreed {
+      @extend .goal-summary-card__areas-of-need;
+      padding-top: govuk-spacing(4);
     }
   }
 
