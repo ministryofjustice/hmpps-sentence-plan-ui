@@ -29,6 +29,10 @@ $white-needs-score-background-colour: #ffffff;
   margin-bottom: 16px;
 }
 
+.needs-score-label__card span {
+  display: block;
+}
+
 @for $i from 0 through 10 {
   .needs-score-label-wrapper--position-#{$i} {
     // set the left margin at the score position minus half the width of the needs-score-label__card below
