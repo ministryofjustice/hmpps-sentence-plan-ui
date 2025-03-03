@@ -58,7 +58,7 @@ jobs:
           make test-up
 
       - name: Telemetry (Track resource usage)
-        uses: catchpoint/workflow-telemetry-action@v2.0.0
+        uses:  catchpoint/workflow-telemetry-action@v2.0.0
 
       - name: Run split Cypress tests
         run: |
