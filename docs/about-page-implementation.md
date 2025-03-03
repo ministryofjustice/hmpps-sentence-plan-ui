@@ -52,11 +52,11 @@ Within the "no score" group we sort it by areas linked to harm first, then linke
 
 The emptyAreas group is sorted alphabetically.
 
-### Error handling
+## Error handling
 
 Error handling is dealt with at the controller level in AboutController.ts; if any of the data retrieval or processing steps listed above fail then it will either render the /about page with an error message, or the user will be redirected to the generic HTTP 500 error page.
 
-### Testing the About page
+## Testing the About page
 
 There are unit tests covering assessmentUtils.ts and AboutController.ts which have decent coverage.
 
