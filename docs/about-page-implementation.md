@@ -2,7 +2,7 @@ The About Person page at /about has quite a lot of logic powering it. This is ho
 
 ## Sentence information
 
-The table of sentence info at the top is powered by data from nDelius. 
+The table of sentence info at the top is powered by data from nDelius.
 
 The data is requested through this chain:
 
@@ -10,15 +10,7 @@ AboutPersonController.ts -> HTTP GET to `/info/pop` -> Sentence Plan API -> ARNS
 
 ## Assessment information
 
-```
-- Explain where data is coming from
-- Explain how data is linked together to eachother/sections
-- Explain how sorting process is decided for scoring/sections
-- Explain how the error handling works, and how these are displayed to the user
-- Maybe(?) explain how the manual testing process works - if still valid
-```
-
-The Assessment information is constructed from a combination of 
+The Assessment information is constructed from a combination of
 
 1. the criminogenic needs in the session that were provided by OASys (the Handover service when running in local/dev environments)
 2. assessment data from the SAN application (wiremock when running in the local environment using [wiremock/mappings/assessment.json])
@@ -26,7 +18,7 @@ The Assessment information is constructed from a combination of
 Once it has been retrieved, these two data sets are passed to `formatAssessmentData` in `assessmentUtils.ts` which takes these steps:
 
 1. Creates a new `AssessmentArea` for each assessment area using `getAssessmentDetailsForArea`, resulting in an array of `AssessmentArea` objects
-2. Decides whether the Assessment is complete or not based on whether any of the `AssessmentArea`s is incomplete. 
+2. Decides whether the Assessment is complete or not based on whether any of the `AssessmentArea`s is incomplete.
 3. Groups the `AssessmentArea`s based on a set of defined criteria
 4. Sorts each group according to its own rules
 
@@ -56,7 +48,7 @@ There is additional handling for a group called `emptyAreas` where we have recei
 
 Within the high and low scoring groups the areas are sorted by the distance between the score and the threshold so that areas with scores much higher than the risk threshold appear first. Where distances between score and threshold are the same we sort alphabetically.
 
-Within the "no score" group we sort it by areas linked to harm first, then linked to reoffending and then alphabetically. 
+Within the "no score" group we sort it by areas linked to harm first, then linked to reoffending and then alphabetically.
 
 The emptyAreas group is sorted alphabetically.
 
