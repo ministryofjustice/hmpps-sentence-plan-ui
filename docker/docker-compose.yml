@@ -42,7 +42,7 @@ services:
       LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY: DEBUG
 
   arns-handover:
-    image: quay.io/hmpps/hmpps-assess-risks-and-needs-handover-service:latest
+    image: ghcr.io/ministryofjustice/hmpps-assess-risks-and-needs-handover-service:latest
     depends_on:
       - redis
     ports:
@@ -92,7 +92,7 @@ services:
       PORT: 3005
 
   coordinator-api:
-    image: quay.io/hmpps/hmpps-assess-risks-and-needs-coordinator-api:latest
+    image: ghcr.io/ministryofjustice/hmpps-assess-risks-and-needs-coordinator-api:latest
     depends_on:
       - postgres
       - hmpps-auth
