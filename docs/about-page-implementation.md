@@ -13,7 +13,7 @@ AboutPersonController.ts -> HTTP GET to `/info/pop` -> Sentence Plan API -> ARNS
 The Assessment information is constructed from a combination of
 
 1. the criminogenic needs in the session that were provided by OASys (the Handover service when running in local/dev environments)
-2. assessment data from the SAN application (wiremock when running in the local environment using [wiremock/mappings/assessment.json])
+2. assessment data from the SAN application (wiremock when running in the local environment using [wiremock/mappings/assessment.json](../wiremock/mappings/assessment.json))
 
 Once it has been retrieved, these two data sets are passed to `formatAssessmentData` in `assessmentUtils.ts` which takes these steps:
 
@@ -64,4 +64,4 @@ There are some cypress tests for the About page but they are minimal and a "best
 
 There are a number of integration tests in https://github.com/ministryofjustice/hmpps-arns-integrations-test-playwright-poc/tree/main/tests which run against the Test environment and do test the end-end journey of making changes in SAN and then making sure they are correctly displayed in Sentence Plan. The Test environment uses a real OASys install called T2.
 
-All other tests are manual; some more from Jean-Yves needed here :)
+All other tests are manual; testing scenarios are described in the Testing area of Confluence.
