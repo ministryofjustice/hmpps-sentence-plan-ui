@@ -5,7 +5,7 @@
       "errorTitle": "Error: Add or change steps - {{ applicationName }}"
     },
     "mainHeading": {
-      "title": "Add or change steps to {{ subject.possessiveName }} goal",
+      "title": "Add or change steps",
       "caption": "{{ goal.title }}"
     },
     "step": {
