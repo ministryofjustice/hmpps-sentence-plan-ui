@@ -22,7 +22,7 @@ Once it has been retrieved, these two data sets are passed to `formatAssessmentD
 3. Groups the `AssessmentArea`s based on a set of defined criteria
 4. Sorts each group according to its own rules
 
-Once returned, this data in handed off to `about.njk` in the normal way and rendered. The `getAssessmentDetailsForArea` is also used for creating the data used in the `_area-assessment-summary` macro used at the top of the 'Create goal', 'Change goal' and 'Add/change steps' pages.
+Once returned, this data is handed off to `about.njk` in the normal way and rendered. The `getAssessmentDetailsForArea` is also used for creating the data used in the `_area-assessment-summary` macro used at the top of the 'Create goal', 'Change goal' and 'Add/change steps' pages.
 
 ### getAssessmentDetailsForArea
 
