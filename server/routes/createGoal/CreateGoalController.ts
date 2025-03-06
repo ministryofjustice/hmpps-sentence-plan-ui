@@ -65,6 +65,9 @@ export default class CreateGoalController {
         })
         .catch((): null => null)
 
+      const currentReturnLink = req.services.sessionService.getReturnLink()
+      const newReturnLink = currentReturnLink === '/about' ? currentReturnLink : `/plan?type=${type}`
+
       req.services.sessionService.setReturnLink(null)
 
       return res.render('pages/create-goal', {
@@ -77,7 +80,7 @@ export default class CreateGoalController {
           dateOptions,
           minimumDatePickerDate,
           assessmentDetailsForArea,
-          returnLink: `/plan?type=${type}`,
+          returnLink: newReturnLink,
           form: req.body,
         },
         errors,
