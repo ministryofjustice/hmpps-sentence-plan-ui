@@ -270,6 +270,15 @@ describe('Rendering About Person for READ_WRITE user', () => {
         })
       })
   })
+  it('Should click create goal then use the back link to return to /about', () => {
+    cy.get('h1').should('include.text', 'About')
+    cy.get('[role="button"]').eq(1).contains('Create goal').click()
+    cy.url().should('include', '/create-goal')
+    cy.get('.govuk-back-link').should('have.attr', 'href').and('include', '/about')
+    cy.get('.govuk-back-link').click()
+    cy.url().should('include', '/about')
+    cy.checkAccessibility()
+  })
 })
 
 describe('Rendering About Person in READ_ONLY', () => {
