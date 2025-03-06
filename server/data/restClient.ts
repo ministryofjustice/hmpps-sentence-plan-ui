@@ -75,16 +75,16 @@ export default class RestClient {
         .responseType(responseType)
         .timeout(this.timeoutConfig())
 
-      return raw ? (result as unknown as Response) : (result.body as Response)
+      return raw ? (result as Response) : (result.body as Response)
     } catch (error) {
       if (handle500 && error.response?.status === 500) {
         const warnings: ErrorSummaryItem[] = []
         warnings.push({ text: errorMessageFor500 })
         error.response.errors = warnings
         logger.info('Handling 500')
-        return error.response as unknown as Response
+        return error.response as Response
       }
-      if (handle404 && error.response?.status === 404) return null as unknown as Response
+      if (handle404 && error.response?.status === 404) return null as Response
       const sanitisedError = sanitiseError(error)
       logger.warn({ ...sanitisedError }, `Error calling ${this.name}, path: '${path}', verb: 'GET'`)
       throw sanitisedError
@@ -113,7 +113,7 @@ export default class RestClient {
         .responseType(responseType)
         .timeout(this.timeoutConfig())
 
-      return raw ? (result as unknown as Response) : (result.body as Response)
+      return raw ? (result as Response) : (result.body as Response)
     } catch (error) {
       const sanitisedError = sanitiseError(error)
       logger.warn({ ...sanitisedError }, `Error calling ${this.name}, path: '${path}', verb: '${method.toUpperCase()}'`)
@@ -155,7 +155,7 @@ export default class RestClient {
         .responseType(responseType)
         .timeout(this.timeoutConfig())
 
-      return raw ? (result as unknown as Response) : (result.body as Response)
+      return raw ? (result as Response) : (result.body as Response)
     } catch (error) {
       const sanitisedError = sanitiseError(error)
       logger.warn({ ...sanitisedError }, `Error calling ${this.name}, path: '${path}', verb: 'DELETE'`)
