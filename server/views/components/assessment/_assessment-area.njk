@@ -1,7 +1,7 @@
 {% from "../../components/need-score/macro.njk" import needsScore %}
 {% from "components/need-score-indicator/macro.njk" import needsScoreIndicator %}
 
-<div class="govuk-accordion" data-module="govuk-accordion" id="accordion-default-{{ loop.index }}">
+<div class="govuk-accordion" data-module="govuk-accordion" id="assessment-accordion-{{ assessmentGroupId }}">
     {% for assessment in formattedAssessments %}
         <div class="govuk-accordion__section" id="{{ assessment.goalRoute }}">
             <div class="govuk-accordion__section-header">
@@ -12,7 +12,7 @@
                     </span>
                 </h3>
                 <div class="govuk-accordion__section-summary govuk-body sp-accordion-tags"
-                     id="accordion-with-summary-sections-summary-{{ loop.index }}">
+                     id="accordion-with-summary-sections-summary-{{ assessment.goalRoute }}-{{ loop.index }}">
                     {% if assessment.isAssessmentSectionComplete and assessment.linkedToHarm === 'YES' %}
                         <span class="moj-badge moj-badge--large moj-badge--purple sp-badge">{{ locale.detail.RoSH }}</span>
                     {% endif %}
@@ -21,7 +21,7 @@
                     {% endif %}
                 </div>
             </div>
-            <div id="accordion-default-content-{{ loop.index }}" class="govuk-accordion__section-content">
+            <div id="assessment-accordion-{{ assessmentGroupId }}-content-{{ loop.index }}" class="govuk-accordion__section-content">
                 {% if assessment.criminogenicNeedMissing %}
                     <p>This information isn't currently available, please check in OASys.</p>
                 {% else %}

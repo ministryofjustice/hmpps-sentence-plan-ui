@@ -29,6 +29,8 @@ describe('Rendering About Person for READ_WRITE user', () => {
         expect(text).to.include('Unpaid work')
         expect(text).to.include('RAR (Rehabilitation activity requirement)')
       })
+
+    cy.checkAccessibility()
   })
 
   it('Should check if the hard-coded entries in Sentence information are displayed correctly', () => {
@@ -268,6 +270,15 @@ describe('Rendering About Person for READ_WRITE user', () => {
         })
       })
   })
+  it('Should click create goal then use the back link to return to /about', () => {
+    cy.get('h1').should('include.text', 'About')
+    cy.get('[role="button"]').eq(1).contains('Create goal').click()
+    cy.url().should('include', '/create-goal')
+    cy.get('.govuk-back-link').should('have.attr', 'href').and('include', '/about')
+    cy.get('.govuk-back-link').click()
+    cy.url().should('include', '/about')
+    cy.checkAccessibility()
+  })
 })
 
 describe('Rendering About Person in READ_ONLY', () => {
@@ -285,6 +296,7 @@ describe('Rendering About Person in READ_ONLY', () => {
     cy.get('h2').eq(3).contains('High-scoring areas from the assessment')
     cy.get('[role="button"]').should('have.length', 1)
     cy.get('[role="button"]').eq(0).should('contain', 'Return to OASys')
+    cy.checkAccessibility()
   })
 
   it('Should check there are no links to create goal', () => {

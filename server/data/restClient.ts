@@ -62,7 +62,7 @@ export default class RestClient {
   }: Request): Promise<Response> {
     logger.info(`${this.name} GET: ${path}`)
     try {
-      const result = await superagent
+      const result: superagent.Response = await superagent
         .get(`${this.apiUrl()}${path}`)
         .query(query)
         .agent(this.agent)
@@ -75,16 +75,16 @@ export default class RestClient {
         .responseType(responseType)
         .timeout(this.timeoutConfig())
 
-      return raw ? result : result.body
+      return raw ? (result as Response) : (result.body as Response)
     } catch (error) {
       if (handle500 && error.response?.status === 500) {
         const warnings: ErrorSummaryItem[] = []
         warnings.push({ text: errorMessageFor500 })
         error.response.errors = warnings
         logger.info('Handling 500')
-        return error.response
+        return error.response as Response
       }
-      if (handle404 && error.response?.status === 404) return null
+      if (handle404 && error.response?.status === 404) return null as Response
       const sanitisedError = sanitiseError(error)
       logger.warn({ ...sanitisedError }, `Error calling ${this.name}, path: '${path}', verb: 'GET'`)
       throw sanitisedError
@@ -97,7 +97,7 @@ export default class RestClient {
   ): Promise<Response> {
     logger.info(`${this.name} ${method.toUpperCase()}: ${path}`)
     try {
-      const result = await superagent[method](`${this.apiUrl()}${path}`)
+      const result: superagent.Response = await superagent[method](`${this.apiUrl()}${path}`)
         .query(query)
         .send(data)
         .agent(this.agent)
@@ -113,7 +113,7 @@ export default class RestClient {
         .responseType(responseType)
         .timeout(this.timeoutConfig())
 
-      return raw ? result : result.body
+      return raw ? (result as Response) : (result.body as Response)
     } catch (error) {
       const sanitisedError = sanitiseError(error)
       logger.warn({ ...sanitisedError }, `Error calling ${this.name}, path: '${path}', verb: '${method.toUpperCase()}'`)
@@ -142,7 +142,7 @@ export default class RestClient {
   }: Request): Promise<Response> {
     logger.info(`${this.name} DELETE: ${path}`)
     try {
-      const result = await superagent
+      const result: superagent.Response = await superagent
         .delete(`${this.apiUrl()}${path}`)
         .query(query)
         .agent(this.agent)
@@ -155,7 +155,7 @@ export default class RestClient {
         .responseType(responseType)
         .timeout(this.timeoutConfig())
 
-      return raw ? result : result.body
+      return raw ? (result as Response) : (result.body as Response)
     } catch (error) {
       const sanitisedError = sanitiseError(error)
       logger.warn({ ...sanitisedError }, `Error calling ${this.name}, path: '${path}', verb: 'DELETE'`)

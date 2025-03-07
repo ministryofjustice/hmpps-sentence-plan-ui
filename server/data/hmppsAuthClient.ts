@@ -43,7 +43,7 @@ export default class HmppsAuthClient {
   }
 
   async getSystemClientToken(): Promise<string> {
-    if (this.getToken()?.expiresAt < Date.now()) {
+    if (this.getToken()?.expiresAt > Date.now()) {
       return this.getToken().token
     }
 
