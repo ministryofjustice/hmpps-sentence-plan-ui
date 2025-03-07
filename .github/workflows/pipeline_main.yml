@@ -13,7 +13,7 @@ permissions:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   helm_lint:
@@ -103,6 +103,7 @@ jobs:
       - node_build
       - node_unit_tests
       - e2e_test
+      - build_docker
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/docker_push.yml@v2
     with:
       docker_registry: 'ghcr.io'
@@ -112,7 +113,9 @@ jobs:
 
   deploy_dev:
     name: Deploy to the development environment
-    needs: publish_docker
+    needs:
+      - build_docker
+      - publish_docker
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@v2
     secrets: inherit
     with:
