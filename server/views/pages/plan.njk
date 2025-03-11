@@ -103,7 +103,7 @@
               {{ locale.notAgreePlan }}
           {%- endif %}
           {%- if data.plan.agreementStatus !== 'DRAFT' %}
-              <a href="/plan-history">{{ locale.viewPlanHistory }}</a>
+              <a class='govuk-!-display-none-print' href="/plan-history">{{ locale.viewPlanHistory }}</a>
           {%- endif %}
       {%- else %}
           {{ locale.addStepSuggestion }}
