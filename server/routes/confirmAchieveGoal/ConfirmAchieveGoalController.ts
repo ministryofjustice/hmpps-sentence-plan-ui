@@ -56,13 +56,8 @@ export default class ConfirmAchieveGoalController {
       }
     }
 
-    const goalData: Partial<NewGoal> = {
-      status: GoalStatus.ACHIEVED,
-      note,
-    }
-
     try {
-      await req.services.goalService.updateGoalStatus(goalData, goalUuid)
+      await req.services.goalService.achieveGoal(note, goalUuid)
       return res.redirect(`/plan?type=achieved&status=achieved`)
     } catch (e) {
       return next(HttpError(500, e.message))
