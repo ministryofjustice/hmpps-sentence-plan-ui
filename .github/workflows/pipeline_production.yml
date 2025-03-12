@@ -115,6 +115,8 @@ jobs:
     name: Deploy to test environment
     needs:
       - build_docker
+      - e2e_test
+      - publish_docker
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@v2 # WORKFLOW_VERSION
     secrets: inherit
     with:
