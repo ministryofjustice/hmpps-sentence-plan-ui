@@ -2,8 +2,14 @@
 [![repo standards badge](https://img.shields.io/badge/dynamic/json?color=blue&style=flat&logo=github&label=MoJ%20Compliant&query=%24.result&url=https%3A%2F%2Foperations-engineering-reports.cloud-platform.service.justice.gov.uk%2Fapi%2Fv1%2Fcompliant_public_repositories%2Fhmpps-sentence-plan-ui)](https://operations-engineering-reports.cloud-platform.service.justice.gov.uk/public-github-repositories.html#hmpps-sentence-plan-ui "Link to report")
 [![CircleCI](https://circleci.com/gh/ministryofjustice/hmpps-sentence-plan-ui/tree/main.svg?style=svg)](https://circleci.com/gh/ministryofjustice/hmpps-sentence-plan-ui)
 
-This project aims to enhance the current process of creating and managing 
+This project aims to enhance the current process of creating and managing
 sentence plans for individuals on probation or in prison.
+
+## Documentation
+
+There is specific implementation documentation for this project in the [docs](./docs) folder.
+
+Other relevant technical docs are in the relevant Confluence space.
 
 ## Pre-requisites
 In order to run this project, the following software is required:

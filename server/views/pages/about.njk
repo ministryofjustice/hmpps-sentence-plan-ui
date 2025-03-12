@@ -115,19 +115,19 @@
           {% if data.formattedAssessmentInfo.areas.incompleteAreas.length > 0 %}
             <h2 class="govuk-heading-m">{{ locale.incompleteAssessment.sectionHeading }}</h2>
             <p class="govuk-body">{{ locale.incompleteAssessment.sectionParagraph }}</p>
-            {{ renderAssessment(data.formattedAssessmentInfo.areas.incompleteAreas, locale, data.readWrite) }}
+            {{ renderAssessment('incompleteAreas', data.formattedAssessmentInfo.areas.incompleteAreas, locale, data.readWrite) }}
           {% endif %}
 
             <h2 class="govuk-heading-m">{{ locale.highScoring.sectionHeading }}</h2>
             {% if data.formattedAssessmentInfo.areas.highScoring.length > 0 %}
-                {{ renderAssessment(data.formattedAssessmentInfo.areas.highScoring, locale, data.readWrite) }}
+                {{ renderAssessment('highScoring', data.formattedAssessmentInfo.areas.highScoring, locale, data.readWrite) }}
             {% else %}
                 <p class="govuk-body">{{ locale.highScoring.sectionEmptyParagraph }}</h2>
             {% endif %}
 
             <h2 class="govuk-heading-m">{{ locale.lowScoring.sectionHeading }}</h2>
             {% if data.formattedAssessmentInfo.areas.lowScoring.length > 0 %}
-                {{ renderAssessment(data.formattedAssessmentInfo.areas.lowScoring, locale, data.readWrite) }}
+                {{ renderAssessment('lowScoring', data.formattedAssessmentInfo.areas.lowScoring, locale, data.readWrite) }}
             {% else %}
                 <p class="govuk-body">{{ locale.lowScoring.sectionEmptyParagraph }}</h2>
             {% endif %}
@@ -135,7 +135,7 @@
             <h2 class="govuk-heading-m">{{ locale.withoutScoring.sectionHeading }}</h2>
             <p id="other-areas-paragraph" class="govuk-body">{{ locale.withoutScoring.sectionParagraph }}</h2>
             {% if data.formattedAssessmentInfo.areas.other.length > 0 %}
-                {{ renderAssessment(data.formattedAssessmentInfo.areas.other, locale, data.readWrite) }}
+                {{ renderAssessment('withoutScoring', data.formattedAssessmentInfo.areas.other, locale, data.readWrite) }}
             {% endif %}
 
         </div>

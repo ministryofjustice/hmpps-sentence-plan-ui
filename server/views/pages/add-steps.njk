@@ -77,9 +77,9 @@
     </div>
 </div>
 
-<form id="create-goal-form" method="POST">
+<form id="add-steps-form" method="POST">
     <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
-    <input type="hidden" id="_areaOfNeed" value="{{ data.areaOfNeed }}"/>
+    <input type="hidden" name="goalStatus" value="{{ data.goal.status }}"/>
     {% set steps = data.form.steps if data.form.steps and data.form.steps.length > 0 else [{}] %}
 
     <button aria-hidden="true" tabindex="-1" value="add-step" type="submit" name="action" class="govuk-visually-hidden">Visually hidden add another step</button>

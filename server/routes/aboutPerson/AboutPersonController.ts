@@ -34,6 +34,8 @@ export default class AboutPersonController {
       const pageId = 'about'
       const readWrite = req.services.sessionService.getAccessMode() === AccessMode.READ_WRITE
 
+      req.services.sessionService.setReturnLink(`/about`)
+
       return res.render('pages/about', {
         locale: locale.en,
         data: {
