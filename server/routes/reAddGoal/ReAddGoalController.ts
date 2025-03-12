@@ -8,7 +8,6 @@ import { requireAccessMode } from '../../middleware/authorisationMiddleware'
 import { AccessMode } from '../../@types/Handover'
 import { HttpError } from '../../utils/HttpError'
 import { goalStatusToTabName } from '../../utils/utils'
-import { NewGoal } from '../../@types/NewGoalType'
 import { getDateOptions, getGoalTargetDate } from '../../utils/goalTargetDateUtils'
 import { ReAddGoal } from '../../@types/ReAddGoal'
 

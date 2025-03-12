@@ -6,7 +6,6 @@ import locale from './locale.json'
 import testHandoverContext from '../../testutils/data/handoverData'
 import ReAddGoalController from './ReAddGoalController'
 import { testGoal } from '../../testutils/data/goalData'
-import { GoalStatus } from '../../@types/GoalType'
 import runMiddlewareChain from '../../testutils/runMiddlewareChain'
 import { goalStatusToTabName } from '../../utils/utils'
 

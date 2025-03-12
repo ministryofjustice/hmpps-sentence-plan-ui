@@ -6,7 +6,6 @@ import locale from './locale.json'
 import testHandoverContext from '../../testutils/data/handoverData'
 import ConfirmAchieveGoalController from './ConfirmAchieveGoalController'
 import { testGoal } from '../../testutils/data/goalData'
-import { GoalStatus } from '../../@types/GoalType'
 import runMiddlewareChain from '../../testutils/runMiddlewareChain'
 
 jest.mock('../../middleware/authorisationMiddleware', () => ({

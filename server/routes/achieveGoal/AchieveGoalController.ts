@@ -1,6 +1,4 @@
 import { NextFunction, Request, Response } from 'express'
-import { NewGoal } from '../../@types/NewGoalType'
-import { GoalStatus } from '../../@types/GoalType'
 import locale from './locale.json'
 import validateRequest from '../../middleware/validationMiddleware'
 import transformRequest from '../../middleware/transformMiddleware'
