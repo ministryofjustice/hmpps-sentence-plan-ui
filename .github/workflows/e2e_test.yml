@@ -72,6 +72,14 @@ jobs:
           path: |
             test_results/cypress/
 
+      - name: Archive screenshots
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshots_${{ inputs.matrix-container }}
+          path: |
+            ./integration_tests/screenshots/**/*
+
       - name: Export container logs
         run: make save-logs PROJECT_NAME="hmpps-sentence-plan-test" OUTPUT_LOGS_DIR=${{ runner.temp }}/docker-logs
 
