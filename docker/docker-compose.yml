@@ -117,7 +117,7 @@ services:
       APP_STRATEGIES_ASSESSMENT: false
 
   api:
-    image: ghcr.io/ministryofjustice/hmpps-sentence-plan:2025-03-12.9.c58bd01
+    image: ghcr.io/ministryofjustice/hmpps-sentence-plan:latest
     depends_on:
       - postgres
       - hmpps-auth
