@@ -6,7 +6,6 @@ import locale from './locale.json'
 import testHandoverContext from '../../testutils/data/handoverData'
 import ReAddGoalController from './ReAddGoalController'
 import { testGoal } from '../../testutils/data/goalData'
-import { GoalStatus } from '../../@types/GoalType'
 import runMiddlewareChain from '../../testutils/runMiddlewareChain'
 import { goalStatusToTabName } from '../../utils/utils'
 
@@ -29,7 +28,7 @@ jest.mock('../../services/sessionService', () => {
 jest.mock('../../services/sentence-plan/goalService', () => {
   return jest.fn().mockImplementation(() => ({
     getGoal: jest.fn().mockReturnValue(testGoal),
-    updateGoalStatus: jest.fn().mockReturnValue(testGoal),
+    reAddGoal: jest.fn().mockReturnValue(testGoal),
   }))
 })
 
@@ -114,16 +113,15 @@ describe('ReAddGoalController', () => {
 
       req.method = 'POST'
 
-      const expectedPartialNewGoal = {
-        status: GoalStatus.ACTIVE,
+      const expectedReAddGoal = {
         note: 'Re-added goal because...',
         targetDate: testGoal.targetDate,
       }
 
       await runMiddlewareChain(controller.post, req, res, next)
 
-      expect(req.services.goalService.updateGoalStatus).toHaveBeenCalledWith(expectedPartialNewGoal, req.params.uuid)
-      expect(res.redirect).toHaveBeenCalledWith(`/plan?type=${goalStatusToTabName(expectedPartialNewGoal.status)}`)
+      expect(req.services.goalService.reAddGoal).toHaveBeenCalledWith(expectedReAddGoal, req.params.uuid)
+      expect(res.redirect).toHaveBeenCalledWith(`/plan?type=${goalStatusToTabName(testGoal.status)}`)
       expect(next).not.toHaveBeenCalled()
     })
   })

@@ -3,8 +3,6 @@ import * as superagent from 'superagent'
 import localeDelete from './locale-delete.json'
 import localeRemove from './locale-remove.json'
 import URLs from '../URLs'
-import { NewGoal } from '../../@types/NewGoalType'
-import { GoalStatus } from '../../@types/GoalType'
 import { PlanAgreementStatus } from '../../@types/PlanType'
 import transformRequest from '../../middleware/transformMiddleware'
 import RemoveGoalPostModel from './models/RemoveGoalPostModel'
@@ -71,16 +69,8 @@ export default class RemoveGoalController {
           return res.redirect(`${URLs.PLAN_OVERVIEW}?type=${type}&status=deleted`)
         }
       } else if (req.body.action === 'remove') {
-        const goalData: Partial<NewGoal> = {
-          status: GoalStatus.REMOVED,
-        }
-
-        if (req.body['goal-removal-note']) {
-          goalData.note = req.body['goal-removal-note']
-        }
-
         try {
-          await req.services.goalService.updateGoalStatus(goalData, goalUuid)
+          await req.services.goalService.removeGoal(req.body['goal-removal-note'], goalUuid)
           return res.redirect(`${URLs.PLAN_OVERVIEW}?type=removed&status=removed`)
         } catch (e) {
           return next(e)
