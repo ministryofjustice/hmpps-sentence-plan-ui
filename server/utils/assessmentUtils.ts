@@ -175,14 +175,14 @@ export const formatAssessmentData = (
 
   const completeAreas = all.filter(area => area.isAssessmentSectionComplete === true)
 
-  const highScoring = filterAndSortAreas(completeAreas, (score, threshold) => score > threshold)
-  const lowScoring = filterAndSortAreas(completeAreas, (score, threshold) => score <= threshold)
-  const otherUnsorted = completeAreas.filter(area => area.criminogenicNeedsScore === undefined)
+  const highScoring = groupAndSortByRisk(filterAndSortAreas(completeAreas, (score, threshold) => score > threshold))
+  const lowScoring = groupAndSortByRisk(filterAndSortAreas(completeAreas, (score, threshold) => score <= threshold))
+  const otherUnsorted = groupAndSortByRisk(completeAreas.filter(area => area.criminogenicNeedsScore === undefined))
 
   // emptyAreas are areas that are missing from the criminogenic needs data
   const emptyAreas = groupAndSortMissingAreas(areaConfigs, crimNeeds)
 
-  const other = groupAndSortOtherAreas(otherUnsorted).concat(emptyAreas)
+  const other = groupAndSortByRisk(otherUnsorted).concat(emptyAreas)
   return {
     isAssessmentComplete: assessmentIsComplete,
     versionUpdatedAt: assessment.lastUpdatedTimestampSAN,
@@ -195,6 +195,7 @@ export const formatAssessmentData = (
   } as FormattedAssessment
 }
 
+// todo can we remove this now?
 const filterAndSortAreas = (areas: AssessmentArea[], comparator: (score: number, threshold: number) => boolean) => {
   return areas
     .filter(area => comparator(Number(area.overallScore), area.thresholdValue))
@@ -207,7 +208,7 @@ const filterAndSortAreas = (areas: AssessmentArea[], comparator: (score: number,
     })
 }
 
-export const groupAndSortOtherAreas = (other: AssessmentArea[]): AssessmentArea[] => {
+export const groupAndSortByRisk = (other: AssessmentArea[]): AssessmentArea[] => {
   const groupedByRiskCount: Record<number, AssessmentArea[]> = {}
 
   // group the areas by the sum of their risk counts, RoSH first
@@ -219,11 +220,24 @@ export const groupAndSortOtherAreas = (other: AssessmentArea[]): AssessmentArea[
     groupedByRiskCount[riskCount].push(area)
   })
 
-  // invert the order of the keys and sort the areas by title
-  return Object.keys(groupedByRiskCount)
+  // For each group of areas, sort them by the distance between their overall score and the threshold value.
+  // If the distances are equal, sort by title
+  const orderedAssessmentAreas = Object.keys(groupedByRiskCount)
     .sort((a, b) => Number(b) - Number(a))
-    .map(key => groupedByRiskCount[Number(key)].sort((a, b) => a.title.localeCompare(b.title)))
+    .map(key =>
+      groupedByRiskCount[Number(key)].sort((a, b) => {
+        const distanceA = Number(a.overallScore) - a.thresholdValue
+        const distanceB = Number(b.overallScore) - b.thresholdValue
+        if (distanceA === distanceB) {
+          return a.title.localeCompare(b.title)
+        }
+        return distanceA > distanceB ? -1 : 1
+      }),
+    )
     .reduce((acc, val) => acc.concat(val), [])
+
+  // invert the order of the keys and sort the areas by title
+  return orderedAssessmentAreas
 }
 
 // This function is used to group and sort the areas that are missing from the criminogenic needs data

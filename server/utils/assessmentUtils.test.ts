@@ -10,7 +10,7 @@ import { areaConfigs } from './assessmentAreaConfig.json'
 import { AssessmentArea } from '../@types/Assessment'
 import {
   formatAssessmentData,
-  groupAndSortOtherAreas,
+  groupAndSortByRisk,
   motivationText,
   sentenceLength,
   yearsAndDaysElapsed,
@@ -146,29 +146,33 @@ describe('sentence length', () => {
   })
 })
 
-describe('groupAndSortOtherAreas', () => {
+describe('groupAndSortAreasByRisk', () => {
   it('groups and sorts areas by risk count', () => {
-    const areas: AssessmentArea[] = [
-      { title: 'Area D', linkedToHarm: 'NO', linkedtoReoffending: 'NO' } as AssessmentArea,
-      { title: 'Area A', linkedToHarm: 'YES', linkedtoReoffending: 'YES' } as AssessmentArea,
-      { title: 'Area B', linkedToHarm: 'YES', linkedtoReoffending: 'NO' } as AssessmentArea,
-      { title: 'Area C', linkedToHarm: 'NO', linkedtoReoffending: 'YES' } as AssessmentArea,
+    const areas: Partial<AssessmentArea>[] = [
+      { title: 'Area A', linkedToHarm: 'YES', linkedtoReoffending: 'YES', overallScore: '2', thresholdValue: 5 },
+      { title: 'Area B', linkedToHarm: 'YES', linkedtoReoffending: 'NO', overallScore: '5', thresholdValue: 5 },
+      { title: 'Area C', linkedToHarm: 'NO', linkedtoReoffending: 'YES', overallScore: '6', thresholdValue: 5 },
+      { title: 'Area D', linkedToHarm: 'NO', linkedtoReoffending: 'NO', overallScore: '10', thresholdValue: 5 },
+      { title: 'Area E', linkedToHarm: 'YES', linkedtoReoffending: 'YES', overallScore: '8', thresholdValue: 5 },
+      { title: 'Area F', linkedToHarm: 'NO', linkedtoReoffending: 'YES', overallScore: '7', thresholdValue: 5 },
     ]
 
-    const result = groupAndSortOtherAreas(areas)
+    const result = groupAndSortByRisk(areas as AssessmentArea[])
 
     expect(result).toEqual([
-      { title: 'Area A', linkedToHarm: 'YES', linkedtoReoffending: 'YES' },
-      { title: 'Area B', linkedToHarm: 'YES', linkedtoReoffending: 'NO' },
-      { title: 'Area C', linkedToHarm: 'NO', linkedtoReoffending: 'YES' },
-      { title: 'Area D', linkedToHarm: 'NO', linkedtoReoffending: 'NO' },
+      { title: 'Area E', linkedToHarm: 'YES', linkedtoReoffending: 'YES', overallScore: '8', thresholdValue: 5 },
+      { title: 'Area A', linkedToHarm: 'YES', linkedtoReoffending: 'YES', overallScore: '2', thresholdValue: 5 },
+      { title: 'Area B', linkedToHarm: 'YES', linkedtoReoffending: 'NO', overallScore: '5', thresholdValue: 5 },
+      { title: 'Area F', linkedToHarm: 'NO', linkedtoReoffending: 'YES', overallScore: '7', thresholdValue: 5 },
+      { title: 'Area C', linkedToHarm: 'NO', linkedtoReoffending: 'YES', overallScore: '6', thresholdValue: 5 },
+      { title: 'Area D', linkedToHarm: 'NO', linkedtoReoffending: 'NO', overallScore: '10', thresholdValue: 5 },
     ])
   })
 
   it('handles empty array', () => {
     const areas: AssessmentArea[] = []
 
-    const result = groupAndSortOtherAreas(areas)
+    const result = groupAndSortByRisk(areas)
 
     expect(result).toEqual([])
   })
@@ -179,7 +183,7 @@ describe('groupAndSortOtherAreas', () => {
       { title: 'Area A', linkedToHarm: 'YES', linkedtoReoffending: 'NO' } as AssessmentArea,
     ]
 
-    const result = groupAndSortOtherAreas(areas)
+    const result = groupAndSortByRisk(areas)
 
     expect(result).toEqual([
       { title: 'Area A', linkedToHarm: 'YES', linkedtoReoffending: 'NO' },
@@ -193,7 +197,7 @@ describe('groupAndSortOtherAreas', () => {
       { title: 'Area B', linkedToHarm: 'YES', linkedtoReoffending: undefined } as AssessmentArea,
     ]
 
-    const result = groupAndSortOtherAreas(areas)
+    const result = groupAndSortByRisk(areas)
 
     expect(result).toEqual([
       { title: 'Area B', linkedToHarm: 'YES', linkedtoReoffending: undefined },
