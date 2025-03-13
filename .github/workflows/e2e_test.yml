@@ -81,10 +81,11 @@ jobs:
             ./integration_tests/screenshots/**/*
 
       - name: Export container logs
+        if: failure()
         run: make save-logs PROJECT_NAME="hmpps-sentence-plan-test" OUTPUT_LOGS_DIR=${{ runner.temp }}/docker-logs
 
       - name: Upload docker logs
-        if: '!cancelled()'
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: docker_logs_${{ inputs.matrix-container }}
