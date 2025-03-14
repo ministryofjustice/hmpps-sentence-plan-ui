@@ -14,6 +14,13 @@
 {% endblock %}
 
 {% block header %}
+  {% if deploymentName %}
+    <div class="custom-deployment-banner">
+      <span class="govuk-body">
+        <u><strong>Notice</strong></u>: You are viewing deployment <strong>{{ ephemeralDeploymentName }}</strong>.
+      </span>
+    </div>
+  {% endif %}
 <div class="govuk-!-display-none-print">
   {% include "./header.njk" %}
   {% if data.popData %}
