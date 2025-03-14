@@ -40,23 +40,19 @@ describe('Rendering About Person for READ_WRITE user', () => {
     cy.get('tbody > :nth-child(2) > :nth-child(4)').contains('3 days')
   })
 
-  it('Should check if main titles of hard-coded high-scoring areas from the assessment are displayed correctly and in order with the correct risk marker', () => {
+  it('Should check if titles of high-scoring areas are displayed in the right order', () => {
     const expectedText = [
-      'Personal relationships and community',
       'Accommodation',
-      'Thinking, behaviours and attitudes',
       'Alcohol use',
       'Employment and education',
-      'Drug use',
-      'Finances',
-      'Health and wellbeing',
+      'Thinking, behaviours and attitudes',
     ]
-    cy.get('.govuk-accordion__section-heading-text-focus')
+    cy.get('#assessment-accordion-highScoring .govuk-accordion__section-heading-text-focus')
       .then($reduced => $reduced.toArray().map(el => el.innerText.trim())) // trim whitespace
       .should('deep.equal', expectedText)
   })
 
-  it('Should check the hard-coded labels appear next to the correct, predetermined areas in correct order', () => {
+  it('Should check the hard-coded labels appear next to the correct areas', () => {
     // this is set to relLinkedToReoffending: 'YES', in backend.ts but doesn't display because the section is incomplete
     cy.get('#personal-relationships-and-community .moj-badge').should('not.exist')
 
@@ -76,18 +72,16 @@ describe('Rendering About Person for READ_WRITE user', () => {
     cy.get('#health-and-wellbeing .moj-badge').should('not.exist')
   })
 
-  it('Should check all hard-coded links in each assessment section are in the expected order', () => {
-    cy.get('.govuk-accordion__show-all').click({ multiple: true })
-
+  it('Should check links in each assessment section are in the expected order', () => {
     const areas = [
       { text: 'Create personal relationships and community goal', href: 'personal-relationships-and-community' },
       { text: 'Create accommodation goal', href: 'accommodation' },
-      { text: 'Create thinking, behaviours and attitudes goal', href: 'thinking-behaviours-and-attitudes' },
       { text: 'Create alcohol use goal', href: 'alcohol-use' },
       { text: 'Create employment and education goal', href: 'employment-and-education' },
+      { text: 'Create thinking, behaviours and attitudes goal', href: 'thinking-behaviours-and-attitudes' },
       { text: 'Create drug use goal', href: 'drug-use' },
-      { text: 'Create finances goal', href: 'finances' },
       { text: 'Create health and wellbeing goal', href: 'health-and-wellbeing' },
+      { text: 'Create finances goal', href: 'finances' },
     ]
 
     areas.forEach((area, index) => {

@@ -46,9 +46,14 @@ There is additional handling for a group called `emptyAreas` where we have recei
 
 ### Sorting data in AssessmentArea groups
 
-Within the high and low scoring groups the areas are sorted by the distance between the score and the threshold so that areas with scores much higher than the risk threshold appear first. Where distances between score and threshold are the same we sort alphabetically.
+In each of the High, Low and No score groups we order like this:
 
-Within the "no score" group we sort it by areas linked to harm first, then linked to reoffending and then alphabetically.
+1. Areas linked to harm AND linked to reoffending
+2. Areas linked to harm only
+3. Areas linked to reoffending only
+4. Areas not linked to harm or reoffending
+
+In each of these groups we then sort by the distance between the score and the threshold so that areas with scores higher than the risk threshold appear first. Where distances between score and threshold are the same we sort alphabetically.
 
 The emptyAreas group is sorted alphabetically.
 
