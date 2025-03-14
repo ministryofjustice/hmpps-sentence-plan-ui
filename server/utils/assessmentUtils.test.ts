@@ -178,16 +178,16 @@ describe('groupAndSortAreasByRisk', () => {
   })
 
   it('sorts areas alphabetically within the same risk count', () => {
-    const areas: AssessmentArea[] = [
-      { title: 'Area B', linkedToHarm: 'YES', linkedtoReoffending: 'NO' } as AssessmentArea,
-      { title: 'Area A', linkedToHarm: 'YES', linkedtoReoffending: 'NO' } as AssessmentArea,
+    const areas: Partial<AssessmentArea>[] = [
+      { title: 'Area B', linkedToHarm: 'YES', linkedtoReoffending: 'NO', overallScore: '2', thresholdValue: 5 },
+      { title: 'Area A', linkedToHarm: 'YES', linkedtoReoffending: 'NO', overallScore: '2', thresholdValue: 5 },
     ]
 
-    const result = groupAndSortByRisk(areas)
+    const result = groupAndSortByRisk(areas as AssessmentArea[])
 
     expect(result).toEqual([
-      { title: 'Area A', linkedToHarm: 'YES', linkedtoReoffending: 'NO' },
-      { title: 'Area B', linkedToHarm: 'YES', linkedtoReoffending: 'NO' },
+      { title: 'Area A', linkedToHarm: 'YES', linkedtoReoffending: 'NO', overallScore: '2', thresholdValue: 5 },
+      { title: 'Area B', linkedToHarm: 'YES', linkedtoReoffending: 'NO', overallScore: '2', thresholdValue: 5 },
     ])
   })
 
