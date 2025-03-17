@@ -19,7 +19,7 @@ jest.mock('../../services/sentence-plan/referentialDataService', () => {
 
 jest.mock('../../services/sentence-plan/assessmentService', () => {
   return jest.fn().mockImplementation(() => ({
-    getAssessmentByUuid: jest.fn().mockReturnValue(incompleteAssessmentData),
+    getAssessmentByUuid: jest.fn().mockResolvedValue(incompleteAssessmentData),
   }))
 })
 
@@ -62,7 +62,7 @@ afterEach(() => {
 })
 
 describe(`GET ${URLs.ABOUT_PERSON}`, () => {
-  it('should render about pop page', () => {
+  it('should render About page', () => {
     return request(app)
       .get(URLs.ABOUT_PERSON)
       .expect('Content-Type', /html/)
