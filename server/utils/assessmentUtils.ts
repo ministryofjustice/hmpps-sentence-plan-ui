@@ -197,9 +197,9 @@ export const formatAssessmentData = (
 
 // 1. Invert the order of the groups of AssessmentArea score rankings (highest first)
 // 2. For each group of areas, sort them by the distance between their overall score and the threshold value.
-// 3. If the distances are equal, sort by title
+// 3. If the distances are equal, sort alphabetically by title
 function sortByScoreAndTitle(groupedByRiskCount: Record<number, AssessmentArea[]>) {
-  const orderedAssessmentAreas = Object.keys(groupedByRiskCount)
+  return Object.keys(groupedByRiskCount)
     .sort((a, b) => Number(b) - Number(a))
     .map(key =>
       groupedByRiskCount[Number(key)].sort((a, b) => {
@@ -212,7 +212,6 @@ function sortByScoreAndTitle(groupedByRiskCount: Record<number, AssessmentArea[]
       }),
     )
     .reduce((acc, val) => acc.concat(val), [])
-  return orderedAssessmentAreas
 }
 
 export const groupAndSortByRisk = (other: AssessmentArea[]): AssessmentArea[] => {
