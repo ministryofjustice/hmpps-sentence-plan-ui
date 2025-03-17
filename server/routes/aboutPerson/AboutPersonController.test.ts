@@ -45,7 +45,7 @@ jest.mock('../../services/sessionService', () => {
 
 jest.mock('../../services/sentence-plan/infoService', () => {
   return jest.fn().mockImplementation(() => ({
-    getPopData: jest.fn().mockReturnValue(popData),
+    getPopData: jest.fn().mockResolvedValue(popData),
   }))
 })
 
@@ -57,7 +57,7 @@ describe('AboutPersonController - assessment complete', () => {
 
   beforeEach(() => {
     controller = new AboutPersonController()
-    req.services.assessmentService.getAssessmentByUuid = jest.fn().mockReturnValue(completeAssessmentData)
+    req.services.assessmentService.getAssessmentByUuid = jest.fn().mockResolvedValue(completeAssessmentData)
     assessmentAreas = formatAssessmentData(fullCrimNeeds, completeAssessmentData, areaConfigs)
   })
 
@@ -117,7 +117,7 @@ describe('AboutPersonController - assessment incomplete', () => {
 
   beforeEach(() => {
     controller = new AboutPersonController()
-    req.services.assessmentService.getAssessmentByUuid = jest.fn().mockReturnValue(incompleteAssessmentData)
+    req.services.assessmentService.getAssessmentByUuid = jest.fn().mockResolvedValue(incompleteAssessmentData)
     assessmentAreas = formatAssessmentData(fullCrimNeeds, incompleteAssessmentData, areaConfigs)
   })
 
