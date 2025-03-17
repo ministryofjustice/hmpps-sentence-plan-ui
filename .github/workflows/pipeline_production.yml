@@ -48,6 +48,7 @@ jobs:
       load: true
       docker_multiplatform: false
       upload_image_artifact: true
+      image_artifact_retention_days: 10
 
   e2e_test:
     needs: [ build_docker ]
