@@ -49,6 +49,28 @@ jest.mock('../../services/sentence-plan/infoService', () => {
   }))
 })
 
+describe('AboutPersonController - API data error handling', () => {
+  let controller: AboutPersonController
+  const req = mockReq()
+  const res = mockRes()
+
+  beforeEach(() => {
+    controller = new AboutPersonController()
+    req.services.assessmentService.getAssessmentByUuid = jest.fn().mockRejectedValue(new Error('API error'))
+    req.services.infoService.getPopData = jest.fn().mockRejectedValue(new Error('API error'))
+  })
+
+  describe('Get About Person', () => {
+    it('should return a 500 error if the API call fails', async () => {
+      const next = jest.fn()
+
+      await controller.get(req, res, next)
+
+      expect(next).toHaveBeenCalledWith(expect.objectContaining({ status: 500 }))
+    })
+  })
+})
+
 describe('AboutPersonController - assessment complete', () => {
   let controller: AboutPersonController
   let assessmentAreas: FormattedAssessment
