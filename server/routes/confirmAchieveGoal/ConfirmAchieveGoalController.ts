@@ -1,6 +1,4 @@
 import { NextFunction, Request, Response } from 'express'
-import { NewGoal } from '../../@types/NewGoalType'
-import { GoalStatus } from '../../@types/GoalType'
 import locale from './locale.json'
 import validateRequest from '../../middleware/validationMiddleware'
 import transformRequest from '../../middleware/transformMiddleware'
@@ -56,13 +54,8 @@ export default class ConfirmAchieveGoalController {
       }
     }
 
-    const goalData: Partial<NewGoal> = {
-      status: GoalStatus.ACHIEVED,
-      note,
-    }
-
     try {
-      await req.services.goalService.updateGoalStatus(goalData, goalUuid)
+      await req.services.goalService.achieveGoal(note, goalUuid)
       return res.redirect(`/plan?type=achieved&status=achieved`)
     } catch (e) {
       return next(HttpError(500, e.message))

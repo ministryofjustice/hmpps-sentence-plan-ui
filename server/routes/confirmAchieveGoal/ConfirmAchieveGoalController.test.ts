@@ -6,7 +6,6 @@ import locale from './locale.json'
 import testHandoverContext from '../../testutils/data/handoverData'
 import ConfirmAchieveGoalController from './ConfirmAchieveGoalController'
 import { testGoal } from '../../testutils/data/goalData'
-import { GoalStatus } from '../../@types/GoalType'
 import runMiddlewareChain from '../../testutils/runMiddlewareChain'
 
 jest.mock('../../middleware/authorisationMiddleware', () => ({
@@ -28,7 +27,7 @@ jest.mock('../../services/sessionService', () => {
 jest.mock('../../services/sentence-plan/goalService', () => {
   return jest.fn().mockImplementation(() => ({
     getGoal: jest.fn().mockReturnValue(testGoal),
-    updateGoalStatus: jest.fn().mockReturnValue(testGoal),
+    achieveGoal: jest.fn().mockReturnValue(testGoal),
   }))
 })
 
@@ -99,14 +98,11 @@ describe('AchieveGoalController', () => {
 
       req.method = 'POST'
 
-      const expectedPartialNewGoal = {
-        status: GoalStatus.ACHIEVED,
-        note: 'Note body',
-      }
+      const expectedNote = 'Note body'
 
       await runMiddlewareChain(controller.post, req, res, next)
 
-      expect(req.services.goalService.updateGoalStatus).toHaveBeenCalledWith(expectedPartialNewGoal, 'some-uuid')
+      expect(req.services.goalService.achieveGoal).toHaveBeenCalledWith(expectedNote, 'some-uuid')
       expect(res.redirect).toHaveBeenCalledWith('/plan?type=achieved&status=achieved')
       expect(next).not.toHaveBeenCalled()
     })
