@@ -203,17 +203,10 @@ function sortByScoreAndTitle(groupedByRiskCount: Record<number, AssessmentArea[]
     .sort((a, b) => Number(b) - Number(a))
     .map(key =>
       groupedByRiskCount[Number(key)].sort((a, b) => {
-        if (
-          a.overallScore === undefined ||
-          a.thresholdValue === undefined ||
-          b.overallScore === undefined ||
-          b.thresholdValue === undefined
-        ) {
-          return a.title.localeCompare(b.title)
-        }
         const distanceA = Number(a.overallScore) - a.thresholdValue
         const distanceB = Number(b.overallScore) - b.thresholdValue
-        if (distanceA === distanceB) {
+        // if the distance from thresholds are the same or if we are missing the scores, we should sort alphabetically
+        if (distanceA === distanceB || Number.isNaN(distanceA) || Number.isNaN(distanceA)) {
           return a.title.localeCompare(b.title)
         }
         return distanceA > distanceB ? -1 : 1
