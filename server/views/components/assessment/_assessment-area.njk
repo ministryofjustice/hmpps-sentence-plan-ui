@@ -1,11 +1,51 @@
 {% from "../../components/need-score/macro.njk" import needsScore %}
 {% from "components/need-score-indicator/macro.njk" import needsScoreIndicator %}
 
-<div class="govuk-accordion" data-module="govuk-accordion" id="assessment-accordion-{{ assessmentGroupId }}">
+{#{% switch assessmentGroupId %}#}
+{#  {% when 'incompleteAreas' %}#}
+{#    <div class="govuk-accordion" data-module="govuk-accordion" #}
+{#        id="assessment-accordion-{{ assessmentGroupId }}" #}
+{#        aria-label="{{ locale.ariaHiddenText.assessmentGroup.incompleteAreas }}">#}
+{#  {% when 'highScoring' %}#}
+{#    <div class="govuk-accordion" data-module="govuk-accordion"#}
+{#        id="assessment-accordion-{{ assessmentGroupId }}"#}
+{#        aria-label="{{ locale.ariaHiddenText.assessmentGroup.highScoring }}">#}
+{#  {% when 'lowScoring' %}#}
+{#    <div class="govuk-accordion" data-module="govuk-accordion"#}
+{#         id="assessment-accordion-{{ assessmentGroupId }}"#}
+{#         aria-label="{{ locale.ariaHiddenText.assessmentGroup.lowScoring }}">#}
+{#  {% when 'withoutScoring' %}#}
+{#    <div class="govuk-accordion" data-module="govuk-accordion"#}
+{#         id="assessment-accordion-{{ assessmentGroupId }}"#}
+{#         aria-label="{{ locale.ariaHiddenText.assessmentGroup.incompleteAreas }}">#}
+{#  {% default %}#}
+{#    <div class="govuk-accordion" data-module="govuk-accordion"#}
+{#         id="assessment-accordion-{{ assessmentGroupId }}"#}
+{#         aria-label="">#}
+{#{% endswitch %}#}
+
+{#SOLUTION 2#}
+{#      <div class="govuk-accordion" data-module="govuk-accordion"#}
+{#           id="assessment-accordion-{{ assessmentGroupId }}"#}
+{#           aria-label="#}
+{#           {% if assessmentGroupId == 'incompleteAreas' %}#}
+{#              {{ locale.ariaHiddenText.assessmentGroup.incompleteAreas }}#}
+{#           {% if assessmentGroupId == 'highScoring' %}#}
+{#              {{ locale.ariaHiddenText.assessmentGroup.highScoring }}#}
+{#           {% if assessmentGroupId == 'lowScoring' %}#}
+{#              {{ locale.ariaHiddenText.assessmentGroup.lowScoring }}#}
+{#           {% if assessmentGroupId == 'withoutScoring' %}#}
+{#              {{ locale.ariaHiddenText.assessmentGroup.withoutScoring }}#}
+{#           {% else %}#}
+
+{#           {% endif %}">#}
+        <div class="govuk-accordion" data-module="govuk-accordion"
+                 id="assessment-accordion-{{ assessmentGroupId }}"
+                 aria-label="">
     {% for assessment in formattedAssessments %}
         <div class="govuk-accordion__section" id="{{ assessment.goalRoute }}">
             <div class="govuk-accordion__section-header">
-                <h3 class="govuk-accordion__section-heading">
+                <h3 class="govuk-accordion__section-heading" aria-label="Show/Hide {{ assessment.title }}">
                     <span class="govuk-accordion__section-button sp-accordion-header"
                           id="accordion-default-heading-{{ loop.index }}">
                       {{ assessment.title }}
