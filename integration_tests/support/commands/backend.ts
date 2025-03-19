@@ -32,7 +32,7 @@ const getApiToken = () => {
     })
 }
 
-function createHandoverContext(apiToken, oasysAssessmentPk, accessMode, sentencePlanVersion) {
+function createHandoverContext(apiToken, oasysAssessmentPk, accessMode, sentencePlanVersion, crn) {
   return {
     url: `${Cypress.env('ARNS_HANDOVER_URL')}/handover`,
     method: 'POST',
@@ -47,7 +47,7 @@ function createHandoverContext(apiToken, oasysAssessmentPk, accessMode, sentence
         returnUrl: Cypress.env('OASTUB_URL'),
       },
       subjectDetails: {
-        crn: 'X123456',
+        crn: crn ?? 'A123456',
         pnc: '01/123456789A',
         givenName: 'Sam',
         familyName: 'Whitfield',
@@ -126,14 +126,14 @@ function createHandoverContext(apiToken, oasysAssessmentPk, accessMode, sentence
 }
 
 export const openSentencePlan = (
-  oasysAssessmentPk,
-  accessMode = AccessMode.READ_WRITE,
-  sentencePlanVersion = undefined,
+  oasysAssessmentPk: string,
+  options?: { accessMode?: string; planVersion?: number; crn?: string },
 ) => {
+  const { accessMode = AccessMode.READ_WRITE, planVersion, crn } = options ?? {}
   cy.session(`${oasysAssessmentPk}_${accessMode}`, () =>
     getApiToken().then(apiToken =>
       cy
-        .request(createHandoverContext(apiToken, oasysAssessmentPk, accessMode, sentencePlanVersion))
+        .request(createHandoverContext(apiToken, oasysAssessmentPk, accessMode, planVersion, crn))
         .then(handoverResponse =>
           cy.visit(`${handoverResponse.body.handoverLink}?clientId=${Cypress.env('ARNS_HANDOVER_CLIENT_ID')}`),
         ),

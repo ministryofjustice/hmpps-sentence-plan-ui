@@ -2,6 +2,7 @@ import AddSteps from '../pages/add-steps'
 import { PlanType } from '../../server/@types/PlanType'
 import DataGenerator from '../support/DataGenerator'
 import IntegrationUtils from '../integrationUtils'
+import { AccessMode } from '../../server/@types/Handover'
 
 const selectStepDescriptionByIndex = (index: number) => {
   return cy.get(`table.goal-summary-card__steps .govuk-table__body > :nth-child(${index}) > :nth-child(2)`)
@@ -26,7 +27,7 @@ describe('Add Steps', () => {
   describe('Security', () => {
     it('Should display authorisation error if user does not have READ_WRITE role', () => {
       cy.get<string>('@oasysAssessmentPk').then(oasysAssessmentPk => {
-        cy.openSentencePlan(oasysAssessmentPk, 'READ_ONLY')
+        cy.openSentencePlan(oasysAssessmentPk, { accessMode: AccessMode.READ_ONLY })
       })
 
       cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
