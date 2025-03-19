@@ -279,7 +279,7 @@ describe('Rendering About Person in READ_ONLY', () => {
   beforeEach(() => {
     cy.createSentencePlan().then(planDetails => {
       cy.wrap(planDetails).as('plan')
-      cy.openSentencePlan(planDetails.oasysAssessmentPk, AccessMode.READ_ONLY)
+      cy.openSentencePlan(planDetails.oasysAssessmentPk, { accessMode: AccessMode.READ_ONLY })
       cy.get('.moj-primary-navigation__container').contains('a', 'About').click()
     })
   })
