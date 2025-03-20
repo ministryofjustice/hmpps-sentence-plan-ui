@@ -8,5 +8,11 @@ describe('Rendering About Person for READ_WRITE user', () => {
     })
   })
 
-  it('Should check the page rendered correctly', () => {})
+  it('Should check the page with nDelius error rendered correctly', () => {
+    cy.get('.govuk-warning-text').should(
+      'contain',
+      'There is a problem getting the sentence information. Try reloading the page or try again later',
+    )
+    cy.get('.sentence-info').should('not.exist')
+  })
 })
