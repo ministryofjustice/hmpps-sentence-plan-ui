@@ -27,7 +27,7 @@
         "status": 200,
         "headers": { "Content-Type": "application/json" },
         "jsonBody": {
-          "crn": "X123456",
+          "crn": "XYZ12345",
           "pnc": "01/14106572A",
           "nomisId": "",
           "givenName": "Buster",
