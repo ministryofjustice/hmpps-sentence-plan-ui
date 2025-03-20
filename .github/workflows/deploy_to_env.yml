@@ -10,8 +10,6 @@ on:
         options:
           - dev
           - test
-          - preprod
-          - prod
         default: 'dev'
       image_tag:
         description: Optional image tag to deploy. If left blank, a new image will be built, pushed and deployed
@@ -19,47 +17,10 @@ on:
         default: ''
         type: string
 
-permissions:
-  contents: read
-
 jobs:
-  helm_lint:
-    name: helm lint
-    uses: ministryofjustice/hmpps-github-actions/.github/workflows/test_helm_lint.yml@v2
+  deploy_to_env:
+    uses: ministryofjustice/hmpps-assess-risks-and-needs-github-actions/.github/workflows/deploy_to_env.yml@v1
     secrets: inherit
     with:
       environment: ${{ inputs.environment }}
-
-  build_docker:
-    if: ${{ inputs.image_tag == '' }}
-    name: Build docker image
-    uses: ministryofjustice/hmpps-github-actions/.github/workflows/docker_build.yml@v2
-    with:
-      docker_registry: 'ghcr.io'
-      registry_org: 'ministryofjustice'
-      tag_latest: false
-      push: true
-      docker_multiplatform: false
-
-  deploy_env_prebuilt:
-    if: ${{ inputs.image_tag != '' }}
-    name: Deploy pre-built image to environment
-    needs:
-      - helm_lint
-    uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@v2
-    secrets: inherit
-    with:
-      environment: ${{ inputs.environment }}
-      app_version: ${{ inputs.image_tag }}
-
-  deploy_env:
-    if: ${{ inputs.image_tag == '' }}
-    name: Deploy to environment
-    needs:
-      - helm_lint
-      - build_docker
-    uses: ministryofjustice/hmpps-github-actions/.github/workflows/deploy_env.yml@v2
-    secrets: inherit
-    with:
-      environment: ${{ inputs.environment }}
-      app_version: ${{ needs.build_docker.outputs.app_version }}
+      image_tag: ${{ inputs.image_tag }}
