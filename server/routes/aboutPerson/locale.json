@@ -6,14 +6,6 @@
     "mainHeading": {
       "title": "About {{ subject.givenName }}"
     },
-    "ariaHiddenText": {
-      "assessmentGroup": {
-        "incompleteAreas": "Show/hide all incomplete areas from the assessment",
-        "highScoring": "Show/hide all high-scoring areas from the assessment",
-        "lowScoring": "Show/hide all low-scoring areas from the assessment",
-        "withoutScoring": "Show/hide all areas without a need score"
-      }
-    },
     "detail": {
       "sentenceHeading": "Sentence",
       "endDateHeading": "Expected end date",

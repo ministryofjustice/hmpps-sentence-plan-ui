@@ -89,6 +89,14 @@ $white-needs-score-background-colour: #ffffff;
   content: "";
 }
 
+#needsScoreMain {
+  margin-bottom: 0;
+}
+
+#needsScoreSub {
+  margin-bottom: 5px;
+}
+
 @mixin needs-score-bar--small($highlightedNumber) {
   margin-bottom: 15px;
   & {
