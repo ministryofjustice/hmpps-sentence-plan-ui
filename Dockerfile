@@ -1,4 +1,4 @@
-FROM node:22.13-bookworm-slim AS base
+FROM node:22.14-bookworm-slim AS base
 
 ARG BUILD_NUMBER
 ARG GIT_REF
