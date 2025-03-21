@@ -1,0 +1,84 @@
+{
+  "mappings": [
+    {
+      "request": {
+        "url": "/arns-api/risks/crn/NOTFOUND",
+        "method": "GET"
+      },
+      "response": {
+        "status": 404
+      }
+    },
+    {
+      "request": {
+        "url": "/arns-api/risks/crn/SERVERERROR",
+        "method": "GET"
+      },
+      "response": {
+        "status": 500
+      }
+    },
+    {
+      "request": {
+        "urlPattern": "/arns-api/risks/crn/(?!NOTFOUND$|SERVERERROR$).*",
+        "method": "GET"
+      },
+      "response": {
+        "status": 200,
+        "headers": { "Content-Type": "application/json" },
+        "jsonBody": {
+          "riskToSelf": {
+            "suicide": {
+              "risk": "NO"
+            },
+            "selfHarm": {
+              "risk": "YES",
+              "previous": "YES",
+              "previousConcernsText": "N/A",
+              "current": "YES",
+              "currentConcernsText": "N/A"
+            },
+            "custody": {
+              "risk": "YES",
+              "previous": "NO",
+              "current": "YES",
+              "currentConcernsText": "N/A"
+            },
+            "hostelSetting": {
+              "risk": "YES",
+              "previous": "NO",
+              "current": "YES",
+              "currentConcernsText": "N/A"
+            },
+            "vulnerability": {
+              "risk": "YES"
+            }
+          },
+          "otherRisks": {
+            "escapeOrAbscond": "YES",
+            "controlIssuesDisruptiveBehaviour": "YES",
+            "breachOfTrust": "YES",
+            "riskToOtherPrisoners": "NO"
+          },
+          "summary": {
+            "whoIsAtRisk": "People around him",
+            "natureOfRisk": "People around him",
+            "riskImminence": "When with others",
+            "riskIncreaseFactors": "Access to Alcohol",
+            "riskMitigationFactors": "Being alone",
+            "riskInCommunity": {
+              "LOW": ["Children"],
+              "HIGH": ["Public", "Known Adult", "Staff"]
+            },
+            "riskInCustody": {
+              "LOW": ["Children"],
+              "HIGH": ["Public", "Known Adult", "Staff", "Prisoners"]
+            },
+            "overallRiskLevel": "HIGH"
+          },
+          "assessedOn": "2024-04-11T14:29:00"
+        }
+      }
+    }
+  ]
+}

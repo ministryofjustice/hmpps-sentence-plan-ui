@@ -80,8 +80,8 @@ describe('Rendering About Person for READ_WRITE user', () => {
       { text: 'Create employment and education goal', href: 'employment-and-education' },
       { text: 'Create thinking, behaviours and attitudes goal', href: 'thinking-behaviours-and-attitudes' },
       { text: 'Create drug use goal', href: 'drug-use' },
-      { text: 'Create health and wellbeing goal', href: 'health-and-wellbeing' },
       { text: 'Create finances goal', href: 'finances' },
+      { text: 'Create health and wellbeing goal', href: 'health-and-wellbeing' },
     ]
 
     areas.forEach((area, index) => {

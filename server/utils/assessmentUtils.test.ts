@@ -204,4 +204,18 @@ describe('groupAndSortAreasByRisk', () => {
       { title: 'Area A', linkedToHarm: undefined, linkedtoReoffending: undefined },
     ])
   })
+
+  it('correctly alphabetically sorts areas without scores', () => {
+    const areas: AssessmentArea[] = [
+      { title: 'Area B', linkedToHarm: 'YES', linkedtoReoffending: 'YES' } as AssessmentArea,
+      { title: 'Area A', linkedToHarm: 'YES', linkedtoReoffending: 'YES' } as AssessmentArea,
+    ]
+
+    const result = groupAndSortByRisk(areas)
+
+    expect(result).toEqual([
+      { title: 'Area A', linkedToHarm: 'YES', linkedtoReoffending: 'YES' },
+      { title: 'Area B', linkedToHarm: 'YES', linkedtoReoffending: 'YES' },
+    ])
+  })
 })
