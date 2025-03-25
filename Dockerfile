@@ -10,7 +10,7 @@ ENV TZ=Europe/London
 RUN ln -snf "/usr/share/zoneinfo/$TZ" /etc/localtime && echo "$TZ" > /etc/timezone
 
 RUN addgroup -g 2000 --system appgroup && \
-    adduser -u 2000 -S appuser -G appgroup
+    adduser -u 2000 --system appuser -G appgroup
 
 WORKDIR /app
 
