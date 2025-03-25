@@ -9,8 +9,8 @@ LABEL maintainer="HMPPS Digital Studio <info@digital.justice.gov.uk>"
 ENV TZ=Europe/London
 RUN ln -snf "/usr/share/zoneinfo/$TZ" /etc/localtime && echo "$TZ" > /etc/timezone
 
-RUN addgroup -S appgroup && \
-    adduser -S appuser -G appgroup
+RUN addgroup -g 2000 --system appgroup && \
+    adduser -u 2000 -S appuser -G appgroup
 
 WORKDIR /app
 
@@ -24,7 +24,9 @@ ENV BUILD_NUMBER=${BUILD_NUMBER}
 ENV GIT_REF=${GIT_REF}
 ENV GIT_BRANCH=${GIT_BRANCH}
 
-RUN apk add --update make
+RUN apk --update-cache upgrade --available \
+  && apk --no-cache add tzdata make \
+  && rm -rf /var/cache/apk/*
 
 ARG BUILD_NUMBER
 ARG GIT_REF
@@ -52,5 +54,5 @@ COPY --from=build --chown=appuser:appgroup /app/dist ./dist
 COPY --from=build --chown=appuser:appgroup /app/node_modules ./node_modules
 EXPOSE 3000
 ENV NODE_ENV='production'
-USER appuser
+USER 2000
 CMD ["npm", "start"]
