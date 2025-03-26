@@ -8,7 +8,7 @@ The data is requested through this chain:
 
 AboutPersonController.ts -> HTTP GET to `/info/pop` -> Sentence Plan API -> ARNSApiService.kt -> HTTP GET to `delius-api.base-url`
 
-When running locally the sentence information is provided by wiremock using [wiremock/mappings/ndelius.json](../wiremock/mappings/ndelius.json).
+When running locally the sentence information is provided by wiremock using [wiremock/mappings/ndelius-casedata.json](../wiremock/mappings/ndelius.json).
 
 ## Assessment information
 
