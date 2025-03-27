@@ -27,10 +27,9 @@ export default defineConfig({
         },
       })
       cypressSplit(on, config)
-      return config
-
       // Add the visual regression plugin
-      return getCompareSnapshotsPlugin(on, config)
+      getCompareSnapshotsPlugin(on, config)
+      return config
     },
     baseUrl: 'http://localhost:6789',
     excludeSpecPattern: '**/!(*.cy).ts',
