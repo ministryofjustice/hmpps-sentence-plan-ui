@@ -1,14 +1,20 @@
 import { NextFunction, Request, Response } from 'express'
 import ReferentialDataService from '../../services/sentence-plan/referentialDataService'
 import locale from './locale.json'
+
 import URLs from '../URLs'
 import { NewGoal } from '../../@types/NewGoalType'
-import { dateToISOFormat, formatDateWithStyle, getAchieveDateOptions } from '../../utils/utils'
+import { formatDateWithStyle } from '../../utils/utils'
 import transformRequest from '../../middleware/transformMiddleware'
 import CreateGoalPostModel from './models/CreateGoalPostModel'
 import validateRequest from '../../middleware/validationMiddleware'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
 import { AccessMode } from '../../@types/Handover'
+import { HttpError } from '../../utils/HttpError'
+import { getDateOptions, getGoalTargetDate } from '../../utils/goalTargetDateUtils'
+import { areaConfigs } from '../../utils/assessmentAreaConfig.json'
+import { AssessmentAreaConfig } from '../../@types/Assessment'
+import { getAssessmentDetailsForArea } from '../../utils/assessmentUtils'
 
 export default class CreateGoalController {
   constructor(private readonly referentialDataService: ReferentialDataService) {}
@@ -21,53 +27,76 @@ export default class CreateGoalController {
     try {
       const { uuid } = await req.services.goalService.saveGoal(processedData, planUuid)
 
+      req.services.sessionService.setReturnLink(`/change-goal/${uuid}/`)
+
       if (req.body.action === 'addStep') {
         return res.redirect(`${URLs.ADD_STEPS.replace(':uuid', uuid)}?type=${type}`)
       }
 
       return res.redirect(`${URLs.PLAN_OVERVIEW}?status=added&type=${type}`)
     } catch (e) {
-      return next(e)
+      return next(HttpError(500, e.message))
     }
   }
 
   private render = async (req: Request, res: Response, next: NextFunction) => {
-    const { errors } = req
-    const type = req.query?.type ?? 'current'
+    try {
+      const { errors } = req
+      const type = req.query?.type ?? 'current'
 
-    const areasOfNeed = this.referentialDataService.getAreasOfNeed()
-    const sortedAreasOfNeed = this.referentialDataService.getSortedAreasOfNeed()
+      const areasOfNeed = this.referentialDataService.getAreasOfNeed()
+      const sortedAreasOfNeed = this.referentialDataService.getSortedAreasOfNeed()
 
-    const dateOptions = this.getDateOptions()
-    const selectedAreaOfNeed = areasOfNeed.find(areaOfNeed => areaOfNeed.url === req.params.areaOfNeed)
-    const minimumDatePickerDate = formatDateWithStyle(new Date().toISOString(), 'short')
+      const dateOptions = getDateOptions()
+      const selectedAreaOfNeed = areasOfNeed.find(areaOfNeed => areaOfNeed.url === req.params.areaOfNeed)
+      const minimumDatePickerDate = formatDateWithStyle(new Date().toISOString(), 'short')
 
-    req.services.sessionService.setReturnLink(null)
+      const criminogenicNeedsData = req.services.sessionService.getCriminogenicNeeds()
+      const planUuid = req.services.sessionService.getPlanUUID()
+      const plan = await req.services.planService.getPlanByUuid(planUuid)
 
-    return res.render('pages/create-goal', {
-      locale: locale.en,
-      data: {
-        areasOfNeed,
-        sortedAreasOfNeed,
-        selectedAreaOfNeed,
-        dateOptions,
-        minimumDatePickerDate,
-        returnLink: `/plan?type=${type}`,
-        form: req.body,
-      },
-      errors,
-    })
+      // get assessment data or swallow the service error and set to null so the template knows this data is missing
+      const assessmentDetailsForArea = await req.services.assessmentService
+        .getAssessmentByUuid(planUuid)
+        .then(assessmentResponse => {
+          const assessmentData = assessmentResponse.sanAssessmentData
+          const areaConfig: AssessmentAreaConfig = areaConfigs.find(config => config.area === selectedAreaOfNeed?.name)
+          return getAssessmentDetailsForArea(criminogenicNeedsData, areaConfig, assessmentData)
+        })
+        .catch((): null => null)
+
+      const currentReturnLink = req.services.sessionService.getReturnLink()
+      const newReturnLink = currentReturnLink === '/about' ? currentReturnLink : `/plan?type=${type}`
+
+      req.services.sessionService.setReturnLink(null)
+
+      return res.render('pages/create-goal', {
+        locale: locale.en,
+        data: {
+          planAgreementStatus: plan.agreementStatus,
+          areasOfNeed,
+          sortedAreasOfNeed,
+          selectedAreaOfNeed,
+          dateOptions,
+          minimumDatePickerDate,
+          assessmentDetailsForArea,
+          returnLink: newReturnLink,
+          form: req.body,
+        },
+        errors,
+      })
+    } catch (e) {
+      return next(HttpError(500, e.message))
+    }
   }
 
   private processGoalData(body: any) {
     const title = body['goal-input-autocomplete']
-    let targetDate =
-      body['date-selection-radio'] === 'custom' && body['start-working-goal-radio'] === 'yes'
-        ? dateToISOFormat(body['date-selection-custom'])
-        : body['date-selection-radio']
-    if (body['start-working-goal-radio'] === 'no') {
-      targetDate = null
-    }
+    const targetDate = getGoalTargetDate(
+      body['start-working-goal-radio'],
+      body['date-selection-radio'],
+      body['date-selection-custom'],
+    )
     const areaOfNeed = body['area-of-need']
     const relatedAreasOfNeed = body['related-area-of-need-radio'] === 'yes' ? body['related-area-of-need'] : undefined
 
@@ -77,11 +106,6 @@ export default class CreateGoalController {
       targetDate,
       relatedAreasOfNeed,
     }
-  }
-
-  private getDateOptions = () => {
-    const today = new Date()
-    return getAchieveDateOptions(today)
   }
 
   private handleValidationErrors = (req: Request, res: Response, next: NextFunction) => {

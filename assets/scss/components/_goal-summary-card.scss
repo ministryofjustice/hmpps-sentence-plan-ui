@@ -49,13 +49,20 @@
   &__areas-of-need {
     margin-bottom: 0;
     @include govuk-font($size: 16, $weight: 'normal');
+
     & {
       color: $govuk-secondary-text-colour;
     }
 
+
     &:not(:last-child) {
       padding-bottom: govuk-spacing(2);
       box-shadow: inset 0 -1px $govuk-border-colour;
+    }
+
+    &_agreed {
+      @extend .goal-summary-card__areas-of-need;
+      padding-top: govuk-spacing(4);
     }
   }
 
@@ -63,4 +70,12 @@
     padding-left: govuk-spacing(3);
     border-left: $govuk-border-width-form-group-error solid $govuk-error-colour;
   }
+
+.govuk-details {
+  margin-bottom: 0;
+}
+
+.step-counter {
+  margin-bottom: govuk-spacing(2)
+}
 }

@@ -1,9 +1,10 @@
 import DataGenerator from '../support/DataGenerator'
 
-describe('Rendering', () => {
+describe('OASys Return Button Rendering', () => {
   beforeEach(() => {
     cy.createSentencePlan().then(planDetails => {
       cy.wrap(planDetails).as('plan')
+      cy.agreePlan(planDetails.plan.uuid)
       cy.openSentencePlan(planDetails.oasysAssessmentPk)
       cy.addGoalToPlan(planDetails.plan.uuid, DataGenerator.generateGoal()).then(goal => {
         cy.addStepToGoal(goal.uuid, DataGenerator.generateStep())

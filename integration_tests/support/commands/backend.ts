@@ -1,6 +1,10 @@
 import { NewGoal } from '../../../server/@types/NewGoalType'
 import { NewStep } from '../../../server/@types/StepType'
 import { AccessMode } from '../../../server/@types/Handover'
+import { GoalStatus } from '../../../server/@types/GoalType'
+import { PlanAgreement } from '../../../server/@types/PlanAgreement'
+import { PlanAgreementStatus } from '../../../server/@types/PlanType'
+import handoverData from '../../../server/testutils/data/handoverData'
 
 const getApiToken = () => {
   const apiToken = Cypress.env('API_TOKEN')
@@ -96,8 +100,8 @@ function createHandoverContext(apiToken, oasysAssessmentPk, accessMode, sentence
           emoThreshold: 'N/A',
         },
         personalRelationshipsAndCommunity: {
-          relLinkedToHarm: 'NO',
-          relLinkedToReoffending: 'NO',
+          relLinkedToHarm: 'NULL',
+          relLinkedToReoffending: 'YES',
           relStrengths: 'NO',
           relOtherWeightedScore: '6',
           relThreshold: 'YES',
@@ -106,7 +110,7 @@ function createHandoverContext(apiToken, oasysAssessmentPk, accessMode, sentence
           thinkLinkedToHarm: 'NO',
           thinkLinkedToReoffending: 'NO',
           thinkStrengths: 'NO',
-          thinkOtherWeightedScore: '10',
+          thinkOtherWeightedScore: '1',
           thinkThreshold: 'YES',
         },
         lifestyleAndAssociates: {
@@ -194,6 +198,45 @@ export const addGoalToPlan = (planUUid: string, goal: NewGoal) => {
         method: 'POST',
         auth: { bearer: apiToken },
         body: goal,
+      })
+      .then(createResponse => createResponse.body),
+  )
+}
+
+export const removeGoalFromPlan = (goalUuid: string, note: string) => {
+  const goal: Partial<NewGoal> = {
+    status: GoalStatus.REMOVED,
+    note,
+  }
+
+  return getApiToken().then(apiToken =>
+    cy
+      .request({
+        url: `${Cypress.env('SP_API_URL')}/goals/${goalUuid}`,
+        method: 'PATCH',
+        auth: { bearer: apiToken },
+        body: goal,
+      })
+      .then(createResponse => createResponse.body),
+  )
+}
+
+export const agreePlan = (planUUid: string) => {
+  const agreement: PlanAgreement = {
+    agreementStatus: PlanAgreementStatus.AGREED,
+    practitionerName: handoverData.principal.displayName,
+    personName: handoverData.subject.givenName,
+    agreementStatusNote: 'Plan was agreed',
+    optionalNote: '',
+  }
+
+  return getApiToken().then(apiToken =>
+    cy
+      .request({
+        url: `${Cypress.env('SP_API_URL')}/plans/${planUUid}/agree`,
+        method: 'POST',
+        auth: { bearer: apiToken },
+        body: agreement,
       })
       .then(createResponse => createResponse.body),
   )

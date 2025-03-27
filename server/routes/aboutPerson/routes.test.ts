@@ -8,7 +8,8 @@ import ReferentialDataService from '../../services/sentence-plan/referentialData
 import { AreaOfNeed } from '../../testutils/data/referenceData'
 import testPlan from '../../testutils/data/planData'
 import testHandoverContext from '../../testutils/data/handoverData'
-import { assessmentData, crimNeedsSubset } from '../../testutils/data/assessmentData'
+import { crimNeedsSubset, incompleteAssessmentData } from '../../testutils/data/testAssessmentData'
+import { AccessMode } from '../../@types/Handover'
 
 jest.mock('../../services/sentence-plan/referentialDataService', () => {
   return jest.fn().mockImplementation(() => ({
@@ -18,13 +19,19 @@ jest.mock('../../services/sentence-plan/referentialDataService', () => {
 
 jest.mock('../../services/sentence-plan/assessmentService', () => {
   return jest.fn().mockImplementation(() => ({
-    getAssessmentByUuid: jest.fn().mockReturnValue(assessmentData),
+    getAssessmentByUuid: jest.fn().mockReturnValue(incompleteAssessmentData),
   }))
 })
 
 jest.mock('../../services/sentence-plan/infoService', () => {
   return jest.fn().mockImplementation(() => ({
     getPopData: jest.fn().mockResolvedValue(testPopData),
+  }))
+})
+
+jest.mock('../../services/sentence-plan/planService', () => {
+  return jest.fn().mockImplementation(() => ({
+    getPlanByUuid: jest.fn().mockResolvedValue(testPlan),
   }))
 })
 
@@ -35,6 +42,8 @@ jest.mock('../../services/sessionService', () => {
     getSubjectDetails: jest.fn().mockReturnValue(testHandoverContext.subject),
     getCriminogenicNeeds: jest.fn().mockReturnValue(crimNeedsSubset),
     getOasysReturnUrl: jest.fn().mockReturnValue('http://mock-return-url'),
+    getAccessMode: jest.fn().mockReturnValue(AccessMode.READ_WRITE),
+    setReturnLink: jest.fn(),
   }))
 })
 
@@ -52,10 +61,10 @@ afterEach(() => {
   jest.resetAllMocks()
 })
 
-describe(`GET ${URLs.ABOUT_POP}`, () => {
+describe(`GET ${URLs.ABOUT_PERSON}`, () => {
   it('should render about pop page', () => {
     return request(app)
-      .get(URLs.ABOUT_POP)
+      .get(URLs.ABOUT_PERSON)
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain(

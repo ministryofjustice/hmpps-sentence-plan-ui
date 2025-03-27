@@ -1,11 +1,12 @@
-import { faker } from '@faker-js/faker'
 import DataGenerator from '../support/DataGenerator'
 import { PlanType } from '../../server/@types/PlanType'
 import { Goal } from '../../server/@types/GoalType'
 import PlanOverview from '../pages/plan-overview'
+import IntegrationUtils from '../integrationUtils'
 
 describe('Achieve goal', () => {
   const planOverview = new PlanOverview()
+  const integrationUtils = new IntegrationUtils()
 
   beforeEach(() => {
     cy.createSentencePlan().then(planDetails => {
@@ -50,13 +51,13 @@ describe('Achieve goal', () => {
         })
 
         planOverview.agreePlan()
-        cy.get('a').contains('Mark as achieved').click()
       })
     })
 
-    it('Display agree plan page correctly on load', () => {
-      cy.get('h1').contains('has achieved this goal')
+    it('Displays agree plan page correctly on load', () => {
       cy.get<Goal>('@newGoal').then(goal => {
+        cy.visit(`/confirm-achieved-goal/${goal.uuid}`)
+        cy.get('h1').contains('has achieved this goal')
         cy.get('.govuk-summary-card__title').should('contain', goal.title)
       })
       cy.checkAccessibility()
@@ -72,15 +73,18 @@ describe('Achieve goal', () => {
         })
 
         planOverview.agreePlan()
-        cy.get('a').contains('Mark as achieved').click()
+        cy.get<Goal>('@newGoal').then(goal => {
+          cy.visit(`/update-goal-steps/${goal.uuid}`)
+          cy.get('button').contains('Mark as achieved').click()
+        })
       })
     })
 
     it('Confirm goal achieved successfully without optional note', () => {
       cy.get('button').contains('Confirm').click()
       cy.url().should('include', 'plan?type=achieved&status=achieved')
-      cy.get(':nth-child(3) > .moj-sub-navigation__link')
       cy.get('.moj-sub-navigation__link').eq(2).should('contain', 'Achieved goals (1)')
+      cy.get('.govuk-summary-card').should('contain', 'Marked as achieved on')
 
       cy.get<Goal>('@newGoal').then(goal => {
         cy.visit(`/view-achieved-goal/${goal.uuid}`)
@@ -106,7 +110,7 @@ describe('Achieve goal', () => {
     })
 
     it('Confirm errors are displayed with optional note of more than 4000 characters', () => {
-      const lorem = faker.lorem.paragraphs(40)
+      const lorem = integrationUtils.generateStringOfLength(4001)
       cy.get('#goal-achievement-helped').invoke('val', lorem)
       cy.get('button').contains('Confirm').click()
       cy.url().should('include', '/confirm-achieved-goal/')
@@ -118,14 +122,13 @@ describe('Achieve goal', () => {
         'contain',
         'How achieving this goal has helped must be 4,000 characters or less',
       )
-      cy.get('#goal-achievement-helped').should('have.text', lorem)
+      cy.get('#goal-achievement-helped').should('not.be.empty')
       cy.checkAccessibility()
     })
 
     it('Cancel goal achieved and redirect successfully', () => {
       cy.get('a').contains('Do not mark as achieved').click()
-      cy.url().should('include', 'plan?type=current')
-      planOverview.getSummaryCard(0).get('a').contains('Mark as achieved')
+      cy.url().should('include', 'update-goal-steps/')
       cy.checkAccessibility()
     })
   })

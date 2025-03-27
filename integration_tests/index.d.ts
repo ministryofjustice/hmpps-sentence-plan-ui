@@ -16,6 +16,8 @@ declare namespace Cypress {
     // API
     addGoalToPlan(planUuid: string, goal: NewGoal): Chainable<Goal>
     addStepToGoal(goalUuid: string, step: NewStep): Chainable<Step>
+    removeGoalFromPlan(goalUuid: string, note: string): Chainable<Goal>
+    agreePlan(planUuid: string): Chainable<Goal>
 
     lockPlan(planUuid: string): Chainable<T>
 

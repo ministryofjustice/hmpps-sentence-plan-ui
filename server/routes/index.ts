@@ -5,7 +5,7 @@ import type { Services } from '../services'
 import setupCreateGoalRoutes from './createGoal/routes'
 import setupRemoveGoalRoutes from './removeGoal/routes'
 import setupChangeGoalRoutes from './changeGoal/routes'
-import setupAboutPopRoutes from './aboutPop/routes'
+import setupAboutPersonRoutes from './aboutPerson/routes'
 import { Page } from '../services/auditService'
 import setupReferenceDataRoutes from './ReferenceData/routes'
 import setupPlanOverviewRoutes from './planOverview/routes'
@@ -13,9 +13,11 @@ import setupAgreePlanRoutes from './agree-plan/routes'
 import URLs from './URLs'
 import setupAddStepsRoutes from './add-steps/routes'
 import setupAchieveGoalRoutes from './achieveGoal/routes'
+import setupConfirmAchieveGoalRoutes from './confirmAchieveGoal/routes'
 import setupUpdateGoalRoutes from './update-goal/routes'
 import setupViewGoalDetailsRoutes from './viewGoalDetails/routes'
 import setupPlanHistoryRoutes from './plan-history/routes'
+import setupReAddGoalRoutes from './reAddGoal/routes'
 
 export default function routes(services: Services): Router {
   const router = Router()
@@ -29,17 +31,19 @@ export default function routes(services: Services): Router {
     res.redirect(URLs.PLAN_OVERVIEW)
   })
 
-  setupAboutPopRoutes(router)
+  setupAboutPersonRoutes(router)
   setupCreateGoalRoutes(router, services)
   setupRemoveGoalRoutes(router)
   setupChangeGoalRoutes(router, services)
   setupViewGoalDetailsRoutes(router)
   setupAchieveGoalRoutes(router)
+  setupConfirmAchieveGoalRoutes(router)
   setupAddStepsRoutes(router)
   setupUpdateGoalRoutes(router, services)
   setupReferenceDataRoutes(router, services)
   setupPlanOverviewRoutes(router)
   setupAgreePlanRoutes(router)
   setupPlanHistoryRoutes(router)
+  setupReAddGoalRoutes(router)
   return router
 }

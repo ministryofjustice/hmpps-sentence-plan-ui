@@ -14,6 +14,7 @@ const mockSessionService = jest.fn().mockImplementation(() => ({
   getPrincipalDetails: jest.fn().mockReturnValue(handoverData.principal),
   getAccessMode: jest.fn().mockReturnValue('READ_WRITE'),
   getReturnLink: jest.fn().mockReturnValue(''),
+  setReturnLink: jest.fn(),
 }))
 
 jest.mock('../../services/sessionService', () => {

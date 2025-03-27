@@ -10,7 +10,7 @@ import runMiddlewareChain from '../../testutils/runMiddlewareChain'
 import AgreePlanPostModel from './models/AgreePlanPostModel'
 import URLs from '../URLs'
 import { PlanAgreementStatus, PlanType } from '../../@types/PlanType'
-import PlanModel from '../shared-models/PlanModel'
+import PlanReadyForAgreementModel from '../shared-models/PlanReadyForAgreementModel'
 import { testGoal } from '../../testutils/data/goalData'
 import testHandoverContext from '../../testutils/data/handoverData'
 
@@ -43,6 +43,7 @@ describe('AgreePlanController', () => {
   let next: NextFunction
   const viewData = {
     data: {
+      planAgreementStatus: testPlan.agreementStatus,
       returnLink: '/some-return-link',
       form: {},
     },
@@ -64,7 +65,7 @@ describe('AgreePlanController', () => {
         it('should add error if no goals', () => {
           const badPlanData: PlanType = { ...testPlan, goals: [] }
 
-          const dataToBeValidated = plainToInstance(PlanModel, badPlanData)
+          const dataToBeValidated = plainToInstance(PlanReadyForAgreementModel, badPlanData)
           const errors = getValidationErrors(dataToBeValidated)
 
           expect(errors).toMatchObject({
@@ -80,7 +81,7 @@ describe('AgreePlanController', () => {
             goals: [{ ...testGoal, steps: [] }],
           }
 
-          const dataToBeValidated = plainToInstance(PlanModel, badPlanData)
+          const dataToBeValidated = plainToInstance(PlanReadyForAgreementModel, badPlanData)
           const errors = getValidationErrors(dataToBeValidated)
 
           expect(errors).toMatchObject({
@@ -170,6 +171,7 @@ describe('AgreePlanController', () => {
       const expectedViewData = {
         ...viewData,
         data: {
+          planAgreementStatus: testPlan.agreementStatus,
           returnLink: '/some-return-link',
           form: {
             'agree-plan-radio': 'no',

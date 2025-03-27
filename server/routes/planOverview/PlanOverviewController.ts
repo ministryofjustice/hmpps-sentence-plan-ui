@@ -4,13 +4,18 @@ import locale from './locale.json'
 import { moveGoal } from '../../utils/utils'
 import URLs from '../URLs'
 import validateRequest, { getValidationErrors } from '../../middleware/validationMiddleware'
-import PlanModel from '../shared-models/PlanModel'
+import PlanReadyForAgreementModel from '../shared-models/PlanReadyForAgreementModel'
+import AgreedPlanModel from '../shared-models/AgreedPlanModel'
 import transformRequest from '../../middleware/transformMiddleware'
 import PlanOverviewQueryModel from './models/PlanOverviewQueryModel'
 import { AccessMode } from '../../@types/Handover'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
+import { HttpError } from '../../utils/HttpError'
+import { PlanAgreementStatus, PlanType } from '../../@types/PlanType'
 
 export default class PlanOverviewController {
+  plan: PlanType
+
   private render = async (req: Request, res: Response, next: NextFunction) => {
     const { errors } = req
 
@@ -18,38 +23,44 @@ export default class PlanOverviewController {
       const planUuid = req.services.sessionService.getPlanUUID()
       const planVersionNumber = req.services.sessionService.getPlanVersionNumber()
 
-      let plan
-
       if (planVersionNumber != null) {
-        plan = await req.services.planService.getPlanByUuidAndVersionNumber(planUuid, planVersionNumber)
+        this.plan = await req.services.planService.getPlanByUuidAndVersionNumber(planUuid, planVersionNumber)
       } else {
-        plan = await req.services.planService.getPlanByUuid(planUuid)
+        this.plan = await req.services.planService.getPlanByUuid(planUuid)
       }
 
       const oasysReturnUrl = req.services.sessionService.getOasysReturnUrl()
       const type = req.query?.type ?? 'current'
       const status = req.query?.status
+      // was the plan updated more than 10s after the user agreed to it?
+      let isUpdatedAfterAgreement = false
+      if (this.plan.agreementDate !== null) {
+        const mostRecentUpdateDate = new Date(this.plan.mostRecentUpdateDate)
+        const agreementDate = new Date(this.plan.agreementDate)
+        isUpdatedAfterAgreement = Math.abs((mostRecentUpdateDate.getTime() - agreementDate.getTime()) / 1000) > 10
+      }
 
       req.services.sessionService.setReturnLink(`/plan?type=${type ?? 'current'}`)
 
-      let pageToRender = 'pages/plan'
+      const readWrite = req.services.sessionService.getAccessMode() === AccessMode.READ_WRITE
 
-      if (req.services.sessionService.getAccessMode() === AccessMode.READ_ONLY) {
-        pageToRender = 'pages/countersign'
-      }
+      const page = 'pages/plan'
 
-      return res.render(pageToRender, {
+      return res.render(page, {
         locale: locale.en,
         data: {
-          plan,
+          planAgreementStatus: this.plan.agreementStatus, // required by layout.njk
+          plan: this.plan,
+          isUpdatedAfterAgreement,
           type,
           status,
           oasysReturnUrl,
+          readWrite,
         },
         errors,
       })
     } catch (e) {
-      return next(e)
+      return next(HttpError(500, e.message))
     }
   }
 
@@ -63,28 +74,38 @@ export default class PlanOverviewController {
       await req.services.goalService.changeGoalOrder(reorderedList)
       return res.redirect(`${URLs.PLAN_OVERVIEW}?type=${type}`)
     } catch (e) {
-      return next(e)
+      return next(HttpError(500, e.message))
     }
   }
 
-  private validatePlanForAgreement = async (req: Request, res: Response, next: NextFunction) => {
+  private validatePlan = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const planUuid = req.services.sessionService.getPlanUUID()
-      const plan = await req.services.planService.getPlanByUuid(planUuid)
+      this.plan = await req.services.planService.getPlanByUuid(planUuid)
       req.errors = { ...req.errors }
 
-      req.errors.domain = getValidationErrors(plainToInstance(PlanModel, plan))
+      let validationModel
+
+      if (req.method === 'POST' && this.plan.agreementStatus === PlanAgreementStatus.DRAFT) {
+        validationModel = PlanReadyForAgreementModel
+      } else if (req.method === 'GET' && this.plan.agreementStatus !== PlanAgreementStatus.DRAFT) {
+        validationModel = AgreedPlanModel
+      }
+
+      if (validationModel) {
+        req.errors.domain = getValidationErrors(plainToInstance(validationModel, this.plan))
+      }
 
       return next()
     } catch (e) {
-      return next(e)
+      return next(HttpError(500, e.message))
     }
   }
 
   private handleValidationErrors = (req: Request, res: Response, next: NextFunction) => {
     const hasErrors = Object.values(req.errors).some(errorCategory => Object.keys(errorCategory).length)
 
-    if (hasErrors) {
+    if (hasErrors && this.plan.agreementStatus === PlanAgreementStatus.DRAFT) {
       if (req.query?.type) {
         delete req.query.type
       }
@@ -107,13 +128,14 @@ export default class PlanOverviewController {
     requireAccessMode(AccessMode.READ_ONLY),
     transformRequest({ query: PlanOverviewQueryModel }),
     validateRequest(),
+    this.validatePlan,
     this.handleValidationErrors,
     this.render,
   ]
 
   post = [
     requireAccessMode(AccessMode.READ_WRITE),
-    this.validatePlanForAgreement,
+    this.validatePlan,
     this.handleValidationErrors,
     this.handleSuccessRedirect,
   ]

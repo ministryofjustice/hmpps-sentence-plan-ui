@@ -27,5 +27,6 @@ export type PlanType = {
   updatedDate: string
   updatedBy: string
   agreementDate: string
+  mostRecentUpdateDate: string
   goals: Goal[]
 }

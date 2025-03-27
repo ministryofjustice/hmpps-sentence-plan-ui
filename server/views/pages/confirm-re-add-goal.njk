@@ -1,0 +1,159 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/date-input/macro.njk" import govukDateInput %}
+{% from "moj/components/date-picker/macro.njk" import mojDatePicker %}
+{% from "../components/summary-card/goal-summary-card.njk" import goalSummaryCard %}
+{% from "../components/error-summary/error-summary.njk" import errorSummary with context %}
+
+{% set locale = interpolate(locale, {
+  dateOptions: {
+    threeMonths: data.dateOptions[0] | formatSimpleDate,
+    sixMonths: data.dateOptions[1] | formatSimpleDate,
+    twelveMonths: data.dateOptions[2] | formatSimpleDate
+  }
+}) %}
+
+{% block pageTitle %}
+    {% if not errors %}
+        {{ locale.page.title }}
+    {% else %}
+        {{ locale.page.errorTitle }}
+    {% endif %}
+{% endblock %}
+
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block content %}
+{{ super() }}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+        <a href="{{ data.returnLink }}" class="govuk-back-link">{{ locale.common.backLink.text }}</a>
+        {{ errorSummary({
+            errors: errors,
+            locale: locale
+        }) }}
+        <h1 class="govuk-heading-l">{{ locale.mainHeading.title }}</h1>
+
+        {{ goalSummaryCard({
+            goal: data.goal,
+            locale: locale
+        }) }}
+
+      <form id="re-add-goal-form" method="POST">
+          <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+          <input type="hidden" name="uuid" value="{{ data.goal.uuid }}">
+
+        {{ govukTextarea({
+          name: "re-add-goal-reason",
+          id: "re-add-goal-reason",
+          classes: "govuk-!-width-two-thirds",
+          rows: 3,
+          label: {
+            text: locale.reason.label,
+            classes: "govuk-label--m"
+          },
+          value: data.form['re-add-goal-reason'],
+          errorMessage: getFormattedError(errors, locale, 're-add-goal-reason')
+        }) }}
+
+          {% set customDateHtml %}
+              {{ mojDatePicker({
+                  id: "date-selection-custom",
+                  name: "date-selection-custom",
+                  errorMessage: getFormattedError(errors, locale, 'date-selection-custom'),
+                  classes: "govuk-input--width-10",
+                  hint: {
+                      text: locale.common.goalEditing.datePicker.hint
+                  },
+                  label: {
+                      text: locale.common.goalEditing.datePicker.label,
+                      classes: "govuk-fieldset__legend--s"
+                  },
+                  value: data.form['date-selection-custom'],
+                  minDate: data.minimumDatePickerDate
+              }) }}
+          {% endset -%}
+
+          {% set customDateRadioHtml %}
+              {{ govukRadios({
+                  name: "date-selection-radio",
+                  fieldset: {
+                      legend: {
+                          text: locale.common.dateSelection.label,
+                          classes: "govuk-fieldset__legend--m"
+                      }
+                  },
+                  hint: {
+                      text: locale.common.dateSelection.hint
+                  },
+                  errorMessage: getFormattedError(errors, locale, 'date-selection-radio'),
+                  value: data.form['date-selection-radio'],
+                  items: [
+                      {
+                          value: data.dateOptions[0] | formatISODate,
+                          text: locale.common.goalEditing.dateSelection.options.threeMonths
+                      },
+                      {
+                          value: data.dateOptions[1] | formatISODate,
+                          text: locale.common.goalEditing.dateSelection.options.sixMonths
+                      },
+                      {
+                          value: data.dateOptions[2] | formatISODate,
+                          text: locale.common.goalEditing.dateSelection.options.twelveMonths
+                      },
+                      {
+                          divider: locale.common.radio.divider
+                      },
+                      {
+                          value: "custom",
+                          text: locale.common.goalEditing.dateSelection.options.custom,
+                          conditional: {
+                          html: customDateHtml
+                      }
+                      }
+                  ]
+              }) }}
+          {% endset -%}
+
+          {{ govukRadios({
+            name: "start-working-goal-radio",
+            fieldset: {
+              legend: {
+                text: locale.common.goalEditing.startWorking.label,
+                classes: "govuk-fieldset__legend--m"
+              }
+            },
+            errorMessage: getFormattedError(errors, locale, 'start-working-goal-radio'),
+            items: [
+              {
+                text: locale.common.goalEditing.startWorking.options.yes,
+                value: "yes",
+                checked: data.form['start-working-goal-radio'] == 'yes',
+                conditional: {
+                html: customDateRadioHtml
+              }
+              },
+              {
+                text: locale.common.goalEditing.startWorking.options.no,
+                value: "no",
+                checked: data.form['start-working-goal-radio'] == 'no'
+              }
+            ]
+          }) }}
+
+          <div class="govuk-button-group">
+              {{ govukButton({
+                  text: locale.confirmGoalReAddToPlan,
+                  name: "action",
+                  value: "confirm"
+              }) }}
+              <a href="/view-removed-goal/{{ data.goal.uuid }}">{{ locale.doNotReAddGoalToPlan }}</a>
+          </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

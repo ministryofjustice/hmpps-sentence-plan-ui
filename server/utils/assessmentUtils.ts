@@ -3,50 +3,119 @@ import camelCase from 'camelcase'
 import { DateTime } from 'luxon'
 import { isBlank } from './utils'
 import {
+  AnswerDTOs,
   AssessmentArea,
   AssessmentAreaConfig,
-  AssessmentAreas,
   AssessmentResponse,
   CriminogenicNeedsData,
+  FormattedAssessment,
   SubAreaData,
 } from '../@types/Assessment'
 import getAssessmentAreaThreshold from '../services/sentence-plan/assessmentAreaThresholds'
+
+export function getAssessmentDetailsForArea(
+  crimNeeds: CriminogenicNeedsData,
+  areaConfig: AssessmentAreaConfig,
+  sanAssessmentData: AnswerDTOs,
+) {
+  const score = crimNeeds[areaConfig.crimNeedsKey][`${areaConfig.crimNeedsSubKey}OtherWeightedScore`]
+
+  let isAssessmentSectionComplete: boolean
+
+  // The Finance and Health and Wellbeing sections never have a score so do not use that when calculating if complete
+  if (['Finances', 'Health and wellbeing'].includes(areaConfig.area)) {
+    isAssessmentSectionComplete = sanAssessmentData[`${areaConfig.assessmentKey}_section_complete`]?.value === 'YES'
+  } else {
+    isAssessmentSectionComplete =
+      sanAssessmentData[`${areaConfig.assessmentKey}_section_complete`]?.value === 'YES' && score !== undefined
+  }
+
+  // Values can be 'YES', 'NO' or 'NULL'
+  const linkedToHarm = crimNeeds[areaConfig.crimNeedsKey][`${areaConfig.crimNeedsSubKey}LinkedToHarm`] ?? 'NULL'
+
+  const linkedtoReoffending =
+    crimNeeds[areaConfig.crimNeedsKey][`${areaConfig.crimNeedsSubKey}LinkedToReoffending`] ?? 'NULL'
+
+  const linkedtoStrengthsOrProtectiveFactors =
+    crimNeeds[areaConfig.crimNeedsKey][`${areaConfig.crimNeedsSubKey}Strengths`] ?? 'NULL'
+
+  const riskOfSeriousHarmDetails =
+    linkedToHarm !== 'NULL'
+      ? sanAssessmentData[
+          `${areaConfig.assessmentKey}_practitioner_analysis_risk_of_serious_harm_${linkedToHarm.toLowerCase()}_details`
+        ]?.value
+      : undefined
+
+  const riskOfReoffendingDetails =
+    linkedtoReoffending !== 'NULL'
+      ? sanAssessmentData[
+          `${areaConfig.assessmentKey}_practitioner_analysis_risk_of_reoffending_${linkedtoReoffending.toLowerCase()}_details`
+        ]?.value
+      : undefined
+
+  const motivationToMakeChanges = motivationText(sanAssessmentData[`${areaConfig.assessmentKey}_changes`]?.value)
+
+  const strengthsOrProtectiveFactorsDetails =
+    linkedtoStrengthsOrProtectiveFactors !== 'NULL'
+      ? sanAssessmentData[
+          `${areaConfig.assessmentKey}_practitioner_analysis_strengths_or_protective_factors_${linkedtoStrengthsOrProtectiveFactors.toLowerCase()}_details`
+        ]?.value
+      : undefined
+
+  const isAssessmentSectionNotStarted =
+    isAssessmentSectionComplete === false &&
+    linkedToHarm === 'NULL' &&
+    linkedtoReoffending === 'NULL' &&
+    linkedtoStrengthsOrProtectiveFactors === 'NULL' &&
+    motivationToMakeChanges === undefined
+
+  return {
+    isAssessmentSectionNotStarted,
+    isAssessmentSectionComplete,
+    linkedToHarm,
+    linkedtoReoffending,
+    linkedtoStrengthsOrProtectiveFactors,
+    riskOfSeriousHarmDetails,
+    riskOfReoffendingDetails,
+    motivationToMakeChanges,
+    strengthsOrProtectiveFactorsDetails,
+  }
+}
 
 export const formatAssessmentData = (
   crimNeeds: CriminogenicNeedsData,
   assessment: AssessmentResponse,
   areaConfigs: AssessmentAreaConfig[],
-): AssessmentAreas => {
+): FormattedAssessment => {
   if (!assessment || !assessment.sanAssessmentData) {
-    return { lowScoring: [], highScoring: [], other: [] }
+    return {
+      isAssessmentComplete: false,
+      areas: { incompleteAreas: [], highScoring: [], lowScoring: [], other: [] },
+    }
   }
 
   const all = areaConfigs
     .filter(areaConfig => areaConfig.crimNeedsKey in crimNeeds && crimNeeds[areaConfig.crimNeedsKey])
     .map(areaConfig => {
       let score
-      const linkedtoRoSH = crimNeeds[areaConfig.crimNeedsKey][`${areaConfig.crimNeedsSubKey}LinkedToHarm`] === 'YES'
-      const linkedtoReoffending =
-        crimNeeds[areaConfig.crimNeedsKey][`${areaConfig.crimNeedsSubKey}LinkedToReoffending`] === 'YES'
       let subData: SubAreaData
       let overallScore
-      const motivationToMakeChanges = motivationText(
-        assessment.sanAssessmentData[`${areaConfig.assessmentKey}_changes`]?.value,
-      )
-      const riskOfSeriousHarmDetails =
-        assessment.sanAssessmentData[
-          `${areaConfig.assessmentKey}_practitioner_analysis_risk_of_serious_harm_yes_details`
-        ]?.value
-      const riskOfReoffendingDetails =
-        assessment.sanAssessmentData[
-          `${areaConfig.assessmentKey}_practitioner_analysis_risk_of_reoffending_yes_details`
-        ]?.value
-      const strengthsOrProtectiveFactors =
-        assessment.sanAssessmentData[
-          `${areaConfig.assessmentKey}_practitioner_analysis_strengths_or_protective_factors_yes_details`
-        ]?.value
 
+      // score in the fullCrimNeeds can be "N/A" or a number
       score = crimNeeds[areaConfig.crimNeedsKey][`${areaConfig.crimNeedsSubKey}OtherWeightedScore`]
+
+      const {
+        isAssessmentSectionNotStarted,
+        isAssessmentSectionComplete,
+        linkedToHarm,
+        linkedtoReoffending,
+        linkedtoStrengthsOrProtectiveFactors,
+        riskOfSeriousHarmDetails,
+        riskOfReoffendingDetails,
+        motivationToMakeChanges,
+        strengthsOrProtectiveFactorsDetails,
+      } = getAssessmentDetailsForArea(crimNeeds, areaConfig, assessment.sanAssessmentData)
+
       if (Number.isNaN(Number(score))) {
         score = undefined
       } else if (score > areaConfig.upperBound) {
@@ -72,12 +141,15 @@ export const formatAssessmentData = (
       return {
         title: areaConfig.area,
         overallScore: overallScore ?? score,
-        linkedtoRoSH,
+        linkedToHarm,
         linkedtoReoffending,
+        linkedtoStrengthsOrProtectiveFactors,
+        isAssessmentSectionNotStarted,
+        isAssessmentSectionComplete,
         motivationToMakeChanges,
         riskOfSeriousHarmDetails,
         riskOfReoffendingDetails,
-        strengthsOrProtectiveFactors,
+        strengthsOrProtectiveFactorsDetails,
         criminogenicNeedsScore: score,
         goalRoute: areaConfig.goalRoute,
         upperBound: areaConfig.upperBound,
@@ -86,46 +158,76 @@ export const formatAssessmentData = (
       } as AssessmentArea
     })
 
-  const lowScoring = filterAndSortAreas(all, (score, threshold) => score <= threshold)
-  const highScoring = filterAndSortAreas(all, (score, threshold) => score > threshold)
-  const otherUnsorted = all.filter(area => area.criminogenicNeedsScore === undefined)
+  let assessmentIsComplete = false
+
+  // if none of the areas have missing information, mark the assessment as complete
+  if (all.every(area => area.isAssessmentSectionComplete === true)) {
+    assessmentIsComplete = true
+  }
+
+  let incompleteAreas: AssessmentArea[] = []
+
+  if (!assessmentIsComplete) {
+    incompleteAreas = all
+      .filter(area => area.isAssessmentSectionComplete === false)
+      .sort((a, b) => a.title.localeCompare(b.title))
+  }
+
+  const completeAreas = all.filter(area => area.isAssessmentSectionComplete === true)
+
+  const highScoring = groupAndSortByRisk(completeAreas.filter(area => Number(area.overallScore) > area.thresholdValue))
+  const lowScoring = groupAndSortByRisk(completeAreas.filter(area => Number(area.overallScore) <= area.thresholdValue))
+  const otherUnsorted = groupAndSortByRisk(completeAreas.filter(area => area.criminogenicNeedsScore === undefined))
 
   // emptyAreas are areas that are missing from the criminogenic needs data
   const emptyAreas = groupAndSortMissingAreas(areaConfigs, crimNeeds)
 
-  const other = groupAndSortOtherAreas(otherUnsorted).concat(emptyAreas)
-  return { lowScoring, highScoring, other, versionUpdatedAt: assessment.lastUpdatedTimestampSAN } as AssessmentAreas
+  const other = groupAndSortByRisk(otherUnsorted).concat(emptyAreas)
+  return {
+    isAssessmentComplete: assessmentIsComplete,
+    versionUpdatedAt: assessment.lastUpdatedTimestampSAN,
+    areas: {
+      incompleteAreas,
+      highScoring,
+      lowScoring,
+      other,
+    },
+  } as FormattedAssessment
 }
 
-const filterAndSortAreas = (areas: AssessmentArea[], comparator: (score: number, threshold: number) => boolean) => {
-  return areas
-    .filter(area => comparator(Number(area.overallScore), area.thresholdValue))
-    .sort((a, b) => {
-      const scoreDifference = Number(a.overallScore) - a.thresholdValue - (Number(b.overallScore) - b.thresholdValue)
-      if (scoreDifference !== 0) {
-        return scoreDifference > 0 ? -1 : 1
-      }
-      return a.title.localeCompare(b.title)
-    })
+// 1. Invert the order of the groups of AssessmentArea score rankings (highest first)
+// 2. For each group of areas, sort them by the distance between their overall score and the threshold value.
+// 3. If the distances are equal, sort alphabetically by title
+function sortByScoreAndTitle(groupedByRiskCount: Record<number, AssessmentArea[]>) {
+  return Object.keys(groupedByRiskCount)
+    .sort((a, b) => Number(b) - Number(a))
+    .map(key =>
+      groupedByRiskCount[Number(key)].sort((a, b) => {
+        const distanceA = Number(a.overallScore) - a.thresholdValue
+        const distanceB = Number(b.overallScore) - b.thresholdValue
+        // if the distance from thresholds are the same or if we are missing the scores, we should sort alphabetically
+        if (distanceA === distanceB || Number.isNaN(distanceA) || Number.isNaN(distanceB)) {
+          return a.title.localeCompare(b.title)
+        }
+        return distanceA > distanceB ? -1 : 1
+      }),
+    )
+    .reduce((acc, val) => acc.concat(val), [])
 }
 
-export const groupAndSortOtherAreas = (other: AssessmentArea[]): AssessmentArea[] => {
+export const groupAndSortByRisk = (other: AssessmentArea[]): AssessmentArea[] => {
   const groupedByRiskCount: Record<number, AssessmentArea[]> = {}
 
   // group the areas by the sum of their risk counts, RoSH first
   other.forEach(area => {
-    const riskCount = (area.linkedtoRoSH ? 2 : 0) + (area.linkedtoReoffending ? 1 : 0)
+    const riskCount = (area.linkedToHarm === 'YES' ? 2 : 0) + (area.linkedtoReoffending === 'YES' ? 1 : 0)
     if (!groupedByRiskCount[riskCount]) {
       groupedByRiskCount[riskCount] = []
     }
     groupedByRiskCount[riskCount].push(area)
   })
 
-  // invert the order of the keys and sort the areas by title
-  return Object.keys(groupedByRiskCount)
-    .sort((a, b) => Number(b) - Number(a))
-    .map(key => groupedByRiskCount[Number(key)].sort((a, b) => a.title.localeCompare(b.title)))
-    .reduce((acc, val) => acc.concat(val), [])
+  return sortByScoreAndTitle(groupedByRiskCount)
 }
 
 // This function is used to group and sort the areas that are missing from the criminogenic needs data
@@ -150,11 +252,6 @@ export const motivationText = (optionResult?: string): string => {
     return undefined
   }
   return camelCase(optionResult)
-}
-
-export const dateWithYear = (datetimeString: string): string | null => {
-  if (!datetimeString || isBlank(datetimeString)) return undefined
-  return DateTime.fromISO(datetimeString).toFormat('d MMMM yyyy')
 }
 
 export const yearsAndDaysElapsed = (datetimeStringFrom: string, datetimeStringTo: string): any => {

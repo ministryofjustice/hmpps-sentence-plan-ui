@@ -40,7 +40,7 @@
     <div class='govuk-grid-row'>
     <div class="govuk-grid-column-two-thirds">
     {% for note in data.notes %}
-        {% set locale = interpolate(locale, {
+        {% set noteLocale = interpolate(locale, {
             noteCreatedDate: note.createdDate | formatSimpleDate,
             noteCreatedBy: note.createdBy | convertToTitleCase,
             hiddenText: note.goalTitle
@@ -48,14 +48,14 @@
         <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" >
         {% if note.noteObject == 'Plan' %}
             {% if note.noteType == 'AGREED' %}
-                <p class='plan-status'><strong>{{ locale.note.status.plan.agreed }}</strong> {{ locale.who.practitionerAndSubject }}</p>
-                <p class='subject-response'>{{ locale.subjectResponse.agreed }}</p>
+                <p class='plan-status'><strong>{{ noteLocale.note.status.plan.agreed }}</strong> {{ noteLocale.who.practitionerAndSubject }}</p>
+                <p class='subject-response'>{{ noteLocale.subjectResponse.agreed }}</p>
             {% elseif note.noteType == 'DO_NOT_AGREE' %}
-                <p class='plan-status'><strong>{{ locale.note.status.plan.created }}</strong> by {{ locale.who.practitionerOnly }}</p>
-                <p class='subject-response'>{{ locale.subjectResponse.didNotAgree }}</p>
+                <p class='plan-status'><strong>{{ noteLocale.note.status.plan.created }}</strong> {{ noteLocale.who.practitionerOnly }}</p>
+                <p class='subject-response'>{{ noteLocale.subjectResponse.didNotAgree }}</p>
             {% elseif note.noteType == 'COULD_NOT_ANSWER' %}
-                <p class='plan-status'><strong>{{ locale.note.status.plan.created }}</strong> {{ locale.who.practitionerOnly }}</p>
-                <p class='subject-response'>{{ locale.subjectResponse.couldNotAgree }}</p>
+                <p class='plan-status'><strong>{{ noteLocale.note.status.plan.created }}</strong> {{ noteLocale.who.practitionerOnly }}</p>
+                <p class='subject-response'>{{ noteLocale.subjectResponse.couldNotAgree }}</p>
             {% endif %}
 
             <div class='plan-note'>
@@ -69,35 +69,41 @@
 
         {% if note.noteObject == 'Goal' %}
             {% if note.noteType == 'REMOVED'%}
-                <p class='goal-status'><strong>{{ locale.note.status.goal.removed }}</strong> {{ locale.who.practitionerOnly }}</p>
+                <p class='goal-status'><strong>{{ noteLocale.note.status.goal.removed }}</strong> {{ noteLocale.who.practitionerOnly }}</p>
+                <p class='goal-title'><strong>{{ note.goalTitle }}</strong></p>
+                <p class='goal-note'>{{ note.note }}</p>
+              {% elseif note.noteType == 'READDED'%}
+                <p class='goal-status'><strong>{{ noteLocale.note.status.goal.addedBackToPlan }}</strong> {{ noteLocale.who.practitionerOnly }}</p>
                 <p class='goal-title'><strong>{{ note.goalTitle }}</strong></p>
                 <p class='goal-note'>{{ note.note }}</p>
             {% elseif note.noteType == 'ACHIEVED'%}
-                <p class='goal-status'><strong>{{ locale.note.status.goal.achieved }}</strong> {{ locale.who.practitionerOnly }}</p>
+                <p class='goal-status'><strong>{{ noteLocale.note.status.goal.achieved }}</strong> {{ noteLocale.who.practitionerOnly }}</p>
                 <p class='goal-title'><strong>{{ note.goalTitle }}</strong></p>
                     {% if note.note.length > 0 %}
                            <p class='goal-note'>{{ note.note }}</p>
                     {% endif %}
             {% elseif note.noteType == 'PROGRESS'%}
-                <p class='goal-status'><strong>{{ locale.note.status.goal.updated }}</strong> {{ locale.who.practitionerOnly }}</p>
+                <p class='goal-status'><strong>{{ noteLocale.note.status.goal.updated }}</strong> {{ noteLocale.who.practitionerOnly }}</p>
                 <p class='goal-title'><strong>{{ note.goalTitle }}</strong></p>
                     {% if note.note.length > 0 %}
                             <p class='goal-note'>{{ note.note }}</p>
                     {% endif %}
             {% endif %}
 
-            {% set goalText = locale.linkType.direct %}
-            {% set hiddenAriaText = locale.ariaText.direct %}
-            {% if note.goalStatus == 'REMOVED' %}
-                {%  set goalLink = '/view-removed-goal/' + note.goalUuid %}
-            {% elseif note.goalStatus == 'ACHIEVED' %}
-                {%  set goalLink = '/view-achieved-goal/' + note.goalUuid  %}
-            {% else %}
-                {% set goalLink = '/update-goal/' + note.goalUuid  %}
-                {% set goalText = locale.linkType.latest %}
-                {% set hiddenAriaText = locale.ariaText.latest %}
+            {% set goalText = noteLocale.linkType.direct %}
+            {% set hiddenAriaText = noteLocale.ariaText.direct %}
+            {% if data.readWrite === true %}
+              {% if note.goalStatus == 'REMOVED' %}
+                  {%  set goalLink = '/view-removed-goal/' + note.goalUuid %}
+              {% elseif note.goalStatus == 'ACHIEVED' %}
+                  {%  set goalLink = '/view-achieved-goal/' + note.goalUuid  %}
+              {% else %}
+                  {% set goalLink = '/update-goal-steps/' + note.goalUuid  %}
+                  {% set goalText = noteLocale.linkType.latest %}
+                  {% set hiddenAriaText = noteLocale.ariaText.latest %}
+              {% endif %}
+              <p class='goal-link'><a aria-label= '{{ hiddenAriaText }}' href='{{ goalLink }}'>{{ goalText }}</a></p>
             {% endif %}
-            <p class='goal-link'><a aria-label= '{{ hiddenAriaText }}' href='{{ goalLink }}' class="govuk-link govuk-link--no-visited-state">{{ goalText }}</a></p>
         {% endif %}
     {% endfor %}
 

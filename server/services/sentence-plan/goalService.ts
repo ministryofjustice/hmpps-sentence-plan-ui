@@ -3,6 +3,7 @@ import { NewGoal } from '../../@types/NewGoalType'
 import { Goal } from '../../@types/GoalType'
 import { Goals } from '../../@types/GoalsType'
 import { GoalOrder } from '../../@types/GoalOrderType'
+import { ReAddGoal } from '../../@types/ReAddGoal'
 
 export default class GoalService {
   constructor(private readonly sentencePlanApiClient: SentencePlanApiClient) {}
@@ -17,9 +18,19 @@ export default class GoalService {
     return restClient.put<Goal>({ path: `/goals/${goalUuid}`, data: goal })
   }
 
-  async updateGoal(goal: Partial<NewGoal>, goalUuid: string) {
-    const restClient = await this.sentencePlanApiClient.restClient('Update goal data')
-    return restClient.patch<Goal>({ path: `/goals/${goalUuid}`, data: goal })
+  async achieveGoal(note: string, goalUuid: string) {
+    const restClient = await this.sentencePlanApiClient.restClient('Achieve goal')
+    return restClient.post<Goal>({ path: `/goals/${goalUuid}/achieve`, data: { note } })
+  }
+
+  async removeGoal(note: string, goalUuid: string) {
+    const restClient = await this.sentencePlanApiClient.restClient('Remove goal')
+    return restClient.post<Goal>({ path: `/goals/${goalUuid}/remove`, data: { note } })
+  }
+
+  async reAddGoal(goal: ReAddGoal, goalUuid: string) {
+    const restClient = await this.sentencePlanApiClient.restClient('Re-add goal')
+    return restClient.post<Goal>({ path: `/goals/${goalUuid}/readd`, data: goal })
   }
 
   async saveGoal(goal: NewGoal, parentPlanUuid: string) {

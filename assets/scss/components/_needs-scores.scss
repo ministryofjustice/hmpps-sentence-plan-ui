@@ -25,8 +25,12 @@ $white-needs-score-background-colour: #ffffff;
 
 .needs-score-label-wrapper {
   width: 10%;
-  // TODO margin-bottom should probably be a relative value based on font-size or line-height rather than a fixed value
+  // the margin bottom is set to 16px to match the height of the border of .needs-score-label__card-pointer
   margin-bottom: 16px;
+}
+
+.needs-score-label__card span {
+  display: block;
 }
 
 @for $i from 0 through 10 {

@@ -15,6 +15,7 @@ import testPlan from '../../testutils/data/planData'
 import { PlanAgreementStatus, PlanType } from '../../@types/PlanType'
 import { Goal } from '../../@types/GoalType'
 import CreateGoalPostModel from '../createGoal/models/CreateGoalPostModel'
+import { crimNeedsSubset, incompleteAssessmentData } from '../../testutils/data/testAssessmentData'
 
 jest.mock('../../middleware/authorisationMiddleware', () => ({
   requireAccessMode: jest.fn(() => (req: Request, res: Response, next: NextFunction) => {
@@ -30,8 +31,15 @@ jest.mock('../../services/sentence-plan/referentialDataService', () => {
 
 jest.mock('../../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
+    getCriminogenicNeeds: jest.fn().mockReturnValue(crimNeedsSubset),
     getPlanUUID: jest.fn().mockReturnValue(testPlan.uuid),
     getReturnLink: jest.fn().mockReturnValue('/some-return-link'),
+  }))
+})
+
+jest.mock('../../services/sentence-plan/assessmentService', () => {
+  return jest.fn().mockImplementation(() => ({
+    getAssessmentByUuid: jest.fn().mockResolvedValue(incompleteAssessmentData),
   }))
 })
 
@@ -56,9 +64,18 @@ describe('ChangeGoalController', () => {
   let next: NextFunction
   const viewData = {
     data: {
+      planAgreementStatus: testPlan.agreementStatus,
       sortedAreasOfNeed: AreaOfNeed,
       returnLink: '/some-return-link',
       form: {},
+      assessmentDetailsForArea: {
+        isAssessmentSectionNotStarted: false,
+        isAssessmentSectionComplete: true,
+        motivationToMakeChanges: 'needsHelpToMakeChanges',
+        linkedToHarm: 'NO',
+        linkedtoReoffending: 'NO',
+        linkedtoStrengthsOrProtectiveFactors: 'NO',
+      },
       selectedAreaOfNeed: AreaOfNeed.find(x => x.name === testGoal.areaOfNeed.name),
       minimumDatePickerDate: '01/01/2024',
       dateOptions: [
@@ -300,7 +317,7 @@ describe('ChangeGoalController', () => {
       await runMiddlewareChain(controller.post, req, res, next)
 
       expect(req.services.goalService.replaceGoal).toHaveBeenCalledWith(updatedGoal, testGoal.uuid)
-      expect(res.redirect).toHaveBeenCalledWith(`/plan?status=updated&type=current`)
+      expect(res.redirect).toHaveBeenCalledWith(`/plan?status=changed&type=current`)
       expect(res.render).not.toHaveBeenCalled()
       expect(next).not.toHaveBeenCalled()
     })
@@ -322,7 +339,7 @@ describe('ChangeGoalController', () => {
       expect(res.render).toHaveBeenCalledWith('pages/change-goal', expectedViewData)
     })
 
-    it('should should return error page if there is an error saving the goal', async () => {
+    it('should return error page if there is an error saving the goal', async () => {
       const updatedGoal: NewGoal = {
         title: 'A new title for the test goal',
         areaOfNeed: testGoal.areaOfNeed.name,
@@ -346,7 +363,7 @@ describe('ChangeGoalController', () => {
       expect(next).toHaveBeenCalledWith(error)
     })
 
-    it('should redirect to update-goal if Plan is agreed and goal.type==current ', async () => {
+    it('should redirect to update-goal-steps if Plan is agreed and goal.type==current ', async () => {
       const draftPlanData: PlanType = { ...testPlan, agreementStatus: PlanAgreementStatus.AGREED }
       req.services.planService.getPlanByUuid = jest.fn().mockResolvedValue(draftPlanData)
 
@@ -373,12 +390,12 @@ describe('ChangeGoalController', () => {
       await runMiddlewareChain(controller.post, req, res, next)
 
       expect(req.services.goalService.replaceGoal).toHaveBeenCalledWith(updatedGoal, testGoal.uuid)
-      expect(res.redirect).toHaveBeenCalledWith(`/update-goal/${testGoal.uuid}`)
+      expect(res.redirect).toHaveBeenCalledWith(`/update-goal-steps/${testGoal.uuid}`)
       expect(res.render).not.toHaveBeenCalled()
       expect(next).not.toHaveBeenCalled()
     })
 
-    it('should redirect to update-goal if Plan is agreed and future goal has steps', async () => {
+    it('should redirect to update-goal-steps if Plan is agreed and future goal has steps', async () => {
       const draftPlanData: PlanType = { ...testPlan, agreementStatus: PlanAgreementStatus.AGREED }
       req.services.planService.getPlanByUuid = jest.fn().mockResolvedValue(draftPlanData)
 
@@ -394,7 +411,32 @@ describe('ChangeGoalController', () => {
       req.params.uuid = testGoal.uuid
 
       await runMiddlewareChain(controller.post, req, res, next)
-      expect(res.redirect).toHaveBeenCalledWith(`/update-goal/${testGoal.uuid}`)
+      expect(res.redirect).toHaveBeenCalledWith(`/update-goal-steps/${testGoal.uuid}`)
+    })
+
+    it('should redirect to add-steps if came from add-steps and user clicked the back link', async () => {
+      const draftPlanData: PlanType = { ...testPlan, agreementStatus: PlanAgreementStatus.DRAFT }
+      req.services.planService.getPlanByUuid = jest.fn().mockResolvedValue(draftPlanData)
+
+      const testGoalWithNoSteps: Goal = { ...testGoal, steps: [] }
+      req.services.goalService.getGoal = jest.fn().mockReturnValue(testGoalWithNoSteps)
+      req.services.sessionService.getReturnLink = jest.fn().mockReturnValue(`/change-goal/${testGoal.uuid}/`)
+      req.services.sessionService.setReturnLink = jest.fn()
+
+      req.body = {
+        'goal-input-autocomplete': 'Goal for the future with no steps',
+        'area-of-need': testGoal.areaOfNeed.name,
+        'related-area-of-need-radio': 'no',
+        'start-working-goal-radio': 'yes',
+        'date-selection-radio': viewData.data.dateOptions[1].toISOString(),
+      }
+      req.errors = {
+        body: {},
+      }
+      req.params.uuid = testGoal.uuid
+
+      await runMiddlewareChain(controller.post, req, res, next)
+      expect(res.redirect).toHaveBeenCalledWith(`/goal/${testGoal.uuid}/add-steps`)
     })
 
     it('should redirect to add-steps if Plan is agreed and current goal has no steps', async () => {

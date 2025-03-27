@@ -1,0 +1,72 @@
+{
+  "en": {
+    "page": {
+      "title": "About - {{ applicationName }}"
+    },
+    "mainHeading": {
+      "title": "About {{ subject.givenName }}"
+    },
+    "detail": {
+      "sentenceHeading": "Sentence",
+      "endDateHeading": "Expected end date",
+      "unpaidWorkHeading": "Unpaid work",
+      "rarHeading": "RAR (Rehabilitation activity requirement)",
+      "lastUpdated": "{{ subject.givenName }}'s assessment was last updated on {{ lastUpdatedDate }}.",
+      "RoSH": "RoSH (Risk of Serious Harm)",
+      "riskOfReoffending": "Risk of reoffending",
+      "linkedToHarm": {
+        "yes": "This area is linked to RoSH (risk of serious harm)",
+        "no": "This area is not linked to RoSH (risk of serious harm)"
+      },
+      "linkedtoReoffending": {
+        "yes": "This area is linked to risk of reoffending",
+        "no": "This area is not linked to risk of reoffending"
+      },
+      "motivationToMakeChanges": "Motivation to make changes in this area",
+      "strengthsOrProtectiveFactors": {
+        "yes": "There are strengths or protective factors related to this area",
+        "no": "There are no strengths or protective factors related to this area"
+      },
+      "needScore": "need score",
+      "lifestyleAndAssociatesNeedScore": "Lifestyle and associates need score"
+    },
+    "lowScoring": {
+      "sectionHeading": "Low-scoring areas from the assessment",
+      "sectionEmptyParagraph": "No low-scoring areas."
+    },
+    "highScoring": {
+      "sectionHeading": "High-scoring areas from the assessment",
+      "sectionEmptyParagraph": "No high-scoring areas."
+    },
+    "withoutScoring": {
+      "sectionHeading": "Areas without a need score",
+      "sectionParagraph": "Health and wellbeing, and finances never have a need score. When other information is available for those areas, you can see it here."
+    },
+    "errors": {
+      "noAssessmentDataFound": "No assessment data found",
+      "noSentenceDataFound": "No sentence data found"
+    },
+    "goalsToAchieve": {
+      "title": "Goals to achieve",
+      "areaOfNeedHeading": "Area of need",
+      "goalHeading": "Goal",
+      "createGoalLink": "Create goal",
+      "viewPreviousGoalsLink": "View previous goals",
+      "noPreviousGoals": "No previous goals"
+    },
+    "incompleteAssessment": {
+      "errorTitle": "Some areas have incomplete information",
+      "errorDescription": "This means the areas have not been marked as complete in the assessment, but you can still see the latest information available.",
+      "sectionHeading": "Incomplete information",
+      "sectionParagraph": "These areas have not been marked as complete in the assessment yet, but you can see the latest information available.",
+      "allInformationMissing": "No information is available yet"
+    },
+    "subNav": {
+      "about": "About",
+      "summary": "Plan summary"
+    },
+    "needScore": {
+      "doesNotHaveNeedScore": "This area never has a need score"
+    }
+  }
+}

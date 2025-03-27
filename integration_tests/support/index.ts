@@ -1,5 +1,13 @@
 import compareSnapshotCommand from 'cypress-image-diff-js/command'
-import { addGoalToPlan, addStepToGoal, createSentencePlan, lockPlan, openSentencePlan } from './commands/backend'
+import {
+  addGoalToPlan,
+  addStepToGoal,
+  agreePlan,
+  createSentencePlan,
+  lockPlan,
+  openSentencePlan,
+  removeGoalFromPlan,
+} from './commands/backend'
 import { checkAccessibility } from './commands/accessibility'
 import 'cypress-axe'
 
@@ -12,6 +20,8 @@ Cypress.Commands.add('createSentencePlan', createSentencePlan)
 // API
 Cypress.Commands.add('addGoalToPlan', addGoalToPlan)
 Cypress.Commands.add('addStepToGoal', addStepToGoal)
+Cypress.Commands.add('removeGoalFromPlan', removeGoalFromPlan)
+Cypress.Commands.add('agreePlan', agreePlan)
 
 Cypress.Commands.add('lockPlan', lockPlan)
 

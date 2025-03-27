@@ -27,7 +27,7 @@ jest.mock('../../services/sentence-plan/referentialDataService', () => {
 jest.mock('../../services/sentence-plan/goalService', () => {
   return jest.fn().mockImplementation(() => ({
     getGoal: jest.fn().mockResolvedValue(testGoal),
-    updateGoal: jest.fn().mockResolvedValue(testGoal),
+    updateGoalStatus: jest.fn().mockResolvedValue(testGoal),
   }))
 })
 
@@ -61,7 +61,7 @@ describe('UpdateGoalController', () => {
       popData: handoverData.subject,
       mainAreaOfNeed: AreaOfNeed.find(x => x.name === testGoal.areaOfNeed.name),
       relatedAreasOfNeed: testGoal.relatedAreasOfNeed.map(x => x.name),
-      returnLink: '/some-return-link',
+      returnLink: '/plan?type=current',
     },
     errors: {},
   }
@@ -97,6 +97,38 @@ describe('UpdateGoalController', () => {
 
       expect(req.services.stepService.saveAllSteps).toHaveBeenCalled()
       expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_OVERVIEW}?type=current`)
+      expect(res.render).not.toHaveBeenCalled()
+      expect(next).not.toHaveBeenCalled()
+    })
+
+    it('should submit the updated fields and redirect to the mark as achieved page if mark as achieved clicked', async () => {
+      req.body = {
+        'step-status-1': StepStatus.IN_PROGRESS,
+        'step-uuid-1': testStep.uuid,
+        'more-detail': '',
+        action: 'mark-as-achieved',
+      }
+
+      await runMiddlewareChain(controller.post, req, res, next)
+
+      expect(req.services.stepService.saveAllSteps).toHaveBeenCalled()
+      expect(res.redirect).toHaveBeenCalledWith('/confirm-achieved-goal/a-un1qu3-t3st-Uu1d')
+      expect(res.render).not.toHaveBeenCalled()
+      expect(next).not.toHaveBeenCalled()
+    })
+
+    it('should submit the updated fields and redirect to the remove goal page if remove goal from plan clicked', async () => {
+      req.body = {
+        'step-status-1': StepStatus.IN_PROGRESS,
+        'step-uuid-1': testStep.uuid,
+        'more-detail': 'A note',
+        action: 'remove',
+      }
+
+      await runMiddlewareChain(controller.post, req, res, next)
+
+      expect(req.services.stepService.saveAllSteps).toHaveBeenCalled()
+      expect(res.redirect).toHaveBeenCalledWith('/remove-goal/a-un1qu3-t3st-Uu1d')
       expect(res.render).not.toHaveBeenCalled()
       expect(next).not.toHaveBeenCalled()
     })
@@ -137,6 +169,19 @@ describe('UpdateGoalController', () => {
 
       expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_OVERVIEW}?type=current`)
       expect(req.services.stepService.saveAllSteps).not.toHaveBeenCalled()
+      expect(next).not.toHaveBeenCalled()
+    })
+
+    it('should redirect to the achieve goal page when saved when all steps are completed', async () => {
+      req.body = {
+        'step-status-1': StepStatus.COMPLETED,
+        'step-uuid-1': testStep.uuid,
+        'more-detail': '',
+      }
+
+      await runMiddlewareChain(controller.post, req, res, next)
+
+      expect(res.redirect).toHaveBeenCalledWith(`${URLs.CONFIRM_ACHIEVE_GOAL.replace(':uuid', testGoal.uuid)}`)
       expect(next).not.toHaveBeenCalled()
     })
 

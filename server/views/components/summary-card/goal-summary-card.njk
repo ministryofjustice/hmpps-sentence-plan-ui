@@ -13,17 +13,19 @@
     {% set locale = interpolate(params.locale.common.goalSummaryCard, {
         goal: goal,
         areaOfNeed: params.goal.areaOfNeed.name | lower,
-        relatedAreasOfNeed: relatedAreasOfNeed | sort | join(', ') | lower,
+        relatedAreasOfNeed: relatedAreasOfNeed | sort | join('; ') | lower,
         targetDate: (params.goal.targetDate | formatSimpleDate) if params.goal.targetDate,
-        lastStatusChangeDate: (params.goal.statusDate | formatSimpleDate) if params.goal.statusDate
+        lastStatusChangeDate: (params.goal.statusDate | formatSimpleDate) if params.goal.statusDate,
+        totalSteps: params.goal.steps.length
     }) %}
 
-    <div class="goal-summary-card {%- if params.errorMessage %} goal-summary-card--error {% endif %}">
+    <div class="goal-summary-card {%- if params.errorMessage %} goal-summary-card--error {% endif %}" id="goal-summary-card-{{ params.index }}">
         {% if params.errorMessage %}
-            {{govukTag({
-                text: params.errorMessage.state,
-                classes: "goal-summary-card__state-tag govuk-tag--red"
-            })}}
+          <div class="goal-error-message">
+            {{ govukErrorMessage({
+              text: params.errorMessage.text
+            }) }}
+          </div>
         {% endif %}
 
         {% call summaryCard({
@@ -38,6 +40,8 @@
             <div class="goal-date-and-notes">
             {% if params.goal.targetDate and params.goal.status != "ACHIEVED" and params.goal.status != "REMOVED" %}
                 <p>{{ locale.info.aimToAchieveDate }}</p>
+            {% elif params.goal.status == "ACHIEVED" %}
+                <p>{{ locale.info.achievedDate }}</p>
             {% elif params.goal.status == "REMOVED" %}
                 <p>{{ locale.info.removedDate }}</p>
                 {% set removedNoteDisplayed = false %}
@@ -48,60 +52,76 @@
                     {% endif %}
                 {% endfor %}
             {% endif %}
-            {% if params.goal.status == "ACHIEVED" %}
-                <p>{{ locale.info.goallastStatusChangeDate }}</p>
-            {% endif %}
             </div>
-            {% if params.errorMessage %}
-                <div class="goal-error-message">
-                {{ govukErrorMessage({
-                    text: params.errorMessage.text
-                }) }}
-                </div>
-            {% endif %}
         </div>
 
         {% if params.goal.steps and params.goal.steps.length > 0 %}
-            <table class="govuk-table goal-summary-card__steps">
-                <thead class="govuk-table__head">
-                <tr class="govuk-table__row">
-                    <th scope="col" class="govuk-table__header">{{ locale.stepsList.whoHeader }}</th>
-                    <th scope="col" class="govuk-table__header">{{ locale.stepsList.whatHeader }}</th>
-                    <th scope="col" class="govuk-table__header">{{ locale.stepsList.statusHeader }}</th>
-                </tr>
-                </thead>
-                <tbody class="govuk-table__body">
-                {% for step in params.goal.steps %}
-                    <tr class="govuk-table__row">
-                        <td class="govuk-table__cell">{{ step.actor }}</td>
-                        <td class="govuk-table__cell">{{ step.description }}</td>
-                        <td class="govuk-table__cell">
-                            {% if step.status =='NOT_STARTED' %}
-                                <strong class="govuk-tag govuk-tag--grey">{{ locale.stepsList.status.notStarted }}</strong>
-                            {% elseif step.status == 'IN_PROGRESS' %}
-                                <strong class="govuk-tag govuk-tag">{{ locale.stepsList.status.inProgress }}</strong>
-                            {% elseif step.status == 'COMPLETED' %}
-                                <strong class="govuk-tag govuk-tag--green">{{ locale.stepsList.status.completed }}</strong>
-                            {% elseif step.status == 'CANNOT_BE_DONE_YET' %}
-                                <strong class="govuk-tag govuk-tag--purple">{{ locale.stepsList.status.cannotBeDoneYet }}</strong>
-                            {% elseif step.status == 'NO_LONGER_NEEDED' %}
-                                <strong class="govuk-tag govuk-tag--yellow">{{ locale.stepsList.status.noLongerNeeded }}</strong>
-                            {% endif %}
-                        </td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
-        {% else %}
+            {% set completedCount = 0 %}
+            {% for step in params.goal.steps %}
+                {% if step.status == 'COMPLETED' %}
+                    {% set completedCount = completedCount + 1 %}
+                {% endif %}
+            {% endfor %}
+            {% if params.plan.agreementStatus and params.plan.agreementStatus != 'DRAFT' %}
+                <p class="step-counter">
+                    {% if params.goal.steps.length == 1 %}
+                        {{ completedCount }}{{ locale.info.stepsCompletedSingular }}
+                    {% else %}
+                        {{ completedCount }}{{ locale.info.stepsCompletedPlural }}
+                    {% endif %}
+                </p>
+                <details class="govuk-details">
+                    <summary class="govuk-details__summary">
+                        <span class="govuk-details__summary-text">
+                          View steps
+                        </span>
+                    </summary>
+            {% endif %}
+            <div class="{% if params.plan.agreementStatus == 'AGREED' %}govuk-details__text
+                        {% elseif params.plan.agreementStatus == 'DRAFT' %}govuk-details__text_inactive
+                        {% endif %}">
+                <table class="govuk-table goal-summary-card__steps">
+                    <thead class="govuk-table__head">
+                      <tr class="govuk-table__row">
+                          <th scope="col" class="govuk-table__header">{{ locale.stepsList.whoHeader }}</th>
+                          <th scope="col" class="govuk-table__header">{{ locale.stepsList.whatHeader }}</th>
+                          <th scope="col" class="govuk-table__header">{{ locale.stepsList.statusHeader }}</th>
+                      </tr>
+                      </thead>
+                      <tbody class="govuk-table__body">
+                      {% for step in params.goal.steps %}
+                          <tr class="govuk-table__row">
+                              <td class="govuk-table__cell">{{ step.actor | replace(" (include who in the step)", "") }}</td>
+                              <td class="govuk-table__cell">{{ step.description }}</td>
+                              <td class="govuk-table__cell">
+                                {% if step.status =='NOT_STARTED' %}
+                                    <strong class="govuk-tag govuk-tag--grey">{{ locale.stepsList.status.notStarted }}</strong>
+                                {% elseif step.status == 'IN_PROGRESS' %}
+                                    <strong class="govuk-tag govuk-tag">{{ locale.stepsList.status.inProgress }}</strong>
+                                {% elseif step.status == 'COMPLETED' %}
+                                    <strong class="govuk-tag govuk-tag--green">{{ locale.stepsList.status.completed }}</strong>
+                                {% elseif step.status == 'CANNOT_BE_DONE_YET' %}
+                                    <strong class="govuk-tag govuk-tag--purple">{{ locale.stepsList.status.cannotBeDoneYet }}</strong>
+                                {% elseif step.status == 'NO_LONGER_NEEDED' %}
+                                    <strong class="govuk-tag govuk-tag--yellow">{{ locale.stepsList.status.noLongerNeeded }}</strong>
+                                {% endif %}
+                              </td>
+                          </tr>
+                      {% endfor %}
+                      </tbody>
+                  </table>
+              </div>
+              </details>
+          {% else %}
             <div class="goal-summary-card__steps--empty">
                 <strong>{{ locale.stepsList.noStepsAdded }}</strong>
                 {% if params.actions.length > 0 %}
-                    <a href="/goal/{{ params.goal.uuid }}/add-steps">{{ locale.stepsList.addSteps }}</a>
+                    <a class="govuk-!-display-none-print" href="/goal/{{ params.goal.uuid }}/add-steps">{{ locale.stepsList.addSteps }}</a>
                 {% endif %}
             </div>
-        {% endif %}
-
-            <p class="goal-summary-card__areas-of-need">
+          {% endif %}
+            <p class="goal-summary-card__areas-of-need
+                {%- if params.plan.agreementStatus and params.plan.agreementStatus !== 'DRAFT' -%}_agreed{%- endif -%}">
                 {{ locale.areaOfNeed.mainAreaOfNeed }}<br>
                 {% if params.goal.relatedAreasOfNeed.length > 0 %}
                     {{ locale.areaOfNeed.relatedAreasOfNeed }}

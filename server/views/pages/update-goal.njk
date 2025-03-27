@@ -4,12 +4,13 @@
 {% from "../components/summary-card/goal-summary-card.njk" import goalSummaryCard %}
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 {% from "../components/note-list/note-list.njk" import noteList %}
-{% from "../components/error-summary/error-summary.njk" import errorSummary %}
+{% from "../components/error-summary/error-summary.njk" import errorSummary with context %}
 
 {% set locale = interpolate(locale, {
     subject: data.popData,
     goal: {
-        targetDate: data.goal.targetDate | formatSimpleDate
+        targetDate: data.goal.targetDate | formatSimpleDate,
+        title: data.goal.title
     }
 }) %}
 
@@ -52,7 +53,7 @@
 
 {% block content %}
     {{ super() }}
-    <a href="/plan" class="govuk-back-link">{{ locale.common.backLink.text }}</a>
+    <a href="{{ data.returnLink }}" class="govuk-back-link">{{ locale.common.backLink.text }}</a>
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
@@ -66,23 +67,23 @@
                 <div class="govuk-grid-column-three-quarters">
                     <span class="govuk-caption-l">{{ data.mainAreaOfNeed.name }}
                         {% if data.relatedAreasOfNeed | length %}
-                            (and {{ data.relatedAreasOfNeed | sort | join(', ') | lower }}){% endif %}</span>
-                    <h1 class="govuk-heading-l">{{ data.goal.title }}</h1>
+                            (and {{ data.relatedAreasOfNeed | sort | join('; ') | lower }}){% endif %}</span>
+                    <h1 class="govuk-heading-l">{{ locale.page.heading }}</h1>
+                    <h2 class="govuk-heading-m">{{ locale.page.goalHeading }}</h2>
                 </div>
             </div>
 
             <p>
                 {% if data.goal.targetDate %}{{ locale.aimToAchieveBy }}{% else %}{{ locale.common.goalSummaryCard.info.thisIsAFutureGoal }}{% endif %}
-                <a href="/change-goal/{{ data.goal.uuid }}" class="govuk-link govuk-link--no-visited-state">{{ locale.updateGoalDetails }}</a>
+                <a href="/change-goal/{{ data.goal.uuid }}">{{ locale.changeGoalDetails }}</a>
             </p>
+
+            <h2 class="govuk-heading-m">{{ locale.reviewSteps }}</h2>
 
             <form id="update-goal-form" method="POST">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}"/>
-                <label class="govuk-label govuk-label--m">
-                    {{ locale.reviewSteps }}
-                </label>
                 {% if data.goal.steps and data.goal.steps.length > 0 %}
-                    <table class="govuk-table goal-summary-card__steps">
+                    <table class="govuk-table update-goal-table goal-summary-card__steps">
                         <thead class="govuk-table__head">
                         <tr class="govuk-table__row">
                             <th scope="col"
@@ -96,44 +97,41 @@
                         <tbody class="govuk-table__body">
                         {% for step in data.goal.steps %}
                             <tr class="govuk-table__row">
-                                <td class="govuk-table__cell">{{ step.actor }}</td>
-                                <td id="step-description-{{ loop.index }}"
-                                    class="govuk-table__cell">{{ step.description }}</td>
-                                <td class="govuk-table__cell">
-                                    {{ govukSelect({
-                                        id: "step-status-" + loop.index,
-                                        name: "step-status-" + loop.index,
-                                        items: items,
-                                        value: step.status,
-                                        classes: "govuk-select--auto-width",
-                                        formGroup: {
-                                            classes: "govuk-!-margin-bottom-0"
-                                        },
-                                        attributes: {
-                                            'aria-label': locale.common.goalSummaryCard.stepsList.statusHeader
-                                        }
-                                    }) }}
-                                    <input name="step-uuid-{{ loop.index }}" type="hidden" value="{{ step.uuid }}"/>
-                                </td>
+                              <td class="govuk-table__cell" data-header="{{ locale.common.goalSummaryCard.stepsList.whoHeader }}">{{ step.actor }}</td>
+                              <td id="step-description-{{ loop.index }}" class="govuk-table__cell" data-header="{{ locale.common.goalSummaryCard.stepsList.stepHeader }}">{{ step.description }}</td>
+                              <td class="govuk-table__cell" data-header="{{ locale.common.goalSummaryCard.stepsList.statusHeader }}">
+                                {{ govukSelect({
+                                  id: "step-status-" + loop.index,
+                                  name: "step-status-" + loop.index,
+                                  items: items,
+                                  value: step.status,
+                                  classes: "govuk-select--auto-width",
+                                  formGroup: {
+                                    classes: "govuk-!-margin-bottom-0"
+                                  },
+                                  attributes: {
+                                    'aria-label': locale.common.goalSummaryCard.stepsList.statusHeader
+                                  }
+                                }) }}
+                                <input name="step-uuid-{{ loop.index }}" type="hidden" value="{{ step.uuid }}"/>
+                              </td>
                             </tr>
                         {% endfor %}
                         </tbody>
                     </table>
+
+                    <p>
+                      <a href="/goal/{{ data.goal.uuid }}/add-steps">{{ locale.addOrChangeSteps }}</a>
+                    </p>
                 {% else %}
                     <div class="goal-summary-card__steps--empty-no-shadow">
-                        <strong>{{ locale.common.goalSummaryCard.stepsList.noStepsAdded }}</strong>
-                        {% if data.actions.length > 0 %}
-                            <a href="/goal/{{ data.goal.uuid }}/add-steps">{{ locale.common.goalSummaryCard.stepsList.addSteps }}</a>
-                        {% endif %}
+                        <p>{{ locale.noStepsAdded }}
+                          <a class="govuk-!-display-none-print" href="/goal/{{ data.goal.uuid }}/add-steps">{{ locale.common.goalSummaryCard.stepsList.addSteps }}</a>
+                        </p>
                     </div>
                 {% endif %}
 
-                <p>
-                    <a href="/goal/{{ data.goal.uuid }}/add-steps"
-                       class="govuk-link govuk-link--no-visited-state">{{ locale.addOrChangeSteps }}</a>
-                </p>
-                <br>
-                <div class="govuk-grid-row">
+                <div class="govuk-grid-row govuk-!-padding-top-2">
                     <div class="govuk-grid-column-two-thirds">
                         <div class="govuk-form-group">
                             {{ govukTextarea({
@@ -156,11 +154,15 @@
                                 locale: locale
                             }) }}
 
-                            <div class="govuk-button-group">
-                                <button type="submit" class="govuk-button" data-module="govuk-button">
-                                    {{ locale.saveGoalAndSteps }}
-                                </button>
+                            <div class="govuk-button-group govuk-!-margin-bottom-0">
+                              <button type="submit" class="govuk-button" name="action" value="save" data-module="govuk-button">
+                                  {{ locale.saveGoalAndSteps }}
+                              </button>
+                              <button type="submit" class="govuk-button govuk-button--secondary" name="action" value="mark-as-achieved" data-module="govuk-button">
+                                {{ locale.markAsAchieved }}
+                              </button>
                             </div>
+                            <button class="govuk-link govuk-link--no-visited-state govuk-!-padding-left-0" name="action" value="remove">{{ locale.removeGoalFromPlan }}</button>
                         </div>
                     </div>
                 </div>

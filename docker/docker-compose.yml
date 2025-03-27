@@ -28,7 +28,7 @@ services:
       - ./forward-proxy/nginx.conf:/etc/nginx/nginx.conf
 
   hmpps-auth:
-    image: quay.io/hmpps/hmpps-auth:2024-10-02.25761.db2ce3c
+    image: quay.io/hmpps/hmpps-auth:2024-12-30.26692.44389cd
     healthcheck:
       test: ["CMD", "curl", "-fs", "http://hmpps-auth:9090/auth/health"]
       interval: 5s
@@ -42,7 +42,7 @@ services:
       LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY: DEBUG
 
   arns-handover:
-    image: quay.io/hmpps/hmpps-assess-risks-and-needs-handover-service:latest
+    image: ghcr.io/ministryofjustice/hmpps-assess-risks-and-needs-handover-service:latest
     depends_on:
       - redis
     ports:
@@ -69,7 +69,7 @@ services:
       CLIENT_SP_HANDOVER_REDIRECT_URI: http://localhost:3000/sign-in
 
   oastub:
-    image: quay.io/hmpps/hmpps-assess-risks-and-needs-oastub-ui:latest
+    image: ghcr.io/ministryofjustice/hmpps-assess-risks-and-needs-oastub-ui:latest
     depends_on:
       - coordinator-api
     ports:
@@ -92,7 +92,7 @@ services:
       PORT: 3005
 
   coordinator-api:
-    image: quay.io/hmpps/hmpps-assess-risks-and-needs-coordinator-api:latest
+    image: ghcr.io/ministryofjustice/hmpps-assess-risks-and-needs-coordinator-api:latest
     depends_on:
       - postgres
       - hmpps-auth
@@ -117,7 +117,7 @@ services:
       APP_STRATEGIES_ASSESSMENT: false
 
   api:
-    image: quay.io/hmpps/hmpps-sentence-plan:latest
+    image: ghcr.io/ministryofjustice/hmpps-sentence-plan:latest
     depends_on:
       - postgres
       - hmpps-auth
@@ -138,7 +138,7 @@ services:
       USE_STUB: true
 
   ui:
-    image: quay.io/hmpps/hmpps-sentence-plan-ui:${APP_VERSION:-latest}
+    image: ghcr.io/ministryofjustice/hmpps-sentence-plan-ui:${APP_VERSION:-latest}
     build:
       context: ../
       target: production

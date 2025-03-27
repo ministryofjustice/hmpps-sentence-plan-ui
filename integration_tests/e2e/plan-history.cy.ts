@@ -1,24 +1,24 @@
 import PlanOverview from '../pages/plan-overview'
 import DataGenerator from '../support/DataGenerator'
+import { AccessMode } from '../../server/@types/Handover'
 
-describe('Rendering', () => {
+describe('Rendering Plan History for READ_WRITE user', () => {
   const planOverview = new PlanOverview()
 
   beforeEach(() => {
     cy.createSentencePlan().then(planDetails => {
       cy.wrap(planDetails).as('plan')
-      cy.openSentencePlan(planDetails.oasysAssessmentPk)
+      cy.openSentencePlan(planDetails.oasysAssessmentPk, AccessMode.READ_WRITE)
       cy.addGoalToPlan(planDetails.plan.uuid, DataGenerator.generateGoal()).then(goal => {
         cy.addStepToGoal(goal.uuid, DataGenerator.generateStep())
       })
     })
   })
 
-  it('Display plan history page correctly on load with no plan agreed', () => {
-    cy.get('.moj-primary-navigation__container').contains('Plan history').click()
-    cy.get('h1').contains('Plan history')
-    cy.get('.plan-history-intro').should('include.text', "plan has been agreed, you'll be able to view updates here.")
-    cy.checkAccessibility()
+  it('Plan history link not displayed with no plan agreed - direct access causes 403 forbidden', () => {
+    cy.get('.moj-primary-navigation__container').should('not.contain', `Plan history`)
+    cy.visit('/plan-history', { failOnStatusCode: false })
+    cy.get('.govuk-heading-l').contains('You do not have permission to perform this action')
   })
 
   it('Display plan history page with plan agreement', () => {
@@ -53,7 +53,7 @@ describe('Rendering', () => {
     cy.get('.plan-status').contains('Plan agreed')
     cy.visit('/plan')
     cy.contains('a', 'Update').click() // click update link
-    cy.url().should('include', '/update-goal') // check url is update goal
+    cy.url().should('include', '/update-goal-steps') // check url is update goal
     cy.get('#step-status-1').select('Not started') // select not started status
     cy.get('textarea#more-detail').type('Updated goal to not started')
     cy.get('.govuk-button').contains('Save goal and steps').click()
@@ -61,6 +61,7 @@ describe('Rendering', () => {
     cy.get('.govuk-tag').contains('Not started')
     cy.get('.moj-primary-navigation__container').contains('Plan history').click()
     cy.get('.goal-status').contains('Goal updated')
+    cy.get('.goal-link').contains('View latest version')
     cy.get('.goal-note').contains('Updated goal to not started')
     cy.checkAccessibility()
   })
@@ -71,13 +72,15 @@ describe('Rendering', () => {
     cy.get('.moj-primary-navigation__container').contains('Plan history').click()
     cy.get('.plan-status').contains('Plan agreed')
     cy.visit('/plan')
-    cy.contains('a', 'Mark as achieved').click()
+    cy.contains('a', 'Update').click()
+    cy.contains('button', 'Mark as achieved').click()
     cy.url().should('include', '/confirm-achieved-goal') // check url
     cy.get('textarea#goal-achievement-helped').type('Updated goal to achieved status')
     cy.get('.govuk-button').contains('Confirm').click()
     cy.url().should('include', '/plan') // check we're back to plan-overview
     cy.get('.moj-primary-navigation__container').contains('Plan history').click()
     cy.get('.goal-status').contains('Goal marked as achieved')
+    cy.get('.goal-link').contains('View goal')
     cy.get('.goal-note').contains('Updated goal to achieved status')
     cy.checkAccessibility()
   })
@@ -88,14 +91,59 @@ describe('Rendering', () => {
     cy.get('.moj-primary-navigation__container').contains('Plan history').click()
     cy.get('.plan-status').contains('Plan agreed')
     cy.visit('/plan')
-    cy.contains('a', 'Remove').click()
+    cy.contains('a', 'Update').click()
+    cy.contains('button', 'Remove goal from plan').click()
     cy.url().should('include', '/remove-goal')
     cy.get('textarea#goal-removal-note').type('Updated goal to removed status')
     cy.get('.govuk-button').contains('Confirm').click()
     cy.url().should('include', '/plan')
     cy.get('.moj-primary-navigation__container').contains('Plan history').click()
     cy.get('.goal-status').contains('Goal removed')
+    cy.get('.goal-link').contains('View goal')
     cy.get('.goal-note').contains('Updated goal to removed status')
+    cy.checkAccessibility()
+  })
+})
+
+describe('Rendering Plan History for READ_ONLY user', () => {
+  const planOverview = new PlanOverview()
+
+  beforeEach(() => {
+    cy.createSentencePlan().then(planDetails => {
+      cy.wrap(planDetails).as('plan')
+      cy.openSentencePlan(planDetails.oasysAssessmentPk, AccessMode.READ_WRITE)
+      cy.addGoalToPlan(planDetails.plan.uuid, DataGenerator.generateGoal()).then(goal => {
+        cy.addStepToGoal(goal.uuid, DataGenerator.generateStep())
+      })
+      // We need to agree plan and mark goal as achieved before switching to READ_ONLY
+      planOverview.agreePlan()
+      cy.get('.moj-primary-navigation__container').contains('Plan history').click()
+      cy.get('.plan-status').contains('Plan agreed')
+      cy.visit('/plan')
+      cy.contains('a', 'Update').click()
+      cy.contains('button', 'Mark as achieved').click()
+      cy.url().should('include', '/confirm-achieved-goal') // check url
+      cy.get('textarea#goal-achievement-helped').type('Updated goal to achieved status')
+      cy.get('.govuk-button').contains('Confirm').click()
+      cy.url().should('include', '/plan') // check we're back to plan-overview
+
+      cy.openSentencePlan(planDetails.oasysAssessmentPk, AccessMode.READ_ONLY)
+    })
+  })
+
+  it('Display plan history page with plan agreement', () => {
+    cy.get('.moj-primary-navigation__container').contains('Plan history').click()
+    cy.get('.plan-history-intro').contains('View all updates and changes made to this plan.')
+    cy.get('.plan-status').contains('Plan agreed')
+    cy.get('.plan-additional-note').contains('Reason to agree')
+    cy.checkAccessibility()
+  })
+
+  it('Display plan history page with achieved goal status', () => {
+    cy.get('.moj-primary-navigation__container').contains('Plan history').click()
+    cy.get('.goal-status').contains('Goal marked as achieved')
+    cy.get('.goal-link').should('not.exist')
+    cy.get('.goal-note').contains('Updated goal to achieved status')
     cy.checkAccessibility()
   })
 })

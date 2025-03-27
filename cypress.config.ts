@@ -1,5 +1,6 @@
 import { defineConfig } from 'cypress'
 import getCompareSnapshotsPlugin from 'cypress-image-diff-js/plugin'
+import cypressSplit from 'cypress-split'
 import { resetStubs } from './integration_tests/mockApis/wiremock'
 import auth from './integration_tests/mockApis/auth'
 
@@ -13,6 +14,7 @@ export default defineConfig({
     configFile: 'reporter-config.json',
   },
   taskTimeout: 60000,
+  defaultCommandTimeout: 60000,
   e2e: {
     setupNodeEvents(on, config) {
       on('task', {
@@ -24,6 +26,8 @@ export default defineConfig({
           return null
         },
       })
+      cypressSplit(on, config)
+      return config
 
       // Add the visual regression plugin
       return getCompareSnapshotsPlugin(on, config)

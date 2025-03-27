@@ -1,9 +1,11 @@
 import { NextFunction, Request, Response } from 'express'
 import locale from './locale.json'
-
+import { areaConfigs } from '../../utils/assessmentAreaConfig.json'
 import { formatAssessmentData } from '../../utils/assessmentUtils'
+import { HttpError } from '../../utils/HttpError'
+import { AccessMode } from '../../@types/Handover'
 
-export default class AboutPopController {
+export default class AboutPersonController {
   constructor() {}
 
   get = async (req: Request, res: Response, next: NextFunction) => {
@@ -15,6 +17,7 @@ export default class AboutPopController {
       const deliusData = await req.services.infoService.getPopData(popData.crn)
       const criminogenicNeedsData = req.services.sessionService.getCriminogenicNeeds()
       const assessmentData = await req.services.assessmentService.getAssessmentByUuid(planUuid)
+      const plan = await req.services.planService.getPlanByUuid(planUuid)
       const errorMessages = []
 
       if (assessmentData === null) {
@@ -27,20 +30,26 @@ export default class AboutPopController {
         errors = { domain: errorMessages }
       }
 
-      const assessmentAreas = formatAssessmentData(criminogenicNeedsData, assessmentData, locale.en.areas)
+      const formattedAssessmentInfo = formatAssessmentData(criminogenicNeedsData, assessmentData, areaConfigs)
       const pageId = 'about'
+      const readWrite = req.services.sessionService.getAccessMode() === AccessMode.READ_WRITE
+
+      req.services.sessionService.setReturnLink(`/about`)
+
       return res.render('pages/about', {
         locale: locale.en,
         data: {
+          planAgreementStatus: plan.agreementStatus,
           oasysReturnUrl,
           pageId,
           deliusData,
-          assessmentAreas,
+          formattedAssessmentInfo,
+          readWrite,
         },
         errors,
       })
     } catch (e) {
-      return next(e)
+      return next(HttpError(500, e.message))
     }
   }
 }

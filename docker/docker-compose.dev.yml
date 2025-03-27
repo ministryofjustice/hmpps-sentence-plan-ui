@@ -1,6 +1,6 @@
 services:
   ui:
-    image: quay.io/hmpps/hmpps-sentence-plan-ui:local
+    image: ghcr.io/ministryofjustice/hmpps-sentence-plan-ui:local
     build:
       target: development
     command: npm run start:dev
@@ -10,6 +10,10 @@ services:
     volumes:
       - ../:/app:cached
       - node_modules:/app/node_modules
+
+  hmpps-auth:
+    environment:
+      JAVA_TOOL_OPTIONS: "-XX:UseSVE=0"
 
 volumes:
   node_modules:

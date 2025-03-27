@@ -2,7 +2,7 @@
 {% from "../components/summary-card/goal-summary-card.njk" import goalSummaryCard %}
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "../components/error-summary/error-summary.njk" import errorSummary %}
+{% from "../components/error-summary/error-summary.njk" import errorSummary with context %}
 
 {% block pageTitle %}
     {% if not errors %}
@@ -51,10 +51,11 @@
                     name: "action",
                     value: "confirm"
                 }) }}
-                <a class="govuk-link govuk-link--no-visited-state" href="/plan?type={{ data.type }}">{{ locale.doNotMarkAsAchievedLink }}</a>
+                <a href="{{ data.returnLink }}">{{ locale.doNotMarkAsAchievedLink }}</a>
             </div>
         </form>
     </div>
 </div>
 
 {% endblock %}
+

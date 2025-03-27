@@ -2,8 +2,7 @@ import { NextFunction, Request, Response } from 'express'
 import locale from './locale.json'
 import URLs from '../URLs'
 import ReferentialDataService from '../../services/sentence-plan/referentialDataService'
-import { dateToISOFormat, formatDateWithStyle, getAchieveDateOptions } from '../../utils/utils'
-import { NewGoal } from '../../@types/NewGoalType'
+import { formatDateWithStyle } from '../../utils/utils'
 import { Goal, GoalStatus } from '../../@types/GoalType'
 import transformRequest from '../../middleware/transformMiddleware'
 import ChangeGoalPostModel from './models/ChangeGoalPostModel'
@@ -11,6 +10,12 @@ import validateRequest from '../../middleware/validationMiddleware'
 import { PlanAgreementStatus } from '../../@types/PlanType'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
 import { AccessMode } from '../../@types/Handover'
+import { HttpError } from '../../utils/HttpError'
+import { getDateOptions, getGoalTargetDate } from '../../utils/goalTargetDateUtils'
+import { NewGoal } from '../../@types/NewGoalType'
+import { areaConfigs } from '../../utils/assessmentAreaConfig.json'
+import { AssessmentAreaConfig } from '../../@types/Assessment'
+import { getAssessmentDetailsForArea } from '../../utils/assessmentUtils'
 
 export default class ChangeGoalController {
   constructor(private readonly referentialDataService: ReferentialDataService) {}
@@ -20,8 +25,11 @@ export default class ChangeGoalController {
     const { errors } = req
 
     const sortedAreasOfNeed = this.referentialDataService.getSortedAreasOfNeed()
-    const returnLink = req.services.sessionService.getReturnLink()
-    const dateOptions = this.getDateOptions()
+    const returnLink =
+      req.services.sessionService.getReturnLink() === `/change-goal/${uuid}/`
+        ? URLs.PLAN_OVERVIEW
+        : req.services.sessionService.getReturnLink()
+    const dateOptions = getDateOptions()
     const minimumDatePickerDate = formatDateWithStyle(new Date().toISOString(), 'short')
 
     try {
@@ -29,39 +37,59 @@ export default class ChangeGoalController {
       const selectedAreaOfNeed = sortedAreasOfNeed.find(areaOfNeed => areaOfNeed.name === goal.areaOfNeed.name)
       const form = errors ? req.body : this.mapGoalToForm(goal)
 
+      const criminogenicNeedsData = req.services.sessionService.getCriminogenicNeeds()
+      const planUuid = req.services.sessionService.getPlanUUID()
+      const plan = await req.services.planService.getPlanByUuid(planUuid)
+
+      // get assessment data or swallow the service error and set to null so the template knows this data is missing
+      const assessmentDetailsForArea = await req.services.assessmentService
+        .getAssessmentByUuid(planUuid)
+        .then(assessmentResponse => {
+          const assessmentData = assessmentResponse.sanAssessmentData
+          const areaConfig: AssessmentAreaConfig = areaConfigs.find(config => config.area === goal.areaOfNeed.name)
+          return getAssessmentDetailsForArea(criminogenicNeedsData, areaConfig, assessmentData)
+        })
+        .catch((): null => null)
+
       return res.render('pages/change-goal', {
         locale: locale.en,
         data: {
+          planAgreementStatus: plan.agreementStatus,
           minimumDatePickerDate,
           sortedAreasOfNeed,
           selectedAreaOfNeed,
           dateOptions,
+          assessmentDetailsForArea,
           returnLink,
           form,
         },
         errors,
       })
     } catch (e) {
-      return next(e)
+      return next(HttpError(500, e.message))
     }
   }
 
   private saveAndRedirect = async (req: Request, res: Response, next: NextFunction) => {
     const goalUuid = req.params.uuid
-    const processedData: NewGoal = this.processGoalData(req.body)
+    const processedData: Partial<NewGoal> = this.processGoalData(req.body)
 
     const type = processedData.targetDate === null ? 'future' : 'current'
 
     try {
       await req.services.goalService.replaceGoal(processedData, goalUuid)
 
-      let redirectTarget = `${URLs.PLAN_OVERVIEW}?status=updated&type=${type}`
+      let redirectTarget = `${URLs.PLAN_OVERVIEW}?status=changed&type=${type}`
 
       const planUuid = req.services.sessionService.getPlanUUID()
       const plan = await req.services.planService.getPlanByUuid(planUuid)
 
+      // Check if the user has came back from the add-goals page
+      if (req.services.sessionService.getReturnLink() === `/change-goal/${goalUuid}/`) {
+        redirectTarget = `/goal/${goalUuid}/add-steps`
+      }
       if (plan.agreementStatus === PlanAgreementStatus.AGREED) {
-        redirectTarget = `/update-goal/${goalUuid}`
+        redirectTarget = `/update-goal-steps/${goalUuid}`
 
         if (type === 'current') {
           const goal = await req.services.goalService.getGoal(goalUuid)
@@ -73,13 +101,8 @@ export default class ChangeGoalController {
 
       return res.redirect(redirectTarget)
     } catch (e) {
-      return next(e)
+      return next(HttpError(500, e.message))
     }
-  }
-
-  private getDateOptions = () => {
-    const today = new Date()
-    return getAchieveDateOptions(today)
   }
 
   private mapGoalToForm = (goal: Goal) => {
@@ -87,7 +110,7 @@ export default class ChangeGoalController {
     let formattedTargetDate
 
     if (goal.targetDate) {
-      isCustomTargetDate = !this.getDateOptions().some(
+      isCustomTargetDate = !getDateOptions().some(
         dateOption => dateOption.toISOString().substring(0, 10) === goal.targetDate.substring(0, 10),
       )
 
@@ -109,15 +132,13 @@ export default class ChangeGoalController {
     }
   }
 
-  private processGoalData(body: any) {
+  private processGoalData(body: any): Partial<NewGoal> {
     const title = body['goal-input-autocomplete']
-    const targetDate =
-      // eslint-disable-next-line no-nested-ternary
-      body['start-working-goal-radio'] === 'yes'
-        ? body['date-selection-radio'] === 'custom'
-          ? dateToISOFormat(body['date-selection-custom'])
-          : body['date-selection-radio']
-        : null
+    const targetDate = getGoalTargetDate(
+      body['start-working-goal-radio'],
+      body['date-selection-radio'],
+      body['date-selection-custom'],
+    )
     const areaOfNeed = body['area-of-need']
     const relatedAreasOfNeed = body['related-area-of-need-radio'] === 'yes' ? body['related-area-of-need'] : undefined
     const status = targetDate === null ? GoalStatus.FUTURE : undefined
