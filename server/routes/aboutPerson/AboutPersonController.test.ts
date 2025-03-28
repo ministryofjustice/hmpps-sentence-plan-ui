@@ -45,8 +45,97 @@ jest.mock('../../services/sessionService', () => {
 
 jest.mock('../../services/sentence-plan/infoService', () => {
   return jest.fn().mockImplementation(() => ({
-    getPopData: jest.fn().mockReturnValue(popData),
+    getPopData: jest.fn().mockResolvedValue(popData),
   }))
+})
+
+jest.mock('../../services/sentence-plan/assessmentService', () => {
+  return jest.fn().mockImplementation(() => ({
+    getAssessmentByUuid: jest.fn().mockResolvedValue(completeAssessmentData),
+  }))
+})
+
+describe('AboutPersonController - API data error handling', () => {
+  let controller: AboutPersonController
+  const req = mockReq()
+  const res = mockRes()
+  const next = jest.fn()
+  let assessmentAreas: FormattedAssessment
+
+  beforeEach(() => {
+    controller = new AboutPersonController()
+    assessmentAreas = formatAssessmentData(fullCrimNeeds, completeAssessmentData, areaConfigs)
+
+    req.services.assessmentService.getAssessmentByUuid = jest.fn().mockResolvedValue(completeAssessmentData)
+    req.services.infoService.getPopData = jest.fn().mockResolvedValue(popData)
+  })
+
+  it('should have a delius error if delius API call fails', async () => {
+    req.services.infoService.getPopData = jest.fn().mockRejectedValue(new Error('API error'))
+
+    await controller.get(req, res, next)
+
+    const deliusData: any = null
+
+    const payload = {
+      locale: locale.en,
+      data: {
+        deliusData,
+        planAgreementStatus: testPlan.agreementStatus,
+        oasysReturnUrl,
+        pageId: 'about',
+        formattedAssessmentInfo: assessmentAreas,
+        readWrite: true,
+      },
+      errors: {
+        domain: ['noDeliusDataFound'],
+      },
+    }
+
+    expect(res.render).toHaveBeenCalledWith('pages/about', payload)
+  })
+
+  it('should have an assessment error if SAN API call fails', async () => {
+    req.services.assessmentService.getAssessmentByUuid = jest.fn().mockRejectedValue(new Error('API error'))
+
+    await controller.get(req, res, next)
+
+    const formattedAssessmentInfo: FormattedAssessment = {
+      areas: {
+        highScoring: [],
+        incompleteAreas: [],
+        lowScoring: [],
+        other: [],
+      },
+      isAssessmentComplete: false,
+    }
+
+    const payload = {
+      locale: locale.en,
+      data: {
+        deliusData: popData,
+        planAgreementStatus: testPlan.agreementStatus,
+        oasysReturnUrl,
+        pageId: 'about',
+        formattedAssessmentInfo,
+        readWrite: true,
+      },
+      errors: {
+        domain: ['noAssessmentDataFound'],
+      },
+    }
+
+    expect(res.render).toHaveBeenCalledWith('pages/about', payload)
+  })
+
+  it('should return a 500 error if both API calls fail', async () => {
+    req.services.assessmentService.getAssessmentByUuid = jest.fn().mockRejectedValue(new Error('API error'))
+    req.services.infoService.getPopData = jest.fn().mockRejectedValue(new Error('API error'))
+
+    await controller.get(req, res, next)
+
+    expect(next).toHaveBeenCalledWith(expect.objectContaining({ status: 500 }))
+  })
 })
 
 describe('AboutPersonController - assessment complete', () => {
@@ -57,7 +146,7 @@ describe('AboutPersonController - assessment complete', () => {
 
   beforeEach(() => {
     controller = new AboutPersonController()
-    req.services.assessmentService.getAssessmentByUuid = jest.fn().mockReturnValue(completeAssessmentData)
+    req.services.assessmentService.getAssessmentByUuid = jest.fn().mockResolvedValue(completeAssessmentData)
     assessmentAreas = formatAssessmentData(fullCrimNeeds, completeAssessmentData, areaConfigs)
   })
 
@@ -117,7 +206,7 @@ describe('AboutPersonController - assessment incomplete', () => {
 
   beforeEach(() => {
     controller = new AboutPersonController()
-    req.services.assessmentService.getAssessmentByUuid = jest.fn().mockReturnValue(incompleteAssessmentData)
+    req.services.assessmentService.getAssessmentByUuid = jest.fn().mockResolvedValue(incompleteAssessmentData)
     assessmentAreas = formatAssessmentData(fullCrimNeeds, incompleteAssessmentData, areaConfigs)
   })
 
