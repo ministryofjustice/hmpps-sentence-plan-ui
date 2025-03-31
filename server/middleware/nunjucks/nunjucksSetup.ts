@@ -36,7 +36,7 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
     [
       path.join(__dirname, '../../../server/views'),
       path.join(__dirname, 'server/views'),
-      'node_modules/hmrc-frontend/dist/',
+      'node_modules/hmrc-frontend/',
       'node_modules/govuk-frontend/dist/',
       'node_modules/@ministryofjustice/frontend/',
     ],
