@@ -8,6 +8,7 @@ $govuk-suppressed-warnings: 'govuk-typography-scale-14';
 
 @import "govuk-frontend/dist/govuk/all";
 @import "@ministryofjustice/frontend/moj/all";
+@import "hmrc-frontend/hmrc/all";
 @import "accessible-autocomplete/dist/accessible-autocomplete.min.css";
 @import './components/header-bar';
 @import "./components/custom-deployment-banner";
