@@ -91,6 +91,7 @@ describe('PlanHistoryController with READ_ONLY permissions', () => {
       locale: locale.en,
       data: {
         notes: [testNoteData],
+        plan: testPlan,
         oasysReturnUrl,
         pageId: 'plan-history',
         readWrite: false,
