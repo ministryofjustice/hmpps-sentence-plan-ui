@@ -8,7 +8,7 @@ describe('Rendering Plan History for READ_WRITE user', () => {
   beforeEach(() => {
     cy.createSentencePlan().then(planDetails => {
       cy.wrap(planDetails).as('plan')
-      cy.openSentencePlan(planDetails.oasysAssessmentPk, AccessMode.READ_WRITE)
+      cy.openSentencePlan(planDetails.oasysAssessmentPk)
       cy.addGoalToPlan(planDetails.plan.uuid, DataGenerator.generateGoal()).then(goal => {
         cy.addStepToGoal(goal.uuid, DataGenerator.generateStep())
       })
@@ -111,7 +111,7 @@ describe('Rendering Plan History for READ_ONLY user', () => {
   beforeEach(() => {
     cy.createSentencePlan().then(planDetails => {
       cy.wrap(planDetails).as('plan')
-      cy.openSentencePlan(planDetails.oasysAssessmentPk, AccessMode.READ_WRITE)
+      cy.openSentencePlan(planDetails.oasysAssessmentPk)
       cy.addGoalToPlan(planDetails.plan.uuid, DataGenerator.generateGoal()).then(goal => {
         cy.addStepToGoal(goal.uuid, DataGenerator.generateStep())
       })
@@ -127,7 +127,7 @@ describe('Rendering Plan History for READ_ONLY user', () => {
       cy.get('.govuk-button').contains('Confirm').click()
       cy.url().should('include', '/plan') // check we're back to plan-overview
 
-      cy.openSentencePlan(planDetails.oasysAssessmentPk, AccessMode.READ_ONLY)
+      cy.openSentencePlan(planDetails.oasysAssessmentPk, { accessMode: AccessMode.READ_ONLY })
     })
   })
 
