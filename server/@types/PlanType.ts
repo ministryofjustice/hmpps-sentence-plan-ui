@@ -5,6 +5,8 @@ export enum PlanAgreementStatus {
   AGREED = 'AGREED',
   DO_NOT_AGREE = 'DO_NOT_AGREE',
   COULD_NOT_ANSWER = 'COULD_NOT_ANSWER',
+  UPDATED_AGREE = 'UPDATED_AGREE',
+  UPDATED_DO_NOT_AGREE = 'UPDATED_DO_NOT_AGREE',
 }
 
 export enum PlanStatus {
