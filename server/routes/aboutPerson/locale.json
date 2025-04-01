@@ -43,8 +43,8 @@
       "sectionParagraph": "Health and wellbeing, and finances never have a need score. When other information is available for those areas, you can see it here."
     },
     "errors": {
-      "noAssessmentDataFound": "No assessment data found",
-      "noSentenceDataFound": "No sentence data found"
+      "noDeliusDataFound": "There is a problem getting the sentence information. Try reloading the page or try again later.",
+      "noAssessmentDataFound": "There is a problem getting the assessment information. Try reloading the page or try again later."
     },
     "goalsToAchieve": {
       "title": "Goals to achieve",

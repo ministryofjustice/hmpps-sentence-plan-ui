@@ -14,18 +14,21 @@ export default class AboutPersonController {
       const planUuid = req.services.sessionService.getPlanUUID()
       const popData = req.services.sessionService.getSubjectDetails()
       const oasysReturnUrl = req.services.sessionService.getOasysReturnUrl()
-      const deliusData = await req.services.infoService.getPopData(popData.crn)
       const criminogenicNeedsData = req.services.sessionService.getCriminogenicNeeds()
-      const assessmentData = await req.services.assessmentService.getAssessmentByUuid(planUuid)
       const plan = await req.services.planService.getPlanByUuid(planUuid)
       const errorMessages = []
 
-      if (assessmentData === null) {
+      const deliusData = await req.services.infoService.getPopData(popData.crn).catch((): null => null)
+      const assessmentData = await req.services.assessmentService.getAssessmentByUuid(planUuid).catch((): null => null)
+
+      if (deliusData === null && assessmentData !== null) {
+        errorMessages.push('noDeliusDataFound')
+      } else if (deliusData !== null && assessmentData === null) {
         errorMessages.push('noAssessmentDataFound')
+      } else if (deliusData === null && assessmentData === null) {
+        return next(HttpError(500))
       }
-      if (deliusData.sentences === null || deliusData.sentences.length === 0) {
-        errorMessages.push('noSentenceDataFound')
-      }
+
       if (errorMessages.length > 0) {
         errors = { domain: errorMessages }
       }
