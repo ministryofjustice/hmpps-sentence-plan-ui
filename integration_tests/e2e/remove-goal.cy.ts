@@ -5,6 +5,7 @@ import DataGenerator from '../support/DataGenerator'
 import { PlanType } from '../../server/@types/PlanType'
 import { NewStep } from '../../server/@types/StepType'
 import PlanOverview from '../pages/plan-overview'
+import { AccessMode } from '../../server/@types/Handover'
 
 describe('Remove a goal from a Plan after it has been agreed', () => {
   beforeEach(() => {
@@ -18,7 +19,7 @@ describe('Remove a goal from a Plan after it has been agreed', () => {
   describe('Security', () => {
     it('Should display authorisation error if user does not have READ_WRITE role', () => {
       cy.get<string>('@oasysAssessmentPk').then(oasysAssessmentPk => {
-        cy.openSentencePlan(oasysAssessmentPk, 'READ_ONLY')
+        cy.openSentencePlan(oasysAssessmentPk, { accessMode: AccessMode.READ_ONLY })
       })
 
       cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
