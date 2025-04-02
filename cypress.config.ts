@@ -1,4 +1,5 @@
 import { defineConfig } from 'cypress'
+import getCompareSnapshotsPlugin from 'cypress-image-diff-js/plugin'
 import cypressSplit from 'cypress-split'
 import { resetStubs } from './integration_tests/mockApis/wiremock'
 import auth from './integration_tests/mockApis/auth'
@@ -26,6 +27,8 @@ export default defineConfig({
         },
       })
       cypressSplit(on, config)
+      // Add the visual regression plugin
+      getCompareSnapshotsPlugin(on, config)
       return config
     },
     baseUrl: 'http://localhost:6789',
