@@ -1,6 +1,6 @@
 services:
   ui:
-    image: quay.io/hmpps/hmpps-sentence-plan-ui:local
+    image: ghcr.io/ministryofjustice/hmpps-sentence-plan-ui:local
     build:
       target: development
     command: npm run start:dev
