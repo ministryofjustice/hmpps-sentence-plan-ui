@@ -50,7 +50,7 @@
             {% if note.noteType == 'AGREED' %}
                 <p class='plan-status'><strong>{{ noteLocale.note.status.plan.agreed }}</strong> {{ noteLocale.who.practitionerAndSubject }}</p>
                 <p class='subject-response'>{{ noteLocale.subjectResponse.agreed }}</p>
-            {% elseif note.noteType == 'UPDATED_AGREE' %}
+            {% elseif note.noteType == 'UPDATED_AGREED' %}
                 <p class='plan-status'><strong>{{ noteLocale.note.status.plan.updated }}</strong> {{ noteLocale.who.practitionerAndSubject }}</p>
                 <p class='subject-response'>{{ noteLocale.subjectResponse.agreed }}</p>
             {% elseif note.noteType == 'UPDATED_DO_NOT_AGREE' %}

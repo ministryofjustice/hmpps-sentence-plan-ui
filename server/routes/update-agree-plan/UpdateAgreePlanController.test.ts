@@ -194,7 +194,7 @@ describe('UpdateAgreePlanController', () => {
       }
       req.method = 'POST'
       const expectedAgreementData = {
-        agreementStatus: PlanAgreementStatus.UPDATED_AGREE,
+        agreementStatus: PlanAgreementStatus.UPDATED_AGREED,
         agreementStatusNote: '',
         optionalNote: '',
         personName: `${testHandoverContext.subject.givenName} ${testHandoverContext.subject.familyName}`,

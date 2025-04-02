@@ -49,7 +49,7 @@ export default class UpdateAgreePlanController {
 
     switch (req.body['agree-plan-radio']) {
       case 'yes':
-        agreement.agreementStatus = PlanAgreementStatus.UPDATED_AGREE
+        agreement.agreementStatus = PlanAgreementStatus.UPDATED_AGREED
         break
       case 'no':
       default:
