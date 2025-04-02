@@ -25,7 +25,7 @@ const buildAssets = buildConfig =>
     sourcemap: !buildConfig.isProduction,
     platform: 'browser',
     target: 'es2018',
-    external: ['/assets/*', '/hmrc-frontend/*'],
+    external: ['/assets/*', 'hmrc-frontend', '/hmrc-frontend/*'],
     bundle: true,
     plugins: [
       clean({
