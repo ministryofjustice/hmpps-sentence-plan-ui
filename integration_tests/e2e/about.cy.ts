@@ -127,7 +127,7 @@ describe('Rendering About Person for READ_WRITE user', () => {
 
     // Header assertions
     cy.get('@sectionContent')
-      .find('p.govuk-\\!-font-weight-bold')
+      .find('h4')
       .then(headings => {
         headings.toArray().forEach((heading, index) => {
           expect(heading.textContent).to.equal(expectedHeadings[index])
@@ -174,7 +174,7 @@ describe('Rendering About Person for READ_WRITE user', () => {
 
     // Header assertions
     cy.get('@sectionContent')
-      .find('p.govuk-\\!-font-weight-bold')
+      .find('h4')
       .then(headings => {
         headings.toArray().forEach((heading, index) => {
           expect(heading.textContent).to.equal(expectedHeadings[index])
@@ -213,7 +213,7 @@ describe('Rendering About Person for READ_WRITE user', () => {
     cy.get('#health-and-wellbeing .govuk-accordion__section-content').as('sectionContent') // Header assertions
 
     cy.get('@sectionContent')
-      .find('p.govuk-\\!-font-weight-bold')
+      .find('h4')
       .then(headings => {
         headings.toArray().forEach((heading, index) => {
           expect(heading.textContent).to.equal(expectedHeadings[index])
@@ -247,7 +247,7 @@ describe('Rendering About Person for READ_WRITE user', () => {
     cy.get('#finances .govuk-accordion__section-content').as('sectionContent') // Header assertions
 
     cy.get('@sectionContent')
-      .find('p.govuk-\\!-font-weight-bold')
+      .find('h4')
       .then(headings => {
         headings.toArray().forEach((heading, index) => {
           expect(heading.textContent).to.equal(expectedHeadings[index])
