@@ -1,7 +1,7 @@
 {% from "../../components/need-score/macro.njk" import needsScore %}
 {% from "components/need-score-indicator/macro.njk" import needsScoreIndicator %}
 
-<div class="govuk-accordion" data-module="govuk-accordion" id="assessment-accordion-{{ assessmentGroupId }}">
+        <div class="govuk-accordion" data-module="govuk-accordion" id="assessment-accordion-{{ assessmentGroupId }}">
     {% for assessment in formattedAssessments %}
         <div class="govuk-accordion__section" id="{{ assessment.goalRoute }}">
             <div class="govuk-accordion__section-header">
@@ -30,7 +30,7 @@
 
                     {# linked to harm #}
                     {% if assessment.linkedToHarm in ['YES', 'NO'] %}
-                        <p class="govuk-!-font-weight-bold">{{ locale.detail.linkedToHarm[assessment.linkedToHarm | lower] }}</p>
+                        <h4 class="govuk-!-margin-top-0">{{ locale.detail.linkedToHarm[assessment.linkedToHarm | lower] }}</h4>
                     {% else %}
                         {% set missingInformation = missingInformation.concat('linkedToHarm') %}
                     {% endif %}
@@ -40,7 +40,7 @@
 
                     {# linked to reoffending #}
                     {% if assessment.linkedtoReoffending in ['YES', 'NO'] %}
-                        <p class="govuk-!-font-weight-bold">{{ locale.detail.linkedtoReoffending[assessment.linkedtoReoffending | lower] }}</p>
+                        <h4 class="govuk-!-margin-top-0">{{ locale.detail.linkedtoReoffending[assessment.linkedtoReoffending | lower] }}</h4>
                     {% else %}
                       {% set missingInformation = missingInformation.concat('linkedToReoffending') %}
                     {% endif %}
@@ -50,24 +50,24 @@
 
                     {# motivation #}
                     {% if assessment.motivationToMakeChanges %}
-                        <p class="govuk-!-font-weight-bold">{{ locale.detail.motivationToMakeChanges }}</p>
+                        <h4 class="govuk-!-margin-top-0">{{ locale.detail.motivationToMakeChanges }}</h4>
                         <p class="govuk-body">{{ locale.common.assessmentInfo.motivationText[assessment.motivationToMakeChanges] }}</p>
                     {% else %}
                       {% set missingInformation = missingInformation.concat('motivationToMakeChanges') %}
                     {% endif %}
 
                     {% if assessment.linkedtoStrengthsOrProtectiveFactors in ['YES', 'NO'] %}
-                        <p class="govuk-!-font-weight-bold">{{ locale.detail.strengthsOrProtectiveFactors[assessment.linkedtoStrengthsOrProtectiveFactors | lower] }}</p>
+                        <h4 class="govuk-!-margin-top-0">{{ locale.detail.strengthsOrProtectiveFactors[assessment.linkedtoStrengthsOrProtectiveFactors | lower] }}</h4>
                     {% else %}
                       {% set missingInformation = missingInformation.concat('linkedtoStrengthsOrProtectiveFactors') %}
                     {% endif %}
                     {% if assessment.strengthsOrProtectiveFactorsDetails.length > 0 %}
-                      <p class="sp-text-pre-wrap govuk-body">{{ assessment.strengthsOrProtectiveFactorsDetails }}</p>
+                        <p class="sp-text-pre-wrap govuk-body">{{ assessment.strengthsOrProtectiveFactorsDetails }}</p>
                     {% endif %}
 
                     {% if assessment.criminogenicNeedsScore %}
                         <div class="assessment-score">
-                            <p class="govuk-!-font-weight-bold">{{ assessment.title }} need score</p>
+                            <h4 class="govuk-!-margin-top-0">{{ assessment.title }} need score</h4>
                             <p class="govuk-body">{{ assessment.criminogenicNeedsScore }} out
                                 of {{ assessment.upperBound }}.
                                 (Scores above {{ assessment.thresholdValue }} are high-scoring.)</p>
@@ -79,7 +79,7 @@
                         </div>
                     {% else %}
                         {% if assessment.title in ['Finances', 'Health and wellbeing'] %}
-                            <p class="govuk-!-font-weight-bold">{{ locale.needScore.doesNotHaveNeedScore }}</p>
+                            <h4 class="govuk-!-margin-top-0">{{ locale.needScore.doesNotHaveNeedScore }}</h4>
                         {% else %}
                           {% set missingInformation = missingInformation.concat('criminogenicNeedsScore') %}
                         {% endif %}
@@ -87,7 +87,7 @@
 
                     {% if assessment.subData %}
                         <div class="assessment-score">
-                            <p class="govuk-!-font-weight-bold">{{ locale.detail.lifestyleAndAssociatesNeedScore }}</p>
+                            <h4 class="govuk-!-margin-top-0">{{ locale.detail.lifestyleAndAssociatesNeedScore }}</h4>
                             <p class="govuk-body">{{ assessment.subData.criminogenicNeedsScore }} out
                                 of {{ assessment.subData.upperBound }}. (Scores above
                                 {{ assessment.subData.thresholdValue }} are high-scoring.)</p>

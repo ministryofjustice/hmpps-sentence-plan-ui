@@ -2,7 +2,7 @@ import hmppsConfig from '@ministryofjustice/eslint-config-hmpps'
 
 export default [
   ...hmppsConfig({
-    extraIgnorePaths: ['assets/**', 'esbuild/**'],
+    extraIgnorePaths: ['assets/**'],
   }),
   {
     rules: {
