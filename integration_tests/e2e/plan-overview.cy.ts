@@ -196,7 +196,7 @@ describe('View Plan Overview for READ_WRITE user', () => {
         })
       })
       planOverview.agreePlanCouldNotAgree()
-      cy.get('.plan-header+p').should('contain', 'Plan created on')
+      cy.get('.plan-header+p').should('contain', "when you've shared the plan with them")
       cy.get('.plan-header+p').should('not.contain', 'Last updated on')
     })
 
