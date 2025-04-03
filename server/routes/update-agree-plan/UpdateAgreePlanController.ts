@@ -6,26 +6,25 @@ import validateRequest, { getValidationErrors } from '../../middleware/validatio
 import PlanReadyForAgreementModel from '../shared-models/PlanReadyForAgreementModel'
 import transformRequest from '../../middleware/transformMiddleware'
 import UpdateAgreePlanPostModel from './models/UpdateAgreePlanPostModel'
-import { PlanAgreementStatus } from '../../@types/PlanType'
+import { PlanAgreementStatus, PlanType } from '../../@types/PlanType'
 import { PlanAgreement } from '../../@types/PlanAgreement'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
 import { AccessMode } from '../../@types/Handover'
 import { HttpError } from '../../utils/HttpError'
 
 export default class UpdateAgreePlanController {
+  private plan: PlanType
+
   private render = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { errors } = req
 
       const returnLink = req.services.sessionService.getReturnLink()
 
-      const planUuid = req.services.sessionService.getPlanUUID()
-      const plan = await req.services.planService.getPlanByUuid(planUuid)
-
       return res.render('pages/update-agree-plan', {
         locale: locale.en,
         data: {
-          planAgreementStatus: plan.agreementStatus,
+          planAgreementStatus: this.plan.agreementStatus,
           returnLink,
           form: req.body,
         },
@@ -71,10 +70,11 @@ export default class UpdateAgreePlanController {
   private validatePlanForAgreement = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const planUuid = req.services.sessionService.getPlanUUID()
-      const plan = await req.services.planService.getPlanByUuid(planUuid)
-      const domainErrors = getValidationErrors(plainToInstance(PlanReadyForAgreementModel, plan)) ?? {}
+      this.plan = await req.services.planService.getPlanByUuid(planUuid)
 
-      if (plan.agreementStatus !== PlanAgreementStatus.COULD_NOT_ANSWER) {
+      const domainErrors = getValidationErrors(plainToInstance(PlanReadyForAgreementModel, this.plan)) ?? {}
+
+      if (this.plan.agreementStatus !== PlanAgreementStatus.COULD_NOT_ANSWER) {
         domainErrors.plan = {
           alreadyAgreed: true,
         }
