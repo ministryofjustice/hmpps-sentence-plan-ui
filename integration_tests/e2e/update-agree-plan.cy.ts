@@ -46,7 +46,7 @@ describe('Update Agree plan', () => {
     })
 
     it('Display update agree plan page correctly on load', () => {
-      cy.get('#update-assessment-text').contains("Update Sam's agreement").click()
+      cy.get('#update-assessment-text a').contains("Update Sam's agreement").click()
       cy.url().should('satisfy', url => url.endsWith('/update-agree-plan'))
       cy.get('.moj-primary-navigation__container').contains(`Plan history`)
       cy.get('.govuk-fieldset__heading').contains('Does Sam agree to their plan?')
