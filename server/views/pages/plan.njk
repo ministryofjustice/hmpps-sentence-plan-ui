@@ -96,7 +96,7 @@
   <p class="govuk-body govuk-!-margin-top-5">
       {%- if data.plan.agreementDate !== null %}
           {%- if data.plan.agreementStatus === 'COULD_NOT_ANSWER' and data.readWrite === true %}
-              <div id='update-assessment-text' class='govuk-!-display-none-print'>
+              <div id="update-assessment-text" class="govuk-!-display-none-print">
                   <a href="/update-agree-plan">{{ locale.couldNotAgreePlanLink }}</a> {{ locale.couldNotAgreePlan }}
               </div>
           {%- elseif data.isUpdatedAfterAgreement %}
