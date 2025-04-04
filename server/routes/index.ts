@@ -18,6 +18,7 @@ import setupUpdateGoalRoutes from './update-goal/routes'
 import setupViewGoalDetailsRoutes from './viewGoalDetails/routes'
 import setupPlanHistoryRoutes from './plan-history/routes'
 import setupReAddGoalRoutes from './reAddGoal/routes'
+import setupUpdateAgreePlanRoutes from './update-agree-plan/routes'
 
 export default function routes(services: Services): Router {
   const router = Router()
@@ -45,5 +46,6 @@ export default function routes(services: Services): Router {
   setupAgreePlanRoutes(router)
   setupPlanHistoryRoutes(router)
   setupReAddGoalRoutes(router)
+  setupUpdateAgreePlanRoutes(router)
   return router
 }
