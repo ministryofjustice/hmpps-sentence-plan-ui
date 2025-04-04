@@ -128,5 +128,5 @@ integration_tests/screenshots/
 **/Chart.lock
 **/.DS_Store
 .run
-
+volume/
 cypress/
