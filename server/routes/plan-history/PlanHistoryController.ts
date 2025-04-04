@@ -9,6 +9,13 @@ export default class PlanHistoryController {
 
     try {
       const planUuid = req.services.sessionService.getPlanUUID()
+      const planVersionNumber = req.services.sessionService.getPlanVersionNumber()
+
+      const plan =
+        planVersionNumber != null
+          ? await req.services.planService.getPlanByUuidAndVersionNumber(planUuid, planVersionNumber)
+          : await req.services.planService.getPlanByUuid(planUuid)
+
       const oasysReturnUrl = req.services.sessionService.getOasysReturnUrl()
       const notes = await req.services.planService.getNotes(planUuid)
       const readWrite = req.services.sessionService.getAccessMode() === AccessMode.READ_WRITE
@@ -17,12 +24,15 @@ export default class PlanHistoryController {
         return next(HttpError(403, 'Plan has not been agreed'))
       }
 
+      req.services.sessionService.setReturnLink(`/plan-history`)
+
       const pageId = 'plan-history'
 
       return res.render('pages/plan-history', {
         locale: locale.en,
         data: {
           notes,
+          plan,
           oasysReturnUrl,
           pageId,
           readWrite,

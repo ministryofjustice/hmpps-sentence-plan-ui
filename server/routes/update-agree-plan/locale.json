@@ -1,0 +1,28 @@
+{
+  "en": {
+    "page": {
+      "title": "Do they agree? - {{ applicationName }}",
+      "errorTitle": "Error: Do they agree - {{ applicationName }}"
+    },
+    "mainHeading": {
+      "title": "Does {{ subject.givenName }} agree to their plan?",
+      "hint": "{{ subject.givenName }} must answer this question."
+    },
+    "agreePlanOptions": {
+      "yes": "Yes, I agree",
+      "no": "No, I do not agree",
+      "enterDetails": "Enter details"
+    },
+    "goBackToPlan": "Go back to {{ subject.possessiveName }} plan",
+    "agreePlanButton": "Save",
+    "errors": {
+      "agree-plan-radio": {
+        "isIn": "Select if they agree to the plan"
+      },
+      "does-not-agree-details": {
+        "isNotEmpty": "Enter details about why they do not agree",
+        "maxLength": "Details on why they do not agree must be 4,000 characters or less"
+      }
+    }
+  }
+}

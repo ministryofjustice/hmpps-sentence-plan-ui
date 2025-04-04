@@ -12,14 +12,17 @@ const oasysReturnUrl = 'https://oasys.return.url'
 jest.mock('../../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
     getPlanUUID: jest.fn().mockReturnValue(testPlan.uuid),
+    getPlanVersionNumber: jest.fn().mockReturnValue(null),
     getOasysReturnUrl: jest.fn().mockReturnValue(oasysReturnUrl),
     getAccessMode: jest.fn().mockReturnValue(AccessMode.READ_WRITE),
+    setReturnLink: jest.fn(),
   }))
 })
 
 jest.mock('../../services/sentence-plan/planService', () => {
   return jest.fn().mockImplementation(() => ({
     getNotes: jest.fn().mockReturnValue([testNoteData]),
+    getPlanByUuid: jest.fn().mockResolvedValue(testPlan),
   }))
 })
 
@@ -36,6 +39,7 @@ describe('PlanHistoryController with READ_WRITE permissions', () => {
       locale: locale.en,
       data: {
         notes: [testNoteData],
+        plan: testPlan,
         oasysReturnUrl,
         pageId: 'plan-history',
         readWrite: true,
@@ -87,6 +91,7 @@ describe('PlanHistoryController with READ_ONLY permissions', () => {
       locale: locale.en,
       data: {
         notes: [testNoteData],
+        plan: testPlan,
         oasysReturnUrl,
         pageId: 'plan-history',
         readWrite: false,
