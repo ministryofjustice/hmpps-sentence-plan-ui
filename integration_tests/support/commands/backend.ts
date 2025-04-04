@@ -82,7 +82,7 @@ function createHandoverContext(apiToken, oasysAssessmentPk, accessMode, sentence
           drugLinkedToHarm: 'NO',
           drugLinkedToReoffending: 'NO',
           drugStrengths: 'NO',
-          drugOtherWeightedScore: '0',
+          drugOtherWeightedScore: 'NULL',
           drugThreshold: 'NO',
         },
         alcoholMisuse: {

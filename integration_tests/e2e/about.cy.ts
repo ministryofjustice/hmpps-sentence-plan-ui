@@ -94,7 +94,7 @@ describe('Rendering About Person for READ_WRITE user', () => {
   })
 
   it('Should check the Missing Information section in Personal Relationships and Community is displayed correctly', () => {
-    cy.get('.govuk-inset-text').should('have.length', 1) // make sure there is only one missing information section
+    cy.get('.govuk-inset-text').should('have.length', 2) // make sure there is only one missing information section
 
     cy.get('#personal-relationships-and-community button').click() // click show all in Personal Relationships and Community assessment section
     cy.get('#personal-relationships-and-community .govuk-inset-text li').should('have.length', 1)
@@ -153,49 +153,49 @@ describe('Rendering About Person for READ_WRITE user', () => {
     cy.get('#thinking-behaviours-and-attitudes .assessment-score').eq(1).find('.highscoring').should('have.length', 6)
   })
 
-  it('Should check if the data for (low-scoring area) drug use are displayed correctly and in order', () => {
-    const expectedHeadings = [
-      'This area is not linked to RoSH (risk of serious harm)',
-      'This area is not linked to risk of reoffending',
-      'Motivation to make changes in this area',
-      'There are no strengths or protective factors related to this area',
-      'Drug use need score',
-    ]
+  // it('Should check if the data for (low-scoring area) drug use are displayed correctly and in order', () => {
+  //   const expectedHeadings = [
+  //     'This area is not linked to RoSH (risk of serious harm)',
+  //     'This area is not linked to risk of reoffending',
+  //     'Motivation to make changes in this area',
+  //     'There are no strengths or protective factors related to this area',
+  //     'Drug use need score',
+  //   ]
+  //
+  //   const expectedBody = [
+  //     'Sam is actively making changes.',
+  //     '0 out of 8. (Scores above 0 are high-scoring.)',
+  //     '0 out of 8',
+  //   ]
+  //
+  //   cy.get('#drug-use button').click() // click show all in Drug use assessment section
+  //
+  //   cy.get('#drug-use .govuk-accordion__section-content').as('sectionContent')
+  //
+  //   // Header assertions
+  //   cy.get('@sectionContent')
+  //     .find('h4')
+  //     .then(headings => {
+  //       headings.toArray().forEach((heading, index) => {
+  //         expect(heading.textContent).to.equal(expectedHeadings[index])
+  //       })
+  //     })
+  //
+  //   // Body assertions
+  //   cy.get('@sectionContent')
+  //     .find('.govuk-body')
+  //     .then(bodyElements => {
+  //       const actualBody = bodyElements.toArray().map(body => body.textContent.replace(/\s+/g, ' '))
+  //       actualBody.forEach((body, index) => {
+  //         expect(body).to.contain(expectedBody[index])
+  //       })
+  //     })
+  // })
 
-    const expectedBody = [
-      'Sam is actively making changes.',
-      '0 out of 8. (Scores above 0 are high-scoring.)',
-      '0 out of 8',
-    ]
-
-    cy.get('#drug-use button').click() // click show all in Drug use assessment section
-
-    cy.get('#drug-use .govuk-accordion__section-content').as('sectionContent')
-
-    // Header assertions
-    cy.get('@sectionContent')
-      .find('h4')
-      .then(headings => {
-        headings.toArray().forEach((heading, index) => {
-          expect(heading.textContent).to.equal(expectedHeadings[index])
-        })
-      })
-
-    // Body assertions
-    cy.get('@sectionContent')
-      .find('.govuk-body')
-      .then(bodyElements => {
-        const actualBody = bodyElements.toArray().map(body => body.textContent.replace(/\s+/g, ' '))
-        actualBody.forEach((body, index) => {
-          expect(body).to.contain(expectedBody[index])
-        })
-      })
-  })
-
-  it('Should check if the score graph for (low-scoring area) drug use is displayed correctly', () => {
-    cy.get('#drug-use button').click()
-    cy.get('#drug-use .assessment-score').find('.highscoring').should('have.length', 0)
-  })
+  // it('Should check if the score graph for (low-scoring area) drug use is displayed correctly', () => {
+  //   cy.get('#drug-use button').click()
+  //   cy.get('#drug-use .assessment-score').find('.highscoring').should('have.length', 0)
+  // })
 
   it('Should check if the data for (non-scoring area) Health and wellbeing are displayed correctly and in order', () => {
     const expectedHeadings = [
@@ -264,6 +264,12 @@ describe('Rendering About Person for READ_WRITE user', () => {
         })
       })
   })
+
+  it('Should check the correct context is displayed when there are no low-scoring areas when at least one assessment is incomplete', () => {
+    cy.get('h1').should('include.text', 'About')
+    cy.get('p.govuk-body').should('contain.text', 'No low-scoring areas at the moment.')
+  })
+
   it('Should click create goal then use the back link to return to /about', () => {
     cy.get('h1').should('include.text', 'About')
     cy.get('[role="button"]').eq(1).contains('Create goal').click()
