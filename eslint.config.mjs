@@ -1,9 +1,7 @@
 import hmppsConfig from '@ministryofjustice/eslint-config-hmpps'
 
 export default [
-  ...hmppsConfig({
-    extraIgnorePaths: ['assets/js/autocomplete/*'],
-  }),
+  ...hmppsConfig(),
   {
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
