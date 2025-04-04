@@ -15,10 +15,12 @@ async function getStepOptionsByAreaOfNeed(areaOfNeed) {
 }
 
 async function initializeStepInputAutocomplete(inputElement) {
-  const { value, name, parentElement } = inputElement
-  const areaOfNeed = document.querySelector(`#${AREA_OF_NEED_INPUT_ID}`).value
+  const { name, parentElement } = inputElement
+  const areaOfNeedElement = document.querySelector(`#${AREA_OF_NEED_INPUT_ID}`)
+  const areaOfNeed = areaOfNeedElement ? areaOfNeedElement.value : undefined
   const row = name.split('step-description-')[1]
   const source = await getStepOptionsByAreaOfNeed(areaOfNeed)
+  const defaultValue = inputElement ? inputElement.value : ''
   inputElement.remove()
 
   accessibleAutocomplete({
@@ -29,7 +31,7 @@ async function initializeStepInputAutocomplete(inputElement) {
     displayMenu: 'overlay',
     minLength: 2,
     showNoOptionsFound: false,
-    defaultValue: value ?? '',
+    defaultValue,
   })
 
   const element = document.getElementById(`step-description-${row}-autocomplete`)
