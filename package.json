@@ -92,7 +92,7 @@
     "express-session": "^1.18.1",
     "govuk-frontend": "^5.8.0",
     "helmet": "^8.0.0",
-    "hmrc-frontend": "^6.62.0",
+    "hmrc-frontend": "^6.64.0",
     "http-errors": "^2.0.0",
     "jwt-decode": "^4.0.0",
     "luxon": "^3.5.0",
