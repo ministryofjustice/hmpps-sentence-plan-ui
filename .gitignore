@@ -130,3 +130,4 @@ integration_tests/screenshots/
 .run
 
 cypress/
+volume/

@@ -45,6 +45,7 @@ services:
     image: ghcr.io/ministryofjustice/hmpps-assess-risks-and-needs-handover-service:latest
     depends_on:
       - redis
+      - localstack
     ports:
       - "7070:7070"
     healthcheck:
@@ -187,3 +188,24 @@ services:
     volumes:
       - ../wiremock/mappings:/home/wiremock/mappings
     entrypoint: ["/docker-entrypoint.sh", "--global-response-templating", "--disable-gzip", "--verbose"]
+
+
+  localstack:
+    image: localstack/localstack:3
+    container_name: localstack-sqs
+    environment:
+      - SERVICES=sqs
+      - LOCALSTACK_HOST=localstack:4566
+      - DEBUG=1
+      - DEFAULT_REGION=eu-west-2
+      - AWS_DEFAULT_REGION=eu-west-2
+      - USE_SSL=false
+    volumes:
+      - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
+      - "./scripts/localstack/init:/etc/localstack/init/ready.d"
+      - "./scripts/localstack/wait:/scripts/wait"
+    healthcheck:
+      test: [ "CMD", "bash", "/scripts/wait/healthcheck.sh" ]
+      interval: 5s
+      timeout: 10s
+      retries: 50
