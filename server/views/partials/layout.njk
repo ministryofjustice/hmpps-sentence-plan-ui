@@ -1,5 +1,6 @@
 {% extends "govuk/template.njk" %}
-{%- from "moj/components/primary-navigation/macro.njk" import mojPrimaryNavigation -%}
+{% from "moj/components/primary-navigation/macro.njk" import mojPrimaryNavigation %}
+{%- from  "hmrc/components/timeout-dialog/macro.njk" import hmrcTimeoutDialog -%}
 
 {% set locale = interpolate(locale, {
   applicationName: applicationName,
@@ -67,6 +68,19 @@
 {% block bodyStart %}{% endblock %}
 
 {% block content %}
+  {{ hmrcTimeoutDialog ({
+    timeout: 300,
+    countdown: 290,
+    keepAliveUrl: "?continue=true",
+    signOutUrl: "?lang=English",
+    title: "Your unsaved information will be deleted soon",
+    message: "We will delete any unsaved information if you do not continue in the next",
+    messageSuffix: "This is to protect your information.",
+    keepAliveButtonText: "Continue using sentence plan",
+    signOutButtonText: "End session",
+    language: "en"
+  }) }}
+
   {% if header.type == 'plan-extended' %}
     {% include "./plan-header/plan-header-extended.njk" %}
   {% else %}
