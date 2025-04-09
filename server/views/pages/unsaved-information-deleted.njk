@@ -1,0 +1,25 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block pageTitle %}
+  Your unsaved information has been deleted - Sentence plan
+{% endblock %}
+
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block header %}
+  {% include "../partials/header.njk" %}
+{% endblock %}
+
+{% block content %}
+  {{ super() }}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <h1 class="govuk-heading-l">Your unsaved information has been deleted</h1>
+      <p class="govuk-body">We have deleted your answers because you did not do anything for 1 hour. This is to protect your information.</p>
+      <p class="govuk-body">You can go to guy's plan to start again.</p>
+    </div>
+  </div>
+
+{% endblock %}
