@@ -1,6 +1,6 @@
 $govuk-global-styles: true;
 $path: "/assets/images/";
-$hmrc-assets-path: '/hmrc-frontend/';
+$hmrc-assets-path: 'node_modules/hmrc-frontend/hmrc';
 
 $moj-page-width: 1170px;
 $govuk-page-width: $moj-page-width;
