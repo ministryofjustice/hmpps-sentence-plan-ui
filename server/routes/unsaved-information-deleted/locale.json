@@ -1,0 +1,14 @@
+{
+  "en": {
+    "page": {
+      "title": "Your unsaved information has been deleted - {{ applicationName }}"
+    },
+    "mainHeading": {
+      "title": "Your unsaved information has been deleted"
+    },
+    "mainBody": {
+      "message": "We have deleted your answers because you did not do anything for 1 hour. This is to protect your information.",
+      "messageAdditional": "You can go to {{ subject.givenName }}'s plan to start again."
+    }
+  }
+}
