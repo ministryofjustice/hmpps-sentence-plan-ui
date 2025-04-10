@@ -32,11 +32,13 @@
     },
     "lowScoring": {
       "sectionHeading": "Low-scoring areas from the assessment",
-      "sectionEmptyParagraph": "No low-scoring areas."
+      "sectionEmptyParagraph": "No low-scoring areas.",
+      "oneOrMoreIncompleteSectionsAndNoScore": "No low-scoring areas at the moment."
     },
     "highScoring": {
       "sectionHeading": "High-scoring areas from the assessment",
-      "sectionEmptyParagraph": "No high-scoring areas."
+      "sectionEmptyParagraph": "No high-scoring areas.",
+      "oneOrMoreIncompleteSectionsAndNoScore": "No high-scoring areas at the moment."
     },
     "withoutScoring": {
       "sectionHeading": "Areas without a need score",
