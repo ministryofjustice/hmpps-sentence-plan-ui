@@ -10,23 +10,15 @@ const applicationInfo = applicationInfoSupplier()
 initialiseAppInsights()
 buildAppInsightsClient(applicationInfo)
 
-import config from '../config'
-import HmppsAuditClient from './hmppsAuditClient'
 import HandoverApiClient from './handoverApiClient'
-
-type RestClientBuilder<T> = (token: string) => T
 
 export const dataAccess = () => {
   const handoverApiClient = new HandoverApiClient()
-  const hmppsAuditClient = new HmppsAuditClient(config.sqs.audit)
 
   return {
     applicationInfo,
     handoverApiClient,
-    hmppsAuditClient,
   }
 }
 
-export type DataAccess = ReturnType<typeof dataAccess>
-
-export { RestClientBuilder, HandoverApiClient, HmppsAuditClient }
+export { HandoverApiClient }
