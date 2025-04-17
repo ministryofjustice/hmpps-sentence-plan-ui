@@ -6,8 +6,11 @@ import testPlan from '../../testutils/data/planData'
 import testNoteData from '../../testutils/data/noteData'
 import PlanHistoryController from './PlanHistoryController'
 import { AccessMode } from '../../@types/Handover'
+import { AuditEvent } from '../../services/auditService'
 
 const oasysReturnUrl = 'https://oasys.return.url'
+
+jest.mock('../../services/auditService')
 
 jest.mock('../../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
@@ -35,6 +38,8 @@ describe('PlanHistoryController with READ_WRITE permissions', () => {
   let viewData: any
 
   beforeEach(() => {
+    jest.clearAllMocks()
+
     viewData = {
       locale: locale.en,
       data: {
@@ -59,6 +64,7 @@ describe('PlanHistoryController with READ_WRITE permissions', () => {
       await controller.get(req, res, next)
 
       expect(res.render).toHaveBeenCalledWith('pages/plan-history', viewData)
+      expect(req.services.auditService.send).toHaveBeenCalledWith(AuditEvent.VIEW_PLAN_HISTORY_PAGE)
     })
     it('should return 403 when no notes exist', async () => {
       req.services.planService.getNotes = jest.fn().mockReturnValue([]) // Set the notes to be empty
@@ -74,6 +80,7 @@ describe('PlanHistoryController with READ_WRITE permissions', () => {
           message: 'Plan has not been agreed',
         }),
       )
+      expect(req.services.auditService.send).not.toHaveBeenCalled()
     })
   })
 })
@@ -87,6 +94,8 @@ describe('PlanHistoryController with READ_ONLY permissions', () => {
   let viewData: any
 
   beforeEach(() => {
+    jest.clearAllMocks()
+
     viewData = {
       locale: locale.en,
       data: {
@@ -113,6 +122,7 @@ describe('PlanHistoryController with READ_ONLY permissions', () => {
       await controller.get(req, res, next)
 
       expect(res.render).toHaveBeenCalledWith('pages/plan-history', viewData)
+      expect(req.services.auditService.send).toHaveBeenCalledWith(AuditEvent.VIEW_PLAN_HISTORY_PAGE)
     })
 
     // render without errors and plan agreement note
@@ -123,6 +133,7 @@ describe('PlanHistoryController with READ_ONLY permissions', () => {
       await controller.get(req, res, next)
 
       expect(res.render).toHaveBeenCalledWith('pages/plan-history', viewData)
+      expect(req.services.auditService.send).toHaveBeenCalledWith(AuditEvent.VIEW_PLAN_HISTORY_PAGE)
     })
   })
 })
