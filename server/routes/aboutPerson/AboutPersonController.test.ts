@@ -16,8 +16,11 @@ import { FormattedAssessment } from '../../@types/Assessment'
 
 import { formatAssessmentData } from '../../utils/assessmentUtils'
 import { AccessMode } from '../../@types/Handover'
+import { AuditEvent } from '../../services/auditService'
 
 const oasysReturnUrl = 'https://oasys.return.url'
+
+jest.mock('../../services/auditService')
 
 jest.mock('../../services/sentence-plan/referentialDataService', () => {
   return jest.fn().mockImplementation(() => ({
@@ -63,6 +66,8 @@ describe('AboutPersonController - API data error handling', () => {
   let assessmentAreas: FormattedAssessment
 
   beforeEach(() => {
+    jest.clearAllMocks()
+
     controller = new AboutPersonController()
     assessmentAreas = formatAssessmentData(fullCrimNeeds, completeAssessmentData, areaConfigs)
 
@@ -93,6 +98,7 @@ describe('AboutPersonController - API data error handling', () => {
     }
 
     expect(res.render).toHaveBeenCalledWith('pages/about', payload)
+    expect(req.services.auditService.send).toHaveBeenCalledWith(AuditEvent.VIEW_ABOUT_PAGE)
   })
 
   it('should have an assessment error if SAN API call fails', async () => {
@@ -126,6 +132,7 @@ describe('AboutPersonController - API data error handling', () => {
     }
 
     expect(res.render).toHaveBeenCalledWith('pages/about', payload)
+    expect(req.services.auditService.send).toHaveBeenCalledWith(AuditEvent.VIEW_ABOUT_PAGE)
   })
 
   it('should return a 500 error if both API calls fail', async () => {
@@ -135,6 +142,7 @@ describe('AboutPersonController - API data error handling', () => {
     await controller.get(req, res, next)
 
     expect(next).toHaveBeenCalledWith(expect.objectContaining({ status: 500 }))
+    expect(req.services.auditService.send).not.toHaveBeenCalled()
   })
 })
 
@@ -145,6 +153,7 @@ describe('AboutPersonController - assessment complete', () => {
   const res = mockRes()
 
   beforeEach(() => {
+    jest.clearAllMocks()
     controller = new AboutPersonController()
     req.services.assessmentService.getAssessmentByUuid = jest.fn().mockResolvedValue(completeAssessmentData)
     assessmentAreas = formatAssessmentData(fullCrimNeeds, completeAssessmentData, areaConfigs)
@@ -169,6 +178,7 @@ describe('AboutPersonController - assessment complete', () => {
       }
 
       expect(res.render).toHaveBeenCalledWith('pages/about', payload)
+      expect(req.services.auditService.send).toHaveBeenCalledWith(AuditEvent.VIEW_ABOUT_PAGE)
     })
   })
 
@@ -194,6 +204,7 @@ describe('AboutPersonController - assessment complete', () => {
       }
 
       expect(res.render).toHaveBeenCalledWith('pages/about', payload)
+      expect(req.services.auditService.send).toHaveBeenCalledWith(AuditEvent.VIEW_ABOUT_PAGE)
     })
   })
 })
@@ -205,6 +216,7 @@ describe('AboutPersonController - assessment incomplete', () => {
   let assessmentAreas: FormattedAssessment
 
   beforeEach(() => {
+    jest.clearAllMocks()
     controller = new AboutPersonController()
     req.services.assessmentService.getAssessmentByUuid = jest.fn().mockResolvedValue(incompleteAssessmentData)
     assessmentAreas = formatAssessmentData(fullCrimNeeds, incompleteAssessmentData, areaConfigs)
@@ -231,6 +243,7 @@ describe('AboutPersonController - assessment incomplete', () => {
       }
 
       expect(res.render).toHaveBeenCalledWith('pages/about', expectedPayload)
+      expect(req.services.auditService.send).toHaveBeenCalledWith(AuditEvent.VIEW_ABOUT_PAGE)
     })
   })
 
@@ -257,6 +270,7 @@ describe('AboutPersonController - assessment incomplete', () => {
       }
 
       expect(res.render).toHaveBeenCalledWith('pages/about', expectedPayload)
+      expect(req.services.auditService.send).toHaveBeenCalledWith(AuditEvent.VIEW_ABOUT_PAGE)
     })
   })
 })

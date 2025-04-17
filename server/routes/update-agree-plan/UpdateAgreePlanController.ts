@@ -11,6 +11,7 @@ import { PlanAgreement } from '../../@types/PlanAgreement'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
 import { AccessMode } from '../../@types/Handover'
 import { HttpError } from '../../utils/HttpError'
+import { AuditEvent } from '../../services/auditService'
 
 export default class UpdateAgreePlanController {
   private plan: PlanType
@@ -60,6 +61,7 @@ export default class UpdateAgreePlanController {
     try {
       const planUuid = req.services.sessionService.getPlanUUID()
       await req.services.planService.agreePlan(planUuid, agreement as PlanAgreement)
+      await req.services.auditService.send(AuditEvent.UPDATE_AGREEMENT, { agreementStatus: agreement.agreementStatus })
 
       return res.redirect(`${URLs.PLAN_OVERVIEW}`)
     } catch (e) {

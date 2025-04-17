@@ -13,6 +13,9 @@ import { PlanAgreementStatus, PlanType } from '../../@types/PlanType'
 import PlanReadyForAgreementModel from '../shared-models/PlanReadyForAgreementModel'
 import { testGoal } from '../../testutils/data/goalData'
 import testHandoverContext from '../../testutils/data/handoverData'
+import { AuditEvent } from '../../services/auditService'
+
+jest.mock('../../services/auditService')
 
 jest.mock('../../middleware/authorisationMiddleware', () => ({
   requireAccessMode: jest.fn(() => (req: Request, res: Response, next: NextFunction) => {
@@ -52,6 +55,7 @@ describe('UpdateAgreePlanController', () => {
   }
 
   beforeEach(() => {
+    jest.clearAllMocks()
     req = mockReq()
     res = mockRes()
     next = jest.fn()
@@ -89,6 +93,10 @@ describe('UpdateAgreePlanController', () => {
           })
         })
       })
+    })
+
+    afterEach(() => {
+      expect(req.services.auditService.send).not.toHaveBeenCalled()
     })
 
     it('should render without validation errors', async () => {
@@ -185,6 +193,7 @@ describe('UpdateAgreePlanController', () => {
       expect(req.services.planService.agreePlan).not.toHaveBeenCalled()
       expect(res.redirect).not.toHaveBeenCalled()
       expect(next).not.toHaveBeenCalled()
+      expect(req.services.auditService.send).not.toHaveBeenCalled()
     })
 
     it('should agree plan and redirect if no validation errors', async () => {
@@ -209,6 +218,9 @@ describe('UpdateAgreePlanController', () => {
       )
       expect(res.redirect).toHaveBeenCalledWith(URLs.PLAN_OVERVIEW)
       expect(next).not.toHaveBeenCalled()
+      expect(req.services.auditService.send).toHaveBeenCalledWith(AuditEvent.UPDATE_AGREEMENT, {
+        agreementStatus: expectedAgreementData.agreementStatus,
+      })
     })
 
     it('should disagree plan and redirect if no validation errors', async () => {
@@ -233,6 +245,9 @@ describe('UpdateAgreePlanController', () => {
       )
       expect(res.redirect).toHaveBeenCalledWith(URLs.PLAN_OVERVIEW)
       expect(next).not.toHaveBeenCalled()
+      expect(req.services.auditService.send).toHaveBeenCalledWith(AuditEvent.UPDATE_AGREEMENT, {
+        agreementStatus: expectedAgreementData.agreementStatus,
+      })
     })
 
     it('should call next if errors', async () => {
@@ -248,6 +263,7 @@ describe('UpdateAgreePlanController', () => {
 
       expect(req.services.planService.agreePlan).toHaveBeenCalled()
       expect(next).toHaveBeenCalled()
+      expect(req.services.auditService.send).not.toHaveBeenCalled()
     })
   })
 })

@@ -11,6 +11,9 @@ import runMiddlewareChain from '../../testutils/runMiddlewareChain'
 import URLs from '../URLs'
 import { testStep } from '../../testutils/data/stepData'
 import { StepStatus } from '../../@types/StepType'
+import { AuditEvent } from '../../services/auditService'
+
+jest.mock('../../services/auditService')
 
 jest.mock('../../middleware/authorisationMiddleware', () => ({
   requireAccessMode: jest.fn(() => (req: Request, res: Response, next: NextFunction) => {
@@ -67,6 +70,7 @@ describe('UpdateGoalController', () => {
   }
 
   beforeEach(() => {
+    jest.clearAllMocks()
     mockReferentialDataService = new ReferentialDataService() as jest.Mocked<ReferentialDataService>
     req = mockReq({
       params: { uuid: testGoal.uuid },
@@ -82,6 +86,10 @@ describe('UpdateGoalController', () => {
       await runMiddlewareChain(controller.get, req, res, next)
 
       expect(res.render).toHaveBeenCalledWith('pages/update-goal', viewData)
+      expect(req.services.auditService.send).toHaveBeenCalledTimes(1)
+      expect(req.services.auditService.send).toHaveBeenCalledWith(AuditEvent.VIEW_UPDATE_GOAL_AND_STEPS_PAGE, {
+        goalUUID: testGoal.uuid,
+      })
     })
   })
 
@@ -99,6 +107,10 @@ describe('UpdateGoalController', () => {
       expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_OVERVIEW}?type=current`)
       expect(res.render).not.toHaveBeenCalled()
       expect(next).not.toHaveBeenCalled()
+      expect(req.services.auditService.send).toHaveBeenCalledTimes(1)
+      expect(req.services.auditService.send).toHaveBeenCalledWith(AuditEvent.UPDATE_GOAL_AND_STEPS, {
+        goalUUID: testGoal.uuid,
+      })
     })
 
     it('should submit the updated fields and redirect to the mark as achieved page if mark as achieved clicked', async () => {
@@ -115,6 +127,10 @@ describe('UpdateGoalController', () => {
       expect(res.redirect).toHaveBeenCalledWith('/confirm-achieved-goal/a-un1qu3-t3st-Uu1d')
       expect(res.render).not.toHaveBeenCalled()
       expect(next).not.toHaveBeenCalled()
+      expect(req.services.auditService.send).toHaveBeenCalledTimes(1)
+      expect(req.services.auditService.send).toHaveBeenCalledWith(AuditEvent.UPDATE_GOAL_AND_STEPS, {
+        goalUUID: testGoal.uuid,
+      })
     })
 
     it('should submit the updated fields and redirect to the remove goal page if remove goal from plan clicked', async () => {
@@ -131,6 +147,10 @@ describe('UpdateGoalController', () => {
       expect(res.redirect).toHaveBeenCalledWith('/remove-goal/a-un1qu3-t3st-Uu1d')
       expect(res.render).not.toHaveBeenCalled()
       expect(next).not.toHaveBeenCalled()
+      expect(req.services.auditService.send).toHaveBeenCalledTimes(1)
+      expect(req.services.auditService.send).toHaveBeenCalledWith(AuditEvent.UPDATE_GOAL_AND_STEPS, {
+        goalUUID: testGoal.uuid,
+      })
     })
 
     it('should call next with an error if saveAllSteps fails', async () => {
@@ -147,6 +167,7 @@ describe('UpdateGoalController', () => {
 
       expect(next).toHaveBeenCalledWith(saveError)
       expect(res.render).not.toHaveBeenCalled()
+      expect(req.services.auditService.send).not.toHaveBeenCalled()
     })
 
     it('should redirect to the error page when incorrect uuid submitted', async () => {
@@ -159,6 +180,7 @@ describe('UpdateGoalController', () => {
       await runMiddlewareChain(controller.post, req, res, next)
 
       expect(next).toHaveBeenCalledWith(new Error('different steps were submitted'))
+      expect(req.services.auditService.send).not.toHaveBeenCalled()
     })
 
     it('should redirect to the plan page when saved with no steps and no note', async () => {
@@ -170,6 +192,10 @@ describe('UpdateGoalController', () => {
       expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_OVERVIEW}?type=current`)
       expect(req.services.stepService.saveAllSteps).not.toHaveBeenCalled()
       expect(next).not.toHaveBeenCalled()
+      expect(req.services.auditService.send).toHaveBeenCalledTimes(1)
+      expect(req.services.auditService.send).toHaveBeenCalledWith(AuditEvent.UPDATE_GOAL_AND_STEPS, {
+        goalUUID: testGoal.uuid,
+      })
     })
 
     it('should redirect to the achieve goal page when saved when all steps are completed', async () => {
@@ -183,6 +209,10 @@ describe('UpdateGoalController', () => {
 
       expect(res.redirect).toHaveBeenCalledWith(`${URLs.CONFIRM_ACHIEVE_GOAL.replace(':uuid', testGoal.uuid)}`)
       expect(next).not.toHaveBeenCalled()
+      expect(req.services.auditService.send).toHaveBeenCalledTimes(1)
+      expect(req.services.auditService.send).toHaveBeenCalledWith(AuditEvent.UPDATE_GOAL_AND_STEPS, {
+        goalUUID: testGoal.uuid,
+      })
     })
 
     it('should redirect to the same page when a validation error occurs', async () => {
@@ -195,6 +225,10 @@ describe('UpdateGoalController', () => {
 
       expect(res.render).toHaveBeenCalled()
       expect(next).not.toHaveBeenCalled()
+      expect(req.services.auditService.send).toHaveBeenCalledTimes(1)
+      expect(req.services.auditService.send).toHaveBeenCalledWith(AuditEvent.VIEW_UPDATE_GOAL_AND_STEPS_PAGE, {
+        goalUUID: testGoal.uuid,
+      })
     })
   })
 })

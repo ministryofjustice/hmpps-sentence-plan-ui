@@ -12,6 +12,9 @@ import URLs from '../URLs'
 import { StepStatus } from '../../@types/StepType'
 import testPlan from '../../testutils/data/planData'
 import { crimNeedsSubset, incompleteAssessmentData } from '../../testutils/data/testAssessmentData'
+import { AuditEvent } from '../../services/auditService'
+
+jest.mock('../../services/auditService')
 
 jest.mock('../../middleware/authorisationMiddleware', () => ({
   requireAccessMode: jest.fn(() => (req: Request, res: Response, next: NextFunction) => {
@@ -96,6 +99,7 @@ describe('AddStepsController', () => {
   }
 
   beforeEach(() => {
+    jest.clearAllMocks()
     req = mockReq()
     res = mockRes()
     next = jest.fn()
@@ -108,6 +112,7 @@ describe('AddStepsController', () => {
       await runMiddlewareChain(controller.get, req, res, next)
 
       expect(res.render).toHaveBeenCalledWith('pages/add-steps', viewData)
+      expect(req.services.auditService.send).not.toHaveBeenCalled()
     })
 
     it('should render with validation errors', async () => {
@@ -125,6 +130,7 @@ describe('AddStepsController', () => {
       await runMiddlewareChain(controller.get, req, res, next)
 
       expect(res.render).toHaveBeenCalledWith('pages/add-steps', expectedViewData)
+      expect(req.services.auditService.send).not.toHaveBeenCalled()
     })
 
     it('should call next if getting data fails', async () => {
@@ -134,6 +140,7 @@ describe('AddStepsController', () => {
       await runMiddlewareChain(controller.get, req, res, next)
 
       expect(next).toHaveBeenCalledWith(error)
+      expect(req.services.auditService.send).not.toHaveBeenCalled()
     })
   })
 
@@ -165,6 +172,7 @@ describe('AddStepsController', () => {
 
       expect(res.render).toHaveBeenCalledWith('pages/add-steps', expectedData)
       expect(next).not.toHaveBeenCalled()
+      expect(req.services.auditService.send).not.toHaveBeenCalled()
     })
 
     it('should add a new step and re-render the page', async () => {
@@ -211,6 +219,7 @@ describe('AddStepsController', () => {
 
       expect(res.render).toHaveBeenCalledWith('pages/add-steps', expectedData)
       expect(next).not.toHaveBeenCalled()
+      expect(req.services.auditService.send).not.toHaveBeenCalled()
     })
 
     it('should save and redirect to plan current tab when adding steps during Create Goal', async () => {
@@ -248,6 +257,9 @@ describe('AddStepsController', () => {
       expect(req.services.stepService.saveAllSteps).toHaveBeenCalledWith(expectedData, 'some-goal-uuid')
       expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_OVERVIEW}?type=current`)
       expect(next).not.toHaveBeenCalled()
+      expect(req.services.auditService.send).toHaveBeenCalledWith(AuditEvent.ADD_OR_CHANGE_STEPS, {
+        goalUUID: 'some-goal-uuid',
+      })
     })
 
     it('should save and redirect to plan future tab when adding steps during Create Goal', async () => {
@@ -285,6 +297,9 @@ describe('AddStepsController', () => {
       expect(req.services.stepService.saveAllSteps).toHaveBeenCalledWith(expectedData, 'some-goal-uuid')
       expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_OVERVIEW}?type=future`)
       expect(next).not.toHaveBeenCalled()
+      expect(req.services.auditService.send).toHaveBeenCalledWith(AuditEvent.ADD_OR_CHANGE_STEPS, {
+        goalUUID: 'some-goal-uuid',
+      })
     })
 
     it('should save and redirect when action is not "add-step" or "remove-step"', async () => {
@@ -320,6 +335,9 @@ describe('AddStepsController', () => {
       expect(req.services.stepService.saveAllSteps).toHaveBeenCalledWith(expectedData, 'some-goal-uuid')
       expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_OVERVIEW}?status=success`)
       expect(next).not.toHaveBeenCalled()
+      expect(req.services.auditService.send).toHaveBeenCalledWith(AuditEvent.ADD_OR_CHANGE_STEPS, {
+        goalUUID: 'some-goal-uuid',
+      })
     })
 
     it('should render the form again if there are validation errors', async () => {
@@ -365,6 +383,7 @@ describe('AddStepsController', () => {
 
       expect(res.render).toHaveBeenCalledWith('pages/add-steps', expectedViewData)
       expect(next).not.toHaveBeenCalled()
+      expect(req.services.auditService.send).not.toHaveBeenCalled()
     })
 
     it('should call next with an error if saveAllSteps fails', async () => {
@@ -385,6 +404,7 @@ describe('AddStepsController', () => {
       expect(next).toHaveBeenCalledWith(saveError)
 
       expect(res.render).not.toHaveBeenCalled()
+      expect(req.services.auditService.send).not.toHaveBeenCalled()
     })
   })
 })

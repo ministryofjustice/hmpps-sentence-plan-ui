@@ -4,6 +4,7 @@ import { areaConfigs } from '../../utils/assessmentAreaConfig.json'
 import { formatAssessmentData } from '../../utils/assessmentUtils'
 import { HttpError } from '../../utils/HttpError'
 import { AccessMode } from '../../@types/Handover'
+import { AuditEvent } from '../../services/auditService'
 
 export default class AboutPersonController {
   constructor() {}
@@ -38,6 +39,8 @@ export default class AboutPersonController {
       const readWrite = req.services.sessionService.getAccessMode() === AccessMode.READ_WRITE
 
       req.services.sessionService.setReturnLink(`/about`)
+
+      await req.services.auditService.send(AuditEvent.VIEW_ABOUT_PAGE)
 
       return res.render('pages/about', {
         locale: locale.en,

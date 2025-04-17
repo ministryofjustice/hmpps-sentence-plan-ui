@@ -10,6 +10,9 @@ import runMiddlewareChain from '../../testutils/runMiddlewareChain'
 import HandoverContextService from '../../services/handover/handoverContextService'
 import PlanService from '../../services/sentence-plan/planService'
 import SessionService from '../../services/sessionService'
+import { AuditEvent } from '../../services/auditService'
+
+jest.mock('../../services/auditService')
 
 jest.mock('../../middleware/authorisationMiddleware', () => ({
   requireAccessMode: jest.fn(() => (req: Request, res: Response, next: NextFunction) => {
@@ -80,12 +83,17 @@ describe('ViewGoalDetailsController', () => {
 
       expect(sessionService.getReturnLink()).toBe(returnLink)
       expect(res.render).toHaveBeenCalledWith('pages/view-goal-details', viewDataPermittedStatus)
+      expect(req.services.auditService.send).toHaveBeenCalledWith(AuditEvent.VIEW_GOAL_DETAILS, {
+        goalStatus: status,
+        goalUUID: 'a-un1qu3-t3st-Uu1d',
+      })
     })
 
     it('should not render when Goal is not Achieved or Removed', async () => {
       await runMiddlewareChain(controller.get, req, res, next)
 
       expect(res.render).not.toHaveBeenCalledWith('pages/view-goal-details', viewData)
+      expect(req.services.auditService.send).not.toHaveBeenCalled()
     })
   })
 })

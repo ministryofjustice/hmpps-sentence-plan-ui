@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express'
 import locale from './locale.json'
 import { AccessMode } from '../../@types/Handover'
 import { HttpError } from '../../utils/HttpError'
+import { AuditEvent } from '../../services/auditService'
 
 export default class PlanHistoryController {
   private render = async (req: Request, res: Response, next: NextFunction) => {
@@ -27,6 +28,8 @@ export default class PlanHistoryController {
       req.services.sessionService.setReturnLink(`/plan-history`)
 
       const pageId = 'plan-history'
+
+      await req.services.auditService.send(AuditEvent.VIEW_PLAN_HISTORY_PAGE)
 
       return res.render('pages/plan-history', {
         locale: locale.en,

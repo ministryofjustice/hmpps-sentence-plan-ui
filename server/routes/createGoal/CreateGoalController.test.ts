@@ -13,6 +13,9 @@ import { testGoal, testNewGoal } from '../../testutils/data/goalData'
 import runMiddlewareChain from '../../testutils/runMiddlewareChain'
 import testPlan from '../../testutils/data/planData'
 import { crimNeedsSubset, incompleteAssessmentData } from '../../testutils/data/testAssessmentData'
+import { AuditEvent } from '../../services/auditService'
+
+jest.mock('../../services/auditService')
 
 jest.mock('../../middleware/authorisationMiddleware', () => ({
   requireAccessMode: jest.fn(() => (req: Request, res: Response, next: NextFunction) => {
@@ -96,6 +99,7 @@ describe('CreateGoalController', () => {
   })
 
   beforeEach(() => {
+    jest.clearAllMocks()
     mockReferentialDataService = new ReferentialDataService() as jest.Mocked<ReferentialDataService>
     req = mockReq()
     req.params.areaOfNeed = 'accommodation'
@@ -106,6 +110,10 @@ describe('CreateGoalController', () => {
   })
 
   describe('get', () => {
+    afterEach(() => {
+      expect(req.services.auditService.send).not.toHaveBeenCalled()
+    })
+
     it('should render without validation errors', async () => {
       await runMiddlewareChain(controller.get, req, res, next)
 
@@ -324,6 +332,9 @@ describe('CreateGoalController', () => {
       expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_OVERVIEW}?status=added&type=current`)
       expect(res.render).not.toHaveBeenCalled()
       expect(next).not.toHaveBeenCalled()
+      expect(req.services.auditService.send).toHaveBeenCalledWith(AuditEvent.CREATE_A_GOAL, {
+        goalUUID: 'new-goal-uuid',
+      })
     })
 
     it('should save and redirect to create step when action is "addStep"', async () => {
@@ -344,6 +355,9 @@ describe('CreateGoalController', () => {
       expect(res.redirect).toHaveBeenCalledWith(`${URLs.ADD_STEPS.replace(':uuid', 'new-goal-uuid')}?type=current`)
       expect(res.render).not.toHaveBeenCalled()
       expect(next).not.toHaveBeenCalled()
+      expect(req.services.auditService.send).toHaveBeenCalledWith(AuditEvent.CREATE_A_GOAL, {
+        goalUUID: 'new-goal-uuid',
+      })
     })
 
     it('should render the form again if there are validation errors', async () => {
@@ -364,6 +378,7 @@ describe('CreateGoalController', () => {
       expect(req.services.goalService.saveGoal).not.toHaveBeenCalled()
       expect(res.redirect).not.toHaveBeenCalled()
       expect(next).not.toHaveBeenCalled()
+      expect(req.services.auditService.send).not.toHaveBeenCalled()
     })
 
     it('should call next with an error if saveGoal fails', async () => {
@@ -386,6 +401,7 @@ describe('CreateGoalController', () => {
       expect(next).toHaveBeenCalledWith(error)
       expect(res.render).not.toHaveBeenCalled()
       expect(res.redirect).not.toHaveBeenCalled()
+      expect(req.services.auditService.send).not.toHaveBeenCalled()
     })
   })
 })

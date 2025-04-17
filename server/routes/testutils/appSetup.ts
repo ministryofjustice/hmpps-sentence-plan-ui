@@ -6,7 +6,6 @@ import routes from '../index'
 import nunjucksSetup from '../../middleware/nunjucks/nunjucksSetup'
 import { requestServices, Services } from '../../services'
 import type { ApplicationInfo } from '../../applicationInfo'
-import AuditService from '../../services/auditService'
 import setupRequestServices from '../../middleware/setupRequestServices'
 import setupNotFoundRoute from '../not-found/routes'
 import setupErrorRoute from '../error/routes'
@@ -66,9 +65,7 @@ function appSetup(services: Services, production: boolean, userSupplier: () => E
 
 export function appWithAllRoutes({
   production = false,
-  services = {
-    auditService: new AuditService(null) as jest.Mocked<AuditService>,
-  },
+  services = {},
   userSupplier = () => user,
 }: {
   production?: boolean

@@ -179,6 +179,13 @@ services:
       SESSION_SECRET: sessionsecret
       SENTENCE_PLAN_API_URL: http://api:8080
       COORDINATOR_API_URL: http://wiremock:8080
+      AWS_ACCESS_KEY_ID: test
+      AWS_SECRET_ACCESS_KEY: test
+      AWS_ENDPOINT_URL: http://localstack:4566
+      AUDIT_ENABLED: true
+      AUDIT_SQS_QUEUE_URL: http://localstack:4566/000000000000/audit-queue
+      AUDIT_SQS_REGION: eu-west-2
+      AUDIT_SERVICE_NAME: hmpps-sentence-plan-ui
 
   wiremock:
     image: wiremock/wiremock:latest
