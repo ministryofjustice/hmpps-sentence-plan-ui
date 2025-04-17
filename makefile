@@ -20,7 +20,7 @@ down: ## Stops and removes all containers in the project.
 	make test-down
 
 build-ui: ## Builds a production image of the UI.
-	docker compose build ui
+	docker compose ${LOCAL_COMPOSE_FILES} build ui
 
 dev-up: ## Starts/restarts the UI in a development container. A remote debugger can be attached on port 9229.
 	@make install-node-modules
