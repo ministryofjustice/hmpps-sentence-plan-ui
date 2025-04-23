@@ -72,8 +72,8 @@
     ]
   },
   "dependencies": {
-    "@aws-sdk/client-sqs": "^3.731.1",
     "@ministryofjustice/frontend": "^4.0.1",
+    "@ministryofjustice/hmpps-audit-client": "^1.1.1",
     "@ministryofjustice/hmpps-monitoring": "^0.0.1-beta.2",
     "accessible-autocomplete": "^3.0.1",
     "agentkeepalive": "^4.6.0",
@@ -131,7 +131,6 @@
     "@typescript-eslint/eslint-plugin": "^8.26.0",
     "@typescript-eslint/parser": "^8.26.0",
     "audit-ci": "^7.1.0",
-    "aws-sdk-client-mock": "^4.1.0",
     "axe-core": "^4.10.2",
     "chokidar": "^3.6.0",
     "concurrently": "^9.1.2",

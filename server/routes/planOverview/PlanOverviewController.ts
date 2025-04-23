@@ -12,6 +12,7 @@ import { AccessMode } from '../../@types/Handover'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
 import { HttpError } from '../../utils/HttpError'
 import { PlanAgreementStatus, PlanType } from '../../@types/PlanType'
+import { AuditEvent } from '../../services/auditService'
 
 export default class PlanOverviewController {
   plan: PlanType
@@ -45,6 +46,8 @@ export default class PlanOverviewController {
       const readWrite = req.services.sessionService.getAccessMode() === AccessMode.READ_WRITE
 
       const page = 'pages/plan'
+
+      await req.services.auditService.send(AuditEvent.VIEW_PLAN_OVERVIEW_PAGE)
 
       return res.render(page, {
         locale: locale.en,

@@ -7,6 +7,9 @@ import testHandoverContext from '../../testutils/data/handoverData'
 import ConfirmAchieveGoalController from './ConfirmAchieveGoalController'
 import { testGoal } from '../../testutils/data/goalData'
 import runMiddlewareChain from '../../testutils/runMiddlewareChain'
+import { AuditEvent } from '../../services/auditService'
+
+jest.mock('../../services/auditService')
 
 jest.mock('../../middleware/authorisationMiddleware', () => ({
   requireAccessMode: jest.fn(() => (req: Request, res: Response, next: NextFunction) => {
@@ -55,6 +58,7 @@ describe('AchieveGoalController', () => {
   }
 
   beforeEach(() => {
+    jest.clearAllMocks()
     req = mockReq()
     res = mockRes()
     next = jest.fn()
@@ -67,6 +71,7 @@ describe('AchieveGoalController', () => {
       await runMiddlewareChain(controller.get, req, res, next)
 
       expect(res.render).toHaveBeenCalledWith('pages/confirm-if-achieved', viewData)
+      expect(req.services.auditService.send).not.toHaveBeenCalled()
     })
 
     it('should render with validation errors', async () => {
@@ -84,6 +89,7 @@ describe('AchieveGoalController', () => {
       await runMiddlewareChain(controller.get, req, res, next)
 
       expect(res.render).toHaveBeenCalledWith('pages/confirm-if-achieved', expectedViewData)
+      expect(req.services.auditService.send).not.toHaveBeenCalled()
     })
   })
 
@@ -105,6 +111,9 @@ describe('AchieveGoalController', () => {
       expect(req.services.goalService.achieveGoal).toHaveBeenCalledWith(expectedNote, 'some-uuid')
       expect(res.redirect).toHaveBeenCalledWith('/plan?type=achieved&status=achieved')
       expect(next).not.toHaveBeenCalled()
+      expect(req.services.auditService.send).toHaveBeenCalledWith(AuditEvent.MARK_GOAL_AS_ACHIEVED, {
+        goalUUID: 'some-uuid',
+      })
     })
   })
 })
