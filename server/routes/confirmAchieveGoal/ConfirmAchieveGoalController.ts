@@ -8,6 +8,7 @@ import { AccessMode } from '../../@types/Handover'
 import { HttpError } from '../../utils/HttpError'
 import URLs from '../URLs'
 import { goalStatusToTabName } from '../../utils/utils'
+import { AuditEvent } from '../../services/auditService'
 
 // AchieveGoalController is accessed through the 'Save goal and steps' button on the update goals page, only when all steps of the goal have been marked as complete. This will provide the user with a prompt to whether the goal has been achieved or not
 export default class ConfirmAchieveGoalController {
@@ -56,6 +57,7 @@ export default class ConfirmAchieveGoalController {
 
     try {
       await req.services.goalService.achieveGoal(note, goalUuid)
+      await req.services.auditService.send(AuditEvent.MARK_GOAL_AS_ACHIEVED, { goalUUID: goalUuid })
       return res.redirect(`/plan?type=achieved&status=achieved`)
     } catch (e) {
       return next(HttpError(500, e.message))

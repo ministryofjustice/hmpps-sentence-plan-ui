@@ -6,7 +6,6 @@ import setupCreateGoalRoutes from './createGoal/routes'
 import setupRemoveGoalRoutes from './removeGoal/routes'
 import setupChangeGoalRoutes from './changeGoal/routes'
 import setupAboutPersonRoutes from './aboutPerson/routes'
-import { Page } from '../services/auditService'
 import setupReferenceDataRoutes from './ReferenceData/routes'
 import setupPlanOverviewRoutes from './planOverview/routes'
 import setupAgreePlanRoutes from './agree-plan/routes'
@@ -25,11 +24,7 @@ export default function routes(services: Services): Router {
   const router = Router()
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
 
-  get('/', async (req, res, next) => {
-    await services.auditService.logPageView(Page.EXAMPLE_PAGE, {
-      who: res.locals.user?.username,
-      correlationId: req.id,
-    })
+  get('/', async (_req, res, _next) => {
     res.redirect(URLs.PLAN_OVERVIEW)
   })
 
