@@ -155,8 +155,8 @@
       "title": "Your unsaved information will be deleted soon",
       "message": "We will delete any unsaved information if you do not continue in the next",
       "messageSuffix": "This is to protect your information.",
-      "continue": "Continue using sentence plan",
-      "signout": "Delete unsaved information"
+      "keepAliveButton": "Continue using sentence plan",
+      "signOutButton": "Delete unsaved information"
     }
   },
   "cy": {}
