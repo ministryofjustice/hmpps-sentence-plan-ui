@@ -22,13 +22,9 @@
     </div>
   </div>
 
-  <div class="govuk-button-group">
-    {{ govukButton({
-      text: locale.goToPlanButton,
-      name: "action",
-      value: "confirm"
-    }) }}
-    <a href="{{ data.returnLink }}">{{ locale.doNotMarkAsAchievedLink }}</a>
-  </div>
+  {{ govukButton({
+    text: locale.goToPlanButton,
+    href: '/plan'
+  }) }}
 
 {% endblock %}
