@@ -19,6 +19,7 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
   app.locals.deploymentName = config.deploymentName
   app.locals.environmentName = config.environmentName
   app.locals.environmentNameColour = config.environmentName === 'PRE-PRODUCTION' ? 'govuk-tag--green' : ''
+  app.locals.sessionExpiryTime = config.session.expiryMinutes
 
   // Cachebusting version string
   if (production) {
