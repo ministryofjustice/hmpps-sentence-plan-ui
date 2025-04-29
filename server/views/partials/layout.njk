@@ -70,7 +70,7 @@
 {% block content %}
   {{ hmrcTimeoutDialog ({
     timeout: sessionExpiryTime * 60,
-    countdown: (sessionExpiryTime - 10) * 60,
+    countdown: 10 * 60,
     keepAliveUrl: "?continue=true",
     signOutUrl: "/unsaved-information-deleted",
     title: locale.common.unsavedInformationModal.title,
