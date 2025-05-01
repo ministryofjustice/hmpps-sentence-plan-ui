@@ -64,7 +64,6 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
     res.render = new Proxy(res.render, {
       apply(target, thisArg, [view, options, callback]) {
         const popData = req.services.sessionService.getSubjectDetails()
-
         return target.apply(thisArg, [
           view,
           mergeDeep(options, {
@@ -74,7 +73,11 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
             data: {
               popData: {
                 ...popData,
-                possessiveName: popData.givenName.endsWith('s') ? `${popData.givenName}'` : `${popData.givenName}'s`,
+                // eslint-disable-next-line no-nested-ternary
+                possessiveName: popData ? popData.givenName.endsWith('s')
+                    ? `${popData.givenName}'`
+                    : `${popData.givenName}'s`
+                  : '',
               },
             },
           }),

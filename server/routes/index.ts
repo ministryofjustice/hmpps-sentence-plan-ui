@@ -43,6 +43,5 @@ export default function routes(services: Services): Router {
   setupPlanHistoryRoutes(router)
   setupReAddGoalRoutes(router)
   setupUpdateAgreePlanRoutes(router)
-  setupUnsavedInformationDeletedControllerRoutes(router)
   return router
 }
