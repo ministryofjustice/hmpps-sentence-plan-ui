@@ -8,8 +8,8 @@
     },
     "mainBody": {
       "message": "This is to protect your information.",
-      "messageAdditional": "You can go to {{ subject.possessiveName }}'s plan to start again."
+      "messageAdditional": "You can return to the plan to start again."
     },
-    "goToPlanButton": "Go to {{ subject.possessiveName }}'s plan"
+    "goToPlanButton": "Return to plan"
   }
 }
