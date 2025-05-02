@@ -4,7 +4,7 @@ import nunjucks from 'nunjucks'
 import express from 'express'
 import { ApplicationInfo } from '../../applicationInfo'
 import config from '../../config'
-import { initialiseName, mergeDeep, convertToTitleCase } from '../../utils/utils'
+import { initialiseName, mergeDeep, convertToTitleCase, nameFormatter } from '../../utils/utils'
 import commonLocale from '../../utils/commonLocale.json'
 import { sentenceLength } from '../../utils/assessmentUtils'
 import { formatDate, localeInterpolation, merge, splitString, toFormattedError } from './helpers'
@@ -73,11 +73,7 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
             data: {
               popData: {
                 ...popData,
-                // eslint-disable-next-line no-nested-ternary
-                possessiveName: popData ? popData.givenName.endsWith('s')
-                    ? `${popData.givenName}'`
-                    : `${popData.givenName}'s`
-                  : '',
+                possessiveName: nameFormatter(popData?.givenName),
               },
             },
           }),

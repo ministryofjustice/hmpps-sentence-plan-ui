@@ -8,7 +8,7 @@ import {
   initialiseName,
   moveGoal,
   sortSteps,
-  toKebabCase,
+  toKebabCase, nameFormatter,
 } from './utils'
 import { NewStep, StepStatus } from '../@types/StepType'
 import { GoalStatus } from '../@types/GoalType'
@@ -205,5 +205,15 @@ describe('generateOauthClientToken', () => {
     const decoded = Buffer.from(value.substring(6), 'base64').toString('utf-8')
 
     expect(decoded).toBe("bob:p@'s&sw/o$+ rd1")
+  })
+})
+
+describe('nameFormatter', () => {
+  it('Formats a non pluralised name', () => {
+    expect(nameFormatter('James')).toEqual('James')
+  })
+
+  it('Formats to a pluralised name', () => {
+    expect(nameFormatter('Bob')).toEqual(`Bob's`)
   })
 })
