@@ -8,7 +8,8 @@ import {
   initialiseName,
   moveGoal,
   sortSteps,
-  toKebabCase, nameFormatter,
+  toKebabCase,
+  nameFormatter,
 } from './utils'
 import { NewStep, StepStatus } from '../@types/StepType'
 import { GoalStatus } from '../@types/GoalType'
