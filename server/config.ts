@@ -65,7 +65,7 @@ export default {
   },
   session: {
     secret: get('SESSION_SECRET', 'app-insecure-default-session', requiredInProduction),
-    expiryMinutes: Number(get('WEB_SESSION_TIMEOUT_IN_MINUTES', 120)),
+    expiryMinutes: Number(get('WEB_SESSION_TIMEOUT_IN_MINUTES', 60)),
   },
   apis: {
     hmppsAuth: {
