@@ -86,12 +86,12 @@ describe('Unsaved information deleted', () => {
       cy.url().should('include', '/unsaved-information-deleted')
       cy.get('h1').should('exist').contains('Your unsaved information has been deleted')
       cy.get('p').should('exist').contains('This is to protect your information.')
-      cy.get('p').should('exist').contains('You can return to the plan to start again.')
-      cy.get('.govuk-button').should('exist').contains('Return to plan')
+      cy.get('p').should('exist').contains('You can go to the plan to start again.')
+      cy.get('.govuk-button').should('exist').contains('Go to the plan')
     })
 
     it(`Should navigate back to a subjects plan when 'Return to plan' button is clicked`, () => {
-      cy.get('.govuk-button').contains('Return to plan').click()
+      cy.get('.govuk-button').contains('Go to the plan').click()
       cy.url().should('include', '/plan')
       cy.get('.plan-header').should('exist')
     })
