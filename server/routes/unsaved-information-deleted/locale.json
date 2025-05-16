@@ -8,8 +8,8 @@
     },
     "mainBody": {
       "message": "This is to protect your information.",
-      "messageAdditional": "You can return to the plan to start again."
+      "messageAdditional": "You can go to the plan to start again."
     },
-    "goToPlanButton": "Return to plan"
+    "goToPlanButton": "Go to the plan"
   }
 }
