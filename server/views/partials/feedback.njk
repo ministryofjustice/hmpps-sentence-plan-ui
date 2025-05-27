@@ -1,0 +1,15 @@
+{% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
+
+{% if feedbackUrl %}
+  <div class="govuk-grid-row user-feedback">
+    <div class="govuk-grid-column-full">
+      {{ govukPhaseBanner({
+        tag: {
+          text: "Beta"
+        },
+        classes: "user-feedback__banner",
+        html: 'This is a new service - your <a class="govuk-link" target="_blank" href="' + feedbackUrl + '">feedback (opens in new tab)</a> will help us improve it'
+      }) }}
+    </div>
+  </div>
+{% endif %}

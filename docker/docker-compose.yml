@@ -186,6 +186,7 @@ services:
       AUDIT_SQS_QUEUE_URL: http://localstack:4566/000000000000/audit-queue
       AUDIT_SQS_REGION: eu-west-2
       AUDIT_SERVICE_NAME: hmpps-sentence-plan-ui
+      FEEDBACK_URL: http://foo.bar
 
   wiremock:
     image: wiremock/wiremock:latest
