@@ -31,6 +31,7 @@ describe('Rendering About Person for READ_WRITE user', () => {
       })
 
     cy.checkAccessibility()
+    cy.hasFeedbackLink()
   })
 
   it('Should check if the hard-coded entries in Sentence information are displayed correctly', () => {

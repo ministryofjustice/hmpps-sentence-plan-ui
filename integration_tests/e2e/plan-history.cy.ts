@@ -21,6 +21,10 @@ describe('Rendering Plan History for READ_WRITE user', () => {
     cy.get('.govuk-heading-l').contains('You do not have permission to perform this action')
   })
 
+  it('Has a feedback link', () => {
+    cy.hasFeedbackLink()
+  })
+
   it('Display plan history page with plan agreement', () => {
     planOverview.agreePlan()
     cy.get('.moj-primary-navigation__container').contains('Plan history').click()

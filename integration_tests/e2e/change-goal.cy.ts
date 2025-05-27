@@ -36,6 +36,15 @@ describe('Change a goal', () => {
   })
 
   describe('Rendering', () => {
+    it('Has a feedback link', () => {
+      cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
+        cy.addGoalToPlan(plan.uuid, goalData).then(goal => {
+          cy.visit(`/change-goal/${goal.uuid}`)
+          cy.hasFeedbackLink()
+        })
+      })
+    })
+
     it('Change goal page populated correctly', () => {
       // Add goal and access change-goal page
       cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
