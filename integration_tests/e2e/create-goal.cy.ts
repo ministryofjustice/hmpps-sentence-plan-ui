@@ -13,6 +13,11 @@ describe('Create a new Goal', () => {
     })
   })
 
+  it('Has a feedback link', () => {
+    createGoalPage.createGoal('accommodation')
+    cy.hasFeedbackLink()
+  })
+
   it('Checks the back link is correct', () => {
     createGoalPage.createGoal('accommodation')
     cy.get('.govuk-back-link').should('have.attr', 'href', '/plan?type=current')
