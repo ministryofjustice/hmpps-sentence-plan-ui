@@ -14,6 +14,8 @@ export default {
   CONFIRM_ACHIEVE_GOAL: '/confirm-if-achieved/:uuid',
   ACHIEVE_GOAL: '/confirm-achieved-goal/:uuid',
   AGREE_PLAN: '/agree-plan',
+  UPDATE_AGREE_PLAN: '/update-agree-plan',
   PLAN_HISTORY: '/plan-history',
   RE_ADD_GOAL: '/confirm-add-goal/:uuid',
+  UNSAVED_INFORMATION_DELETED: '/unsaved-information-deleted',
 }

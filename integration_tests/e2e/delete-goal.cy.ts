@@ -3,6 +3,7 @@ import { Goal } from '../../server/@types/GoalType'
 import DataGenerator from '../support/DataGenerator'
 import { PlanType } from '../../server/@types/PlanType'
 import { NewStep } from '../../server/@types/StepType'
+import { AccessMode } from '../../server/@types/Handover'
 
 describe('Delete a goal from a Plan before it has been agreed', () => {
   beforeEach(() => {
@@ -16,7 +17,7 @@ describe('Delete a goal from a Plan before it has been agreed', () => {
   describe('Security', () => {
     it('Should display authorisation error if user does not have READ_WRITE role', () => {
       cy.get<string>('@oasysAssessmentPk').then(oasysAssessmentPk => {
-        cy.openSentencePlan(oasysAssessmentPk, 'READ_ONLY')
+        cy.openSentencePlan(oasysAssessmentPk, { accessMode: AccessMode.READ_ONLY })
       })
 
       cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {

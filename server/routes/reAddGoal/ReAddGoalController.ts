@@ -10,6 +10,7 @@ import { HttpError } from '../../utils/HttpError'
 import { goalStatusToTabName } from '../../utils/utils'
 import { getDateOptions, getGoalTargetDate } from '../../utils/goalTargetDateUtils'
 import { ReAddGoal } from '../../@types/ReAddGoal'
+import { AuditEvent } from '../../services/auditService'
 
 export default class ReAddGoalController {
   constructor() {}
@@ -58,6 +59,7 @@ export default class ReAddGoalController {
 
     try {
       await req.services.goalService.reAddGoal(reAddGoal, goalUuid)
+      await req.services.auditService.send(AuditEvent.ADD_A_GOAL_BACK_TO_PLAN, { goalUUID: goalUuid })
       return res.redirect(`/plan?type=${goalStatusToTabName(status)}`)
     } catch (e) {
       return next(HttpError(500, e.message))

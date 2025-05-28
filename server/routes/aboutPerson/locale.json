@@ -32,19 +32,21 @@
     },
     "lowScoring": {
       "sectionHeading": "Low-scoring areas from the assessment",
-      "sectionEmptyParagraph": "No low-scoring areas."
+      "sectionEmptyParagraph": "No low-scoring areas.",
+      "oneOrMoreIncompleteSectionsAndNoScore": "No low-scoring areas at the moment."
     },
     "highScoring": {
       "sectionHeading": "High-scoring areas from the assessment",
-      "sectionEmptyParagraph": "No high-scoring areas."
+      "sectionEmptyParagraph": "No high-scoring areas.",
+      "oneOrMoreIncompleteSectionsAndNoScore": "No high-scoring areas at the moment."
     },
     "withoutScoring": {
       "sectionHeading": "Areas without a need score",
       "sectionParagraph": "Health and wellbeing, and finances never have a need score. When other information is available for those areas, you can see it here."
     },
     "errors": {
-      "noAssessmentDataFound": "No assessment data found",
-      "noSentenceDataFound": "No sentence data found"
+      "noDeliusDataFound": "There is a problem getting the sentence information. Try reloading the page or try again later.",
+      "noAssessmentDataFound": "There is a problem getting the assessment information. Try reloading the page or try again later."
     },
     "goalsToAchieve": {
       "title": "Goals to achieve",

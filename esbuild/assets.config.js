@@ -25,7 +25,7 @@ const buildAssets = buildConfig =>
     sourcemap: !buildConfig.isProduction,
     platform: 'browser',
     target: 'es2018',
-    external: ['/assets/*'],
+    external: ['/assets/*', 'node_modules/hmrc-frontend/*'],
     bundle: true,
     plugins: [
       clean({
@@ -39,7 +39,7 @@ const buildAssets = buildConfig =>
   })
 
 module.exports = buildConfig => {
-  console.log('\u{1b}[1m\u{2728}  Building assets...\u{1b}[0m')
+  process.stderr.write('\u{1b}[1m\u{2728}  Building assets...\u{1b}[0m')
 
   return Promise.all([buildAssets(buildConfig), buildAdditionalAssets(buildConfig)])
 }

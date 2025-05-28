@@ -94,7 +94,7 @@ describe('Rendering About Person for READ_WRITE user', () => {
   })
 
   it('Should check the Missing Information section in Personal Relationships and Community is displayed correctly', () => {
-    cy.get('.govuk-inset-text').should('have.length', 1) // make sure there is only one missing information section
+    cy.get('.govuk-inset-text').should('have.length', 2) // make sure there are only two missing information sections
 
     cy.get('#personal-relationships-and-community button').click() // click show all in Personal Relationships and Community assessment section
     cy.get('#personal-relationships-and-community .govuk-inset-text li').should('have.length', 1)
@@ -127,7 +127,7 @@ describe('Rendering About Person for READ_WRITE user', () => {
 
     // Header assertions
     cy.get('@sectionContent')
-      .find('p.govuk-\\!-font-weight-bold')
+      .find('h4')
       .then(headings => {
         headings.toArray().forEach((heading, index) => {
           expect(heading.textContent).to.equal(expectedHeadings[index])
@@ -153,7 +153,7 @@ describe('Rendering About Person for READ_WRITE user', () => {
     cy.get('#thinking-behaviours-and-attitudes .assessment-score').eq(1).find('.highscoring').should('have.length', 6)
   })
 
-  it('Should check if the data for (low-scoring area) drug use are displayed correctly and in order', () => {
+  it('Should check if the data for (area without a need score) drug use are displayed correctly and in order', () => {
     const expectedHeadings = [
       'This area is not linked to RoSH (risk of serious harm)',
       'This area is not linked to risk of reoffending',
@@ -174,7 +174,7 @@ describe('Rendering About Person for READ_WRITE user', () => {
 
     // Header assertions
     cy.get('@sectionContent')
-      .find('p.govuk-\\!-font-weight-bold')
+      .find('h4')
       .then(headings => {
         headings.toArray().forEach((heading, index) => {
           expect(heading.textContent).to.equal(expectedHeadings[index])
@@ -190,11 +190,6 @@ describe('Rendering About Person for READ_WRITE user', () => {
           expect(body).to.contain(expectedBody[index])
         })
       })
-  })
-
-  it('Should check if the score graph for (low-scoring area) drug use is displayed correctly', () => {
-    cy.get('#drug-use button').click()
-    cy.get('#drug-use .assessment-score').find('.highscoring').should('have.length', 0)
   })
 
   it('Should check if the data for (non-scoring area) Health and wellbeing are displayed correctly and in order', () => {
@@ -213,7 +208,7 @@ describe('Rendering About Person for READ_WRITE user', () => {
     cy.get('#health-and-wellbeing .govuk-accordion__section-content').as('sectionContent') // Header assertions
 
     cy.get('@sectionContent')
-      .find('p.govuk-\\!-font-weight-bold')
+      .find('h4')
       .then(headings => {
         headings.toArray().forEach((heading, index) => {
           expect(heading.textContent).to.equal(expectedHeadings[index])
@@ -247,7 +242,7 @@ describe('Rendering About Person for READ_WRITE user', () => {
     cy.get('#finances .govuk-accordion__section-content').as('sectionContent') // Header assertions
 
     cy.get('@sectionContent')
-      .find('p.govuk-\\!-font-weight-bold')
+      .find('h4')
       .then(headings => {
         headings.toArray().forEach((heading, index) => {
           expect(heading.textContent).to.equal(expectedHeadings[index])
@@ -279,7 +274,7 @@ describe('Rendering About Person in READ_ONLY', () => {
   beforeEach(() => {
     cy.createSentencePlan().then(planDetails => {
       cy.wrap(planDetails).as('plan')
-      cy.openSentencePlan(planDetails.oasysAssessmentPk, AccessMode.READ_ONLY)
+      cy.openSentencePlan(planDetails.oasysAssessmentPk, { accessMode: AccessMode.READ_ONLY })
       cy.get('.moj-primary-navigation__container').contains('a', 'About').click()
     })
   })

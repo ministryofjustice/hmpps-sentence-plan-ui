@@ -13,8 +13,8 @@ export default defineConfig({
   reporterOptions: {
     configFile: 'reporter-config.json',
   },
-  taskTimeout: 60000,
-  defaultCommandTimeout: 60000,
+  taskTimeout: 10000,
+  defaultCommandTimeout: 10000,
   e2e: {
     setupNodeEvents(on, config) {
       on('task', {
