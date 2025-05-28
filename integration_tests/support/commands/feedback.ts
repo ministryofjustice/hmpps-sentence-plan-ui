@@ -1,6 +1,6 @@
 // eslint-disable-next-line import/prefer-default-export
 export const hasFeedbackLink = () => {
-  const stubFeedbackUrl = 'http://localhost:9092/'
+  const stubFeedbackUrl = Cypress.env('FEEDBACK_URL')
 
   cy.get('.govuk-phase-banner__text > .govuk-link').as('feedbackLink')
 

@@ -42,6 +42,7 @@ export default defineConfig({
       SP_API_URL: 'http://localhost:8080',
       COORDINATOR_API_URL: 'http://localhost:6060',
       OASTUB_URL: 'http://localhost:7072',
+      FEEDBACK_URL: 'http://localhost:9092',
     },
   },
 })
