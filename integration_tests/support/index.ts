@@ -10,6 +10,7 @@ import {
 } from './commands/backend'
 import { checkAccessibility } from './commands/accessibility'
 import 'cypress-axe'
+import { hasFeedbackLink } from './commands/feedback'
 
 compareSnapshotCommand()
 
@@ -27,3 +28,6 @@ Cypress.Commands.add('lockPlan', lockPlan)
 
 // Accessibility
 Cypress.Commands.add('checkAccessibility', checkAccessibility)
+
+// Feedback
+Cypress.Commands.add('hasFeedbackLink', hasFeedbackLink)
