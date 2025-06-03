@@ -44,6 +44,26 @@ describe('Visual comparison testing', () => {
       cy.get('.moj-side-navigation__list').contains('a', 'Drug use').click()
       cy.compareSnapshot('create-goal-drug-use-page')
     })
+
+    it('Create goal - alcohol use screenshot', () => {
+      cy.get('.moj-side-navigation__list').contains('a', 'Alcohol use').click()
+      cy.compareSnapshot('create-goal-alcohol-use-page')
+    })
+
+    it('Create goal - health and wellbeing screenshot', () => {
+      cy.get('.moj-side-navigation__list').contains('a', 'Health and wellbeing').click()
+      cy.compareSnapshot('create-goal-health-and-wellbeing-page')
+    })
+
+    it('Create goal - personal relationships and community screenshot', () => {
+      cy.get('.moj-side-navigation__list').contains('a', 'Personal relationships and community').click()
+      cy.compareSnapshot('create-goal-personal-relationships-and-community-page')
+    })
+
+    it('Create goal - thinking behaviours and attitude screenshot', () => {
+      cy.get('.moj-side-navigation__list').contains('a', 'Thinking, behaviours and attitude').click()
+      cy.compareSnapshot('create-goal-thinking-behaviours-and-attitude-page')
+    })
   })
 
   // describe('Plan History', () => {
