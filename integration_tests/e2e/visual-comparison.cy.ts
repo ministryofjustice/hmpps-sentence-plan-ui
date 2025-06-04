@@ -1,20 +1,33 @@
+import DataGenerator from '../support/DataGenerator'
+import { PlanType } from '../../server/@types/PlanType'
+
 describe('Visual comparison testing', () => {
   beforeEach(() => {
     cy.createSentencePlan().then(planDetails => {
-      cy.wrap(planDetails).as('plan')
       cy.openSentencePlan(planDetails.oasysAssessmentPk)
       cy.visit('/plan')
     })
   })
 
   describe('Plan overview', () => {
-    it('Plan overview page screenshot', () => {
+    it('Plan overview - base screenshot', () => {
       cy.compareSnapshot('plan-overview-page')
+    })
+
+    it('Plan overview - goal without steps screenshot', () => {
+      cy.contains('a', 'Create goal').click()
+      cy.get(`#goal-input-autocomplete`).type('Get suitable accommodation')
+      cy.get(`#related-area-of-need-radio-2`).click()
+      cy.get('#start-working-goal-radio').click()
+      cy.get('#date-selection-radio').click()
+      cy.get('button').contains('Save without steps').click()
+      cy.visit('/plan')
+      cy.compareSnapshot('plan-overview-goal-without-steps-page')
     })
   })
 
   describe('About', () => {
-    it('About page screenshot', () => {
+    it('About - base screenshot', () => {
       cy.get('.moj-primary-navigation__container').contains('a', 'About').click()
       cy.compareSnapshot('about-page')
     })
