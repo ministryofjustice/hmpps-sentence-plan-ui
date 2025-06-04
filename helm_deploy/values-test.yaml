@@ -23,7 +23,7 @@ generic-service:
 
   allowlist:
     capita-dev: 51.104.16.30/31
-    captia-further: 172.167.141.40/32
+    capita-further: 172.167.141.40/32
     neil-test: 51.155.102.238/32
     capita-developers-vms-one: 85.115.52.180/32
     capita-developers-vms-two: 85.115.52.200/29
