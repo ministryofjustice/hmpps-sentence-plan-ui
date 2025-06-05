@@ -1,6 +1,3 @@
-import DataGenerator from '../support/DataGenerator'
-import { PlanType } from '../../server/@types/PlanType'
-
 describe('Visual comparison testing', () => {
   beforeEach(() => {
     cy.createSentencePlan().then(planDetails => {
@@ -9,27 +6,44 @@ describe('Visual comparison testing', () => {
     })
   })
 
-  describe('Plan overview', () => {
-    it('Plan overview - base screenshot', () => {
-      cy.compareSnapshot('plan-overview-page')
-    })
-
-    it('Plan overview - goal without steps screenshot', () => {
-      cy.contains('a', 'Create goal').click()
-      cy.get(`#goal-input-autocomplete`).type('Get suitable accommodation')
-      cy.get(`#related-area-of-need-radio-2`).click()
-      cy.get('#start-working-goal-radio').click()
-      cy.get('#date-selection-radio').click()
-      cy.get('button').contains('Save without steps').click()
-      cy.visit('/plan')
-      cy.compareSnapshot('plan-overview-goal-without-steps-page')
-    })
-  })
-
   describe('About', () => {
     it('About - base screenshot', () => {
       cy.get('.moj-primary-navigation__container').contains('a', 'About').click()
       cy.compareSnapshot('about-page')
+    })
+  })
+
+  describe('Plan overview', () => {
+    describe('Base state', () => {
+      it('Plan overview - base screenshot', () => {
+        cy.compareSnapshot('plan-overview-page')
+      })
+
+      it('Plan overview - base error validation screenshot', () => {
+        cy.get('button').contains('Agree plan').click()
+        cy.compareSnapshot('plan-overview-base-error-validation-page')
+      })
+    })
+
+    describe('Goal without steps', () => {
+      beforeEach(() => {
+        cy.contains('a', 'Create goal').click()
+        cy.get(`#goal-input-autocomplete`).type('Get suitable accommodation')
+        cy.get(`#related-area-of-need-radio-2`).click()
+        cy.get('#start-working-goal-radio').click()
+        cy.get('#date-selection-radio').click()
+        cy.get('button').contains('Save without steps').click()
+        cy.visit('/plan')
+      })
+
+      it('Plan overview - goal without steps screenshot', () => {
+        cy.compareSnapshot('plan-overview-goal-without-steps-page')
+      })
+
+      it('Plan overview - goal without steps error validation screenshot', () => {
+        cy.get('button').contains('Agree plan').click()
+        cy.compareSnapshot('plan-overview-goal-without-steps-error-validation-page')
+      })
     })
   })
 
@@ -43,9 +57,21 @@ describe('Visual comparison testing', () => {
       cy.compareSnapshot('create-goal-accommodation-page')
     })
 
+    it('Create goal - accommodation error validation screenshot', () => {
+      cy.get('.moj-side-navigation__list').contains('a', 'Accommodation').click()
+      cy.get('button').contains('Add steps').click()
+      cy.compareSnapshot('create-goal-accommodation-error-validation-page')
+    })
+
     it('Create goal - employment and education screenshot', () => {
       cy.get('.moj-side-navigation__list').contains('a', 'Employment and education').click()
       cy.compareSnapshot('create-goal-employment-and-education-page')
+    })
+
+    it('Create goal - employment and education error validation screenshot', () => {
+      cy.get('.moj-side-navigation__list').contains('a', 'Employment and education').click()
+      cy.get('button').contains('Add steps').click()
+      cy.compareSnapshot('create-goal-employment-and-education-error-validation-page')
     })
 
     it('Create goal - finances screenshot', () => {
@@ -53,9 +79,21 @@ describe('Visual comparison testing', () => {
       cy.compareSnapshot('create-goal-finances-page')
     })
 
+    it('Create goal - finances error validation screenshot', () => {
+      cy.get('.moj-side-navigation__list').contains('a', 'Finances').click()
+      cy.get('button').contains('Add steps').click()
+      cy.compareSnapshot('create-goal-finances-error-validation-page')
+    })
+
     it('Create goal - drug use screenshot', () => {
       cy.get('.moj-side-navigation__list').contains('a', 'Drug use').click()
       cy.compareSnapshot('create-goal-drug-use-page')
+    })
+
+    it('Create goal - drug use error validation screenshot', () => {
+      cy.get('.moj-side-navigation__list').contains('a', 'Drug use').click()
+      cy.get('button').contains('Add steps').click()
+      cy.compareSnapshot('create-goal-drug-use-error-validation-page')
     })
 
     it('Create goal - alcohol use screenshot', () => {
@@ -63,9 +101,21 @@ describe('Visual comparison testing', () => {
       cy.compareSnapshot('create-goal-alcohol-use-page')
     })
 
+    it('Create goal - alcohol use error validation screenshot', () => {
+      cy.get('.moj-side-navigation__list').contains('a', 'Alcohol use').click()
+      cy.get('button').contains('Add steps').click()
+      cy.compareSnapshot('create-goal-alcohol-use-error-validation-page')
+    })
+
     it('Create goal - health and wellbeing screenshot', () => {
       cy.get('.moj-side-navigation__list').contains('a', 'Health and wellbeing').click()
       cy.compareSnapshot('create-goal-health-and-wellbeing-page')
+    })
+
+    it('Create goal - health and wellbeing error validation screenshot', () => {
+      cy.get('.moj-side-navigation__list').contains('a', 'Health and wellbeing').click()
+      cy.get('button').contains('Add steps').click()
+      cy.compareSnapshot('create-goal-health-and-wellbeing-error-validation-page')
     })
 
     it('Create goal - personal relationships and community screenshot', () => {
@@ -73,9 +123,47 @@ describe('Visual comparison testing', () => {
       cy.compareSnapshot('create-goal-personal-relationships-and-community-page')
     })
 
+    it('Create goal - personal relationships and community error validation screenshot', () => {
+      cy.get('.moj-side-navigation__list').contains('a', 'Personal relationships and community').click()
+      cy.get('button').contains('Add steps').click()
+      cy.compareSnapshot('create-goal-personal-relationships-and-community-error-validation-page')
+    })
+
     it('Create goal - thinking behaviours and attitude screenshot', () => {
       cy.get('.moj-side-navigation__list').contains('a', 'Thinking, behaviours and attitude').click()
       cy.compareSnapshot('create-goal-thinking-behaviours-and-attitude-page')
+    })
+
+    it('Create goal - thinking behaviours and attitude error validation screenshot', () => {
+      cy.get('.moj-side-navigation__list').contains('a', 'Thinking, behaviours and attitude').click()
+      cy.get('button').contains('Add steps').click()
+      cy.compareSnapshot('create-goal-thinking-behaviours-and-attitude-error-validation-page')
+    })
+  })
+
+  describe('Add/Change steps', () => {
+    beforeEach(() => {
+      cy.contains('a', 'Create goal').click()
+      cy.get(`#goal-input-autocomplete`).type('Get suitable accommodation')
+      cy.get(`#related-area-of-need-radio-2`).click()
+      cy.get('#start-working-goal-radio').click()
+      cy.get('#date-selection-radio').click()
+      cy.get('button').contains('Add steps').click()
+    })
+
+    it('Add/Change steps - base screenshot', () => {
+      cy.compareSnapshot('add-change-steps-page')
+    })
+
+    it('Add/Change steps - single step error validation base screenshot', () => {
+      cy.get('#step-description-1').type('Adhere to the conditions of a lease agreement.')
+      cy.get('button').contains('Save and continue').click()
+      cy.compareSnapshot('add-change-steps-single-step-error-validation-page')
+    })
+
+    it('Add/Change steps - single step multiple error validation base screenshot', () => {
+      cy.get('button').contains('Save and continue').click()
+      cy.compareSnapshot('add-change-steps-single-step-multiple-error-validation-page')
     })
   })
 
