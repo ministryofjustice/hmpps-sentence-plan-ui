@@ -17,9 +17,13 @@ generic-service:
     TOKEN_VERIFICATION_API_URL: "https://token-verification-api-dev.prison.service.justice.gov.uk"
     ENVIRONMENT_NAME: TEST
 
+  namespace_secrets:
+    hmpps-sentence-plan-ui-feedback-url:
+      FEEDBACK_URL: "FEEDBACK_URL"
+
   allowlist:
     capita-dev: 51.104.16.30/31
-    captia-further: 172.167.141.40/32
+    capita-further: 172.167.141.40/32
     neil-test: 51.155.102.238/32
     capita-developers-vms-one: 85.115.52.180/32
     capita-developers-vms-two: 85.115.52.200/29
@@ -29,6 +33,6 @@ generic-service:
     capita-developers-vms-six: 85.115.54.200/29
     krupal-app-sec: 80.195.27.199/32
     kieran-accessibility: 5.181.59.114/32
-      
+
 generic-prometheus-alerts:
   alertSeverity: hmpps-sentence-plan-notifications

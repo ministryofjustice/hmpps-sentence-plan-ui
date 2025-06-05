@@ -7,4 +7,8 @@
     margin-right: 0;
     border-bottom: none;
   }
+
+  &__link:visited {
+    color: $govuk-link-colour;
+  }
 }
