@@ -25,7 +25,7 @@ describe('Visual comparison testing', () => {
       })
     })
 
-    describe('Goal without steps', () => {
+    describe('Current goal without steps', () => {
       beforeEach(() => {
         cy.contains('a', 'Create goal').click()
         cy.get(`#goal-input-autocomplete`).type('Get suitable accommodation')
@@ -36,13 +36,74 @@ describe('Visual comparison testing', () => {
         cy.visit('/plan')
       })
 
-      it('Plan overview - goal without steps screenshot', () => {
-        cy.compareSnapshot('plan-overview-goal-without-steps-page')
+      it('Plan overview - current goal without steps screenshot', () => {
+        cy.compareSnapshot('plan-overview-current-goal-without-steps-page')
       })
 
-      it('Plan overview - goal without steps error validation screenshot', () => {
+      it('Plan overview - current goal without steps error validation screenshot', () => {
         cy.get('button').contains('Agree plan').click()
-        cy.compareSnapshot('plan-overview-goal-without-steps-error-validation-page')
+        cy.compareSnapshot('plan-overview-current-goal-without-steps-error-validation-page')
+      })
+    })
+
+    describe('Current goal with steps', () => {
+      it('Plan overview - current goal with steps screenshot', () => {
+        cy.contains('a', 'Create goal').click()
+        cy.get(`#goal-input-autocomplete`).type('Get suitable accommodation')
+        cy.get(`#related-area-of-need-radio-2`).click()
+        cy.get('#start-working-goal-radio').click()
+        cy.get('#date-selection-radio').click()
+        cy.get('button').contains('Add steps').click()
+        cy.get('#step-actor-1').select('Probation practitioner')
+        cy.get(`#step-description-1`).type('Check that the subject is adhering to a lease agreement')
+        cy.get('button').contains('Save and continue').click()
+        cy.visit('/plan')
+        cy.compareSnapshot('plan-overview-current-goal-with-steps-page')
+      })
+    })
+
+    describe('Future goal with steps', () => {
+      beforeEach(() => {
+        cy.contains('a', 'Create goal').click()
+        cy.get(`#goal-input-autocomplete`).type('Get suitable accommodation')
+        cy.get(`#related-area-of-need-radio-2`).click()
+        cy.get('#start-working-goal-radio-2').click()
+        cy.get('button').contains('Add steps').click()
+        cy.get('#step-actor-1').select('Probation practitioner')
+        cy.get(`#step-description-1`).type('Check that the subject is adhering to a lease agreement')
+        cy.get('button').contains('Save and continue').click()
+        cy.visit('/plan')
+      })
+
+      it('Plan overview - future goal with steps', () => {
+        cy.contains('a', 'Future goals').click()
+        cy.compareSnapshot('plan-overview-future-goal-with-steps-page')
+      })
+
+      it('Plan overview - future goal with steps error validation screenshot', () => {
+        cy.get('button').contains('Agree plan').click()
+        cy.compareSnapshot('plan-overview-future-goal-with-steps-error-validation-page')
+      })
+    })
+
+    describe('Future goal without steps', () => {
+      beforeEach(() => {
+        cy.contains('a', 'Create goal').click()
+        cy.get(`#goal-input-autocomplete`).type('Get suitable accommodation')
+        cy.get(`#related-area-of-need-radio-2`).click()
+        cy.get('#start-working-goal-radio-2').click()
+        cy.get('button').contains('Save without steps').click()
+        cy.visit('/plan')
+      })
+
+      it('Plan overview - future goal without steps screenshot', () => {
+        cy.contains('a', 'Future goals').click()
+        cy.compareSnapshot('plan-overview-future-goal-without-steps-page')
+      })
+
+      it('Plan overview - future goal without steps error validation screenshot', () => {
+        cy.get('button').contains('Agree plan').click()
+        cy.compareSnapshot('plan-overview-future-goal-without-steps-error-validation-page')
       })
     })
   })
@@ -155,15 +216,15 @@ describe('Visual comparison testing', () => {
       cy.compareSnapshot('add-change-steps-page')
     })
 
-    it('Add/Change steps - single step error validation base screenshot', () => {
-      cy.get('#step-description-1').type('Adhere to the conditions of a lease agreement.')
+    it('Add/Change steps - single step error validation screenshot', () => {
       cy.get('button').contains('Save and continue').click()
       cy.compareSnapshot('add-change-steps-single-step-error-validation-page')
     })
 
-    it('Add/Change steps - single step multiple error validation base screenshot', () => {
+    it('Add/Change steps - multiple steps error validation screenshot', () => {
+      cy.get('button').contains('Add another step').click()
       cy.get('button').contains('Save and continue').click()
-      cy.compareSnapshot('add-change-steps-single-step-multiple-error-validation-page')
+      cy.compareSnapshot('add-change-steps-multiple-step-error-validation-page')
     })
   })
 
