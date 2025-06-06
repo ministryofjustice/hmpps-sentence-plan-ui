@@ -33,7 +33,6 @@ describe('Visual comparison testing', () => {
         cy.get('#start-working-goal-radio').click()
         cy.get('#date-selection-radio').click()
         cy.get('button').contains('Save without steps').click()
-        cy.visit('/plan')
       })
 
       it('Plan overview - current goal without steps screenshot', () => {
@@ -57,7 +56,6 @@ describe('Visual comparison testing', () => {
         cy.get('#step-actor-1').select('Probation practitioner')
         cy.get(`#step-description-1`).type('Check that the subject is adhering to a lease agreement')
         cy.get('button').contains('Save and continue').click()
-        cy.visit('/plan')
         cy.compareSnapshot('plan-overview-current-goal-with-steps-page')
       })
     })
@@ -72,7 +70,6 @@ describe('Visual comparison testing', () => {
         cy.get('#step-actor-1').select('Probation practitioner')
         cy.get(`#step-description-1`).type('Check that the subject is adhering to a lease agreement')
         cy.get('button').contains('Save and continue').click()
-        cy.visit('/plan')
       })
 
       it('Plan overview - future goal with steps', () => {
@@ -93,7 +90,6 @@ describe('Visual comparison testing', () => {
         cy.get(`#related-area-of-need-radio-2`).click()
         cy.get('#start-working-goal-radio-2').click()
         cy.get('button').contains('Save without steps').click()
-        cy.visit('/plan')
       })
 
       it('Plan overview - future goal without steps screenshot', () => {
@@ -106,6 +102,30 @@ describe('Visual comparison testing', () => {
         cy.compareSnapshot('plan-overview-future-goal-without-steps-error-validation-page')
       })
     })
+
+    describe('Agree plan', () => {
+      beforeEach(() => {
+        cy.contains('a', 'Create goal').click()
+        cy.get(`#goal-input-autocomplete`).type('Get suitable accommodation')
+        cy.get(`#related-area-of-need-radio-2`).click()
+        cy.get('#start-working-goal-radio').click()
+        cy.get('#date-selection-radio').click()
+        cy.get('button').contains('Add steps').click()
+        cy.get('#step-actor-1').select('Probation practitioner')
+        cy.get(`#step-description-1`).type('Check that the subject is adhering to a lease agreement')
+        cy.get('button').contains('Save and continue').click()
+        cy.get('button').contains('Agree plan').click()
+      })
+
+      it('Agree plan - base screenshot', () => {
+        cy.compareSnapshot('agree-plan-page')
+      })
+
+      it('Agree plan - no options selected error validation screenshot', () => {
+        cy.get('button').contains('Save').click()
+        cy.compareSnapshot('agree-plan-error-validation-page')
+      })
+    })
   })
 
   describe('Create goal', () => {
@@ -114,12 +134,10 @@ describe('Visual comparison testing', () => {
     })
 
     it('Create goal - accommodation screenshot', () => {
-      cy.get('.moj-side-navigation__list').contains('a', 'Accommodation').click()
       cy.compareSnapshot('create-goal-accommodation-page')
     })
 
     it('Create goal - accommodation error validation screenshot', () => {
-      cy.get('.moj-side-navigation__list').contains('a', 'Accommodation').click()
       cy.get('button').contains('Add steps').click()
       cy.compareSnapshot('create-goal-accommodation-error-validation-page')
     })
@@ -225,6 +243,41 @@ describe('Visual comparison testing', () => {
       cy.get('button').contains('Add another step').click()
       cy.get('button').contains('Save and continue').click()
       cy.compareSnapshot('add-change-steps-multiple-step-error-validation-page')
+    })
+  })
+
+  describe('Change goal', () => {
+    beforeEach(() => {
+      cy.contains('a', 'Create goal').click()
+      cy.get(`#goal-input-autocomplete`).type('Get suitable accommodation')
+      cy.get(`#related-area-of-need-radio-2`).click()
+      cy.get('#start-working-goal-radio-2').click()
+      cy.get('button').contains('Save without steps').click()
+      cy.contains('a', 'Future goals').click()
+      cy.get('a').contains('Change goal').click()
+    })
+
+    it('Change goal - base screenshot', () => {
+      cy.compareSnapshot('change-goal-page')
+    })
+
+    it('Change goal - empty field error validation screenshot', () => {
+      cy.get(`#goal-input-autocomplete`).clear()
+      cy.get('button').contains('Save goal').click()
+      cy.compareSnapshot('change-goal-error-validation-page')
+    })
+  })
+
+  describe('Delete goal', () => {
+    it('Delete goal - base screenshot', () => {
+      cy.contains('a', 'Create goal').click()
+      cy.get(`#goal-input-autocomplete`).type('Get suitable accommodation')
+      cy.get(`#related-area-of-need-radio-2`).click()
+      cy.get('#start-working-goal-radio-2').click()
+      cy.get('button').contains('Save without steps').click()
+      cy.contains('a', 'Future goals').click()
+      cy.get('a').contains('Delete').click()
+      cy.compareSnapshot('delete-goal-page')
     })
   })
 
