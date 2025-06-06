@@ -11,6 +11,7 @@ import { goalStatusToTabName } from '../../utils/utils'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
 import { AccessMode } from '../../@types/Handover'
 import { HttpError } from '../../utils/HttpError'
+import { AuditEvent } from '../../services/auditService'
 
 export default class RemoveGoalController {
   render = async (req: Request, res: Response, next: NextFunction) => {
@@ -66,11 +67,13 @@ export default class RemoveGoalController {
       if (req.body.action === 'delete') {
         const response: superagent.Response = <superagent.Response>await req.services.goalService.deleteGoal(goalUuid)
         if (response.status === 204) {
+          await req.services.auditService.send(AuditEvent.DELETE_A_GOAL, { goalUUID: goalUuid })
           return res.redirect(`${URLs.PLAN_OVERVIEW}?type=${type}&status=deleted`)
         }
       } else if (req.body.action === 'remove') {
         try {
           await req.services.goalService.removeGoal(req.body['goal-removal-note'], goalUuid)
+          await req.services.auditService.send(AuditEvent.REMOVE_A_GOAL, { goalUUID: goalUuid })
           return res.redirect(`${URLs.PLAN_OVERVIEW}?type=removed&status=removed`)
         } catch (e) {
           return next(e)

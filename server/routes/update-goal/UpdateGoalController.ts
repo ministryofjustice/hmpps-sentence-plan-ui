@@ -14,6 +14,7 @@ import { Goal } from '../../@types/GoalType'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
 import { AccessMode } from '../../@types/Handover'
 import { HttpError } from '../../utils/HttpError'
+import { AuditEvent } from '../../services/auditService'
 
 export default class UpdateGoalController {
   constructor(private readonly referentialDataService: ReferentialDataService) {}
@@ -32,6 +33,8 @@ export default class UpdateGoalController {
 
       const returnLink = `/plan?type=${goalType}`
       req.services.sessionService.setReturnLink(`/update-goal-steps/${uuid}`)
+
+      await req.services.auditService.send(AuditEvent.VIEW_UPDATE_GOAL_AND_STEPS_PAGE, { goalUUID: uuid })
 
       return res.render('pages/update-goal', {
         locale: locale.en,
@@ -86,6 +89,8 @@ export default class UpdateGoalController {
       const goalType: string = goalStatusToTabName(goal.status)
 
       await this.updateSteps(req, goal, steps, note)
+
+      await req.services.auditService.send(AuditEvent.UPDATE_GOAL_AND_STEPS, { goalUUID: uuid })
 
       if (req.body.action === 'mark-as-achieved') {
         return res.redirect(`${URLs.ACHIEVE_GOAL.replace(':uuid', uuid)}`)

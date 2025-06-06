@@ -26,5 +26,8 @@ declare namespace Cypress {
 
     // Accessibility
     checkAccessibility(injectAxe: boolean = true, disabledRules: string[] = []): Chainable<T>
+
+    // Feedback
+    hasFeedbackLink(): Chainable
   }
 }

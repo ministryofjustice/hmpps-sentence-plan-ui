@@ -82,7 +82,7 @@ function createHandoverContext(apiToken, oasysAssessmentPk, accessMode, sentence
           drugLinkedToHarm: 'NO',
           drugLinkedToReoffending: 'NO',
           drugStrengths: 'NO',
-          drugOtherWeightedScore: '0',
+          drugOtherWeightedScore: 'NULL',
           drugThreshold: 'NO',
         },
         alcoholMisuse: {
@@ -212,8 +212,8 @@ export const removeGoalFromPlan = (goalUuid: string, note: string) => {
   return getApiToken().then(apiToken =>
     cy
       .request({
-        url: `${Cypress.env('SP_API_URL')}/goals/${goalUuid}`,
-        method: 'PATCH',
+        url: `${Cypress.env('SP_API_URL')}/goals/${goalUuid}/remove`,
+        method: 'POST',
         auth: { bearer: apiToken },
         body: goal,
       })

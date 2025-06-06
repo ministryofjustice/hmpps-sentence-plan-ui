@@ -1,57 +1,65 @@
-import AuditService, { Page } from './auditService'
-import HmppsAuditClient from '../data/hmppsAuditClient'
+import { auditService } from '@ministryofjustice/hmpps-audit-client'
+import AuditService, { AuditEvent } from './auditService'
+import logger from '../../logger'
+import { ApplicationInfo } from '../applicationInfo'
 
-jest.mock('../data/hmppsAuditClient')
+jest.mock('@ministryofjustice/hmpps-audit-client')
+jest.mock('../../logger')
 
-describe('Audit service', () => {
-  let hmppsAuditClient: jest.Mocked<HmppsAuditClient>
-  let auditService: AuditService
+const mockSendAuditMessage = jest.fn()
+auditService.sendAuditMessage = mockSendAuditMessage
+
+describe('AuditService', () => {
+  const mockAppInfo = { applicationName: 'TestApp' } as unknown as ApplicationInfo
+  const mockCorrelationId = 'abc-123'
+  const mockSessionService = {
+    getPrincipalDetails: jest.fn(),
+    getSubjectDetails: jest.fn(),
+    getPlanUUID: jest.fn(),
+    getPlanVersionNumber: jest.fn(),
+  }
+
+  let auditServiceInstance: AuditService
 
   beforeEach(() => {
-    hmppsAuditClient = new HmppsAuditClient(null) as jest.Mocked<HmppsAuditClient>
-    auditService = new AuditService(hmppsAuditClient)
+    jest.clearAllMocks()
+
+    mockSessionService.getPrincipalDetails.mockReturnValue({ identifier: 'user-1' })
+    mockSessionService.getSubjectDetails.mockReturnValue({ crn: 'X12345' })
+    mockSessionService.getPlanUUID.mockReturnValue('plan-uuid')
+    mockSessionService.getPlanVersionNumber.mockReturnValue(2)
+
+    auditServiceInstance = new AuditService(mockAppInfo, mockSessionService as any, mockCorrelationId)
   })
 
-  describe('logAuditEvent', () => {
-    it('sends audit message using audit client', async () => {
-      await auditService.logAuditEvent({
-        what: 'AUDIT_EVENT',
-        who: 'user1',
-        subjectId: 'subject123',
-        subjectType: 'exampleType',
-        correlationId: 'request123',
-        details: { extraDetails: 'example' },
-      })
+  it('should send audit message with correct payload', async () => {
+    const customDetails = { foo: 'bar' }
 
-      expect(hmppsAuditClient.sendMessage).toHaveBeenCalledWith({
-        what: 'AUDIT_EVENT',
-        who: 'user1',
-        subjectId: 'subject123',
-        subjectType: 'exampleType',
-        correlationId: 'request123',
-        details: { extraDetails: 'example' },
-      })
+    await auditServiceInstance.send(AuditEvent.CREATE_A_GOAL, customDetails)
+
+    expect(mockSendAuditMessage).toHaveBeenCalledWith({
+      action: AuditEvent.CREATE_A_GOAL,
+      who: 'user-1',
+      subjectId: 'X12345',
+      subjectType: 'CRN',
+      service: 'TestApp',
+      correlationId: 'abc-123',
+      details: JSON.stringify({
+        planUUID: 'plan-uuid',
+        planVersionNumber: 2,
+        foo: 'bar',
+      }),
     })
+
+    expect(logger.info).toHaveBeenCalledWith('HMPPS Audit event sent successfully (CREATE_A_GOAL)')
   })
 
-  describe('logPageView', () => {
-    it('sends page view event audit message using audit client', async () => {
-      await auditService.logPageView(Page.EXAMPLE_PAGE, {
-        who: 'user1',
-        subjectId: 'subject123',
-        subjectType: 'exampleType',
-        correlationId: 'request123',
-        details: { extraDetails: 'example' },
-      })
+  it('should log an error if audit sending fails', async () => {
+    const error = new Error('Boom!')
+    mockSendAuditMessage.mockRejectedValue(error)
 
-      expect(hmppsAuditClient.sendMessage).toHaveBeenCalledWith({
-        what: 'PAGE_VIEW_EXAMPLE_PAGE',
-        who: 'user1',
-        subjectId: 'subject123',
-        subjectType: 'exampleType',
-        correlationId: 'request123',
-        details: { extraDetails: 'example' },
-      })
-    })
+    await auditServiceInstance.send(AuditEvent.DELETE_A_GOAL)
+
+    expect(logger.error).toHaveBeenCalledWith('Error sending HMPPS Audit event (DELETE_A_GOAL):', error)
   })
 })

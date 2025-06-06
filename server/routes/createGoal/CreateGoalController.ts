@@ -15,6 +15,7 @@ import { getDateOptions, getGoalTargetDate } from '../../utils/goalTargetDateUti
 import { areaConfigs } from '../../utils/assessmentAreaConfig.json'
 import { AssessmentAreaConfig } from '../../@types/Assessment'
 import { getAssessmentDetailsForArea } from '../../utils/assessmentUtils'
+import { AuditEvent } from '../../services/auditService'
 
 export default class CreateGoalController {
   constructor(private readonly referentialDataService: ReferentialDataService) {}
@@ -28,6 +29,8 @@ export default class CreateGoalController {
       const { uuid } = await req.services.goalService.saveGoal(processedData, planUuid)
 
       req.services.sessionService.setReturnLink(`/change-goal/${uuid}/`)
+
+      await req.services.auditService.send(AuditEvent.CREATE_A_GOAL, { goalUUID: uuid })
 
       if (req.body.action === 'addStep') {
         return res.redirect(`${URLs.ADD_STEPS.replace(':uuid', uuid)}?type=${type}`)

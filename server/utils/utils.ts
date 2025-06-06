@@ -146,3 +146,13 @@ export function generateOauthClientToken(
   const token = Buffer.from(`${clientId}:${clientSecret}`).toString('base64')
   return `Basic ${token}`
 }
+
+export function nameFormatter(inputName: string) {
+  let name = ''
+
+  if (inputName) {
+    name = inputName.endsWith('s') ? inputName : `${inputName}'s`
+  }
+
+  return name
+}

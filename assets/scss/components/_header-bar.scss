@@ -28,11 +28,9 @@
     &__organisation-name {
       @include govuk-responsive-margin(2, 'right');
       @include govuk-font($size: 24, $weight: 'bold');
-
-      & {
-        display: flex;
-        align-items: center;
-      }
+      display: flex;
+      align-items: center;
+      color: govuk-colour('white');
     }
 
     &__service-name {

@@ -18,6 +18,8 @@
       "achievedGoal": "Congratulations on achieving a goal, {{ subject.givenName }}"
     },
     "agreePlan": "{{ subject.givenName }} agreed to their plan on {{ plan.agreementDate }}.",
+    "couldNotAgreePlanLink": "Update {{ subject.possessiveName }} agreement",
+    "couldNotAgreePlan": "when you've shared the plan with them.",
     "notAgreePlan": "Plan created on {{ plan.createdDate }}.",
     "lastUpdatedPlan": "Last updated on {{ plan.mostRecentUpdateDate }} by {{ plan.mostRecentUpdateByName }}.",
     "viewPlanHistory": "View plan history",

@@ -8,6 +8,9 @@ import ReAddGoalController from './ReAddGoalController'
 import { testGoal } from '../../testutils/data/goalData'
 import runMiddlewareChain from '../../testutils/runMiddlewareChain'
 import { goalStatusToTabName } from '../../utils/utils'
+import { AuditEvent } from '../../services/auditService'
+
+jest.mock('../../services/auditService')
 
 jest.mock('../../middleware/authorisationMiddleware', () => ({
   requireAccessMode: jest.fn(() => (req: Request, res: Response, next: NextFunction) => {
@@ -68,6 +71,7 @@ describe('ReAddGoalController', () => {
   })
 
   beforeEach(() => {
+    jest.clearAllMocks()
     req = mockReq()
     res = mockRes()
     next = jest.fn()
@@ -76,6 +80,10 @@ describe('ReAddGoalController', () => {
   })
 
   describe('get', () => {
+    afterEach(() => {
+      expect(req.services.auditService.send).not.toHaveBeenCalled()
+    })
+
     it('should render OK', async () => {
       await runMiddlewareChain(controller.get, req, res, next)
 
@@ -123,6 +131,9 @@ describe('ReAddGoalController', () => {
       expect(req.services.goalService.reAddGoal).toHaveBeenCalledWith(expectedReAddGoal, req.params.uuid)
       expect(res.redirect).toHaveBeenCalledWith(`/plan?type=${goalStatusToTabName(testGoal.status)}`)
       expect(next).not.toHaveBeenCalled()
+      expect(req.services.auditService.send).toHaveBeenCalledWith(AuditEvent.ADD_A_GOAL_BACK_TO_PLAN, {
+        goalUUID: req.params.uuid,
+      })
     })
   })
 })

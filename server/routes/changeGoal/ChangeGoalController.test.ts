@@ -16,6 +16,9 @@ import { PlanAgreementStatus, PlanType } from '../../@types/PlanType'
 import { Goal } from '../../@types/GoalType'
 import CreateGoalPostModel from '../createGoal/models/CreateGoalPostModel'
 import { crimNeedsSubset, incompleteAssessmentData } from '../../testutils/data/testAssessmentData'
+import { AuditEvent } from '../../services/auditService'
+
+jest.mock('../../services/auditService')
 
 jest.mock('../../middleware/authorisationMiddleware', () => ({
   requireAccessMode: jest.fn(() => (req: Request, res: Response, next: NextFunction) => {
@@ -97,6 +100,7 @@ describe('ChangeGoalController', () => {
   })
 
   beforeEach(() => {
+    // jest.clearAllMocks()
     mockReferentialDataService = new ReferentialDataService() as jest.Mocked<ReferentialDataService>
     req = mockReq()
     res = mockRes()
@@ -110,6 +114,7 @@ describe('ChangeGoalController', () => {
       await runMiddlewareChain(controller.get, req, res, next)
 
       expect(res.render).toHaveBeenCalledWith('pages/change-goal', viewData)
+      expect(req.services.auditService.send).not.toHaveBeenCalled()
     })
 
     it('should render with validation errors', async () => {
@@ -127,6 +132,7 @@ describe('ChangeGoalController', () => {
       await runMiddlewareChain(controller.get, req, res, next)
 
       expect(res.render).toHaveBeenCalledWith('pages/change-goal', expectedViewData)
+      expect(req.services.auditService.send).not.toHaveBeenCalled()
     })
   })
 
@@ -320,6 +326,7 @@ describe('ChangeGoalController', () => {
       expect(res.redirect).toHaveBeenCalledWith(`/plan?status=changed&type=current`)
       expect(res.render).not.toHaveBeenCalled()
       expect(next).not.toHaveBeenCalled()
+      expect(req.services.auditService.send).toHaveBeenCalledWith(AuditEvent.CHANGE_A_GOAL, { goalUUID: testGoal.uuid })
     })
 
     it('should render the form again if there are validation errors', async () => {
@@ -337,6 +344,7 @@ describe('ChangeGoalController', () => {
       await runMiddlewareChain(controller.post, req, res, next)
 
       expect(res.render).toHaveBeenCalledWith('pages/change-goal', expectedViewData)
+      expect(req.services.auditService.send).not.toHaveBeenCalled()
     })
 
     it('should return error page if there is an error saving the goal', async () => {
@@ -361,6 +369,7 @@ describe('ChangeGoalController', () => {
       await runMiddlewareChain(controller.post, req, res, next)
 
       expect(next).toHaveBeenCalledWith(error)
+      expect(req.services.auditService.send).not.toHaveBeenCalled()
     })
 
     it('should redirect to update-goal-steps if Plan is agreed and goal.type==current ', async () => {
@@ -393,6 +402,7 @@ describe('ChangeGoalController', () => {
       expect(res.redirect).toHaveBeenCalledWith(`/update-goal-steps/${testGoal.uuid}`)
       expect(res.render).not.toHaveBeenCalled()
       expect(next).not.toHaveBeenCalled()
+      expect(req.services.auditService.send).toHaveBeenCalledWith(AuditEvent.CHANGE_A_GOAL, { goalUUID: testGoal.uuid })
     })
 
     it('should redirect to update-goal-steps if Plan is agreed and future goal has steps', async () => {
@@ -412,6 +422,7 @@ describe('ChangeGoalController', () => {
 
       await runMiddlewareChain(controller.post, req, res, next)
       expect(res.redirect).toHaveBeenCalledWith(`/update-goal-steps/${testGoal.uuid}`)
+      expect(req.services.auditService.send).toHaveBeenCalledWith(AuditEvent.CHANGE_A_GOAL, { goalUUID: testGoal.uuid })
     })
 
     it('should redirect to add-steps if came from add-steps and user clicked the back link', async () => {
@@ -437,6 +448,7 @@ describe('ChangeGoalController', () => {
 
       await runMiddlewareChain(controller.post, req, res, next)
       expect(res.redirect).toHaveBeenCalledWith(`/goal/${testGoal.uuid}/add-steps`)
+      expect(req.services.auditService.send).toHaveBeenCalledWith(AuditEvent.CHANGE_A_GOAL, { goalUUID: testGoal.uuid })
     })
 
     it('should redirect to add-steps if Plan is agreed and current goal has no steps', async () => {
@@ -460,6 +472,7 @@ describe('ChangeGoalController', () => {
 
       await runMiddlewareChain(controller.post, req, res, next)
       expect(res.redirect).toHaveBeenCalledWith(`/goal/${testGoal.uuid}/add-steps`)
+      expect(req.services.auditService.send).toHaveBeenCalledWith(AuditEvent.CHANGE_A_GOAL, { goalUUID: testGoal.uuid })
     })
   })
 })

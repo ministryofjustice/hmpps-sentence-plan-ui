@@ -41,6 +41,16 @@ describe('Remove a goal from a Plan after it has been agreed', () => {
       targetDate: new Date(new Date().setMonth(new Date().getMonth() + 6)).toISOString().split('T')[0],
     }
 
+    it('has a feedback link', () => {
+      cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
+        cy.addGoalToPlan(plan.uuid, goalData).then(goal => {
+          cy.agreePlan(plan.uuid)
+          cy.visit(`/remove-goal/${goal.uuid}`)
+          cy.hasFeedbackLink()
+        })
+      })
+    })
+
     it('Goal with no steps renders correctly', () => {
       // Add goal and access remove page
       cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {

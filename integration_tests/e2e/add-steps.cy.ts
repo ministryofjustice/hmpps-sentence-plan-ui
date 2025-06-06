@@ -52,6 +52,10 @@ describe('Add Steps', () => {
       })
     })
 
+    it('Has a feedback link', () => {
+      cy.hasFeedbackLink()
+    })
+
     it('Add one step', () => {
       cy.url().should('include', '/add-steps')
       cy.get('.moj-primary-navigation__container').should('not.contain', `Plan history`)

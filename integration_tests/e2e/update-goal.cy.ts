@@ -39,6 +39,13 @@ describe('Update goal', () => {
       })
     })
 
+    it('has a feedback link', () => {
+      cy.get<Goal>('@goalForNow').then(goal => {
+        cy.visit(`/update-goal-steps/${goal.uuid}`)
+        cy.hasFeedbackLink()
+      })
+    })
+
     it('Should say when to achieve this goal by', () => {
       cy.get<Goal>('@goalForNow').then(goal => {
         cy.visit(`/update-goal-steps/${goal.uuid}`)

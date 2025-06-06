@@ -16,6 +16,7 @@ import { NewGoal } from '../../@types/NewGoalType'
 import { areaConfigs } from '../../utils/assessmentAreaConfig.json'
 import { AssessmentAreaConfig } from '../../@types/Assessment'
 import { getAssessmentDetailsForArea } from '../../utils/assessmentUtils'
+import { AuditEvent } from '../../services/auditService'
 
 export default class ChangeGoalController {
   constructor(private readonly referentialDataService: ReferentialDataService) {}
@@ -78,6 +79,8 @@ export default class ChangeGoalController {
 
     try {
       await req.services.goalService.replaceGoal(processedData, goalUuid)
+
+      await req.services.auditService.send(AuditEvent.CHANGE_A_GOAL, { goalUUID: goalUuid })
 
       let redirectTarget = `${URLs.PLAN_OVERVIEW}?status=changed&type=${type}`
 

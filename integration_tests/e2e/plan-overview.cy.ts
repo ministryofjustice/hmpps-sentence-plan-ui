@@ -12,6 +12,11 @@ describe('View Plan Overview for READ_WRITE user', () => {
     })
   })
 
+  it('Has a feedback link', () => {
+    cy.visit('/plan')
+    cy.hasFeedbackLink()
+  })
+
   it('Should have a Create goal button and it should take to create goal', () => {
     cy.visit('/plan')
     cy.get('.moj-primary-navigation__container').should('not.contain', `Plan history`)
@@ -196,7 +201,7 @@ describe('View Plan Overview for READ_WRITE user', () => {
         })
       })
       planOverview.agreePlanCouldNotAgree()
-      cy.get('.plan-header+p').should('contain', 'Plan created on')
+      cy.get('#update-assessment-text').contains("Update Sam's agreement when you've shared the plan with them")
       cy.get('.plan-header+p').should('not.contain', 'Last updated on')
     })
 

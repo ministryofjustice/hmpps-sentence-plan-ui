@@ -62,6 +62,7 @@ describe('Achieve goal', () => {
         cy.get('.govuk-summary-card__title').should('contain', goal.title)
       })
       cy.checkAccessibility()
+      cy.hasFeedbackLink()
     })
   })
 

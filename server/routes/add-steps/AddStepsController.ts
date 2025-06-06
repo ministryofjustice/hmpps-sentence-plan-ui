@@ -13,6 +13,7 @@ import { HttpError } from '../../utils/HttpError'
 import { areaConfigs } from '../../utils/assessmentAreaConfig.json'
 import { AssessmentAreaConfig } from '../../@types/Assessment'
 import { getAssessmentDetailsForArea } from '../../utils/assessmentUtils'
+import { AuditEvent } from '../../services/auditService'
 
 export default class AddStepsController {
   private render = async (req: Request, res: Response, next: NextFunction) => {
@@ -77,6 +78,8 @@ export default class AddStepsController {
 
     try {
       await req.services.stepService.saveAllSteps(goalData, req.params.uuid)
+
+      await req.services.auditService.send(AuditEvent.ADD_OR_CHANGE_STEPS, { goalUUID: req.params.uuid })
 
       const type = goalStatusToTabName(req.body.goalStatus)
 

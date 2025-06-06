@@ -27,7 +27,9 @@
       "status": {
         "plan": {
           "agreed": "Plan agreed",
-          "created": "Plan created"
+          "created": "Plan created",
+          "updated": "Agreement updated",
+          "couldNotAgreeLink": "Update {{ subject.possessiveName }} agreement"
         },
         "goal": {
           "created": "Goal created",

@@ -8,8 +8,11 @@ import runMiddlewareChain from '../../testutils/runMiddlewareChain'
 import testHandoverContext from '../../testutils/data/handoverData'
 import { AccessMode } from '../../@types/Handover'
 import { PlanAgreementStatus, PlanType } from '../../@types/PlanType'
+import { AuditEvent } from '../../services/auditService'
 
 const oasysReturnUrl = 'https://oasys.return.url'
+
+jest.mock('../../services/auditService')
 
 jest.mock('../../middleware/authorisationMiddleware', () => ({
   requireAccessMode: jest.fn(() => (req: Request, res: Response, next: NextFunction) => {
@@ -43,6 +46,8 @@ describe('PlanOverviewController', () => {
   let viewData: any
 
   beforeEach(() => {
+    jest.clearAllMocks()
+
     viewData = {
       locale: locale.en,
       data: {
@@ -68,6 +73,10 @@ describe('PlanOverviewController', () => {
   })
 
   describe('get', () => {
+    afterEach(() => {
+      expect(req.services.auditService.send).toHaveBeenCalledWith(AuditEvent.VIEW_PLAN_OVERVIEW_PAGE)
+    })
+
     it('should render without validation errors', async () => {
       await runMiddlewareChain(controller.get, req, res, next)
 
