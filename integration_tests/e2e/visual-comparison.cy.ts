@@ -46,7 +46,7 @@ describe('Visual comparison testing', () => {
     })
 
     describe('Current goal with steps', () => {
-      it('Plan overview - current goal with steps screenshot', () => {
+      beforeEach(() => {
         cy.contains('a', 'Create goal').click()
         cy.get(`#goal-input-autocomplete`).type('Get suitable accommodation')
         cy.get(`#related-area-of-need-radio-2`).click()
@@ -56,7 +56,27 @@ describe('Visual comparison testing', () => {
         cy.get('#step-actor-1').select('Probation practitioner')
         cy.get(`#step-description-1`).type('Check that the subject is adhering to a lease agreement')
         cy.get('button').contains('Save and continue').click()
+      })
+
+      it('Plan overview - current goal with steps screenshot', () => {
         cy.compareSnapshot('plan-overview-current-goal-with-steps-page')
+      })
+
+      it('Plan overview - plan agreed screenshot', () => {
+        cy.get('button').contains('Agree plan').click()
+        cy.get('#agree-plan-radio').click()
+        cy.get('button').contains('Save').click()
+        cy.compareSnapshot('plan-overview-plan-agreed-page')
+      })
+
+      it('Plan overview - step marked as completed on updated goal for agreed plan', () => {
+        cy.get('button').contains('Agree plan').click()
+        cy.get('#agree-plan-radio').click()
+        cy.get('button').contains('Save').click()
+        cy.contains('a', 'Update').click()
+        cy.get('#step-status-1').select('Completed')
+        cy.get('button').contains('Save goal and steps').click()
+        cy.compareSnapshot('plan-overview-step-completed-for-goal-of-agreed-plan-page')
       })
     })
 
@@ -124,6 +144,56 @@ describe('Visual comparison testing', () => {
       it('Agree plan - no options selected error validation screenshot', () => {
         cy.get('button').contains('Save').click()
         cy.compareSnapshot('agree-plan-error-validation-page')
+      })
+
+      it('Agree plan - subject does not agree to plan', () => {
+        cy.get('#agree-plan-radio-2').click()
+        cy.compareSnapshot('agree-plan-no-agreement-page')
+      })
+
+      it('Agree plan - subject does not agree to plan error validation', () => {
+        cy.get('#agree-plan-radio-2').click()
+        cy.get('button').contains('Save').click()
+        cy.compareSnapshot('agree-plan-no-agreement-error-validation-page')
+      })
+
+      it('Agree plan - subject cannot agree to plan', () => {
+        cy.get('#agree-plan-radio-4').click()
+        cy.get('button').contains('Save').click()
+        cy.compareSnapshot('agree-plan-cannot-agree-page')
+      })
+
+      it ('Agree plan - subject cannot agree to plan error validation', () => {
+        cy.get('#agree-plan-radio-4').click()
+        cy.get('button').contains('Save').click()
+        cy.compareSnapshot('agree-plan-cannot-agree-error-validation-page')
+      })
+    })
+
+    describe('Plan history', () => {
+      beforeEach(() => {
+        cy.contains('a', 'Create goal').click()
+        cy.get(`#goal-input-autocomplete`).type('Get suitable accommodation')
+        cy.get(`#related-area-of-need-radio-2`).click()
+        cy.get('#start-working-goal-radio').click()
+        cy.get('#date-selection-radio').click()
+        cy.get('button').contains('Add steps').click()
+        cy.get('#step-actor-1').select('Probation practitioner')
+        cy.get(`#step-description-1`).type('Check that the subject is adhering to a lease agreement')
+        cy.get('button').contains('Save and continue').click()
+        cy.get('button').contains('Agree plan').click()
+        cy.get('#agree-plan-radio').click()
+        cy.get('button').contains('Save').click()
+      })
+
+      it('Plan history - base screenshot', () => {
+        cy.contains('a','Plan history').click()
+        cy.compareSnapshot('plan-history-page')
+      })
+
+      it('Plan history - update goal page', () => {
+        cy.contains('a','Update').click()
+        cy.compareSnapshot('plan-history-update-goal-page')
       })
     })
   })
@@ -280,11 +350,4 @@ describe('Visual comparison testing', () => {
       cy.compareSnapshot('delete-goal-page')
     })
   })
-
-  // describe('Plan History', () => {
-  //   it('take plan history page screenshot', () => {
-  //     cy.visit('/plan-history')
-  //     cy.compareSnapshot('plan-history-page')
-  //   })
-  // })
 })
