@@ -6,8 +6,10 @@ import locale from './locale.json'
 import testHandoverContext from '../../testutils/data/handoverData'
 import AchieveGoalController from './AchieveGoalController'
 import { testGoal } from '../../testutils/data/goalData'
-import { GoalStatus } from '../../@types/GoalType'
 import runMiddlewareChain from '../../testutils/runMiddlewareChain'
+import { AuditEvent } from '../../services/auditService'
+
+jest.mock('../../services/auditService')
 
 jest.mock('../../middleware/authorisationMiddleware', () => ({
   requireAccessMode: jest.fn(() => (req: Request, res: Response, next: NextFunction) => {
@@ -27,7 +29,7 @@ jest.mock('../../services/sessionService', () => {
 jest.mock('../../services/sentence-plan/goalService', () => {
   return jest.fn().mockImplementation(() => ({
     getGoal: jest.fn().mockReturnValue(testGoal),
-    updateGoalStatus: jest.fn().mockReturnValue(testGoal),
+    achieveGoal: jest.fn().mockReturnValue(testGoal),
   }))
 })
 
@@ -54,6 +56,7 @@ describe('AchieveGoalController', () => {
   }
 
   beforeEach(() => {
+    jest.clearAllMocks()
     req = mockReq()
     res = mockRes()
     next = jest.fn()
@@ -66,6 +69,7 @@ describe('AchieveGoalController', () => {
       await runMiddlewareChain(controller.get, req, res, next)
 
       expect(res.render).toHaveBeenCalledWith('pages/confirm-achieved-goal', viewData)
+      expect(req.services.auditService.send).not.toHaveBeenCalled()
     })
 
     it('should render with validation errors', async () => {
@@ -83,6 +87,7 @@ describe('AchieveGoalController', () => {
       await runMiddlewareChain(controller.get, req, res, next)
 
       expect(res.render).toHaveBeenCalledWith('pages/confirm-achieved-goal', expectedViewData)
+      expect(req.services.auditService.send).not.toHaveBeenCalled()
     })
   })
 
@@ -96,16 +101,16 @@ describe('AchieveGoalController', () => {
 
       req.method = 'POST'
 
-      const expectedPartialNewGoal = {
-        status: GoalStatus.ACHIEVED,
-        note: 'Note body',
-      }
+      const expectedNote = 'Note body'
 
       await runMiddlewareChain(controller.post, req, res, next)
 
-      expect(req.services.goalService.updateGoalStatus).toHaveBeenCalledWith(expectedPartialNewGoal, 'some-uuid')
+      expect(req.services.goalService.achieveGoal).toHaveBeenCalledWith(expectedNote, 'some-uuid')
       expect(res.redirect).toHaveBeenCalledWith('/plan?type=achieved&status=achieved')
       expect(next).not.toHaveBeenCalled()
+      expect(req.services.auditService.send).toHaveBeenCalledWith(AuditEvent.MARK_GOAL_AS_ACHIEVED, {
+        goalUUID: 'some-uuid',
+      })
     })
   })
 })

@@ -50,17 +50,6 @@
 
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
-            {% if errors.domain %}
-                {%  set errorList = [] %}
-                {%  for error in errors.domain %}
-                    {%  set errorList = (errorList.push({ text: locale.errors[error]}), errorList)    %}
-                {%  endfor %}
-                    {{ govukErrorSummary({
-                        titleText: locale.common.errorSummaryCard.title,
-                        errorList: errorList
-                    }) }}
-            {% endif %}
-
             {% set bannerContent = "
                 <h2 class='govuk-heading-m'>" ~ locale.incompleteAssessment.errorTitle ~ "</h2>
                 <p class='govuk-body'>" ~ locale.incompleteAssessment.errorDescription ~ "</p>
@@ -70,12 +59,21 @@
               {{ mojBanner({
                 type: 'warning',
                 html: bannerContent,
-                iconFallbackText: 'Warning'
+                iconFallbackText: 'Warning',
+                classes: 'govuk-!-margin-top-4'
+              }) }}
+            {% endif %}
+
+            <h2 class="govuk-heading-m govuk-!-margin-top-3">Sentence information</h2>
+
+            {% if errors.domain[0] == 'noDeliusDataFound' %}
+              {{ govukWarningText({
+                text: locale.errors['noDeliusDataFound'],
+                iconFallbackText: "Warning"
               }) }}
             {% endif %}
 
             {% if data.deliusData.sentences.length > 0 %}
-            <h2 class="govuk-heading-m govuk-!-margin-top-3">Sentence information</h2>
             <table class="govuk-table govuk-!-margin-bottom-6 sentence-info">
 
                 <tr class="govuk-body-s">
@@ -108,34 +106,47 @@
             </table>
             {% endif %}
 
-            {% if data.formattedAssessmentInfo.versionUpdatedAt %}
+            {% if errors.domain[0] == 'noAssessmentDataFound' %}
+              {{ govukWarningText({
+                text: locale.errors['noAssessmentDataFound'],
+                iconFallbackText: "Warning"
+              }) }}
+            {% else %}
+
+                {% if data.formattedAssessmentInfo.versionUpdatedAt %}
                     <p id="last-updated" class="govuk-body govuk-!-margin-top-5">{{ locale.detail.lastUpdated }}</p>
-            {% endif %}
+                {% endif %}
 
-          {% if data.formattedAssessmentInfo.areas.incompleteAreas.length > 0 %}
-            <h2 class="govuk-heading-m">{{ locale.incompleteAssessment.sectionHeading }}</h2>
-            <p class="govuk-body">{{ locale.incompleteAssessment.sectionParagraph }}</p>
-            {{ renderAssessment('incompleteAreas', data.formattedAssessmentInfo.areas.incompleteAreas, locale, data.readWrite) }}
-          {% endif %}
+                {% if data.formattedAssessmentInfo.areas.incompleteAreas.length > 0 %}
+                  <h2 class="govuk-heading-m">{{ locale.incompleteAssessment.sectionHeading }}</h2>
+                  <p class="govuk-body">{{ locale.incompleteAssessment.sectionParagraph }}</p>
+                  {{ renderAssessment('incompleteAreas', data.formattedAssessmentInfo.areas.incompleteAreas, locale, data.readWrite) }}
+                {% endif %}
 
-            <h2 class="govuk-heading-m">{{ locale.highScoring.sectionHeading }}</h2>
-            {% if data.formattedAssessmentInfo.areas.highScoring.length > 0 %}
-                {{ renderAssessment('highScoring', data.formattedAssessmentInfo.areas.highScoring, locale, data.readWrite) }}
-            {% else %}
-                <p class="govuk-body">{{ locale.highScoring.sectionEmptyParagraph }}</h2>
-            {% endif %}
+                <h2 class="govuk-heading-m">{{ locale.highScoring.sectionHeading }}</h2>
+                {% if data.formattedAssessmentInfo.areas.highScoring.length > 0 %}
+                    {{ renderAssessment('highScoring', data.formattedAssessmentInfo.areas.highScoring, locale, data.readWrite) }}
+                {% elseif data.formattedAssessmentInfo.areas.incompleteAreas.length > 0 and data.formattedAssessmentInfo.areas.highScoring.length == 0 %}
+                  <p class="govuk-body">{{ locale.highScoring.oneOrMoreIncompleteSectionsAndNoScore }}</p>
+                {% else %}
+                    <p class="govuk-body">{{ locale.highScoring.sectionEmptyParagraph }}</p>
+                {% endif %}
 
-            <h2 class="govuk-heading-m">{{ locale.lowScoring.sectionHeading }}</h2>
-            {% if data.formattedAssessmentInfo.areas.lowScoring.length > 0 %}
-                {{ renderAssessment('lowScoring', data.formattedAssessmentInfo.areas.lowScoring, locale, data.readWrite) }}
-            {% else %}
-                <p class="govuk-body">{{ locale.lowScoring.sectionEmptyParagraph }}</h2>
-            {% endif %}
+                <h2 class="govuk-heading-m">{{ locale.lowScoring.sectionHeading }}</h2>
+                {% if data.formattedAssessmentInfo.areas.lowScoring.length > 0 %}
+                    {{ renderAssessment('lowScoring', data.formattedAssessmentInfo.areas.lowScoring, locale, data.readWrite) }}
+                {% elseif data.formattedAssessmentInfo.areas.incompleteAreas.length > 0 and data.formattedAssessmentInfo.areas.lowScoring.length == 0 %}
+                  <p class="govuk-body">{{ locale.lowScoring.oneOrMoreIncompleteSectionsAndNoScore }}</p>
+                {% else %}
+                    <p class="govuk-body">{{ locale.lowScoring.sectionEmptyParagraph }}</p>
+                {% endif %}
 
-            <h2 class="govuk-heading-m">{{ locale.withoutScoring.sectionHeading }}</h2>
-            <p id="other-areas-paragraph" class="govuk-body">{{ locale.withoutScoring.sectionParagraph }}</h2>
-            {% if data.formattedAssessmentInfo.areas.other.length > 0 %}
-                {{ renderAssessment('withoutScoring', data.formattedAssessmentInfo.areas.other, locale, data.readWrite) }}
+                <h2 class="govuk-heading-m">{{ locale.withoutScoring.sectionHeading }}</h2>
+                <p id="other-areas-paragraph" class="govuk-body">{{ locale.withoutScoring.sectionParagraph }}</p>
+                {% if data.formattedAssessmentInfo.areas.other.length > 0 %}
+                    {{ renderAssessment('withoutScoring', data.formattedAssessmentInfo.areas.other, locale, data.readWrite) }}
+                {% endif %}
+
             {% endif %}
 
         </div>

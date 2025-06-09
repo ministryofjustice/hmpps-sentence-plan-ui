@@ -1,6 +1,7 @@
 import { faker } from '@faker-js/faker'
 import DataGenerator from '../support/DataGenerator'
 import { PlanType } from '../../server/@types/PlanType'
+import { AccessMode } from '../../server/@types/Handover'
 
 describe('Agree plan', () => {
   beforeEach(() => {
@@ -14,7 +15,7 @@ describe('Agree plan', () => {
   describe('Security', () => {
     it('Should display authorisation error if user does not have READ_WRITE role', () => {
       cy.get<string>('@oasysAssessmentPk').then(oasysAssessmentPk => {
-        cy.openSentencePlan(oasysAssessmentPk, 'READ_ONLY')
+        cy.openSentencePlan(oasysAssessmentPk, { accessMode: AccessMode.READ_ONLY })
       })
 
       cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
@@ -53,6 +54,7 @@ describe('Agree plan', () => {
       cy.get('.govuk-button').contains('Save')
       cy.get('.govuk-back-link').should('have.attr', 'href', '/plan?type=current')
       cy.checkAccessibility()
+      cy.hasFeedbackLink()
     })
   })
 

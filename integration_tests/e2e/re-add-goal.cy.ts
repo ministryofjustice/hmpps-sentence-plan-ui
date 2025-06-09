@@ -17,6 +17,11 @@ describe('Re-add a goal to a Plan after it has been removed', () => {
     })
   })
 
+  it('Has a feedback link', () => {
+    cy.visit(`/view-removed-goal/${removedGoal.uuid}`)
+    cy.hasFeedbackLink()
+  })
+
   it('Remove goal details page contains button to re-add goal to plan OK', () => {
     cy.visit(`/view-removed-goal/${removedGoal.uuid}`)
     cy.get('a.add-to-plan').should('contain.text', 'Add to plan')

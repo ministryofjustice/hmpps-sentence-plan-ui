@@ -15,15 +15,13 @@ import CoordinatorApiClient from '../data/coordinatorApiClient'
 import AssessmentService from './sentence-plan/assessmentService'
 
 export const services = () => {
-  const { applicationInfo, handoverApiClient, hmppsAuditClient } = dataAccess()
+  const { applicationInfo, handoverApiClient } = dataAccess()
 
-  const auditService = new AuditService(hmppsAuditClient)
   const referentialDataService = new ReferentialDataService()
   const handoverContextService = new HandoverContextService(handoverApiClient)
 
   return {
     applicationInfo,
-    auditService,
     referentialDataService,
     handoverContextService,
   }
@@ -40,6 +38,7 @@ export const requestServices = (appServices: Services) => ({
   assessmentService: (req: Request) => new AssessmentService(req.services.assessmentApiClient),
   sessionService: (req: Request) =>
     new SessionService(req, appServices.handoverContextService, req.services.planService),
+  auditService: (req: Request) => new AuditService(appServices.applicationInfo, req.services.sessionService, req.id),
 })
 
 export type RequestServices = {

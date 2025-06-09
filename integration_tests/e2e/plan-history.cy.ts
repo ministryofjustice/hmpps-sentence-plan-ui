@@ -8,7 +8,7 @@ describe('Rendering Plan History for READ_WRITE user', () => {
   beforeEach(() => {
     cy.createSentencePlan().then(planDetails => {
       cy.wrap(planDetails).as('plan')
-      cy.openSentencePlan(planDetails.oasysAssessmentPk, AccessMode.READ_WRITE)
+      cy.openSentencePlan(planDetails.oasysAssessmentPk)
       cy.addGoalToPlan(planDetails.plan.uuid, DataGenerator.generateGoal()).then(goal => {
         cy.addStepToGoal(goal.uuid, DataGenerator.generateStep())
       })
@@ -21,12 +21,17 @@ describe('Rendering Plan History for READ_WRITE user', () => {
     cy.get('.govuk-heading-l').contains('You do not have permission to perform this action')
   })
 
+  it('Has a feedback link', () => {
+    cy.hasFeedbackLink()
+  })
+
   it('Display plan history page with plan agreement', () => {
     planOverview.agreePlan()
     cy.get('.moj-primary-navigation__container').contains('Plan history').click()
     cy.get('.plan-history-intro').contains('View all updates and changes made to this plan.')
     cy.get('.plan-status').contains('Plan agreed')
     cy.get('.plan-additional-note').contains('Reason to agree')
+    cy.get('#update-agreement-link').should('not.exist')
     cy.checkAccessibility()
   })
 
@@ -35,14 +40,17 @@ describe('Rendering Plan History for READ_WRITE user', () => {
     cy.get('.moj-primary-navigation__container').contains('Plan history').click()
     cy.get('.plan-status').contains('Plan created')
     cy.get('.plan-note').contains('Reason to not agree')
+    cy.get('#update-agreement-link').should('not.exist')
     cy.checkAccessibility()
   })
 
-  it('Display plan history page with plan could not agree', () => {
+  it('Display plan history page with plan could not agree with update agreement link', () => {
     planOverview.agreePlanCouldNotAgree()
     cy.get('.moj-primary-navigation__container').contains('Plan history').click()
     cy.get('.plan-status').contains('Plan created')
     cy.get('.plan-note').contains('Reason they could not agree')
+    cy.get('#update-agreement-link').contains("Update Sam's agreement").click()
+    cy.url().should('include', '/update-agree-plan')
     cy.checkAccessibility()
   })
 
@@ -111,7 +119,7 @@ describe('Rendering Plan History for READ_ONLY user', () => {
   beforeEach(() => {
     cy.createSentencePlan().then(planDetails => {
       cy.wrap(planDetails).as('plan')
-      cy.openSentencePlan(planDetails.oasysAssessmentPk, AccessMode.READ_WRITE)
+      cy.openSentencePlan(planDetails.oasysAssessmentPk)
       cy.addGoalToPlan(planDetails.plan.uuid, DataGenerator.generateGoal()).then(goal => {
         cy.addStepToGoal(goal.uuid, DataGenerator.generateStep())
       })
@@ -127,7 +135,7 @@ describe('Rendering Plan History for READ_ONLY user', () => {
       cy.get('.govuk-button').contains('Confirm').click()
       cy.url().should('include', '/plan') // check we're back to plan-overview
 
-      cy.openSentencePlan(planDetails.oasysAssessmentPk, AccessMode.READ_ONLY)
+      cy.openSentencePlan(planDetails.oasysAssessmentPk, { accessMode: AccessMode.READ_ONLY })
     })
   })
 
@@ -144,6 +152,31 @@ describe('Rendering Plan History for READ_ONLY user', () => {
     cy.get('.goal-status').contains('Goal marked as achieved')
     cy.get('.goal-link').should('not.exist')
     cy.get('.goal-note').contains('Updated goal to achieved status')
+    cy.checkAccessibility()
+  })
+})
+
+describe('Rendering Plan History for READ_ONLY user with a COULD_NOT_AGREE plan', () => {
+  const planOverview = new PlanOverview()
+
+  beforeEach(() => {
+    cy.createSentencePlan().then(planDetails => {
+      cy.wrap(planDetails).as('plan')
+      cy.openSentencePlan(planDetails.oasysAssessmentPk)
+      cy.addGoalToPlan(planDetails.plan.uuid, DataGenerator.generateGoal()).then(goal => {
+        cy.addStepToGoal(goal.uuid, DataGenerator.generateStep())
+      })
+      // We need to mark plan as could not answer and mark goal as achieved before switching to READ_ONLY
+      planOverview.agreePlanCouldNotAgree()
+      cy.openSentencePlan(planDetails.oasysAssessmentPk, { accessMode: AccessMode.READ_ONLY })
+    })
+  })
+
+  it('Display plan history page with plan could not agree without update agreement link', () => {
+    cy.get('.moj-primary-navigation__container').contains('Plan history').click()
+    cy.get('.plan-status').contains('Plan created')
+    cy.get('.plan-note').contains('Reason they could not agree')
+    cy.get('#update-agreement-link').should('not.exist')
     cy.checkAccessibility()
   })
 })

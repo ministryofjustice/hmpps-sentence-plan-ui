@@ -5,6 +5,7 @@ import { Strategy } from 'passport-oauth2'
 import config from '../config'
 import { generateOauthClientToken } from '../utils/utils'
 import URLs from '../routes/URLs'
+import UnsavedInformationDeletedController from '../routes/unsaved-information-deleted/UnsavedInformationDeletedController'
 
 passport.serializeUser((user, done) => {
   // Not used but required for Passport
@@ -41,6 +42,9 @@ passport.use(
 
 export default function setupAuthentication() {
   const router = Router()
+
+  const controller = new UnsavedInformationDeletedController()
+  router.get(URLs.UNSAVED_INFORMATION_DELETED, controller.get)
 
   router.use(passport.initialize())
   router.use(passport.session())

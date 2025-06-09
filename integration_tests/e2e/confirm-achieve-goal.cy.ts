@@ -4,6 +4,7 @@ import { Goal } from '../../server/@types/GoalType'
 import PlanOverview from '../pages/plan-overview'
 import AchieveGoal from '../pages/achieve-goal'
 import IntegrationUtils from '../integrationUtils'
+import { AccessMode } from '../../server/@types/Handover'
 
 describe('Achieve goal', () => {
   const planOverview = new PlanOverview()
@@ -32,7 +33,7 @@ describe('Achieve goal', () => {
 
     it('Should display authorisation error if user does not have READ_WRITE role', () => {
       cy.get<string>('@oasysAssessmentPk').then(oasysAssessmentPk => {
-        cy.openSentencePlan(oasysAssessmentPk, 'READ_ONLY')
+        cy.openSentencePlan(oasysAssessmentPk, { accessMode: AccessMode.READ_ONLY })
       })
 
       cy.get<Goal>('@newGoal').then(goal => {
@@ -63,6 +64,7 @@ describe('Achieve goal', () => {
         cy.get('.govuk-summary-card__title').should('contain', goal.title)
       })
       cy.checkAccessibility()
+      cy.hasFeedbackLink()
     })
   })
 

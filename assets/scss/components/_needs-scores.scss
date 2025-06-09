@@ -89,6 +89,16 @@ $white-needs-score-background-colour: #ffffff;
   content: "";
 }
 
+.needsScoreMain {
+  @extend .govuk-\!-font-weight-bold;
+  @extend .govuk-heading-s;
+  margin-bottom: 0;
+}
+
+.needsScoreSub {
+  margin-bottom: govuk-spacing(1)
+}
+
 @mixin needs-score-bar--small($highlightedNumber) {
   margin-bottom: 15px;
   & {
