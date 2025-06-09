@@ -88,6 +88,17 @@ describe('Visual comparison testing', () => {
         cy.get('button').contains('Confirm').click()
         cy.compareSnapshot('plan-overview-confirm-goal-achieved-page')
       })
+
+      it('Plan overview - remove a goal from an agreed plan screenshot', () => {
+        cy.get('button').contains('Agree plan').click()
+        cy.get('#agree-plan-radio').click()
+        cy.get('button').contains('Save').click()
+        cy.contains('a', 'Update').click()
+        cy.get('button').contains('Remove goal from plan').click()
+        cy.get('#goal-removal-note').type('Goal completed.')
+        cy.get('button').contains('Confirm').click()
+        cy.compareSnapshot('plan-overview-remove-goal-from-plan-page')
+      })
     })
 
     describe('Future goal with steps', () => {
@@ -211,6 +222,63 @@ describe('Visual comparison testing', () => {
       cy.contains('a','Update').click()
       cy.get('button').contains('Mark as achieved').click()
       cy.compareSnapshot('plan-history-confirm-achieved-goal-page')
+    })
+
+    it('Plan history - view achieved goal details screenshot', () => {
+      cy.contains('a','Update').click()
+      cy.get('button').contains('Mark as achieved').click()
+      cy.get('button').contains('Confirm').click()
+      cy.contains('a', 'Achieved goals').click()
+      cy.contains('a', 'View details').click()
+      cy.compareSnapshot('plan-history-achieved-goal-view-details-page')
+    })
+
+    it('Plan history - remove goal from a plan screenshot', () => {
+      cy.contains('a','Update').click()
+      cy.get('button').contains('Remove goal from plan').click()
+      cy.compareSnapshot('plan-history-remove-goal-page')
+    })
+
+    it('Plan history - remove goal from a plan error validation screenshot', () => {
+      cy.contains('a','Update').click()
+      cy.get('button').contains('Remove goal from plan').click()
+      cy.get('button').contains('Confirm').click()
+      cy.compareSnapshot('plan-history-remove-goal-error-validation-page')
+    })
+
+    describe('Removed goal - view and re-add to plan', () => {
+      beforeEach(() => {
+        cy.contains('a', 'Update').click()
+        cy.get('button').contains('Remove goal from plan').click()
+        cy.get('#goal-removal-note').type('Goal completed.')
+        cy.get('button').contains('Confirm').click()
+        cy.contains('a', 'Removed goals').click()
+        cy.contains('a', 'View details').click()
+      })
+
+      it('Plan history - view removed goal details screenshot', () => {
+        cy.compareSnapshot('plan-history-remove-goal-view-details-page')
+      })
+
+      it('Plan history - confirm adding a removed goal back into the plan screenshot', () => {
+        cy.contains('a', 'Add to plan').click()
+        cy.compareSnapshot('plan-history-add-removed-goal-back-into-plan-page')
+      })
+
+      it('Plan history - confirm adding a removed goal back into the plan error validation screenshot', () => {
+        cy.contains('a', 'Add to plan').click()
+        cy.get('button').contains('Confirm').click()
+        cy.compareSnapshot('plan-history-add-removed-goal-back-into-plan-error-validation-page')
+      })
+
+      it('Plan overview - applying a removed goal as a current goal to the agreed plan screenshot', () => {
+        cy.contains('a', 'Add to plan').click()
+        cy.get('#re-add-goal-reason').type('Subject needs to find a new place to live.')
+        cy.get('#start-working-goal-radio').click()
+        cy.get('#date-selection-radio').click()
+        cy.get('button').contains('Confirm').click()
+        cy.compareSnapshot('plan-overview-remove-goal-added-as-current-goal-page')
+      })
     })
   })
 
