@@ -69,7 +69,7 @@ describe('Visual comparison testing', () => {
         cy.compareSnapshot('plan-overview-plan-agreed-page')
       })
 
-      it('Plan overview - step marked as completed on updated goal for agreed plan', () => {
+      it('Plan overview - step marked as completed on updated goal for agreed plan screenshot', () => {
         cy.get('button').contains('Agree plan').click()
         cy.get('#agree-plan-radio').click()
         cy.get('button').contains('Save').click()
@@ -77,6 +77,16 @@ describe('Visual comparison testing', () => {
         cy.get('#step-status-1').select('Completed')
         cy.get('button').contains('Save goal and steps').click()
         cy.compareSnapshot('plan-overview-step-completed-for-goal-of-agreed-plan-page')
+      })
+
+      it('Plan overview - confirm goal achieved screenshot', () => {
+        cy.get('button').contains('Agree plan').click()
+        cy.get('#agree-plan-radio').click()
+        cy.get('button').contains('Save').click()
+        cy.contains('a', 'Update').click()
+        cy.get('button').contains('Mark as achieved').click()
+        cy.get('button').contains('Confirm').click()
+        cy.compareSnapshot('plan-overview-confirm-goal-achieved-page')
       })
     })
 
@@ -122,79 +132,85 @@ describe('Visual comparison testing', () => {
         cy.compareSnapshot('plan-overview-future-goal-without-steps-error-validation-page')
       })
     })
+  })
 
-    describe('Agree plan', () => {
-      beforeEach(() => {
-        cy.contains('a', 'Create goal').click()
-        cy.get(`#goal-input-autocomplete`).type('Get suitable accommodation')
-        cy.get(`#related-area-of-need-radio-2`).click()
-        cy.get('#start-working-goal-radio').click()
-        cy.get('#date-selection-radio').click()
-        cy.get('button').contains('Add steps').click()
-        cy.get('#step-actor-1').select('Probation practitioner')
-        cy.get(`#step-description-1`).type('Check that the subject is adhering to a lease agreement')
-        cy.get('button').contains('Save and continue').click()
-        cy.get('button').contains('Agree plan').click()
-      })
-
-      it('Agree plan - base screenshot', () => {
-        cy.compareSnapshot('agree-plan-page')
-      })
-
-      it('Agree plan - no options selected error validation screenshot', () => {
-        cy.get('button').contains('Save').click()
-        cy.compareSnapshot('agree-plan-error-validation-page')
-      })
-
-      it('Agree plan - subject does not agree to plan', () => {
-        cy.get('#agree-plan-radio-2').click()
-        cy.compareSnapshot('agree-plan-no-agreement-page')
-      })
-
-      it('Agree plan - subject does not agree to plan error validation', () => {
-        cy.get('#agree-plan-radio-2').click()
-        cy.get('button').contains('Save').click()
-        cy.compareSnapshot('agree-plan-no-agreement-error-validation-page')
-      })
-
-      it('Agree plan - subject cannot agree to plan', () => {
-        cy.get('#agree-plan-radio-4').click()
-        cy.get('button').contains('Save').click()
-        cy.compareSnapshot('agree-plan-cannot-agree-page')
-      })
-
-      it ('Agree plan - subject cannot agree to plan error validation', () => {
-        cy.get('#agree-plan-radio-4').click()
-        cy.get('button').contains('Save').click()
-        cy.compareSnapshot('agree-plan-cannot-agree-error-validation-page')
-      })
+  describe('Agree plan', () => {
+    beforeEach(() => {
+      cy.contains('a', 'Create goal').click()
+      cy.get(`#goal-input-autocomplete`).type('Get suitable accommodation')
+      cy.get(`#related-area-of-need-radio-2`).click()
+      cy.get('#start-working-goal-radio').click()
+      cy.get('#date-selection-radio').click()
+      cy.get('button').contains('Add steps').click()
+      cy.get('#step-actor-1').select('Probation practitioner')
+      cy.get(`#step-description-1`).type('Check that the subject is adhering to a lease agreement')
+      cy.get('button').contains('Save and continue').click()
+      cy.get('button').contains('Agree plan').click()
     })
 
-    describe('Plan history', () => {
-      beforeEach(() => {
-        cy.contains('a', 'Create goal').click()
-        cy.get(`#goal-input-autocomplete`).type('Get suitable accommodation')
-        cy.get(`#related-area-of-need-radio-2`).click()
-        cy.get('#start-working-goal-radio').click()
-        cy.get('#date-selection-radio').click()
-        cy.get('button').contains('Add steps').click()
-        cy.get('#step-actor-1').select('Probation practitioner')
-        cy.get(`#step-description-1`).type('Check that the subject is adhering to a lease agreement')
-        cy.get('button').contains('Save and continue').click()
-        cy.get('button').contains('Agree plan').click()
-        cy.get('#agree-plan-radio').click()
-        cy.get('button').contains('Save').click()
-      })
+    it('Agree plan - base screenshot', () => {
+      cy.compareSnapshot('agree-plan-page')
+    })
 
-      it('Plan history - base screenshot', () => {
-        cy.contains('a','Plan history').click()
-        cy.compareSnapshot('plan-history-page')
-      })
+    it('Agree plan - no options selected error validation screenshot', () => {
+      cy.get('button').contains('Save').click()
+      cy.compareSnapshot('agree-plan-no-options-error-validation-page')
+    })
 
-      it('Plan history - update goal page', () => {
-        cy.contains('a','Update').click()
-        cy.compareSnapshot('plan-history-update-goal-page')
-      })
+    it('Agree plan - subject does not agree to plan', () => {
+      cy.get('#agree-plan-radio-2').click()
+      cy.compareSnapshot('agree-plan-no-agreement-page')
+    })
+
+    it('Agree plan - subject does not agree to plan error validation', () => {
+      cy.get('#agree-plan-radio-2').click()
+      cy.get('button').contains('Save').click()
+      cy.compareSnapshot('agree-plan-no-agreement-error-validation-page')
+    })
+
+    it('Agree plan - subject cannot agree to plan', () => {
+      cy.get('#agree-plan-radio-4').click()
+      cy.get('button').contains('Save').click()
+      cy.compareSnapshot('agree-plan-cannot-agree-page')
+    })
+
+    it ('Agree plan - subject cannot agree to plan error validation', () => {
+      cy.get('#agree-plan-radio-4').click()
+      cy.get('button').contains('Save').click()
+      cy.compareSnapshot('agree-plan-cannot-agree-error-validation-page')
+    })
+  })
+
+  describe('Plan history', () => {
+    beforeEach(() => {
+      cy.contains('a', 'Create goal').click()
+      cy.get(`#goal-input-autocomplete`).type('Get suitable accommodation')
+      cy.get(`#related-area-of-need-radio-2`).click()
+      cy.get('#start-working-goal-radio').click()
+      cy.get('#date-selection-radio').click()
+      cy.get('button').contains('Add steps').click()
+      cy.get('#step-actor-1').select('Probation practitioner')
+      cy.get(`#step-description-1`).type('Check that the subject is adhering to a lease agreement')
+      cy.get('button').contains('Save and continue').click()
+      cy.get('button').contains('Agree plan').click()
+      cy.get('#agree-plan-radio').click()
+      cy.get('button').contains('Save').click()
+    })
+
+    it('Plan history - base screenshot', () => {
+      cy.contains('a','Plan history').click()
+      cy.compareSnapshot('plan-history-page')
+    })
+
+    it('Plan history - update goal screenshot', () => {
+      cy.contains('a','Update').click()
+      cy.compareSnapshot('plan-history-update-goal-page')
+    })
+
+    it('Plan history - confirm achievement of goal screenshot', () => {
+      cy.contains('a','Update').click()
+      cy.get('button').contains('Mark as achieved').click()
+      cy.compareSnapshot('plan-history-confirm-achieved-goal-page')
     })
   })
 
