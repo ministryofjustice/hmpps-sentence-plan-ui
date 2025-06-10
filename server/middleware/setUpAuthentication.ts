@@ -6,6 +6,7 @@ import config from '../config'
 import { generateOauthClientToken } from '../utils/utils'
 import URLs from '../routes/URLs'
 import UnsavedInformationDeletedController from '../routes/unsaved-information-deleted/UnsavedInformationDeletedController'
+import { AccessMode } from '../@types/Handover'
 
 passport.serializeUser((user, done) => {
   // Not used but required for Passport
@@ -62,7 +63,16 @@ export default function setupAuthentication() {
 
         return req.services.sessionService
           .setupSession()
-          .then(() => res.redirect(req.session.returnTo || URLs.PLAN_OVERVIEW))
+          .then(() => {
+            const redirectURL =
+              req.session.returnTo ||
+              (req.services.sessionService.getAccessMode() === AccessMode.READ_WRITE
+                ? URLs.DATA_PRIVACY
+                : URLs.PLAN_OVERVIEW)
+
+            res.redirect(redirectURL)
+          })
+
           .catch(next)
       })
     })(req, res, next),
