@@ -1,6 +1,7 @@
 import { faker } from '@faker-js/faker'
 import { NewGoal } from '../../server/@types/NewGoalType'
 import { PlanType } from '../../server/@types/PlanType'
+import { AccessMode } from '../../server/@types/Handover'
 
 describe('Change a goal', () => {
   const goalData: NewGoal = {
@@ -20,7 +21,7 @@ describe('Change a goal', () => {
   describe('Security', () => {
     it('Should display authorisation error if user does not have READ_WRITE role', () => {
       cy.get<string>('@oasysAssessmentPk').then(oasysAssessmentPk => {
-        cy.openSentencePlan(oasysAssessmentPk, 'READ_ONLY')
+        cy.openSentencePlan(oasysAssessmentPk, { accessMode: AccessMode.READ_ONLY })
       })
 
       cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
@@ -35,6 +36,15 @@ describe('Change a goal', () => {
   })
 
   describe('Rendering', () => {
+    it('Has a feedback link', () => {
+      cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
+        cy.addGoalToPlan(plan.uuid, goalData).then(goal => {
+          cy.visit(`/change-goal/${goal.uuid}`)
+          cy.hasFeedbackLink()
+        })
+      })
+    })
+
     it('Change goal page populated correctly', () => {
       // Add goal and access change-goal page
       cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {

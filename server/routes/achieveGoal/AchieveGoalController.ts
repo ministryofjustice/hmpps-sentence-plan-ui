@@ -1,6 +1,4 @@
 import { NextFunction, Request, Response } from 'express'
-import { NewGoal } from '../../@types/NewGoalType'
-import { GoalStatus } from '../../@types/GoalType'
 import locale from './locale.json'
 import validateRequest from '../../middleware/validationMiddleware'
 import transformRequest from '../../middleware/transformMiddleware'
@@ -8,6 +6,7 @@ import AchieveGoalPostModel from './models/AchieveGoalPostModel'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
 import { AccessMode } from '../../@types/Handover'
 import { HttpError } from '../../utils/HttpError'
+import { AuditEvent } from '../../services/auditService'
 
 // AchieveGoalController is accessed through the 'mark as achieved' button on the update goals page.
 export default class AchieveGoalController {
@@ -42,13 +41,9 @@ export default class AchieveGoalController {
     const goalUuid = req.params.uuid
     const note = req.body['goal-achievement-helped']
 
-    const goalData: Partial<NewGoal> = {
-      status: GoalStatus.ACHIEVED,
-      note,
-    }
-
     try {
-      await req.services.goalService.updateGoalStatus(goalData, goalUuid)
+      await req.services.goalService.achieveGoal(note, goalUuid)
+      await req.services.auditService.send(AuditEvent.MARK_GOAL_AS_ACHIEVED, { goalUUID: goalUuid })
       return res.redirect(`/plan?type=achieved&status=achieved`)
     } catch (e) {
       return next(HttpError(500, e.message))

@@ -95,15 +95,19 @@
 
   <p class="govuk-body govuk-!-margin-top-5">
       {%- if data.plan.agreementDate !== null %}
-          {%- if data.isUpdatedAfterAgreement %}
+          {%- if data.plan.agreementStatus === 'COULD_NOT_ANSWER' and data.readWrite === true %}
+              <div id="update-assessment-text" class="govuk-!-display-none-print">
+                  <a href="/update-agree-plan">{{ locale.couldNotAgreePlanLink }}</a> {{ locale.couldNotAgreePlan }}
+              </div>
+          {%- elseif data.isUpdatedAfterAgreement %}
               {{ locale.lastUpdatedPlan }}
-          {%- elseif data.plan.agreementStatus === 'AGREED' %}
+          {%- elseif data.plan.agreementStatus === 'AGREED' or data.plan.agreementStatus === 'UPDATED_AGREED' %}
               {{ locale.agreePlan }}
-          {%- elseif data.plan.agreementStatus === 'DO_NOT_AGREE' or data.plan.agreementStatus === 'COULD_NOT_ANSWER' %}
+          {%- elseif data.plan.agreementStatus === 'DO_NOT_AGREE' or data.plan.agreementStatus === 'UPDATED_DO_NOT_AGREE' %}
               {{ locale.notAgreePlan }}
           {%- endif %}
-          {%- if data.plan.agreementStatus !== 'DRAFT' %}
-              <a href="/plan-history">{{ locale.viewPlanHistory }}</a>
+          {%- if data.plan.agreementStatus !== 'DRAFT' and data.plan.agreementStatus !== 'COULD_NOT_ANSWER'%}
+              <a class='govuk-!-display-none-print' href="/plan-history">{{ locale.viewPlanHistory }}</a>
           {%- endif %}
       {%- else %}
           {{ locale.addStepSuggestion }}

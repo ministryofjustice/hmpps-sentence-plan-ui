@@ -5,6 +5,7 @@ import PlanOverview from '../pages/plan-overview'
 import UpdateGoal from '../pages/update-goal'
 import { Goal } from '../../server/@types/GoalType'
 import { NewGoal } from '../../server/@types/NewGoalType'
+import { AccessMode } from '../../server/@types/Handover'
 
 describe('Update goal', () => {
   beforeEach(() => {
@@ -35,6 +36,13 @@ describe('Update goal', () => {
         cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal()).then(goal => {
           cy.wrap(goal).as('goalWithNoSteps')
         })
+      })
+    })
+
+    it('has a feedback link', () => {
+      cy.get<Goal>('@goalForNow').then(goal => {
+        cy.visit(`/update-goal-steps/${goal.uuid}`)
+        cy.hasFeedbackLink()
       })
     })
 
@@ -75,7 +83,7 @@ describe('Update goal', () => {
 
     it('Should display authorisation error if user does not have READ_WRITE role', () => {
       cy.get<string>('@oasysAssessmentPk').then(oasysAssessmentPk => {
-        cy.openSentencePlan(oasysAssessmentPk, 'READ_ONLY')
+        cy.openSentencePlan(oasysAssessmentPk, { accessMode: AccessMode.READ_ONLY })
       })
 
       cy.get<Goal>('@goalForNow').then(goal => {

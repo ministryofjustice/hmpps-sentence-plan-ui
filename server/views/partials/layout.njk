@@ -1,5 +1,6 @@
 {% extends "govuk/template.njk" %}
-{%- from "moj/components/primary-navigation/macro.njk" import mojPrimaryNavigation -%}
+{% from "moj/components/primary-navigation/macro.njk" import mojPrimaryNavigation %}
+{% from  "hmrc/components/timeout-dialog/macro.njk" import hmrcTimeoutDialog %}
 
 {% set locale = interpolate(locale, {
   applicationName: applicationName,
@@ -14,6 +15,13 @@
 {% endblock %}
 
 {% block header %}
+  {% if deploymentName %}
+    <div class="custom-deployment-banner">
+      <span class="govuk-body">
+        <u><strong>Notice</strong></u>: You are viewing deployment <strong>{{ deploymentName }}</strong>.
+      </span>
+    </div>
+  {% endif %}
 <div class="govuk-!-display-none-print">
   {% include "./header.njk" %}
   {% if data.popData %}
@@ -60,6 +68,21 @@
 {% block bodyStart %}{% endblock %}
 
 {% block content %}
+  {{ hmrcTimeoutDialog ({
+    timeout: sessionExpiryTime * 60,
+    countdown: 10 * 60,
+    keepAliveUrl: "?continue=true",
+    signOutUrl: "/unsaved-information-deleted",
+    title: locale.common.unsavedInformationModal.title,
+    message: locale.common.unsavedInformationModal.message,
+    messageSuffix: locale.common.unsavedInformationModal.messageSuffix,
+    keepAliveButtonText: locale.common.unsavedInformationModal.keepAliveButton,
+    signOutButtonText: locale.common.unsavedInformationModal.signOutButton,
+    language: "en"
+  }) }}
+
+  {% include "./feedback.njk" %}
+
   {% if header.type == 'plan-extended' %}
     {% include "./plan-header/plan-header-extended.njk" %}
   {% else %}

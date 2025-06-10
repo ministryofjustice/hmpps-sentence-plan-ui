@@ -1,5 +1,6 @@
 $govuk-global-styles: true;
 $path: "/assets/images/";
+$hmrc-assets-path: 'node_modules/hmrc-frontend/hmrc';
 
 $moj-page-width: 1170px;
 $govuk-page-width: $moj-page-width;
@@ -8,8 +9,10 @@ $govuk-suppressed-warnings: 'govuk-typography-scale-14';
 
 @import "govuk-frontend/dist/govuk/all";
 @import "@ministryofjustice/frontend/moj/all";
+@import "hmrc-frontend/hmrc/all";
 @import "accessible-autocomplete/dist/accessible-autocomplete.min.css";
 @import './components/header-bar';
+@import "./components/custom-deployment-banner";
 @import "./components/back-to-top";
 @import './components/rosh-widget';
 @import "./components/plan-header";
@@ -24,4 +27,5 @@ $govuk-suppressed-warnings: 'govuk-typography-scale-14';
 @import "./components/select";
 @import "./components/print";
 @import "components/needs-scores";
+@import "components/user-feedback";
 @import './local';

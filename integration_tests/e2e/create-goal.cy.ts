@@ -1,5 +1,6 @@
 import { faker } from '@faker-js/faker'
 import CreateGoal from '../pages/create-goal'
+import { AccessMode } from '../../server/@types/Handover'
 
 describe('Create a new Goal', () => {
   const createGoalPage = new CreateGoal()
@@ -10,6 +11,11 @@ describe('Create a new Goal', () => {
       cy.wrap(planDetails.oasysAssessmentPk).as('oasysAssessmentPk')
       cy.openSentencePlan(planDetails.oasysAssessmentPk)
     })
+  })
+
+  it('Has a feedback link', () => {
+    createGoalPage.createGoal('accommodation')
+    cy.hasFeedbackLink()
   })
 
   it('Checks the back link is correct', () => {
@@ -41,7 +47,7 @@ describe('Create a new Goal', () => {
   describe('Security', () => {
     it('Should display authorisation error if user does not have READ_WRITE role', () => {
       cy.get<string>('@oasysAssessmentPk').then(oasysAssessmentPk => {
-        cy.openSentencePlan(oasysAssessmentPk, 'READ_ONLY')
+        cy.openSentencePlan(oasysAssessmentPk, { accessMode: AccessMode.READ_ONLY })
       })
 
       cy.visit(`/create-goal/accommodation`, { failOnStatusCode: false })

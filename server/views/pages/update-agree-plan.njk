@@ -1,0 +1,86 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "../components/error-summary/error-summary.njk" import errorSummary with context %}
+
+{% block pageTitle %}
+    {% if not errors %}
+        {{ locale.page.title }}
+    {% else %}
+        {{ locale.page.errorTitle }}
+    {% endif %}
+{% endblock %}
+
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block content %}
+    {{ super() }}
+    <a href="{{ data.returnLink }}" class="govuk-back-link">{{ locale.common.backLink.text }}</a>
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            {{ errorSummary({
+                errors: errors,
+                locale: locale
+            }) }}
+
+            <form id="update-agree-plan-form" method="POST">
+                <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+
+                {% set doesNotAgreeDetailsHtml %}
+                    {{ govukTextarea({
+                        name: "does-not-agree-details",
+                        id: "does-not-agree-details",
+                        rows: 3,
+                        label: {
+                            text: locale.agreePlanOptions.enterDetails
+                        },
+                        value: data.form['does-not-agree-details'] if data.form['agree-plan-radio'] == 'no',
+                        errorMessage: getFormattedError(errors, locale, 'does-not-agree-details')
+                    }) }}
+                {% endset -%}
+
+                {{ govukRadios({
+                    name: "agree-plan-radio",
+                    id: "agree-plan-radio",
+                    fieldset: {
+                        legend: {
+                            text: locale.mainHeading.title,
+                            isPageHeading: true,
+                            classes: "govuk-fieldset__legend--l"
+                        }
+                    },
+                    hint: {
+                        text: locale.mainHeading.hint
+                    },
+                    errorMessage: getFormattedError(errors, locale, 'agree-plan-radio'),
+                    items: [
+                        {
+                            value: "yes",
+                            text: locale.agreePlanOptions.yes,
+                            checked: data.form['agree-plan-radio'] == 'yes'
+                        },
+                        {
+                            value: "no",
+                            text: locale.agreePlanOptions.no,
+                            checked: data.form['agree-plan-radio'] == 'no',
+                            conditional: {
+                                html: doesNotAgreeDetailsHtml
+                            }
+                        }
+                    ]
+                }) }}
+
+                <div class="govuk-button-group">
+                  {{ govukButton({
+                      text: locale.agreePlanButton,
+                      name: "action",
+                      value: "agreePlan"
+                  }) }}
+
+                  <a class='govuk-!-display-none-print' href="/plan">{{ locale.goBackToPlan }}</a>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

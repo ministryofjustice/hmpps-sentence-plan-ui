@@ -5,6 +5,7 @@ import DataGenerator from '../support/DataGenerator'
 import { PlanType } from '../../server/@types/PlanType'
 import { NewStep } from '../../server/@types/StepType'
 import PlanOverview from '../pages/plan-overview'
+import { AccessMode } from '../../server/@types/Handover'
 
 describe('Remove a goal from a Plan after it has been agreed', () => {
   beforeEach(() => {
@@ -18,7 +19,7 @@ describe('Remove a goal from a Plan after it has been agreed', () => {
   describe('Security', () => {
     it('Should display authorisation error if user does not have READ_WRITE role', () => {
       cy.get<string>('@oasysAssessmentPk').then(oasysAssessmentPk => {
-        cy.openSentencePlan(oasysAssessmentPk, 'READ_ONLY')
+        cy.openSentencePlan(oasysAssessmentPk, { accessMode: AccessMode.READ_ONLY })
       })
 
       cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
@@ -39,6 +40,16 @@ describe('Remove a goal from a Plan after it has been agreed', () => {
       relatedAreasOfNeed: ['Health and wellbeing'],
       targetDate: new Date(new Date().setMonth(new Date().getMonth() + 6)).toISOString().split('T')[0],
     }
+
+    it('has a feedback link', () => {
+      cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
+        cy.addGoalToPlan(plan.uuid, goalData).then(goal => {
+          cy.agreePlan(plan.uuid)
+          cy.visit(`/remove-goal/${goal.uuid}`)
+          cy.hasFeedbackLink()
+        })
+      })
+    })
 
     it('Goal with no steps renders correctly', () => {
       // Add goal and access remove page

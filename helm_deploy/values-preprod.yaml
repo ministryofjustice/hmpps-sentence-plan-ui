@@ -17,5 +17,9 @@ generic-service:
     TOKEN_VERIFICATION_API_URL: "https://token-verification-api-preprod.prison.service.justice.gov.uk"
     ENVIRONMENT_NAME: PRE-PRODUCTION
 
+  namespace_secrets:
+    hmpps-sentence-plan-ui-feedback-url:
+      FEEDBACK_URL: "FEEDBACK_URL"
+
 generic-prometheus-alerts:
   alertSeverity: hmpps-sentence-plan-notifications

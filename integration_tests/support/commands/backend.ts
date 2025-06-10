@@ -32,7 +32,7 @@ const getApiToken = () => {
     })
 }
 
-function createHandoverContext(apiToken, oasysAssessmentPk, accessMode, sentencePlanVersion) {
+function createHandoverContext(apiToken, oasysAssessmentPk, accessMode, sentencePlanVersion, crn) {
   return {
     url: `${Cypress.env('ARNS_HANDOVER_URL')}/handover`,
     method: 'POST',
@@ -47,7 +47,7 @@ function createHandoverContext(apiToken, oasysAssessmentPk, accessMode, sentence
         returnUrl: Cypress.env('OASTUB_URL'),
       },
       subjectDetails: {
-        crn: 'X123456',
+        crn: crn ?? 'A123456',
         pnc: '01/123456789A',
         givenName: 'Sam',
         familyName: 'Whitfield',
@@ -82,7 +82,7 @@ function createHandoverContext(apiToken, oasysAssessmentPk, accessMode, sentence
           drugLinkedToHarm: 'NO',
           drugLinkedToReoffending: 'NO',
           drugStrengths: 'NO',
-          drugOtherWeightedScore: '0',
+          drugOtherWeightedScore: 'NULL',
           drugThreshold: 'NO',
         },
         alcoholMisuse: {
@@ -126,14 +126,14 @@ function createHandoverContext(apiToken, oasysAssessmentPk, accessMode, sentence
 }
 
 export const openSentencePlan = (
-  oasysAssessmentPk,
-  accessMode = AccessMode.READ_WRITE,
-  sentencePlanVersion = undefined,
+  oasysAssessmentPk: string,
+  options?: { accessMode?: string; planVersion?: number; crn?: string },
 ) => {
+  const { accessMode = AccessMode.READ_WRITE, planVersion, crn } = options ?? {}
   cy.session(`${oasysAssessmentPk}_${accessMode}`, () =>
     getApiToken().then(apiToken =>
       cy
-        .request(createHandoverContext(apiToken, oasysAssessmentPk, accessMode, sentencePlanVersion))
+        .request(createHandoverContext(apiToken, oasysAssessmentPk, accessMode, planVersion, crn))
         .then(handoverResponse =>
           cy.visit(`${handoverResponse.body.handoverLink}?clientId=${Cypress.env('ARNS_HANDOVER_CLIENT_ID')}`),
         ),
@@ -212,8 +212,8 @@ export const removeGoalFromPlan = (goalUuid: string, note: string) => {
   return getApiToken().then(apiToken =>
     cy
       .request({
-        url: `${Cypress.env('SP_API_URL')}/goals/${goalUuid}`,
-        method: 'PATCH',
+        url: `${Cypress.env('SP_API_URL')}/goals/${goalUuid}/remove`,
+        method: 'POST',
         auth: { bearer: apiToken },
         body: goal,
       })
