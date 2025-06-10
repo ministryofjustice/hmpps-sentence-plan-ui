@@ -1,6 +1,10 @@
 import { NewGoal } from '../../../server/@types/NewGoalType'
 import { NewStep } from '../../../server/@types/StepType'
 import { AccessMode } from '../../../server/@types/Handover'
+import { GoalStatus } from '../../../server/@types/GoalType'
+import { PlanAgreement } from '../../../server/@types/PlanAgreement'
+import { PlanAgreementStatus } from '../../../server/@types/PlanType'
+import handoverData from '../../../server/testutils/data/handoverData'
 
 const getApiToken = () => {
   const apiToken = Cypress.env('API_TOKEN')
@@ -28,7 +32,7 @@ const getApiToken = () => {
     })
 }
 
-function createHandoverContext(apiToken, oasysAssessmentPk, accessMode, sentencePlanVersion) {
+function createHandoverContext(apiToken, oasysAssessmentPk, accessMode, sentencePlanVersion, crn) {
   return {
     url: `${Cypress.env('ARNS_HANDOVER_URL')}/handover`,
     method: 'POST',
@@ -43,7 +47,7 @@ function createHandoverContext(apiToken, oasysAssessmentPk, accessMode, sentence
         returnUrl: Cypress.env('OASTUB_URL'),
       },
       subjectDetails: {
-        crn: 'X123456',
+        crn: crn ?? 'A123456',
         pnc: '01/123456789A',
         givenName: 'Sam',
         familyName: 'Whitfield',
@@ -52,19 +56,84 @@ function createHandoverContext(apiToken, oasysAssessmentPk, accessMode, sentence
         location: 'COMMUNITY',
         sexuallyMotivatedOffenceHistory: 'NO',
       },
+      criminogenicNeedsData: {
+        accommodation: {
+          accLinkedToHarm: 'NO',
+          accLinkedToReoffending: 'YES',
+          accStrengths: 'NO',
+          accOtherWeightedScore: '6',
+          accThreshold: 'YES',
+        },
+        educationTrainingEmployability: {
+          eteLinkedToHarm: 'NO',
+          eteLinkedToReoffending: 'YES',
+          eteStrengths: 'YES',
+          eteOtherWeightedScore: '2',
+          eteThreshold: 'YES',
+        },
+        finance: {
+          financeLinkedToHarm: 'NO',
+          financeLinkedToReoffending: 'NO',
+          financeStrengths: 'NO',
+          financeOtherWeightedScore: 'N/A',
+          financeThreshold: 'N/A',
+        },
+        drugMisuse: {
+          drugLinkedToHarm: 'NO',
+          drugLinkedToReoffending: 'NO',
+          drugStrengths: 'NO',
+          drugOtherWeightedScore: 'NULL',
+          drugThreshold: 'NO',
+        },
+        alcoholMisuse: {
+          alcoholLinkedToHarm: 'NO',
+          alcoholLinkedToReoffending: 'YES',
+          alcoholStrengths: 'YES',
+          alcoholOtherWeightedScore: '3',
+          alcoholThreshold: 'YES',
+        },
+        healthAndWellbeing: {
+          emoLinkedToHarm: 'NO',
+          emoLinkedToReoffending: 'NO',
+          emoStrengths: 'NO',
+          emoOtherWeightedScore: 'N/A',
+          emoThreshold: 'N/A',
+        },
+        personalRelationshipsAndCommunity: {
+          relLinkedToHarm: 'NULL',
+          relLinkedToReoffending: 'YES',
+          relStrengths: 'NO',
+          relOtherWeightedScore: '6',
+          relThreshold: 'YES',
+        },
+        thinkingBehaviourAndAttitudes: {
+          thinkLinkedToHarm: 'NO',
+          thinkLinkedToReoffending: 'NO',
+          thinkStrengths: 'NO',
+          thinkOtherWeightedScore: '1',
+          thinkThreshold: 'YES',
+        },
+        lifestyleAndAssociates: {
+          lifestyleLinkedToHarm: 'N/A',
+          lifestyleLinkedToReoffending: 'N/A',
+          lifestyleStrengths: 'N/A',
+          lifestyleOtherWeightedScore: '6',
+          lifestyleThreshold: 'YES',
+        },
+      },
     },
   }
 }
 
 export const openSentencePlan = (
-  oasysAssessmentPk,
-  accessMode = AccessMode.READ_WRITE,
-  sentencePlanVersion = undefined,
+  oasysAssessmentPk: string,
+  options?: { accessMode?: string; planVersion?: number; crn?: string },
 ) => {
+  const { accessMode = AccessMode.READ_WRITE, planVersion, crn } = options ?? {}
   cy.session(`${oasysAssessmentPk}_${accessMode}`, () =>
     getApiToken().then(apiToken =>
       cy
-        .request(createHandoverContext(apiToken, oasysAssessmentPk, accessMode, sentencePlanVersion))
+        .request(createHandoverContext(apiToken, oasysAssessmentPk, accessMode, planVersion, crn))
         .then(handoverResponse =>
           cy.visit(`${handoverResponse.body.handoverLink}?clientId=${Cypress.env('ARNS_HANDOVER_CLIENT_ID')}`),
         ),
@@ -129,6 +198,45 @@ export const addGoalToPlan = (planUUid: string, goal: NewGoal) => {
         method: 'POST',
         auth: { bearer: apiToken },
         body: goal,
+      })
+      .then(createResponse => createResponse.body),
+  )
+}
+
+export const removeGoalFromPlan = (goalUuid: string, note: string) => {
+  const goal: Partial<NewGoal> = {
+    status: GoalStatus.REMOVED,
+    note,
+  }
+
+  return getApiToken().then(apiToken =>
+    cy
+      .request({
+        url: `${Cypress.env('SP_API_URL')}/goals/${goalUuid}/remove`,
+        method: 'POST',
+        auth: { bearer: apiToken },
+        body: goal,
+      })
+      .then(createResponse => createResponse.body),
+  )
+}
+
+export const agreePlan = (planUUid: string) => {
+  const agreement: PlanAgreement = {
+    agreementStatus: PlanAgreementStatus.AGREED,
+    practitionerName: handoverData.principal.displayName,
+    personName: handoverData.subject.givenName,
+    agreementStatusNote: 'Plan was agreed',
+    optionalNote: '',
+  }
+
+  return getApiToken().then(apiToken =>
+    cy
+      .request({
+        url: `${Cypress.env('SP_API_URL')}/plans/${planUUid}/agree`,
+        method: 'POST',
+        auth: { bearer: apiToken },
+        body: agreement,
       })
       .then(createResponse => createResponse.body),
   )

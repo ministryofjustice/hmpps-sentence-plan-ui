@@ -16,7 +16,11 @@ generic-service:
     COORDINATOR_API_URL: "https://arns-coordinator-api-dev.hmpps.service.justice.gov.uk"
     TOKEN_VERIFICATION_API_URL: "https://token-verification-api-dev.prison.service.justice.gov.uk"
     ENVIRONMENT_NAME: DEV
-  
+
+  namespace_secrets:
+    hmpps-sentence-plan-ui-feedback-url:
+      FEEDBACK_URL: "FEEDBACK_URL"
+
   allowlist:
     capita-dev: 51.104.16.30/31
     captia-further: 172.167.141.40/32

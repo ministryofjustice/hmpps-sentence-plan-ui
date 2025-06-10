@@ -28,16 +28,23 @@
         "agreePlanButton": "Agree plan"
       }
     },
+    "errorSummaryCard": {
+      "title": "There is a problem"
+    },
     "goalSummaryCard": {
       "info": {
         "aimToAchieveDate": "Aim to achieve this by {{ targetDate }}.",
+        "removedDate": "Removed on {{ lastStatusChangeDate }}.",
         "aimToAchieveSentence": "Aim to achieve this by the end of {{ subject.possessiveName }} sentence.",
-        "goalAchievedDate": "Marked as achieved on {{ achievedDate }}.",
-        "thisIsAFutureGoal": "This is a future goal."
+        "achievedDate": "Marked as achieved on {{ lastStatusChangeDate }}.",
+        "thisIsAFutureGoal": "This is a future goal.",
+        "stepsCompletedSingular": " out of {{ totalSteps }} step completed.",
+        "stepsCompletedPlural": " out of {{ totalSteps }} steps completed."
       },
       "stepsList": {
         "whoHeader": "Who will do this",
-        "whatHeader": "Step",
+        "whatHeader": "Steps",
+        "stepHeader": "Step",
         "statusHeader": "Status",
         "noStepsAdded": "No steps added",
         "addSteps": "Add steps",
@@ -54,12 +61,35 @@
         "relatedAreasOfNeed": "Also relates to: {{ relatedAreasOfNeed }}"
       }
     },
+    "goalEditing": {
+      "startWorking": {
+        "label": "Can {{ subject.givenName }} start working on this goal now?",
+        "options": {
+          "yes": "Yes",
+          "no": "No, it is a future goal"
+        }
+      },
+      "dateSelection": {
+        "label": "When should {{ subject.givenName }} aim to achieve this goal?",
+        "options": {
+          "threeMonths": "In 3 months ({{ dateOptions.threeMonths }})",
+          "sixMonths": "In 6 months ({{ dateOptions.sixMonths }})",
+          "twelveMonths": "In 12 months ({{ dateOptions.twelveMonths }})",
+          "custom": "Set another date"
+        }
+      },
+      "datePicker": {
+        "label": "Select a date",
+        "hint": "For example, 31/3/2023."
+      }
+    },
     "noteList": {
       "viewAllNotes": "View all notes",
       "noGoalNotes": "There are no notes on this goal yet.",
       "noteHeading": "{{ noteDate }} by {{ noteAuthor }}",
       "goalAchievedNote": "Goal marked as achieved on {{ noteDate }}.",
-      "goalRemovedNote": "Goal removed on {{ noteDate }}."
+      "goalRemovedNote": "Goal removed on {{ noteDate }}.",
+      "goalReAddedNote": "Goal added back into plan on {{ noteDate }}."
     },
     "backLink": {
       "text": "Back"
@@ -75,7 +105,59 @@
     },
     "buttons": {},
     "links": {},
-    "footer": {}
+    "footer": {},
+    "sentence": {
+      "year": "year",
+      "month": "month",
+      "day": "day",
+      "conjunction": "and"
+    },
+    "assessmentInfo": {
+      "detailsSummary": "View information from {{ subject.possessiveName }} assessment",
+      "assessmentIncomplete": "This area has not been marked as complete in the assessment yet, but you can check the latest information available below.",
+      "assessmentNotStarted": "No information is available yet as the assessment has not been started for this area.",
+      "missingInformation": "Missing information:",
+      "assessmentUnavailable": "There is a problem getting this information. Try reloading the page or try again later.",
+      "missingInformationList": {
+        "linkedToHarm": "whether this area is linked to RoSH (risk of serious harm)",
+        "linkedToReoffending": "whether this area is linked to risk of reoffending",
+        "motivationToMakeChanges": "motivation to make changes",
+        "linkedtoStrengthsOrProtectiveFactors": "strengths and protective factors",
+        "criminogenicNeedsScore": "the need score"
+      },
+      "motivationToMakeChanges": "Motivation to make changes in this area",
+      "motivationNotAnswered": "{{ subject.givenName }} did not have to answer this question.",
+      "motivationText": {
+        "madeChanges": "{{ subject.givenName }} has already made positive changes and wants to maintain them.",
+        "makingChanges": "{{ subject.givenName }} is actively making changes.",
+        "wantToMakeChanges": "{{ subject.givenName }} wants to make changes and knows how to.",
+        "needsHelpToMakeChanges": "{{ subject.givenName }} wants to make changes but needs help.",
+        "thinkingAboutMakingChanges": "{{ subject.givenName }} is thinking about making changes.",
+        "doesNotWantToMakeChanges": "{{ subject.givenName }} does not want to make changes.",
+        "doesNotWantToAnswer": "{{ subject.givenName }} does not want to answer.",
+        "notPresent": "{{ subject.givenName }} was not present to answer this question.",
+        "notApplicable": "This question was not applicable."
+      },
+      "linkedToHarm": {
+        "yes": "This area is linked to RoSH (risk of serious harm)",
+        "no": "This area is not linked to RoSH (risk of serious harm)"
+      },
+      "linkedToReoffending": {
+        "yes": "This area is linked to risk of reoffending",
+        "no": "This area is not linked to risk of reoffending"
+      },
+      "linkedtoStrengthsOrProtectiveFactors": {
+        "yes": "There are strengths or protective factors related to this area",
+        "no": "There are no strengths or protective factors related to this area"
+      }
+    },
+    "unsavedInformationModal": {
+      "title": "Your unsaved information will be deleted soon",
+      "message": "We will delete any unsaved information if you do not continue in the next",
+      "messageSuffix": "This is to protect your information.",
+      "keepAliveButton": "Continue using sentence plan",
+      "signOutButton": "Delete unsaved information"
+    }
   },
   "cy": {}
 }

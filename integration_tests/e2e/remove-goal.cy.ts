@@ -5,6 +5,7 @@ import DataGenerator from '../support/DataGenerator'
 import { PlanType } from '../../server/@types/PlanType'
 import { NewStep } from '../../server/@types/StepType'
 import PlanOverview from '../pages/plan-overview'
+import { AccessMode } from '../../server/@types/Handover'
 
 describe('Remove a goal from a Plan after it has been agreed', () => {
   beforeEach(() => {
@@ -18,7 +19,7 @@ describe('Remove a goal from a Plan after it has been agreed', () => {
   describe('Security', () => {
     it('Should display authorisation error if user does not have READ_WRITE role', () => {
       cy.get<string>('@oasysAssessmentPk').then(oasysAssessmentPk => {
-        cy.openSentencePlan(oasysAssessmentPk, 'READ_ONLY')
+        cy.openSentencePlan(oasysAssessmentPk, { accessMode: AccessMode.READ_ONLY })
       })
 
       cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
@@ -28,6 +29,7 @@ describe('Remove a goal from a Plan after it has been agreed', () => {
       })
 
       cy.get('.govuk-body').should('contain', 'You do not have permission to perform this action')
+      cy.checkAccessibility(true, ['scrollable-region-focusable'])
     })
   })
 
@@ -39,13 +41,28 @@ describe('Remove a goal from a Plan after it has been agreed', () => {
       targetDate: new Date(new Date().setMonth(new Date().getMonth() + 6)).toISOString().split('T')[0],
     }
 
+    it('has a feedback link', () => {
+      cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
+        cy.addGoalToPlan(plan.uuid, goalData).then(goal => {
+          cy.agreePlan(plan.uuid)
+          cy.visit(`/remove-goal/${goal.uuid}`)
+          cy.hasFeedbackLink()
+        })
+      })
+    })
+
     it('Goal with no steps renders correctly', () => {
       // Add goal and access remove page
       cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
         cy.addGoalToPlan(plan.uuid, goalData).then(goal => {
+          cy.agreePlan(plan.uuid)
           cy.visit(`/remove-goal/${goal.uuid}`)
         })
       })
+
+      cy.get('.moj-primary-navigation__container').contains(`Plan history`)
+      cy.title().should('contain', 'Confirm you want to remove this goal')
+      cy.get('h1').should('include.text', 'Confirm you want to remove this goal')
 
       // Check goal data is rendered correctly
       cy.get('.goal-summary-card')
@@ -54,6 +71,7 @@ describe('Remove a goal from a Plan after it has been agreed', () => {
         .and('contain', `Area of need: ${goalData.areaOfNeed.toLowerCase()}`)
         .and('contain', `Also relates to: ${goalData.relatedAreasOfNeed[0].toLowerCase()}`)
         .and('not.contain', `Add steps`)
+      cy.checkAccessibility()
     })
 
     it('Goal with steps renders correctly', () => {
@@ -64,9 +82,13 @@ describe('Remove a goal from a Plan after it has been agreed', () => {
         cy.addGoalToPlan(plan.uuid, goalData).then(goal => {
           cy.addStepToGoal(goal.uuid, stepData[0])
           cy.addStepToGoal(goal.uuid, stepData[1])
-          cy.visit(`/confirm-delete-goal/${goal.uuid}`)
+          cy.agreePlan(plan.uuid)
+          cy.visit(`/remove-goal/${goal.uuid}`)
         })
       })
+
+      cy.title().should('contain', 'Confirm you want to remove this goal')
+      cy.get('h1').should('include.text', 'Confirm you want to remove this goal')
 
       // Check goal data is rendered correctly
       cy.get('.goal-summary-card')
@@ -81,6 +103,7 @@ describe('Remove a goal from a Plan after it has been agreed', () => {
         .and('contain', stepData[0].actor)
         .and('contain', stepData[1].description)
         .and('contain', stepData[1].actor)
+      cy.checkAccessibility()
     })
   })
 
@@ -114,8 +137,10 @@ describe('Remove a goal from a Plan after it has been agreed', () => {
 
       // Click remove goal
       cy.contains('.goal-summary-card', goalData.title).within(() => {
-        cy.contains('a', 'Remove').click()
+        cy.contains('a', 'Update').click()
       })
+
+      cy.contains('button', 'Remove goal from plan').click()
 
       // Check we've landed on confirm goal remove page
       cy.get<Goal>('@goal').then(goal => {
@@ -132,6 +157,7 @@ describe('Remove a goal from a Plan after it has been agreed', () => {
       })
       cy.get('.govuk-error-summary').should('contain', 'Enter why you want to remove this goal')
       cy.get('.govuk-error-message').should('contain', 'Enter why you want to remove this goal')
+      cy.checkAccessibility()
     })
 
     it('When confirmed, and a note is provided, goal is removed', () => {
@@ -141,8 +167,10 @@ describe('Remove a goal from a Plan after it has been agreed', () => {
 
       // Click remove goal
       cy.contains('.goal-summary-card', goalData.title).within(() => {
-        cy.contains('a', 'Remove').click()
+        cy.contains('a', 'Update').click()
       })
+
+      cy.contains('button', 'Remove goal from plan').click()
 
       // Check we've landed on confirm goal remove page
       cy.get<Goal>('@goal').then(goal => {
@@ -159,6 +187,8 @@ describe('Remove a goal from a Plan after it has been agreed', () => {
       // Check goal has been removed
       cy.url().should('contain', '/plan?type=removed&status=removed')
       cy.get('.goal-list .goal-summary-card').should('have.length', 1).and('contain', goalData.title)
+      cy.get('.back-to-top-link').should('have.attr', 'href', '#top')
+      cy.checkAccessibility()
     })
 
     it('When confirmed, and a long note is provided, page with error details is rendered', () => {
@@ -169,8 +199,10 @@ describe('Remove a goal from a Plan after it has been agreed', () => {
 
       // Click remove goal
       cy.contains('.goal-summary-card', goalData.title).within(() => {
-        cy.contains('a', 'Remove').click()
+        cy.contains('a', 'Update').click()
       })
+
+      cy.contains('button', 'Remove goal from plan').click()
 
       // Add note text
       cy.get('#goal-removal-note').invoke('val', lorem)
@@ -192,6 +224,7 @@ describe('Remove a goal from a Plan after it has been agreed', () => {
       )
 
       cy.get('#goal-removal-note').should('contain', lorem)
+      cy.checkAccessibility()
     })
 
     it('When goal is removed, view details is available and has correct content', () => {
@@ -199,8 +232,10 @@ describe('Remove a goal from a Plan after it has been agreed', () => {
 
       // Click remove goal
       cy.contains('.goal-summary-card', goalData.title).within(() => {
-        cy.contains('a', 'Remove').click()
+        cy.contains('a', 'Update').click()
       })
+
+      cy.contains('button', 'Remove goal from plan').click()
 
       // Add note text
       cy.get('#goal-removal-note').type('Some optional text in the note field')
@@ -216,7 +251,6 @@ describe('Remove a goal from a Plan after it has been agreed', () => {
       cy.get('h2').should('contain', goalData.title)
       cy.get('p.govuk-body').should('contain', 'Removed on ')
       cy.get('a.govuk-back-link').should('have.attr', 'href').and('include', '/plan?type=removed')
-      cy.get('.govuk-button--secondary').should('contain', 'Add to plan')
     })
   })
 })

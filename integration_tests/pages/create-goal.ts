@@ -13,7 +13,7 @@ export default class CreateGoal {
   }
 
   createGoal = (goalType: string) => {
-    cy.get(`.moj-button-menu a[href='/create-goal/${goalType}']`).click()
+    cy.get(`.moj-button-group a[href='/create-goal/${goalType}']`).click()
     cy.url().should('include', `/create-goal/${goalType}`)
   }
 
@@ -37,7 +37,7 @@ export default class CreateGoal {
 
   selectAchievementDateSomethingElse = (value: string) => {
     cy.get('.govuk-radios').last().contains('Set another date').click()
-    cy.get('.hmpps-js-datepicker-input').type(value)
+    cy.get('.moj-js-datepicker-input').type(value)
   }
 
   clickButton = (value: string) => {

@@ -8,12 +8,16 @@ import localeRemove from './locale-remove.json'
 import URLs from '../URLs'
 import testPlan, { agreedTestPlan } from '../../testutils/data/planData'
 import runMiddlewareChain from '../../testutils/runMiddlewareChain'
+import { AuditEvent } from '../../services/auditService'
 
 const mockGetPlanUUID = jest.fn().mockReturnValue(testPlan.uuid)
 const mockSessionService = jest.fn().mockImplementation(() => ({
   getPlanUUID: mockGetPlanUUID,
   getReturnLink: jest.fn().mockReturnValue(''),
+  setReturnLink: jest.fn(),
 }))
+
+jest.mock('../../services/auditService')
 
 jest.mock('../../middleware/authorisationMiddleware', () => ({
   requireAccessMode: jest.fn(() => (req: Request, res: Response, next: NextFunction) => {
@@ -41,7 +45,6 @@ jest.mock('../../services/sentence-plan/goalService', () => {
     deleteGoal: jest.fn().mockReturnValue({ status: 204 }),
     removeGoal: jest.fn().mockReturnValue(testGoal),
     getGoal: jest.fn().mockReturnValue(testGoal),
-    updateGoal: jest.fn().mockReturnValue(testGoal),
   }))
 })
 
@@ -52,6 +55,7 @@ describe('Remove Goal', () => {
   let next: NextFunction
   const viewData = {
     data: {
+      planAgreementStatus: testPlan.agreementStatus,
       form: {},
       returnLink: '',
       type: 'current',
@@ -63,6 +67,7 @@ describe('Remove Goal', () => {
   }
 
   beforeEach(() => {
+    jest.clearAllMocks()
     req = mockReq()
     res = mockRes()
     next = jest.fn()
@@ -76,6 +81,7 @@ describe('Remove Goal', () => {
       await runMiddlewareChain(controller.get, req, res, next)
 
       expect(res.render).toHaveBeenCalledWith('pages/remove-goal', viewData)
+      expect(req.services.auditService.send).not.toHaveBeenCalled()
     })
   })
 
@@ -87,6 +93,9 @@ describe('Remove Goal', () => {
 
       expect(req.services.goalService.deleteGoal).toHaveBeenCalled()
       expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_OVERVIEW}?type=some-type&status=deleted`)
+      expect(req.services.auditService.send).toHaveBeenCalledWith(AuditEvent.DELETE_A_GOAL, {
+        goalUUID: req.body.goalUuid,
+      })
     })
   })
 })
@@ -98,6 +107,7 @@ describe('Test Removing Goal', () => {
   let next: NextFunction
   const viewData = {
     data: {
+      planAgreementStatus: agreedTestPlan.agreementStatus,
       form: {},
       returnLink: '',
       type: 'current',
@@ -109,6 +119,7 @@ describe('Test Removing Goal', () => {
   }
 
   beforeEach(() => {
+    jest.clearAllMocks()
     req = mockReq()
     res = mockRes()
     next = jest.fn()
@@ -126,6 +137,7 @@ describe('Test Removing Goal', () => {
       await runMiddlewareChain(controller.get, req, res, next)
 
       expect(res.render).toHaveBeenCalledWith('pages/remove-goal', viewData)
+      expect(req.services.auditService.send).not.toHaveBeenCalled()
     })
   })
 
@@ -135,8 +147,11 @@ describe('Test Removing Goal', () => {
 
       await runMiddlewareChain(controller.post, req, res, next)
 
-      expect(req.services.goalService.updateGoal).toHaveBeenCalled()
+      expect(req.services.goalService.removeGoal).toHaveBeenCalled()
       expect(res.redirect).toHaveBeenCalledWith(`${URLs.PLAN_OVERVIEW}?type=removed&status=removed`)
+      expect(req.services.auditService.send).toHaveBeenCalledWith(AuditEvent.REMOVE_A_GOAL, {
+        goalUUID: req.body.goalUuid,
+      })
     })
 
     it('should re-render remove goal page if remove goal is selected and no reason is provided', async () => {
@@ -144,8 +159,9 @@ describe('Test Removing Goal', () => {
 
       await runMiddlewareChain(controller.post, req, res, next)
 
-      expect(req.services.goalService.updateGoal).not.toHaveBeenCalled()
+      expect(req.services.goalService.removeGoal).not.toHaveBeenCalled()
       expect(res.render).toHaveBeenCalled()
+      expect(req.services.auditService.send).not.toHaveBeenCalled()
     })
   })
 })

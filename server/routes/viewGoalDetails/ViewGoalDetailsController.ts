@@ -4,6 +4,8 @@ import { GoalStatus } from '../../@types/GoalType'
 import URLs from '../URLs'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
 import { AccessMode } from '../../@types/Handover'
+import { HttpError } from '../../utils/HttpError'
+import { AuditEvent } from '../../services/auditService'
 
 export default class ViewGoalDetailsController {
   private render = async (req: Request, res: Response, next: NextFunction) => {
@@ -20,6 +22,15 @@ export default class ViewGoalDetailsController {
         return next()
       }
 
+      if (goal.status === GoalStatus.REMOVED) {
+        req.services.sessionService.setReturnLink(`/view-removed-goal/${goal.uuid}`)
+      }
+
+      await req.services.auditService.send(AuditEvent.VIEW_GOAL_DETAILS, {
+        goalUUID: goal.uuid,
+        goalStatus: goal.status,
+      })
+
       return res.render('pages/view-goal-details', {
         locale: locale.en,
         data: {
@@ -29,7 +40,7 @@ export default class ViewGoalDetailsController {
         errors,
       })
     } catch (e) {
-      return next(e)
+      return next(HttpError(500, e.message))
     }
   }
 

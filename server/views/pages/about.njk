@@ -1,0 +1,156 @@
+{% extends "../partials/layout.njk" %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
+{% from "moj/components/sub-navigation/macro.njk" import mojSubNavigation %}
+{% from "moj/components/button-menu/macro.njk" import mojButtonMenu %}
+{%- from "moj/components/banner/macro.njk" import mojBanner -%}
+{% from "../components/assessment/assessment.njk" import renderAssessment %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+
+{% set print = true %}
+{% set locale = interpolate(locale, {
+    subject: data.popData,
+    lastUpdatedDate: data.formattedAssessmentInfo.versionUpdatedAt | formatSimpleDate
+}) %}
+
+{% block pageTitle %}
+    {% if not errors %}
+        {{ locale.page.title }}
+    {% else %}
+        {{ locale.page.errorTitle }}
+    {% endif %}
+{% endblock %}
+
+{% set mainClasses = "app-container govuk-body" %}
+{% set header = {
+    type: "plan-extended",
+    heading: locale.mainHeading.title,
+    items: [
+        {
+            text: locale.common.header.returnToOasysButton,
+            href: data.oasysReturnUrl,
+            classes: "govuk-button--secondary",
+            type: 'button'
+        },
+        {
+            text: locale.common.planHeader.extended.createGoalButton,
+            href: "/create-goal/accommodation",
+            classes: "govuk-button--secondary",
+            type: 'button'
+        } if data.readWrite === true
+    ]
+} %}
+
+{% block bodyStart %}
+    <div id="top"></div>
+{% endblock %}
+
+{% block content %}
+    {{ super() }}
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+            {% set bannerContent = "
+                <h2 class='govuk-heading-m'>" ~ locale.incompleteAssessment.errorTitle ~ "</h2>
+                <p class='govuk-body'>" ~ locale.incompleteAssessment.errorDescription ~ "</p>
+            "%}
+
+            {% if not data.formattedAssessmentInfo.isAssessmentComplete %}
+              {{ mojBanner({
+                type: 'warning',
+                html: bannerContent,
+                iconFallbackText: 'Warning',
+                classes: 'govuk-!-margin-top-4'
+              }) }}
+            {% endif %}
+
+            <h2 class="govuk-heading-m govuk-!-margin-top-3">Sentence information</h2>
+
+            {% if errors.domain[0] == 'noDeliusDataFound' %}
+              {{ govukWarningText({
+                text: locale.errors['noDeliusDataFound'],
+                iconFallbackText: "Warning"
+              }) }}
+            {% endif %}
+
+            {% if data.deliusData.sentences.length > 0 %}
+            <table class="govuk-table govuk-!-margin-bottom-6 sentence-info">
+
+                <tr class="govuk-body-s">
+                    <td class="govuk-padding-right--25">{{ locale.detail.sentenceHeading }}</td>
+                    <td class="govuk-padding-right--25">{{ locale.detail.endDateHeading }}</td>
+                    <td class="govuk-padding-right--25">{{ locale.detail.unpaidWorkHeading }}</td>
+                    <td class="govuk-padding-right--25">{{ locale.detail.rarHeading }}</td>
+                </tr>
+
+                {% for sentence in data.deliusData.sentences %}
+                    <tr class="govuk-table__row govuk-body-l {{ 'single-sentence' if data.deliusData.sentences.length == 1 }}">
+                        <td class = "govuk-table__cell govuk-padding-bottom--25">{{ sentence.description }} <br/> {{ sentenceLength(sentence.startDate, sentence.endDate, locale.common.sentence) }}</td>
+                        <td class = "govuk-table__cell govuk-padding-bottom--25">{{ sentence.endDate | formatSimpleDate }}</td>
+                        <td class = "govuk-table__cell govuk-padding-bottom--25">
+                            {% if sentence.unpaidWorkHoursOrdered > 0 %}
+                                {{ sentence.unpaidWorkHoursOrdered }} hours
+                            {% else %}
+                                No
+                            {% endif %}
+                        </td>
+                        <td class = "govuk-table__cell govuk-padding-bottom--25">
+                            {% if sentence.rarDaysOrdered > 0 %}
+                                {{ sentence.rarDaysOrdered }} days
+                            {% else %}
+                                No
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor  %}
+            </table>
+            {% endif %}
+
+            {% if errors.domain[0] == 'noAssessmentDataFound' %}
+              {{ govukWarningText({
+                text: locale.errors['noAssessmentDataFound'],
+                iconFallbackText: "Warning"
+              }) }}
+            {% else %}
+
+                {% if data.formattedAssessmentInfo.versionUpdatedAt %}
+                    <p id="last-updated" class="govuk-body govuk-!-margin-top-5">{{ locale.detail.lastUpdated }}</p>
+                {% endif %}
+
+                {% if data.formattedAssessmentInfo.areas.incompleteAreas.length > 0 %}
+                  <h2 class="govuk-heading-m">{{ locale.incompleteAssessment.sectionHeading }}</h2>
+                  <p class="govuk-body">{{ locale.incompleteAssessment.sectionParagraph }}</p>
+                  {{ renderAssessment('incompleteAreas', data.formattedAssessmentInfo.areas.incompleteAreas, locale, data.readWrite) }}
+                {% endif %}
+
+                <h2 class="govuk-heading-m">{{ locale.highScoring.sectionHeading }}</h2>
+                {% if data.formattedAssessmentInfo.areas.highScoring.length > 0 %}
+                    {{ renderAssessment('highScoring', data.formattedAssessmentInfo.areas.highScoring, locale, data.readWrite) }}
+                {% elseif data.formattedAssessmentInfo.areas.incompleteAreas.length > 0 and data.formattedAssessmentInfo.areas.highScoring.length == 0 %}
+                  <p class="govuk-body">{{ locale.highScoring.oneOrMoreIncompleteSectionsAndNoScore }}</p>
+                {% else %}
+                    <p class="govuk-body">{{ locale.highScoring.sectionEmptyParagraph }}</p>
+                {% endif %}
+
+                <h2 class="govuk-heading-m">{{ locale.lowScoring.sectionHeading }}</h2>
+                {% if data.formattedAssessmentInfo.areas.lowScoring.length > 0 %}
+                    {{ renderAssessment('lowScoring', data.formattedAssessmentInfo.areas.lowScoring, locale, data.readWrite) }}
+                {% elseif data.formattedAssessmentInfo.areas.incompleteAreas.length > 0 and data.formattedAssessmentInfo.areas.lowScoring.length == 0 %}
+                  <p class="govuk-body">{{ locale.lowScoring.oneOrMoreIncompleteSectionsAndNoScore }}</p>
+                {% else %}
+                    <p class="govuk-body">{{ locale.lowScoring.sectionEmptyParagraph }}</p>
+                {% endif %}
+
+                <h2 class="govuk-heading-m">{{ locale.withoutScoring.sectionHeading }}</h2>
+                <p id="other-areas-paragraph" class="govuk-body">{{ locale.withoutScoring.sectionParagraph }}</p>
+                {% if data.formattedAssessmentInfo.areas.other.length > 0 %}
+                    {{ renderAssessment('withoutScoring', data.formattedAssessmentInfo.areas.other, locale, data.readWrite) }}
+                {% endif %}
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+{% endblock %}

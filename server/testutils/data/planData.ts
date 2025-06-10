@@ -8,7 +8,8 @@ const testPlan: PlanType = {
   createdDate: new Date(Date.now() - 1000 * 60 * 60).toISOString(),
   updatedDate: new Date().toISOString(),
   updatedBy: '',
-  agreementDate: new Date().toISOString(),
+  agreementDate: null,
+  mostRecentUpdateDate: new Date().toISOString(),
   goals: [testGoal],
 }
 
@@ -20,8 +21,21 @@ const agreedTestPlan: PlanType = {
   updatedDate: new Date().toISOString(),
   updatedBy: '',
   agreementDate: new Date().toISOString(),
+  mostRecentUpdateDate: new Date().toISOString(),
+  goals: [testGoal],
+}
+
+const couldNotAnswerTestPlan: PlanType = {
+  uuid: 'could-not-answer-plan-uuid',
+  status: PlanStatus.UNSIGNED,
+  agreementStatus: PlanAgreementStatus.COULD_NOT_ANSWER,
+  createdDate: new Date(Date.now() - 1000 * 60 * 60).toISOString(),
+  updatedDate: new Date().toISOString(),
+  updatedBy: '',
+  agreementDate: new Date().toISOString(),
+  mostRecentUpdateDate: new Date().toISOString(),
   goals: [testGoal],
 }
 
 export default testPlan
-export { agreedTestPlan }
+export { agreedTestPlan, couldNotAnswerTestPlan }

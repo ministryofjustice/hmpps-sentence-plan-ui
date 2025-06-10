@@ -3,6 +3,7 @@ import { Goal } from '../../server/@types/GoalType'
 import DataGenerator from '../support/DataGenerator'
 import { PlanType } from '../../server/@types/PlanType'
 import { NewStep } from '../../server/@types/StepType'
+import { AccessMode } from '../../server/@types/Handover'
 
 describe('Delete a goal from a Plan before it has been agreed', () => {
   beforeEach(() => {
@@ -16,7 +17,7 @@ describe('Delete a goal from a Plan before it has been agreed', () => {
   describe('Security', () => {
     it('Should display authorisation error if user does not have READ_WRITE role', () => {
       cy.get<string>('@oasysAssessmentPk').then(oasysAssessmentPk => {
-        cy.openSentencePlan(oasysAssessmentPk, 'READ_ONLY')
+        cy.openSentencePlan(oasysAssessmentPk, { accessMode: AccessMode.READ_ONLY })
       })
 
       cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
@@ -26,6 +27,7 @@ describe('Delete a goal from a Plan before it has been agreed', () => {
       })
 
       cy.get('.govuk-body').should('contain', 'You do not have permission to perform this action')
+      cy.checkAccessibility(true, ['scrollable-region-focusable'])
     })
   })
 
@@ -52,6 +54,8 @@ describe('Delete a goal from a Plan before it has been agreed', () => {
         .and('contain', `Area of need: ${goalData.areaOfNeed.toLowerCase()}`)
         .and('contain', `Also relates to: ${goalData.relatedAreasOfNeed[0].toLowerCase()}`)
         .and('not.contain', `Add steps`)
+
+      cy.checkAccessibility()
     })
 
     it('Goal with steps renders correctly', () => {
@@ -79,6 +83,8 @@ describe('Delete a goal from a Plan before it has been agreed', () => {
         .and('contain', stepData[0].actor)
         .and('contain', stepData[1].description)
         .and('contain', stepData[1].actor)
+
+      cy.checkAccessibility()
     })
   })
 
@@ -116,6 +122,8 @@ describe('Delete a goal from a Plan before it has been agreed', () => {
       // Check goal has been deleted
       cy.url().should('contain', '/plan?type=current&status=deleted')
       cy.get('.goal-list .goal-summary-card').should('have.length', 2).and('not.contain', goalData.title)
+
+      cy.checkAccessibility()
     })
   })
 })

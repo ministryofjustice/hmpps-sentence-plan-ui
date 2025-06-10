@@ -10,9 +10,12 @@ import runMiddlewareChain from '../../testutils/runMiddlewareChain'
 import AgreePlanPostModel from './models/AgreePlanPostModel'
 import URLs from '../URLs'
 import { PlanAgreementStatus, PlanType } from '../../@types/PlanType'
-import PlanModel from '../shared-models/PlanModel'
+import PlanReadyForAgreementModel from '../shared-models/PlanReadyForAgreementModel'
 import { testGoal } from '../../testutils/data/goalData'
 import testHandoverContext from '../../testutils/data/handoverData'
+import { AuditEvent } from '../../services/auditService'
+
+jest.mock('../../services/auditService')
 
 jest.mock('../../middleware/authorisationMiddleware', () => ({
   requireAccessMode: jest.fn(() => (req: Request, res: Response, next: NextFunction) => {
@@ -43,6 +46,7 @@ describe('AgreePlanController', () => {
   let next: NextFunction
   const viewData = {
     data: {
+      planAgreementStatus: testPlan.agreementStatus,
       returnLink: '/some-return-link',
       form: {},
     },
@@ -51,6 +55,7 @@ describe('AgreePlanController', () => {
   }
 
   beforeEach(() => {
+    jest.clearAllMocks()
     req = mockReq()
     res = mockRes()
     next = jest.fn()
@@ -59,12 +64,16 @@ describe('AgreePlanController', () => {
   })
 
   describe('get', () => {
+    afterEach(() => {
+      expect(req.services.auditService.send).not.toHaveBeenCalled()
+    })
+
     describe('validation', () => {
       describe('goals', () => {
         it('should add error if no goals', () => {
           const badPlanData: PlanType = { ...testPlan, goals: [] }
 
-          const dataToBeValidated = plainToInstance(PlanModel, badPlanData)
+          const dataToBeValidated = plainToInstance(PlanReadyForAgreementModel, badPlanData)
           const errors = getValidationErrors(dataToBeValidated)
 
           expect(errors).toMatchObject({
@@ -80,7 +89,7 @@ describe('AgreePlanController', () => {
             goals: [{ ...testGoal, steps: [] }],
           }
 
-          const dataToBeValidated = plainToInstance(PlanModel, badPlanData)
+          const dataToBeValidated = plainToInstance(PlanReadyForAgreementModel, badPlanData)
           const errors = getValidationErrors(dataToBeValidated)
 
           expect(errors).toMatchObject({
@@ -170,6 +179,7 @@ describe('AgreePlanController', () => {
       const expectedViewData = {
         ...viewData,
         data: {
+          planAgreementStatus: testPlan.agreementStatus,
           returnLink: '/some-return-link',
           form: {
             'agree-plan-radio': 'no',
@@ -193,6 +203,7 @@ describe('AgreePlanController', () => {
       expect(req.services.planService.agreePlan).not.toHaveBeenCalled()
       expect(res.redirect).not.toHaveBeenCalled()
       expect(next).not.toHaveBeenCalled()
+      expect(req.services.auditService.send).not.toHaveBeenCalled()
     })
 
     it('should agree plan and redirect if no validation errors', async () => {
@@ -214,6 +225,9 @@ describe('AgreePlanController', () => {
       expect(req.services.planService.agreePlan).toHaveBeenCalledWith(testPlan.uuid, expectedAgreementData)
       expect(res.redirect).toHaveBeenCalledWith(URLs.PLAN_OVERVIEW)
       expect(next).not.toHaveBeenCalled()
+      expect(req.services.auditService.send).toHaveBeenCalledWith(AuditEvent.AGREE_PLAN, {
+        agreementStatus: expectedAgreementData.agreementStatus,
+      })
     })
 
     it('should agree plan with conditional agreement note details', async () => {
@@ -236,6 +250,9 @@ describe('AgreePlanController', () => {
       expect(req.services.planService.agreePlan).toHaveBeenCalledWith(testPlan.uuid, expectedAgreementData)
       expect(res.redirect).toHaveBeenCalledWith(URLs.PLAN_OVERVIEW)
       expect(next).not.toHaveBeenCalled()
+      expect(req.services.auditService.send).toHaveBeenCalledWith(AuditEvent.AGREE_PLAN, {
+        agreementStatus: expectedAgreementData.agreementStatus,
+      })
     })
 
     it('should call next if errors', async () => {
@@ -251,6 +268,7 @@ describe('AgreePlanController', () => {
 
       expect(req.services.planService.agreePlan).toHaveBeenCalled()
       expect(next).toHaveBeenCalled()
+      expect(req.services.auditService.send).not.toHaveBeenCalled()
     })
   })
 })

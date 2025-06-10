@@ -1,0 +1,26 @@
+name: Deploy to environment
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: Environment
+        type: choice
+        required: true
+        options:
+          - dev
+          - test
+        default: 'dev'
+      image_tag:
+        description: Optional image tag to deploy. If left blank, a new image will be built, pushed and deployed
+        required: false
+        default: ''
+        type: string
+
+jobs:
+  deploy_to_env:
+    uses: ministryofjustice/hmpps-assess-risks-and-needs-github-actions/.github/workflows/deploy_to_env.yml@v1
+    secrets: inherit
+    with:
+      environment: ${{ inputs.environment }}
+      image_tag: ${{ inputs.image_tag }}

@@ -19,6 +19,7 @@
 {% set mainClasses = "app-container govuk-body" %}
 
 {% block content %}
+    {{ super() }}
     <div class="govuk-grid-row">
         <div class="govuk-grid-column-full">
             <a href="{{ data.returnLink }}" class="govuk-back-link">{{ locale.common.backLink.text }}</a>
@@ -73,9 +74,8 @@
             {% if data.goal.status == 'REMOVED' %}
                 {{ govukButton({
                     text: locale.addToPlan,
-                    name: "action",
-                    value: "#",
-                    classes: "govuk-button--secondary"
+                    href: '/confirm-add-goal/' + data.goal.uuid,
+                    classes: "govuk-button--secondary add-to-plan"
                 }) }}
             {% endif %}
 

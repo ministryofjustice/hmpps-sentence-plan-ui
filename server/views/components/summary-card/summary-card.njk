@@ -1,5 +1,5 @@
 {%- macro _actionLink(action, cardTitle) %}
-    <a class="govuk-link govuk-link--no-visited-state {%- if action.classes %} {{ action.classes }}{% endif %}" href="{{ action.href }}">
+    <a class=" {%- if action.classes %} {{ action.classes }}{% endif %}" href="{{ action.href }}">
         {{- action.html | safe | indent(4) if action.html else action.text -}}
 
         {%- if action.visuallyHiddenText or cardTitle -%}

@@ -1,24 +1,54 @@
-import type { Router } from 'express'
-import express from 'express'
 import passport from 'passport'
 import flash from 'connect-flash'
+import { Router } from 'express'
+import { Strategy } from 'passport-oauth2'
 import config from '../config'
-import auth from '../authentication/auth'
+import { generateOauthClientToken } from '../utils/utils'
 import URLs from '../routes/URLs'
+import UnsavedInformationDeletedController from '../routes/unsaved-information-deleted/UnsavedInformationDeletedController'
 
-const router = express.Router()
+passport.serializeUser((user, done) => {
+  // Not used but required for Passport
+  done(null, user)
+})
 
-export default function setUpAuth(): Router {
-  auth.init()
+passport.deserializeUser((user, done) => {
+  // Not used but required for Passport
+  done(null, user as Express.User)
+})
+
+passport.use(
+  new Strategy(
+    {
+      authorizationURL: `${config.apis.arnsHandover.externalUrl}/oauth2/authorize`,
+      tokenURL: `${config.apis.arnsHandover.url}/oauth2/token`,
+      clientID: config.apis.arnsHandover.clientId,
+      clientSecret: config.apis.arnsHandover.clientSecret,
+      callbackURL: `${config.domain}/sign-in/callback`,
+      state: true,
+      customHeaders: {
+        Authorization: generateOauthClientToken(
+          config.apis.arnsHandover.clientId,
+          config.apis.arnsHandover.clientSecret,
+        ),
+      },
+      scope: 'openid profile',
+    },
+    (token, refreshToken, params, profile, done) => {
+      return done(null, { token, username: params.user_name, authSource: params.auth_source })
+    },
+  ),
+)
+
+export default function setupAuthentication() {
+  const router = Router()
+
+  const controller = new UnsavedInformationDeletedController()
+  router.get(URLs.UNSAVED_INFORMATION_DELETED, controller.get)
 
   router.use(passport.initialize())
   router.use(passport.session())
   router.use(flash())
-
-  router.get('/autherror', (req, res) => {
-    res.status(401)
-    return res.render('autherror')
-  })
 
   router.get('/sign-in', passport.authenticate('oauth2'))
 

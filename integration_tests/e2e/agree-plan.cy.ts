@@ -1,6 +1,7 @@
 import { faker } from '@faker-js/faker'
 import DataGenerator from '../support/DataGenerator'
 import { PlanType } from '../../server/@types/PlanType'
+import { AccessMode } from '../../server/@types/Handover'
 
 describe('Agree plan', () => {
   beforeEach(() => {
@@ -14,7 +15,7 @@ describe('Agree plan', () => {
   describe('Security', () => {
     it('Should display authorisation error if user does not have READ_WRITE role', () => {
       cy.get<string>('@oasysAssessmentPk').then(oasysAssessmentPk => {
-        cy.openSentencePlan(oasysAssessmentPk, 'READ_ONLY')
+        cy.openSentencePlan(oasysAssessmentPk, { accessMode: AccessMode.READ_ONLY })
       })
 
       cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
@@ -24,6 +25,8 @@ describe('Agree plan', () => {
 
         cy.visit(`/agree-plan`, { failOnStatusCode: false })
         cy.get('.govuk-body').should('contain', 'You do not have permission to perform this action')
+
+        cy.checkAccessibility(true, ['scrollable-region-focusable'])
       })
     })
   })
@@ -41,6 +44,7 @@ describe('Agree plan', () => {
 
     it('Display agree plan page correctly on load', () => {
       cy.get('button[value="agree-plan"]').click()
+      cy.get('.moj-primary-navigation__container').should('not.contain', `Plan history`)
       cy.get('.govuk-fieldset__heading').contains('agree to this plan?')
       cy.get('.govuk-label').contains('Yes, I agree')
       cy.get('.govuk-label').contains('No, I do not agree')
@@ -49,6 +53,8 @@ describe('Agree plan', () => {
       cy.get('.govuk-label').contains('Add any notes (optional)')
       cy.get('.govuk-button').contains('Save')
       cy.get('.govuk-back-link').should('have.attr', 'href', '/plan?type=current')
+      cy.checkAccessibility()
+      cy.hasFeedbackLink()
     })
   })
 
@@ -73,6 +79,7 @@ describe('Agree plan', () => {
         })
 
         cy.url().should('satisfy', url => url.endsWith('/plan'))
+        cy.checkAccessibility()
       })
     })
 
@@ -102,6 +109,7 @@ describe('Agree plan', () => {
           cy.visit(`/agree-plan`)
           cy.url().should('include', `/agree-plan`)
         })
+        cy.checkAccessibility()
       })
 
       it('Display validation error if nothing is selected', () => {
@@ -112,20 +120,25 @@ describe('Agree plan', () => {
           'Select if they agree to the plan, or that they could not answer this question',
         )
         cy.title().should('contain', 'Error:')
+        cy.checkAccessibility()
       })
+
       it('Display validation error if No is selected but no details provided', () => {
         cy.get('#agree-plan-radio-2').click()
         cy.get('.govuk-button').click()
 
         cy.contains('#does-not-agree-details-error', 'Enter details about why they do not agree')
         cy.title().should('contain', 'Error:')
+        cy.checkAccessibility()
       })
+
       it('Display validation error if Not answered is selected but no details provided', () => {
         cy.get('#agree-plan-radio-4').click()
         cy.get('.govuk-button').click()
 
         cy.contains('#could-not-answer-details-error', 'Enter details about why they could not answer')
         cy.title().should('contain', 'Error:')
+        cy.checkAccessibility()
       })
     })
   })
@@ -142,12 +155,15 @@ describe('Agree plan', () => {
     })
 
     it('Submit successfully when Yes is selected and additional notes provided', () => {
+      cy.get('.moj-primary-navigation__container').should('not.contain', `Plan history`)
       cy.get('#agree-plan-radio').click()
       cy.get('#notes').type('abc')
 
       cy.get('.govuk-button').click()
 
       cy.url().should('satisfy', url => url.endsWith('/plan'))
+      cy.get('.moj-primary-navigation__container').contains(`Plan history`)
+      cy.checkAccessibility()
     })
 
     it('Displays errors if Yes is selected and long additional notes provided', () => {
@@ -164,6 +180,7 @@ describe('Agree plan', () => {
 
       cy.get('#notes').should('contain', lorem)
       cy.get('.govuk-back-link').should('have.attr', 'href', '/plan?type=current')
+      cy.checkAccessibility()
     })
 
     it('Submit successfully when No is selected and additional information provided', () => {
@@ -173,6 +190,7 @@ describe('Agree plan', () => {
       cy.get('.govuk-button').click()
 
       cy.url().should('satisfy', url => url.endsWith('/plan'))
+      cy.checkAccessibility()
     })
 
     it('Displays errors when No is selected and long additional information provided', () => {
@@ -194,6 +212,7 @@ describe('Agree plan', () => {
       )
 
       cy.get('#does-not-agree-details').should('contain', lorem)
+      cy.checkAccessibility()
     })
 
     it('Submit successfully when "Could not answer this question" is selected and additional information provided', () => {
@@ -203,6 +222,7 @@ describe('Agree plan', () => {
       cy.get('.govuk-button').click()
 
       cy.url().should('satisfy', url => url.endsWith('/plan'))
+      cy.checkAccessibility()
     })
 
     it('Display errors when "Could not answer this question" is selected and long additional information provided', () => {
@@ -224,6 +244,7 @@ describe('Agree plan', () => {
       )
 
       cy.get('#could-not-answer-details').should('contain', lorem)
+      cy.checkAccessibility()
     })
   })
 })

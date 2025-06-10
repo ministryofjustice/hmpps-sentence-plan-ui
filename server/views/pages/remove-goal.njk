@@ -2,7 +2,7 @@
 {% from "../components/summary-card/goal-summary-card.njk" import goalSummaryCard %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
-{% from "../components/error-summary/error-summary.njk" import errorSummary %}
+{% from "../components/error-summary/error-summary.njk" import errorSummary with context %}
 
 {% set locale = interpolate(locale, {
     goalUuid: data.goal.uuid
@@ -19,7 +19,7 @@
 {% set mainClasses = "app-container govuk-body" %}
 
 {% block content %}
-
+{{ super() }}
 <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
         <a href="{{ data.returnLink }}" class="govuk-back-link">{{ locale.common.backLink.text }}</a>
@@ -66,7 +66,7 @@
                     name: "action",
                     value: data.actionType
                 }) }}
-                <a class="govuk-link govuk-link--no-visited-state" href="{{ data.returnLink }}">{{ locale.cancelButtonText }}</a>
+                <a href="{{ data.returnLink }}">{{ locale.cancelButtonText }}</a>
             </div>
         </form>
     </div>

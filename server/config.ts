@@ -65,11 +65,12 @@ export default {
   },
   session: {
     secret: get('SESSION_SECRET', 'app-insecure-default-session', requiredInProduction),
-    expiryMinutes: Number(get('WEB_SESSION_TIMEOUT_IN_MINUTES', 120)),
+    expiryMinutes: Number(get('WEB_SESSION_TIMEOUT_IN_MINUTES', 60)),
   },
   apis: {
     hmppsAuth: {
       url: get('HMPPS_AUTH_URL', 'http://localhost:9090/auth', requiredInProduction),
+      healthPath: '/health/ping',
       externalUrl: get('HMPPS_AUTH_EXTERNAL_URL', get('HMPPS_AUTH_URL', 'http://localhost:9090/auth')),
       timeout: {
         response: Number(get('HMPPS_AUTH_TIMEOUT_RESPONSE', 10000)),
@@ -83,6 +84,7 @@ export default {
     },
     arnsHandover: {
       url: get('HMPPS_ARNS_HANDOVER_URL', 'http://localhost:8080/oauth2/authorize', requiredInProduction),
+      healthPath: '/health/ping',
       externalUrl: get(
         'HMPPS_ARNS_HANDOVER_EXTERNAL_URL',
         get('HMPPS_ARNS_HANDOVER_URL', 'http://localhost:9090/auth'),
@@ -95,25 +97,9 @@ export default {
       clientId: get('HMPPS_ARNS_HANDOVER_CLIENT_ID', 'clientid', requiredInProduction),
       clientSecret: get('HMPPS_ARNS_HANDOVER_CLIENT_SECRET', 'clientsecret', requiredInProduction),
     },
-    manageUsersApi: {
-      url: get('MANAGE_USERS_API_URL', 'http://localhost:9091', requiredInProduction),
-      timeout: {
-        response: Number(get('MANAGE_USERS_API_TIMEOUT_RESPONSE', 10000)),
-        deadline: Number(get('MANAGE_USERS_API_TIMEOUT_DEADLINE', 10000)),
-      },
-      agent: new AgentConfig(Number(get('MANAGE_USERS_API_TIMEOUT_RESPONSE', 10000))),
-    },
-    tokenVerification: {
-      url: get('TOKEN_VERIFICATION_API_URL', 'http://localhost:8100', requiredInProduction),
-      timeout: {
-        response: Number(get('TOKEN_VERIFICATION_API_TIMEOUT_RESPONSE', 5000)),
-        deadline: Number(get('TOKEN_VERIFICATION_API_TIMEOUT_DEADLINE', 5000)),
-      },
-      agent: new AgentConfig(Number(get('TOKEN_VERIFICATION_API_TIMEOUT_RESPONSE', 5000))),
-      enabled: get('TOKEN_VERIFICATION_ENABLED', 'false') === 'true',
-    },
     sentencePlanApi: {
       url: get('SENTENCE_PLAN_API_URL', 'https://sentence-plan-api-dev.hmpps.service.justice.gov.uk'),
+      healthPath: '/health/ping',
       timeout: {
         response: Number(get('SENTENCE_PLAN_API_TIMEOUT_RESPONSE', 10000)),
         deadline: Number(get('SENTENCE_PLAN_API_TIMEOUT_DEADLINE', 10000)),
@@ -122,6 +108,7 @@ export default {
     },
     coordinatorApi: {
       url: get('COORDINATOR_API_URL', 'https://arns-coordinator-api-dev.hmpps.service.justice.gov.uk'),
+      healthPath: '/health/ping',
       timeout: {
         response: Number(get('COORDINATOR_API_TIMEOUT_RESPONSE', 10000)),
         deadline: Number(get('COORDINATOR_API_TIMEOUT_DEADLINE', 10000)),
@@ -134,4 +121,6 @@ export default {
   },
   domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
   environmentName: get('ENVIRONMENT_NAME', ''),
+  deploymentName: get('DEPLOYMENT_NAME', ''),
+  feedbackUrl: get('FEEDBACK_URL', null),
 }

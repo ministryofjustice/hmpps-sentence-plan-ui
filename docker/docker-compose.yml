@@ -23,12 +23,13 @@ services:
       - arns-handover
     ports:
       - "9091:9091"
+      - "9092:9092"
       - "7071:7071"
     volumes:
       - ./forward-proxy/nginx.conf:/etc/nginx/nginx.conf
 
   hmpps-auth:
-    image: quay.io/hmpps/hmpps-auth:2024-10-02.25761.db2ce3c
+    image: quay.io/hmpps/hmpps-auth:2024-12-30.26692.44389cd
     healthcheck:
       test: ["CMD", "curl", "-fs", "http://hmpps-auth:9090/auth/health"]
       interval: 5s
@@ -42,9 +43,10 @@ services:
       LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY: DEBUG
 
   arns-handover:
-    image: quay.io/hmpps/hmpps-assess-risks-and-needs-handover-service:latest
+    image: ghcr.io/ministryofjustice/hmpps-assess-risks-and-needs-handover-service:latest
     depends_on:
       - redis
+      - localstack
     ports:
       - "7070:7070"
     healthcheck:
@@ -69,7 +71,7 @@ services:
       CLIENT_SP_HANDOVER_REDIRECT_URI: http://localhost:3000/sign-in
 
   oastub:
-    image: quay.io/hmpps/hmpps-assess-risks-and-needs-oastub-ui:latest
+    image: ghcr.io/ministryofjustice/hmpps-assess-risks-and-needs-oastub-ui:latest
     depends_on:
       - coordinator-api
     ports:
@@ -92,7 +94,7 @@ services:
       PORT: 3005
 
   coordinator-api:
-    image: quay.io/hmpps/hmpps-assess-risks-and-needs-coordinator-api:latest
+    image: ghcr.io/ministryofjustice/hmpps-assess-risks-and-needs-coordinator-api:latest
     depends_on:
       - postgres
       - hmpps-auth
@@ -117,7 +119,7 @@ services:
       APP_STRATEGIES_ASSESSMENT: false
 
   api:
-    image: quay.io/hmpps/hmpps-sentence-plan:latest
+    image: ghcr.io/ministryofjustice/hmpps-sentence-plan:latest
     depends_on:
       - postgres
       - hmpps-auth
@@ -130,15 +132,14 @@ services:
     environment:
       SERVER_PORT: 8080
       DB_ENDPOINT: postgres:5432
-      ARNS_API_CLIENT_ID: sentence-plan-api-client
-      ARNS_API_CLIENT_SECRET: sentence-plan-api-client
+      API_CLIENT_ID: sentence-plan-api-client
+      API_CLIENT_SECRET: sentence-plan-api-client
       HMPPS_AUTH_BASE_URL: http://hmpps-auth:9090
       ARNS_API_BASE_URL: http://wiremock:8080/arns-api
       DELIUS_API_BASE_URL: http://wiremock:8080/delius-api
-      USE_STUB: true
 
   ui:
-    image: quay.io/hmpps/hmpps-sentence-plan-ui:${APP_VERSION:-latest}
+    image: ghcr.io/ministryofjustice/hmpps-sentence-plan-ui:${APP_VERSION:-latest}
     build:
       context: ../
       target: production
@@ -179,6 +180,14 @@ services:
       SESSION_SECRET: sessionsecret
       SENTENCE_PLAN_API_URL: http://api:8080
       COORDINATOR_API_URL: http://wiremock:8080
+      AWS_ACCESS_KEY_ID: test
+      AWS_SECRET_ACCESS_KEY: test
+      AWS_ENDPOINT_URL: http://localstack:4566
+      AUDIT_ENABLED: true
+      AUDIT_SQS_QUEUE_URL: http://localstack:4566/000000000000/audit-queue
+      AUDIT_SQS_REGION: eu-west-2
+      AUDIT_SERVICE_NAME: hmpps-sentence-plan-ui
+      FEEDBACK_URL: http://localhost:9092
 
   wiremock:
     image: wiremock/wiremock:latest
@@ -188,3 +197,24 @@ services:
     volumes:
       - ../wiremock/mappings:/home/wiremock/mappings
     entrypoint: ["/docker-entrypoint.sh", "--global-response-templating", "--disable-gzip", "--verbose"]
+
+
+  localstack:
+    image: localstack/localstack:3
+    container_name: localstack-sqs
+    environment:
+      - SERVICES=sqs
+      - LOCALSTACK_HOST=localstack:4566
+      - DEBUG=1
+      - DEFAULT_REGION=eu-west-2
+      - AWS_DEFAULT_REGION=eu-west-2
+      - USE_SSL=false
+    volumes:
+      - "${LOCALSTACK_VOLUME_DIR:-./volume}:/var/lib/localstack"
+      - "./scripts/localstack/init:/etc/localstack/init/ready.d"
+      - "./scripts/localstack/wait:/scripts/wait"
+    healthcheck:
+      test: [ "CMD", "bash", "/scripts/wait/healthcheck.sh" ]
+      interval: 5s
+      timeout: 10s
+      retries: 50

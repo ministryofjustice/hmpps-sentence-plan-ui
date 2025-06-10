@@ -8,22 +8,33 @@ export interface AssessmentResponse {
 }
 
 export interface AssessmentArea {
-  title: string
-  linkedtoRoSH: boolean
-  linkedtoReoffending: boolean
-  motivationToMakeChanges?: string
-  riskOfSeriousHarm?: string
-  riskOfReoffending: string
-  strengthsOrProtectiveFactors?: string
+  criminogenicNeedMissing?: boolean
   criminogenicNeedsScore?: string
   goalRoute?: string
+  isAssessmentSectionNotStarted: boolean
+  isAssessmentSectionComplete: boolean
+  linkedToHarm: string
+  linkedtoReoffending: string
+  linkedtoStrengthsOrProtectiveFactors: string
+  motivationToMakeChanges?: string
+  overallScore?: string
+  riskOfReoffendingDetails?: string
+  riskOfSeriousHarmDetails?: string
+  strengthsOrProtectiveFactors?: string
+  thresholdValue?: number
+  title: string
+  upperBound?: number
 }
 
-export interface AssessmentAreas {
-  lowScoring: AssessmentArea[]
-  highScoring: AssessmentArea[]
-  other: AssessmentArea[]
+export interface FormattedAssessment {
+  isAssessmentComplete: boolean
   versionUpdatedAt?: string
+  areas: {
+    incompleteAreas: AssessmentArea[]
+    lowScoring: AssessmentArea[]
+    highScoring: AssessmentArea[]
+    other: AssessmentArea[]
+  }
 }
 
 export interface AssessmentAreaConfig {
@@ -33,6 +44,7 @@ export interface AssessmentAreaConfig {
   assessmentKey: string
   goalRoute: string
   upperBound?: number
+  thresholdValue?: number
 }
 
 export const enum FieldType {
@@ -60,6 +72,15 @@ interface Option {
   value: string
   text: string
 }
+
+export interface SubAreaData {
+  upperBound: string
+  thresholdValue: number
+  criminogenicNeedsScore: string
+}
+
+// criminogenicNeedsData definition is on
+// https://dsdmoj.atlassian.net/wiki/spaces/ARN/pages/5102404112/OASys+Integration+API+Sentence+Plan#:~:text=criminogenicNeedsData
 
 export interface Accommodation {
   [key: string]: any
@@ -131,6 +152,7 @@ export interface ThinkingBehaviourAndAttitudes {
   thinkStrengths?: string
   thinkOtherWeightedScore?: string
   thinkThreshold?: string
+  subData?: SubAreaData
 }
 
 export interface LifestyleAndAssociates {

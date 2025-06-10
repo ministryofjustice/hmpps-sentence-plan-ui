@@ -13,6 +13,8 @@ import { NewGoal } from '../../@types/NewGoalType'
 import { Goal } from '../../@types/GoalType'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
 import { AccessMode } from '../../@types/Handover'
+import { HttpError } from '../../utils/HttpError'
+import { AuditEvent } from '../../services/auditService'
 
 export default class UpdateGoalController {
   constructor(private readonly referentialDataService: ReferentialDataService) {}
@@ -24,12 +26,15 @@ export default class UpdateGoalController {
     try {
       const sortedAreasOfNeed = this.referentialDataService.getSortedAreasOfNeed()
       const goal = await req.services.goalService.getGoal(uuid)
+      const goalType: string = goalStatusToTabName(goal.status)
       const popData = req.services.sessionService.getSubjectDetails()
       const mainAreaOfNeed = sortedAreasOfNeed.find(areaOfNeed => areaOfNeed.name === goal.areaOfNeed.name)
       const relatedAreasOfNeed = goal.relatedAreasOfNeed.map(need => need.name)
 
-      const returnLink = req.services.sessionService.getReturnLink()
-      req.services.sessionService.setReturnLink(`/update-goal/${uuid}`)
+      const returnLink = `/plan?type=${goalType}`
+      req.services.sessionService.setReturnLink(`/update-goal-steps/${uuid}`)
+
+      await req.services.auditService.send(AuditEvent.VIEW_UPDATE_GOAL_AND_STEPS_PAGE, { goalUUID: uuid })
 
       return res.render('pages/update-goal', {
         locale: locale.en,
@@ -44,7 +49,7 @@ export default class UpdateGoalController {
         errors,
       })
     } catch (e) {
-      return next(e)
+      return next(HttpError(500, e.message))
     }
   }
 
@@ -84,10 +89,25 @@ export default class UpdateGoalController {
       const goalType: string = goalStatusToTabName(goal.status)
 
       await this.updateSteps(req, goal, steps, note)
-      req.services.sessionService.setReturnLink(null)
-      return res.redirect(`${URLs.PLAN_OVERVIEW}?type=${goalType}`)
+
+      await req.services.auditService.send(AuditEvent.UPDATE_GOAL_AND_STEPS, { goalUUID: uuid })
+
+      if (req.body.action === 'mark-as-achieved') {
+        return res.redirect(`${URLs.ACHIEVE_GOAL.replace(':uuid', uuid)}`)
+      }
+
+      if (req.body.action === 'remove') {
+        return res.redirect(`${URLs.REMOVE_GOAL.replace(':uuid', uuid)}`)
+      }
+
+      // redirect to plan overview if any step is not marked as completed
+      if (steps.length === 0 || steps.some((step: { status: string }) => step.status !== 'COMPLETED')) {
+        return res.redirect(`${URLs.PLAN_OVERVIEW}?type=${goalType}`)
+      }
+
+      return res.redirect(`${URLs.CONFIRM_ACHIEVE_GOAL.replace(':uuid', uuid)}`)
     } catch (e) {
-      return next(e)
+      return next(HttpError(500, e.message))
     }
   }
 

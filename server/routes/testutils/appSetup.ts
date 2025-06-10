@@ -3,11 +3,9 @@ import cookieSession from 'cookie-session'
 import { v4 as uuidv4 } from 'uuid'
 
 import routes from '../index'
-import nunjucksSetup from '../../utils/nunjucksSetup'
-import * as auth from '../../authentication/auth'
+import nunjucksSetup from '../../middleware/nunjucks/nunjucksSetup'
 import { requestServices, Services } from '../../services'
 import type { ApplicationInfo } from '../../applicationInfo'
-import AuditService from '../../services/auditService'
 import setupRequestServices from '../../middleware/setupRequestServices'
 import setupNotFoundRoute from '../not-found/routes'
 import setupErrorRoute from '../error/routes'
@@ -20,6 +18,7 @@ const testAppInfo: ApplicationInfo = {
   gitRef: 'long ref',
   gitShortHash: 'short ref',
   branchName: 'main',
+  productId: '123',
 }
 
 export const user = {
@@ -66,15 +65,12 @@ function appSetup(services: Services, production: boolean, userSupplier: () => E
 
 export function appWithAllRoutes({
   production = false,
-  services = {
-    auditService: new AuditService(null) as jest.Mocked<AuditService>,
-  },
+  services = {},
   userSupplier = () => user,
 }: {
   production?: boolean
   services?: Partial<Services>
   userSupplier?: () => Express.User
 }): Express {
-  auth.default.authenticationMiddleware = () => (req, res, next) => next()
   return appSetup(services as Services, production, userSupplier)
 }

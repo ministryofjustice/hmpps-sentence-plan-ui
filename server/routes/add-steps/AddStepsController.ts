@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import locale from './locale.json'
 import URLs from '../URLs'
-import { toKebabCase } from '../../utils/utils'
+import { goalStatusToTabName, toKebabCase } from '../../utils/utils'
 import validateRequest from '../../middleware/validationMiddleware'
 import AddStepsPostModel, { StepModel } from './models/AddStepsPostModel'
 import transformRequest from '../../middleware/transformMiddleware'
@@ -9,6 +9,11 @@ import { StepStatus } from '../../@types/StepType'
 import { NewGoal } from '../../@types/NewGoalType'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
 import { AccessMode } from '../../@types/Handover'
+import { HttpError } from '../../utils/HttpError'
+import { areaConfigs } from '../../utils/assessmentAreaConfig.json'
+import { AssessmentAreaConfig } from '../../@types/Assessment'
+import { getAssessmentDetailsForArea } from '../../utils/assessmentUtils'
+import { AuditEvent } from '../../services/auditService'
 
 export default class AddStepsController {
   private render = async (req: Request, res: Response, next: NextFunction) => {
@@ -19,6 +24,20 @@ export default class AddStepsController {
       const goal = await req.services.goalService.getGoal(req.params.uuid)
       const steps = await req.services.stepService.getSteps(req.params.uuid)
       const returnLink = req.services.sessionService.getReturnLink() ?? `${URLs.PLAN_OVERVIEW}?type=${type}`
+      const planUuid = req.services.sessionService.getPlanUUID()
+      const plan = await req.services.planService.getPlanByUuid(planUuid)
+
+      const criminogenicNeedsData = req.services.sessionService.getCriminogenicNeeds()
+
+      // get assessment data or swallow the service error and set to null so the template knows this data is missing
+      const assessmentDetailsForArea = await req.services.assessmentService
+        .getAssessmentByUuid(planUuid)
+        .then(assessmentResponse => {
+          const assessmentData = assessmentResponse.sanAssessmentData
+          const areaConfig: AssessmentAreaConfig = areaConfigs.find(config => config.area === goal.areaOfNeed.name)
+          return getAssessmentDetailsForArea(criminogenicNeedsData, areaConfig, assessmentData)
+        })
+        .catch((): null => null)
 
       if (!req.body.steps || req.body.steps.length === 0) {
         req.body.steps = steps.map(step => ({
@@ -31,16 +50,18 @@ export default class AddStepsController {
       return res.render('pages/add-steps', {
         locale: locale.en,
         data: {
+          planAgreementStatus: plan.agreementStatus,
           goal,
           popData,
           areaOfNeed: toKebabCase(goal.areaOfNeed.name),
+          assessmentDetailsForArea,
           returnLink,
           form: req.body,
         },
         errors,
       })
     } catch (e) {
-      return next(e)
+      return next(HttpError(500, e.message))
     }
   }
 
@@ -58,13 +79,18 @@ export default class AddStepsController {
     try {
       await req.services.stepService.saveAllSteps(goalData, req.params.uuid)
 
-      // TODO: this is wrong... we should be able to add steps only, or add steps after adding a (current or future) goal, and get a success banner...
-      const link = req.services.sessionService.getReturnLink() ?? `${URLs.PLAN_OVERVIEW}?status=success`
-      req.services.sessionService.setReturnLink(null)
+      await req.services.auditService.send(AuditEvent.ADD_OR_CHANGE_STEPS, { goalUUID: req.params.uuid })
+
+      const type = goalStatusToTabName(req.body.goalStatus)
+
+      const link =
+        req.services.sessionService.getReturnLink() === `/change-goal/${req.params.uuid}/`
+          ? `${URLs.PLAN_OVERVIEW}?type=${type}`
+          : req.services.sessionService.getReturnLink()
 
       return res.redirect(link)
     } catch (e) {
-      return next(e)
+      return next(HttpError(500, e.message))
     }
   }
 
@@ -88,11 +114,27 @@ export default class AddStepsController {
     return next()
   }
 
+  private handleClearStep = (req: Request, res: Response, next: NextFunction) => {
+    if (req.body.action.startsWith('clear-step-')) {
+      const defaultStepValue = {
+        actor: 'Choose someone',
+        description: '',
+        status: StepStatus.NOT_STARTED,
+      }
+
+      req.body.steps.splice(0, 1, defaultStepValue)
+
+      return this.render(req, res, next)
+    }
+
+    return next()
+  }
+
   private handleAddStep = (req: Request, res: Response, next: NextFunction) => {
     if (req.body.action === 'add-step') {
       delete req.body.action
       req.body.steps.push({
-        actor: req.services.sessionService.getSubjectDetails().givenName,
+        actor: 'Choose someone',
         description: '',
         status: StepStatus.NOT_STARTED,
       })
@@ -117,6 +159,7 @@ export default class AddStepsController {
       body: AddStepsPostModel,
     }),
     this.handleRemoveStep,
+    this.handleClearStep,
     this.handleAddStep,
     validateRequest(),
     this.handleValidationErrors,

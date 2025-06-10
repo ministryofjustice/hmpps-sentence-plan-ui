@@ -1,5 +1,9 @@
 {% extends "../partials/layout.njk" %}
 
+{% set locale = interpolate(locale, {
+  oasysReturnUrl: data.oasysReturnUrl
+}) %}
+
 {% block pageTitle %}
   {{ locale.page.title }}
 {% endblock %}
@@ -11,7 +15,9 @@
 {% endblock %}
 
 {% block content %}
-  <div class="govuk-grid-row">
+  {{ super() }}
+
+  <div class="govuk-grid-row govuk-!-margin-top-4">
     <div class="govuk-grid-column-two-thirds">
       <h1 class="govuk-heading-l">{{ locale.mainHeading.title }}</h1>
       {% for suggestion in locale.suggestions %}

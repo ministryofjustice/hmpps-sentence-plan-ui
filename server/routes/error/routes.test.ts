@@ -9,6 +9,7 @@ import localeUnauthorized from './locale-unauthorized.json'
 import localeForbidden from './locale-forbidden.json'
 import localeBadRequest from './locale-bad-request.json'
 import localeServiceFault from './locale-service-fault.json'
+import testPlan from '../../testutils/data/planData'
 
 const mockGet = jest.fn()
 const mockPost = jest.fn()
@@ -16,6 +17,9 @@ const mockPost = jest.fn()
 jest.mock('../../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
     getSubjectDetails: jest.fn().mockReturnValue(handoverData.subject),
+    getOasysReturnUrl: jest.fn().mockReturnValue(handoverData.principal.returnUrl),
+    getPlanUUID: jest.fn().mockReturnValue(testPlan.uuid),
+    getPlanVersionNumber: jest.fn().mockReturnValue(null),
   }))
 })
 

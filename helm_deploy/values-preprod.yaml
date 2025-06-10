@@ -5,10 +5,10 @@ generic-service:
   replicaCount: 2
 
   ingress:
-    host: hmpps-sentence-plan-ui-preprod.hmpps.service.justice.gov.uk
+    host: sentence-plan-preprod.hmpps.service.justice.gov.uk
 
   env:
-    INGRESS_URL: "https://hmpps-sentence-plan-ui-preprod.hmpps.service.justice.gov.uk"
+    INGRESS_URL: "https://sentence-plan-preprod.hmpps.service.justice.gov.uk"
     SENTENCE_PLAN_API_URL: "https://sentence-plan-api-preprod.hmpps.service.justice.gov.uk"
     HMPPS_AUTH_URL: "https://sign-in-preprod.hmpps.service.justice.gov.uk/auth"
     HMPPS_ARNS_HANDOVER_URL: "https://arns-handover-service-preprod.hmpps.service.justice.gov.uk"
@@ -16,6 +16,10 @@ generic-service:
     COORDINATOR_API_URL: "https://arns-coordinator-api-preprod.hmpps.service.justice.gov.uk"
     TOKEN_VERIFICATION_API_URL: "https://token-verification-api-preprod.prison.service.justice.gov.uk"
     ENVIRONMENT_NAME: PRE-PRODUCTION
+
+  namespace_secrets:
+    hmpps-sentence-plan-ui-feedback-url:
+      FEEDBACK_URL: "FEEDBACK_URL"
 
 generic-prometheus-alerts:
   alertSeverity: hmpps-sentence-plan-notifications

@@ -14,13 +14,15 @@
                         noteDate: note.createdDate | formatSimpleDate,
                         noteAuthor: note.practitionerName | convertToTitleCase
                     }) %}
-                    <h4>{{ locale.noteHeading }}</h4>
+                    <label class="govuk-heading-s">{{ locale.noteHeading }}</label>
                     {% if note.type == "ACHIEVED" %}
-                        <p>{{ locale.goalAchievedNote }}</p>
+                        <p class="goal-status">{{ locale.goalAchievedNote }}</p>
                     {% elif note.type == "REMOVED" %}
-                        <p>{{ locale.goalRemovedNote }}</p>
+                      <p class="goal-status">{{ locale.goalRemovedNote }}</p>
+                      {% elif note.type == "READDED" %}
+                      <p class="goal-status">{{ locale.goalReAddedNote }}</p>
                     {% endif %}
-                    <p>{{ note.note }}</p>
+                    <p class="goal-note">{{ note.note }}</p>
                 {% endfor %}
             {% else %}
                 <p>{{ params.locale.common.noteList.noGoalNotes }}</p>

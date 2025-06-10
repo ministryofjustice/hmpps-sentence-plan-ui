@@ -1,8 +1,8 @@
 {
   "en": {
     "page": {
-      "title": "Remove a goal - {{ applicationName }}",
-      "errorTitle": "Error: Remove a goal - {{ applicationName }}"
+      "title": "Confirm you want to remove this goal - {{ applicationName }}",
+      "errorTitle": "Error: Confirm you want to remove this goal - {{ applicationName }}"
     },
     "mainHeading": {
       "title": "Confirm you want to remove this goal"

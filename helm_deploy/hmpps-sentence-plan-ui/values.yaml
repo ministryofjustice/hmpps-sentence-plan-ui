@@ -1,5 +1,6 @@
 generic-service:
   nameOverride: hmpps-sentence-plan-ui
+  serviceAccountName: hmpps-sentence-plan
   productId: "hmpps-sentence-plan-notifications" # productId for the product that this belongs too, i.e. DPS001, see README.md for details
 
   # the IRSA service account name for accessing AWS resources
@@ -8,7 +9,7 @@ generic-service:
   replicaCount: 4
 
   image:
-    repository: quay.io/hmpps/hmpps-sentence-plan-ui
+    repository: ghcr.io/ministryofjustice/hmpps-sentence-plan-ui
     tag: app_version # override at deployment time
     port: 3000
 
@@ -31,12 +32,6 @@ generic-service:
     httpGet:
       path: /ping
 
-  custommetrics:
-    enabled: true
-    scrapeInterval: 15s
-    metricsPath: /metrics
-    metricsPort: 3001
-
   # Environment variables to load into the deployment
   env:
     NODE_ENV: "production"
@@ -45,8 +40,8 @@ generic-service:
     TOKEN_VERIFICATION_ENABLED: "true"
     APPLICATIONINSIGHTS_CONNECTION_STRING: "InstrumentationKey=$(APPINSIGHTS_INSTRUMENTATIONKEY);IngestionEndpoint=https://northeurope-0.in.applicationinsights.azure.com/;LiveEndpoint=https://northeurope.livediagnostics.monitor.azure.com/"
     AUDIT_SQS_REGION: "eu-west-2"
-    AUDIT_SERVICE_NAME: "UNASSIGNED" # Your audit service name
-    AUDIT_ENABLED: "false"
+    AUDIT_SERVICE_NAME: "hmpps-sentence-plan-ui"
+    AUDIT_ENABLED: "true"
 
   # Pre-existing kubernetes secrets to load as environment variables in the deployment.
   # namespace_secrets:
@@ -66,9 +61,9 @@ generic-service:
     elasticache-redis:
       REDIS_HOST: "primary_endpoint_address"
       REDIS_AUTH_TOKEN: "auth_token"
-    #sqs-hmpps-audit-secret:
-    #  AUDIT_SQS_QUEUE_URL: "sqs_queue_url"
-    #  AUDIT_SQS_QUEUE_NAME: "sqs_queue_name"
+    hmpps-sqs-audit-queue:
+      AUDIT_SQS_QUEUE_URL: "sqs_queue_url"
+      AUDIT_SQS_QUEUE_NAME: "sqs_queue_name"
 
   allowlist:
     groups:

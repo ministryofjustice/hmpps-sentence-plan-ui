@@ -17,9 +17,12 @@
       "deletedGoal": "You deleted a goal from {{ subject.possessiveName }} plan",
       "achievedGoal": "Congratulations on achieving a goal, {{ subject.givenName }}"
     },
-    "agreePlan": "{{ subject.givenName }} agreed to their plan on {{ plan.agreementDate }}",
-    "notAgreePlan": "Plan created on {{ plan.createdDate }}",
-    "lastUpdatedPlan": "Last updated on {{ plan.updatedDate }} by {{ plan.updatedBy }}",
+    "agreePlan": "{{ subject.givenName }} agreed to their plan on {{ plan.agreementDate }}.",
+    "couldNotAgreePlanLink": "Update {{ subject.possessiveName }} agreement",
+    "couldNotAgreePlan": "when you've shared the plan with them.",
+    "notAgreePlan": "Plan created on {{ plan.createdDate }}.",
+    "lastUpdatedPlan": "Last updated on {{ plan.mostRecentUpdateDate }} by {{ plan.mostRecentUpdateByName }}.",
+    "viewPlanHistory": "View plan history",
     "subNavigation": {
       "currentGoals": "Goals to work on now ({{ goalCounts.currentGoals }})",
       "futureGoals": "Future goals ({{ goalCounts.futureGoals }})",
@@ -64,7 +67,7 @@
     },
     "errors": {
       "steps": {
-        "arrayNotEmpty": "You must add steps to the goals {{ subject.givenName }} is working on now"
+        "arrayNotEmpty": "Add steps to '{{ goalTitle }}'"
       },
       "goals": {
         "arrayNotEmpty": "To agree the plan, create a goal to work on now"

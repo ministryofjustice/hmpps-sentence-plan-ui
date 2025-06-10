@@ -1,8 +1,8 @@
 import * as govukFrontend from 'govuk-frontend'
 import * as mojFrontend from '@ministryofjustice/frontend'
-import './datepicker.js'
+import * as hmrcFrontend from 'hmrc-frontend/hmrc/all'
 import './autocomplete/goal-autocomplete'
-import './autocomplete/step-autocomplete'
 
 govukFrontend.initAll()
 mojFrontend.initAll()
+hmrcFrontend.initAll()

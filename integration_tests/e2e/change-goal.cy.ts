@@ -1,6 +1,7 @@
 import { faker } from '@faker-js/faker'
 import { NewGoal } from '../../server/@types/NewGoalType'
 import { PlanType } from '../../server/@types/PlanType'
+import { AccessMode } from '../../server/@types/Handover'
 
 describe('Change a goal', () => {
   const goalData: NewGoal = {
@@ -20,7 +21,7 @@ describe('Change a goal', () => {
   describe('Security', () => {
     it('Should display authorisation error if user does not have READ_WRITE role', () => {
       cy.get<string>('@oasysAssessmentPk').then(oasysAssessmentPk => {
-        cy.openSentencePlan(oasysAssessmentPk, 'READ_ONLY')
+        cy.openSentencePlan(oasysAssessmentPk, { accessMode: AccessMode.READ_ONLY })
       })
 
       cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
@@ -29,11 +30,21 @@ describe('Change a goal', () => {
         })
 
         cy.get('.govuk-body').should('contain', 'You do not have permission to perform this action')
+        cy.checkAccessibility(true, ['scrollable-region-focusable'])
       })
     })
   })
 
   describe('Rendering', () => {
+    it('Has a feedback link', () => {
+      cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
+        cy.addGoalToPlan(plan.uuid, goalData).then(goal => {
+          cy.visit(`/change-goal/${goal.uuid}`)
+          cy.hasFeedbackLink()
+        })
+      })
+    })
+
     it('Change goal page populated correctly', () => {
       // Add goal and access change-goal page
       cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
@@ -43,6 +54,7 @@ describe('Change a goal', () => {
       })
 
       cy.get('.govuk-back-link').should('have.attr', 'href', '/plan?type=current')
+      cy.get('.moj-primary-navigation__container').should('not.contain', `Plan history`)
 
       // Check goal data is populated correctly
       cy.contains('#goal-input-autocomplete__option--0', goalData.title)
@@ -51,6 +63,7 @@ describe('Change a goal', () => {
       cy.get('input[value="Health and wellbeing"]').should('be.checked')
       cy.get('input[name="start-working-goal-radio"]').should('be.checked').and('have.value', 'yes')
       cy.get('#date-selection-radio-2').should('be.checked')
+      cy.checkAccessibility()
     })
   })
 
@@ -80,6 +93,7 @@ describe('Change a goal', () => {
       cy.title().should('contain', 'Error:')
 
       cy.get('.govuk-back-link').should('have.attr', 'href', '/plan?type=current')
+      cy.checkAccessibility()
     })
   })
 
@@ -99,13 +113,16 @@ describe('Change a goal', () => {
       cy.get('input[value="Alcohol use"]').check()
 
       cy.contains('button', 'save').click()
-      cy.url().should('include', 'plan?status=updated&type=current')
+      cy.url().should('include', 'plan?status=changed&type=current')
+      cy.get(".moj-sub-navigation__list a[aria-current='page']").should('have.attr', 'href', '/plan?type=current')
 
       // Check goal data is saved and rendered correctly
       cy.get('.goal-summary-card')
         .should('contain', 'some goal')
         .and('contain', `Area of need: ${goalData.areaOfNeed.toLowerCase()}`)
-        .and('contain', 'Also relates to: alcohol use, employment and education, health and wellbeing')
+        .and('contain', 'Also relates to: alcohol use; employment and education; health and wellbeing')
+
+      cy.checkAccessibility()
     })
 
     it('Should change goal with NO related areas of need', () => {
@@ -113,10 +130,13 @@ describe('Change a goal', () => {
       cy.get('#related-area-of-need-radio-2').check()
 
       cy.contains('button', 'save').click()
-      cy.url().should('include', 'plan?status=updated&type=current')
+      cy.url().should('include', 'plan?status=changed&type=current')
+      cy.get(".moj-sub-navigation__list a[aria-current='page']").should('have.attr', 'href', '/plan?type=current')
 
       // Check goal data is saved and rendered correctly
       cy.get('.goal-summary-card').and('not.contain', 'Also relates to:')
+
+      cy.checkAccessibility()
     })
 
     it('Should change goal with related areas of need', () => {
@@ -125,10 +145,13 @@ describe('Change a goal', () => {
       cy.get('input[value="Health and wellbeing"]').uncheck()
 
       cy.contains('button', 'save').click()
-      cy.url().should('include', 'plan?status=updated&type=current')
+      cy.url().should('include', 'plan?status=changed&type=current')
+      cy.get(".moj-sub-navigation__list a[aria-current='page']").should('have.attr', 'href', '/plan?type=current')
 
       // Check goal data is saved and rendered correctly
       cy.get('.goal-summary-card').and('contain', 'Also relates to: employment and education')
+
+      cy.checkAccessibility()
     })
 
     it('Should change goal with standard date', () => {
@@ -136,7 +159,10 @@ describe('Change a goal', () => {
       cy.get('.govuk-radios').contains('In 6 months').click()
 
       cy.contains('button', 'save').click()
-      cy.url().should('include', 'plan?status=updated&type=current')
+      cy.url().should('include', 'plan?status=changed&type=current')
+      cy.get(".moj-sub-navigation__list a[aria-current='page']").should('have.attr', 'href', '/plan?type=current')
+
+      cy.checkAccessibility()
     })
 
     it('Should change goal with standard date and related areas of need are retained', () => {
@@ -144,8 +170,11 @@ describe('Change a goal', () => {
       cy.get('.govuk-radios').contains('In 6 months').click()
 
       cy.contains('button', 'save').click()
-      cy.url().should('include', 'plan?status=updated&type=current')
+      cy.url().should('include', 'plan?status=changed&type=current')
+      cy.get(".moj-sub-navigation__list a[aria-current='page']").should('have.attr', 'href', '/plan?type=current')
       cy.get('.goal-summary-card').and('contain', 'Also relates to: health and wellbeing')
+
+      cy.checkAccessibility()
     })
 
     it('Should change goal with custom date', () => {
@@ -158,7 +187,10 @@ describe('Change a goal', () => {
       cy.get('.govuk-radios').contains('Set another date').click()
       cy.get('#date-selection-custom').type(date)
       cy.contains('button', 'save').click()
-      cy.url().should('include', 'plan?status=updated&type=current')
+      cy.url().should('include', 'plan?status=changed&type=current')
+      cy.get(".moj-sub-navigation__list a[aria-current='page']").should('have.attr', 'href', '/plan?type=current')
+
+      cy.checkAccessibility()
     })
 
     it('Should change goal with future date', () => {
@@ -166,10 +198,15 @@ describe('Change a goal', () => {
       cy.get('.govuk-radios').contains('No, it is a future goal').click()
 
       cy.contains('button', 'save').click()
-      cy.url().should('include', 'plan?status=updated&type=future')
+
+      cy.url().should('include', 'plan?status=changed&type=future')
+      cy.get(".moj-sub-navigation__list a[aria-current='page']").should('have.attr', 'href', '/plan?type=future')
 
       // Check goal data is saved and rendered correctly
       cy.get('.moj-sub-navigation').and('contain', 'Future goals (1)')
+      cy.get('.back-to-top-link').should('have.attr', 'href', '#top')
+
+      cy.checkAccessibility()
     })
 
     it('Should display error if goal title is too long', () => {
@@ -184,6 +221,20 @@ describe('Change a goal', () => {
       cy.get('.govuk-error-summary').should('contain', 'Goal must be 4,000 characters or less')
       cy.get('#goal-input-error').should('contain', 'Goal must be 4,000 characters or less')
       cy.get('#goal-input-autocomplete').invoke('val').should('contain', lorem)
+
+      cy.checkAccessibility()
+    })
+  })
+
+  describe('Back behaviour', () => {
+    it('should go back to delete goal page if we came from the delete goal page', () => {
+      cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
+        cy.addGoalToPlan(plan.uuid, goalData).then(goal => {
+          cy.visit(`/confirm-delete-goal/${goal.uuid}`)
+        })
+      })
+      cy.contains('a', 'change the goal').click()
+      cy.get('.govuk-back-link').should('have.attr', 'href').and('include', '/confirm-delete-goal/')
     })
   })
 })

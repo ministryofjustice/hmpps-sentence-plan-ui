@@ -3,7 +3,6 @@ import request from 'supertest'
 import { appWithAllRoutes } from '../testutils/appSetup'
 import testPopData from '../../testutils/data/popData'
 import ReferentialDataService from '../../services/sentence-plan/referentialDataService'
-import { roSHData } from '../../testutils/data/roshData'
 import handoverData from '../../testutils/data/handoverData'
 import { testGoal } from '../../testutils/data/goalData'
 import testPlan, { agreedTestPlan } from '../../testutils/data/planData'
@@ -15,6 +14,7 @@ const mockSessionService = jest.fn().mockImplementation(() => ({
   getPrincipalDetails: jest.fn().mockReturnValue(handoverData.principal),
   getAccessMode: jest.fn().mockReturnValue('READ_WRITE'),
   getReturnLink: jest.fn().mockReturnValue(''),
+  setReturnLink: jest.fn(),
 }))
 
 jest.mock('../../services/sessionService', () => {
@@ -24,7 +24,6 @@ jest.mock('../../services/sessionService', () => {
 jest.mock('../../services/sentence-plan/infoService', () => {
   return jest.fn().mockImplementation(() => ({
     getPopData: jest.fn().mockResolvedValue(testPopData),
-    getRoSHData: jest.fn().mockResolvedValue(roSHData),
   }))
 })
 

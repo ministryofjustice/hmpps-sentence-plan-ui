@@ -1,4 +1,4 @@
-FROM node:20-bullseye-slim as base
+FROM node:22.14-alpine3.20 AS base
 
 ARG BUILD_NUMBER
 ARG GIT_REF
@@ -9,8 +9,8 @@ LABEL maintainer="HMPPS Digital Studio <info@digital.justice.gov.uk>"
 ENV TZ=Europe/London
 RUN ln -snf "/usr/share/zoneinfo/$TZ" /etc/localtime && echo "$TZ" > /etc/timezone
 
-RUN addgroup --gid 2000 --system appgroup && \
-    adduser --uid 2000 --system appuser --gid 2000
+RUN addgroup -g 2000 --system appgroup && \
+    adduser -u 2000 --system appuser -G appgroup
 
 WORKDIR /app
 
@@ -24,22 +24,20 @@ ENV BUILD_NUMBER=${BUILD_NUMBER}
 ENV GIT_REF=${GIT_REF}
 ENV GIT_BRANCH=${GIT_BRANCH}
 
-RUN apt-get update && \
-    apt-get upgrade -y && \
-    apt-get autoremove -y && \
-    apt-get install -y make python g++ curl && \
-    rm -rf /var/lib/apt/lists/*
+RUN apk --update-cache upgrade --available \
+  && apk --no-cache add tzdata make \
+  && rm -rf /var/cache/apk/*
 
-FROM base as development
 ARG BUILD_NUMBER
 ARG GIT_REF
 ARG GIT_BRANCH
 
+FROM base AS development
 ENV BUILD_NUMBER ${BUILD_NUMBER}
 ENV GIT_REF ${GIT_REF}
 ENV NODE_ENV='development'
 
-FROM base as build
+FROM base AS build
 ARG BUILD_NUMBER
 ARG GIT_REF
 ARG GIT_BRANCH
@@ -54,7 +52,7 @@ FROM base AS production
 COPY --from=build --chown=appuser:appgroup /app/package.json /app/package-lock.json ./
 COPY --from=build --chown=appuser:appgroup /app/dist ./dist
 COPY --from=build --chown=appuser:appgroup /app/node_modules ./node_modules
-EXPOSE 3000 3001
+EXPOSE 3000
 ENV NODE_ENV='production'
 USER 2000
 CMD ["npm", "start"]

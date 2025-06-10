@@ -15,12 +15,17 @@ async function getGoalOptionsByAreaOfNeed(areaOfNeed) {
 }
 
 async function initializeGoalInputAutocomplete() {
-  const areaOfNeed = document.querySelector(`#${AREA_OF_NEED_INPUT_ID}`)?.value
+  const areaOfNeedElement = document.querySelector(`#${AREA_OF_NEED_INPUT_ID}`)
+  const areaOfNeed = areaOfNeedElement ? areaOfNeedElement.value : undefined
   const source = await getGoalOptionsByAreaOfNeed(areaOfNeed)
   const wrapperElement = document.querySelector(`.${GOAL_AUTOCOMPLETE_WRAPPER_CLASS}`)
   const inputElement = document.querySelector(`#${GOAL_INPUT_ID}`)
-  const defaultValue = inputElement?.value ?? ''
+  const defaultValue = inputElement ? inputElement.value : ''
   inputElement.remove()
+
+  // Update label for the autocomplete input
+  const label = document.querySelector('label[for="goal-input"]')
+  label.setAttribute('for', `${GOAL_INPUT_ID}-autocomplete`)
 
   accessibleAutocomplete({
     element: wrapperElement,

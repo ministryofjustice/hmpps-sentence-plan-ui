@@ -3,28 +3,38 @@ import { plainToInstance } from 'class-transformer'
 import locale from './locale.json'
 import URLs from '../URLs'
 import validateRequest, { getValidationErrors } from '../../middleware/validationMiddleware'
-import PlanModel from '../shared-models/PlanModel'
+import PlanReadyForAgreementModel from '../shared-models/PlanReadyForAgreementModel'
 import transformRequest from '../../middleware/transformMiddleware'
 import AgreePlanPostModel from './models/AgreePlanPostModel'
 import { PlanAgreementStatus } from '../../@types/PlanType'
 import { PlanAgreement } from '../../@types/PlanAgreement'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
 import { AccessMode } from '../../@types/Handover'
+import { HttpError } from '../../utils/HttpError'
+import { AuditEvent } from '../../services/auditService'
 
 export default class AgreePlanController {
-  private render = async (req: Request, res: Response) => {
-    const { errors } = req
+  private render = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { errors } = req
 
-    const returnLink = req.services.sessionService.getReturnLink()
+      const returnLink = req.services.sessionService.getReturnLink()
 
-    return res.render('pages/agree-plan', {
-      locale: locale.en,
-      data: {
-        returnLink,
-        form: req.body,
-      },
-      errors,
-    })
+      const planUuid = req.services.sessionService.getPlanUUID()
+      const plan = await req.services.planService.getPlanByUuid(planUuid)
+
+      return res.render('pages/agree-plan', {
+        locale: locale.en,
+        data: {
+          planAgreementStatus: plan.agreementStatus,
+          returnLink,
+          form: req.body,
+        },
+        errors,
+      })
+    } catch (e) {
+      return next(HttpError(500, e.message))
+    }
   }
 
   private agreePlanAndRedirect = async (req: Request, res: Response, next: NextFunction) => {
@@ -55,6 +65,7 @@ export default class AgreePlanController {
     try {
       const planUuid = req.services.sessionService.getPlanUUID()
       await req.services.planService.agreePlan(planUuid, agreement as PlanAgreement)
+      await req.services.auditService.send(AuditEvent.AGREE_PLAN, { agreementStatus: agreement.agreementStatus })
 
       return res.redirect(`${URLs.PLAN_OVERVIEW}`)
     } catch (e) {
@@ -66,7 +77,7 @@ export default class AgreePlanController {
     try {
       const planUuid = req.services.sessionService.getPlanUUID()
       const plan = await req.services.planService.getPlanByUuid(planUuid)
-      const domainErrors = getValidationErrors(plainToInstance(PlanModel, plan)) ?? {}
+      const domainErrors = getValidationErrors(plainToInstance(PlanReadyForAgreementModel, plan)) ?? {}
 
       if (plan.agreementStatus !== PlanAgreementStatus.DRAFT) {
         domainErrors.plan = {
@@ -80,7 +91,7 @@ export default class AgreePlanController {
 
       return next()
     } catch (e) {
-      return next(e)
+      return next(HttpError(500, e.message))
     }
   }
 
@@ -89,7 +100,7 @@ export default class AgreePlanController {
 
     if (hasErrors) {
       if (req.method === 'POST') {
-        return this.render(req, res)
+        return this.render(req, res, next)
       }
 
       return res.redirect(URLs.PLAN_OVERVIEW)

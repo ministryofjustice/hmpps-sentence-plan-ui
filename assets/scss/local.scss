@@ -1,5 +1,9 @@
 .capital:first-letter {text-transform: uppercase}
 
+a {
+  @extend .govuk-link--no-visited-state
+}
+
 .govuk-visually-hidden {
   &--mobile {
     @include govuk-media-query($until: tablet) {
@@ -25,10 +29,8 @@
 }
 
 .plan-navigation {
-  .moj-sub-navigation__list {
-    & > *:last-child {
-      float: right;
-    }
+  .moj-sub-navigation__list > li:has(> a[href="/plan?type=removed"]) {
+    float: right;
   }
 }
 .sp-badge {
@@ -49,9 +51,12 @@
   bottom: 25px
 }
 
-
 .govuk-margin-top--60 {
   margin-top: 60px!important;
+}
+
+.app-container {
+  padding-top: 0;
 }
 
 .sp-accordion-header {
@@ -85,4 +90,47 @@
   overflow: auto;
   background-color: govuk-colour('light-grey');
   @include govuk-responsive-padding(4);
+}
+
+.sentence-info .single-sentence .govuk-table__cell {
+  border-bottom: 0;
+}
+
+.assessment-score {
+  @include govuk-responsive-margin(6, "bottom");
+}
+
+@include govuk-media-query($until: tablet) {
+  .update-goal-table {
+    border-collapse: separate !important; /* Prevents double borders in some browsers */
+
+    .govuk-table__head {
+      display: none;
+    }
+
+    .govuk-table__row {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      border-bottom: 1px solid #b1b4b6;
+      padding: 0.5em 0;
+    }
+
+    .govuk-table__header, .govuk-table__cell {
+      display: block;
+      width: 100%;
+      border: none !important;
+      text-align: left;
+      padding: 0.5em 0;
+    }
+
+    .govuk-table__cell {
+      &::before {
+        content: attr(data-header);
+        font-weight: bold;
+        display: block;
+        margin-bottom: 0.5em;
+      }
+    }
+  }
 }
