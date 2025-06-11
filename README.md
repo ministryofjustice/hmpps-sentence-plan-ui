@@ -51,5 +51,9 @@ You can connect to the remote debugger session on http://localhost:9229 like so
 ### Testing
 The test suite can be run using `make test`
 
+### Visual Regression Testing
+Visual Regression Testing for UI snapshot verification can be run using `make vrt-ci`.
+To visually inspect these snapshots, verify UI states and update locally, this can be run using `make vrt`.
+
 ### Linting
 Linting can be run using `make lint` and `make lint-fix`

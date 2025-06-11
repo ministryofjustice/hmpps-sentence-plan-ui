@@ -38,7 +38,7 @@ test: ## Runs the unit test suite.
 	@make install-node-modules
 	docker compose ${DEV_COMPOSE_FILES} run --rm --no-deps ui npm run test
 
-vrt: ## Run the snapshot Visual Regression Test UI locally. This allows for snapshots to be visually compared and updated.
+vrt: ## Run the snapshot Visual Regression Test UI locally. This allows for snapshots to be visually compared and updated manually.
 	@make install-node-modules
 	npx cypress-image-diff-html-report start
 
