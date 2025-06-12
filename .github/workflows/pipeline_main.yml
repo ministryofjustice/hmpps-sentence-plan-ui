@@ -49,6 +49,12 @@ jobs:
       docker_multiplatform: false
       upload_image_artifact: true
 
+  visual_regression_test:
+    needs: [build_docker]
+    uses: visual_regression_test.yml
+    with:
+      app_version: ${{ needs.build_docker.outputs.app_version }}
+
   e2e_test:
     needs: [ build_docker ]
     strategy:
