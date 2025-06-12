@@ -200,7 +200,7 @@ describe('Visual comparison testing', () => {
       cy.compareSnapshot('agree-plan-cannot-agree-page')
     })
 
-    it ('Agree plan - subject cannot agree to plan error validation', () => {
+    it('Agree plan - subject cannot agree to plan error validation', () => {
       cy.get('#agree-plan-radio-4').click()
       cy.get('button').contains('Save').click()
       cy.compareSnapshot('agree-plan-cannot-agree-error-validation-page')
@@ -224,23 +224,23 @@ describe('Visual comparison testing', () => {
     })
 
     it('Plan history - base', () => {
-      cy.contains('a','Plan history').click()
+      cy.contains('a', 'Plan history').click()
       cy.compareSnapshot('plan-history-page')
     })
 
     it('Plan history - update goal', () => {
-      cy.contains('a','Update').click()
+      cy.contains('a', 'Update').click()
       cy.compareSnapshot('plan-history-update-goal-page')
     })
 
     it('Plan history - confirm achievement of goal', () => {
-      cy.contains('a','Update').click()
+      cy.contains('a', 'Update').click()
       cy.get('button').contains('Mark as achieved').click()
       cy.compareSnapshot('plan-history-confirm-achieved-goal-page')
     })
 
     it('Plan history - view achieved goal details', () => {
-      cy.contains('a','Update').click()
+      cy.contains('a', 'Update').click()
       cy.get('button').contains('Mark as achieved').click()
       cy.get('button').contains('Confirm').click()
       cy.contains('a', 'Achieved goals').click()
@@ -249,13 +249,13 @@ describe('Visual comparison testing', () => {
     })
 
     it('Plan history - remove goal from a plan', () => {
-      cy.contains('a','Update').click()
+      cy.contains('a', 'Update').click()
       cy.get('button').contains('Remove goal from plan').click()
       cy.compareSnapshot('plan-history-remove-goal-page')
     })
 
     it('Plan history - remove goal from a plan error validation', () => {
-      cy.contains('a','Update').click()
+      cy.contains('a', 'Update').click()
       cy.get('button').contains('Remove goal from plan').click()
       cy.get('button').contains('Confirm').click()
       cy.compareSnapshot('plan-history-remove-goal-error-validation-page')
