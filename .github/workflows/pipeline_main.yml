@@ -51,7 +51,7 @@ jobs:
 
   visual_regression_test:
     needs: [build_docker]
-    uses: visual_regression_test.yml
+    uses: ./.github/workflows/visual_regression_test.yml
     with:
       app_version: ${{ needs.build_docker.outputs.app_version }}
 
