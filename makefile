@@ -51,7 +51,7 @@ vrt-ci: ## Run the snapshot Visual Regression Tests in headless mode. Override t
 
 e2e: ## Run the end-to-end tests locally in the Cypress app. Override the default base URL with BASE_URL=...
 	@make install-node-modules
-	docker compose ${DEV_COMPOSE_FILES} up --no-recreate --wait
+	docker compose ${DEV_COMPOSE_FILES} up --quiet-pull --no-recreate --wait
 	npx cypress install
 	npx cypress open --e2e -c baseUrl=$(BASE_URL),experimentalInteractiveRunEvents=true
 
