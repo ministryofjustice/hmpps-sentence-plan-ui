@@ -35,6 +35,9 @@ jobs:
       - name: Run npm ci
         run: npm ci
 
+      - name: Stand up environment
+        run: make dev-up
+
       - name: Run visual regression testing
         run: make vrt-ci
 
