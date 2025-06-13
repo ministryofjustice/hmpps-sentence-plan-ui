@@ -138,6 +138,8 @@
     "cookie-session": "^2.1.0",
     "cypress": "^14.2.0",
     "cypress-axe": "^1.5.0",
+    "cypress-image-diff-html-report": "^2.2.0",
+    "cypress-image-diff-js": "^2.4.0",
     "cypress-multi-reporters": "^2.0.4",
     "cypress-split": "^1.24.8",
     "esbuild": "^0.25.0",

@@ -1,3 +1,4 @@
+import compareSnapshotCommand from 'cypress-image-diff-js/command'
 import {
   addGoalToPlan,
   addStepToGoal,
@@ -10,6 +11,8 @@ import {
 import { checkAccessibility } from './commands/accessibility'
 import 'cypress-axe'
 import { hasFeedbackLink } from './commands/feedback'
+
+compareSnapshotCommand()
 
 // Handover/Auth
 Cypress.Commands.add('openSentencePlan', openSentencePlan)
