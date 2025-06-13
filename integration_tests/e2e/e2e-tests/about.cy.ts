@@ -1,4 +1,4 @@
-import { AccessMode } from '../../server/@types/Handover'
+import { AccessMode } from '../../../server/@types/Handover'
 
 describe('Rendering About Person for READ_WRITE user', () => {
   beforeEach(() => {

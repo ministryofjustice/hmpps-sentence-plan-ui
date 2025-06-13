@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker'
-import { NewGoal } from '../../server/@types/NewGoalType'
-import { PlanType } from '../../server/@types/PlanType'
-import { AccessMode } from '../../server/@types/Handover'
+import { NewGoal } from '../../../server/@types/NewGoalType'
+import { PlanType } from '../../../server/@types/PlanType'
+import { AccessMode } from '../../../server/@types/Handover'
 
 describe('Change a goal', () => {
   const goalData: NewGoal = {

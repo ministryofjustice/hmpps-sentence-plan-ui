@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker'
-import CreateGoal from '../pages/create-goal'
-import { AccessMode } from '../../server/@types/Handover'
+import CreateGoal from '../../pages/create-goal'
+import { AccessMode } from '../../../server/@types/Handover'
 
 describe('Create a new Goal', () => {
   const createGoalPage = new CreateGoal()

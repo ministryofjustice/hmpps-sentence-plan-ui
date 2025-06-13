@@ -1,4 +1,4 @@
-import DataGenerator from '../support/DataGenerator'
+import DataGenerator from '../../support/DataGenerator'
 
 describe('OASys Return Button Rendering', () => {
   beforeEach(() => {

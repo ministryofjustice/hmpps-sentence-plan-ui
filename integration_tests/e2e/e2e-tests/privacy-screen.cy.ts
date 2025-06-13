@@ -1,5 +1,5 @@
-import { AccessMode } from '../../server/@types/Handover'
-import URLs from '../../server/routes/URLs'
+import { AccessMode } from '../../../server/@types/Handover'
+import URLs from '../../../server/routes/URLs'
 
 describe('Privacy Screen', () => {
   beforeEach(() => {

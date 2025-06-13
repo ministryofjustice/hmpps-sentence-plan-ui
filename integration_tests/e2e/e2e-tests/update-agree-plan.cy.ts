@@ -1,8 +1,8 @@
 import { faker } from '@faker-js/faker'
-import DataGenerator from '../support/DataGenerator'
-import { PlanType } from '../../server/@types/PlanType'
-import { AccessMode } from '../../server/@types/Handover'
-import PlanOverview from '../pages/plan-overview'
+import DataGenerator from '../../support/DataGenerator'
+import { PlanType } from '../../../server/@types/PlanType'
+import { AccessMode } from '../../../server/@types/Handover'
+import PlanOverview from '../../pages/plan-overview'
 
 describe('Update Agree plan', () => {
   beforeEach(() => {

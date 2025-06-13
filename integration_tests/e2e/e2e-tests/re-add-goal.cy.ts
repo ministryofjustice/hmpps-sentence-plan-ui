@@ -1,5 +1,5 @@
-import DataGenerator from '../support/DataGenerator'
-import { Goal } from '../../server/@types/GoalType'
+import DataGenerator from '../../support/DataGenerator'
+import { Goal } from '../../../server/@types/GoalType'
 
 describe('Re-add a goal to a Plan after it has been removed', () => {
   let removedGoal: Goal

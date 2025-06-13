@@ -1,6 +1,6 @@
-import { AccessMode } from '../../server/@types/Handover'
-import DataGenerator from '../support/DataGenerator'
-import { PlanType } from '../../server/@types/PlanType'
+import { AccessMode } from '../../../server/@types/Handover'
+import DataGenerator from '../../support/DataGenerator'
+import { PlanType } from '../../../server/@types/PlanType'
 
 describe('View Plan Overview for READ_ONLY user', () => {
   beforeEach(() => {

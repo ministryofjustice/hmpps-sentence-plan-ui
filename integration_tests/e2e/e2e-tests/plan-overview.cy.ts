@@ -1,6 +1,6 @@
-import PlanOverview from '../pages/plan-overview'
-import { PlanType } from '../../server/@types/PlanType'
-import DataGenerator from '../support/DataGenerator'
+import PlanOverview from '../../pages/plan-overview'
+import { PlanType } from '../../../server/@types/PlanType'
+import DataGenerator from '../../support/DataGenerator'
 
 describe('View Plan Overview for READ_WRITE user', () => {
   const planOverview = new PlanOverview()

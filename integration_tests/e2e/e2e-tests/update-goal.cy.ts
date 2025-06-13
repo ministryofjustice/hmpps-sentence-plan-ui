@@ -1,11 +1,11 @@
 import { faker } from '@faker-js/faker'
-import DataGenerator from '../support/DataGenerator'
-import { PlanType } from '../../server/@types/PlanType'
-import PlanOverview from '../pages/plan-overview'
-import UpdateGoal from '../pages/update-goal'
-import { Goal } from '../../server/@types/GoalType'
-import { NewGoal } from '../../server/@types/NewGoalType'
-import { AccessMode } from '../../server/@types/Handover'
+import DataGenerator from '../../support/DataGenerator'
+import { PlanType } from '../../../server/@types/PlanType'
+import PlanOverview from '../../pages/plan-overview'
+import UpdateGoal from '../../pages/update-goal'
+import { Goal } from '../../../server/@types/GoalType'
+import { NewGoal } from '../../../server/@types/NewGoalType'
+import { AccessMode } from '../../../server/@types/Handover'
 
 describe('Update goal', () => {
   beforeEach(() => {

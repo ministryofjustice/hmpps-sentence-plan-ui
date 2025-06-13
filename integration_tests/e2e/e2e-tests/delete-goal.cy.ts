@@ -1,9 +1,9 @@
-import { NewGoal } from '../../server/@types/NewGoalType'
-import { Goal } from '../../server/@types/GoalType'
-import DataGenerator from '../support/DataGenerator'
-import { PlanType } from '../../server/@types/PlanType'
-import { NewStep } from '../../server/@types/StepType'
-import { AccessMode } from '../../server/@types/Handover'
+import { NewGoal } from '../../../server/@types/NewGoalType'
+import { Goal } from '../../../server/@types/GoalType'
+import DataGenerator from '../../support/DataGenerator'
+import { PlanType } from '../../../server/@types/PlanType'
+import { NewStep } from '../../../server/@types/StepType'
+import { AccessMode } from '../../../server/@types/Handover'
 
 describe('Delete a goal from a Plan before it has been agreed', () => {
   beforeEach(() => {
