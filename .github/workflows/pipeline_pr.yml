@@ -44,9 +44,16 @@ jobs:
 
   visual_regression_test:
     needs: [build_docker]
+    strategy:
+      fail-fast: false
+      matrix:
+        containers: [ 1, 2, 3 ]
     uses: ./.github/workflows/visual_regression_test.yml
     with:
       app_version: ${{ needs.build_docker.outputs.app_version }}
+      job-index: ${{ strategy.job-index }}
+      job-total: ${{ strategy.job-total }}
+      matrix-container: ${{ matrix.containers }}
 
   e2e_test:
     needs: [build_docker]

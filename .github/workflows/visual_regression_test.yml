@@ -7,6 +7,21 @@ on:
         description: App version
         required: true
         type: string
+      job-index:
+        description: 'The index of the current job in the matrix'
+        required: false
+        type: number
+        default: 1
+      job-total:
+        description: 'The total number of jobs in the matrix'
+        required: false
+        type: number
+        default: 1
+      matrix-container:
+        description: 'The matrix container description'
+        required: false
+        type: number
+        default: 1
 
 jobs:
   visual_regression_test:
@@ -41,10 +56,13 @@ jobs:
 
       - name: Run visual regression testing
         run: make vrt-ci
+        env:
+          SPLIT: ${{ inputs.job-total }}
+          SPLIT_INDEX: ${{ inputs.job-index }}
 
       - name: Upload failed visual regression artifacts (if any)
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: 'cypress-screenshot-diffs'
-          path: 'cypress-image-diff-screenshots/diff'
+          name: vrt-screenshots_${{ inputs.matrix-container }}
+          path: 'cypress-image-diff-screenshots/comparison'
