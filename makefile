@@ -38,16 +38,13 @@ test: ## Runs the unit test suite.
 	@make install-node-modules
 	docker compose ${DEV_COMPOSE_FILES} run --rm --no-deps ui npm run test
 
-vrt: ## Run the snapshot Visual Regression Test UI locally. This allows for snapshots to be visually compared and updated manually.
-	@make install-node-modules
-	npx cypress-image-diff-html-report start
-
 BASE_URL ?= "http://localhost:3000"
-vrt-ci: ## Run the snapshot Visual Regression Tests in headless mode. Override the default base URL with BASE_URL=...
+vrt: ## Run the snapshot Visual Regression Tests locally and a UI; this allows for snapshots to be visually compared and updated manually.
 	@make install-node-modules
-	docker compose ${DEV_COMPOSE_FILES} up --no-recreate --wait
+	docker compose ${DEV_COMPOSE_FILES} up --quiet-pull --no-recreate --wait
 	npx cypress install
-	npx cypress run -c baseUrl=$(BASE_URL) -s 'integration_tests/e2e/visual-comparison.cy.ts'
+	npx cypress run -c baseUrl=${BASE_URL} -s 'integration_tests/e2e/visual-comparison.cy.ts'
+	npx cypress-image-diff-html-report start
 
 e2e: ## Run the end-to-end tests locally in the Cypress app. Override the default base URL with BASE_URL=...
 	@make install-node-modules
@@ -56,8 +53,11 @@ e2e: ## Run the end-to-end tests locally in the Cypress app. Override the defaul
 	npx cypress open --e2e -c baseUrl=$(BASE_URL),experimentalInteractiveRunEvents=true
 
 BASE_URL_CI ?= "http://ui:3000"
+vrt-ci: ## Run the snapshot Visual Regression Tests in headless mode. Used in CI. Override the default base URL with BASE_URL_CI=...
+	docker compose ${TEST_COMPOSE_FILES} -p ${PROJECT_NAME}-test run --quiet-pull --rm -e CYPRESS_BASE_URL=${BASE_URL_CI} cypress run -s 'integration_tests/e2e/visual-comparison.cy.ts'
+
 e2e-ci: ## Run the end-to-end tests in parallel in a headless browser. Used in CI. Override the default base URL with BASE_URL_CI=...
-	docker compose ${TEST_COMPOSE_FILES} -p ${PROJECT_NAME}-test run --quiet-pull --rm -e CYPRESS_BASE_URL=${BASE_URL_CI} -e SPLIT=${SPLIT} -e SPLIT_INDEX=${SPLIT_INDEX} cypress --browser edge --env split=true
+	docker compose ${TEST_COMPOSE_FILES} -p ${PROJECT_NAME}-test run --quiet-pull --rm -e CYPRESS_BASE_URL=${BASE_URL_CI} -s 'integration_tests/e2e/' -e SPLIT=${SPLIT} -e SPLIT_INDEX=${SPLIT_INDEX} cypress --browser edge --env split=true
 
 test-up: ## Stands up a test environment.
 	docker compose --progress plain ${LOCAL_COMPOSE_FILES} pull --quiet --policy missing
