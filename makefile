@@ -43,7 +43,7 @@ vrt: ## Run the snapshot Visual Regression Tests locally and a UI; this allows f
 	@make install-node-modules
 	docker compose ${DEV_COMPOSE_FILES} up --quiet-pull --no-recreate --wait
 	npx cypress install
-	npx cypress run -c baseUrl=${BASE_URL} -s 'integration_tests/e2e/vrt-tests/**/*.cy.ts'
+	npx cypress run -c baseUrl=${BASE_URL} -s 'integration_tests/e2e/vrt-tests/*.cy.ts'
 	npx cypress-image-diff-html-report start
 
 e2e: ## Run the end-to-end tests locally in the Cypress app. Override the default base URL with BASE_URL=...
@@ -54,10 +54,10 @@ e2e: ## Run the end-to-end tests locally in the Cypress app. Override the defaul
 
 BASE_URL_CI ?= "http://ui:3000"
 vrt-ci: ## Run the snapshot Visual Regression Tests in headless mode. Used in CI. Override the default base URL with BASE_URL_CI=...
-	docker compose ${TEST_COMPOSE_FILES} -p ${PROJECT_NAME}-test run --rm cypress find integration_tests/e2e/vrt-tests '*.cy.ts'
+	docker compose ${TEST_COMPOSE_FILES} -p ${PROJECT_NAME}-test run --quiet-pull --rm -e CYPRESS_BASE_URL=${BASE_URL_CI} -e SPLIT=${SPLIT} -e SPLIT_INDEX=${SPLIT_INDEX} cypress --env split=true run --spec 'integration_tests/e2e/vrt-tests/*.cy.ts'
 
 e2e-ci: ## Run the end-to-end tests in parallel in a headless browser. Used in CI. Override the default base URL with BASE_URL_CI=...
-	docker compose ${TEST_COMPOSE_FILES} -p ${PROJECT_NAME}-test run --quiet-pull --rm -e CYPRESS_BASE_URL=${BASE_URL_CI} -e SPLIT=${SPLIT} -e SPLIT_INDEX=${SPLIT_INDEX} cypress --browser edge --env split=true --spec 'integration_tests/e2e/e2e-tests/**/*.cy.ts'
+	docker compose ${TEST_COMPOSE_FILES} -p ${PROJECT_NAME}-test run --quiet-pull --rm -e CYPRESS_BASE_URL=${BASE_URL_CI} -e SPLIT=${SPLIT} -e SPLIT_INDEX=${SPLIT_INDEX} cypress --browser edge --env split=true run --spec 'integration_tests/e2e/e2e-tests/**/*.cy.ts'
 
 test-up: ## Stands up a test environment.
 	docker compose --progress plain ${LOCAL_COMPOSE_FILES} pull --quiet --policy missing

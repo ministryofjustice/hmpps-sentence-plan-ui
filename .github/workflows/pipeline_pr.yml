@@ -47,7 +47,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        containers: [ 0, 1, 2 ]
+        containers: [ 1, 2, 3 ]
     uses: ./.github/workflows/visual_regression_test.yml
     with:
       app_version: ${{ needs.build_docker.outputs.app_version }}
