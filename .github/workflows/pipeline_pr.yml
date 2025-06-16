@@ -52,16 +52,11 @@ jobs:
 
   e2e_test:
     needs: [build_docker]
-    strategy:
-      fail-fast: false
-      matrix:
-        containers: [ 1, 2, 3, 4, 5 ]
     uses: ./.github/workflows/e2e_test.yml
     with:
       app_version: ${{ needs.build_docker.outputs.app_version }}
       job-index: 1
       job-total: 5
-      matrix-container: ${{ matrix.containers }}
 
   publish-test-results:
     name: "Publish Tests Results"
