@@ -8,12 +8,17 @@ on:
         required: true
         type: string
       job-index:
-        description: 'The index of the current job'
+        description: 'The index of the current job in the matrix'
         required: false
         type: number
         default: 0
       job-total:
-        description: 'The total number of jobs to run'
+        description: 'The total number of jobs in the matrix'
+        required: false
+        type: number
+        default: 1
+      matrix-container:
+        description: 'The matrix container description'
         required: false
         type: number
         default: 1
@@ -59,5 +64,5 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: vrt-screenshots_${{ env.SPLIT_INDEX }}
+          name: vrt-screenshots_${{ inputs.matrix-container }}
           path: 'cypress-image-diff-screenshots/comparison'

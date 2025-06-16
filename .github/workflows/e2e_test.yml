@@ -8,12 +8,17 @@ on:
         required: true
         type: string
       job-index:
-        description: 'The index of the current job'
+        description: 'The index of the current job in the matrix'
         required: false
         type: number
         default: 1
       job-total:
-        description: 'The total number of jobs to run'
+        description: 'The total number of jobs in the matrix'
+        required: false
+        type: number
+        default: 1
+      matrix-container:
+        description: 'The matrix container description'
         required: false
         type: number
         default: 1
@@ -63,7 +68,7 @@ jobs:
         if: '!cancelled()'
         uses: actions/upload-artifact@v4
         with:
-          name: test_results_${{ env.SPLIT_INDEX }}
+          name: test_results_${{ inputs.matrix-container }}
           path: |
             test_results/cypress/
 
@@ -71,7 +76,7 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: screenshots_${{ env.SPLIT_INDEX }}
+          name: screenshots_${{ inputs.matrix-container }}
           path: |
             ./integration_tests/screenshots/**/*
 
@@ -83,6 +88,6 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: docker_logs_${{ env.SPLIT_INDEX }}
+          name: docker_logs_${{ inputs.matrix-container }}
           path: |
             ${{ runner.temp }}/docker-logs
