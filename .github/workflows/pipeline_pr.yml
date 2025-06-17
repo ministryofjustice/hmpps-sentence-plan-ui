@@ -84,7 +84,7 @@ jobs:
           path: unit_test_artifacts
           pattern: npm_unit_test_artifacts
 
-      - name: Publish Test Results
+      - name: Publish Unit Test Results
         uses: EnricoMi/publish-unit-test-result-action@170bf24d20d201b842d7a52403b73ed297e6645b # v2.18.0
         with:
           files: "unit_test_artifacts/**/*.xml"
@@ -96,7 +96,7 @@ jobs:
           path: artifacts
           pattern: test_results_*
 
-      - name: Publish Test Results
+      - name: Publish E2E Test Results
         uses: EnricoMi/publish-unit-test-result-action@170bf24d20d201b842d7a52403b73ed297e6645b # v2.18.0
         with:
           files: "artifacts/**/*.xml"
@@ -108,8 +108,8 @@ jobs:
           path: artifacts
           pattern: test_results_*
 
-      - name: Publish Test Results
+      - name: Publish VR Test Results
         uses: EnricoMi/publish-unit-test-result-action@170bf24d20d201b842d7a52403b73ed297e6645b # v2.18.0
         with:
-          files: "artifacts/**/*.json"
+          files: "artifacts/**/*.xml"
           check_name: "Visual Regression Test Results"
