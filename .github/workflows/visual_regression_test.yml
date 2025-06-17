@@ -11,7 +11,7 @@ on:
         description: 'The index of the current job in the matrix'
         required: false
         type: number
-        default: 0
+        default: 1
       job-total:
         description: 'The total number of jobs in the matrix'
         required: false

@@ -51,7 +51,7 @@ jobs:
     uses: ./.github/workflows/visual_regression_test.yml
     with:
       app_version: ${{ needs.build_docker.outputs.app_version }}
-      job-index: 0
+      job-index: ${{ strategy.job-index }}
       job-total: ${{ strategy.job-total }}
       matrix-container: ${{ matrix.containers }}
 
@@ -64,7 +64,7 @@ jobs:
     uses: ./.github/workflows/e2e_test.yml
     with:
       app_version: ${{ needs.build_docker.outputs.app_version }}
-      job-index: 1
+      job-index: ${{ strategy.job-index }}
       job-total: ${{ strategy.job-total }}
       matrix-container: ${{ matrix.containers }}
 
