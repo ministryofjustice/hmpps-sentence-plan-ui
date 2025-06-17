@@ -57,7 +57,7 @@ vrt-ci: ## Run the snapshot Visual Regression Tests in headless mode. Used in CI
 	docker compose ${TEST_COMPOSE_FILES} -p ${PROJECT_NAME}-test run --quiet-pull --rm -e CYPRESS_BASE_URL=${BASE_URL_CI} -e SPEC="integration_tests/e2e/vrt-tests/**/*.cy.ts" -e SPLIT=${SPLIT} -e SPLIT_INDEX=${SPLIT_INDEX} cypress --env split=true run --spec 'integration_tests/e2e/vrt-tests/**/*.cy.ts'
 
 e2e-ci: ## Run the end-to-end tests in parallel in a headless browser. Used in CI. Override the default base URL with BASE_URL_CI=...
-	docker compose ${TEST_COMPOSE_FILES} -p ${PROJECT_NAME}-test run --quiet-pull --rm -e CYPRESS_BASE_URL=${BASE_URL_CI} -e SPLIT=${SPLIT} -e SPLIT_INDEX=${SPLIT_INDEX} cypress --browser edge --env split=true run --spec 'integration_tests/e2e/e2e-tests/**/*.cy.ts'
+	docker compose ${TEST_COMPOSE_FILES} -p ${PROJECT_NAME}-test run --quiet-pull --rm -e CYPRESS_BASE_URL=${BASE_URL_CI} -e SPEC="integration_tests/e2e/e2e-tests/**/*.cy.ts" -e SPLIT=${SPLIT} -e SPLIT_INDEX=${SPLIT_INDEX} cypress --browser edge --env split=true run --spec 'integration_tests/e2e/e2e-tests/**/*.cy.ts'
 
 test-up: ## Stands up a test environment.
 	docker compose --progress plain ${LOCAL_COMPOSE_FILES} pull --quiet --policy missing
