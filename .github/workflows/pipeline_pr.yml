@@ -70,7 +70,7 @@ jobs:
 
   publish-test-results:
     name: "Publish Tests Results"
-    needs: [ e2e_test, node_unit_tests ]
+    needs: [ visual_regression_test, e2e_test, node_unit_tests ]
     runs-on: ubuntu-latest
     permissions:
       checks: write
@@ -78,6 +78,18 @@ jobs:
     if: always()
 
     steps:
+      - name: Download Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+          pattern: test_results_*
+
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@170bf24d20d201b842d7a52403b73ed297e6645b # v2.18.0
+        with:
+          files: "artifacts/**/*.json"
+          check_name: "Visual Regression Test Results"
+
       - name: Download Unit Test Artifacts
         uses: actions/download-artifact@v4
         with:
