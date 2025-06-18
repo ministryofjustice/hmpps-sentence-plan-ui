@@ -130,4 +130,8 @@ integration_tests/screenshots/
 .run
 
 cypress/
+/cypress-image-diff-screenshots/comparison/
+/cypress-image-diff-screenshots/diff/
+/cypress-image-diff-html-report/
+
 volume/
