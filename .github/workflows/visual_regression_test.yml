@@ -60,14 +60,6 @@ jobs:
           SPLIT: ${{ inputs.job-total }}
           SPLIT_INDEX: ${{ inputs.job-index }}
 
-      - name: Upload test results
-        if: '!cancelled()'
-        uses: actions/upload-artifact@v4
-        with:
-          name: vrt-screenshots_${{ inputs.matrix-container }}
-          path: |
-            vrt-screenshots/cypress/
-
       - name: Upload failed visual regression artifacts (if any)
         if: failure()
         uses: actions/upload-artifact@v4

@@ -101,15 +101,3 @@ jobs:
         with:
           files: "artifacts/**/*.xml"
           check_name: "Cypress Test Results"
-
-      - name: Download Visual Regression Test Artifacts
-        uses: actions/download-artifact@v4
-        with:
-          path: artifacts
-          pattern: vrt-screenshots_*
-
-      - name: Publish Visual Regression Test Results
-        uses: EnricoMi/publish-unit-test-result-action@170bf24d20d201b842d7a52403b73ed297e6645b # v2.18.0
-        with:
-          files: "artifacts/**/*.xml"
-          check_name: "Visual Regression Test Results"
