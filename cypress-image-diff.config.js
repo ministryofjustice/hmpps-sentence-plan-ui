@@ -3,6 +3,7 @@ const config = {
   JSON_REPORT: {
     FILENAME: 'cypress-image-diff',
     OVERWRITE: true,
+    FAIL_ON_MISSING_BASELINE: true,
   },
 }
 
