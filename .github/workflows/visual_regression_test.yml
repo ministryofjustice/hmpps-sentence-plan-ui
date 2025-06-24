@@ -65,7 +65,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: vrt-screenshots_${{ inputs.matrix-container }}
-          path: 'cypress-image-diff-screenshots/comparison'
+          path: 'cypress-image-diff-screenshots'
 
       - name: Export container logs
         if: failure()
