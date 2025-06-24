@@ -50,12 +50,6 @@ jobs:
       - name: Run npm ci
         run: npm ci
 
-      - name: Download baseline images
-        uses: actions/download-artifact@v4
-        with:
-          name: snapshot-baseline-images
-          path: 'cypress-image-diff-screenshots/baseline'
-
       - name: Stand up a test environment
         run: |
           make test-up

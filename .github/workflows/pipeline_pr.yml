@@ -42,19 +42,8 @@ jobs:
       upload_image_artifact: true
       image_artifact_retention_days: 2
 
-  prepare_baseline_images:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Upload baseline images
-        uses: actions/upload-artifact@v4
-        with:
-          name: snapshot-baseline-images
-          path: 'cypress-image-diff-screenshots/baseline'
-
   visual_regression_test:
-    needs: [build_docker, prepare_baseline_images]
+    needs: build_docker
     strategy:
       fail-fast: false
       matrix:
