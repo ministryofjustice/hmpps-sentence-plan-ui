@@ -39,11 +39,7 @@ test: ## Runs the unit test suite.
 	docker compose ${DEV_COMPOSE_FILES} run --rm --no-deps ui npm run test
 
 BASE_URL ?= "http://localhost:3000"
-vrt: ## Run the snapshot Visual Regression Tests locally and a UI; this allows for snapshots to be visually compared and updated manually.
-	@make install-node-modules
-	docker compose ${DEV_COMPOSE_FILES} up --quiet-pull --no-recreate --wait
-	npx cypress install
-	npx cypress run -c baseUrl=${BASE_URL} -s 'integration_tests/e2e/vrt-tests/*.cy.ts'
+vrt: ## Run the snapshot Visual Regression Tests UI; this allows for snapshots to be visually compared.
 	npx cypress-image-diff-html-report start
 
 e2e: ## Run the end-to-end tests locally in the Cypress app. Override the default base URL with BASE_URL=...
