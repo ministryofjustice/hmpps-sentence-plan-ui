@@ -60,11 +60,18 @@ jobs:
           SPLIT: ${{ inputs.job-total }}
           SPLIT_INDEX: ${{ inputs.job-index }}
 
+      - name: Upload passing visual regression artifacts
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: successful_vrt_screenshots_${{ inputs.matrix-container }}
+          path: 'cypress-image-diff-screenshots'
+
       - name: Upload failed visual regression artifacts (if any)
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: vrt-screenshots_${{ inputs.matrix-container }}
+          name: failed_vrt_screenshots_${{ inputs.matrix-container }}
           path: 'cypress-image-diff-screenshots'
 
       - name: Export container logs
@@ -75,6 +82,6 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: docker_logs_${{ inputs.matrix-container }}
+          name: vrt_docker_logs_${{ inputs.matrix-container }}
           path: |
             ${{ runner.temp }}/docker-logs
