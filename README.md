@@ -52,8 +52,13 @@ You can connect to the remote debugger session on http://localhost:9229 like so
 The test suite can be run using `make test`
 
 ### Visual Regression Testing
-Visual Regression Testing for UI snapshot verification can be run using `make vrt-ci`.
-To visually inspect these snapshots, verify UI states and update locally, this can be run using `make vrt`.
+Visual Regression Testing for SP is run through the SP CI pipeline. Any failed snapshots will be uploaded as artifacts and can be accessed there.
+
+> **Note:** In order to compare failed snapshots locally, you will need to download the artifacts for each matrix container of visual regression testing.
+> These will then need to add the snapshots from the `comparison` folder locally into the SP project. This needs to be done `before` running visual comparison locally.
+
+To run the snapshot comparison UI locally, run `make vrt`. This will allow you to compare and updated baseline snapshots using a UI. This also allows for visual inspection
+of failed snapshots by the team to ensure UI changes don't impact the overall look and feel of SP.
 
 ### Linting
 Linting can be run using `make lint` and `make lint-fix`
