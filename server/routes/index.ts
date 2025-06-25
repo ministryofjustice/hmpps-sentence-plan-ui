@@ -18,6 +18,7 @@ import setupViewGoalDetailsRoutes from './viewGoalDetails/routes'
 import setupPlanHistoryRoutes from './plan-history/routes'
 import setupReAddGoalRoutes from './reAddGoal/routes'
 import setupUpdateAgreePlanRoutes from './update-agree-plan/routes'
+import setupPrivacyScreenRoutes from './privacy-screen/routes'
 import config from '../config'
 
 export default function routes(services: Services): Router {
@@ -48,5 +49,6 @@ export default function routes(services: Services): Router {
   setupPlanHistoryRoutes(router)
   setupReAddGoalRoutes(router)
   setupUpdateAgreePlanRoutes(router)
+  setupPrivacyScreenRoutes(router)
   return router
 }

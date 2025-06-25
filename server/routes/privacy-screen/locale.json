@@ -1,0 +1,24 @@
+{
+  "en": {
+    "page": {
+      "title": "Remember to close anything you do not need before starting an appointment - {{ applicationName }}",
+      "errorTitle": "Error: Remember to close anything you do not need before starting an appointment - {{ applicationName }}"
+    },
+    "mainHeading": {
+      "title": "Remember to close anything you do not need before starting an appointment with {{ subject.givenName }}"
+    },
+    "mainBody": {
+      "message": "For example, Outlook, Teams or NDelius.",
+      "messageAdditional": "You must do this to avoid sharing sensitive information.",
+      "checkBoxLabel": "I confirm I'll close anything I do not need before starting an appointment"
+    },
+    "errors": {
+      "confirm-privacy-checkbox": {
+        "isNotEmpty": "Confirm you'll close anything you do not need before starting an appointment"
+      }
+    },
+    "returnToOasysButton": "Return to OASys",
+    "confirmButton": "Confirm"
+  }
+}
+
