@@ -45,6 +45,10 @@ describe('Update Agree plan', () => {
       })
     })
 
+    it('has a feedback link', () => {
+      cy.hasFeedbackLink()
+    })
+
     it('Display update agree plan page correctly on load', () => {
       cy.get('#update-assessment-text a').contains("Update Sam's agreement").click()
       cy.url().should('satisfy', url => url.endsWith('/update-agree-plan'))

@@ -12,6 +12,11 @@ describe('View Plan Overview for READ_WRITE user', () => {
     })
   })
 
+  it('Has a feedback link', () => {
+    cy.visit('/plan')
+    cy.hasFeedbackLink()
+  })
+
   it('Should have a Create goal button and it should take to create goal', () => {
     cy.visit('/plan')
     cy.get('.moj-primary-navigation__container').should('not.contain', `Plan history`)

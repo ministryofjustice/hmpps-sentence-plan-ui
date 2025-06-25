@@ -40,7 +40,7 @@
             }
           ]
         }) }}
-    {% else  %}
+    {% elseif not data.privacyScreen  %}
         {{ mojPrimaryNavigation({
                   label: 'Primary navigation',
                   items: [{
@@ -80,6 +80,8 @@
     signOutButtonText: locale.common.unsavedInformationModal.signOutButton,
     language: "en"
   }) }}
+
+  {% include "./feedback.njk" %}
 
   {% if header.type == 'plan-extended' %}
     {% include "./plan-header/plan-header-extended.njk" %}

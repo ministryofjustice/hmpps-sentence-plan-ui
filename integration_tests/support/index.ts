@@ -9,6 +9,7 @@ import {
 } from './commands/backend'
 import { checkAccessibility } from './commands/accessibility'
 import 'cypress-axe'
+import { hasFeedbackLink } from './commands/feedback'
 
 // Handover/Auth
 Cypress.Commands.add('openSentencePlan', openSentencePlan)
@@ -24,3 +25,6 @@ Cypress.Commands.add('lockPlan', lockPlan)
 
 // Accessibility
 Cypress.Commands.add('checkAccessibility', checkAccessibility)
+
+// Feedback
+Cypress.Commands.add('hasFeedbackLink', hasFeedbackLink)

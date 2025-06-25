@@ -18,10 +18,17 @@ import setupViewGoalDetailsRoutes from './viewGoalDetails/routes'
 import setupPlanHistoryRoutes from './plan-history/routes'
 import setupReAddGoalRoutes from './reAddGoal/routes'
 import setupUpdateAgreePlanRoutes from './update-agree-plan/routes'
+import setupPrivacyScreenRoutes from './privacy-screen/routes'
+import config from '../config'
 
 export default function routes(services: Services): Router {
   const router = Router()
   const get = (path: string | string[], handler: RequestHandler) => router.get(path, asyncMiddleware(handler))
+
+  router.use((_req, res, next) => {
+    res.locals.feedbackUrl = config.feedbackUrl
+    next()
+  })
 
   get('/', async (_req, res, _next) => {
     res.redirect(URLs.PLAN_OVERVIEW)
@@ -42,5 +49,6 @@ export default function routes(services: Services): Router {
   setupPlanHistoryRoutes(router)
   setupReAddGoalRoutes(router)
   setupUpdateAgreePlanRoutes(router)
+  setupPrivacyScreenRoutes(router)
   return router
 }

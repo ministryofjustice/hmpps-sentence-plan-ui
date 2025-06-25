@@ -1,0 +1,71 @@
+{% extends "../partials/layout.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "../components/error-summary/error-summary.njk" import errorSummary with context %}
+
+{% set print = true %}
+{% set locale = interpolate(locale, {
+    subject: data.popData,
+    lastUpdatedDate: data.formattedAssessmentInfo.versionUpdatedAt | formatSimpleDate
+}) %}
+
+{% block pageTitle %}
+    {% if not errors %}
+        {{ locale.page.title }}
+    {% else %}
+        {{ locale.page.errorTitle }}
+    {% endif %}
+{% endblock %}
+
+{% set mainClasses = "app-container govuk-body" %}
+
+{% block bodyStart %}
+    <div id="top"></div>
+{% endblock %}
+
+{% block content %}
+    {{ super() }}
+
+    <a class="govuk-back-link govuk-!-display-none-print" href="{{ data.oasysReturnUrl }}">{{ locale.common.backLink.text }}</a>
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+
+            {{ errorSummary({
+                errors: errors,
+                locale: locale
+            }) }}
+
+            <h1 class="govuk-heading-l">{{ locale.mainHeading.title }}</h1>
+
+            <form id="confirm-privacy-form" method="POST">
+                <input type="hidden" name="_csrf" value="{{ csrfToken }}">
+
+                <p class="govuk-body">{{ locale.mainBody.message }}</p>
+                <p class="govuk-body">{{ locale.mainBody.messageAdditional }}</p>
+
+                {{ govukCheckboxes({
+                  name: "confirm-privacy-checkbox",
+                  errorMessage: getFormattedError(errors, locale, "confirm-privacy-checkbox"),
+                  items: [
+                    {
+                      value: "true",
+                      text: locale.mainBody.checkBoxLabel
+                    }
+                  ]
+                }) }}
+
+
+                <div class="govuk-button-group">
+                    {{ govukButton({
+                        text: locale.confirmButton,
+                        name: "action",
+                        value: "confirm"
+                    }) }}
+                    <a class="govuk-!-display-none-print govuk-link--no-visited-state" href="{{ data.oasysReturnUrl }}">{{ locale.returnToOasysButton }}</a>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

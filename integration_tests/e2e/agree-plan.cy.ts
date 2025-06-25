@@ -54,6 +54,7 @@ describe('Agree plan', () => {
       cy.get('.govuk-button').contains('Save')
       cy.get('.govuk-back-link').should('have.attr', 'href', '/plan?type=current')
       cy.checkAccessibility()
+      cy.hasFeedbackLink()
     })
   })
 
