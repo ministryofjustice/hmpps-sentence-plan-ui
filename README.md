@@ -57,7 +57,7 @@ Visual Regression Testing for SP is run through the SP CI pipeline. Any failed s
 > **Note:** In order to compare failed snapshots locally, you will need to download the artifacts for each matrix container of visual regression testing.
 > These will then need to add the snapshots from the `comparison` folder locally into the SP project. This needs to be done `before` running visual comparison locally.
 
-To run the snapshot comparison UI locally, run `make vrt`. This will allow you to compare and updated baseline snapshots using a UI. This also allows for visual inspection
+To run the snapshot comparison UI locally, run `make vrt`. This will allow you to compare and update baseline snapshots using a UI. This also allows for visual inspection
 of failed snapshots by the team to ensure UI changes don't impact the overall look and feel of SP.
 
 ### Linting
