@@ -1,4 +1,5 @@
 import { defineConfig } from 'cypress'
+import getCompareSnapshotsPlugin from 'cypress-image-diff-js/plugin'
 import cypressSplit from 'cypress-split'
 import { resetStubs } from './integration_tests/mockApis/wiremock'
 import auth from './integration_tests/mockApis/auth'
@@ -26,6 +27,8 @@ export default defineConfig({
         },
       })
       cypressSplit(on, config)
+      // Add the visual regression plugin
+      getCompareSnapshotsPlugin(on, config)
       return config
     },
     baseUrl: 'http://localhost:6789',
@@ -44,5 +47,7 @@ export default defineConfig({
       OASTUB_URL: 'http://localhost:7072',
       FEEDBACK_URL: 'http://localhost:9092/',
     },
+    viewportWidth: 1000, // Default value: 1280
+    viewportHeight: 660, // Default value: 720
   },
 })
