@@ -60,6 +60,13 @@ jobs:
           SPLIT: ${{ inputs.job-total }}
           SPLIT_INDEX: ${{ inputs.job-index }}
 
+      - name: Upload snapshot artifacts
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress_snapshots_${{ inputs.matrix-container }}
+          path: 'cypress-image-diff-screenshots'
+
       - name: Upload failed visual regression artifacts (if any)
         if: failure()
         uses: actions/upload-artifact@v4
