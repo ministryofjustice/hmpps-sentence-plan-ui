@@ -1,0 +1,721 @@
+{
+  "total": 57,
+  "totalPassed": 57,
+  "totalSuites": 14,
+  "suites": [
+    {
+      "name": "about.cy.ts",
+      "path": "integration_tests/e2e/vrt-tests/about.cy.ts",
+      "tests": [
+        {
+          "status": "pass",
+          "name": "about.cy.ts-base-page",
+          "percentage": 0,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/about.cy.ts",
+          "specFilename": "about.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/about.cy.ts-base-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/about.cy.ts-base-page.png"
+        }
+      ]
+    },
+    {
+      "name": "add-steps.cy.ts",
+      "path": "integration_tests/e2e/vrt-tests/add-steps.cy.ts",
+      "tests": [
+        {
+          "status": "pass",
+          "name": "add-steps.cy.ts-base-page",
+          "percentage": 0,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/add-steps.cy.ts",
+          "specFilename": "add-steps.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/add-steps.cy.ts-base-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/add-steps.cy.ts-base-page.png"
+        },
+        {
+          "status": "pass",
+          "name": "add-steps.cy.ts-single-step-error-validation-page",
+          "percentage": 0,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/add-steps.cy.ts",
+          "specFilename": "add-steps.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/add-steps.cy.ts-single-step-error-validation-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/add-steps.cy.ts-single-step-error-validation-page.png"
+        },
+        {
+          "status": "pass",
+          "name": "add-steps.cy.ts-multiple-step-error-validation-page",
+          "percentage": 0,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/add-steps.cy.ts",
+          "specFilename": "add-steps.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/add-steps.cy.ts-multiple-step-error-validation-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/add-steps.cy.ts-multiple-step-error-validation-page.png"
+        }
+      ]
+    },
+    {
+      "name": "agree-plan.cy.ts",
+      "path": "integration_tests/e2e/vrt-tests/agree-plan.cy.ts",
+      "tests": [
+        {
+          "status": "pass",
+          "name": "agree-plan.cy.ts-base-page",
+          "percentage": 0,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/agree-plan.cy.ts",
+          "specFilename": "agree-plan.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/agree-plan.cy.ts-base-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/agree-plan.cy.ts-base-page.png"
+        },
+        {
+          "status": "pass",
+          "name": "agree-plan.cy.ts-no-options-error-validation-page",
+          "percentage": 0,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/agree-plan.cy.ts",
+          "specFilename": "agree-plan.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/agree-plan.cy.ts-no-options-error-validation-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/agree-plan.cy.ts-no-options-error-validation-page.png"
+        },
+        {
+          "status": "pass",
+          "name": "agree-plan.cy.ts-no-agreement-page",
+          "percentage": 0,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/agree-plan.cy.ts",
+          "specFilename": "agree-plan.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/agree-plan.cy.ts-no-agreement-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/agree-plan.cy.ts-no-agreement-page.png"
+        },
+        {
+          "status": "pass",
+          "name": "agree-plan.cy.ts-no-agreement-error-validation-page",
+          "percentage": 0,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/agree-plan.cy.ts",
+          "specFilename": "agree-plan.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/agree-plan.cy.ts-no-agreement-error-validation-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/agree-plan.cy.ts-no-agreement-error-validation-page.png"
+        },
+        {
+          "status": "pass",
+          "name": "agree-plan.cy.ts-cannot-agree-page",
+          "percentage": 0,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/agree-plan.cy.ts",
+          "specFilename": "agree-plan.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/agree-plan.cy.ts-cannot-agree-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/agree-plan.cy.ts-cannot-agree-page.png"
+        },
+        {
+          "status": "pass",
+          "name": "agree-plan.cy.ts-cannot-agree-error-validation-page",
+          "percentage": 0,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/agree-plan.cy.ts",
+          "specFilename": "agree-plan.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/agree-plan.cy.ts-cannot-agree-error-validation-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/agree-plan.cy.ts-cannot-agree-error-validation-page.png"
+        }
+      ]
+    },
+    {
+      "name": "change-goal.cy.ts",
+      "path": "integration_tests/e2e/vrt-tests/change-goal.cy.ts",
+      "tests": [
+        {
+          "status": "pass",
+          "name": "change-goal.cy.ts-base-page",
+          "percentage": 0,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/change-goal.cy.ts",
+          "specFilename": "change-goal.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/change-goal.cy.ts-base-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/change-goal.cy.ts-base-page.png"
+        },
+        {
+          "status": "pass",
+          "name": "change-goal.cy.ts-error-validation-page",
+          "percentage": 0,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/change-goal.cy.ts",
+          "specFilename": "change-goal.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/change-goal.cy.ts-error-validation-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/change-goal.cy.ts-error-validation-page.png"
+        }
+      ]
+    },
+    {
+      "name": "create-goal.cy.ts",
+      "path": "integration_tests/e2e/vrt-tests/create-goal.cy.ts",
+      "tests": [
+        {
+          "status": "pass",
+          "name": "create-goal.cy.ts-accommodation-page",
+          "percentage": 0,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/create-goal.cy.ts",
+          "specFilename": "create-goal.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/create-goal.cy.ts-accommodation-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/create-goal.cy.ts-accommodation-page.png"
+        },
+        {
+          "status": "pass",
+          "name": "create-goal.cy.ts-accommodation-error-validation-page",
+          "percentage": 0,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/create-goal.cy.ts",
+          "specFilename": "create-goal.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/create-goal.cy.ts-accommodation-error-validation-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/create-goal.cy.ts-accommodation-error-validation-page.png"
+        },
+        {
+          "status": "pass",
+          "name": "create-goal.cy.ts-employment-and-education-page",
+          "percentage": 0,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/create-goal.cy.ts",
+          "specFilename": "create-goal.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/create-goal.cy.ts-employment-and-education-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/create-goal.cy.ts-employment-and-education-page.png"
+        },
+        {
+          "status": "pass",
+          "name": "create-goal.cy.ts-employment-and-education-error-validation-page",
+          "percentage": 0,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/create-goal.cy.ts",
+          "specFilename": "create-goal.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/create-goal.cy.ts-employment-and-education-error-validation-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/create-goal.cy.ts-employment-and-education-error-validation-page.png"
+        },
+        {
+          "status": "pass",
+          "name": "create-goal.cy.ts-finances-page",
+          "percentage": 0,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/create-goal.cy.ts",
+          "specFilename": "create-goal.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/create-goal.cy.ts-finances-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/create-goal.cy.ts-finances-page.png"
+        },
+        {
+          "status": "pass",
+          "name": "create-goal.cy.ts-finances-error-validation-page",
+          "percentage": 0,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/create-goal.cy.ts",
+          "specFilename": "create-goal.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/create-goal.cy.ts-finances-error-validation-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/create-goal.cy.ts-finances-error-validation-page.png"
+        },
+        {
+          "status": "pass",
+          "name": "create-goal.cy.ts-drug-use-page",
+          "percentage": 0,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/create-goal.cy.ts",
+          "specFilename": "create-goal.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/create-goal.cy.ts-drug-use-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/create-goal.cy.ts-drug-use-page.png"
+        },
+        {
+          "status": "pass",
+          "name": "create-goal.cy.ts-drug-use-error-validation-page",
+          "percentage": 0,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/create-goal.cy.ts",
+          "specFilename": "create-goal.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/create-goal.cy.ts-drug-use-error-validation-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/create-goal.cy.ts-drug-use-error-validation-page.png"
+        },
+        {
+          "status": "pass",
+          "name": "create-goal.cy.ts-alcohol-use-page",
+          "percentage": 0,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/create-goal.cy.ts",
+          "specFilename": "create-goal.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/create-goal.cy.ts-alcohol-use-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/create-goal.cy.ts-alcohol-use-page.png"
+        },
+        {
+          "status": "pass",
+          "name": "create-goal.cy.ts-alcohol-use-error-validation-page",
+          "percentage": 0,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/create-goal.cy.ts",
+          "specFilename": "create-goal.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/create-goal.cy.ts-alcohol-use-error-validation-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/create-goal.cy.ts-alcohol-use-error-validation-page.png"
+        },
+        {
+          "status": "pass",
+          "name": "create-goal.cy.ts-health-and-wellbeing-page",
+          "percentage": 0,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/create-goal.cy.ts",
+          "specFilename": "create-goal.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/create-goal.cy.ts-health-and-wellbeing-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/create-goal.cy.ts-health-and-wellbeing-page.png"
+        },
+        {
+          "status": "pass",
+          "name": "create-goal.cy.ts-health-and-wellbeing-error-validation-page",
+          "percentage": 0,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/create-goal.cy.ts",
+          "specFilename": "create-goal.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/create-goal.cy.ts-health-and-wellbeing-error-validation-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/create-goal.cy.ts-health-and-wellbeing-error-validation-page.png"
+        },
+        {
+          "status": "pass",
+          "name": "create-goal.cy.ts-personal-relationships-and-community-page",
+          "percentage": 0,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/create-goal.cy.ts",
+          "specFilename": "create-goal.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/create-goal.cy.ts-personal-relationships-and-community-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/create-goal.cy.ts-personal-relationships-and-community-page.png"
+        },
+        {
+          "status": "pass",
+          "name": "create-goal.cy.ts-personal-relationships-and-community-error-validation-page",
+          "percentage": 0,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/create-goal.cy.ts",
+          "specFilename": "create-goal.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/create-goal.cy.ts-personal-relationships-and-community-error-validation-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/create-goal.cy.ts-personal-relationships-and-community-error-validation-page.png"
+        },
+        {
+          "status": "pass",
+          "name": "create-goal.cy.ts-thinking-behaviours-and-attitude-page",
+          "percentage": 0,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/create-goal.cy.ts",
+          "specFilename": "create-goal.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/create-goal.cy.ts-thinking-behaviours-and-attitude-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/create-goal.cy.ts-thinking-behaviours-and-attitude-page.png"
+        },
+        {
+          "status": "pass",
+          "name": "create-goal.cy.ts-thinking-behaviours-and-attitude-error-validation-page",
+          "percentage": 0,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/create-goal.cy.ts",
+          "specFilename": "create-goal.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/create-goal.cy.ts-thinking-behaviours-and-attitude-error-validation-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/create-goal.cy.ts-thinking-behaviours-and-attitude-error-validation-page.png"
+        }
+      ]
+    },
+    {
+      "name": "data-privacy.cy.ts",
+      "path": "integration_tests/e2e/vrt-tests/data-privacy.cy.ts",
+      "tests": [
+        {
+          "status": "pass",
+          "name": "data-privacy.cy.ts-base-page",
+          "percentage": 0,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/data-privacy.cy.ts",
+          "specFilename": "data-privacy.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/data-privacy.cy.ts-base-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/data-privacy.cy.ts-base-page.png"
+        },
+        {
+          "status": "pass",
+          "name": "data-privacy.cy.ts-base-error-validation-page",
+          "percentage": 0,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/data-privacy.cy.ts",
+          "specFilename": "data-privacy.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/data-privacy.cy.ts-base-error-validation-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/data-privacy.cy.ts-base-error-validation-page.png"
+        },
+        {
+          "status": "pass",
+          "name": "data-privacy.cy.ts-view-plan-after-agreeing-to-privacy-statement-page",
+          "percentage": 0,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/data-privacy.cy.ts",
+          "specFilename": "data-privacy.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/data-privacy.cy.ts-view-plan-after-agreeing-to-privacy-statement-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/data-privacy.cy.ts-view-plan-after-agreeing-to-privacy-statement-page.png"
+        }
+      ]
+    },
+    {
+      "name": "delete-goal.cy.ts",
+      "path": "integration_tests/e2e/vrt-tests/delete-goal.cy.ts",
+      "tests": [
+        {
+          "status": "pass",
+          "name": "delete-goal.cy.ts-base-page",
+          "percentage": 0,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/delete-goal.cy.ts",
+          "specFilename": "delete-goal.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/delete-goal.cy.ts-base-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/delete-goal.cy.ts-base-page.png"
+        }
+      ]
+    },
+    {
+      "name": "plan-history.cy.ts",
+      "path": "integration_tests/e2e/vrt-tests/plan-history.cy.ts",
+      "tests": [
+        {
+          "status": "pass",
+          "name": "plan-history.cy.ts-base-page",
+          "percentage": 0.038348249442368525,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/plan-history.cy.ts",
+          "specFilename": "plan-history.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/plan-history.cy.ts-base-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/plan-history.cy.ts-base-page.png"
+        },
+        {
+          "status": "pass",
+          "name": "plan-history.cy.ts-update-goal-page",
+          "percentage": 0.030518730828671948,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/plan-history.cy.ts",
+          "specFilename": "plan-history.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/plan-history.cy.ts-update-goal-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/plan-history.cy.ts-update-goal-page.png"
+        },
+        {
+          "status": "pass",
+          "name": "plan-history.cy.ts-confirm-achieved-goal-page",
+          "percentage": 0.0231229325206432,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/plan-history.cy.ts",
+          "specFilename": "plan-history.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/plan-history.cy.ts-confirm-achieved-goal-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/plan-history.cy.ts-confirm-achieved-goal-page.png"
+        },
+        {
+          "status": "pass",
+          "name": "plan-history.cy.ts-achieved-goal-view-details-page",
+          "percentage": 0.019302616569366517,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/plan-history.cy.ts",
+          "specFilename": "plan-history.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/plan-history.cy.ts-achieved-goal-view-details-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/plan-history.cy.ts-achieved-goal-view-details-page.png"
+        },
+        {
+          "status": "pass",
+          "name": "plan-history.cy.ts-remove-goal-page",
+          "percentage": 0.02188702620658331,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/plan-history.cy.ts",
+          "specFilename": "plan-history.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/plan-history.cy.ts-remove-goal-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/plan-history.cy.ts-remove-goal-page.png"
+        },
+        {
+          "status": "pass",
+          "name": "plan-history.cy.ts-remove-goal-error-validation-page",
+          "percentage": 0.020280805062535753,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/plan-history.cy.ts",
+          "specFilename": "plan-history.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/plan-history.cy.ts-remove-goal-error-validation-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/plan-history.cy.ts-remove-goal-error-validation-page.png"
+        },
+        {
+          "status": "pass",
+          "name": "plan-history.cy.ts-remove-goal-view-details-page",
+          "percentage": 0.0186175601467199,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/plan-history.cy.ts",
+          "specFilename": "plan-history.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/plan-history.cy.ts-remove-goal-view-details-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/plan-history.cy.ts-remove-goal-view-details-page.png"
+        },
+        {
+          "status": "pass",
+          "name": "plan-history.cy.ts-add-removed-goal-back-into-plan-page",
+          "percentage": 0.015682359381155545,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/plan-history.cy.ts",
+          "specFilename": "plan-history.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/plan-history.cy.ts-add-removed-goal-back-into-plan-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/plan-history.cy.ts-add-removed-goal-back-into-plan-page.png"
+        },
+        {
+          "status": "pass",
+          "name": "plan-history.cy.ts-add-removed-goal-back-into-plan-error-validation-page",
+          "percentage": 0.014286552132950318,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/plan-history.cy.ts",
+          "specFilename": "plan-history.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/plan-history.cy.ts-add-removed-goal-back-into-plan-error-validation-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/plan-history.cy.ts-add-removed-goal-back-into-plan-error-validation-page.png"
+        },
+        {
+          "status": "pass",
+          "name": "plan-history.cy.ts-remove-goal-added-as-current-goal-page",
+          "percentage": 0.038876537901940116,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/plan-history.cy.ts",
+          "specFilename": "plan-history.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/plan-history.cy.ts-remove-goal-added-as-current-goal-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/plan-history.cy.ts-remove-goal-added-as-current-goal-page.png"
+        }
+      ]
+    },
+    {
+      "name": "plan-overview-current-goal-with-steps.cy.ts",
+      "path": "integration_tests/e2e/vrt-tests/plan-overview-current-goal-with-steps.cy.ts",
+      "tests": [
+        {
+          "status": "pass",
+          "name": "plan-overview-current-goal-with-steps.cy.ts-current-goal-with-steps-page",
+          "percentage": 0.024618298195866545,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/plan-overview-current-goal-with-steps.cy.ts",
+          "specFilename": "plan-overview-current-goal-with-steps.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/plan-overview-current-goal-with-steps.cy.ts-current-goal-with-steps-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/plan-overview-current-goal-with-steps.cy.ts-current-goal-with-steps-page.png"
+        },
+        {
+          "status": "pass",
+          "name": "plan-overview-current-goal-with-steps.cy.ts-plan-agreed-page",
+          "percentage": 0.038876537901940116,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/plan-overview-current-goal-with-steps.cy.ts",
+          "specFilename": "plan-overview-current-goal-with-steps.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/plan-overview-current-goal-with-steps.cy.ts-plan-agreed-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/plan-overview-current-goal-with-steps.cy.ts-plan-agreed-page.png"
+        },
+        {
+          "status": "pass",
+          "name": "plan-overview-current-goal-with-steps.cy.ts-step-completed-for-goal-of-agreed-plan-page",
+          "percentage": 0.022582297477505467,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/plan-overview-current-goal-with-steps.cy.ts",
+          "specFilename": "plan-overview-current-goal-with-steps.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/plan-overview-current-goal-with-steps.cy.ts-step-completed-for-goal-of-agreed-plan-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/plan-overview-current-goal-with-steps.cy.ts-step-completed-for-goal-of-agreed-plan-page.png"
+        },
+        {
+          "status": "pass",
+          "name": "plan-overview-current-goal-with-steps.cy.ts-confirm-goal-achieved-page",
+          "percentage": 0.0337968937380182,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/plan-overview-current-goal-with-steps.cy.ts",
+          "specFilename": "plan-overview-current-goal-with-steps.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/plan-overview-current-goal-with-steps.cy.ts-confirm-goal-achieved-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/plan-overview-current-goal-with-steps.cy.ts-confirm-goal-achieved-page.png"
+        },
+        {
+          "status": "pass",
+          "name": "plan-overview-current-goal-with-steps.cy.ts-remove-goal-from-plan-page",
+          "percentage": 0.03314841727092815,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/plan-overview-current-goal-with-steps.cy.ts",
+          "specFilename": "plan-overview-current-goal-with-steps.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/plan-overview-current-goal-with-steps.cy.ts-remove-goal-from-plan-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/plan-overview-current-goal-with-steps.cy.ts-remove-goal-from-plan-page.png"
+        }
+      ]
+    },
+    {
+      "name": "plan-overview-current-goal-without-steps.cy.ts",
+      "path": "integration_tests/e2e/vrt-tests/plan-overview-current-goal-without-steps.cy.ts",
+      "tests": [
+        {
+          "status": "pass",
+          "name": "plan-overview-current-goal-without-steps.cy.ts-current-goal-without-steps-page",
+          "percentage": 0.024583403354520084,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/plan-overview-current-goal-without-steps.cy.ts",
+          "specFilename": "plan-overview-current-goal-without-steps.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/plan-overview-current-goal-without-steps.cy.ts-current-goal-without-steps-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/plan-overview-current-goal-without-steps.cy.ts-current-goal-without-steps-page.png"
+        },
+        {
+          "status": "pass",
+          "name": "plan-overview-current-goal-without-steps.cy.ts-current-goal-without-steps-error-validation-page",
+          "percentage": 0.023151963206929308,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/plan-overview-current-goal-without-steps.cy.ts",
+          "specFilename": "plan-overview-current-goal-without-steps.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/plan-overview-current-goal-without-steps.cy.ts-current-goal-without-steps-error-validation-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/plan-overview-current-goal-without-steps.cy.ts-current-goal-without-steps-error-validation-page.png"
+        }
+      ]
+    },
+    {
+      "name": "plan-overview-future-goal-with-steps.cy.ts",
+      "path": "integration_tests/e2e/vrt-tests/plan-overview-future-goal-with-steps.cy.ts",
+      "tests": [
+        {
+          "status": "pass",
+          "name": "plan-overview-future-goal-with-steps.cy.ts-future-goal-with-steps-page",
+          "percentage": 0,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/plan-overview-future-goal-with-steps.cy.ts",
+          "specFilename": "plan-overview-future-goal-with-steps.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/plan-overview-future-goal-with-steps.cy.ts-future-goal-with-steps-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/plan-overview-future-goal-with-steps.cy.ts-future-goal-with-steps-page.png"
+        },
+        {
+          "status": "pass",
+          "name": "plan-overview-future-goal-with-steps.cy.ts-future-goal-with-steps-error-validation-page",
+          "percentage": 0,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/plan-overview-future-goal-with-steps.cy.ts",
+          "specFilename": "plan-overview-future-goal-with-steps.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/plan-overview-future-goal-with-steps.cy.ts-future-goal-with-steps-error-validation-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/plan-overview-future-goal-with-steps.cy.ts-future-goal-with-steps-error-validation-page.png"
+        }
+      ]
+    },
+    {
+      "name": "plan-overview-future-goal-without-steps.cy.ts",
+      "path": "integration_tests/e2e/vrt-tests/plan-overview-future-goal-without-steps.cy.ts",
+      "tests": [
+        {
+          "status": "pass",
+          "name": "plan-overview-future-goal-without-steps.cy.ts-future-goal-without-steps-page",
+          "percentage": 0,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/plan-overview-future-goal-without-steps.cy.ts",
+          "specFilename": "plan-overview-future-goal-without-steps.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/plan-overview-future-goal-without-steps.cy.ts-future-goal-without-steps-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/plan-overview-future-goal-without-steps.cy.ts-future-goal-without-steps-page.png"
+        },
+        {
+          "status": "pass",
+          "name": "plan-overview-future-goal-without-steps.cy.ts-future-goal-without-steps-error-validation-page",
+          "percentage": 0,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/plan-overview-future-goal-without-steps.cy.ts",
+          "specFilename": "plan-overview-future-goal-without-steps.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/plan-overview-future-goal-without-steps.cy.ts-future-goal-without-steps-error-validation-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/plan-overview-future-goal-without-steps.cy.ts-future-goal-without-steps-error-validation-page.png"
+        }
+      ]
+    },
+    {
+      "name": "plan-overview.cy.ts",
+      "path": "integration_tests/e2e/vrt-tests/plan-overview.cy.ts",
+      "tests": [
+        {
+          "status": "pass",
+          "name": "plan-overview.cy.ts-base-page",
+          "percentage": 0,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/plan-overview.cy.ts",
+          "specFilename": "plan-overview.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/plan-overview.cy.ts-base-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/plan-overview.cy.ts-base-page.png"
+        },
+        {
+          "status": "pass",
+          "name": "plan-overview.cy.ts-base-error-validation-page",
+          "percentage": 0,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/plan-overview.cy.ts",
+          "specFilename": "plan-overview.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/plan-overview.cy.ts-base-error-validation-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/plan-overview.cy.ts-base-error-validation-page.png"
+        }
+      ]
+    },
+    {
+      "name": "unsaved-information-deleted.cy.ts",
+      "path": "integration_tests/e2e/vrt-tests/unsaved-information-deleted.cy.ts",
+      "tests": [
+        {
+          "status": "pass",
+          "name": "unsaved-information-deleted.cy.ts-base-page",
+          "percentage": 0,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/unsaved-information-deleted.cy.ts",
+          "specFilename": "unsaved-information-deleted.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/unsaved-information-deleted.cy.ts-base-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/unsaved-information-deleted.cy.ts-base-page.png"
+        },
+        {
+          "status": "pass",
+          "name": "unsaved-information-deleted.cy.ts-return-to-plan-from-unsaved-information-deleted-page",
+          "percentage": 0,
+          "failureThreshold": 0.05,
+          "specPath": "integration_tests/e2e/vrt-tests/unsaved-information-deleted.cy.ts",
+          "specFilename": "unsaved-information-deleted.cy.ts",
+          "baselinePath": "cypress-image-diff-screenshots/baseline/unsaved-information-deleted.cy.ts-return-to-plan-from-unsaved-information-deleted-page.png",
+          "diffPath": "",
+          "comparisonPath": "cypress-image-diff-screenshots/comparison/unsaved-information-deleted.cy.ts-return-to-plan-from-unsaved-information-deleted-page.png"
+        }
+      ]
+    }
+  ],
+  "startedAt": "2025-07-01T12:23:52.471Z",
+  "endedAt": "2025-07-01T12:24:40.022Z",
+  "browserName": "electron"
+}
