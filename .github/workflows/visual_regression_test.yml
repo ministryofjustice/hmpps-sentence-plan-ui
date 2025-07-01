@@ -60,8 +60,8 @@ jobs:
           SPLIT: ${{ inputs.job-total }}
           SPLIT_INDEX: ${{ inputs.job-index }}
 
-      - name: Upload image diff report
-        if: always()
+      - name: Upload failed image diff report
+        if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: cypress_image_diff_report${{ inputs.matrix-container }}
