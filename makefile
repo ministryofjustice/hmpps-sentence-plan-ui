@@ -40,6 +40,8 @@ test: ## Runs the unit test suite.
 
 BASE_URL ?= "http://localhost:3000"
 vrt: ## Run the snapshot Visual Regression Tests UI; this allows for snapshots to be visually compared.
+	@make install-node-modules
+	docker compose ${TEST_COMPOSE_FILES} -p ${PROJECT_NAME}-test run --quiet-pull --rm -e CYPRESS_BASE_URL=${BASE_URL_CI} -e SPEC="integration_tests/e2e/vrt-tests/**/*.cy.ts" cypress run --spec 'integration_tests/e2e/vrt-tests/**/*.cy.ts'
 	npx cypress-image-diff-html-report start
 
 e2e: ## Run the end-to-end tests locally in the Cypress app. Override the default base URL with BASE_URL=...
