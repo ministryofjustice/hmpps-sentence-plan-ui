@@ -97,6 +97,15 @@ export default {
       clientId: get('HMPPS_ARNS_HANDOVER_CLIENT_ID', 'clientid', requiredInProduction),
       clientSecret: get('HMPPS_ARNS_HANDOVER_CLIENT_SECRET', 'clientsecret', requiredInProduction),
     },
+    arnsApi: {
+      url: get('ARNS_API_URL', 'https://assess-risks-and-needs-dev.hmpps.service.justice.gov.uk'),
+      healthPath: '/health/ping',
+      timeout: {
+        response: Number(get('ARNS_API_TIMEOUT_RESPONSE', 10000)),
+        deadline: Number(get('ARNS_API_TIMEOUT_DEADLINE', 10000)),
+      },
+      agent: new AgentConfig(Number(get('ARNS_API_TIMEOUT_RESPONSE', 10000))),
+    },
     sentencePlanApi: {
       url: get('SENTENCE_PLAN_API_URL', 'https://sentence-plan-api-dev.hmpps.service.justice.gov.uk'),
       healthPath: '/health/ping',
