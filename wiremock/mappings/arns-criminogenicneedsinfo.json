@@ -1,0 +1,162 @@
+{
+  "mappings": [
+    {
+      "request": {
+        "url": "/arns-api/needs/crn/NOTFOUND",
+        "method": "GET"
+      },
+      "response": {
+        "status": 404
+      }
+    },
+    {
+      "request": {
+        "url": "/arns-api/needs/crn/SERVERERROR",
+        "method": "GET"
+      },
+      "response": {
+        "status": 500
+      }
+    },
+    {
+      "request": {
+        "urlPattern": "/arns-api/needs/crn/(?!NOTFOUND$|SERVERERROR$).*",
+        "method": "GET"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {
+          "identifiedNeeds": [
+            {
+              "section": "ACCOMMODATION",
+              "name": "Accommodation",
+              "riskOfHarm": false,
+              "riskOfReoffending": false,
+              "severity": "STANDARD",
+              "score": 3,
+              "oasysThreshold": {
+                "standard": 2
+              },
+              "tierThreshold": {
+                "standard": 2,
+                "severe": 7
+              }
+            },
+            {
+              "section": "EDUCATION_TRAINING_AND_EMPLOYABILITY",
+              "name": "Education, Training and Employability",
+              "riskOfHarm": false,
+              "riskOfReoffending": false,
+              "severity": "STANDARD",
+              "score": 3,
+              "oasysThreshold": {
+                "standard": 3
+              },
+              "tierThreshold": {
+                "standard": 3,
+                "severe": 7
+              }
+            },
+            {
+              "section": "LIFESTYLE_AND_ASSOCIATES",
+              "name": "Lifestyle and Associates",
+              "riskOfHarm": false,
+              "riskOfReoffending": true,
+              "severity": "STANDARD",
+              "score": 3,
+              "oasysThreshold": {
+                "standard": 2
+              },
+              "tierThreshold": {
+                "standard": 2,
+                "severe": 5
+              }
+            },
+            {
+              "section": "DRUG_MISUSE",
+              "name": "Drug Misuse",
+              "riskOfHarm": true,
+              "riskOfReoffending": true,
+              "severity": "STANDARD",
+              "score": 6,
+              "oasysThreshold": {
+                "standard": 2
+              },
+              "tierThreshold": {
+                "standard": 2,
+                "severe": 8
+              }
+            },
+            {
+              "section": "ATTITUDE",
+              "name": "Attitudes",
+              "riskOfHarm": false,
+              "riskOfReoffending": true,
+              "severity": "STANDARD",
+              "score": 5,
+              "oasysThreshold": {
+                "standard": 2
+              },
+              "tierThreshold": {
+                "standard": 2,
+                "severe": 7
+              }
+            }
+          ],
+          "notIdentifiedNeeds": [
+            {
+              "section": "RELATIONSHIPS",
+              "name": "Relationships",
+              "riskOfHarm": false,
+              "riskOfReoffending": false,
+              "severity": "NO_NEED",
+              "score": 1,
+              "oasysThreshold": {
+                "standard": 2
+              },
+              "tierThreshold": {
+                "standard": 2,
+                "severe": 5
+              }
+            },
+            {
+              "section": "ALCOHOL_MISUSE",
+              "name": "Alcohol Misuse",
+              "riskOfHarm": false,
+              "riskOfReoffending": false,
+              "severity": "NO_NEED",
+              "score": 1,
+              "oasysThreshold": {
+                "standard": 4
+              },
+              "tierThreshold": {
+                "standard": 4,
+                "severe": 7
+              }
+            },
+            {
+              "section": "THINKING_AND_BEHAVIOUR",
+              "name": "Thinking and Behaviour",
+              "riskOfHarm": false,
+              "riskOfReoffending": true,
+              "severity": "NO_NEED",
+              "score": 3,
+              "oasysThreshold": {
+                "standard": 4
+              },
+              "tierThreshold": {
+                "standard": 4,
+                "severe": 7
+              }
+            }
+          ],
+          "unansweredNeeds": [],
+          "assessedOn": "2024-08-01T14:20:00"
+        }
+      }
+    }
+  ]
+}
