@@ -55,7 +55,11 @@ The test suite can be run using `make test`
 Visual Regression Testing for SP is run through the SP CI pipeline. Any failed snapshots will be uploaded as artifacts and can be accessed there.
 
 > **Note:** In order to compare failed snapshots locally, you will need to download the artifacts for each matrix container of visual regression testing.
-> These will then need to add the snapshots from the `comparison` folder locally into the SP project. This needs to be done `before` running visual comparison locally.
+> These will need to be added to the respective `comparison` and `diff` folders locally in the SP project (create these directories locally if you
+> don't have them). The pipeline will also upload a JSON report for failed image diffs, which will need to be incorporated into the main
+> [cypress-image-diff-html-report](cypress-image-diff-html-report/cypress-image-diff.json) `or` add the failed report into the same directory.
+
+> **Important note:** This needs to be done `before` running visual comparison locally.
 
 To run the snapshot comparison UI locally, run `make vrt`. This will allow you to compare and update baseline snapshots using a UI. This also allows for visual inspection
 of failed snapshots by the team to ensure UI changes don't impact the overall look and feel of SP.
