@@ -37,13 +37,8 @@
               "riskOfReoffending": false,
               "severity": "STANDARD",
               "score": 3,
-              "oasysThreshold": {
-                "standard": 2
-              },
-              "tierThreshold": {
-                "standard": 2,
-                "severe": 7
-              }
+              "oasysThreshold": 2,
+              "tierThreshold": 2
             },
             {
               "section": "EDUCATION_TRAINING_AND_EMPLOYABILITY",
@@ -52,13 +47,8 @@
               "riskOfReoffending": false,
               "severity": "STANDARD",
               "score": 3,
-              "oasysThreshold": {
-                "standard": 3
-              },
-              "tierThreshold": {
-                "standard": 3,
-                "severe": 7
-              }
+              "oasysThreshold": 3,
+              "tierThreshold": 3
             },
             {
               "section": "LIFESTYLE_AND_ASSOCIATES",
@@ -67,13 +57,8 @@
               "riskOfReoffending": true,
               "severity": "STANDARD",
               "score": 3,
-              "oasysThreshold": {
-                "standard": 2
-              },
-              "tierThreshold": {
-                "standard": 2,
-                "severe": 5
-              }
+              "oasysThreshold": 2,
+              "tierThreshold": 2
             },
             {
               "section": "DRUG_MISUSE",
@@ -82,13 +67,8 @@
               "riskOfReoffending": true,
               "severity": "STANDARD",
               "score": 6,
-              "oasysThreshold": {
-                "standard": 2
-              },
-              "tierThreshold": {
-                "standard": 2,
-                "severe": 8
-              }
+              "oasysThreshold": 2,
+              "tierThreshold": 2
             },
             {
               "section": "ATTITUDE",
@@ -97,13 +77,8 @@
               "riskOfReoffending": true,
               "severity": "STANDARD",
               "score": 5,
-              "oasysThreshold": {
-                "standard": 2
-              },
-              "tierThreshold": {
-                "standard": 2,
-                "severe": 7
-              }
+              "oasysThreshold": 2,
+              "tierThreshold": 2
             }
           ],
           "notIdentifiedNeeds": [
@@ -114,13 +89,8 @@
               "riskOfReoffending": false,
               "severity": "NO_NEED",
               "score": 1,
-              "oasysThreshold": {
-                "standard": 2
-              },
-              "tierThreshold": {
-                "standard": 2,
-                "severe": 5
-              }
+              "oasysThreshold": 2,
+              "tierThreshold": 2
             },
             {
               "section": "ALCOHOL_MISUSE",
@@ -129,13 +99,8 @@
               "riskOfReoffending": false,
               "severity": "NO_NEED",
               "score": 1,
-              "oasysThreshold": {
-                "standard": 4
-              },
-              "tierThreshold": {
-                "standard": 4,
-                "severe": 7
-              }
+              "oasysThreshold": 4,
+              "tierThreshold": 4
             },
             {
               "section": "THINKING_AND_BEHAVIOUR",
@@ -144,13 +109,8 @@
               "riskOfReoffending": true,
               "severity": "NO_NEED",
               "score": 3,
-              "oasysThreshold": {
-                "standard": 4
-              },
-              "tierThreshold": {
-                "standard": 4,
-                "severe": 7
-              }
+              "oasysThreshold": 4,
+              "tierThreshold": 4
             }
           ],
           "unansweredNeeds": [],
