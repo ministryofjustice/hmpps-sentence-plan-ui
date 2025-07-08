@@ -13,6 +13,8 @@ import HmppsAuthClient from '../data/hmppsAuthClient'
 import SentencePlanApiClient from '../data/sentencePlanApiClient'
 import CoordinatorApiClient from '../data/coordinatorApiClient'
 import AssessmentService from './sentence-plan/assessmentService'
+import ArnsApiClient from '../data/arnsApiClient'
+import ArnsNeedsService from './sentence-plan/arnsNeedsService'
 
 export const services = () => {
   const { applicationInfo, handoverApiClient } = dataAccess()
@@ -30,6 +32,7 @@ export const services = () => {
 export const requestServices = (appServices: Services) => ({
   sentencePlanApiClient: (req: Request) => new SentencePlanApiClient(new HmppsAuthClient(req)),
   assessmentApiClient: (req: Request) => new CoordinatorApiClient(new HmppsAuthClient(req)),
+  arnsApiClient: (req: Request) => new ArnsApiClient(new HmppsAuthClient(req)),
   formStorageService: (req: Request) => new FormStorageService(req),
   planService: (req: Request) => new PlanService(req.services.sentencePlanApiClient),
   goalService: (req: Request) => new GoalService(req.services.sentencePlanApiClient),
@@ -39,6 +42,7 @@ export const requestServices = (appServices: Services) => ({
   sessionService: (req: Request) =>
     new SessionService(req, appServices.handoverContextService, req.services.planService),
   auditService: (req: Request) => new AuditService(appServices.applicationInfo, req.services.sessionService, req.id),
+  arnsNeedsService: (req: Request) => new ArnsNeedsService(req.services.arnsApiClient),
 })
 
 export type RequestServices = {

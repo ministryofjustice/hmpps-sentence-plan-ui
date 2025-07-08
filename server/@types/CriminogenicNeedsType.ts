@@ -1,11 +1,11 @@
-export type criminogenicNeeds = {
-  identifiedNeeds: assessmentOfNeed[]
-  notIdentifiedNeeds: assessmentOfNeed[]
-  unansweredNeeds: assessmentOfNeed[]
+export type CriminogenicNeeds = {
+  identifiedNeeds: AssessmentOfNeed[]
+  notIdentifiedNeeds: AssessmentOfNeed[]
+  unansweredNeeds: AssessmentOfNeed[]
   assessedOn: string
 }
 
-type assessmentOfNeed = {
+type AssessmentOfNeed = {
   section: SectionStatus
   name: string
   riskOfHarm: boolean
