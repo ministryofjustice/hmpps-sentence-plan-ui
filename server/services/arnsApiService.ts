@@ -1,7 +1,7 @@
-import ArnsApiClient from '../../data/arnsApiClient'
-import { CriminogenicNeeds } from '../../@types/CriminogenicNeedsType'
+import ArnsApiClient from '../data/arnsApiClient'
+import { CriminogenicNeeds } from '../@types/CriminogenicNeedsType'
 
-export default class ArnsNeedsService {
+export default class ArnsApiService {
   constructor(private readonly arnsApiClient: ArnsApiClient) {}
 
   async getCriminogenicNeeds(crn: string) {

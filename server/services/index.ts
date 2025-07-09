@@ -14,7 +14,7 @@ import SentencePlanApiClient from '../data/sentencePlanApiClient'
 import CoordinatorApiClient from '../data/coordinatorApiClient'
 import AssessmentService from './sentence-plan/assessmentService'
 import ArnsApiClient from '../data/arnsApiClient'
-import ArnsNeedsService from './sentence-plan/arnsNeedsService'
+import ArnsApiService from './arnsApiService'
 
 export const services = () => {
   const { applicationInfo, handoverApiClient } = dataAccess()
@@ -42,7 +42,7 @@ export const requestServices = (appServices: Services) => ({
   sessionService: (req: Request) =>
     new SessionService(req, appServices.handoverContextService, req.services.planService),
   auditService: (req: Request) => new AuditService(appServices.applicationInfo, req.services.sessionService, req.id),
-  arnsNeedsService: (req: Request) => new ArnsNeedsService(req.services.arnsApiClient),
+  arnsApiService: (req: Request) => new ArnsApiService(req.services.arnsApiClient),
 })
 
 export type RequestServices = {
