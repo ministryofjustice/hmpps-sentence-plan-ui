@@ -18,7 +18,7 @@ passport.deserializeUser((user, done) => {
   done(null, user as Express.User)
 })
 
-passport.use(
+passport.use('handover-oauth2',
   new Strategy(
     {
       authorizationURL: `${config.apis.arnsHandover.externalUrl}/oauth2/authorize`,
@@ -41,6 +41,26 @@ passport.use(
   ),
 )
 
+// default name is 'oauth2', but can specify name as first parameter
+passport.use(new Strategy(
+  {
+    authorizationURL: `${config.apis.hmppsAuth.externalUrl}/oauth/authorize`,
+    tokenURL: `${config.apis.hmppsAuth.url}/oauth/token`,
+    clientID: 'sentence-plan-client',
+    clientSecret: 'sentence-plan-client',
+    callbackURL: `${config.domain}/sign-in/callback`,
+    state: true,
+    customHeaders: { Authorization: generateOauthClientToken(
+        'sentence-plan-client',
+        'sentence-plan-client'
+      )
+    },
+  },
+  (token, refreshToken, params, profile, done) => {
+    return done(null, { token, username: params.user_name, authSource: params.auth_source })
+  }
+))
+
 export default function setupAuthentication() {
   const router = Router()
 
@@ -51,10 +71,10 @@ export default function setupAuthentication() {
   router.use(passport.session())
   router.use(flash())
 
-  router.get('/sign-in', passport.authenticate('oauth2'))
+  router.get('/sign-in', passport.authenticate('handover-oauth2'))
 
-  router.get('/sign-in/callback', (req, res, next) =>
-    passport.authenticate('oauth2', {}, (err: any, user: Express.User) => {
+  router.get('/sign-in/handover/callback', (req, res, next) =>
+    passport.authenticate('handover-oauth2', {}, (err: any, user: Express.User) => {
       if (err) return next(err)
       if (!user) return res.redirect('/autherror')
 
@@ -78,8 +98,28 @@ export default function setupAuthentication() {
     })(req, res, next),
   )
 
-  const authUrl = config.apis.arnsHandover.url
-  const authParameters = `client_id=${config.apis.arnsHandover.clientId}&redirect_uri=${config.domain}`
+  router.get('/sign-in/hmpps-auth', passport.authenticate('oauth2'))
+
+  router.get('/sign-in/callback', (req, res, next) =>
+    passport.authenticate('oauth2', {}, (err: any, user: Express.User) => {
+      if (err) return next(err)
+      if (!user) return res.redirect('/autherror')
+
+      return req.logIn(user, loginErr => {
+        if (err) return next(loginErr)
+
+        return req.services.sessionService
+          .setupAuthSession()
+          .then(() => {
+            res.redirect(URLs.PLAN_OVERVIEW)
+          })
+      })
+    }
+    )(req, res, next),
+  )
+
+  const authUrl = config.apis.hmppsAuth.externalUrl
+  const authParameters = `client_id=sentence-plan-client&redirect_uri=${config.domain}/sign-in/hmpps-auth/`
 
   router.use('/sign-out', (req, res, next) => {
     const authSignOutUrl = `${authUrl}/sign-out?${authParameters}`
