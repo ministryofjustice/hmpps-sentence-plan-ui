@@ -14,6 +14,11 @@ export default class SessionService {
     try {
       this.request.session.handover = await this.handoverContextService.getContext(this.request.user?.token)
 
+      const subjectCRN = this.getSubjectDetails()?.crn
+      if (subjectCRN) {
+        await this.request.services.planService.associate(this.getPlanUUID(), subjectCRN)
+      }
+
       if (this.getPlanVersionNumber() != null) {
         this.request.session.plan = await this.planService.getPlanByUuidAndVersionNumber(
           this.getPlanUUID(),
