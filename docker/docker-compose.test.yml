@@ -1,8 +1,8 @@
 services:
-  ui:
+  sp-ui:
     environment:
       HMPPS_ARNS_HANDOVER_EXTERNAL_URL: http://arns-handover:7070
-      INGRESS_URL: http://ui:3000
+      INGRESS_URL: http://sp-ui:3000
       FEEDBACK_URL: http://forward-proxy:9092
 
   oastub:
@@ -11,8 +11,8 @@ services:
 
   arns-handover:
     environment:
-      CLIENT_SP_OAUTH_REDIRECT_URI: http://ui:3000/sign-in/callback
-      CLIENT_SP_HANDOVER_REDIRECT_URI: http://ui:3000/sign-in
+      CLIENT_SP_OAUTH_REDIRECT_URI: http://sp-ui:3000/sign-in/callback
+      CLIENT_SP_HANDOVER_REDIRECT_URI: http://sp-ui:3000/sign-in
       HMPPS_HANDOVER_EXTERNAL_URL: http://arns-handover:7070
       OASYS_BASE_URL: http://oastub:3000
       OASYS_RETURN_URLS: http://oastub:3000
@@ -20,10 +20,10 @@ services:
   cypress:
     image: cypress/included
     environment:
-      CYPRESS_BASE_URL: http://ui:3000
+      CYPRESS_BASE_URL: http://sp-ui:3000
       CYPRESS_ARNS_HANDOVER_URL: http://arns-handover:7070
       CYPRESS_HMPPS_AUTH_URL: http://hmpps-auth:9090
-      CYPRESS_SP_API_URL: http://api:8080
+      CYPRESS_SP_API_URL: http://sp-api:8080
       CYPRESS_OASTUB_URL: http://oastub:3000
       CYPRESS_COORDINATOR_API_URL: http://coordinator-api:8080
       CYPRESS_FEEDBACK_URL: http://forward-proxy:9092/
