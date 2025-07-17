@@ -8,14 +8,14 @@ The data is requested through this chain:
 
 AboutPersonController.ts -> HTTP GET to `/info/pop` -> Sentence Plan API -> ARNSApiService.kt -> HTTP GET to `delius-api.base-url`
 
-When running locally the sentence information is provided by wiremock using [wiremock/mappings/ndelius-casedata.json](../wiremock/mappings/ndelius.json).
+When running locally the sentence information is provided by wiremock using [wiremock/mappings/ndelius-casedata.json](../wiremock/arns-api/ndelius.json).
 
 ## Assessment information
 
 The Assessment information is constructed from a combination of
 
-1. the criminogenic needs in the session that were provided by OASys (the Handover service when running in local/dev environments)
-2. assessment data from the SAN application (wiremock when running in the local environment using [wiremock/mappings/assessment.json](../wiremock/mappings/assessment.json))
+1. the criminogenic needs fetched from the ARNS API
+2. assessment data from the SAN application (wiremock when running in the local environment using [wiremock/mappings/assessment.json](../wiremock/arns-api/assessment.json))
 
 Once it has been retrieved, these two data sets are passed to `formatAssessmentData` in `assessmentUtils.ts` which takes these steps:
 

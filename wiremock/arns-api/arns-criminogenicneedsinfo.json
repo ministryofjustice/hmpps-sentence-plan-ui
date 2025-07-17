@@ -2,7 +2,7 @@
   "mappings": [
     {
       "request": {
-        "url": "/arns-api/needs/crn/NOTFOUND",
+        "url": "/needs/crn/NOTFOUND",
         "method": "GET"
       },
       "response": {
@@ -11,7 +11,7 @@
     },
     {
       "request": {
-        "url": "/arns-api/needs/crn/SERVERERROR",
+        "url": "/needs/crn/SERVERERROR",
         "method": "GET"
       },
       "response": {
@@ -20,7 +20,7 @@
     },
     {
       "request": {
-        "urlPattern": "/arns-api/needs/crn/(?!NOTFOUND$|SERVERERROR$).*",
+        "urlPattern": "/needs/crn/(?!NOTFOUND$|SERVERERROR$).*",
         "method": "GET"
       },
       "response": {
