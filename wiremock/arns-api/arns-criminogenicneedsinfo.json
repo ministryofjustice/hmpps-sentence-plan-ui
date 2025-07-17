@@ -2,25 +2,45 @@
   "mappings": [
     {
       "request": {
-        "url": "/needs/crn/NOTFOUND",
+        "url": "/needs/NOTFOUND",
         "method": "GET"
       },
       "response": {
-        "status": 404
+        "status": 404,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {
+          "status": 404,
+          "developerMessage": "Prisoner Not Found",
+          "errorCode": 20012,
+          "userMessage": "Prisoner Not Found",
+          "moreInfo": "Prisoner Not Found"
+        }
       }
     },
     {
       "request": {
-        "url": "/needs/crn/SERVERERROR",
+        "url": "/needs/SERVERERROR",
         "method": "GET"
       },
       "response": {
-        "status": 500
+        "status": 500,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {
+          "status": 500,
+          "developerMessage": "System is down",
+          "errorCode": 20012,
+          "userMessage": "System is down",
+          "moreInfo": "Hard disk failure"
+        }
       }
     },
     {
       "request": {
-        "urlPattern": "/needs/crn/(?!NOTFOUND$|SERVERERROR$).*",
+        "urlPattern": "/needs/(?!NOTFOUND$|SERVERERROR$).*",
         "method": "GET"
       },
       "response": {

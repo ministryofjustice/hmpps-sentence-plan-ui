@@ -6,6 +6,6 @@ export default class ArnsApiService {
 
   async getCriminogenicNeeds(crn: string) {
     const restClient = await this.arnsApiClient.restClient('Getting Criminogenic Needs using crn')
-    return restClient.get<CriminogenicNeeds>({ path: `/needs/crn/${crn}` })
+    return restClient.get<CriminogenicNeeds>({ path: `/needs/${crn}` })
   }
 }

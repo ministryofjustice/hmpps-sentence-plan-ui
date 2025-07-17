@@ -49,8 +49,11 @@ services:
       CLIENT_ID: hmpps-assess-risks-and-needs-oastub-ui
       CLIENT_SECRET: clientsecret
       CLIENT_SP_SECRET: sp-secret
-      CLIENT_SP_OAUTH_REDIRECT_URI: http://localhost:3000/sign-in/callback
-      CLIENT_SP_HANDOVER_REDIRECT_URI: http://localhost:3000/sign-in
+      CLIENT_SP_OAUTH_REDIRECT_URI: http://localhost:3001/sign-in/callback
+      CLIENT_SP_HANDOVER_REDIRECT_URI: http://localhost:3001/sign-in
+      CLIENT_SAN_SECRET: san-secret
+      CLIENT_SAN_OAUTH_REDIRECT_URI: http://localhost:3000/sign-in/callback
+      CLIENT_SAN_HANDOVER_REDIRECT_URI: http://localhost:3000/sign-in
 
   oastub:
     image: ghcr.io/ministryofjustice/hmpps-assess-risks-and-needs-oastub-ui:latest
@@ -135,7 +138,7 @@ services:
       - sp-api
     environment:
       PRODUCT_ID: SP
-      INGRESS_URL: http://localhost:3000
+      INGRESS_URL: http://localhost:3001
       HTTPS: false
       PORT: 3000
       REDIS_ENABLED: true

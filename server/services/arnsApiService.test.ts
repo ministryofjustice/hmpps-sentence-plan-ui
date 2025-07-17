@@ -26,7 +26,7 @@ describe('ArnsApiService', () => {
       await arnsApiService.getCriminogenicNeeds(crn)
 
       expect(mockArnsApiClient.restClient).toHaveBeenCalledWith('Getting Criminogenic Needs using crn')
-      expect(mockRestClient.get).toHaveBeenCalledWith({ path: `/needs/crn/${crn}` })
+      expect(mockRestClient.get).toHaveBeenCalledWith({ path: `/needs/${crn}` })
     })
   })
 })
