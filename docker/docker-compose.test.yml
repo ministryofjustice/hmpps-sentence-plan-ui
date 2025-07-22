@@ -29,7 +29,11 @@ services:
       CYPRESS_FEEDBACK_URL: http://forward-proxy:9092/
     volumes:
       - ../:/integration_tests
+      - node_modules:/integration_tests/node_modules
     working_dir: /integration_tests
 
 volumes:
   test_results:
+  node_modules:
+    external: true
+    name: ${COMPOSE_PROJECT_NAME}_node_modules
