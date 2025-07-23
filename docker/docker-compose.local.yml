@@ -9,6 +9,8 @@ services:
 
   forward-proxy:
     image: nginx:latest
+    networks:
+      - hmpps
     depends_on:
       - hmpps-auth
       - arns-handover
