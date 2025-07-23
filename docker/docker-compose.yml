@@ -36,11 +36,15 @@ services:
       retries: 60
     ports:
       - "9090:9090"
+    volumes:
+      - ./auth_db:/auth_db
     environment:
       SERVER_PORT: 9090
       SPRING_PROFILES_ACTIVE: dev
       APPLICATION_AUTHENTICATION_UI_ALLOWLIST: 0.0.0.0/0
       LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY: DEBUG
+#      LOGGING_LEVEL_ORG_FLYWAYDB_CORE: DEBUG
+      SPRING_FLYWAY_LOCATIONS: classpath:db/auth,db/auth_{vendor},db/dev/data/auth_{vendor},db/dev/data/auth,filesystem:/auth_db
 
   arns-handover:
     image: ghcr.io/ministryofjustice/hmpps-assess-risks-and-needs-handover-service:latest
@@ -67,8 +71,8 @@ services:
       CLIENT_ID: hmpps-assess-risks-and-needs-oastub-ui
       CLIENT_SECRET: clientsecret
       CLIENT_SP_SECRET: sp-secret
-      CLIENT_SP_OAUTH_REDIRECT_URI: http://localhost:3000/sign-in/callback
-      CLIENT_SP_HANDOVER_REDIRECT_URI: http://localhost:3000/sign-in
+      CLIENT_SP_OAUTH_REDIRECT_URI: http://localhost:3000/sign-in/hmpps-auth/callback,http://localhost:3000/sign-in/handover/callback
+      CLIENT_SP_HANDOVER_REDIRECT_URI: http://localhost:3000/sign-in/handover
 
   oastub:
     image: ghcr.io/ministryofjustice/hmpps-assess-risks-and-needs-oastub-ui:latest

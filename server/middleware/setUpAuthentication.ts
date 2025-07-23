@@ -25,7 +25,7 @@ passport.use('handover-oauth2',
       tokenURL: `${config.apis.arnsHandover.url}/oauth2/token`,
       clientID: config.apis.arnsHandover.clientId,
       clientSecret: config.apis.arnsHandover.clientSecret,
-      callbackURL: `${config.domain}/sign-in/callback`,
+      callbackURL: `${config.domain}/sign-in/handover/callback`,
       state: true,
       customHeaders: {
         Authorization: generateOauthClientToken(
@@ -48,7 +48,7 @@ passport.use(new Strategy(
     tokenURL: `${config.apis.hmppsAuth.url}/oauth/token`,
     clientID: 'sentence-plan-client',
     clientSecret: 'sentence-plan-client',
-    callbackURL: `${config.domain}/sign-in/callback`,
+    callbackURL: `${config.domain}/sign-in/hmpps-auth/callback`,
     state: true,
     customHeaders: { Authorization: generateOauthClientToken(
         'sentence-plan-client',
@@ -71,7 +71,7 @@ export default function setupAuthentication() {
   router.use(passport.session())
   router.use(flash())
 
-  router.get('/sign-in', passport.authenticate('handover-oauth2'))
+  router.get('/sign-in/handover', passport.authenticate('handover-oauth2'))
 
   router.get('/sign-in/handover/callback', (req, res, next) =>
     passport.authenticate('handover-oauth2', {}, (err: any, user: Express.User) => {
@@ -100,7 +100,7 @@ export default function setupAuthentication() {
 
   router.get('/sign-in/hmpps-auth', passport.authenticate('oauth2'))
 
-  router.get('/sign-in/callback', (req, res, next) =>
+  router.get('/sign-in/hmpps-auth/callback', (req, res, next) =>
     passport.authenticate('oauth2', {}, (err: any, user: Express.User) => {
       if (err) return next(err)
       if (!user) return res.redirect('/autherror')

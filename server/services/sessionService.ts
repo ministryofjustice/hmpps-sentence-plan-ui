@@ -61,7 +61,7 @@ export default class SessionService {
         },
         sentencePlanContext: {
           oasysAssessmentPk: '',
-          planId: '56528271-fafa-4e8c-a1c9-56e2a8a7c878',
+          planId: 'fbacdbe7-6c5d-44b6-8264-6e72e349b402',
           planVersion: null, // null as it isHistoricalPlan (and READ_ONLY) if anything else specified.
         }
       }
