@@ -1,15 +1,14 @@
-// Anything higher than this value is considered high scoring.
-// The names of these fields match the CriminogenicNeedsData interface
-const assessmentAreaThresholds: Map<string, number> = new Map([
-  ['accommodation', 1],
-  ['educationTrainingEmployability', 1],
-  ['drugMisuse', 0],
-  ['alcoholMisuse', 1],
-  ['personalRelationshipsAndCommunity', 1],
-  ['thinkingBehaviourAndAttitudes', 2],
-  ['lifestyleAndAssociates', 1],
-])
+import { Section } from '../../@types/CriminogenicNeedsType'
 
-export default function getAssessmentAreaThreshold(areaName: string): number {
-  return assessmentAreaThresholds.get(areaName)
+// Anything higher than this value is considered high scoring.
+// eslint-disable-next-line import/prefer-default-export
+export const assessmentAreaThresholds: { [key in Section]: number } = {
+  ACCOMMODATION: 1,
+  ALCOHOL_MISUSE: 1,
+  ATTITUDE: 2,
+  DRUG_MISUSE: 0,
+  EDUCATION_TRAINING_AND_EMPLOYABILITY: 1,
+  LIFESTYLE_AND_ASSOCIATES: 1,
+  RELATIONSHIPS: 1,
+  THINKING_AND_BEHAVIOUR: 2,
 }

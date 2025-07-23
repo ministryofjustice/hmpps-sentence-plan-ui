@@ -85,10 +85,7 @@ export default {
     arnsHandover: {
       url: get('HMPPS_ARNS_HANDOVER_URL', 'http://arns-handover:7070', requiredInProduction),
       healthPath: '/health/ping',
-      externalUrl: get(
-        'HMPPS_ARNS_HANDOVER_EXTERNAL_URL',
-        get('HMPPS_ARNS_HANDOVER_URL', 'http://localhost:7070'),
-      ),
+      externalUrl: get('HMPPS_ARNS_HANDOVER_EXTERNAL_URL', get('HMPPS_ARNS_HANDOVER_URL', 'http://localhost:7070')),
       timeout: {
         response: Number(get('HMPPS_ARNS_HANDOVER_TIMEOUT_RESPONSE', 10000)),
         deadline: Number(get('HMPPS_ARNS_HANDOVER_TIMEOUT_DEADLINE', 10000)),

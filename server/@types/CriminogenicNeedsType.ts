@@ -6,29 +6,34 @@ export type CriminogenicNeeds = {
 }
 
 type AssessmentOfNeed = {
-  section: SectionStatus
+  section: Section
   name: string
-  riskOfHarm: boolean
-  riskOfReoffending: boolean
-  severity: SeverityStatus
-  score: number
-  oasysThreshold: number
-  tierThreshold: number
+  riskOfHarm?: boolean
+  riskOfReoffending?: boolean
+  severity?: Severity
+  score?: number
+  oasysThreshold?: number
+  tierThreshold?: number
 }
 
-enum SectionStatus {
+export enum Section {
   ACCOMMODATION = 'ACCOMMODATION',
   EDUCATION_TRAINING_AND_EMPLOYABILITY = 'EDUCATION_TRAINING_AND_EMPLOYABILITY',
+  RELATIONSHIPS = 'RELATIONSHIPS',
   LIFESTYLE_AND_ASSOCIATES = 'LIFESTYLE_AND_ASSOCIATES',
   DRUG_MISUSE = 'DRUG_MISUSE',
-  ATTITUDE = 'ATTITUDE',
-  RELATIONSHIPS = 'RELATIONSHIPS',
   ALCOHOL_MISUSE = 'ALCOHOL_MISUSE',
   THINKING_AND_BEHAVIOUR = 'THINKING_AND_BEHAVIOUR',
+  ATTITUDE = 'ATTITUDE',
 }
 
-enum SeverityStatus {
+enum Severity {
   SEVERE = 'SEVERE',
   STANDARD = 'STANDARD',
   NO_NEED = 'NO_NEED',
+}
+
+export interface CriminogenicNeedScore {
+  section: Section
+  score: number | null
 }

@@ -13,7 +13,7 @@ import { AccessMode } from '../../@types/Handover'
 import { HttpError } from '../../utils/HttpError'
 import { getDateOptions, getGoalTargetDate } from '../../utils/goalTargetDateUtils'
 import { NewGoal } from '../../@types/NewGoalType'
-import { areaConfigs } from '../../utils/assessmentAreaConfig.json'
+import { areaConfigs } from '../../utils/assessmentAreaConfig'
 import { AssessmentAreaConfig } from '../../@types/Assessment'
 import { getAssessmentDetailsForArea } from '../../utils/assessmentUtils'
 import { AuditEvent } from '../../services/auditService'
@@ -38,9 +38,9 @@ export default class ChangeGoalController {
       const selectedAreaOfNeed = sortedAreasOfNeed.find(areaOfNeed => areaOfNeed.name === goal.areaOfNeed.name)
       const form = errors ? req.body : this.mapGoalToForm(goal)
 
-      const criminogenicNeedsData = req.services.sessionService.getCriminogenicNeeds()
       const planUuid = req.services.sessionService.getPlanUUID()
       const plan = await req.services.planService.getPlanByUuid(planUuid)
+      const criminogenicNeedScores = await req.services.arnsApiService.getCriminogenicNeeds(plan.crn)
 
       // get assessment data or swallow the service error and set to null so the template knows this data is missing
       const assessmentDetailsForArea = await req.services.assessmentService
@@ -48,7 +48,7 @@ export default class ChangeGoalController {
         .then(assessmentResponse => {
           const assessmentData = assessmentResponse.sanAssessmentData
           const areaConfig: AssessmentAreaConfig = areaConfigs.find(config => config.area === goal.areaOfNeed.name)
-          return getAssessmentDetailsForArea(criminogenicNeedsData, areaConfig, assessmentData)
+          return getAssessmentDetailsForArea(criminogenicNeedScores, areaConfig, assessmentData)
         })
         .catch((): null => null)
 

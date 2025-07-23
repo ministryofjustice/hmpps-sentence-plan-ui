@@ -121,19 +121,20 @@
               "score": 1,
               "oasysThreshold": 4,
               "tierThreshold": 4
-            },
+            }
+          ],
+          "unansweredNeeds": [
             {
               "section": "THINKING_AND_BEHAVIOUR",
               "name": "Thinking and Behaviour",
-              "riskOfHarm": false,
-              "riskOfReoffending": true,
-              "severity": "NO_NEED",
-              "score": 3,
+              "riskOfHarm": null,
+              "riskOfReoffending": null,
+              "severity": null,
+              "score": null,
               "oasysThreshold": 4,
               "tierThreshold": 4
             }
           ],
-          "unansweredNeeds": [],
           "assessedOn": "2024-08-01T14:20:00"
         }
       }
