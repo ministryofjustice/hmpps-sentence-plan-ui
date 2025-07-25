@@ -42,12 +42,14 @@ export default class PlanOverviewController {
         isUpdatedAfterAgreement = Math.abs((mostRecentUpdateDate.getTime() - agreementDate.getTime()) / 1000) > 10
       }
 
-      // Set a flag for whether the future goal reminder should be shown.
-      const shouldShowFutureGoalReminder = this.plan.goals.some(goal => {
-        return (
-          goal.status === GoalStatus.FUTURE && goal.reminderDate != null && new Date(goal.reminderDate) <= new Date()
-        )
-      })
+      // Set a flag for whether the future goal reminder should be shown for an Agreed Plan.
+      const shouldShowFutureGoalReminder =
+        this.plan.agreementStatus === PlanAgreementStatus.AGREED &&
+        this.plan.goals.some(goal => {
+          return (
+            goal.status === GoalStatus.FUTURE && goal.reminderDate != null && new Date(goal.reminderDate) <= new Date()
+          )
+        })
 
       req.services.sessionService.setReturnLink(`/plan?type=${type ?? 'current'}`)
 
