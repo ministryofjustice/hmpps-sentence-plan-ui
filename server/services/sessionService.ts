@@ -35,36 +35,53 @@ export default class SessionService {
 
   setupAuthSession = async () => {
     try {
-      // const deliusData = await this.infoService.getPopData('X000001')
-      // console.log(deliusData);
-
       this.request.session.handover = {
-        assessmentContext: {
-          oasysAssessmentPk: '',
+        assessmentContext: { // Why does SP need to know this?
+          oasysAssessmentPk: '', // Isn't this only in the coordinator?
           assessmentVersion: 0
         },
-        criminogenicNeedsData: {},
-        handoverSessionId: '',
-        principal: {
-          identifier: 'X',
-          displayName: this.request.user.username,
+        criminogenicNeedsData: {}, // Aiden?
+        handoverSessionId: '', // ??
+        principal: { // ??
+          identifier: 'X', // This should be a UUID? But is shortened in OAStub.
+          displayName: this.request.user.username, // Username is probably not right here
           accessMode: AccessMode.READ_WRITE
         },
-        subject: {
-          crn: 'X000001',
-          pnc: '01/01PNC',
-          givenName: 'Alex',
-          familyName: 'Alexandersson',
-          dateOfBirth: '01-01-1960',
-          gender: Gender.NotSpecified,
+        subject: { // nDelius
+          crn: 'XYZ12345',
+          pnc: '',
+          givenName: '',
+          familyName: '',
+          dateOfBirth: '',
+          gender: Gender.NotKnown,
           location: 'PRISON'
         },
         sentencePlanContext: {
-          oasysAssessmentPk: '',
-          planId: 'fbacdbe7-6c5d-44b6-8264-6e72e349b402',
+          oasysAssessmentPk: '', // Isn't this only in the coordinator?
+          planId: '', // Via Jake's CRN API?
           planVersion: null, // null as it isHistoricalPlan (and READ_ONLY) if anything else specified.
         }
       }
+
+      // Failed: TypeError: Cannot read properties of undefined (reading 'identifier') HmppsAuthClient.getSystemClientToken
+      // Need to do this AFTER setting principal...
+      const deliusData = await this.request.services.infoService.getPopData('XYZ12345').catch((): null => null)
+      deliusData === null ? console.log('No Delius Data') : console.log(deliusData);
+
+      this.request.session.handover.subject = { // nDelius?
+        crn: deliusData.crn,
+        pnc: deliusData.prc, // Is this the same thing and just a typo? Not that it seems to be in the returned data from the delius API and is just hardcoded in our SP API.
+        givenName: deliusData.firstName,
+        familyName: deliusData.lastName,
+        dateOfBirth: deliusData.doB,
+        gender: Gender.NotSpecified, // Handover.Gender and Person.Gender are different :/
+        location: 'PRISON' // No location in deliusData, so...
+      }
+
+      this.request.session.handover.sentencePlanContext.planId = (await this.planService.getPlanByCrn('XYZ12345'))[0].uuid
+
+      // Currently only the sentences are used from the deliusData, and only on the about page...
+      // The rest of the data is from the handover subject (as popData in nunjucksSetup.ts).
 
       if (this.getPlanVersionNumber() != null) {
         this.request.session.plan = await this.planService.getPlanByUuidAndVersionNumber(
