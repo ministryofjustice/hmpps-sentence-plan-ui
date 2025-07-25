@@ -39,6 +39,7 @@
     "goalSummaryCard": {
       "info": {
         "dueToBeChecked": "Due to be checked",
+        "checkGoalOn": "Check goal on",
         "aimToAchieveDate": "Aim to achieve this by {{ targetDate }}.",
         "removedDate": "Removed on {{ lastStatusChangeDate }}.",
         "aimToAchieveSentence": "Aim to achieve this by the end of {{ subject.possessiveName }} sentence.",
