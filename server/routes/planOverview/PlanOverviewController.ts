@@ -44,7 +44,9 @@ export default class PlanOverviewController {
 
       // Set a flag for whether the future goal reminder should be shown.
       const shouldShowFutureGoalReminder = this.plan.goals.some(goal => {
-        return goal.status === GoalStatus.FUTURE && new Date(goal.reminderDate) <= new Date()
+        return (
+          goal.status === GoalStatus.FUTURE && goal.reminderDate != null && new Date(goal.reminderDate) <= new Date()
+        )
       })
 
       req.services.sessionService.setReturnLink(`/plan?type=${type ?? 'current'}`)

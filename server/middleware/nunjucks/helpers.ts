@@ -94,6 +94,8 @@ export const splitString = (input: string, delimiter: string) => {
 }
 
 export const isPastOrToday = (input: string) => {
+  if (!input) return false
+
   const inputDate = new Date(input)
   const today = new Date()
 
