@@ -6,7 +6,7 @@ import {
   incompleteAssessmentData,
 } from '../testutils/data/testAssessmentData'
 import commonLocale from './commonLocale.json'
-import { areaConfigs } from './assessmentAreaConfig.json'
+import { areaConfigs } from './assessmentAreaConfig'
 import { AssessmentArea } from '../@types/Assessment'
 import {
   formatAssessmentData,
@@ -15,6 +15,7 @@ import {
   sentenceLength,
   yearsAndDaysElapsed,
 } from './assessmentUtils'
+import { Section } from '../@types/CriminogenicNeedsType'
 
 describe('format assessment data', () => {
   it('returns empty arrays when assessment is null', () => {
@@ -38,48 +39,62 @@ describe('format assessment data', () => {
     expect(result.isAssessmentComplete).toEqual(false)
 
     expect(result.areas.incompleteAreas.length).toEqual(5)
+
     expect(result.areas.incompleteAreas[0].title).toEqual('Alcohol use')
+    expect(result.areas.incompleteAreas[0].overallScore).toEqual(null)
     expect(result.areas.incompleteAreas[0].isAssessmentSectionNotStarted).toEqual(true)
+    expect(result.areas.incompleteAreas[0].isAssessmentSectionComplete).toEqual(false)
+
     expect(result.areas.incompleteAreas[1].title).toEqual('Drug use')
+    expect(result.areas.incompleteAreas[1].overallScore).toEqual(null)
+    expect(result.areas.incompleteAreas[1].isAssessmentSectionNotStarted).toEqual(true)
+    expect(result.areas.incompleteAreas[1].isAssessmentSectionComplete).toEqual(false)
+
     expect(result.areas.incompleteAreas[2].title).toEqual('Finances')
+    expect(result.areas.incompleteAreas[2].overallScore).toEqual(null)
+    expect(result.areas.incompleteAreas[2].isAssessmentSectionNotStarted).toEqual(true)
+    expect(result.areas.incompleteAreas[2].isAssessmentSectionComplete).toEqual(false)
 
     expect(result.areas.incompleteAreas[3].title).toEqual('Personal relationships and community')
-    expect(result.areas.incompleteAreas[3].overallScore).toEqual('6')
-    expect(result.areas.incompleteAreas[3].isAssessmentSectionNotStarted).toEqual(false)
+    expect(result.areas.incompleteAreas[3].overallScore).toEqual(6)
+    expect(result.areas.incompleteAreas[3].isAssessmentSectionNotStarted).toEqual(true)
     expect(result.areas.incompleteAreas[3].isAssessmentSectionComplete).toEqual(false)
+
     expect(result.areas.incompleteAreas[4].title).toEqual('Thinking, behaviours and attitudes')
-    expect(result.areas.incompleteAreas[4].overallScore).toEqual('1')
-    expect(result.areas.incompleteAreas[4].isAssessmentSectionNotStarted).toEqual(false)
+    expect(result.areas.incompleteAreas[4].overallScore).toEqual(1)
+    expect(result.areas.incompleteAreas[4].isAssessmentSectionNotStarted).toEqual(true)
     expect(result.areas.incompleteAreas[4].isAssessmentSectionComplete).toEqual(false)
 
     expect(result.areas.highScoring.length).toEqual(1)
     expect(result.areas.highScoring[0].title).toEqual('Accommodation')
-    expect(result.areas.highScoring[0].overallScore).toEqual('6')
+    expect(result.areas.highScoring[0].overallScore).toEqual(6)
     expect(result.areas.highScoring[0].isAssessmentSectionNotStarted).toEqual(false)
     expect(result.areas.highScoring[0].isAssessmentSectionComplete).toEqual(true)
 
     expect(result.areas.lowScoring.length).toEqual(1)
     expect(result.areas.lowScoring[0].title).toEqual('Employment and education')
-    expect(result.areas.lowScoring[0].overallScore).toEqual('1')
-    expect(result.areas.incompleteAreas[3].isAssessmentSectionNotStarted).toEqual(false)
+    expect(result.areas.lowScoring[0].overallScore).toEqual(1)
+    expect(result.areas.lowScoring[0].isAssessmentSectionNotStarted).toEqual(false)
     expect(result.areas.lowScoring[0].isAssessmentSectionComplete).toEqual(true)
 
     expect(result.areas.other.length).toEqual(1)
-    expect(result.areas.other[0].title).toEqual('Health and wellbeing')
 
     // Health and Wellbeing never has a score but should be marked as complete.
-    // Only this Finance behave like this. Others need the score _and_ the `section_complete` flag.
+    // Areas without a criminogenic needs score behave like this. Others need the score _and_ the `section_complete` flag.
+    expect(result.areas.other[0].title).toEqual('Health and wellbeing')
     expect(result.areas.other[0].isAssessmentSectionComplete).toEqual(true)
     expect(result.areas.other[0].isAssessmentSectionNotStarted).toEqual(false)
-
-    result.areas.other.forEach(otherArea => {
-      expect(otherArea.overallScore).toBeUndefined()
-    })
+    expect(result.areas.other[0].overallScore).toBeNull()
   })
 
   it('returns education section not marked as complete when it does not have a score', () => {
-    fullCrimNeeds.educationTrainingEmployability.eteOtherWeightedScore = undefined
-    const result = formatAssessmentData(fullCrimNeeds, incompleteAssessmentData, areaConfigs)
+    const crimNeeds = fullCrimNeeds.map(it => {
+      if (it.section === Section.EDUCATION_TRAINING_AND_EMPLOYABILITY) {
+        return { ...it, score: null }
+      }
+      return it
+    })
+    const result = formatAssessmentData(crimNeeds, incompleteAssessmentData, areaConfigs)
 
     expect(result.isAssessmentComplete).toEqual(false)
     expect(result.areas.incompleteAreas[2].title).toEqual('Employment and education')
@@ -91,13 +106,15 @@ describe('format assessment data', () => {
     const result = formatAssessmentData(crimNeedsOrdered, completeAssessmentData, areaConfigs)
     expect(result.isAssessmentComplete).toEqual(true)
 
-    expect(result.areas.highScoring.length).toEqual(3)
-    expect(result.areas.highScoring[0].title).toEqual('Drug use')
-    expect(result.areas.highScoring[0].overallScore).toEqual('4')
-    expect(result.areas.highScoring[1].title).toEqual('Thinking, behaviours and attitudes')
-    expect(result.areas.highScoring[1].overallScore).toEqual('5')
-    expect(result.areas.highScoring[2].title).toEqual('Accommodation')
-    expect(result.areas.highScoring[2].overallScore).toEqual('3')
+    expect(result.areas.highScoring.length).toEqual(4)
+    expect(result.areas.highScoring[0].title).toEqual('Accommodation')
+    expect(result.areas.highScoring[0].overallScore).toEqual(3)
+    expect(result.areas.highScoring[1].title).toEqual('Personal relationships and community')
+    expect(result.areas.highScoring[1].overallScore).toEqual(6)
+    expect(result.areas.highScoring[2].title).toEqual('Drug use')
+    expect(result.areas.highScoring[2].overallScore).toEqual(4)
+    expect(result.areas.highScoring[3].title).toEqual('Thinking, behaviours and attitudes')
+    expect(result.areas.highScoring[3].overallScore).toEqual(5)
   })
 })
 
@@ -149,23 +166,23 @@ describe('sentence length', () => {
 describe('groupAndSortAreasByRisk', () => {
   it('groups and sorts areas by risk count', () => {
     const areas: Partial<AssessmentArea>[] = [
-      { title: 'Area A', linkedToHarm: 'YES', linkedtoReoffending: 'YES', overallScore: '2', thresholdValue: 5 },
-      { title: 'Area B', linkedToHarm: 'YES', linkedtoReoffending: 'NO', overallScore: '5', thresholdValue: 5 },
-      { title: 'Area C', linkedToHarm: 'NO', linkedtoReoffending: 'YES', overallScore: '6', thresholdValue: 5 },
-      { title: 'Area D', linkedToHarm: 'NO', linkedtoReoffending: 'NO', overallScore: '10', thresholdValue: 5 },
-      { title: 'Area E', linkedToHarm: 'YES', linkedtoReoffending: 'YES', overallScore: '8', thresholdValue: 5 },
-      { title: 'Area F', linkedToHarm: 'NO', linkedtoReoffending: 'YES', overallScore: '7', thresholdValue: 5 },
+      { title: 'Area A', linkedToHarm: 'YES', linkedtoReoffending: 'YES', overallScore: 2, thresholdValue: 5 },
+      { title: 'Area B', linkedToHarm: 'YES', linkedtoReoffending: 'NO', overallScore: 5, thresholdValue: 5 },
+      { title: 'Area C', linkedToHarm: 'NO', linkedtoReoffending: 'YES', overallScore: 6, thresholdValue: 5 },
+      { title: 'Area D', linkedToHarm: 'NO', linkedtoReoffending: 'NO', overallScore: 10, thresholdValue: 5 },
+      { title: 'Area E', linkedToHarm: 'YES', linkedtoReoffending: 'YES', overallScore: 8, thresholdValue: 5 },
+      { title: 'Area F', linkedToHarm: 'NO', linkedtoReoffending: 'YES', overallScore: 7, thresholdValue: 5 },
     ]
 
     const result = groupAndSortByRisk(areas as AssessmentArea[])
 
     expect(result).toEqual([
-      { title: 'Area E', linkedToHarm: 'YES', linkedtoReoffending: 'YES', overallScore: '8', thresholdValue: 5 },
-      { title: 'Area A', linkedToHarm: 'YES', linkedtoReoffending: 'YES', overallScore: '2', thresholdValue: 5 },
-      { title: 'Area B', linkedToHarm: 'YES', linkedtoReoffending: 'NO', overallScore: '5', thresholdValue: 5 },
-      { title: 'Area F', linkedToHarm: 'NO', linkedtoReoffending: 'YES', overallScore: '7', thresholdValue: 5 },
-      { title: 'Area C', linkedToHarm: 'NO', linkedtoReoffending: 'YES', overallScore: '6', thresholdValue: 5 },
-      { title: 'Area D', linkedToHarm: 'NO', linkedtoReoffending: 'NO', overallScore: '10', thresholdValue: 5 },
+      { title: 'Area E', linkedToHarm: 'YES', linkedtoReoffending: 'YES', overallScore: 8, thresholdValue: 5 },
+      { title: 'Area A', linkedToHarm: 'YES', linkedtoReoffending: 'YES', overallScore: 2, thresholdValue: 5 },
+      { title: 'Area B', linkedToHarm: 'YES', linkedtoReoffending: 'NO', overallScore: 5, thresholdValue: 5 },
+      { title: 'Area F', linkedToHarm: 'NO', linkedtoReoffending: 'YES', overallScore: 7, thresholdValue: 5 },
+      { title: 'Area C', linkedToHarm: 'NO', linkedtoReoffending: 'YES', overallScore: 6, thresholdValue: 5 },
+      { title: 'Area D', linkedToHarm: 'NO', linkedtoReoffending: 'NO', overallScore: 10, thresholdValue: 5 },
     ])
   })
 
@@ -179,15 +196,15 @@ describe('groupAndSortAreasByRisk', () => {
 
   it('sorts areas alphabetically within the same risk count', () => {
     const areas: Partial<AssessmentArea>[] = [
-      { title: 'Area B', linkedToHarm: 'YES', linkedtoReoffending: 'NO', overallScore: '2', thresholdValue: 5 },
-      { title: 'Area A', linkedToHarm: 'YES', linkedtoReoffending: 'NO', overallScore: '2', thresholdValue: 5 },
+      { title: 'Area B', linkedToHarm: 'YES', linkedtoReoffending: 'NO', overallScore: 2, thresholdValue: 5 },
+      { title: 'Area A', linkedToHarm: 'YES', linkedtoReoffending: 'NO', overallScore: 2, thresholdValue: 5 },
     ]
 
     const result = groupAndSortByRisk(areas as AssessmentArea[])
 
     expect(result).toEqual([
-      { title: 'Area A', linkedToHarm: 'YES', linkedtoReoffending: 'NO', overallScore: '2', thresholdValue: 5 },
-      { title: 'Area B', linkedToHarm: 'YES', linkedtoReoffending: 'NO', overallScore: '2', thresholdValue: 5 },
+      { title: 'Area A', linkedToHarm: 'YES', linkedtoReoffending: 'NO', overallScore: 2, thresholdValue: 5 },
+      { title: 'Area B', linkedToHarm: 'YES', linkedtoReoffending: 'NO', overallScore: 2, thresholdValue: 5 },
     ])
   })
 

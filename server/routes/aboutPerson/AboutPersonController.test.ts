@@ -2,7 +2,7 @@ import mockRes from '../../testutils/preMadeMocks/mockRes'
 import mockReq from '../../testutils/preMadeMocks/mockReq'
 import AboutPersonController from './AboutPersonController'
 import locale from './locale.json'
-import { areaConfigs } from '../../utils/assessmentAreaConfig.json'
+import { areaConfigs } from '../../utils/assessmentAreaConfig'
 import { AreaOfNeed } from '../../testutils/data/referenceData'
 import testPlan from '../../testutils/data/planData'
 import popData from '../../testutils/data/popData'
@@ -40,9 +40,14 @@ jest.mock('../../services/sessionService', () => {
     getOasysReturnUrl: jest.fn().mockReturnValue(oasysReturnUrl),
     getPrincipalDetails: jest.fn().mockReturnValue(testHandoverContext.principal),
     getSubjectDetails: jest.fn().mockReturnValue(testHandoverContext.subject),
-    getCriminogenicNeeds: jest.fn().mockReturnValue(fullCrimNeeds),
     getAccessMode: jest.fn().mockReturnValue(AccessMode.READ_WRITE),
     setReturnLink: jest.fn(),
+  }))
+})
+
+jest.mock('../../services/arnsApiService', () => {
+  return jest.fn().mockImplementation(() => ({
+    getCriminogenicNeeds: jest.fn().mockReturnValue(fullCrimNeeds),
   }))
 })
 
@@ -224,7 +229,7 @@ describe('AboutPersonController - assessment incomplete', () => {
 
   describe('Get About Person READ_WRITE', () => {
     it('should render when no exceptions thrown', async () => {
-      req.services.sessionService.getCriminogenicNeeds = jest.fn().mockReturnValue(fullCrimNeeds)
+      req.services.arnsApiService.getCriminogenicNeeds = jest.fn().mockReturnValue(fullCrimNeeds)
 
       const next = jest.fn()
       await controller.get(req, res, next)
@@ -249,7 +254,7 @@ describe('AboutPersonController - assessment incomplete', () => {
 
   describe('Get About Person READ_ONLY', () => {
     it('should render when no exceptions thrown', async () => {
-      req.services.sessionService.getCriminogenicNeeds = jest.fn().mockReturnValue(fullCrimNeeds)
+      req.services.arnsApiService.getCriminogenicNeeds = jest.fn().mockReturnValue(fullCrimNeeds)
       req.services.sessionService.getAccessMode = jest.fn().mockReturnValue(AccessMode.READ_ONLY)
 
       const next = jest.fn()

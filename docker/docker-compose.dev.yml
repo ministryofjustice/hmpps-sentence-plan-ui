@@ -1,5 +1,5 @@
 services:
-  ui:
+  sp-ui:
     image: ghcr.io/ministryofjustice/hmpps-sentence-plan-ui:local
     build:
       target: development

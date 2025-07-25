@@ -33,9 +33,14 @@ jest.mock('../../services/sentence-plan/referentialDataService', () => {
 jest.mock('../../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
     getPlanUUID: jest.fn().mockReturnValue('some-plan-uuid'),
-    getCriminogenicNeeds: jest.fn().mockReturnValue(crimNeedsSubset),
     getReturnLink: jest.fn().mockReturnValue('/some-return-link'),
     setReturnLink: jest.fn(),
+  }))
+})
+
+jest.mock('../../services/arnsApiService', () => {
+  return jest.fn().mockImplementation(() => ({
+    getCriminogenicNeeds: jest.fn().mockReturnValue(crimNeedsSubset),
   }))
 })
 

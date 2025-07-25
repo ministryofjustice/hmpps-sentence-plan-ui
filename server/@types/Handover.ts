@@ -1,12 +1,9 @@
-import { CriminogenicNeedsData } from './Assessment'
-
 export type HandoverContextData = {
   handoverSessionId: string
   principal: HandoverPrincipal
   subject: HandoverSubject
   assessmentContext: HandoverAssessmentContext
   sentencePlanContext: HandoverSentencePlanContext
-  criminogenicNeedsData?: CriminogenicNeedsData
 }
 
 export type HandoverPrincipal = {
