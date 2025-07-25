@@ -1,3 +1,4 @@
+import * as Express from 'express'
 import HandoverContextService from './handover/handoverContextService'
 import PlanService from './sentence-plan/planService'
 import Logger from '../../logger'
