@@ -7,7 +7,7 @@ import config from '../../config'
 import { initialiseName, mergeDeep, convertToTitleCase, nameFormatter } from '../../utils/utils'
 import commonLocale from '../../utils/commonLocale.json'
 import { sentenceLength } from '../../utils/assessmentUtils'
-import { formatDate, localeInterpolation, merge, splitString, toFormattedError } from './helpers'
+import { formatDate, isPastOrToday, localeInterpolation, merge, splitString, toFormattedError } from './helpers'
 
 const production = process.env.NODE_ENV === 'production'
 
@@ -53,6 +53,7 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
   njkEnv.addFilter('formatSimpleDate', date => formatDate(date, 'simple'))
   njkEnv.addFilter('formatISODate', date => formatDate(date, 'iso'))
   njkEnv.addFilter('splitString', splitString)
+  njkEnv.addFilter('isPastOrToday', isPastOrToday)
 
   /** GLOBALS * */
   njkEnv.addGlobal('merge', merge)

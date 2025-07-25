@@ -92,3 +92,14 @@ export const merge = (...args: object[]): object => {
 export const splitString = (input: string, delimiter: string) => {
   return input.split(delimiter)
 }
+
+export const isPastOrToday = (input: string) => {
+  const inputDate = new Date(input)
+  const today = new Date()
+
+  // Zero out time to compare just dates
+  inputDate.setHours(0, 0, 0, 0)
+  today.setHours(0, 0, 0, 0)
+
+  return inputDate <= today
+}

@@ -38,7 +38,9 @@
         }) %}
         <div class="goal-summary-card__info">
             <div class="goal-date-and-notes">
-            {% if params.goal.targetDate and params.goal.status != "ACHIEVED" and params.goal.status != "REMOVED" %}
+            {% if params.goal.status === 'FUTURE' and params.goal.reminderDate | isPastOrToday %}
+              <p class="goal-check-reminder govuk-tag--orange">{{ locale.info.dueToBeChecked }}</p>
+            {% elif params.goal.targetDate and params.goal.status != "ACHIEVED" and params.goal.status != "REMOVED" %}
                 <p>{{ locale.info.aimToAchieveDate }}</p>
             {% elif params.goal.status == "ACHIEVED" %}
                 <p>{{ locale.info.achievedDate }}</p>
