@@ -2,6 +2,7 @@ import { URLSearchParams } from 'url'
 
 import superagent from 'superagent'
 
+import * as Express from 'express'
 import logger from '../../logger'
 import config from '../config'
 import { generateOauthClientToken } from '../utils/utils'
