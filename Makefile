@@ -1,7 +1,6 @@
 SHELL = '/bin/bash'
 DEV_COMPOSE_FILES = -f docker/docker-compose.yml -f docker/docker-compose.local.yml -f docker/docker-compose.dev.yml
 LOCAL_COMPOSE_FILES = -f docker/docker-compose.yml -f docker/docker-compose.local.yml
-TEST_COMPOSE_FILES = -f docker/docker-compose.yml -f docker/docker-compose.test.yml
 PROJECT_NAME = hmpps-assess-risks-and-needs
 
 export COMPOSE_PROJECT_NAME=${PROJECT_NAME}
@@ -48,20 +47,6 @@ e2e: ## Run the end-to-end tests locally in the Cypress app. Override the defaul
 	docker compose ${DEV_COMPOSE_FILES} up --quiet-pull --no-recreate --wait
 	npx cypress install
 	npx cypress open --e2e -c baseUrl=${BASE_URL},experimentalInteractiveRunEvents=true
-
-BASE_URL_CI ?= "http://sp-ui:3000"
-vrt-ci: ## Run the snapshot Visual Regression Tests in headless mode. Used in CI. Override the default base URL with BASE_URL_CI=...
-	docker compose ${TEST_COMPOSE_FILES} -p ${PROJECT_NAME}-test run --quiet-pull --rm -e CYPRESS_BASE_URL=${BASE_URL_CI} -e SPEC="integration_tests/e2e/vrt-tests/**/*.cy.ts" -e SPLIT=${SPLIT} -e SPLIT_INDEX=${SPLIT_INDEX} cypress --env split=true run --spec 'integration_tests/e2e/vrt-tests/**/*.cy.ts'
-
-e2e-ci: ## Run the end-to-end tests in parallel in a headless browser. Used in CI. Override the default base URL with BASE_URL_CI=...
-	docker compose ${TEST_COMPOSE_FILES} -p ${PROJECT_NAME}-test run --quiet-pull --rm -e CYPRESS_BASE_URL=${BASE_URL_CI} -e SPEC="integration_tests/e2e/e2e-tests/**/*.cy.ts" -e SPLIT=${SPLIT} -e SPLIT_INDEX=${SPLIT_INDEX} cypress --browser edge --env split=true run --spec 'integration_tests/e2e/e2e-tests/**/*.cy.ts'
-
-test-up: ## Stands up a test environment.
-	docker compose --progress plain ${LOCAL_COMPOSE_FILES} pull --quiet --policy missing
-	docker compose --progress plain ${TEST_COMPOSE_FILES} -p ${PROJECT_NAME}-test up sp-ui --quiet-pull --wait --force-recreate
-
-test-down: ## Stops and removes all of the test containers.
-	docker compose --progress plain ${TEST_COMPOSE_FILES} -p ${PROJECT_NAME}-test down
 
 lint: ## Runs the linter.
 	docker compose ${DEV_COMPOSE_FILES} run --rm --no-deps sp-ui npm run lint
