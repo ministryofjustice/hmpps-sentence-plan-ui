@@ -141,7 +141,6 @@ services:
     depends_on:
       - redis
       - hmpps-auth
-      - forward-proxy
       - oastub
       - arns-handover
       - sp-api
