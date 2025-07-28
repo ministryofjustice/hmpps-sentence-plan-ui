@@ -76,7 +76,7 @@ jobs:
 
       - name: Export container logs
         if: failure()
-        run: make save-logs PROJECT_NAME="hmpps-sentence-plan-test" OUTPUT_LOGS_DIR=${{ runner.temp }}/docker-logs
+        run: make save-logs PROJECT_NAME="hmpps-assess-risks-and-needs-test" OUTPUT_LOGS_DIR=${{ runner.temp }}/docker-logs
 
       - name: Upload docker logs
         if: failure()

@@ -27,6 +27,8 @@ services:
 
   cypress:
     image: cypress/included
+    networks:
+      - hmpps
     environment:
       CYPRESS_BASE_URL: http://sp-ui:3000
       CYPRESS_ARNS_HANDOVER_URL: http://arns-handover:7070
