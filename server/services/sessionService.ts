@@ -2,6 +2,7 @@ import HandoverContextService from './handover/handoverContextService'
 import PlanService from './sentence-plan/planService'
 import Logger from '../../logger'
 import {AccessMode, Gender} from '../@types/Handover'
+import { jwtDecode } from 'jwt-decode'
 
 export default class SessionService {
   constructor(
@@ -35,6 +36,8 @@ export default class SessionService {
 
   setupAuthSession = async () => {
     try {
+      const decoded: any = jwtDecode(this.request.user.token)
+
       this.request.session.handover = {
         assessmentContext: { // Why does SP need to know this?
           oasysAssessmentPk: '', // Isn't this only in the coordinator?
@@ -44,8 +47,8 @@ export default class SessionService {
         handoverSessionId: '', // ??
         principal: { // ??
           identifier: 'X', // This should be a UUID? But is shortened in OAStub.
-          displayName: this.request.user.username, // Username is probably not right here
-          accessMode: AccessMode.READ_WRITE
+          displayName: decoded.name, // this.request.user.username is probably not right here
+          accessMode: AccessMode.READ_WRITE // Use 'scope' values instead of hardcoding?
         },
         subject: { // nDelius
           crn: 'XYZ12345',
@@ -66,30 +69,28 @@ export default class SessionService {
       // Failed: TypeError: Cannot read properties of undefined (reading 'identifier') HmppsAuthClient.getSystemClientToken
       // Need to do this AFTER setting principal...
       const deliusData = await this.request.services.infoService.getPopData('XYZ12345').catch((): null => null)
-      deliusData === null ? console.log('No Delius Data') : console.log(deliusData);
+      // deliusData === null ? console.log('No Delius Data') : console.log(deliusData);
 
       this.request.session.handover.subject = { // nDelius?
         crn: deliusData.crn,
-        pnc: deliusData.prc, // Is this the same thing and just a typo? Not that it seems to be in the returned data from the delius API and is just hardcoded in our SP API.
+        pnc: deliusData.prc, // Is this the same thing and just a typo? Not present in the returned data from the delius API and is just hardcoded in our SP API. So where do I get this from?
         givenName: deliusData.firstName,
         familyName: deliusData.lastName,
         dateOfBirth: deliusData.doB,
         gender: Gender.NotSpecified, // Handover.Gender and Person.Gender are different :/
-        location: 'PRISON' // No location in deliusData, so...
+        location: 'PRISON' // No location in deliusData, but there is an inCustody field...
       }
-
-      this.request.session.handover.sentencePlanContext.planId = (await this.planService.getPlanByCrn('XYZ12345'))[0].uuid
 
       // Currently only the sentences are used from the deliusData, and only on the about page...
       // The rest of the data is from the handover subject (as popData in nunjucksSetup.ts).
-
       if (this.getPlanVersionNumber() != null) {
         this.request.session.plan = await this.planService.getPlanByUuidAndVersionNumber(
           this.getPlanUUID(),
           this.getPlanVersionNumber(),
         )
       } else {
-        this.request.session.plan = await this.planService.getPlanByUuid(this.getPlanUUID())
+        this.request.session.plan = (await this.planService.getPlanByCrn('XYZ12345'))[0]
+        this.request.session.handover.sentencePlanContext.planId = this.request.session.plan.uuid
       }
     } catch (e) {
       Logger.error('Failed to setup session:', e)
