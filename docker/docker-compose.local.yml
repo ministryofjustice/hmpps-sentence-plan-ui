@@ -47,6 +47,18 @@ services:
     ports:
       - "3001:3000"
 
+  san-api:
+    ports:
+      - "8080:8080"
+
+  san-ui:
+    depends_on:
+      - forward-proxy
+    environment:
+      FEEDBACK_URL: http://localhost:9092
+    ports:
+      - "3000:3000"
+
   delius:
     ports:
       - "9094:8080"

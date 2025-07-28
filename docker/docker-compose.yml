@@ -107,7 +107,6 @@ services:
       SP_API_BASE_URL: http://sp-api:8080
       CLIENT_ID: hmpps-assess-risks-and-needs-oastub-ui
       CLIENT_SECRET: clientsecret
-      APP_STRATEGIES_ASSESSMENT: false
 
   sp-api:
     image: ghcr.io/ministryofjustice/hmpps-sentence-plan:latest
@@ -146,6 +145,7 @@ services:
       - oastub
       - arns-handover
       - sp-api
+      - san-api
     networks:
       - hmpps
     environment:
@@ -180,6 +180,61 @@ services:
       AUDIT_SQS_REGION: eu-west-2
       AUDIT_SERVICE_NAME: hmpps-sentence-plan-ui
       FEEDBACK_URL: http://localhost:9092
+
+  san-ui:
+    image: ghcr.io/ministryofjustice/hmpps-strengths-based-needs-assessments-ui:latest
+    networks:
+      - hmpps
+    depends_on:
+      - redis
+      - hmpps-auth
+      - arns-handover
+      - oastub
+    healthcheck:
+      test: [ "CMD", "node", "./docker/healthcheck.js" ]
+      interval: 5s
+      retries: 60
+    environment:
+      PORT: 3000
+      REDIS_HOST: redis
+      HMPPS_AUTH_EXTERNAL_URL: http://localhost:9090/auth
+      HMPPS_AUTH_URL: http://hmpps-auth:9090/auth
+      HMPPS_ARNS_HANDOVER_URL: http://arns-handover:7070
+      HMPPS_ARNS_HANDOVER_EXTERNAL_URL: http://localhost:7070
+      OASYS_URL: http://localhost:7072
+      HANDOVER_CLIENT_ID: strengths-and-needs-assessment
+      HANDOVER_CLIENT_SECRET: san-secret
+      TOKEN_VERIFICATION_ENABLED: false
+      TOKEN_VERIFICATION_API_URL: http://hmpps-auth:9091/verification
+      API_CLIENT_SECRET: clientsecret
+      SYSTEM_CLIENT_SECRET: clientsecret
+      API_CLIENT_ID: hmpps-strengths-and-needs-ui
+      SYSTEM_CLIENT_ID: hmpps-assess-risks-and-needs-oastub-ui
+      SESSION_SECRET: sessionsecret
+      SBNA_API_URL: http://san-api:8080
+      INGRESS_URL: http://localhost:3000
+      HTTPS: false
+      NODE_ENV: development
+      FEEDBACK_URL: http://foo.bar
+
+  san-api:
+    image: ghcr.io/ministryofjustice/hmpps-strengths-based-needs-assessments-api:latest
+    networks:
+      - hmpps
+    depends_on:
+      - postgres
+      - hmpps-auth
+      - san-ui
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://san-api:8080/health/ping" ]
+      interval: 5s
+      retries: 60
+    environment:
+      SERVER_PORT: 8080
+      SPRING_PROFILES_ACTIVE: postgres
+      DATABASE_ENDPOINT: postgres:5432
+      OAUTH_ENDPOINT_URL: http://hmpps-auth:9090/auth
+      FORM_CONFIG_BASE_URL: http://san-ui:3000/config
 
   delius:
     image: wiremock/wiremock:latest

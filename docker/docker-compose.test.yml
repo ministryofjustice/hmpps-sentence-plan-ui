@@ -1,8 +1,16 @@
 services:
   sp-ui:
     environment:
+      HMPPS_AUTH_EXTERNAL_URL: http://hmpps-auth:9090/auth
       HMPPS_ARNS_HANDOVER_EXTERNAL_URL: http://arns-handover:7070
       INGRESS_URL: http://sp-ui:3000
+      FEEDBACK_URL: http://forward-proxy:9092
+
+  san-ui:
+    environment:
+      HMPPS_AUTH_EXTERNAL_URL: http://hmpps-auth:9090/auth
+      HMPPS_ARNS_HANDOVER_EXTERNAL_URL: http://arns-handover:7070
+      INGRESS_URL: http://san-ui:3000
       FEEDBACK_URL: http://forward-proxy:9092
 
   oastub:
@@ -24,6 +32,7 @@ services:
       CYPRESS_ARNS_HANDOVER_URL: http://arns-handover:7070
       CYPRESS_HMPPS_AUTH_URL: http://hmpps-auth:9090
       CYPRESS_SP_API_URL: http://sp-api:8080
+      CYPRESS_SAN_API_URL: http://san-api:8080
       CYPRESS_OASTUB_URL: http://oastub:3000
       CYPRESS_COORDINATOR_API_URL: http://coordinator-api:8080
       CYPRESS_FEEDBACK_URL: http://forward-proxy:9092/

@@ -5,8 +5,7 @@ services:
       target: development
     command: npm run start:dev
     ports:
-      - "3000:3000"
-      - "9229:9229"
+      - "9230:9229"
     volumes:
       - ../:/app:cached
       - node_modules:/app/node_modules
