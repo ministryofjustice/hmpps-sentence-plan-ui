@@ -79,6 +79,7 @@ describe('ChangeGoalController', () => {
       assessmentDetailsForArea: {
         isAssessmentSectionNotStarted: false,
         isAssessmentSectionComplete: true,
+        isSanSectionComplete: true,
         motivationToMakeChanges: 'needsHelpToMakeChanges',
         linkedToHarm: 'NO',
         linkedtoReoffending: 'NO',

@@ -15,6 +15,7 @@ export interface AssessmentArea {
   goalRoute?: string
   isAssessmentSectionNotStarted: boolean
   isAssessmentSectionComplete: boolean
+  isSanSectionComplete: boolean
   linkedToHarm: string
   linkedtoReoffending: string
   linkedtoStrengthsOrProtectiveFactors: string

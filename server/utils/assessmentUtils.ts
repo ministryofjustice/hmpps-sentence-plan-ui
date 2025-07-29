@@ -70,6 +70,7 @@ export function getAssessmentDetailsForArea(
   return {
     isAssessmentSectionNotStarted,
     isAssessmentSectionComplete,
+    isSanSectionComplete,
     linkedToHarm,
     linkedtoReoffending,
     linkedtoStrengthsOrProtectiveFactors,
@@ -100,6 +101,7 @@ export const formatAssessmentData = (
     const {
       isAssessmentSectionNotStarted,
       isAssessmentSectionComplete,
+      isSanSectionComplete,
       linkedToHarm,
       linkedtoReoffending,
       linkedtoStrengthsOrProtectiveFactors,
@@ -136,6 +138,7 @@ export const formatAssessmentData = (
       linkedtoStrengthsOrProtectiveFactors,
       isAssessmentSectionNotStarted,
       isAssessmentSectionComplete,
+      isSanSectionComplete,
       motivationToMakeChanges,
       riskOfSeriousHarmDetails,
       riskOfReoffendingDetails,
@@ -148,14 +151,13 @@ export const formatAssessmentData = (
     } as AssessmentArea
   })
 
-  const incompleteAreas = all
-    .filter(area => !area.isAssessmentSectionComplete)
-    .sort((a, b) => a.title.localeCompare(b.title))
-  const completeAreas = all.filter(area => area.isAssessmentSectionComplete)
-
-  const highScoring = groupAndSortByRisk(completeAreas.filter(area => Number(area.overallScore) > area.thresholdValue))
-  const lowScoring = groupAndSortByRisk(completeAreas.filter(area => Number(area.overallScore) <= area.thresholdValue))
+  const incompleteAreas = all.filter(area => !area.isSanSectionComplete).sort((a, b) => a.title.localeCompare(b.title))
+  const completeAreas = all.filter(area => area.isSanSectionComplete)
+  const scoredAreas = completeAreas.filter(area => area.criminogenicNeedsScore !== null)
   const other = groupAndSortByRisk(completeAreas.filter(area => area.criminogenicNeedsScore === null))
+
+  const highScoring = groupAndSortByRisk(scoredAreas.filter(area => Number(area.overallScore) > area.thresholdValue))
+  const lowScoring = groupAndSortByRisk(scoredAreas.filter(area => Number(area.overallScore) <= area.thresholdValue))
 
   return {
     isAssessmentComplete: all.every(area => area.isAssessmentSectionComplete),

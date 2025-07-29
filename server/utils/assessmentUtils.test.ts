@@ -97,9 +97,9 @@ describe('format assessment data', () => {
     const result = formatAssessmentData(crimNeeds, incompleteAssessmentData, areaConfigs)
 
     expect(result.isAssessmentComplete).toEqual(false)
-    expect(result.areas.incompleteAreas[2].title).toEqual('Employment and education')
-    expect(result.areas.incompleteAreas[2].isAssessmentSectionComplete).toEqual(false)
-    expect(result.areas.incompleteAreas[2].isAssessmentSectionNotStarted).toEqual(false)
+    expect(result.areas.other[0].title).toEqual('Employment and education')
+    expect(result.areas.other[0].isAssessmentSectionComplete).toEqual(false)
+    expect(result.areas.other[0].isAssessmentSectionNotStarted).toEqual(false)
   })
 
   it('returns correctly ordered assessments by score compared to threshold in high scoring section', () => {

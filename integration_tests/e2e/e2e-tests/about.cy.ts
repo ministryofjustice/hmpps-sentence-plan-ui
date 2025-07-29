@@ -75,12 +75,12 @@ describe('Rendering About Person for READ_WRITE user', () => {
 
   it('Should check links in each assessment section are in the expected order', () => {
     const areas = [
-      { text: 'Create drug use goal', href: 'drug-use' },
       { text: 'Create personal relationships and community goal', href: 'personal-relationships-and-community' },
       { text: 'Create accommodation goal', href: 'accommodation' },
       { text: 'Create alcohol use goal', href: 'alcohol-use' },
       { text: 'Create employment and education goal', href: 'employment-and-education' },
       { text: 'Create thinking, behaviours and attitudes goal', href: 'thinking-behaviours-and-attitudes' },
+      { text: 'Create drug use goal', href: 'drug-use' },
       { text: 'Create finances goal', href: 'finances' },
       { text: 'Create health and wellbeing goal', href: 'health-and-wellbeing' },
     ]

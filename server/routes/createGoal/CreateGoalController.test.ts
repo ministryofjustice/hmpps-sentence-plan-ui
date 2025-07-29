@@ -80,6 +80,7 @@ describe('CreateGoalController', () => {
       assessmentDetailsForArea: {
         isAssessmentSectionNotStarted: false,
         isAssessmentSectionComplete: true,
+        isSanSectionComplete: true,
         motivationToMakeChanges: 'thinkingAboutMakingChanges',
         linkedToHarm: 'NO',
         linkedtoReoffending: 'YES',
