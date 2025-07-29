@@ -148,30 +148,17 @@ export const formatAssessmentData = (
     } as AssessmentArea
   })
 
-  let assessmentIsComplete = false
-
-  // if none of the areas have missing information, mark the assessment as complete
-  if (all.every(area => area.isAssessmentSectionComplete === true)) {
-    assessmentIsComplete = true
-  }
-
-  let incompleteAreas: AssessmentArea[] = []
-
-  if (!assessmentIsComplete) {
-    incompleteAreas = all
-      .filter(area => area.isAssessmentSectionComplete === false)
-      .sort((a, b) => a.title.localeCompare(b.title))
-  }
-
-  const completeAreas = all.filter(area => area.isAssessmentSectionComplete === true)
+  const incompleteAreas = all
+    .filter(area => !area.isAssessmentSectionComplete)
+    .sort((a, b) => a.title.localeCompare(b.title))
+  const completeAreas = all.filter(area => area.isAssessmentSectionComplete)
 
   const highScoring = groupAndSortByRisk(completeAreas.filter(area => Number(area.overallScore) > area.thresholdValue))
   const lowScoring = groupAndSortByRisk(completeAreas.filter(area => Number(area.overallScore) <= area.thresholdValue))
-  const otherUnsorted = groupAndSortByRisk(completeAreas.filter(area => area.criminogenicNeedsScore === null))
+  const other = groupAndSortByRisk(completeAreas.filter(area => area.criminogenicNeedsScore === null))
 
-  const other = groupAndSortByRisk(otherUnsorted)
   return {
-    isAssessmentComplete: assessmentIsComplete,
+    isAssessmentComplete: all.every(area => area.isAssessmentSectionComplete),
     versionUpdatedAt: assessment.lastUpdatedTimestampSAN,
     areas: {
       incompleteAreas,
