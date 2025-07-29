@@ -14,6 +14,7 @@ export type HandoverPrincipal = {
   displayName: string
   accessMode: AccessMode
   returnUrl?: string
+  authType?: AuthType
 }
 
 export type HandoverSubject = {
@@ -42,6 +43,11 @@ export type HandoverSentencePlanContext = {
 export const enum AccessMode {
   READ_WRITE = 'READ_WRITE',
   READ_ONLY = 'READ_ONLY',
+}
+
+export const enum AuthType {
+  OASYS = 'OASYS',
+  HMPPS_AUTH = 'HMPPS_AUTH',
 }
 
 export const enum Gender {

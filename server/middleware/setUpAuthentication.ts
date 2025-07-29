@@ -5,7 +5,6 @@ import { Strategy } from 'passport-oauth2'
 import config from '../config'
 import { generateOauthClientToken } from '../utils/utils'
 import URLs from '../routes/URLs'
-import UnsavedInformationDeletedController from '../routes/unsaved-information-deleted/UnsavedInformationDeletedController'
 import { AccessMode } from '../@types/Handover'
 
 passport.serializeUser((user, done) => {

@@ -2,7 +2,7 @@ import * as Express from 'express'
 import HandoverContextService from './handover/handoverContextService'
 import PlanService from './sentence-plan/planService'
 import Logger from '../../logger'
-import {AccessMode, Gender} from '../@types/Handover'
+import {AccessMode, AuthType, Gender} from '../@types/Handover'
 import { jwtDecode } from 'jwt-decode'
 
 export default class SessionService {
@@ -49,7 +49,8 @@ export default class SessionService {
         principal: { // ??
           identifier: 'X', // This should be a UUID? But is shortened in OAStub.
           displayName: decoded.name, // this.request.user.username is probably not right here
-          accessMode: AccessMode.READ_WRITE // Use 'scope' values instead of hardcoding?
+          accessMode: AccessMode.READ_WRITE, // Use 'scope' values instead of hardcoding?
+          authType: AuthType.HMPPS_AUTH
         },
         subject: { // nDelius
           crn: 'XYZ12345',
@@ -90,7 +91,7 @@ export default class SessionService {
           this.getPlanVersionNumber(),
         )
       } else {
-        this.request.session.plan = (await this.planService.getPlanByCrn('XYZ12345'))[0]
+        this.request.session.plan = (await this.planService.getPlanByCrn('X770507'))[0]
         this.request.session.handover.sentencePlanContext.planId = this.request.session.plan.uuid
       }
     } catch (e) {
