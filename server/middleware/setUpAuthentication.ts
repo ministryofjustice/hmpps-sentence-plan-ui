@@ -64,9 +64,6 @@ passport.use(new Strategy(
 export default function setupAuthentication() {
   const router = Router()
 
-  const controller = new UnsavedInformationDeletedController()
-  router.get(URLs.UNSAVED_INFORMATION_DELETED, controller.get)
-
   router.use(passport.initialize())
   router.use(passport.session())
   router.use(flash())
