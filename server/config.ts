@@ -69,7 +69,7 @@ export default {
   },
   apis: {
     hmppsAuth: {
-      url: get('HMPPS_AUTH_URL', 'http://hmpps-auth:9090/auth', requiredInProduction),
+      url: get('HMPPS_AUTH_URL', 'http://localhost:9090/auth', requiredInProduction),
       healthPath: '/health/ping',
       externalUrl: get('HMPPS_AUTH_EXTERNAL_URL', get('HMPPS_AUTH_URL', 'http://localhost:9090/auth')),
       timeout: {
@@ -83,7 +83,7 @@ export default {
       systemClientSecret: get('SYSTEM_CLIENT_SECRET', 'clientsecret', requiredInProduction),
     },
     arnsHandover: {
-      url: get('HMPPS_ARNS_HANDOVER_URL', 'http://arns-handover:7070', requiredInProduction),
+      url: get('HMPPS_ARNS_HANDOVER_URL', 'http://localhost:7070', requiredInProduction),
       healthPath: '/health/ping',
       externalUrl: get('HMPPS_ARNS_HANDOVER_EXTERNAL_URL', get('HMPPS_ARNS_HANDOVER_URL', 'http://localhost:7070')),
       timeout: {
