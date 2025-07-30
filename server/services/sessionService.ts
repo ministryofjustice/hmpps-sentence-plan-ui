@@ -55,8 +55,6 @@ export default class SessionService {
 
   getOasysReturnUrl = () => this.request.session.handover?.principal.returnUrl
 
-  getCriminogenicNeeds = () => this.request.session.handover?.criminogenicNeedsData
-
   getReturnLink = () => this.request.session.returnLink
 
   setReturnLink = (returnLink: string) => {
