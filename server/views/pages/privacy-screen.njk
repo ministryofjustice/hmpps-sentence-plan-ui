@@ -42,8 +42,9 @@
             <form id="confirm-privacy-form" method="POST">
                 <input type="hidden" name="_csrf" value="{{ csrfToken }}">
 
-                <p class="govuk-body">{{ locale.mainBody.message }}</p>
-                <p class="govuk-body">{{ locale.mainBody.messageAdditional }}</p>
+                <p class="govuk-body">{{ locale.mainBody.paragraph1 }}</p>
+                <p class="govuk-body">{{ locale.mainBody.paragraph2 }}</p>
+                <p class="govuk-body">{{ locale.mainBody.paragraph3 }}</p>
 
                 {{ govukCheckboxes({
                   name: "confirm-privacy-checkbox",

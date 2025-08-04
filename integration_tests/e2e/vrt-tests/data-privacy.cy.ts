@@ -2,7 +2,7 @@ describe('Data privacy', () => {
   beforeEach(() => {
     cy.createSentencePlan().then(planDetails => {
       cy.openSentencePlan(planDetails.oasysAssessmentPk)
-      cy.visit('/close-anything-not-needed-before-appointment')
+      cy.visit('/close-any-other-applications-before-appointment')
     })
   })
 
