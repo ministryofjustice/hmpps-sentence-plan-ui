@@ -57,7 +57,7 @@ describe('authorisationMiddleware', () => {
 
     expect(req.services!.sessionService.getPrincipalDetails).toHaveBeenCalled()
     expect(next).not.toHaveBeenCalled()
-    expect(res.redirect).toHaveBeenCalledWith('/sign-in')
+    expect(res.redirect).toHaveBeenCalledWith('/sign-in/hmpps-auth')
     expect(req.session!.returnTo).toBe('/test-url')
   })
 })

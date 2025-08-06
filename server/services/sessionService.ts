@@ -4,6 +4,7 @@ import PlanService from './sentence-plan/planService'
 import Logger from '../../logger'
 import {AccessMode, AuthType, Gender} from '../@types/Handover'
 import { jwtDecode } from 'jwt-decode'
+import {JwtPayloadExtended} from "../@types/Token";
 
 export default class SessionService {
   constructor(
@@ -37,29 +38,39 @@ export default class SessionService {
 
   setupAuthSession = async () => {
     try {
-      const decoded: any = jwtDecode(this.request.user.token)
+      const { name, user_uuid }: JwtPayloadExtended = jwtDecode(this.request?.user?.token)
+
+      // @ts-ignore
+      this.request.session.handover = {
+        principal: {
+          identifier: user_uuid,
+          displayName: name,
+          accessMode: AccessMode.READ_WRITE, // Use 'scope' values instead of hardcoding?
+          authType: AuthType.HMPPS_AUTH
+        }
+      }
+
+      // Failed: TypeError: Cannot read properties of undefined (reading 'identifier') HmppsAuthClient.getSystemClientToken
+      // Need to do this AFTER setting principal...
+      const deliusData = await this.request.services.infoService.getPopData('X775086').catch((): null => null)
+      deliusData.crn = 'X775086'
 
       this.request.session.handover = {
         assessmentContext: { // Why does SP need to know this?
           oasysAssessmentPk: '', // Isn't this only in the coordinator?
           assessmentVersion: 0
         },
-        criminogenicNeedsData: {}, // Aiden?
+        criminogenicNeedsData: {},
         handoverSessionId: '', // ??
-        principal: { // ??
-          identifier: 'X', // This should be a UUID? But is shortened in OAStub.
-          displayName: decoded.name, // this.request.user.username is probably not right here
-          accessMode: AccessMode.READ_WRITE, // Use 'scope' values instead of hardcoding?
-          authType: AuthType.HMPPS_AUTH
-        },
-        subject: { // nDelius
-          crn: 'XYZ12345',
-          pnc: '',
-          givenName: '',
-          familyName: '',
-          dateOfBirth: '',
-          gender: Gender.NotKnown,
-          location: 'PRISON'
+        principal: this.request.session.handover.principal,
+        subject: { // nDelius?
+          crn: deliusData.crn,
+          pnc: 'UNKNOWN PNC',
+          givenName: deliusData.firstName,
+          familyName: deliusData.lastName,
+          dateOfBirth: deliusData.doB,
+          gender: Gender.NotSpecified, // Handover.Gender and Person.Gender are different :/
+          location: 'COMMUNITY' // No location in deliusData, but there is an inCustody field...
         },
         sentencePlanContext: {
           oasysAssessmentPk: '', // Isn't this only in the coordinator?
@@ -68,20 +79,7 @@ export default class SessionService {
         }
       }
 
-      // Failed: TypeError: Cannot read properties of undefined (reading 'identifier') HmppsAuthClient.getSystemClientToken
-      // Need to do this AFTER setting principal...
-      const deliusData = await this.request.services.infoService.getPopData('XYZ12345').catch((): null => null)
-      // deliusData === null ? console.log('No Delius Data') : console.log(deliusData);
-
-      this.request.session.handover.subject = { // nDelius?
-        crn: deliusData.crn,
-        pnc: deliusData.prc, // Is this the same thing and just a typo? Not present in the returned data from the delius API and is just hardcoded in our SP API. So where do I get this from?
-        givenName: deliusData.firstName,
-        familyName: deliusData.lastName,
-        dateOfBirth: deliusData.doB,
-        gender: Gender.NotSpecified, // Handover.Gender and Person.Gender are different :/
-        location: 'PRISON' // No location in deliusData, but there is an inCustody field...
-      }
+      const subjectCRN = this.getSubjectDetails()?.crn
 
       // Currently only the sentences are used from the deliusData, and only on the about page...
       // The rest of the data is from the handover subject (as popData in nunjucksSetup.ts).
@@ -91,8 +89,12 @@ export default class SessionService {
           this.getPlanVersionNumber(),
         )
       } else {
-        this.request.session.plan = (await this.planService.getPlanByCrn('X770507'))[0]
+        this.request.session.plan = (await this.planService.getPlanByCrn(subjectCRN))[0]
         this.request.session.handover.sentencePlanContext.planId = this.request.session.plan.uuid
+      }
+
+      if (subjectCRN) {
+        await this.request.services.planService.associate(this.getPlanUUID(), subjectCRN)
       }
     } catch (e) {
       Logger.error('Failed to setup session:', e)

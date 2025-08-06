@@ -4,12 +4,16 @@ import SessionService from './sessionService'
 import testHandoverContext from '../testutils/data/handoverData'
 import PlanService from './sentence-plan/planService'
 import HandoverContextService from './handover/handoverContextService'
+import popData from "../testutils/data/popData";
+import createUserToken from "../testutils/createUserToken";
+import {AuthType} from "../@types/Handover";
 
 jest.mock('./sentence-plan/planService', () => {
   return jest.fn().mockImplementation(() => ({
     getPlanByUuid: jest.fn(),
     getPlanByUuidAndVersionNumber: jest.fn(),
     associate: jest.fn(),
+    getPlanByCrn: jest.fn(),
   }))
 })
 jest.mock('./handover/handoverContextService', () => {
@@ -70,6 +74,27 @@ describe('SessionService', () => {
         handover: testHandoverContext,
       }
       expect(sessionService.getSubjectDetails()).toBe(testHandoverContext.subject)
+    })
+  })
+
+  describe('setupAuthSession', () => {
+    it('should set up session with handover and plan', async () => {
+      handoverContextServiceMock.getContext.mockResolvedValue(testHandoverContext)
+      planServiceMock.getPlanByUuidAndVersionNumber.mockResolvedValue(testPlan)
+      planServiceMock.associate.mockResolvedValue(testPlan)
+      planServiceMock.getPlanByCrn.mockResolvedValue([testPlan])
+      requestMock.services.infoService.getPopData = jest.fn().mockResolvedValue(popData)
+      requestMock.user = {
+          token: createUserToken([]),
+      }
+
+      await sessionService.setupAuthSession()
+
+      testHandoverContext.principal.authType = AuthType.HMPPS_AUTH
+      testHandoverContext.criminogenicNeedsData = {}
+      expect(requestMock.session.handover).toEqual(testHandoverContext)
+      expect(requestMock.session.plan).toEqual(testPlan)
+      expect(requestMock.session.plan.crn).toEqual(testHandoverContext.subject.crn)
     })
   })
 })

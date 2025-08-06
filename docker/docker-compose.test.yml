@@ -12,7 +12,7 @@ services:
   arns-handover:
     environment:
       CLIENT_SP_OAUTH_REDIRECT_URI: http://ui:3000/sign-in/callback
-      CLIENT_SP_HANDOVER_REDIRECT_URI: http://ui:3000/sign-in
+      CLIENT_SP_HANDOVER_REDIRECT_URI: http://ui:3000/sign-in/handover
       HMPPS_HANDOVER_EXTERNAL_URL: http://arns-handover:7070
       OASYS_BASE_URL: http://oastub:3000
       OASYS_RETURN_URLS: http://oastub:3000

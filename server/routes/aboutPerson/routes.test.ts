@@ -68,7 +68,7 @@ describe(`GET ${URLs.ABOUT_PERSON}`, () => {
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain(
-          locale.en.mainHeading.title.replace('{{ subject.givenName }}', testPopData.givenName),
+          locale.en.mainHeading.title.replace('{{ subject.givenName }}', testPopData.firstName),
         )
       })
   })

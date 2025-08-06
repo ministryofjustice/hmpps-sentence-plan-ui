@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken'
 export default function createUserToken(authorities: string[]) {
   const payload = {
     user_name: 'user1',
+    name: 'Dr. Benjamin Runolfsdottir',
     scope: ['read', 'write'],
     auth_source: 'nomis',
     authorities,
