@@ -47,7 +47,7 @@ describe('authorisationMiddleware', () => {
     expect(next).toHaveBeenCalled()
   })
 
-  it('should redirect to /sign-in if principal details are not present', async () => {
+  it('should redirect to /sign-in/handover if principal details are not present', async () => {
     ;(req.services.sessionService.getPrincipalDetails as jest.Mock).mockReturnValue(null)
     req.originalUrl = '/test-url'
     req.session = {} as Session
@@ -57,7 +57,7 @@ describe('authorisationMiddleware', () => {
 
     expect(req.services!.sessionService.getPrincipalDetails).toHaveBeenCalled()
     expect(next).not.toHaveBeenCalled()
-    expect(res.redirect).toHaveBeenCalledWith('/sign-in/hmpps-auth')
+    expect(res.redirect).toHaveBeenCalledWith('/sign-in/handover')
     expect(req.session!.returnTo).toBe('/test-url')
   })
 })

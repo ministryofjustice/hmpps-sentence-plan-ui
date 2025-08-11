@@ -1,29 +1,32 @@
 import { RequestHandler } from 'express'
-import { AccessMode } from '../@types/Handover'
+import {AccessMode, AuthType} from '../@types/Handover'
 import { HttpError } from '../utils/HttpError'
 import {JwtPayloadExtended} from "../@types/Token";
 import {jwtDecode} from "jwt-decode";
 
 export default function authorisationMiddleware(): RequestHandler {
   return (req, res, next) => {
-    const { auth_source, authorities: roles = [] }: JwtPayloadExtended = jwtDecode(req?.user?.token)
+    const authType: AuthType = req.services.sessionService.getPrincipalDetails()?.authType
 
-    if (auth_source === 'auth') {
-       if (roles.includes('ROLE_SENTENCE_PLAN_USER')) {
-         return next()
-       } else {
-         return res.redirect('/autherror')
-       }
-    } else if (auth_source !== 'auth' && req.services.sessionService.getPrincipalDetails()) {
+    // Auth
+    if (authType == AuthType.HMPPS_AUTH) {
+      const {authorities: roles = []}: JwtPayloadExtended = jwtDecode(req?.user?.token)
+
+      if (roles.includes('ROLE_SENTENCE_PLAN_USER')) {
+        return next()
+      } else {
+        return res.redirect('/autherror')
+      }
+    }
+
+    // Handover
+    if (req.services.sessionService.getPrincipalDetails()) {
       return next()
     }
 
+    // Failure
     req.session.returnTo = req.originalUrl
-    if (auth_source === 'auth') {
-      return res.redirect('/sign-in/hmpps-auth')
-    } else {
-      return res.redirect('/sign-in/handover')
-    }
+    return res.redirect('/sign-in/handover')
   }
 }
 
