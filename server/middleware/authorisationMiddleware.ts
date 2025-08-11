@@ -1,16 +1,29 @@
 import { RequestHandler } from 'express'
 import { AccessMode } from '../@types/Handover'
 import { HttpError } from '../utils/HttpError'
+import {JwtPayloadExtended} from "../@types/Token";
+import {jwtDecode} from "jwt-decode";
 
 export default function authorisationMiddleware(): RequestHandler {
   return (req, res, next) => {
-    if (req.services.sessionService.getPrincipalDetails()) {
+    const { auth_source, authorities: roles = [] }: JwtPayloadExtended = jwtDecode(req?.user?.token)
+
+    if (auth_source === 'auth') {
+       if (roles.includes('ROLE_SENTENCE_PLAN_USER')) {
+         return next()
+       } else {
+         return res.redirect('/autherror')
+       }
+    } else if (auth_source !== 'auth' && req.services.sessionService.getPrincipalDetails()) {
       return next()
     }
 
-    // TODO: error flow? redirect to handover or auth depending on method used?
     req.session.returnTo = req.originalUrl
-    return res.redirect('/sign-in/hmpps-auth')
+    if (auth_source === 'auth') {
+      return res.redirect('/sign-in/hmpps-auth')
+    } else {
+      return res.redirect('/sign-in/handover')
+    }
   }
 }
 

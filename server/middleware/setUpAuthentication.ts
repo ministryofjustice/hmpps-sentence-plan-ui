@@ -67,6 +67,11 @@ export default function setupAuthentication() {
   router.use(passport.session())
   router.use(flash())
 
+  router.get('/autherror', (req, res) => {
+    res.status(401)
+    return res.render('autherror')
+  })
+
   router.get('/sign-in/handover', passport.authenticate('handover-oauth2'))
 
   router.get('/sign-in/handover/callback', (req, res, next) =>

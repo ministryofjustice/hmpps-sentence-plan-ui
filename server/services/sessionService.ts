@@ -38,6 +38,7 @@ export default class SessionService {
 
   setupAuthSession = async () => {
     try {
+      // The auth token has more attributes than the handover token
       const { name, user_uuid }: JwtPayloadExtended = jwtDecode(this.request?.user?.token)
 
       // @ts-ignore

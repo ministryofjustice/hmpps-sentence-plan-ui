@@ -2,6 +2,7 @@ import testPlan from '../testutils/data/planData'
 import mockReq from '../testutils/preMadeMocks/mockReq'
 import SessionService from './sessionService'
 import testHandoverContext from '../testutils/data/handoverData'
+import authContextData from "../testutils/data/authContextData";
 import PlanService from './sentence-plan/planService'
 import HandoverContextService from './handover/handoverContextService'
 import popData from "../testutils/data/popData";
@@ -92,7 +93,7 @@ describe('SessionService', () => {
 
       testHandoverContext.principal.authType = AuthType.HMPPS_AUTH
       testHandoverContext.criminogenicNeedsData = {}
-      // expect(requestMock.session.handover).toEqual(testHandoverContext)
+      expect(requestMock.session.handover).toEqual(authContextData)
       expect(requestMock.session.plan).toEqual(testPlan)
       expect(requestMock.session.plan.crn).toEqual(testHandoverContext.subject.crn)
     })

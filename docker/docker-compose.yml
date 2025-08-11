@@ -45,6 +45,8 @@ services:
       LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY: DEBUG
 #      LOGGING_LEVEL_ORG_FLYWAYDB_CORE: DEBUG
       SPRING_FLYWAY_LOCATIONS: classpath:db/auth,db/auth_{vendor},db/dev/data/auth_{vendor},db/dev/data/auth,filesystem:/auth_db
+      SPRING_H2_CONSOLE_ENABLED: true
+      SPRING_H2_CONSOLE_SETTINGS_WEB_ALLOW_OTHERS: true
 
   arns-handover:
     image: ghcr.io/ministryofjustice/hmpps-assess-risks-and-needs-handover-service:latest
