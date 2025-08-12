@@ -9,6 +9,7 @@ const testPlan: PlanType = {
   updatedDate: new Date().toISOString(),
   updatedBy: '',
   agreementDate: null,
+  crn: 'X336018',
   mostRecentUpdateDate: new Date().toISOString(),
   goals: [testGoal],
 }
@@ -21,6 +22,7 @@ const agreedTestPlan: PlanType = {
   updatedDate: new Date().toISOString(),
   updatedBy: '',
   agreementDate: new Date().toISOString(),
+  crn: 'X336018',
   mostRecentUpdateDate: new Date().toISOString(),
   goals: [testGoal],
 }
@@ -33,6 +35,7 @@ const couldNotAnswerTestPlan: PlanType = {
   updatedDate: new Date().toISOString(),
   updatedBy: '',
   agreementDate: new Date().toISOString(),
+  crn: 'X336018',
   mostRecentUpdateDate: new Date().toISOString(),
   goals: [testGoal],
 }

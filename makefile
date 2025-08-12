@@ -39,15 +39,21 @@ test: ## Runs the unit test suite.
 	docker compose ${DEV_COMPOSE_FILES} run --rm --no-deps ui npm run test
 
 BASE_URL ?= "http://localhost:3000"
+vrt: ## Run the snapshot Visual Regression Tests UI; this allows for snapshots to be visually compared.
+	npx cypress-image-diff-html-report start
+
 e2e: ## Run the end-to-end tests locally in the Cypress app. Override the default base URL with BASE_URL=...
 	@make install-node-modules
-	docker compose ${DEV_COMPOSE_FILES} up --no-recreate --wait
+	docker compose ${DEV_COMPOSE_FILES} up --quiet-pull --no-recreate --wait
 	npx cypress install
-	npx cypress open --e2e -c baseUrl=$(BASE_URL),experimentalInteractiveRunEvents=true
+	npx cypress open --e2e -c baseUrl=${BASE_URL},experimentalInteractiveRunEvents=true
 
 BASE_URL_CI ?= "http://ui:3000"
+vrt-ci: ## Run the snapshot Visual Regression Tests in headless mode. Used in CI. Override the default base URL with BASE_URL_CI=...
+	docker compose ${TEST_COMPOSE_FILES} -p ${PROJECT_NAME}-test run --quiet-pull --rm -e CYPRESS_BASE_URL=${BASE_URL_CI} -e SPEC="integration_tests/e2e/vrt-tests/**/*.cy.ts" -e SPLIT=${SPLIT} -e SPLIT_INDEX=${SPLIT_INDEX} cypress --env split=true run --spec 'integration_tests/e2e/vrt-tests/**/*.cy.ts'
+
 e2e-ci: ## Run the end-to-end tests in parallel in a headless browser. Used in CI. Override the default base URL with BASE_URL_CI=...
-	docker compose ${TEST_COMPOSE_FILES} -p ${PROJECT_NAME}-test run --quiet-pull --rm -e CYPRESS_BASE_URL=${BASE_URL_CI} -e SPLIT=${SPLIT} -e SPLIT_INDEX=${SPLIT_INDEX} cypress --browser edge --env split=true
+	docker compose ${TEST_COMPOSE_FILES} -p ${PROJECT_NAME}-test run --quiet-pull --rm -e CYPRESS_BASE_URL=${BASE_URL_CI} -e SPEC="integration_tests/e2e/e2e-tests/**/*.cy.ts" -e SPLIT=${SPLIT} -e SPLIT_INDEX=${SPLIT_INDEX} cypress --browser edge --env split=true run --spec 'integration_tests/e2e/e2e-tests/**/*.cy.ts'
 
 test-up: ## Stands up a test environment.
 	docker compose --progress plain ${LOCAL_COMPOSE_FILES} pull --quiet --policy missing

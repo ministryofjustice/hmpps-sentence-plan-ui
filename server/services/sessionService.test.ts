@@ -9,6 +9,7 @@ jest.mock('./sentence-plan/planService', () => {
   return jest.fn().mockImplementation(() => ({
     getPlanByUuid: jest.fn(),
     getPlanByUuidAndVersionNumber: jest.fn(),
+    associate: jest.fn(),
   }))
 })
 jest.mock('./handover/handoverContextService', () => {
@@ -34,11 +35,13 @@ describe('SessionService', () => {
     it('should set up session with handover and plan', async () => {
       handoverContextServiceMock.getContext.mockResolvedValue(testHandoverContext)
       planServiceMock.getPlanByUuidAndVersionNumber.mockResolvedValue(testPlan)
+      planServiceMock.associate.mockResolvedValue(testPlan)
 
       await sessionService.setupSession()
 
       expect(requestMock.session.handover).toEqual(testHandoverContext)
       expect(requestMock.session.plan).toEqual(testPlan)
+      expect(requestMock.session.plan.crn).toEqual(testHandoverContext.subject.crn)
     })
   })
 

@@ -1,7 +1,7 @@
 {% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
 
 {% if feedbackUrl %}
-  <div class="govuk-grid-row user-feedback">
+  <div class="govuk-grid-row user-feedback govuk-!-display-none-print">
     <div class="govuk-grid-column-full">
       {{ govukPhaseBanner({
         tag: {

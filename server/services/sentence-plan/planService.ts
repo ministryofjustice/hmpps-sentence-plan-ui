@@ -27,4 +27,11 @@ export default class PlanService {
     const restClient = await this.sentencePlanApiClient.restClient(`Getting notes for plan with plan UUID: ${planUuid}`)
     return restClient.get<NoteType[]>({ path: `/plans/${planUuid}/notes` })
   }
+
+  async associate(planUuid: string, crn: string) {
+    const restClient = await this.sentencePlanApiClient.restClient(
+      `Associate plan with CRN: planUuid: ${planUuid} crn: ${crn} `,
+    )
+    return restClient.put<PlanType>({ path: `/plans/associate/${planUuid}/${crn}` })
+  }
 }
