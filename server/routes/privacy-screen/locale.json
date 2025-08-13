@@ -10,7 +10,7 @@
     "mainBody": {
       "paragraph1": "For example, Outlook, Teams or NDelius.",
       "paragraph2": "You must do this to avoid sharing sensitive information.",
-      "paragraph3": "You should not let {{ subject.givenName }} use your device either.",
+      "paragraph3": "You must not let {{ subject.givenName }} use your device either.",
       "checkBoxLabel": "I confirm I'll close any other applications before starting an appointment"
     },
     "errors": {
