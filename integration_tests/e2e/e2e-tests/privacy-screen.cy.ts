@@ -42,7 +42,7 @@ describe('Privacy Screen', () => {
       )
       cy.get('.govuk-body').contains('For example, Outlook, Teams or NDelius.')
       cy.get('.govuk-body').contains('You must do this to avoid sharing sensitive information.')
-      cy.get('.govuk-body').contains('You should not let Sam use your device either.')
+      cy.get('.govuk-body').contains('You must not let Sam use your device either.')
       cy.get('.govuk-checkboxes').contains("I confirm I'll close any other applications before starting an appointment")
       cy.get('.govuk-button').contains('Confirm')
       cy.contains('a', 'Return to OASys').should('have.attr', 'href').and('include', Cypress.env('OASTUB_URL'))
