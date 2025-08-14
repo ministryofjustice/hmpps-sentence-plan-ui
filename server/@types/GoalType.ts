@@ -15,6 +15,7 @@ export type Goal = {
   relatedAreasOfNeed: AreaOfNeed[]
   createdDate: string
   targetDate?: string
+  reminderDate?: string
   statusDate?: string
   goalOrder: number
   steps: Step[]

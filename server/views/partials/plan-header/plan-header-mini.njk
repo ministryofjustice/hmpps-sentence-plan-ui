@@ -1,3 +1,5 @@
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+
 {% if data.popData %}
     <header class="plan-header" role="presentation">
         <div class="plan-header__subject-details">
@@ -17,6 +19,21 @@
                 </div>
             </dl>
         </div>
+
+        {% if data.shouldShowFutureGoalReminder %}
+          {% set html %}
+            <p class="govuk-notification-banner__heading">
+              {{ locale.common.planHeader.reminderBanner.heading }}
+            </p>
+            <p>{{ locale.common.planHeader.reminderBanner.message }}</p>
+          {% endset %}
+
+          {{ govukNotificationBanner({
+            titleText: locale.common.planHeader.reminderBanner.title,
+            html: html
+          }) }}
+        {% endif %}
+
         {% block extension %}
             {# Block for extended versions #}
         {% endblock %}

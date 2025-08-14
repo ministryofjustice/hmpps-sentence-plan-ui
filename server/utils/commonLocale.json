@@ -26,6 +26,11 @@
         "title": "About {{ subject.givenName }}",
         "createGoalButton": "Create goal",
         "agreePlanButton": "Agree plan"
+      },
+      "reminderBanner": {
+        "title": "Reminder",
+        "heading": "Check {{ subject.possessiveName }} future goals",
+        "message": "Update future goals if {{ subject.givenName }} can work on them now, or set a new reminder to check them later."
       }
     },
     "errorSummaryCard": {
@@ -33,6 +38,8 @@
     },
     "goalSummaryCard": {
       "info": {
+        "dueToBeChecked": "Due to be checked",
+        "checkGoalOn": "Check goal on",
         "aimToAchieveDate": "Aim to achieve this by {{ targetDate }}.",
         "removedDate": "Removed on {{ lastStatusChangeDate }}.",
         "aimToAchieveSentence": "Aim to achieve this by the end of {{ subject.possessiveName }} sentence.",
