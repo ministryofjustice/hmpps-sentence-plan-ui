@@ -6,6 +6,7 @@ import {
   createSentencePlan,
   lockPlan,
   openSentencePlan,
+  openSentencePlanAuth,
   removeGoalFromPlan,
 } from './commands/backend'
 import { checkAccessibility } from './commands/accessibility'
@@ -16,6 +17,7 @@ compareSnapshotCommand()
 
 // Handover/Auth
 Cypress.Commands.add('openSentencePlan', openSentencePlan)
+Cypress.Commands.add('openSentencePlanAuth', openSentencePlanAuth)
 Cypress.Commands.add('createSentencePlan', createSentencePlan)
 
 // API

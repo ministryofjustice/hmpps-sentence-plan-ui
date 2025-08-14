@@ -118,10 +118,51 @@ const token = (roles: string[] = []) =>
       },
     },
   })
+
+const stubUser = () =>
+  stubFor({
+    request: {
+      method: 'GET',
+      urlPattern: '/users/me',
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: {
+        username: 'USER1',
+        active: true,
+        name: 'joe bloggs',
+        authSource: 'delius',
+        userId: '2500485109',
+        uuid: 'a0701e84-71a6-4a20-95a7-59082cc57b00',
+      },
+    },
+  })
+
+const stubUserEmail = () =>
+  stubFor({
+    request: {
+      method: 'GET',
+      urlPattern: '/users/me/email',
+    },
+    response: {
+      status: 200,
+      headers: {
+        'Content-Type': 'application/json;charset=UTF-8',
+      },
+      jsonBody: {
+        email: 'joe@gov.uk',
+      },
+    },
+  })
+
 export default {
   getSignInUrl,
   stubAuthPing: ping,
   stubAuthManageDetails: manageDetails,
   stubSignIn: (roles: string[]): Promise<[Response, Response, Response, Response]> =>
     Promise.all([favicon(), redirect(), signOut(), token(roles)]),
+  stubAuthUser: (): Promise<[Response, Response]> => Promise.all([stubUser(), stubUserEmail()]),
 }

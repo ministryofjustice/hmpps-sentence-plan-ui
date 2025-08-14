@@ -143,6 +143,32 @@ export const openSentencePlan = (
   return cy.visit('/')
 }
 
+export const openSentencePlanAuth = (
+  oasysAssessmentPk: string,
+  options?: { accessMode?: string; planUuid?: string; planVersion?: number; crn?: string },
+) => {
+  const { accessMode = AccessMode.READ_WRITE, planUuid, crn } = options ?? {}
+  cy.session(`${oasysAssessmentPk}_${accessMode}`, () => {
+    cy.visit('/sign-in/hmpps-auth')
+
+    getApiToken().then(apiToken => cy.request({
+          url: `${Cypress.env('SP_API_URL')}/plans/associate/${planUuid}/${crn}`,
+          method: 'PUT',
+          auth: {
+            bearer: apiToken
+          },
+        }),
+      )
+
+      cy.get('#username').type('AUTH_ADM')
+      cy.get('#password').type('password123456')
+      cy.get('#submit').click()
+    }
+  )
+
+  return cy.visit('/plan')
+}
+
 export const createSentencePlan = () => {
   const oasysAssessmentPk = Math.random().toString().substring(2, 9)
 

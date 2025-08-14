@@ -90,6 +90,7 @@ export default class SessionService {
           this.getPlanVersionNumber(),
         )
       } else {
+        // This [0] is dodgy as association not guaranteed unique especially with Cypress needing to associate to find the data first :/
         this.request.session.plan = (await this.planService.getPlanByCrn(subjectCRN))[0]
         this.request.session.handover.sentencePlanContext.planId = this.request.session.plan.uuid
       }

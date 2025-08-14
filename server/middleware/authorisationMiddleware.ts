@@ -6,16 +6,14 @@ import {jwtDecode} from "jwt-decode";
 
 export default function authorisationMiddleware(): RequestHandler {
   return (req, res, next) => {
-    const authType: AuthType = req.services.sessionService.getPrincipalDetails()?.authType
-
     // Auth
-    if (authType == AuthType.HMPPS_AUTH) {
+    if (req.services.sessionService.getPrincipalDetails()?.authType == AuthType.HMPPS_AUTH) {
       const {authorities: roles = []}: JwtPayloadExtended = jwtDecode(req?.user?.token)
 
       if (roles.includes('ROLE_SENTENCE_PLAN_USER')) {
         return next()
       } else {
-        return res.redirect('/autherror')
+        throw new HttpError(401)
       }
     }
 
@@ -26,7 +24,7 @@ export default function authorisationMiddleware(): RequestHandler {
 
     // Failure
     req.session.returnTo = req.originalUrl
-    return res.redirect('/sign-in/handover')
+    return res.redirect('/sign-in/hmpps-auth') // This is what happens if you access with no creds...
   }
 }
 

@@ -6,6 +6,7 @@ import config from '../config'
 import { generateOauthClientToken } from '../utils/utils'
 import URLs from '../routes/URLs'
 import { AccessMode } from '../@types/Handover'
+import {HttpError} from "../utils/HttpError";
 
 passport.serializeUser((user, done) => {
   // Not used but required for Passport
@@ -67,17 +68,32 @@ export default function setupAuthentication() {
   router.use(passport.session())
   router.use(flash())
 
-  router.get('/autherror', (req, res) => {
-    res.status(401)
-    return res.render('autherror')
-  })
+  router.get('/sign-in/hmpps-auth', passport.authenticate('oauth2'))
+
+  router.get('/sign-in/hmpps-auth/callback', (req, res, next) =>
+    passport.authenticate('oauth2', {}, (err: any, user: Express.User) => {
+      if (err) return next(err)
+      if (!user) throw new HttpError(401)
+
+      return req.logIn(user, loginErr => {
+        if (err) return next(loginErr)
+
+        return req.services.sessionService
+          .setupAuthSession()
+          .then(() => {
+            res.redirect(URLs.PLAN_OVERVIEW)
+          })
+      })
+    }
+    )(req, res, next),
+  )
 
   router.get('/sign-in/handover', passport.authenticate('handover-oauth2'))
 
   router.get('/sign-in/handover/callback', (req, res, next) =>
     passport.authenticate('handover-oauth2', {}, (err: any, user: Express.User) => {
       if (err) return next(err)
-      if (!user) return res.redirect('/autherror')
+      if (!user) throw new HttpError(401)
 
       return req.logIn(user, loginErr => {
         if (err) return next(loginErr)
@@ -97,26 +113,6 @@ export default function setupAuthentication() {
           .catch(next)
       })
     })(req, res, next),
-  )
-
-  router.get('/sign-in/hmpps-auth', passport.authenticate('oauth2'))
-
-  router.get('/sign-in/hmpps-auth/callback', (req, res, next) =>
-    passport.authenticate('oauth2', {}, (err: any, user: Express.User) => {
-      if (err) return next(err)
-      if (!user) return res.redirect('/autherror')
-
-      return req.logIn(user, loginErr => {
-        if (err) return next(loginErr)
-
-        return req.services.sessionService
-          .setupAuthSession()
-          .then(() => {
-            res.redirect(URLs.PLAN_OVERVIEW)
-          })
-      })
-    }
-    )(req, res, next),
   )
 
   const authUrl = config.apis.hmppsAuth.externalUrl
