@@ -32,6 +32,17 @@ const getApiToken = () => {
     })
 }
 
+const associateCrn = (apiToken, planUuid: string, crn: string) => {
+  cy.request({
+    url: `${Cypress.env('SP_API_URL')}/plans/associate/${planUuid}/${crn}`,
+    method: 'PUT',
+    auth: {
+      bearer: apiToken
+    },
+  })
+}
+
+
 function createHandoverContext(apiToken, oasysAssessmentPk, accessMode, sentencePlanVersion, crn) {
   return {
     url: `${Cypress.env('ARNS_HANDOVER_URL')}/handover`,
@@ -149,22 +160,14 @@ export const openSentencePlanAuth = (
 ) => {
   const { accessMode = AccessMode.READ_WRITE, planUuid, crn } = options ?? {}
   cy.session(`${oasysAssessmentPk}_${accessMode}`, () => {
-    cy.visit('/sign-in/hmpps-auth')
-
-    getApiToken().then(apiToken => cy.request({
-          url: `${Cypress.env('SP_API_URL')}/plans/associate/${planUuid}/${crn}`,
-          method: 'PUT',
-          auth: {
-            bearer: apiToken
-          },
-        }),
-      )
-
-      cy.get('#username').type('AUTH_ADM')
-      cy.get('#password').type('password123456')
-      cy.get('#submit').click()
+      getApiToken().then(apiToken => associateCrn(apiToken, planUuid, crn))
     }
   )
+
+  cy.visit('/sign-in/hmpps-auth')
+  cy.get('#username').type('AUTH_ADM')
+  cy.get('#password').type('password123456')
+  cy.get('#submit').click()
 
   return cy.visit('/plan')
 }
