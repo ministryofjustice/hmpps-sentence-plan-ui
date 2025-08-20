@@ -12,10 +12,8 @@ export default class ArnsApiService {
       handle404: true,
     })
 
-    // TODO: remove temporary debug
-    logger.info(`Crim needs for CRN ${crn}: ${JSON.stringify(crimNeeds)}`)
-
     if (crimNeeds === null) {
+      logger.info('Criminogenic needs not found')
       return []
     }
 

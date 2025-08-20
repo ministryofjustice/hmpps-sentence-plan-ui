@@ -118,7 +118,7 @@
               "riskOfHarm": false,
               "riskOfReoffending": false,
               "severity": "NO_NEED",
-              "score": 1,
+              "score": 0,
               "oasysThreshold": 4,
               "tierThreshold": 4
             }
