@@ -116,8 +116,8 @@ describe('Rendering About Person for READ_WRITE user', () => {
 
     const expectedBody = [
       'Sam wants to make changes but needs help.',
-      '1 out of 10. (Scores above 2 are high-scoring.)',
-      '1 out of 10',
+      '0 out of 10. (Scores above 2 are high-scoring.)',
+      '0 out of 10',
       '6 out of 6. (Scores above 1 are high-scoring.)',
       '6 out of 6',
     ]
@@ -147,10 +147,12 @@ describe('Rendering About Person for READ_WRITE user', () => {
   })
 
   it('Should check if the score graph for Thinking behaviour and attitudes is displayed correctly', () => {
-    cy.get('#thinking-behaviours-and-attitudes .assessment-score').eq(0).find('.lowscoring').should('have.length', 1)
+    cy.get('#thinking-behaviours-and-attitudes .assessment-score').eq(0).find('.lowscoring').should('have.length', 0)
+    cy.get('#thinking-behaviours-and-attitudes .assessment-score').eq(0).find('.highscoring').should('have.length', 0)
   })
 
   it('Should check if the score graph for Lifestyle and associates is displayed correctly', () => {
+    cy.get('#thinking-behaviours-and-attitudes .assessment-score').eq(1).find('.lowscoring').should('have.length', 0)
     cy.get('#thinking-behaviours-and-attitudes .assessment-score').eq(1).find('.highscoring').should('have.length', 6)
   })
 
