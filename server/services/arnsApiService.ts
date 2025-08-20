@@ -7,17 +7,8 @@ export default class ArnsApiService {
 
   async getCriminogenicNeeds(crn: string): Promise<CriminogenicNeedScore[]> {
     const restClient = await this.arnsApiClient.restClient('Getting Criminogenic Needs using crn')
-
-    const incompleteCrimNeeds = await restClient.get<CriminogenicNeeds>({
-      path: `/needs/${crn}?excludeIncomplete=false`,
-      handle404: true,
-    })
-
-    // TODO: remove temporary debug
-    logger.info(`Incomplete crim needs for CRN ${crn}: ${JSON.stringify(incompleteCrimNeeds)}`)
-
     const crimNeeds = await restClient.get<CriminogenicNeeds>({
-      path: `/needs/${crn}`,
+      path: `/needs/${crn}?excludeIncomplete=false`,
       handle404: true,
     })
 
