@@ -34,19 +34,23 @@ describe('ArnsApiService', () => {
     assessedOn: 'now',
   }
 
-  beforeEach(() => {
-    mockRestClient = {
-      get: jest.fn().mockResolvedValue(response),
-    }
-
+  const createArnsApiClientMock = (restClientMock: any) => {
+    mockRestClient = restClientMock
     mockArnsApiClient = new ArnsApiClient(null) as jest.Mocked<ArnsApiClient>
     mockArnsApiClient.restClient = jest.fn().mockResolvedValue(mockRestClient)
-
     arnsApiService = new ArnsApiService(mockArnsApiClient)
-  })
+  }
 
-  describe('getPlanByCrn', () => {
+  describe('get criminogenic needs by CRN', () => {
     it('should call restClient.get with correct path using crn', async () => {
+      createArnsApiClientMock({
+        get: jest.fn().mockResolvedValue(response),
+      })
+
+      mockArnsApiClient = new ArnsApiClient(null) as jest.Mocked<ArnsApiClient>
+      mockArnsApiClient.restClient = jest.fn().mockResolvedValue(mockRestClient)
+
+      arnsApiService = new ArnsApiService(mockArnsApiClient)
       const crn = 'A1234B'
 
       const result = await arnsApiService.getCriminogenicNeeds(crn)
@@ -67,7 +71,26 @@ describe('ArnsApiService', () => {
 
       expect(result).toEqual(expectedResult)
       expect(mockArnsApiClient.restClient).toHaveBeenCalledWith('Getting Criminogenic Needs using crn')
-      expect(mockRestClient.get).toHaveBeenCalledWith({ path: `/needs/${crn}?excludeIncomplete=false` })
+      expect(mockRestClient.get).toHaveBeenCalledWith({
+        path: `/needs/${crn}?excludeIncomplete=false`,
+        handle404: true,
+      })
+    })
+
+    it('should return an empty array when the response is a 404', async () => {
+      createArnsApiClientMock({
+        get: jest.fn().mockResolvedValue(null),
+      })
+
+      const crn = 'A1234B'
+      const result = await arnsApiService.getCriminogenicNeeds(crn)
+
+      expect(result).toEqual([])
+      expect(mockArnsApiClient.restClient).toHaveBeenCalledWith('Getting Criminogenic Needs using crn')
+      expect(mockRestClient.get).toHaveBeenCalledWith({
+        path: `/needs/${crn}?excludeIncomplete=false`,
+        handle404: true,
+      })
     })
   })
 })
