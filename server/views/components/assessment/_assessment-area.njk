@@ -65,7 +65,7 @@
                         <p class="sp-text-pre-wrap govuk-body">{{ assessment.strengthsOrProtectiveFactorsDetails }}</p>
                     {% endif %}
 
-                    {% if assessment.criminogenicNeedsScore is not null %}
+                    {% if assessment.criminogenicNeedsScore is number and assessment.criminogenicNeedsScore is not null %}
                         <div class="assessment-score">
                             <h4 class="govuk-!-margin-top-0">{{ assessment.title }} need score</h4>
                             <p class="govuk-body">{{ assessment.criminogenicNeedsScore }} out
