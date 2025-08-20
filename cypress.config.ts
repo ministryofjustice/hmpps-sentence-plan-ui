@@ -31,7 +31,7 @@ export default defineConfig({
       getCompareSnapshotsPlugin(on, config)
       return config
     },
-    baseUrl: 'http://localhost:6789',
+    baseUrl: 'http://localhost:3001',
     excludeSpecPattern: '**/!(*.cy).ts',
     specPattern: 'integration_tests/e2e/**/*.{cy,spec}.{js,jsx,ts,tsx}',
     supportFile: 'integration_tests/support/index.ts',
@@ -42,8 +42,9 @@ export default defineConfig({
       HMPPS_AUTH_URL: 'http://localhost:9091',
       ARNS_HANDOVER_URL: 'http://localhost:7070',
       ARNS_HANDOVER_CLIENT_ID: 'sentence-plan',
-      SP_API_URL: 'http://localhost:8080',
-      COORDINATOR_API_URL: 'http://localhost:6060',
+      SP_API_URL: 'http://localhost:8081',
+      SAN_API_URL: 'http://localhost:8080',
+      COORDINATOR_API_URL: 'http://localhost:8070',
       OASTUB_URL: 'http://localhost:7072',
       FEEDBACK_URL: 'http://localhost:9092/',
     },

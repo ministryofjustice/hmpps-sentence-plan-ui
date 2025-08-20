@@ -8,6 +8,7 @@ import StepService from '../../services/sentence-plan/stepsService'
 import InfoService from '../../services/sentence-plan/infoService'
 import AsssessmentService from '../../services/sentence-plan/assessmentService'
 import AuditService from '../../services/auditService'
+import ArnsApiService from '../../services/arnsApiService'
 
 jest.mock('../../services/formStorageService')
 
@@ -40,6 +41,7 @@ const mockReq = ({
     infoService: new InfoService(null),
     assessmentService: new AsssessmentService(null),
     auditService: new AuditService(null, null, null),
+    arnsApiService: new ArnsApiService(null),
   },
 }: MockReqOptions = {}): jest.Mocked<Request> =>
   ({

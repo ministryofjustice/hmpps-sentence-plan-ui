@@ -40,10 +40,15 @@ jest.mock('../../services/sessionService', () => {
     getPlanUUID: jest.fn().mockReturnValue(testPlan.uuid),
     getPrincipalDetails: jest.fn().mockReturnValue(testHandoverContext.principal),
     getSubjectDetails: jest.fn().mockReturnValue(testHandoverContext.subject),
-    getCriminogenicNeeds: jest.fn().mockReturnValue(crimNeedsSubset),
     getOasysReturnUrl: jest.fn().mockReturnValue('http://mock-return-url'),
     getAccessMode: jest.fn().mockReturnValue(AccessMode.READ_WRITE),
     setReturnLink: jest.fn(),
+  }))
+})
+
+jest.mock('../../services/arnsApiService', () => {
+  return jest.fn().mockImplementation(() => ({
+    getCriminogenicNeeds: jest.fn().mockReturnValue(crimNeedsSubset),
   }))
 })
 

@@ -10,7 +10,7 @@ export type NewStep = {
   description: string
   status: StepStatus
   actor: string
-  updated: number
+  updated?: number
 }
 
 export type Step = {

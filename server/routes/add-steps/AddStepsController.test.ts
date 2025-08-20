@@ -37,11 +37,16 @@ jest.mock('../../services/sentence-plan/stepsService', () => {
 
 jest.mock('../../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
-    getCriminogenicNeeds: jest.fn().mockReturnValue(crimNeedsSubset),
     getSubjectDetails: jest.fn().mockReturnValue(handoverData.subject),
     getPlanUUID: jest.fn().mockReturnValue('some-plan-uuid'),
     getReturnLink: jest.fn().mockReturnValue('/plan?status=success'),
     setReturnLink: jest.fn(),
+  }))
+})
+
+jest.mock('../../services/arnsApiService', () => {
+  return jest.fn().mockImplementation(() => ({
+    getCriminogenicNeeds: jest.fn().mockReturnValue(crimNeedsSubset),
   }))
 })
 
@@ -79,6 +84,7 @@ describe('AddStepsController', () => {
       assessmentDetailsForArea: {
         isAssessmentSectionNotStarted: false,
         isAssessmentSectionComplete: true,
+        isSanSectionComplete: true,
         motivationToMakeChanges: 'needsHelpToMakeChanges',
         linkedToHarm: 'NO',
         linkedtoReoffending: 'NO',
@@ -358,6 +364,7 @@ describe('AddStepsController', () => {
           assessmentDetailsForArea: {
             isAssessmentSectionNotStarted: false,
             isAssessmentSectionComplete: true,
+            isSanSectionComplete: true,
             motivationToMakeChanges: 'needsHelpToMakeChanges',
             linkedToHarm: 'NO',
             linkedtoReoffending: 'NO',

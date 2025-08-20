@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import locale from './locale.json'
-import { areaConfigs } from '../../utils/assessmentAreaConfig.json'
+import { areaConfigs } from '../../utils/assessmentAreaConfig'
 import { formatAssessmentData } from '../../utils/assessmentUtils'
 import { HttpError } from '../../utils/HttpError'
 import { AccessMode } from '../../@types/Handover'
@@ -15,8 +15,6 @@ export default class AboutPersonController {
       const planUuid = req.services.sessionService.getPlanUUID()
       const popData = req.services.sessionService.getSubjectDetails()
       const oasysReturnUrl = req.services.sessionService.getOasysReturnUrl()
-      const criminogenicNeedsData = req.services.sessionService.getCriminogenicNeeds()
-      const plan = await req.services.planService.getPlanByUuid(planUuid)
       const errorMessages = []
 
       const deliusData = await req.services.infoService.getPopData(popData.crn).catch((): null => null)
@@ -34,7 +32,10 @@ export default class AboutPersonController {
         errors = { domain: errorMessages }
       }
 
-      const formattedAssessmentInfo = formatAssessmentData(criminogenicNeedsData, assessmentData, areaConfigs)
+      const plan = await req.services.planService.getPlanByUuid(planUuid)
+      const criminogenicNeedScores = await req.services.arnsApiService.getCriminogenicNeeds(plan.crn)
+
+      const formattedAssessmentInfo = formatAssessmentData(criminogenicNeedScores, assessmentData, areaConfigs)
       const pageId = 'about'
       const readWrite = req.services.sessionService.getAccessMode() === AccessMode.READ_WRITE
 

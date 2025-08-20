@@ -1,0 +1,140 @@
+{
+  "mappings": [
+    {
+      "request": {
+        "url": "/needs/NOTFOUND",
+        "method": "GET"
+      },
+      "response": {
+        "status": 404,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {
+          "status": 404,
+          "developerMessage": "Prisoner Not Found",
+          "errorCode": 20012,
+          "userMessage": "Prisoner Not Found",
+          "moreInfo": "Prisoner Not Found"
+        }
+      }
+    },
+    {
+      "request": {
+        "url": "/needs/SERVERERROR",
+        "method": "GET"
+      },
+      "response": {
+        "status": 500,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {
+          "status": 500,
+          "developerMessage": "System is down",
+          "errorCode": 20012,
+          "userMessage": "System is down",
+          "moreInfo": "Hard disk failure"
+        }
+      }
+    },
+    {
+      "request": {
+        "urlPattern": "/needs/(?!NOTFOUND$|SERVERERROR$).*",
+        "method": "GET"
+      },
+      "response": {
+        "status": 200,
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "jsonBody": {
+          "identifiedNeeds": [
+            {
+              "section": "ACCOMMODATION",
+              "name": "Accommodation",
+              "riskOfHarm": false,
+              "riskOfReoffending": true,
+              "severity": "STANDARD",
+              "score": 6,
+              "oasysThreshold": 2,
+              "tierThreshold": 2
+            },
+            {
+              "section": "EDUCATION_TRAINING_AND_EMPLOYABILITY",
+              "name": "Education, Training and Employability",
+              "riskOfHarm": false,
+              "riskOfReoffending": true,
+              "severity": "STANDARD",
+              "score": 2,
+              "oasysThreshold": 3,
+              "tierThreshold": 3
+            },
+            {
+              "section": "LIFESTYLE_AND_ASSOCIATES",
+              "name": "Lifestyle and Associates",
+              "riskOfHarm": false,
+              "riskOfReoffending": true,
+              "severity": "STANDARD",
+              "score": 6,
+              "oasysThreshold": 2,
+              "tierThreshold": 2
+            },
+            {
+              "section": "ATTITUDE",
+              "name": "Attitudes",
+              "riskOfHarm": false,
+              "riskOfReoffending": true,
+              "severity": "STANDARD",
+              "score": 5,
+              "oasysThreshold": 2,
+              "tierThreshold": 2
+            },
+            {
+              "section": "RELATIONSHIPS",
+              "name": "Relationships",
+              "riskOfHarm": false,
+              "riskOfReoffending": true,
+              "severity": "NO_NEED",
+              "score": 6,
+              "oasysThreshold": 2,
+              "tierThreshold": 2
+            },
+            {
+              "section": "ALCOHOL_MISUSE",
+              "name": "Alcohol Misuse",
+              "riskOfHarm": false,
+              "riskOfReoffending": true,
+              "severity": "NO_NEED",
+              "score": 3,
+              "oasysThreshold": 4,
+              "tierThreshold": 4
+            }
+          ],
+          "notIdentifiedNeeds": [
+            {
+              "section": "THINKING_AND_BEHAVIOUR",
+              "name": "Thinking and Behaviour",
+              "riskOfHarm": false,
+              "riskOfReoffending": false,
+              "severity": "NO_NEED",
+              "score": 0,
+              "oasysThreshold": 4,
+              "tierThreshold": 4
+            }
+          ],
+          "unansweredNeeds": [
+            {
+              "section": "DRUG_MISUSE",
+              "name": "Drug Misuse",
+              "severity": null,
+              "oasysThreshold": 2,
+              "tierThreshold": 2
+            }
+          ],
+          "assessedOn": "2024-08-01T14:20:00"
+        }
+      }
+    }
+  ]
+}

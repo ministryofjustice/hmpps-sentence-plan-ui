@@ -10,7 +10,7 @@ import { NewGoal } from '../../@types/NewGoalType'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
 import { AccessMode } from '../../@types/Handover'
 import { HttpError } from '../../utils/HttpError'
-import { areaConfigs } from '../../utils/assessmentAreaConfig.json'
+import { areaConfigs } from '../../utils/assessmentAreaConfig'
 import { AssessmentAreaConfig } from '../../@types/Assessment'
 import { getAssessmentDetailsForArea } from '../../utils/assessmentUtils'
 import { AuditEvent } from '../../services/auditService'
@@ -27,7 +27,7 @@ export default class AddStepsController {
       const planUuid = req.services.sessionService.getPlanUUID()
       const plan = await req.services.planService.getPlanByUuid(planUuid)
 
-      const criminogenicNeedsData = req.services.sessionService.getCriminogenicNeeds()
+      const criminogenicNeedScores = await req.services.arnsApiService.getCriminogenicNeeds(plan.crn)
 
       // get assessment data or swallow the service error and set to null so the template knows this data is missing
       const assessmentDetailsForArea = await req.services.assessmentService
@@ -35,7 +35,7 @@ export default class AddStepsController {
         .then(assessmentResponse => {
           const assessmentData = assessmentResponse.sanAssessmentData
           const areaConfig: AssessmentAreaConfig = areaConfigs.find(config => config.area === goal.areaOfNeed.name)
-          return getAssessmentDetailsForArea(criminogenicNeedsData, areaConfig, assessmentData)
+          return getAssessmentDetailsForArea(criminogenicNeedScores, areaConfig, assessmentData)
         })
         .catch((): null => null)
 
