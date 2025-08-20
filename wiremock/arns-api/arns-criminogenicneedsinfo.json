@@ -127,10 +127,7 @@
             {
               "section": "DRUG_MISUSE",
               "name": "Drug Misuse",
-              "riskOfHarm": null,
-              "riskOfReoffending": null,
               "severity": null,
-              "score": null,
               "oasysThreshold": 2,
               "tierThreshold": 2
             }

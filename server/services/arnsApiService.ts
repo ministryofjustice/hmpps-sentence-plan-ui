@@ -25,7 +25,7 @@ export default class ArnsApiService {
           ...acc,
           {
             section: need.section,
-            score: need.score,
+            score: need.score === undefined ? null : need.score,
           } as CriminogenicNeedScore,
         ]
       },
