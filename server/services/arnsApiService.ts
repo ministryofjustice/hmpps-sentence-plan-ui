@@ -13,7 +13,7 @@ export default class ArnsApiService {
     })
 
     // TODO: remove temporary debug
-    logger.info(`Crim needs for CRN ${crn}: ${crimNeeds}`)
+    logger.info(`Crim needs for CRN ${crn}: ${JSON.stringify(crimNeeds)}`)
 
     if (crimNeeds === null) {
       return []
