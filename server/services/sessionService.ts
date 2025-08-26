@@ -1,10 +1,10 @@
 import * as Express from 'express'
+import { jwtDecode } from 'jwt-decode'
 import HandoverContextService from './handover/handoverContextService'
 import PlanService from './sentence-plan/planService'
 import Logger from '../../logger'
-import {AccessMode, AuthType, Gender} from '../@types/Handover'
-import { jwtDecode } from 'jwt-decode'
-import {JwtPayloadExtended} from "../@types/Token";
+import { AccessMode, AuthType, Gender } from '../@types/Handover'
+import { JwtPayloadExtended } from '../@types/Token'
 
 export default class SessionService {
   constructor(
@@ -39,16 +39,16 @@ export default class SessionService {
   setupAuthSession = async () => {
     try {
       // The auth token has more attributes than the handover token
-      const { name, user_uuid }: JwtPayloadExtended = jwtDecode(this.request?.user?.token)
+      const { name, user_uuid: userUuid }: JwtPayloadExtended = jwtDecode(this.request?.user?.token)
 
-      // @ts-ignore
+      // @ts-expect-error lazy coding
       this.request.session.handover = {
         principal: {
-          identifier: user_uuid,
+          identifier: userUuid,
           displayName: name,
           accessMode: AccessMode.READ_WRITE, // Use 'scope' values instead of hardcoding?
-          authType: AuthType.HMPPS_AUTH
-        }
+          authType: AuthType.HMPPS_AUTH,
+        },
       }
 
       // Failed: TypeError: Cannot read properties of undefined (reading 'identifier') HmppsAuthClient.getSystemClientToken
@@ -57,27 +57,29 @@ export default class SessionService {
       deliusData.crn = 'X775086'
 
       this.request.session.handover = {
-        assessmentContext: { // Why does SP need to know this?
+        assessmentContext: {
+          // Why does SP need to know this?
           oasysAssessmentPk: '', // Isn't this only in the coordinator?
-          assessmentVersion: 0
+          assessmentVersion: 0,
         },
         criminogenicNeedsData: {},
         handoverSessionId: '', // ??
         principal: this.request.session.handover.principal,
-        subject: { // nDelius?
+        subject: {
+          // nDelius?
           crn: deliusData.crn,
           pnc: 'UNKNOWN PNC',
           givenName: deliusData.firstName,
           familyName: deliusData.lastName,
           dateOfBirth: deliusData.doB,
           gender: Gender.NotSpecified, // Handover.Gender and Person.Gender are different :/
-          location: 'COMMUNITY' // No location in deliusData, but there is an inCustody field...
+          location: 'COMMUNITY', // No location in deliusData, but there is an inCustody field...
         },
         sentencePlanContext: {
           oasysAssessmentPk: '', // Isn't this only in the coordinator?
           planId: '', // Via Jake's CRN API?
           planVersion: null, // null as it isHistoricalPlan (and READ_ONLY) if anything else specified.
-        }
+        },
       }
 
       const subjectCRN = this.getSubjectDetails()?.crn
@@ -90,8 +92,8 @@ export default class SessionService {
           this.getPlanVersionNumber(),
         )
       } else {
-        // This [0] is dodgy as association not guaranteed unique especially with Cypress needing to associate to find the data first :/
-        this.request.session.plan = (await this.planService.getPlanByCrn(subjectCRN))[0]
+        // This is dodgy as association not guaranteed unique especially with Cypress needing to associate to find the data first :/
+        ;[this.request.session.plan] = await this.planService.getPlanByCrn(subjectCRN)
         this.request.session.handover.sentencePlanContext.planId = this.request.session.plan.uuid
       }
 

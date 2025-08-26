@@ -6,7 +6,7 @@ import config from '../config'
 import { generateOauthClientToken } from '../utils/utils'
 import URLs from '../routes/URLs'
 import { AccessMode } from '../@types/Handover'
-import {HttpError} from "../utils/HttpError";
+import { HttpError } from '../utils/HttpError'
 
 passport.serializeUser((user, done) => {
   // Not used but required for Passport
@@ -18,7 +18,8 @@ passport.deserializeUser((user, done) => {
   done(null, user as Express.User)
 })
 
-passport.use('handover-oauth2',
+passport.use(
+  'handover-oauth2',
   new Strategy(
     {
       authorizationURL: `${config.apis.arnsHandover.externalUrl}/oauth2/authorize`,
@@ -42,24 +43,22 @@ passport.use('handover-oauth2',
 )
 
 // default name is 'oauth2', but can specify name as first parameter
-passport.use(new Strategy(
-  {
-    authorizationURL: `${config.apis.hmppsAuth.externalUrl}/oauth/authorize`,
-    tokenURL: `${config.apis.hmppsAuth.url}/oauth/token`,
-    clientID: 'sentence-plan-client',
-    clientSecret: 'sentence-plan-client',
-    callbackURL: `${config.domain}/sign-in/hmpps-auth/callback`,
-    state: true,
-    customHeaders: { Authorization: generateOauthClientToken(
-        'sentence-plan-client',
-        'sentence-plan-client'
-      )
+passport.use(
+  new Strategy(
+    {
+      authorizationURL: `${config.apis.hmppsAuth.externalUrl}/oauth/authorize`,
+      tokenURL: `${config.apis.hmppsAuth.url}/oauth/token`,
+      clientID: 'sentence-plan-client',
+      clientSecret: 'sentence-plan-client',
+      callbackURL: `${config.domain}/sign-in/hmpps-auth/callback`,
+      state: true,
+      customHeaders: { Authorization: generateOauthClientToken('sentence-plan-client', 'sentence-plan-client') },
     },
-  },
-  (token, refreshToken, params, profile, done) => {
-    return done(null, { token, username: params.user_name, authSource: params.auth_source })
-  }
-))
+    (token, refreshToken, params, profile, done) => {
+      return done(null, { token, username: params.user_name, authSource: params.auth_source })
+    },
+  ),
+)
 
 export default function setupAuthentication() {
   const router = Router()
@@ -78,14 +77,11 @@ export default function setupAuthentication() {
       return req.logIn(user, loginErr => {
         if (err) return next(loginErr)
 
-        return req.services.sessionService
-          .setupAuthSession()
-          .then(() => {
-            res.redirect(URLs.PLAN_OVERVIEW)
-          })
+        return req.services.sessionService.setupAuthSession().then(() => {
+          res.redirect(URLs.PLAN_OVERVIEW)
+        })
       })
-    }
-    )(req, res, next),
+    })(req, res, next),
   )
 
   router.get('/sign-in/handover', passport.authenticate('handover-oauth2'))

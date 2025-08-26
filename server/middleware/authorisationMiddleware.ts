@@ -1,20 +1,19 @@
 import { RequestHandler } from 'express'
-import {AccessMode, AuthType} from '../@types/Handover'
+import { jwtDecode } from 'jwt-decode'
+import { AccessMode, AuthType } from '../@types/Handover'
 import { HttpError } from '../utils/HttpError'
-import {JwtPayloadExtended} from "../@types/Token";
-import {jwtDecode} from "jwt-decode";
+import { JwtPayloadExtended } from '../@types/Token'
 
 export default function authorisationMiddleware(): RequestHandler {
   return (req, res, next) => {
     // Auth
-    if (req.services.sessionService.getPrincipalDetails()?.authType == AuthType.HMPPS_AUTH) {
-      const {authorities: roles = []}: JwtPayloadExtended = jwtDecode(req?.user?.token)
+    if (req.services.sessionService.getPrincipalDetails()?.authType === AuthType.HMPPS_AUTH) {
+      const { authorities: roles = [] }: JwtPayloadExtended = jwtDecode(req?.user?.token)
 
       if (roles.includes('ROLE_SENTENCE_PLAN_USER')) {
         return next()
-      } else {
-        throw new HttpError(401)
       }
+      throw new HttpError(401)
     }
 
     // Handover

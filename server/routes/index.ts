@@ -20,7 +20,7 @@ import setupReAddGoalRoutes from './reAddGoal/routes'
 import setupUpdateAgreePlanRoutes from './update-agree-plan/routes'
 import setupPrivacyScreenRoutes from './privacy-screen/routes'
 import config from '../config'
-import setupUnsavedInformationDeletedRoutes from "./unsaved-information-deleted/routes";
+import setupUnsavedInformationDeletedRoutes from './unsaved-information-deleted/routes'
 
 export default function routes(services: Services): Router {
   const router = Router()

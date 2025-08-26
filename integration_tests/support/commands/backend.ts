@@ -37,11 +37,10 @@ const associateCrn = (apiToken, planUuid: string, crn: string) => {
     url: `${Cypress.env('SP_API_URL')}/plans/associate/${planUuid}/${crn}`,
     method: 'PUT',
     auth: {
-      bearer: apiToken
+      bearer: apiToken,
     },
   })
 }
-
 
 function createHandoverContext(apiToken, oasysAssessmentPk, accessMode, sentencePlanVersion, crn) {
   return {
@@ -160,9 +159,8 @@ export const openSentencePlanAuth = (
 ) => {
   const { accessMode = AccessMode.READ_WRITE, planUuid, crn } = options ?? {}
   cy.session(`${oasysAssessmentPk}_${accessMode}`, () => {
-      getApiToken().then(apiToken => associateCrn(apiToken, planUuid, crn))
-    }
-  )
+    getApiToken().then(apiToken => associateCrn(apiToken, planUuid, crn))
+  })
 
   cy.visit('/sign-in/hmpps-auth')
   cy.get('#username').type('AUTH_ADM')

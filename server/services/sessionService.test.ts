@@ -2,12 +2,12 @@ import testPlan from '../testutils/data/planData'
 import mockReq from '../testutils/preMadeMocks/mockReq'
 import SessionService from './sessionService'
 import testHandoverContext from '../testutils/data/handoverData'
-import authContextData from "../testutils/data/authContextData";
+import authContextData from '../testutils/data/authContextData'
 import PlanService from './sentence-plan/planService'
 import HandoverContextService from './handover/handoverContextService'
-import popData from "../testutils/data/popData";
-import createUserToken from "../testutils/createUserToken";
-import {AuthType} from "../@types/Handover";
+import popData from '../testutils/data/popData'
+import createUserToken from '../testutils/createUserToken'
+import { AuthType } from '../@types/Handover'
 
 jest.mock('./sentence-plan/planService', () => {
   return jest.fn().mockImplementation(() => ({
@@ -86,7 +86,7 @@ describe('SessionService', () => {
       planServiceMock.getPlanByCrn.mockResolvedValue([testPlan])
       requestMock.services.infoService.getPopData = jest.fn().mockResolvedValue(popData)
       requestMock.user = {
-          token: createUserToken([]),
+        token: createUserToken([]),
       }
 
       await sessionService.setupAuthSession()
