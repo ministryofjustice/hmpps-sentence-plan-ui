@@ -10,7 +10,7 @@ export default class AssessmentService {
     return restClient.get<AssessmentResponse>({ path: `/entity/${planUuid}/ASSESSMENT`, handle404: true })
   }
 
-  async getVersionsByUuid(entityUuid: string){
+  async getVersionsByUuid(entityUuid: string) {
     const restClient = await this.assessmentApiClient.restClient(
       `Getting assessment and plan versions for entity UUID: ${entityUuid}`,
     )
