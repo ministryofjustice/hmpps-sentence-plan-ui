@@ -2,11 +2,13 @@ import passport from 'passport'
 import flash from 'connect-flash'
 import { Router } from 'express'
 import { Strategy } from 'passport-oauth2'
+import { VerificationClient, AuthenticatedRequest } from '@ministryofjustice/hmpps-auth-clients'
 import config from '../config'
 import { generateOauthClientToken } from '../utils/utils'
 import URLs from '../routes/URLs'
 import { AccessMode } from '../@types/Handover'
 import { HttpError } from '../utils/HttpError'
+import logger from '../../logger'
 
 passport.serializeUser((user, done) => {
   // Not used but required for Passport
@@ -62,6 +64,7 @@ passport.use(
 
 export default function setupAuthentication() {
   const router = Router()
+  const tokenVerificationClient = new VerificationClient(config.apis.tokenVerification, logger)
 
   router.use(passport.initialize())
   router.use(passport.session())
@@ -79,7 +82,7 @@ export default function setupAuthentication() {
 
         return req.services.sessionService.setupAuthSession().then(() => {
           res.redirect(URLs.PLAN_OVERVIEW)
-        })
+        }).catch(next)
       })
     })(req, res, next),
   )
@@ -102,11 +105,8 @@ export default function setupAuthentication() {
               (req.services.sessionService.getAccessMode() === AccessMode.READ_WRITE
                 ? URLs.DATA_PRIVACY
                 : URLs.PLAN_OVERVIEW)
-
             res.redirect(redirectURL)
-          })
-
-          .catch(next)
+          }).catch(next)
       })
     })(req, res, next),
   )
@@ -122,6 +122,19 @@ export default function setupAuthentication() {
         return req.session.destroy(() => res.redirect(authSignOutUrl))
       })
     } else res.redirect(authSignOutUrl)
+  })
+
+  router.use(async (req, res, next) => {
+    if (req?.user?.authSource === 'auth') {
+      if (req.isAuthenticated() && (await tokenVerificationClient.verifyToken(req as unknown as AuthenticatedRequest))) {
+        return next()
+      }
+      req.session.returnTo = req.originalUrl
+      return res.redirect('/sign-in/hmpps-auth')
+    } else {
+      // Do we verify the handover token anywhere?
+      return next()
+    }
   })
 
   router.use((req, res, next) => {

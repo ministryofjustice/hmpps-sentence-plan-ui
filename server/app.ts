@@ -10,7 +10,7 @@ import setUpWebSession from './middleware/setUpWebSession'
 import routes from './routes'
 import { requestServices, Services } from './services'
 import setupRequestServices from './middleware/setupRequestServices'
-import setUpAuth from './middleware/setUpAuthentication'
+import setupAuthentication from './middleware/setUpAuthentication'
 import authorisationMiddleware from './middleware/authorisationMiddleware'
 import setupNotFoundRoute from './routes/not-found/routes'
 import setupErrorRoute from './routes/error/routes'
@@ -30,7 +30,7 @@ export default function createApp(services: Services): express.Application {
   app.use(setUpStaticResources())
   nunjucksSetup(app, services.applicationInfo)
   app.use(setupRequestServices(requestServices(services)))
-  app.use(setUpAuth())
+  app.use(setupAuthentication())
   app.use(authorisationMiddleware())
   app.use(setUpCsrf())
 

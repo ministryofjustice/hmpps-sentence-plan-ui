@@ -102,7 +102,7 @@ export default class SessionService {
       }
     } catch (e) {
       Logger.error('Failed to setup session:', e)
-      throw Error(e)
+      throw Error(e.message)
     }
   }
 
