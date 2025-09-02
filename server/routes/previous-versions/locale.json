@@ -1,0 +1,25 @@
+{
+  "en": {
+    "page": {
+      "title": "Previous versions - {{ applicationName }}"
+    },
+    "mainHeading": {
+      "title": "Previous versions"
+    },
+    "mainBody": {
+      "textForWhenVersionsExist": "Check versions of {{ subject.givenName }}'s current assessment and plan. The links will open in a new tab.",
+      "textForWhenVersionsDontExist": "There are no previous versions of {{ subject.givenName }}'s assessment and plan yet.",
+      "allVersionsHeading": "All versions",
+      "countersignedVersionsHeading": "Countersigned versions",
+      "columnText": {
+        "dateText": "Date and what was updated",
+        "assessmentText": "Assessment",
+        "sentencePlanText": "Sentence plan",
+        "statusText": "Status"
+      }
+    },
+    "returnToOasysButton": "Return to OASys",
+    "viewLinkText": "View"
+  }
+}
+
