@@ -161,12 +161,84 @@ export const createSentencePlan = () => {
           oasysAssessmentPk,
         },
       })
-      .then(createResponse => ({
-        plan: {
-          uuid: createResponse.body.sentencePlanId,
-        },
-        oasysAssessmentPk,
-      })),
+      .then(createResponse =>
+        cy
+          .request({
+            url: `${Cypress.env('SAN_API_URL')}/assessment/${createResponse.body.sanAssessmentId}/answers`,
+            method: 'POST',
+            auth: { bearer: apiToken },
+            body: {
+              answersToAdd: {
+                accommodation_practitioner_analysis_risk_of_serious_harm: { value: 'NO' },
+                accommodation_practitioner_analysis_risk_of_reoffending: { value: 'YES' },
+                accommodation_practitioner_analysis_strengths_or_protective_factors: { value: 'NO' },
+                accommodation_changes: { value: 'NOT_APPLICABLE' },
+                accommodation_section_complete: { value: 'YES' },
+                employment_education_practitioner_analysis_risk_of_serious_harm: { value: 'NO' },
+                employment_education_practitioner_analysis_risk_of_reoffending: { value: 'YES' },
+                employment_education_practitioner_analysis_risk_of_reoffending_yes_details: {
+                  value:
+                    'Sam does not perceive herself to be reckless or a risk-taker, stating that she did not believe that the alcohol she had consumed the previous evening would cause her to be over the limit feeling like ‘everyone does it’ in relation to driving home the next day. She described just being focused on the opportunity to do some outstanding household chores before her children came home. However, Sam accepts that she consumed the quantity of alcohol that she did and that she is responsible for her own actions.\n\nSam has now experienced two occasions in which her judgement and decision making has been impaired as a result of alcohol use. Additionally, when discussing the lead up to both the incidents Sam has been able to reflect that the circumstances preceding those nights were both stressful and overwhelming for her; therefore, using alcohol as a form of escapism. Sam is still in shock about the potential consequences her actions may have on her career, family and social services involvement however feels this is just a one off that won’t happen again.\n\nSam needs to understand how dealing with her problems is linked to her alcohol use and then recognising the consequences of her actions and behaviour once she has consumed alcohol to an unacceptable level. Her attitude towards how she behaves needs to be also explored further to also help reduce her risk of re offending whilst she justifies her behaviour by stating ‘everyone does it’.',
+                },
+                employment_education_practitioner_analysis_strengths_or_protective_factors: { value: 'YES' },
+                employment_education_practitioner_analysis_strengths_or_protective_factors_yes_details: {
+                  value:
+                    'It is positive to see that from our discussions and exploration into the index offence, Sam is open to receiving support or guidance in ensuring she does not repeat this mistake again. Whilst she is not yet sure on what specifically she should work on, she presents as motivated to work with me to explore this further together.',
+                },
+                employment_education_changes: { value: 'MAKING_CHANGES' },
+                employment_education_section_complete: { value: 'YES' },
+                finance_practitioner_analysis_risk_of_serious_harm: { value: 'NO' },
+                finance_practitioner_analysis_risk_of_reoffending: { value: 'NO' },
+                finance_practitioner_analysis_risk_of_reoffending_no_details: {
+                  value: 'There is no risk of reoffending',
+                },
+                finance_practitioner_analysis_strengths_or_protective_factors: { value: 'NO' },
+                finance_practitioner_analysis_strengths_or_protective_factors_no_details: { value: 'Nothing to add' },
+                finance_changes: { value: 'NOT_APPLICABLE' },
+                finance_section_complete: { value: 'YES' },
+                drug_use_practitioner_analysis_risk_of_serious_harm: { value: 'NO' },
+                drug_use_practitioner_analysis_risk_of_reoffending: { value: 'NO' },
+                drug_use_practitioner_analysis_strengths_or_protective_factors: { value: 'NO' },
+                drug_use_changes: { value: 'MAKING_CHANGES' },
+                drug_use_section_complete: { value: 'YES' },
+                alcohol_use_practitioner_analysis_risk_of_serious_harm: { value: 'NO' },
+                alcohol_use_practitioner_analysis_risk_of_reoffending: { value: 'YES' },
+                alcohol_use_practitioner_analysis_strengths_or_protective_factors: { value: 'YES' },
+                alcohol_use_changes: { value: 'MAKING_CHANGES' },
+                alcohol_use_section_complete: { value: 'YES' },
+                health_wellbeing_practitioner_analysis_risk_of_serious_harm: { value: 'NO' },
+                health_wellbeing_practitioner_analysis_risk_of_serious_harm_no_details: {
+                  value: 'There is no risk of serious harm',
+                },
+                health_wellbeing_practitioner_analysis_risk_of_reoffending: { value: 'NO' },
+                health_wellbeing_practitioner_analysis_strengths_or_protective_factors: { value: 'NO' },
+                health_wellbeing_changes: { value: 'NOT_APPLICABLE' },
+                health_wellbeing_section_complete: { value: 'YES' },
+                personal_relationships_community_practitioner_analysis_risk_of_reoffending: { value: 'YES' },
+                personal_relationships_community_practitioner_analysis_strengths_or_protective_factors: { value: 'NO' },
+                personal_relationships_community_changes: { value: 'MADE_CHANGES' },
+                personal_relationships_community_section_complete: { value: 'NO' },
+                thinking_behaviours_attitudes_practitioner_analysis_risk_of_serious_harm: { value: 'NO' },
+                thinking_behaviours_attitudes_practitioner_analysis_risk_of_reoffending: { value: 'NO' },
+                thinking_behaviours_attitudes_practitioner_analysis_strengths_or_protective_factors: { value: 'NO' },
+                thinking_behaviours_attitudes_changes: { value: 'NEEDS_HELP_TO_MAKE_CHANGES' },
+                thinking_behaviours_attitudes_section_complete: { value: 'YES' },
+              },
+              userDetails: {
+                id: '12345',
+                name: 'Cypress',
+                type: 'SAN',
+              },
+            },
+            retryOnNetworkFailure: false,
+          })
+          .then(() => ({
+            plan: {
+              uuid: createResponse.body.sentencePlanId,
+            },
+            oasysAssessmentPk,
+          })),
+      ),
   )
 }
 
