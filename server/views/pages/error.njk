@@ -4,6 +4,14 @@
   oasysReturnUrl: data.oasysReturnUrl
 }) %}
 
+{% set resolutionMessage %}
+  {% if data.authSource == 'auth' %}
+    {{ locale.resolution.auth | safe }}
+  {% else %}
+    {{ locale.resolution.oasys | safe }}
+  {% endif %}
+{% endset %}
+
 {% block pageTitle %}
   {{ locale.page.title }}
 {% endblock %}
@@ -23,7 +31,7 @@
       {% for suggestion in locale.suggestions %}
         <p class="govuk-body">{{ suggestion }}</p>
       {% endfor %}
-      {{ locale.resolution | safe }}
+      {{ resolutionMessage | safe }}
     </div>
   </div>
 

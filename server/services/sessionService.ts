@@ -5,6 +5,7 @@ import PlanService from './sentence-plan/planService'
 import Logger from '../../logger'
 import { AccessMode, AuthType, Gender } from '../@types/Handover'
 import { JwtPayloadExtended } from '../@types/Token'
+import config from '../config'
 
 export default class SessionService {
   constructor(
@@ -48,6 +49,7 @@ export default class SessionService {
           displayName: name,
           accessMode: AccessMode.READ_WRITE, // Use 'scope' values instead of hardcoding?
           authType: AuthType.HMPPS_AUTH,
+          returnUrl: `${config.apis.hmppsAuth.externalUrl}/sign-in?redirect_uri=${config.domain}/sign-in/hmpps-auth/callback` // Do something useful here...
         },
       }
 

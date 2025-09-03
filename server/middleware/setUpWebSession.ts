@@ -25,7 +25,7 @@ export default function setUpWebSession(): Router {
       secret: config.session.secret,
       resave: false, // redis implements touch so shouldn't need this
       saveUninitialized: false,
-      rolling: true,
+      rolling: true, // This being true defeats the purpose of the below middleware.
     }),
   )
 

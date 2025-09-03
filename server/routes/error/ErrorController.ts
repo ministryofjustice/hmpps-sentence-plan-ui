@@ -45,7 +45,10 @@ export default class ErrorController {
       case http.HTTP_STATUS_UNAUTHORIZED:
         return res.render('pages/error', {
           locale: localeUnauthorized.en,
-          data: { oasysReturnUrl },
+          data: {
+            oasysReturnUrl,
+            authSource: req?.user?.authSource,
+          },
         })
       case http.HTTP_STATUS_FORBIDDEN:
         return res.render('pages/error', {
