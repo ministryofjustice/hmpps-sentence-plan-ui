@@ -44,28 +44,30 @@
         </div>
 
 
-      {% if data.versions.allVersions == 0 %}
+      {% if data.versions.allVersions > 0 %}
         <div class="govuk-grid-column-full">
-          <p>{{ textForWhenVersionsExist }}</p>
+          <p> {{ locale.mainBody.textForWhenVersionsExist }} </p>
         </div>
 
         <div class="govuk-grid-column-three-quarters">
           {% set tableRows = [] %}
           {% for date, version in data.versions.allVersions %}
-            {% set assessmentVersionLink %}
-              <a href="/form/view-historic/{{ version.uuid }}/accommodation-analysis" class="govuk-link" rel="noreferrer noopener" target="_blank">View<span class="govuk-visually-hidden"> assessment from {{ version.updatedAt | formatDateForDisplay }} (opens in new tab) </span></a>
-            {% endset %}
+            {% if version.entityType === "ASSESSMENT" %}
+              {% set assessmentVersionLink %}
+                <a href="/form/view-historic/{{ version.uuid }}/accommodation-analysis" class="govuk-link" rel="noreferrer noopener" target="_blank">{{ locale.viewLinkText }}<span class="govuk-visually-hidden"> assessment from {{ version.updatedAt | formatDateForDisplay }} (opens in new tab) </span></a>
+              {% endset %}
 
-            {% set row = [
-              {
-                html: version.updatedAt | formatDateForDisplay
-              },
-              {
-                html: assessmentVersionLink
-              }
-            ]
-            %}
-            {% set tableRows = tableRows.concat([row]) %}
+              {% set row = [
+                {
+                  html: version.updatedAt | formatDateForDisplay
+                },
+                {
+                  html: assessmentVersionLink
+                }
+              ]
+              %}
+              {% set tableRows = tableRows.concat([row]) %}
+            {% endif %}
           {% endfor %}
 
           {{ govukTable({
@@ -73,10 +75,10 @@
             firstCellIsHeader: false,
             head: [
               {
-                text: "Date"
+                text: locale.mainBody.dateText
               },
               {
-                text: "Assessment"
+                text: locale.mainBody.assessmentText
               }
             ],
             rows: tableRows
