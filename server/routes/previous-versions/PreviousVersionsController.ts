@@ -9,6 +9,7 @@ export default class PreviousVersionsController {
     const { errors } = req
     try {
       const planUuid = req.services.sessionService.getPlanUUID()
+      const versions = await req.services.assessmentService.getVersionsByUuid(planUuid)
       const pageId = 'previous-versions'
 
       return res.render('pages/previous-versions', {
@@ -16,7 +17,7 @@ export default class PreviousVersionsController {
         data: {
           pageId,
           oasysReturnUrl: req.services.sessionService.getOasysReturnUrl(),
-          versions: await req.services.assessmentService.getVersionsByUuid(planUuid),
+          versions,
           returnLink: req.services.sessionService.getReturnLink(),
         },
         errors,

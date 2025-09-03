@@ -1,0 +1,97 @@
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{%- from "govuk/components/tag/macro.njk" import govukTag -%}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% extends "../partials/layout.njk" %}
+
+{% block pageTitle %}
+  {% if not errors %}
+    {{ locale.page.title }}
+  {% else %}
+    {{ locale.page.errorTitle }}
+  {% endif %}
+{% endblock %}
+
+{% set mainClasses = "app-container govuk-body" %}
+{% set header = {
+  type: "plan-extended",
+  heading: locale.mainHeading.title,
+  items: [
+    {
+      text: locale.common.header.returnToOasysButton,
+      href: data.oasysReturnUrl,
+      classes: "govuk-button--secondary",
+      type: 'button'
+    }
+  ]
+} %}
+
+{% block bodyStart %}
+  <div id="top"></div>
+{% endblock %}
+
+
+{% block content %}
+  {{ super() }}
+
+  <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        <div class="back-link--previous-versions">
+          {{ govukBackLink({
+            text: "Back",
+            href: "#",
+            attributes: { "data-browser-back": "" }
+          }) }}
+        </div>
+
+
+      {% if data.versions.allVersions == 0 %}
+        <div class="govuk-grid-column-full">
+          <p>{{ textForWhenVersionsExist }}</p>
+        </div>
+
+        <div class="govuk-grid-column-three-quarters">
+          {% set tableRows = [] %}
+          {% for date, version in data.versions.allVersions %}
+            {% set assessmentVersionLink %}
+              <a href="/form/view-historic/{{ version.uuid }}/accommodation-analysis" class="govuk-link" rel="noreferrer noopener" target="_blank">View<span class="govuk-visually-hidden"> assessment from {{ version.updatedAt | formatDateForDisplay }} (opens in new tab) </span></a>
+            {% endset %}
+
+            {% set row = [
+              {
+                html: version.updatedAt | formatDateForDisplay
+              },
+              {
+                html: assessmentVersionLink
+              }
+            ]
+            %}
+            {% set tableRows = tableRows.concat([row]) %}
+          {% endfor %}
+
+          {{ govukTable({
+            captionClasses: "govuk-table__caption--m",
+            firstCellIsHeader: false,
+            head: [
+              {
+                text: "Date"
+              },
+              {
+                text: "Assessment"
+              }
+            ],
+            rows: tableRows
+          })
+          }}
+        </div>
+      {% else %}
+
+          <p class="govuk-body govuk-!-margin-top-3 ">
+            {{ locale.mainBody.textForWhenVersionsDontExist }} </p>
+
+      {% endif %}
+    </div>
+
+  </div>
+
+
+{% endblock %}
