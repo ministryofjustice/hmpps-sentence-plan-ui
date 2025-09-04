@@ -25,6 +25,54 @@
   ]
 } %}
 
+{% macro generateTable( versions, tableCaption, showStatus) %}
+  <div class="govuk-grid-column-three-quarters">
+    {% set tableRows = [] %}
+    {% for date, version in versions %}
+      {% set assessmentVersionLink %}
+        <a href="/form/view-historic/{{ version.assessmentVersion.uuid }}/accommodation-analysis" class="govuk-link" rel="noreferrer noopener" target="_blank">{{ locale.viewLinkText }}<span class="govuk-visually-hidden"> assessment from {{ version.assessmentVersion.updatedAt }} (opens in new tab) </span></a>
+      {% endset %}
+
+      {% set planVersionLink %}
+        <a href="/form/view-historic/{{ version.planVersion.uuid }}/accommodation-analysis" class="govuk-link" rel="noreferrer noopener" target="_blank">{{ locale.viewLinkText }}<span class="govuk-visually-hidden"> plan from {{ version.planVersion.updatedAt }} (opens in new tab) </span></a>
+      {% endset %}
+
+      {% set planVersionTag %}
+
+          {{ govukTag({
+            text: version.planVersion.status
+          })
+          }}
+
+      {% endset %}
+
+      {% set row = [
+        { html: [date | formatSimpleDate, version.description] | join("<br>") },
+        { html: assessmentVersionLink },
+        { html: planVersionLink },
+        { html: planVersionTag }
+      ]
+      %}
+      {% set tableRows = tableRows.concat([row]) %}
+    {% endfor %}
+
+    {{ govukTable({
+      caption: tableCaption,
+      captionClasses: "govuk-table__caption--m",
+      firstCellIsHeader: false,
+      classes: "previous-versions-table",
+      head: [
+        { text: locale.mainBody.columnText.dateText, classes: "date-column"},
+        { text: locale.mainBody.columnText.assessmentText, classes: "view-link-column" },
+        { text: locale.mainBody.columnText.sentencePlanText, classes: "view-link-column" },
+        { text: locale.mainBody.columnText.statusText, classes: "status-column" }
+      ],
+      rows: tableRows
+    })
+    }}
+  </div>
+{% endmacro %}
+
 {% block bodyStart %}
   <div id="top"></div>
 {% endblock %}
@@ -34,65 +82,29 @@
   {{ super() }}
 
   <div class="govuk-grid-row">
-      <div class="govuk-grid-column-full">
-        <div class="back-link--previous-versions">
-          {{ govukBackLink({
-            text: "Back",
-            href: "#",
-            attributes: { "data-browser-back": "" }
-          }) }}
-        </div>
+    <div class="govuk-grid-column-full">
+      <div class="back-link--previous-versions">
+        {{ govukBackLink({
+          text: "Back",
+          href: "#",
+          attributes: { "data-browser-back": "" }
+        }) }}
+      </div>
 
-
-      {% if data.versions.allVersions > 0 %}
-        <div class="govuk-grid-column-full">
-          <p> {{ locale.mainBody.textForWhenVersionsExist }} </p>
-        </div>
-
-        <div class="govuk-grid-column-three-quarters">
-          {% set tableRows = [] %}
-          {% for date, version in data.versions.allVersions %}
-            {% if version.entityType === "ASSESSMENT" %}
-              {% set assessmentVersionLink %}
-                <a href="/form/view-historic/{{ version.uuid }}/accommodation-analysis" class="govuk-link" rel="noreferrer noopener" target="_blank">{{ locale.viewLinkText }}<span class="govuk-visually-hidden"> assessment from {{ version.updatedAt | formatDateForDisplay }} (opens in new tab) </span></a>
-              {% endset %}
-
-              {% set row = [
-                {
-                  html: version.updatedAt | formatDateForDisplay
-                },
-                {
-                  html: assessmentVersionLink
-                }
-              ]
-              %}
-              {% set tableRows = tableRows.concat([row]) %}
-            {% endif %}
-          {% endfor %}
-
-          {{ govukTable({
-            captionClasses: "govuk-table__caption--m",
-            firstCellIsHeader: false,
-            head: [
-              {
-                text: locale.mainBody.dateText
-              },
-              {
-                text: locale.mainBody.assessmentText
-              }
-            ],
-            rows: tableRows
-          })
-          }}
-        </div>
+      {% if data.versions.allVersions | length or data.versions.countersignedVersions | length %}
+        <p> {{ locale.mainBody.textForWhenVersionsExist }} </p>
       {% else %}
-
-          <p class="govuk-body govuk-!-margin-top-3 ">
-            {{ locale.mainBody.textForWhenVersionsDontExist }} </p>
-
+        <p class="govuk-body govuk-!-margin-top-3 "> {{ locale.mainBody.textForWhenVersionsDontExist }} </p>
       {% endif %}
     </div>
 
+{#    {% if data.versions.countersignedVersions | length %}#}
+      {{ generateTable(data.versions.countersignedVersions, locale.mainBody.countersignedVersionsHeading) }}
+{#    {% endif %}#}
+
+    {% if data.versions.allVersions | length %}
+      {{ generateTable(data.versions.allVersions, locale.mainBody.allVersionsHeading) }}
+    {% endif %}
   </div>
 
 
