@@ -16,7 +16,7 @@ declare namespace Cypress {
     ): Chainable<T>
     openSentencePlanAuth(
       oasysAssessmentPk: string,
-      options?: { accessMode?: string; planUuid?: string; planVersion?: number; crn?: string },
+      options?: { accessMode?: string; planUuid?: string; planVersion?: number; crn?: string, username?: string },
     ): Chainable<T>
     createSentencePlan(): Chainable<T>
 

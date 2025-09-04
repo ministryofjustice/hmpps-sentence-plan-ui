@@ -155,7 +155,7 @@ export const openSentencePlan = (
 
 export const openSentencePlanAuth = (
   oasysAssessmentPk: string,
-  options?: { accessMode?: string; planUuid?: string; planVersion?: number; crn?: string },
+  options?: { accessMode?: string; planUuid?: string; planVersion?: number; crn?: string, username?: string },
 ) => {
   const { accessMode = AccessMode.READ_WRITE, planUuid, crn } = options ?? {}
   cy.session(`${oasysAssessmentPk}_${accessMode}`, () => {
@@ -163,11 +163,9 @@ export const openSentencePlanAuth = (
   })
 
   cy.visit('/sign-in/hmpps-auth')
-  cy.get('#username').type('AUTH_ADM')
+  cy.get('#username').type(options.username)
   cy.get('#password').type('password123456')
   cy.get('#submit').click()
-
-  return cy.visit('/plan')
 }
 
 export const createSentencePlan = () => {
