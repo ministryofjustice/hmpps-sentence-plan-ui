@@ -6,6 +6,7 @@ type VersionDetails = {
   createdAt: string
   updatedAt: string
   status: string
+  planAgreementStatus: string | null
   entityType: EntityType
 }
 
