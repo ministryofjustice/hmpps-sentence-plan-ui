@@ -16,6 +16,32 @@
         "assessmentText": "Assessment",
         "sentencePlanText": "Sentence plan",
         "statusText": "Status"
+      },
+      "tags": {
+        "COUNTERSIGNED": {
+          "text": "Countersigned",
+          "classes": "govuk-tag--turquoise"
+        },
+        "DOUBLE_COUNTERSIGNED": {
+          "text": "Countersigned",
+          "classes": "govuk-tag--turquoise"
+        },
+        "AGREED": {
+          "text": "Plan agreed",
+          "classes": "govuk-tag--blue"
+        },
+        "DO_NOT_AGREE": {
+          "text": "Plan created",
+          "classes": "govuk-tag--blue"
+        },
+        "COULD_NOT_ANSWER": {
+          "text": "Plan created",
+          "classes": "govuk-tag--blue"
+        },
+        "UPDATED_AGREED": {
+          "text": "Plan agreement updated",
+          "classes": "govuk-tag--light-blue"
+        }
       }
     },
     "returnToOasysButton": "Return to OASys",
