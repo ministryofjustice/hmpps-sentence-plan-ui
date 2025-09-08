@@ -27,7 +27,12 @@
   ]
 } %}
 
-{% macro generateTable( versions, tableCaption, showStatus) %}
+
+{% macro showStatusTag( versions, tableCaption ) %}
+
+{% endmacro %}
+
+{% macro generateTable( versions, tableCaption, fieldName) %}
   <div class="govuk-grid-column-three-quarters">
     {% set tableRows = [] %}
     {% for date, version in versions %}
@@ -39,13 +44,9 @@
         <a href="/form/view-historic/{{ version.planVersion.uuid }}/accommodation-analysis" class="govuk-link" rel="noreferrer noopener" target="_blank">{{ locale.viewLinkText }}<span class="govuk-visually-hidden"> plan from {{ version.planVersion.updatedAt }} (opens in new tab) </span></a>
       {% endset %}
 
-      {% set planVersionTag %}
-        {% if showStatus %}
-          {{ govukTag({
-            text: version.planVersion.status
-          })
-          }}
 
+      {% set planVersionTag %}
+        {{ showStatusTag( versions, tableCaption ) }}
       {% endset %}
 
       {% set row = [
@@ -101,11 +102,11 @@
     </div>
 
 {#    {% if data.versions.countersignedVersions | length %}#}
-      {{ generateTable(data.versions.countersignedVersions, locale.mainBody.countersignedVersionsHeading) }}
+      {{ generateTable(data.versions.countersignedVersions, locale.mainBody.tables.countersignedVersions.tableHeading) }}
 {#    {% endif %}#}
 
     {% if data.versions.allVersions | length %}
-      {{ generateTable(data.versions.allVersions, locale.mainBody.allVersionsHeading) }}
+      {{ generateTable(data.versions.allVersions, locale.mainBody.tables.allVersions.tableHeading) }}
     {% endif %}
   </div>
 
