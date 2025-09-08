@@ -54,6 +54,7 @@ describe('PlanOverviewController', () => {
         planAgreementStatus: testPlan.agreementStatus,
         plan: testPlan,
         isUpdatedAfterAgreement: false,
+        shouldShowFutureGoalReminder: false,
         type: 'current',
         oasysReturnUrl,
         readWrite: true,

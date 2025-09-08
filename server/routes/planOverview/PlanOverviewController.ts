@@ -13,6 +13,7 @@ import { requireAccessMode } from '../../middleware/authorisationMiddleware'
 import { HttpError } from '../../utils/HttpError'
 import { PlanAgreementStatus, PlanType } from '../../@types/PlanType'
 import { AuditEvent } from '../../services/auditService'
+import { GoalStatus } from '../../@types/GoalType'
 
 export default class PlanOverviewController {
   plan: PlanType
@@ -41,6 +42,15 @@ export default class PlanOverviewController {
         isUpdatedAfterAgreement = Math.abs((mostRecentUpdateDate.getTime() - agreementDate.getTime()) / 1000) > 10
       }
 
+      // Set a flag for whether the future goal reminder should be shown for an Agreed Plan.
+      const shouldShowFutureGoalReminder =
+        this.plan.agreementStatus === PlanAgreementStatus.AGREED &&
+        this.plan.goals.some(goal => {
+          return (
+            goal.status === GoalStatus.FUTURE && goal.reminderDate != null && new Date(goal.reminderDate) <= new Date()
+          )
+        })
+
       req.services.sessionService.setReturnLink(`/plan?type=${type ?? 'current'}`)
 
       const readWrite = req.services.sessionService.getAccessMode() === AccessMode.READ_WRITE
@@ -55,6 +65,7 @@ export default class PlanOverviewController {
           planAgreementStatus: this.plan.agreementStatus, // required by layout.njk
           plan: this.plan,
           isUpdatedAfterAgreement,
+          shouldShowFutureGoalReminder,
           type,
           status,
           oasysReturnUrl,
