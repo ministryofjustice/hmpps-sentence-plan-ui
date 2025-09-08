@@ -10,10 +10,10 @@ export default function authorisationMiddleware(): RequestHandler {
     if (req.services.sessionService.getPrincipalDetails()?.authType === AuthType.HMPPS_AUTH) {
       const { authorities: roles = [] }: JwtPayloadExtended = jwtDecode(req?.user?.token)
 
-      if (roles.includes('ROLE_SENTENCE_PLAN_USER')) {
+      if (roles.includes('ROLE_SENTENCE_PLAN')) {
         return next()
       }
-      throw new HttpError(401)
+      throw new HttpError(401, "No role ROLE_SENTENCE_PLAN found for this user.")
     }
 
     // Handover

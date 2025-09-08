@@ -42,7 +42,7 @@ export default class SessionService {
       // The auth token has more attributes than the handover token
       const { name, user_uuid: userUuid }: JwtPayloadExtended = jwtDecode(this.request?.user?.token)
 
-      // @ts-expect-error lazy coding
+      // @ts-expect-error TODO: do something else here
       this.request.session.handover = {
         principal: {
           identifier: userUuid,
@@ -78,8 +78,8 @@ export default class SessionService {
           location: 'COMMUNITY', // No location in deliusData, but there is an inCustody field...
         },
         sentencePlanContext: {
-          oasysAssessmentPk: '', // Isn't this only in the coordinator?
-          planId: '', // Via Jake's CRN API?
+          oasysAssessmentPk: '',
+          planId: '',
           planVersion: null, // null as it isHistoricalPlan (and READ_ONLY) if anything else specified.
         },
       }
