@@ -22,7 +22,7 @@ export default class PrivacyScreenController {
         locale: locale.en,
         data: {
           privacyScreen: true, // hides the navigation bar from the page
-          oasysReturnUrl: req.services.sessionService.getOasysReturnUrl(),
+          systemReturnUrl: req.services.sessionService.getSystemReturnUrl(),
           form: req.body,
         },
         errors,

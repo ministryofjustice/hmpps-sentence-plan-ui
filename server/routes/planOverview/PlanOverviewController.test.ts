@@ -10,7 +10,7 @@ import { AccessMode } from '../../@types/Handover'
 import { PlanAgreementStatus, PlanType } from '../../@types/PlanType'
 import { AuditEvent } from '../../services/auditService'
 
-const oasysReturnUrl = 'https://oasys.return.url'
+const systemReturnUrl = 'https://oasys.return.url'
 
 jest.mock('../../services/auditService')
 
@@ -23,7 +23,7 @@ jest.mock('../../middleware/authorisationMiddleware', () => ({
 jest.mock('../../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
     getPlanUUID: jest.fn().mockReturnValue(testPlan.uuid),
-    getOasysReturnUrl: jest.fn().mockReturnValue(oasysReturnUrl),
+    getSystemReturnUrl: jest.fn().mockReturnValue(systemReturnUrl),
     getPrincipalDetails: jest.fn().mockReturnValue(testHandoverContext.principal),
     getAccessMode: jest.fn().mockReturnValue(AccessMode.READ_WRITE),
     setReturnLink: jest.fn().mockImplementation,
@@ -55,7 +55,7 @@ describe('PlanOverviewController', () => {
         plan: testPlan,
         isUpdatedAfterAgreement: false,
         type: 'current',
-        oasysReturnUrl,
+        systemReturnUrl,
         readWrite: true,
       },
       errors: {

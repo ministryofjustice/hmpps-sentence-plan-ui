@@ -41,7 +41,7 @@ jest.mock('../../services/sessionService', () => {
     getPrincipalDetails: jest.fn().mockReturnValue(testHandoverContext.principal),
     getSubjectDetails: jest.fn().mockReturnValue(testHandoverContext.subject),
     getCriminogenicNeeds: jest.fn().mockReturnValue(crimNeedsSubset),
-    getOasysReturnUrl: jest.fn().mockReturnValue('http://mock-return-url'),
+    getSystemReturnUrl: jest.fn().mockReturnValue('http://mock-return-url'),
     getAccessMode: jest.fn().mockReturnValue(AccessMode.READ_WRITE),
     setReturnLink: jest.fn(),
   }))

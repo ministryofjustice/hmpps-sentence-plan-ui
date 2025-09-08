@@ -127,7 +127,7 @@ export default class SessionService {
     return AccessMode.READ_WRITE
   }
 
-  getOasysReturnUrl = () => this.request.session.handover?.principal.returnUrl
+  getSystemReturnUrl = () => this.request.session.handover?.principal.returnUrl
 
   getCriminogenicNeeds = () => this.request.session.handover?.criminogenicNeedsData
 

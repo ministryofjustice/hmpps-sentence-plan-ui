@@ -21,9 +21,9 @@ export default function authorisationMiddleware(): RequestHandler {
       return next()
     }
 
-    // Failure
+    // Failure - no credentials
     req.session.returnTo = req.originalUrl
-    return res.redirect('/sign-in/hmpps-auth') // This is what happens if you access with no creds...
+    return res.redirect('/sign-in/hmpps-auth')
   }
 }
 

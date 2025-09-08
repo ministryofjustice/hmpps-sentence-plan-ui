@@ -1,7 +1,6 @@
-describe('View Plan Overview for READ_WRITE user', () => {
+describe('Users with the role can access the plan', () => {
   beforeEach(() => {
     cy.createSentencePlan().then(planDetails => {
-      // cy.wrap(planDetails).as('plan')
       cy.openSentencePlanAuth(planDetails.oasysAssessmentPk, { planUuid: planDetails.plan.uuid, crn: 'X775086', username: 'AUTH_ADM' })
     })
   })
