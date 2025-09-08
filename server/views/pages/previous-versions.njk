@@ -27,14 +27,35 @@
   ]
 } %}
 
+{% macro showStatusTag( version, tableCaption, previousStatus ) %}
+  {% set tagKey = "" %}
 
-{% macro showStatusTag( versions, tableCaption ) %}
+  {% for key, table in locale.mainBody.tables %}
+    {% if table.tableHeading == tableCaption %}
+      {% set tagKey = version.planVersion[table.tagSource] %}
+    {% endif %}
+  {% endfor %}
 
+
+  {% if tableCaption == locale.mainBody.tables.allVersions.tableHeading %}
+    {% if tagKey == previousStatus %}
+      {% set tagKey = "" %}
+    {% endif %}
+  {% endif %}
+
+  {% if tagKey and (tagKey in locale.mainBody.tags)%}
+    {{ govukTag({
+      text: locale.mainBody.tags[tagKey].text,
+      classes: locale.mainBody.tags[tagKey].classes
+    }) }}
+  {% endif %}
 {% endmacro %}
 
-{% macro generateTable( versions, tableCaption, fieldName) %}
+{% macro generateTable( versions, tableCaption, trackStatus) %}
   <div class="govuk-grid-column-three-quarters">
     {% set tableRows = [] %}
+    {% set previousStatus  = "" %}
+
     {% for date, version in versions %}
       {% set assessmentVersionLink %}
         <a href="/form/view-historic/{{ version.assessmentVersion.uuid }}/accommodation-analysis" class="govuk-link" rel="noreferrer noopener" target="_blank">{{ locale.viewLinkText }}<span class="govuk-visually-hidden"> assessment from {{ version.assessmentVersion.updatedAt }} (opens in new tab) </span></a>
@@ -44,10 +65,13 @@
         <a href="/form/view-historic/{{ version.planVersion.uuid }}/accommodation-analysis" class="govuk-link" rel="noreferrer noopener" target="_blank">{{ locale.viewLinkText }}<span class="govuk-visually-hidden"> plan from {{ version.planVersion.updatedAt }} (opens in new tab) </span></a>
       {% endset %}
 
-
       {% set planVersionTag %}
-        {{ showStatusTag( versions, tableCaption ) }}
+        {{ showStatusTag(version, tableCaption, previousStatus) }}
       {% endset %}
+
+      {% if trackStatus %}
+        {% set previousStatus = version.planVersion.planAgreementStatus %}
+      {% endif %}
 
       {% set row = [
         { html: [date | formatSimpleDate, version.description] | join("<br>") },
@@ -58,6 +82,7 @@
       %}
       {% set tableRows = tableRows.concat([row]) %}
     {% endfor %}
+
 
     {{ govukTable({
       caption: tableCaption,
@@ -102,11 +127,11 @@
     </div>
 
 {#    {% if data.versions.countersignedVersions | length %}#}
-      {{ generateTable(data.versions.countersignedVersions, locale.mainBody.tables.countersignedVersions.tableHeading) }}
+      {{ generateTable(data.versions.countersignedVersions, locale.mainBody.tables.countersignedVersions.tableHeading, false) }}
 {#    {% endif %}#}
 
     {% if data.versions.allVersions | length %}
-      {{ generateTable(data.versions.allVersions, locale.mainBody.tables.allVersions.tableHeading) }}
+      {{ generateTable(data.versions.allVersions, locale.mainBody.tables.allVersions.tableHeading, true) }}
     {% endif %}
   </div>
 

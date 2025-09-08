@@ -18,14 +18,18 @@
       "tables": {
         "allVersions": {
           "tableHeading": "All versions",
-          "tagSource": "version.planVersion.planAgreementStatus"
+          "tagSource": "planAgreementStatus"
         },
         "countersignedVersions": {
           "tableHeading": "Countersigned versions",
-          "tagSource": "version.planVersion.status"
+          "tagSource": "status"
         }
       },
       "tags": {
+        "DRAFT": {
+          "text": "TEST",
+          "classes": "govuk-tag--purple"
+        },
         "COUNTERSIGNED": {
           "text": "Countersigned",
           "classes": "govuk-tag--turquoise"
