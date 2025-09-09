@@ -53,12 +53,18 @@ export default class ErrorController {
       case http.HTTP_STATUS_FORBIDDEN:
         return res.render('pages/error', {
           locale: localeForbidden.en,
-          data: { systemReturnUrl },
+          data: {
+            systemReturnUrl,
+            authSource: req?.user?.authSource,
+          },
         })
       default:
         return res.render('pages/error', {
           locale: localeBadRequest.en,
-          data: { systemReturnUrl },
+          data: {
+            systemReturnUrl,
+            authSource: req?.user?.authSource,
+          },
         })
     }
   }

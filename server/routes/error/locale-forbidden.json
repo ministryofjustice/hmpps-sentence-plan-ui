@@ -6,6 +6,9 @@
     "mainHeading": {
       "title": "You do not have permission to perform this action"
     },
-    "resolution": "<a href='{{ systemReturnUrl }}'>Go to the OASys homepage</a>"
+    "resolution": {
+      "oasys": "<a href='{{ systemReturnUrl }}'>Go to the OASys homepage</a> to sign-in again",
+      "auth": "<a href='{{ systemReturnUrl }}'>Go to the Auth homepage</a> to sign-in again"
+    }
   }
 }

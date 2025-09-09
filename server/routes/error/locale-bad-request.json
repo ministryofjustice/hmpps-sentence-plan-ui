@@ -7,6 +7,9 @@
       "title": "There was an issue with your request"
     },
     "suggestions": ["Try performing your request again.", "If the request still fails, try again later."],
-    "resolution": "<a href='{{ systemReturnUrl }}' >Go to the OASys homepage</a>"
+    "resolution": {
+      "oasys": "<a href='{{ systemReturnUrl }}'>Go to the OASys homepage</a> to sign-in again",
+      "auth": "<a href='{{ systemReturnUrl }}'>Go to the Auth homepage</a> to sign-in again"
+    }
   }
 }
