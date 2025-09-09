@@ -25,26 +25,20 @@
   ]
 } %}
 
-{% macro getTagKey(status) %}
-  {%- set tagKey = "" -%}
+{% macro showStatusTag( tableConfig, previousStatusKey, trackStatus, tagStatus ) %}
+  {% set tagKey = "" %}
 
   {% for key, tag in locale.mainBody.tags %}
-    {%- if status in tag.statuses and not tagKey -%}
+    {%- if tagStatus in tag.statuses -%}
       {% set tagKey = key %}
     {%- endif -%}
   {% endfor %}
 
-  {{- tagKey -}}
-{% endmacro %}
-
-{% macro showStatusTag( tableConfig, previousStatus, trackStatus, tagStatus ) %}
-  {% set tagKey = getTagKey(tagStatus) %}
-
-  {% if trackStatus and tagKey == previousStatus %}
-      {% set tagKey = "" %}
+  {% if trackStatus and tagKey == previousStatusKey %}
+    {% set tagKey = "" %}
   {% endif %}
 
-  {% if tagKey and (tagKey in locale.mainBody.tags)%}
+  {% if tagKey %}
     {{ govukTag({
       text: locale.mainBody.tags[tagKey].text,
       classes: locale.mainBody.tags[tagKey].classes
@@ -57,7 +51,7 @@
   <div class="govuk-grid-column-three-quarters">
     {% set tableRows = [] %}
     {% set versionList = [] %}
-    {% set previousStatus  = "" %}
+    {% set previousStatusKey  = "" %}
 
     {% for date, version in versions %}
       {% set versionList = versionList.concat([{ date: date, version: version }]) %}
@@ -78,14 +72,13 @@
       {% endset %}
 
       {% set planVersionTag %}
-        {{ showStatusTag( tableConfig, previousStatus, trackStatus, tagStatus) }}
+        {{ showStatusTag( tableConfig, previousStatusKey, trackStatus, tagStatus) }}
       {% endset %}
 
-      {% set tagKey = getTagKey(tagStatus) %}
       {% if trackStatus %}
         {% for key, tag in locale.mainBody.tags %}
           {% if tagStatus in tag.statuses %}
-            {% set previousStatus = key %}
+            {% set previousStatusKey = key %}
           {% endif %}
         {% endfor %}
       {% endif %}
@@ -139,9 +132,9 @@
       {% endif %}
     </div>
 
-{#    {% if data.versions.countersignedVersions | length %}#}
+    {% if data.versions.countersignedVersions | length %}
       {{ generateTable(data.versions.countersignedVersions, locale.mainBody.tables.countersignedVersions, false) }}
-{#    {% endif %}#}
+    {% endif %}
 
     {% if data.versions.allVersions | length %}
       {{ generateTable(data.versions.allVersions, locale.mainBody.tables.allVersions, true) }}
