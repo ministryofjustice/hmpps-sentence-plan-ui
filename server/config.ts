@@ -93,12 +93,9 @@ export default {
       enabled: get('TOKEN_VERIFICATION_ENABLED', 'false') === 'true',
     },
     arnsHandover: {
-      url: get('HMPPS_ARNS_HANDOVER_URL', 'http://localhost:8080/oauth2/authorize', requiredInProduction),
+      url: get('HMPPS_ARNS_HANDOVER_URL', 'http://localhost:7070', requiredInProduction),
       healthPath: '/health/ping',
-      externalUrl: get(
-        'HMPPS_ARNS_HANDOVER_EXTERNAL_URL',
-        get('HMPPS_ARNS_HANDOVER_URL', 'http://localhost:9090/auth'),
-      ),
+      externalUrl: get('HMPPS_ARNS_HANDOVER_EXTERNAL_URL', get('HMPPS_ARNS_HANDOVER_URL', 'http://localhost:7070')),
       timeout: {
         response: Number(get('HMPPS_ARNS_HANDOVER_TIMEOUT_RESPONSE', 10000)),
         deadline: Number(get('HMPPS_ARNS_HANDOVER_TIMEOUT_DEADLINE', 10000)),
@@ -108,7 +105,7 @@ export default {
       clientSecret: get('HMPPS_ARNS_HANDOVER_CLIENT_SECRET', 'clientsecret', requiredInProduction),
     },
     sentencePlanApi: {
-      url: get('SENTENCE_PLAN_API_URL', 'https://sentence-plan-api-dev.hmpps.service.justice.gov.uk'),
+      url: get('SENTENCE_PLAN_API_URL', 'http://localhost:8081'),
       healthPath: '/health/ping',
       timeout: {
         response: Number(get('SENTENCE_PLAN_API_TIMEOUT_RESPONSE', 10000)),
@@ -117,7 +114,7 @@ export default {
       agent: new AgentConfig(Number(get('SENTENCE_PLAN_API_TIMEOUT_RESPONSE', 10000))),
     },
     coordinatorApi: {
-      url: get('COORDINATOR_API_URL', 'https://arns-coordinator-api-dev.hmpps.service.justice.gov.uk'),
+      url: get('COORDINATOR_API_URL', 'http://localhost:8070'),
       healthPath: '/health/ping',
       timeout: {
         response: Number(get('COORDINATOR_API_TIMEOUT_RESPONSE', 10000)),
@@ -129,7 +126,7 @@ export default {
   sqs: {
     audit: auditConfig(),
   },
-  domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
+  domain: get('INGRESS_URL', 'http://localhost:3001', requiredInProduction),
   environmentName: get('ENVIRONMENT_NAME', ''),
   deploymentName: get('DEPLOYMENT_NAME', ''),
   feedbackUrl: get('FEEDBACK_URL', null),

@@ -2,7 +2,7 @@
   "mappings": [
     {
       "request": {
-        "url": "/delius-api/case-details/NOTFOUND",
+        "url": "/case-details/NOTFOUND",
         "method": "GET"
       },
       "response": {
@@ -11,7 +11,7 @@
     },
     {
       "request": {
-        "url": "/delius-api/case-details/SERVERERROR",
+        "url": "/case-details/SERVERERROR",
         "method": "GET"
       },
       "response": {
@@ -20,7 +20,7 @@
     },
     {
       "request": {
-        "urlPattern": "/delius-api/case-details/(?!NOTFOUND$|SERVERERROR$).*",
+        "urlPattern": "/case-details/(?!NOTFOUND$|SERVERERROR$).*",
         "method": "GET"
       },
       "response": {

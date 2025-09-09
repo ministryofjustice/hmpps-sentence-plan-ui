@@ -51,12 +51,15 @@ jobs:
         run: npm ci
 
       - name: Stand up a test environment
-        run: |
-          make test-up
+        run: make up
 
       - name: Run visual regression testing
-        run: make vrt-ci
+        uses: cypress-io/github-action@v6.7.16
+        with:
+          publish-summary: false
+          browser: edge
         env:
+          SPEC: 'integration_tests/e2e/vrt-tests/**/*.cy.ts'
           SPLIT: ${{ inputs.job-total }}
           SPLIT_INDEX: ${{ inputs.job-index }}
 
@@ -76,7 +79,7 @@ jobs:
 
       - name: Export container logs
         if: failure()
-        run: make save-logs PROJECT_NAME="hmpps-sentence-plan-test" OUTPUT_LOGS_DIR=${{ runner.temp }}/docker-logs
+        run: make save-logs OUTPUT_LOGS_DIR=${{ runner.temp }}/docker-logs
 
       - name: Upload docker logs
         if: failure()
