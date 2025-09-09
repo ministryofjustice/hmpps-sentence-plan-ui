@@ -25,19 +25,23 @@
   ]
 } %}
 
-{% macro showStatusTag( version, tableCaption, previousStatus, trackStatus ) %}
-  {% set tagKey = "" %} {# eg COUNTERSIGNED #}
+{% macro getTagKey(status) %}
+  {%- set tagKey = "" -%}
 
-  {% for key, table in locale.mainBody.tables %}
-    {% if table.tableHeading == tableCaption %}
-      {% set tagKey = version.planVersion[table.tagSource] %} {# eg COUNTERSIGNED #}
-    {% endif %}
+  {% for key, tag in locale.mainBody.tags %}
+    {%- if status in tag.statuses and not tagKey -%}
+      {% set tagKey = key %}
+    {%- endif -%}
   {% endfor %}
 
-  {% if trackStatus %}
-    {% if tagKey == previousStatus %}
+  {{- tagKey -}}
+{% endmacro %}
+
+{% macro showStatusTag( tableConfig, previousStatus, trackStatus, tagStatus ) %}
+  {% set tagKey = getTagKey(tagStatus) %}
+
+  {% if trackStatus and tagKey == previousStatus %}
       {% set tagKey = "" %}
-    {% endif %}
   {% endif %}
 
   {% if tagKey and (tagKey in locale.mainBody.tags)%}
@@ -49,7 +53,7 @@
 {% endmacro %}
 
 
-{% macro generateTable( versions, tableCaption, trackStatus) %}
+{% macro generateTable( versions, tableConfig, trackStatus) %}
   <div class="govuk-grid-column-three-quarters">
     {% set tableRows = [] %}
     {% set versionList = [] %}
@@ -63,6 +67,7 @@
     {% for entry in versionList %}
       {% set date = entry.date %}
       {% set version = entry.version %}
+      {% set tagStatus = version.planVersion[tableConfig.tagSource] %} {# eg "DO_NOT_AGREE" #}
 
       {% set assessmentVersionLink %}
         <a href="/form/view-historic/{{ version.assessmentVersion.uuid }}/accommodation-analysis" class="govuk-link" rel="noreferrer noopener" target="_blank">{{ locale.viewLinkText }}<span class="govuk-visually-hidden"> assessment from {{ version.assessmentVersion.updatedAt }} (opens in new tab) </span></a>
@@ -73,13 +78,14 @@
       {% endset %}
 
       {% set planVersionTag %}
-        {{ showStatusTag(version, tableCaption, previousStatus, trackStatus) }}
+        {{ showStatusTag( tableConfig, previousStatus, trackStatus, tagStatus) }}
       {% endset %}
 
+      {% set tagKey = getTagKey(tagStatus) %}
       {% if trackStatus %}
-        {% for key, table in locale.mainBody.tables %}
-          {% if table.tableHeading == tableCaption %}
-            {% set previousStatus = version.planVersion[table.tagSource] %}
+        {% for key, tag in locale.mainBody.tags %}
+          {% if tagStatus in tag.statuses %}
+            {% set previousStatus = key %}
           {% endif %}
         {% endfor %}
       {% endif %}
@@ -95,7 +101,7 @@
     {% endfor %}
 
     {{ govukTable({
-      caption: tableCaption,
+      caption: tableConfig.tableHeading,
       captionClasses: "govuk-table__caption--m",
       firstCellIsHeader: false,
       classes: "previous-versions-table",
@@ -134,11 +140,11 @@
     </div>
 
 {#    {% if data.versions.countersignedVersions | length %}#}
-      {{ generateTable(data.versions.countersignedVersions, locale.mainBody.tables.countersignedVersions.tableHeading, false) }}
+      {{ generateTable(data.versions.countersignedVersions, locale.mainBody.tables.countersignedVersions, false) }}
 {#    {% endif %}#}
 
     {% if data.versions.allVersions | length %}
-      {{ generateTable(data.versions.allVersions, locale.mainBody.tables.allVersions.tableHeading, true) }}
+      {{ generateTable(data.versions.allVersions, locale.mainBody.tables.allVersions, true) }}
     {% endif %}
   </div>
 {% endblock %}
