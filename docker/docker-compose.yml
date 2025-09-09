@@ -61,7 +61,7 @@ services:
       CLIENT_ID: hmpps-assess-risks-and-needs-oastub-ui
       CLIENT_SECRET: clientsecret
       CLIENT_SP_SECRET: sp-secret
-      CLIENT_SP_OAUTH_REDIRECT_URI: http://localhost:3001/sign-in/callback,,http://localhost:3001/sign-in/handover/callback
+      CLIENT_SP_OAUTH_REDIRECT_URI: http://localhost:3001/sign-in/callback,http://localhost:3001/sign-in/handover/callback
       CLIENT_SP_HANDOVER_REDIRECT_URI: http://localhost:3001/sign-in/handover
       CLIENT_SAN_SECRET: san-secret
       CLIENT_SAN_OAUTH_REDIRECT_URI: http://localhost:3000/sign-in/callback

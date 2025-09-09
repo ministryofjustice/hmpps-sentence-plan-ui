@@ -14,7 +14,7 @@ describe('Attempt to access without having the role', () => {
     cy.contains('a', 'Go to the Auth homepage').should(
       'have.attr',
       'href',
-      'http://localhost:9090/auth/sign-in?redirect_uri=http://localhost:3000/sign-in/hmpps-auth/callback',
+      'http://localhost:9090/auth/sign-in?redirect_uri=http://localhost:3001/sign-in/hmpps-auth/callback',
     )
   })
 
