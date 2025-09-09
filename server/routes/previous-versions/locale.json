@@ -26,31 +26,23 @@
         }
       },
       "tags": {
-        "DRAFT": {
-          "text": "TEST",
-          "classes": "govuk-tag--purple"
-        },
-        "COUNTERSIGNED": {
+        "countersigned": {
+          "statuses": ["COUNTERSIGNED", "DOUBLE_COUNTERSIGNED"],
           "text": "Countersigned",
           "classes": "govuk-tag--turquoise"
         },
-        "DOUBLE_COUNTERSIGNED": {
-          "text": "Countersigned",
-          "classes": "govuk-tag--turquoise"
-        },
-        "AGREED": {
+        "agreed": {
+          "statuses": ["AGREED"],
           "text": "Plan agreed",
           "classes": "govuk-tag--blue"
         },
-        "DO_NOT_AGREE": {
+        "created": {
+          "statuses": ["DO_NOT_AGREE", "COULD_NOT_ANSWER"],
           "text": "Plan created",
           "classes": "govuk-tag--blue"
         },
-        "COULD_NOT_ANSWER": {
-          "text": "Plan created",
-          "classes": "govuk-tag--blue"
-        },
-        "UPDATED_AGREED": {
+        "updated": {
+          "statuses": ["UPDATED_AGREED"],
           "text": "Plan agreement updated",
           "classes": "govuk-tag--light-blue"
         }

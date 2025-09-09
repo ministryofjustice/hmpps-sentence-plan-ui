@@ -11,8 +11,6 @@
   {% endif %}
 {% endblock %}
 
-
-
 {% set mainClasses = "app-container govuk-body" %}
 {% set header = {
   type: "plan-extended",
@@ -27,17 +25,16 @@
   ]
 } %}
 
-{% macro showStatusTag( version, tableCaption, previousStatus ) %}
-  {% set tagKey = "" %}
+{% macro showStatusTag( version, tableCaption, previousStatus, trackStatus ) %}
+  {% set tagKey = "" %} {# eg COUNTERSIGNED #}
 
   {% for key, table in locale.mainBody.tables %}
     {% if table.tableHeading == tableCaption %}
-      {% set tagKey = version.planVersion[table.tagSource] %}
+      {% set tagKey = version.planVersion[table.tagSource] %} {# eg COUNTERSIGNED #}
     {% endif %}
   {% endfor %}
 
-
-  {% if tableCaption == locale.mainBody.tables.allVersions.tableHeading %}
+  {% if trackStatus %}
     {% if tagKey == previousStatus %}
       {% set tagKey = "" %}
     {% endif %}
@@ -51,12 +48,22 @@
   {% endif %}
 {% endmacro %}
 
+
 {% macro generateTable( versions, tableCaption, trackStatus) %}
   <div class="govuk-grid-column-three-quarters">
     {% set tableRows = [] %}
+    {% set versionList = [] %}
     {% set previousStatus  = "" %}
 
     {% for date, version in versions %}
+      {% set versionList = versionList.concat([{ date: date, version: version }]) %}
+    {% endfor %}
+    {% set versionList = versionList | sort(attribute='date') %}
+
+    {% for entry in versionList %}
+      {% set date = entry.date %}
+      {% set version = entry.version %}
+
       {% set assessmentVersionLink %}
         <a href="/form/view-historic/{{ version.assessmentVersion.uuid }}/accommodation-analysis" class="govuk-link" rel="noreferrer noopener" target="_blank">{{ locale.viewLinkText }}<span class="govuk-visually-hidden"> assessment from {{ version.assessmentVersion.updatedAt }} (opens in new tab) </span></a>
       {% endset %}
@@ -66,11 +73,15 @@
       {% endset %}
 
       {% set planVersionTag %}
-        {{ showStatusTag(version, tableCaption, previousStatus) }}
+        {{ showStatusTag(version, tableCaption, previousStatus, trackStatus) }}
       {% endset %}
 
       {% if trackStatus %}
-        {% set previousStatus = version.planVersion.planAgreementStatus %}
+        {% for key, table in locale.mainBody.tables %}
+          {% if table.tableHeading == tableCaption %}
+            {% set previousStatus = version.planVersion[table.tagSource] %}
+          {% endif %}
+        {% endfor %}
       {% endif %}
 
       {% set row = [
@@ -80,9 +91,8 @@
         { html: planVersionTag }
       ]
       %}
-      {% set tableRows = tableRows.concat([row]) %}
+      {% set tableRows = [row].concat(tableRows) %}
     {% endfor %}
-
 
     {{ govukTable({
       caption: tableCaption,
@@ -95,8 +105,7 @@
         { text: locale.mainBody.columnText.sentencePlanText, classes: "view-link-column" },
         { text: locale.mainBody.columnText.statusText, classes: "status-column" }
       ],
-      rows: tableRows
-    })
+      rows: tableRows })
     }}
   </div>
 {% endmacro %}
@@ -105,10 +114,8 @@
   <div id="top"></div>
 {% endblock %}
 
-
 {% block content %}
   {{ super() }}
-
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <div class="back-link--previous-versions">
@@ -134,6 +141,4 @@
       {{ generateTable(data.versions.allVersions, locale.mainBody.tables.allVersions.tableHeading, true) }}
     {% endif %}
   </div>
-
-
 {% endblock %}
