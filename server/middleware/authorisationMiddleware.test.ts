@@ -4,9 +4,9 @@ import authorisationMiddleware from './authorisationMiddleware'
 import mockReq from '../testutils/preMadeMocks/mockReq'
 import mockRes from '../testutils/preMadeMocks/mockRes'
 import handoverData from '../testutils/data/handoverData'
-import {AccessMode, AuthType} from '../@types/Handover'
-import createUserToken from "../testutils/createUserToken";
-import {HttpError} from "../utils/HttpError";
+import { AccessMode, AuthType } from '../@types/Handover'
+import createUserToken from '../testutils/createUserToken'
+import { HttpError } from '../utils/HttpError'
 
 jest.mock('../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
@@ -66,11 +66,11 @@ describe('authorisationMiddleware', () => {
   it('should throw an error if the role is not present', async () => {
     ;(req.services.sessionService.getPrincipalDetails as jest.Mock).mockReturnValue({
       ...handoverData.principal,
-      authType: AuthType.HMPPS_AUTH
+      authType: AuthType.HMPPS_AUTH,
     })
     req.originalUrl = '/test-url'
     req.session = {} as Session
-    req.user = {authSource: 'auth', username: 'user1', token: createUserToken([]) }
+    req.user = { authSource: 'auth', username: 'user1', token: createUserToken([]) }
 
     const middleware = authorisationMiddleware()
     try {
@@ -84,11 +84,11 @@ describe('authorisationMiddleware', () => {
   it('should call next if the role is present', async () => {
     ;(req.services.sessionService.getPrincipalDetails as jest.Mock).mockReturnValue({
       ...handoverData.principal,
-      authType: AuthType.HMPPS_AUTH
+      authType: AuthType.HMPPS_AUTH,
     })
     req.originalUrl = '/test-url'
     req.session = {} as Session
-    req.user = {authSource: 'auth', username: 'user1', token: createUserToken(['ROLE_SENTENCE_PLAN']) }
+    req.user = { authSource: 'auth', username: 'user1', token: createUserToken(['ROLE_SENTENCE_PLAN']) }
 
     const middleware = authorisationMiddleware()
     middleware(req as Request, res as Response, next)

@@ -155,7 +155,7 @@ export const openSentencePlan = (
 
 export const openSentencePlanAuth = (
   oasysAssessmentPk: string,
-  options?: { accessMode?: string; planUuid?: string; planVersion?: number; crn?: string, username?: string },
+  options?: { accessMode?: string; planUuid?: string; planVersion?: number; crn?: string; username?: string },
 ) => {
   const { accessMode = AccessMode.READ_WRITE, planUuid, crn } = options ?? {}
   cy.session(`${oasysAssessmentPk}_${accessMode}`, () => {

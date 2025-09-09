@@ -49,7 +49,7 @@ export default class SessionService {
           displayName: name,
           accessMode: AccessMode.READ_WRITE, // Use 'scope' values instead of hardcoding?
           authType: AuthType.HMPPS_AUTH,
-          returnUrl: `${config.apis.hmppsAuth.externalUrl}/sign-in?redirect_uri=${config.domain}/sign-in/hmpps-auth/callback` // Do something useful here...
+          returnUrl: `${config.apis.hmppsAuth.externalUrl}/sign-in?redirect_uri=${config.domain}/sign-in/hmpps-auth/callback`, // Do something useful here...
         },
       }
 

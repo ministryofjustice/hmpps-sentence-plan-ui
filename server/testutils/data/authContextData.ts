@@ -9,7 +9,7 @@ const authContextData: HandoverContextData = {
     authType: AuthType.HMPPS_AUTH,
     identifier: 'a23ccacf-7160-4431-9b4d-c560be9c9f5c',
     displayName: 'Dr. Benjamin Runolfsdottir',
-    returnUrl: 'http://localhost:9090/auth/sign-in?redirect_uri=http://localhost:3000/sign-in/hmpps-auth/callback'
+    returnUrl: 'http://localhost:9090/auth/sign-in?redirect_uri=http://localhost:3001/sign-in/hmpps-auth/callback',
   },
   sentencePlanContext: {
     oasysAssessmentPk: '',

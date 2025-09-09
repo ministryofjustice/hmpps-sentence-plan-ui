@@ -80,9 +80,12 @@ export default function setupAuthentication() {
       return req.logIn(user, loginErr => {
         if (err) return next(loginErr)
 
-        return req.services.sessionService.setupAuthSession().then(() => {
-          res.redirect(URLs.PLAN_OVERVIEW)
-        }).catch(next)
+        return req.services.sessionService
+          .setupAuthSession()
+          .then(() => {
+            res.redirect(URLs.PLAN_OVERVIEW)
+          })
+          .catch(next)
       })
     })(req, res, next),
   )
@@ -106,7 +109,8 @@ export default function setupAuthentication() {
                 ? URLs.DATA_PRIVACY
                 : URLs.PLAN_OVERVIEW)
             res.redirect(redirectURL)
-          }).catch(next)
+          })
+          .catch(next)
       })
     })(req, res, next),
   )
@@ -126,15 +130,17 @@ export default function setupAuthentication() {
 
   router.use(async (req, res, next) => {
     if (req?.user?.authSource === 'auth') {
-      if (req.isAuthenticated() && (await tokenVerificationClient.verifyToken(req as unknown as AuthenticatedRequest))) {
+      if (
+        req.isAuthenticated() &&
+        (await tokenVerificationClient.verifyToken(req as unknown as AuthenticatedRequest))
+      ) {
         return next()
       }
       req.session.returnTo = req.originalUrl
       return res.redirect('/sign-in/hmpps-auth')
-    } else {
-      // Do we verify the handover token anywhere?
-      return next()
     }
+    // Do we verify the handover token anywhere?
+    return next()
   })
 
   router.use((req, res, next) => {

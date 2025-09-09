@@ -13,7 +13,7 @@ export default function authorisationMiddleware(): RequestHandler {
       if (roles.includes('ROLE_SENTENCE_PLAN')) {
         return next()
       }
-      throw new HttpError(401, "No role ROLE_SENTENCE_PLAN found for this user.")
+      throw new HttpError(401, 'No role ROLE_SENTENCE_PLAN found for this user.')
     }
 
     // Handover
