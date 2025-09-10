@@ -7,7 +7,8 @@
 
   &__subject-details {
     * {
-      display: inline-block;
+      display: flex;
+      flex-wrap: wrap;
     }
 
     &:not(:last-child) {
@@ -16,7 +17,7 @@
 
     &__title {
       font-weight: bold;
-      margin-right: govuk-spacing(3);
+      margin-right: govuk-spacing(4);
       margin-bottom: 0;
     }
 
@@ -25,18 +26,23 @@
       @include govuk-font($size: 19, $weight: 'normal');
 
       dd {
-        margin-left: govuk-spacing(1);
+        margin-left: govuk-spacing(2);
       }
 
       & > * {
         color: $govuk-secondary-text-colour;
         padding-right: govuk-spacing(2);
-        margin-right: govuk-spacing(1);
+        margin-right: govuk-spacing(2);
 
         &:not(:last-child) {
           box-shadow: inset -1px 0 0 $govuk-border-colour;
         }
       }
+    }
+
+    &__navigation-links {
+      margin-left: auto;
+      white-space: nowrap;
     }
   }
 
