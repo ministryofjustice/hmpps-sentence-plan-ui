@@ -47,7 +47,7 @@
 {% endmacro %}
 
 
-{% macro generateTable( versions, tableConfig, trackStatus) %}
+{% macro generateTable( versions, tableConfig, trackStatus, showTableCaption) %}
   <div class="govuk-grid-column-three-quarters">
     {% set tableRows = [] %}
     {% set versionList = [] %}
@@ -94,8 +94,8 @@
     {% endfor %}
 
     {{ govukTable({
-      caption: tableConfig.tableHeading,
-      captionClasses: "govuk-table__caption--m",
+      caption: tableConfig.tableHeading if showTableCaption,
+      captionClasses: "govuk-table__caption--m" if showTableCaption,
       firstCellIsHeader: false,
       classes: "previous-versions-table",
       head: [
@@ -133,11 +133,15 @@
     </div>
 
     {% if data.versions.countersignedVersions | length %}
-      {{ generateTable(data.versions.countersignedVersions, locale.mainBody.tables.countersignedVersions, false) }}
+      {% set showTableCaption = true %}
+      {% set trackStatus = false %}
+      {{ generateTable(data.versions.countersignedVersions, locale.mainBody.tables.countersignedVersions, trackStatus, showTableCaption) }}
     {% endif %}
 
     {% if data.versions.allVersions | length %}
-      {{ generateTable(data.versions.allVersions, locale.mainBody.tables.allVersions, true) }}
+      {% set showTableCaption = data.versions.countersignedVersions | length > 0 %}
+      {% set trackStatus = true %}
+      {{ generateTable(data.versions.allVersions, locale.mainBody.tables.allVersions, trackStatus, showTableCaption) }}
     {% endif %}
   </div>
 {% endblock %}
