@@ -99,7 +99,7 @@
 
     {{ govukTable({
       caption: tableConfig.tableHeading if showTableCaption,
-      captionClasses: "govuk-table__caption--m" if showTableCaption,
+      captionClasses: "govuk-table__caption--m govuk-!-margin-top-3" if showTableCaption,
       firstCellIsHeader: false,
       classes: "previous-versions-table",
       head: [
@@ -121,10 +121,10 @@
   {{ super() }}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
-      <div class="back-link--previous-versions">
+      <div class="back-link--previous-versions govuk-!-margin-bottom-2">
         {{ govukBackLink({
           text: "Back",
-          href: "#",
+          href: data.returnLink,
           attributes: { "data-browser-back": "" }
         }) }}
       </div>
