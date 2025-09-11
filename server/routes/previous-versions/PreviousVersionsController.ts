@@ -15,7 +15,11 @@ export default class PreviousVersionsController {
       const versions = await req.services.assessmentService.getVersionsByUuid(planUuid)
 
       // remove the latest(current) version from allVersions:
-      const trimmedAllVersions = Object.fromEntries(Object.entries(versions.allVersions).slice(1))
+      const trimmedAllVersions = Object.fromEntries(
+        Object.entries(versions.allVersions)
+          .sort((a, b) => b[0].localeCompare(a[0]))
+          .slice(1),
+      )
 
       await req.services.auditService.send(AuditEvent.VIEW_PREVIOUS_VERSIONS_PAGE)
 
