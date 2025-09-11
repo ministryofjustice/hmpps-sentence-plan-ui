@@ -14,6 +14,9 @@ export default class PreviousVersionsController {
       const plan = await req.services.planService.getPlanByUuid(planUuid)
       const versions = await req.services.assessmentService.getVersionsByUuid(planUuid)
 
+      // remove the latest(current) version from allVersions:
+      const trimmedAllVersions = Object.fromEntries(Object.entries(versions.allVersions).slice(1))
+
       await req.services.auditService.send(AuditEvent.VIEW_PREVIOUS_VERSIONS_PAGE)
 
       return res.render('pages/previous-versions', {
@@ -22,7 +25,10 @@ export default class PreviousVersionsController {
           planAgreementStatus: plan.agreementStatus,
           pageId,
           oasysReturnUrl: req.services.sessionService.getOasysReturnUrl(),
-          versions,
+          versions: {
+            ...versions,
+            allVersions: trimmedAllVersions,
+          },
           returnLink: req.services.sessionService.getReturnLink(),
         },
         errors,
