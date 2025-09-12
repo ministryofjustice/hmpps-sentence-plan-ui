@@ -24,7 +24,7 @@ describe('Attempt to access without having the role', () => {
       followRedirect: false, // Do NOT follow, so you get the 4xx response
       failOnStatusCode: false,
     }).then(response => {
-      expect(response.status).to.eq(401)
+      expect(response.status).to.eq(403)
       expect(response.redirectedToUrl).to.eq(undefined) // Cypress does not set this if not following the redirect
     })
   })

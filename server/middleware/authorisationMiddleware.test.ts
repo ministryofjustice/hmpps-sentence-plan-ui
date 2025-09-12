@@ -77,7 +77,7 @@ describe('authorisationMiddleware', () => {
       middleware(req as Request, res as Response, next)
     } catch (error) {
       expect(error).toBeInstanceOf(HttpError)
-      expect(error.status).toBe(401)
+      expect(error.status).toBe(403)
     }
   })
 
