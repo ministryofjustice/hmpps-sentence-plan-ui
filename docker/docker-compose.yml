@@ -31,7 +31,6 @@ services:
       SPRING_PROFILES_ACTIVE: dev
       APPLICATION_AUTHENTICATION_UI_ALLOWLIST: 0.0.0.0/0
       LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY: DEBUG
-#      LOGGING_LEVEL_ORG_FLYWAYDB_CORE: DEBUG
       SPRING_FLYWAY_LOCATIONS: classpath:db/auth,db/auth_{vendor},db/dev/data/auth_{vendor},db/dev/data/auth,filesystem:/auth_db
       SPRING_H2_CONSOLE_ENABLED: true
       SPRING_H2_CONSOLE_SETTINGS_WEB_ALLOW_OTHERS: true
@@ -61,7 +60,7 @@ services:
       CLIENT_ID: hmpps-assess-risks-and-needs-oastub-ui
       CLIENT_SECRET: clientsecret
       CLIENT_SP_SECRET: sp-secret
-      CLIENT_SP_OAUTH_REDIRECT_URI: http://localhost:3001/sign-in/callback,http://localhost:3001/sign-in/handover/callback
+      CLIENT_SP_OAUTH_REDIRECT_URI: http://localhost:3001/sign-in/handover/callback
       CLIENT_SP_HANDOVER_REDIRECT_URI: http://localhost:3001/sign-in/handover
       CLIENT_SAN_SECRET: san-secret
       CLIENT_SAN_OAUTH_REDIRECT_URI: http://localhost:3000/sign-in/callback
@@ -166,8 +165,8 @@ services:
       MANAGE_USERS_API_URL: false
       TOKEN_VERIFICATION_ENABLED: false
       TOKEN_VERIFICATION_API_URL: http://hmpps-auth:9091/verification
-      API_CLIENT_ID: hmpps-assess-risks-and-needs-oastub-ui
-      API_CLIENT_SECRET: clientsecret
+      API_CLIENT_ID: sentence-plan-client
+      API_CLIENT_SECRET: sentence-plan-client
       SYSTEM_CLIENT_ID: hmpps-assess-risks-and-needs-oastub-ui
       SYSTEM_CLIENT_SECRET: clientsecret
       HMPPS_ARNS_HANDOVER_CLIENT_ID: sentence-plan

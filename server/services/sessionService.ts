@@ -49,7 +49,7 @@ export default class SessionService {
           displayName: name,
           accessMode: AccessMode.READ_WRITE, // Use 'scope' values instead of hardcoding?
           authType: AuthType.HMPPS_AUTH,
-          returnUrl: `${config.apis.hmppsAuth.externalUrl}/sign-in?redirect_uri=${config.domain}/sign-in/hmpps-auth/callback`, // Do something useful here...
+          returnUrl: `${config.apis.hmppsAuth.externalUrl}/sign-in?redirect_uri=${config.domain}/sign-in/hmpps-auth/callback`,
         },
       }
 
@@ -94,7 +94,7 @@ export default class SessionService {
           this.getPlanVersionNumber(),
         )
       } else {
-        // This is dodgy as association not guaranteed unique especially with Cypress needing to associate to find the data first :/
+        // TODO: association not guaranteed unique especially with Cypress needing to associate to find the data first :/
         ;[this.request.session.plan] = await this.planService.getPlanByCrn(subjectCRN)
         this.request.session.handover.sentencePlanContext.planId = this.request.session.plan.uuid
       }

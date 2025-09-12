@@ -50,11 +50,16 @@ passport.use(
     {
       authorizationURL: `${config.apis.hmppsAuth.externalUrl}/oauth/authorize`,
       tokenURL: `${config.apis.hmppsAuth.url}/oauth/token`,
-      clientID: 'sentence-plan-client',
-      clientSecret: 'sentence-plan-client',
+      clientID: config.apis.hmppsAuth.apiClientId,
+      clientSecret: config.apis.hmppsAuth.apiClientSecret,
       callbackURL: `${config.domain}/sign-in/hmpps-auth/callback`,
       state: true,
-      customHeaders: { Authorization: generateOauthClientToken('sentence-plan-client', 'sentence-plan-client') },
+      customHeaders: {
+        Authorization: generateOauthClientToken(
+          config.apis.hmppsAuth.apiClientId,
+          config.apis.hmppsAuth.apiClientSecret,
+        )
+      },
     },
     (token, refreshToken, params, profile, done) => {
       return done(null, { token, username: params.user_name, authSource: params.auth_source })
@@ -115,10 +120,9 @@ export default function setupAuthentication() {
     })(req, res, next),
   )
 
-  const authUrl = config.apis.hmppsAuth.externalUrl
-  const authParameters = `client_id=sentence-plan-client&redirect_uri=${config.domain}/sign-in/hmpps-auth/`
-
   router.use('/sign-out', (req, res, next) => {
+    const authUrl = config.apis.hmppsAuth.externalUrl
+    const authParameters = `client_id=${config.apis.hmppsAuth.systemClientId}&redirect_uri=${config.domain}/sign-in/hmpps-auth/`
     const authSignOutUrl = `${authUrl}/sign-out?${authParameters}`
     if (req.user) {
       req.logout(err => {
