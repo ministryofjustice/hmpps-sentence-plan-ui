@@ -34,4 +34,9 @@ export default class PlanService {
     )
     return restClient.put<PlanType>({ path: `/plans/associate/${planUuid}/${crn}` })
   }
+
+  async getPlanByCrn(crn: string) {
+    const restClient = await this.sentencePlanApiClient.restClient(`Getting plan UUID for CRN: ${crn}`)
+    return restClient.get<PlanType[]>({ path: `/plans/crn/${crn}` })
+  }
 }

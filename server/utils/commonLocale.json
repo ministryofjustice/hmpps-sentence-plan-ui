@@ -3,6 +3,7 @@
     "header": {
       "serviceName": "{{ applicationName }}",
       "managedInOasysText": "OASys User",
+      "hmppsAuthUser": "Auth User",
       "signOutLink": "Sign out",
       "returnToOasysButton": "Return to OASys"
     },

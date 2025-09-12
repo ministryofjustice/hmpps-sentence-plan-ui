@@ -18,7 +18,7 @@ import { formatAssessmentData } from '../../utils/assessmentUtils'
 import { AccessMode } from '../../@types/Handover'
 import { AuditEvent } from '../../services/auditService'
 
-const oasysReturnUrl = 'https://oasys.return.url'
+const systemReturnUrl = 'https://oasys.return.url'
 
 jest.mock('../../services/auditService')
 
@@ -37,7 +37,7 @@ jest.mock('../../services/sentence-plan/planService', () => {
 jest.mock('../../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
     getPlanUUID: jest.fn().mockReturnValue(testPlan.uuid),
-    getOasysReturnUrl: jest.fn().mockReturnValue(oasysReturnUrl),
+    getSystemReturnUrl: jest.fn().mockReturnValue(systemReturnUrl),
     getPrincipalDetails: jest.fn().mockReturnValue(testHandoverContext.principal),
     getSubjectDetails: jest.fn().mockReturnValue(testHandoverContext.subject),
     getCriminogenicNeeds: jest.fn().mockReturnValue(fullCrimNeeds),
@@ -87,7 +87,7 @@ describe('AboutPersonController - API data error handling', () => {
       data: {
         deliusData,
         planAgreementStatus: testPlan.agreementStatus,
-        oasysReturnUrl,
+        systemReturnUrl,
         pageId: 'about',
         formattedAssessmentInfo: assessmentAreas,
         readWrite: true,
@@ -121,7 +121,7 @@ describe('AboutPersonController - API data error handling', () => {
       data: {
         deliusData: popData,
         planAgreementStatus: testPlan.agreementStatus,
-        oasysReturnUrl,
+        systemReturnUrl,
         pageId: 'about',
         formattedAssessmentInfo,
         readWrite: true,
@@ -168,7 +168,7 @@ describe('AboutPersonController - assessment complete', () => {
         locale: locale.en,
         data: {
           planAgreementStatus: testPlan.agreementStatus,
-          oasysReturnUrl,
+          systemReturnUrl,
           pageId: 'about',
           deliusData: popData,
           formattedAssessmentInfo: assessmentAreas,
@@ -194,7 +194,7 @@ describe('AboutPersonController - assessment complete', () => {
         locale: locale.en,
         data: {
           planAgreementStatus: testPlan.agreementStatus,
-          oasysReturnUrl,
+          systemReturnUrl,
           pageId: 'about',
           deliusData: popData,
           formattedAssessmentInfo: assessmentAreas,
@@ -233,7 +233,7 @@ describe('AboutPersonController - assessment incomplete', () => {
         locale: locale.en,
         data: {
           planAgreementStatus: testPlan.agreementStatus,
-          oasysReturnUrl,
+          systemReturnUrl,
           pageId: 'about',
           deliusData: popData,
           formattedAssessmentInfo: assessmentAreas,
@@ -260,7 +260,7 @@ describe('AboutPersonController - assessment incomplete', () => {
         locale: locale.en,
         data: {
           planAgreementStatus: testPlan.agreementStatus,
-          oasysReturnUrl,
+          systemReturnUrl,
           pageId: 'about',
           deliusData: popData,
           formattedAssessmentInfo: assessmentAreas,

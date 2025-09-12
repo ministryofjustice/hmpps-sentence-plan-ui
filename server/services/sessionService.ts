@@ -1,8 +1,11 @@
 import * as Express from 'express'
+import { jwtDecode } from 'jwt-decode'
 import HandoverContextService from './handover/handoverContextService'
 import PlanService from './sentence-plan/planService'
 import Logger from '../../logger'
-import { AccessMode } from '../@types/Handover'
+import { AccessMode, AuthType, Gender } from '../@types/Handover'
+import { JwtPayloadExtended } from '../@types/Token'
+import config from '../config'
 
 export default class SessionService {
   constructor(
@@ -34,6 +37,77 @@ export default class SessionService {
     }
   }
 
+  setupAuthSession = async () => {
+    try {
+      // The auth token has more attributes than the handover token
+      const { name, user_uuid: userUuid }: JwtPayloadExtended = jwtDecode(this.request?.user?.token)
+
+      // @ts-expect-error TODO: do something else here
+      this.request.session.handover = {
+        principal: {
+          identifier: userUuid,
+          displayName: name,
+          accessMode: AccessMode.READ_WRITE, // Use 'scope' values instead of hardcoding?
+          authType: AuthType.HMPPS_AUTH,
+          returnUrl: `${config.apis.hmppsAuth.externalUrl}/sign-in?redirect_uri=${config.domain}/sign-in/hmpps-auth/callback`,
+        },
+      }
+
+      // Failed: TypeError: Cannot read properties of undefined (reading 'identifier') HmppsAuthClient.getSystemClientToken
+      // Need to do this AFTER setting principal...
+      const deliusData = await this.request.services.infoService.getPopData('X775086').catch((): null => null)
+      deliusData.crn = 'X775086'
+
+      this.request.session.handover = {
+        assessmentContext: {
+          // Why does SP need to know this?
+          oasysAssessmentPk: '', // Isn't this only in the coordinator?
+          assessmentVersion: 0,
+        },
+        criminogenicNeedsData: {},
+        handoverSessionId: '', // ??
+        principal: this.request.session.handover.principal,
+        subject: {
+          // nDelius?
+          crn: deliusData.crn,
+          pnc: 'UNKNOWN PNC',
+          givenName: deliusData.firstName,
+          familyName: deliusData.lastName,
+          dateOfBirth: deliusData.doB,
+          gender: Gender.NotSpecified, // Handover.Gender and Person.Gender are different :/
+          location: 'COMMUNITY', // No location in deliusData, but there is an inCustody field...
+        },
+        sentencePlanContext: {
+          oasysAssessmentPk: '',
+          planId: '',
+          planVersion: null, // null as it isHistoricalPlan (and READ_ONLY) if anything else specified.
+        },
+      }
+
+      const subjectCRN = this.getSubjectDetails()?.crn
+
+      // Currently only the sentences are used from the deliusData, and only on the about page...
+      // The rest of the data is from the handover subject (as popData in nunjucksSetup.ts).
+      if (this.getPlanVersionNumber() != null) {
+        this.request.session.plan = await this.planService.getPlanByUuidAndVersionNumber(
+          this.getPlanUUID(),
+          this.getPlanVersionNumber(),
+        )
+      } else {
+        // TODO: association not guaranteed unique especially with Cypress needing to associate to find the data first :/
+        ;[this.request.session.plan] = await this.planService.getPlanByCrn(subjectCRN)
+        this.request.session.handover.sentencePlanContext.planId = this.request.session.plan.uuid
+      }
+
+      if (subjectCRN) {
+        await this.request.services.planService.associate(this.getPlanUUID(), subjectCRN)
+      }
+    } catch (e) {
+      Logger.error('Failed to setup session:', e)
+      throw Error(e.message)
+    }
+  }
+
   getPlanUUID = () => this.request.session.handover?.sentencePlanContext.planId
 
   getPlanVersionNumber = () => this.request.session.handover?.sentencePlanContext.planVersion
@@ -53,7 +127,7 @@ export default class SessionService {
     return AccessMode.READ_WRITE
   }
 
-  getOasysReturnUrl = () => this.request.session.handover?.principal.returnUrl
+  getSystemReturnUrl = () => this.request.session.handover?.principal.returnUrl
 
   getCriminogenicNeeds = () => this.request.session.handover?.criminogenicNeedsData
 

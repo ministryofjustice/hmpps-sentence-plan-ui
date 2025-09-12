@@ -27,13 +27,16 @@
         "status": 200,
         "headers": { "Content-Type": "application/json" },
         "jsonBody": {
+          "name": {
+            "forename": "Buster",
+            "middleName": "",
+            "surname": "Sanford"
+          },
           "crn": "XYZ12345",
-          "pnc": "01/14106572A",
-          "nomisId": "",
-          "givenName": "Buster",
-          "familyName": "Sanford",
+          "tier": "",
           "dateOfBirth": "2002-01-15",
-          "gender": 1,
+          "nomisId": "",
+          "region": "",
           "location": "COMMUNITY",
           "sexuallyMotivatedOffenceHistory": "YES",
           "sentences": [

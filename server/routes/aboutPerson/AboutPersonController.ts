@@ -14,7 +14,7 @@ export default class AboutPersonController {
     try {
       const planUuid = req.services.sessionService.getPlanUUID()
       const popData = req.services.sessionService.getSubjectDetails()
-      const oasysReturnUrl = req.services.sessionService.getOasysReturnUrl()
+      const systemReturnUrl = req.services.sessionService.getSystemReturnUrl()
       const criminogenicNeedsData = req.services.sessionService.getCriminogenicNeeds()
       const plan = await req.services.planService.getPlanByUuid(planUuid)
       const errorMessages = []
@@ -46,7 +46,7 @@ export default class AboutPersonController {
         locale: locale.en,
         data: {
           planAgreementStatus: plan.agreementStatus,
-          oasysReturnUrl,
+          systemReturnUrl,
           pageId,
           deliusData,
           formattedAssessmentInfo,
