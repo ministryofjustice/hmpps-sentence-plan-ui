@@ -58,7 +58,7 @@ passport.use(
         Authorization: generateOauthClientToken(
           config.apis.hmppsAuth.apiClientId,
           config.apis.hmppsAuth.apiClientSecret,
-        )
+        ),
       },
     },
     (token, refreshToken, params, profile, done) => {
