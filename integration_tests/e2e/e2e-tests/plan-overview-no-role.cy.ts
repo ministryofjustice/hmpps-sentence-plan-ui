@@ -10,7 +10,7 @@ describe('Attempt to access without having the role', () => {
   })
 
   it('Redirects to the error page', () => {
-    cy.get('.govuk-heading-l').should('have.text', 'You need to sign in to use this service')
+    cy.get('.govuk-heading-l').should('have.text', 'You do not have permission to perform this action')
     cy.contains('a', 'Go to the Auth homepage').should(
       'have.attr',
       'href',
