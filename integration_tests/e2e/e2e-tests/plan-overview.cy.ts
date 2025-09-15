@@ -17,6 +17,10 @@ describe('View Plan Overview for READ_WRITE user', () => {
     cy.hasFeedbackLink()
   })
 
+  it('Has a previous versions link', () => {
+    cy.get('.plan-header__subject-details__navigation-links').should('contain', `View previous versions`)
+  })
+
   it('Should have a Create goal button and it should take to create goal', () => {
     cy.visit('/plan')
     cy.get('.moj-primary-navigation__container').should('not.contain', `Plan history`)
