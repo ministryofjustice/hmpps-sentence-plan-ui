@@ -34,8 +34,8 @@ describe('Rendering About Person for READ_WRITE user', () => {
     cy.hasFeedbackLink()
   })
 
-  it('Has a previous versions link', () => {
-    cy.get('.plan-header__subject-details__navigation-links').should('contain', `View previous versions`)
+  it('Has a previous versions page link', () => {
+    cy.hasPreviousVersionsPageLink()
   })
 
   it('Should check if the hard-coded entries in Sentence information are displayed correctly', () => {

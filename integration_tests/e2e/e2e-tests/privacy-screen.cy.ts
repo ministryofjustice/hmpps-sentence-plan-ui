@@ -34,6 +34,10 @@ describe('Privacy Screen', () => {
       cy.hasFeedbackLink()
     })
 
+    it('Has no previous versions page link', () => {
+      cy.get('.plan-header [data-previous-versions-link]').should('not.exist')
+    })
+
     it('Display privacy page correctly on load', () => {
       cy.get('button[value="confirm"]')
       cy.get('.moj-primary-navigation__container').should('not.exist')

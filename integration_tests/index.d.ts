@@ -29,5 +29,8 @@ declare namespace Cypress {
 
     // Feedback
     hasFeedbackLink(): Chainable
+
+    // Navigation links
+    hasPreviousVersionsPageLink(): Chainable
   }
 }

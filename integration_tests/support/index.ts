@@ -11,6 +11,7 @@ import {
 import { checkAccessibility } from './commands/accessibility'
 import 'cypress-axe'
 import { hasFeedbackLink } from './commands/feedback'
+import { hasPreviousVersionsPageLink } from './commands/previousVersions'
 
 compareSnapshotCommand()
 
@@ -31,3 +32,6 @@ Cypress.Commands.add('checkAccessibility', checkAccessibility)
 
 // Feedback
 Cypress.Commands.add('hasFeedbackLink', hasFeedbackLink)
+
+// Previous versions page links
+Cypress.Commands.add('hasPreviousVersionsPageLink', hasPreviousVersionsPageLink)
