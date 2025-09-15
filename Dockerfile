@@ -1,4 +1,4 @@
-FROM node:22.14-alpine3.20 AS base
+FROM node:22.16-alpine3.20 AS base
 
 ARG BUILD_NUMBER
 ARG GIT_REF
