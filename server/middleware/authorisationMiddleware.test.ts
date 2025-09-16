@@ -29,7 +29,7 @@ describe('authorisationMiddleware', () => {
     ;(req.services.sessionService.getPrincipalDetails as jest.Mock).mockReturnValue({})
 
     const middleware = authorisationMiddleware()
-    middleware(req as Request, res as Response, next)
+    await middleware(req as Request, res as Response, next)
 
     expect(req.services!.sessionService.getPrincipalDetails).toHaveBeenCalled()
     expect(next).toHaveBeenCalled()
@@ -43,7 +43,7 @@ describe('authorisationMiddleware', () => {
     })
 
     const middleware = authorisationMiddleware()
-    middleware(req as Request, res as Response, next)
+    await middleware(req as Request, res as Response, next)
 
     expect(req.services!.sessionService.getPrincipalDetails).toHaveBeenCalled()
     expect(next).toHaveBeenCalled()
@@ -55,7 +55,7 @@ describe('authorisationMiddleware', () => {
     req.session = {} as Session
 
     const middleware = authorisationMiddleware()
-    middleware(req as Request, res as Response, next)
+    await middleware(req as Request, res as Response, next)
 
     expect(req.services!.sessionService.getPrincipalDetails).toHaveBeenCalled()
     expect(next).not.toHaveBeenCalled()
@@ -63,7 +63,7 @@ describe('authorisationMiddleware', () => {
     expect(req.session!.returnTo).toBe('/test-url')
   })
 
-  it('should throw an error if the role is not present', async () => {
+  it('calls next(HttpError) with 403 if the role is not present', async () => {
     ;(req.services.sessionService.getPrincipalDetails as jest.Mock).mockReturnValue({
       ...handoverData.principal,
       authType: AuthType.HMPPS_AUTH,
@@ -73,26 +73,73 @@ describe('authorisationMiddleware', () => {
     req.user = { authSource: 'auth', username: 'user1', token: createUserToken([]) }
 
     const middleware = authorisationMiddleware()
-    try {
-      middleware(req as Request, res as Response, next)
-    } catch (error) {
-      expect(error).toBeInstanceOf(HttpError)
-      expect(error.status).toBe(403)
-    }
+    await middleware(req as Request, res as Response, next)
+
+    expect(next).toHaveBeenCalledWith(expect.any(HttpError))
+    expect((next as jest.Mock).mock.calls[0][0].status).toBe(403)
   })
 
-  it('should call next if the role is present', async () => {
-    ;(req.services.sessionService.getPrincipalDetails as jest.Mock).mockReturnValue({
-      ...handoverData.principal,
-      authType: AuthType.HMPPS_AUTH,
+  it('should call next if the role is present and canAccess is true', async () => {
+    const mockGetData = jest.fn().mockResolvedValue({
+        inCaseload: true,
+        userExcluded: false,
+        userRestricted: false,
+        canAccess: true,
     })
-    req.originalUrl = '/test-url'
-    req.session = {} as Session
-    req.user = { authSource: 'auth', username: 'user1', token: createUserToken(['ROLE_SENTENCE_PLAN']) }
+
+    const req: any = {
+      originalUrl: '/test-url',
+      session: {} as Session,
+      user: { authSource: 'auth', username: 'user1', token: createUserToken(['ROLE_SENTENCE_PLAN']) },
+      services : {
+        sessionService: {
+          getPrincipalDetails: jest.fn().mockReturnValue({
+            ...handoverData.principal,
+            authType: 'HMPPS_AUTH'
+          }),
+        },
+        sentencePlanAndDeliusService: {
+          getDataByUsernameAndCrn: mockGetData,
+        },
+      }
+    }
 
     const middleware = authorisationMiddleware()
-    middleware(req as Request, res as Response, next)
+    await middleware(req as Request, res as Response, next)
 
+    expect(mockGetData).toHaveBeenCalledWith('user1', 'b')
     expect(next).toHaveBeenCalled()
+  })
+
+  it('calls next(HttpError) with 403 if canAccess is false', async () => {
+    const mockGetData = jest.fn().mockResolvedValue({
+      inCaseload: true,
+      userExcluded: false,
+      userRestricted: false,
+      canAccess: false,
+    })
+
+    const req: any = {
+      originalUrl: '/test-url',
+      session: {} as Session,
+      user: { authSource: 'auth', username: 'user1', token: createUserToken(['ROLE_SENTENCE_PLAN']) },
+      services : {
+        sessionService: {
+          getPrincipalDetails: jest.fn().mockReturnValue({
+            ...handoverData.principal,
+            authType: 'HMPPS_AUTH'
+          }),
+        },
+        sentencePlanAndDeliusService: {
+          getDataByUsernameAndCrn: mockGetData,
+        },
+      }
+    }
+
+    const middleware = authorisationMiddleware()
+    await middleware(req as Request, res as Response, next)
+
+    expect(next).toHaveBeenCalledWith(expect.any(HttpError))
+    expect((next as jest.Mock).mock.calls[0][0].status).toBe(403)
   })
 })
