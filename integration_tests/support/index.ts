@@ -4,6 +4,7 @@ import {
   addStepToGoal,
   agreePlan,
   createSentencePlan,
+  createSentencePlanWithVersions,
   lockPlan,
   openSentencePlan,
   removeGoalFromPlan,
@@ -26,6 +27,7 @@ Cypress.Commands.add('removeGoalFromPlan', removeGoalFromPlan)
 Cypress.Commands.add('agreePlan', agreePlan)
 
 Cypress.Commands.add('lockPlan', lockPlan)
+Cypress.Commands.add('createSentencePlanWithVersions', createSentencePlanWithVersions)
 
 // Accessibility
 Cypress.Commands.add('checkAccessibility', checkAccessibility)

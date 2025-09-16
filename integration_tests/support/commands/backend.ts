@@ -326,3 +326,124 @@ export const addStepToGoal = (goalUuid: string, step: NewStep) => {
       .then(createResponse => createResponse.body),
   )
 }
+
+export const createSentencePlanWithVersions = (numberOfVersions: number, numberOfCountersignedVersions: number = 0) => {
+  const createVersions = (max: number, planUuid: string, apiToken: string) => {
+    if (max <= 0) {
+      return cy.task(
+        'runDBQuery',
+        `WITH plan_data AS (
+                SELECT id FROM "sentence-plan".plan WHERE uuid = '${planUuid}'
+              )
+              UPDATE "sentence-plan".plan_version pv
+              SET
+                created_date = CURRENT_DATE - ((${numberOfVersions} - pv.version - 1) || ' days')::INTERVAL,
+                last_updated_date = CURRENT_DATE - ((${numberOfVersions} - pv.version - 1) || ' days')::INTERVAL
+              FROM plan_data
+              WHERE pv.plan_id = plan_data.id;`,
+      )
+    }
+    return cy.lockPlan(planUuid).then(() => {
+      const versionGoal: NewGoal = {
+        title: `Version ${numberOfVersions - max + 1} Goal`,
+        areaOfNeed: 'ACCOMMODATION',
+        note: `Automated goal for version creation - ${numberOfVersions - max + 1}`,
+      }
+      cy.request({
+        url: `${Cypress.env('SP_API_URL')}/plans/${planUuid}/goals`,
+        method: 'POST',
+        auth: { bearer: apiToken },
+        body: versionGoal,
+        retryOnNetworkFailure: false,
+      }).then(() => {
+        createVersions(max - 1, planUuid, apiToken)
+      })
+    })
+  }
+
+  const createCountersignedVersions = (max: number, planUuid: string, apiToken: string) => {
+    if (max <= 0) {
+      return cy.task(
+        'runDBQuery',
+        `WITH plan_data AS (
+          SELECT id FROM "sentence-plan".plan WHERE uuid = '${planUuid}'
+        ),
+              versions_to_update AS (
+                SELECT pv.id,
+                       ROW_NUMBER() OVER (ORDER BY pv.version DESC) AS rn
+                FROM "sentence-plan".plan_version pv
+                       JOIN plan_data pd ON pv.plan_id = pd.id
+                WHERE pv.countersigning_status IS DISTINCT FROM 'COUNTERSIGNED'
+           )
+        UPDATE "sentence-plan".plan_version pv
+        SET
+          countersigning_status = 'COUNTERSIGNED',
+          created_date = CURRENT_DATE - (( ${numberOfCountersignedVersions} - v.rn ) || ' days')::INTERVAL,
+          last_updated_date = CURRENT_DATE - (( ${numberOfCountersignedVersions} - v.rn ) || ' days')::INTERVAL
+        FROM versions_to_update v
+        WHERE pv.id = v.id
+          AND v.rn <= ${numberOfCountersignedVersions};`,
+      );
+    }
+
+    return cy.lockPlan(planUuid).then(() => {
+      const versionGoal: NewGoal = {
+        title: `Countersigned version ${numberOfCountersignedVersions - max + 1} Goal`,
+        areaOfNeed: 'ACCOMMODATION',
+        note: `Automated goal for countersigned version creation - ${numberOfCountersignedVersions - max + 1}`,
+      }
+      return cy
+        .request({
+          url: `${Cypress.env('SP_API_URL')}/plans/${planUuid}/goals`,
+          method: 'POST',
+          auth: { bearer: apiToken },
+          body: versionGoal,
+          retryOnNetworkFailure: false,
+        })
+        .then(() => {
+          cy.task(
+            'runDBQuery',
+            `WITH plan_data AS (
+                SELECT id FROM "sentence-plan".plan WHERE uuid = '${planUuid}'
+              ),
+              max_version AS (
+                SELECT MAX(pv.version) AS version
+                FROM "sentence-plan".plan_version pv
+                JOIN plan_data pd ON pv.plan_id = pd.id
+                )
+              UPDATE "sentence-plan".plan_version pv
+              SET
+                countersigning_status = 'COUNTERSIGNED'
+              FROM plan_data, max_version
+              WHERE pv.plan_id = plan_data.id
+              AND pv.version = max_version.version;`,
+          )
+        })
+        .then(() => {
+          createCountersignedVersions(max - 1, planUuid, apiToken)
+        })
+    })
+  }
+
+  return cy.createSentencePlan().then(result => {
+    if (numberOfVersions <= 1 && numberOfCountersignedVersions <= 0) return result
+
+    return getApiToken().then(apiToken => {
+      if (numberOfVersions > 1) {
+        return createVersions(numberOfVersions - 1, result.plan.uuid, apiToken).then(() => {
+          if (numberOfCountersignedVersions > 0) {
+            return createCountersignedVersions(numberOfCountersignedVersions, result.plan.uuid, apiToken).then(
+              () => result,
+            )
+          }
+          return result
+        })
+      }
+      if (numberOfCountersignedVersions > 0) {
+        return createCountersignedVersions(numberOfCountersignedVersions, result.plan.uuid, apiToken).then(() => result)
+      }
+
+      return result
+    })
+  })
+}
