@@ -15,6 +15,7 @@ generic-service:
     MANAGE_USERS_API_URL: "https://manage-users-api-dev.hmpps.service.justice.gov.uk"
     COORDINATOR_API_URL: "https://arns-coordinator-api-test.hmpps.service.justice.gov.uk"
     TOKEN_VERIFICATION_API_URL: "https://token-verification-api-dev.prison.service.justice.gov.uk"
+    MPOP_URL: "https://manage-people-on-probation-dev.hmpps.service.justice.gov.uk"
     ENVIRONMENT_NAME: TEST
 
   namespace_secrets:

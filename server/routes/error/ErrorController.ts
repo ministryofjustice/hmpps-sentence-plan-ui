@@ -47,7 +47,6 @@ export default class ErrorController {
           locale: localeUnauthorized.en,
           data: {
             systemReturnUrl,
-            authSource: req?.user?.authSource,
           },
         })
       case http.HTTP_STATUS_FORBIDDEN:
@@ -55,7 +54,6 @@ export default class ErrorController {
           locale: localeForbidden.en,
           data: {
             systemReturnUrl,
-            authSource: req?.user?.authSource,
           },
         })
       default:
@@ -63,7 +61,6 @@ export default class ErrorController {
           locale: localeBadRequest.en,
           data: {
             systemReturnUrl,
-            authSource: req?.user?.authSource,
           },
         })
     }

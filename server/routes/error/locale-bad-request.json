@@ -9,7 +9,7 @@
     "suggestions": ["Try performing your request again.", "If the request still fails, try again later."],
     "resolution": {
       "oasys": "<a href='{{ systemReturnUrl }}'>Go to the OASys homepage</a> to sign-in again",
-      "auth": "<a href='{{ systemReturnUrl }}'>Go to the Auth homepage</a> to sign-in again"
+      "auth": "<a href='{{ managePeopleOnProbationUrl }}'>Return to the Manage People on Probation service</a> to sign-in again"
     }
   }
 }

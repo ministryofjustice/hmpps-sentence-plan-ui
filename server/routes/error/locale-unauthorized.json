@@ -10,8 +10,8 @@
       "This could be because you’ve used a bookmarked link, or your session has expired due to inactivity."
     ],
     "resolution": {
-      "oasys": "<a href='{{ systemReturnUrl }}'>Go to the OASys homepage</a> to sign-in again",
-      "auth": "<a href='{{ systemReturnUrl }}'>Go to the Auth homepage</a> to sign-in again"
+      "oasys": "Go to the OASys homepage to sign-in",
+      "auth": "<a href='{{ managePeopleOnProbationUrl }}'>Go to the Manage People on Probation service</a> to sign-in"
     }
   }
 }
