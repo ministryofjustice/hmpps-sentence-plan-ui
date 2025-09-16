@@ -1,10 +1,10 @@
 import { NewGoal } from '../../../server/@types/NewGoalType'
 import { NewStep } from '../../../server/@types/StepType'
-import { AccessMode } from '../../../server/@types/Handover'
 import { GoalStatus } from '../../../server/@types/GoalType'
 import { PlanAgreement } from '../../../server/@types/PlanAgreement'
 import { PlanAgreementStatus } from '../../../server/@types/PlanType'
 import handoverData from '../../../server/testutils/data/handoverData'
+import { AccessMode } from '../../../server/@types/SessionType'
 
 const getApiToken = () => {
   const apiToken = Cypress.env('API_TOKEN')

@@ -1,4 +1,5 @@
-import { AccessMode, AuthType, HandoverContextData } from '../../@types/Handover'
+import { AccessMode, AuthType } from '../../@types/SessionType'
+import { HandoverContextData } from '../../@types/Handover'
 
 const authContextData: HandoverContextData = {
   assessmentContext: { oasysAssessmentPk: '', assessmentVersion: 0 },

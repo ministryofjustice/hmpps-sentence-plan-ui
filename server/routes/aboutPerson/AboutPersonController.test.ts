@@ -15,8 +15,8 @@ import {
 import { FormattedAssessment } from '../../@types/Assessment'
 
 import { formatAssessmentData } from '../../utils/assessmentUtils'
-import { AccessMode } from '../../@types/Handover'
 import { AuditEvent } from '../../services/auditService'
+import { AccessMode } from '../../@types/SessionType'
 
 const systemReturnUrl = 'https://oasys.return.url'
 

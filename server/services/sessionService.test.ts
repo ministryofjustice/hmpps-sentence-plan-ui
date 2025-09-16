@@ -7,7 +7,7 @@ import PlanService from './sentence-plan/planService'
 import HandoverContextService from './handover/handoverContextService'
 import popData from '../testutils/data/popData'
 import createUserToken from '../testutils/createUserToken'
-import { AuthType } from '../@types/Handover'
+import { AuthType } from '../@types/SessionType'
 
 jest.mock('./sentence-plan/planService', () => {
   return jest.fn().mockImplementation(() => ({

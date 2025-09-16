@@ -1,8 +1,8 @@
 import { RequestHandler } from 'express'
 import { jwtDecode } from 'jwt-decode'
-import { AccessMode, AuthType } from '../@types/Handover'
 import { HttpError } from '../utils/HttpError'
 import { JwtPayloadExtended } from '../@types/Token'
+import { AccessMode, AuthType } from '../@types/SessionType'
 
 export default function authorisationMiddleware(): RequestHandler {
   return (req, res, next) => {

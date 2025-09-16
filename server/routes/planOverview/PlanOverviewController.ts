@@ -8,11 +8,11 @@ import PlanReadyForAgreementModel from '../shared-models/PlanReadyForAgreementMo
 import AgreedPlanModel from '../shared-models/AgreedPlanModel'
 import transformRequest from '../../middleware/transformMiddleware'
 import PlanOverviewQueryModel from './models/PlanOverviewQueryModel'
-import { AccessMode } from '../../@types/Handover'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
 import { HttpError } from '../../utils/HttpError'
 import { PlanAgreementStatus, PlanType } from '../../@types/PlanType'
 import { AuditEvent } from '../../services/auditService'
+import { AccessMode } from '../../@types/SessionType'
 
 export default class PlanOverviewController {
   plan: PlanType

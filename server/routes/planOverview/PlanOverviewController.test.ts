@@ -6,9 +6,9 @@ import locale from './locale.json'
 import testPlan from '../../testutils/data/planData'
 import runMiddlewareChain from '../../testutils/runMiddlewareChain'
 import testHandoverContext from '../../testutils/data/handoverData'
-import { AccessMode } from '../../@types/Handover'
 import { PlanAgreementStatus, PlanType } from '../../@types/PlanType'
 import { AuditEvent } from '../../services/auditService'
+import { AccessMode } from '../../@types/SessionType'
 
 const systemReturnUrl = 'https://oasys.return.url'
 

@@ -3,8 +3,8 @@ import locale from './locale.json'
 import { areaConfigs } from '../../utils/assessmentAreaConfig.json'
 import { formatAssessmentData } from '../../utils/assessmentUtils'
 import { HttpError } from '../../utils/HttpError'
-import { AccessMode } from '../../@types/Handover'
 import { AuditEvent } from '../../services/auditService'
+import { AccessMode } from '../../@types/SessionType'
 
 export default class AboutPersonController {
   constructor() {}

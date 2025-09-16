@@ -3,9 +3,8 @@ import { jwtDecode } from 'jwt-decode'
 import HandoverContextService from './handover/handoverContextService'
 import PlanService from './sentence-plan/planService'
 import Logger from '../../logger'
-import { AccessMode, AuthType, Gender } from '../@types/Handover'
 import { JwtPayloadExtended } from '../@types/Token'
-import config from '../config'
+import { AccessMode, AuthType, Gender } from '../@types/SessionType'
 
 export default class SessionService {
   constructor(

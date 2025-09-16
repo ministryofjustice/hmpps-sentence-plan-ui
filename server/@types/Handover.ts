@@ -1,32 +1,13 @@
 import { CriminogenicNeedsData } from './Assessment'
+import { AuthenticationDetails, SubjectDetails } from './SessionType'
 
 export type HandoverContextData = {
   handoverSessionId: string
-  principal: HandoverPrincipal
-  subject: HandoverSubject
+  principal: AuthenticationDetails
+  subject: SubjectDetails
   assessmentContext: HandoverAssessmentContext
   sentencePlanContext: HandoverSentencePlanContext
   criminogenicNeedsData?: CriminogenicNeedsData
-}
-
-export type HandoverPrincipal = {
-  identifier: string
-  displayName: string
-  accessMode: AccessMode
-  returnUrl?: string
-  authType?: AuthType
-}
-
-export type HandoverSubject = {
-  crn: string
-  pnc: string
-  nomisId?: string
-  givenName: string
-  familyName: string
-  dateOfBirth: string
-  gender: Gender
-  location: 'PRISON' | 'COMMUNITY'
-  sexuallyMotivatedOffenceHistory?: string
 }
 
 export type HandoverAssessmentContext = {
@@ -38,21 +19,4 @@ export type HandoverSentencePlanContext = {
   oasysAssessmentPk: string
   planId: string
   planVersion: number
-}
-
-export const enum AccessMode {
-  READ_WRITE = 'READ_WRITE',
-  READ_ONLY = 'READ_ONLY',
-}
-
-export const enum AuthType {
-  OASYS = 'OASYS',
-  HMPPS_AUTH = 'HMPPS_AUTH',
-}
-
-export const enum Gender {
-  NotKnown = 0,
-  Male = 1,
-  Female = 2,
-  NotSpecified = 9,
 }

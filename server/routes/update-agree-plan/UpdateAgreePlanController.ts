@@ -9,9 +9,9 @@ import UpdateAgreePlanPostModel from './models/UpdateAgreePlanPostModel'
 import { PlanAgreementStatus, PlanType } from '../../@types/PlanType'
 import { PlanAgreement } from '../../@types/PlanAgreement'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
-import { AccessMode } from '../../@types/Handover'
 import { HttpError } from '../../utils/HttpError'
 import { AuditEvent } from '../../services/auditService'
+import { AccessMode } from '../../@types/SessionType'
 
 export default class UpdateAgreePlanController {
   private plan: PlanType
