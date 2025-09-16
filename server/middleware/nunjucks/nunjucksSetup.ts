@@ -63,7 +63,12 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
   app.use((req, res, next) => {
     res.render = new Proxy(res.render, {
       apply(target, thisArg, [view, options, callback]) {
-        const popData = req.services.sessionService.getSubjectDetails()
+        const subjectDetails = req.services.sessionService.getSubjectDetails()
+        const popData = subjectDetails && {
+          ...subjectDetails,
+          possessiveName: nameFormatter(subjectDetails?.givenName),
+        }
+
         return target.apply(thisArg, [
           view,
           mergeDeep(options, {
@@ -71,10 +76,7 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
               common: commonLocale.en,
             },
             data: {
-              popData: {
-                ...popData,
-                possessiveName: nameFormatter(popData?.givenName),
-              },
+              popData,
             },
           }),
           callback,
