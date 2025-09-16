@@ -383,7 +383,7 @@ export const createSentencePlanWithVersions = (numberOfVersions: number, numberO
         FROM versions_to_update v
         WHERE pv.id = v.id
           AND v.rn <= ${numberOfCountersignedVersions};`,
-      );
+      )
     }
 
     return cy.lockPlan(planUuid).then(() => {

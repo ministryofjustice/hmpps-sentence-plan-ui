@@ -101,7 +101,6 @@ describe('View Previous Versions', () => {
       cy.get('.previous-versions-table').should('exist')
       cy.get('.govuk-table__caption--m').should('not.exist', 'All versions')
       cy.get('.govuk-table__caption--m').should('not.exist', 'Countersigned versions')
-
     })
   })
 
@@ -159,5 +158,3 @@ describe('View Previous Versions', () => {
     // })
   })
 })
-
-
