@@ -2,7 +2,6 @@ import testPlan from '../testutils/data/planData'
 import mockReq from '../testutils/preMadeMocks/mockReq'
 import SessionService from './sessionService'
 import testHandoverContext from '../testutils/data/handoverData'
-import authContextData from '../testutils/data/authContextData'
 import PlanService from './sentence-plan/planService'
 import HandoverContextService from './handover/handoverContextService'
 import popData from '../testutils/data/popData'
@@ -41,19 +40,30 @@ describe('SessionService', () => {
       handoverContextServiceMock.getContext.mockResolvedValue(testHandoverContext)
       planServiceMock.getPlanByUuidAndVersionNumber.mockResolvedValue(testPlan)
       planServiceMock.associate.mockResolvedValue(testPlan)
+      requestMock.services = { planService: planServiceMock }
 
-      await sessionService.setupSession()
+      await sessionService.setupSessionFromHandover()
 
-      expect(requestMock.session.handover).toEqual(testHandoverContext)
-      expect(requestMock.session.plan).toEqual(testPlan)
-      expect(requestMock.session.plan.crn).toEqual(testHandoverContext.subject.crn)
+      expect(requestMock.session.principal).toEqual({
+        ...testHandoverContext.principal,
+        authType: AuthType.OASYS,
+      })
+      expect(requestMock.session.subject).toEqual(testHandoverContext.subject)
+      expect(requestMock.session.criminogenicNeeds).toEqual(testHandoverContext.criminogenicNeedsData)
+      expect(requestMock.session.plan).toEqual({
+        id: testHandoverContext.sentencePlanContext.planId,
+        version: testHandoverContext.sentencePlanContext.planVersion,
+      })
     })
   })
 
   describe('getPlanUUID', () => {
     it('should get plan UUID from session', async () => {
       requestMock.session = {
-        handover: testHandoverContext,
+        plan: {
+          id: testHandoverContext.sentencePlanContext.planId,
+          version: testHandoverContext.sentencePlanContext.planVersion,
+        },
       }
 
       expect(sessionService.getPlanUUID()).toBe(testHandoverContext.sentencePlanContext.planId)
@@ -63,7 +73,7 @@ describe('SessionService', () => {
   describe('getPrincipalDetails', () => {
     it('should get principal details from session', async () => {
       requestMock.session = {
-        handover: testHandoverContext,
+        principal: testHandoverContext.principal,
       }
       expect(sessionService.getPrincipalDetails()).toBe(testHandoverContext.principal)
     })
@@ -72,7 +82,7 @@ describe('SessionService', () => {
   describe('getSubjectDetails', () => {
     it('should get subject details from session', async () => {
       requestMock.session = {
-        handover: testHandoverContext,
+        subject: testHandoverContext.subject,
       }
       expect(sessionService.getSubjectDetails()).toBe(testHandoverContext.subject)
     })
@@ -80,22 +90,31 @@ describe('SessionService', () => {
 
   describe('setupAuthSession', () => {
     it('should set up session with handover and plan', async () => {
-      handoverContextServiceMock.getContext.mockResolvedValue(testHandoverContext)
-      planServiceMock.getPlanByUuidAndVersionNumber.mockResolvedValue(testPlan)
-      planServiceMock.associate.mockResolvedValue(testPlan)
-      planServiceMock.getPlanByCrn.mockResolvedValue([testPlan])
+      const crn = 'X775086'
+      planServiceMock.getPlanByCrn.mockResolvedValue({
+        uuid: testPlan.uuid,
+        currentVersion: testPlan,
+      } as any)
       requestMock.services.infoService.getPopData = jest.fn().mockResolvedValue(popData)
       requestMock.user = {
         token: createUserToken([]),
       }
 
-      await sessionService.setupAuthSession()
+      await sessionService.setupSessionFromAuth(crn)
 
-      testHandoverContext.principal.authType = AuthType.HMPPS_AUTH
-      testHandoverContext.criminogenicNeedsData = {}
-      expect(requestMock.session.handover).toEqual(authContextData)
-      expect(requestMock.session.plan).toEqual(testPlan)
-      expect(requestMock.session.plan.crn).toEqual(testHandoverContext.subject.crn)
+      expect(requestMock.session.subject).toEqual({
+        crn: popData.crn,
+        pnc: 'UNKNOWN PNC',
+        givenName: popData.firstName,
+        familyName: popData.lastName,
+        dateOfBirth: popData.doB,
+        gender: 9,
+        location: 'COMMUNITY',
+      })
+      expect(requestMock.session.plan).toEqual({
+        id: testPlan.uuid,
+        version: null,
+      })
     })
   })
 })
