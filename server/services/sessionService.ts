@@ -40,7 +40,7 @@ export default class SessionService {
     }
   }
 
-  setupPrincipleFromAuth = async (token: string) => {
+  setupPrincipalFromAuth = async (token: string) => {
     try {
       const { name, user_uuid: userUuid } = jwtDecode<JwtPayloadExtended>(token)
 
@@ -58,7 +58,7 @@ export default class SessionService {
 
   setupSessionFromAuth = async (crn: string) => {
     try {
-      const deliusData = await this.request.services.infoService.getPopData(crn).catch((): null => null)
+      const deliusData = await this.request.services.infoService.getPopData(crn)
 
       this.request.session.subject = {
         crn: deliusData.crn,

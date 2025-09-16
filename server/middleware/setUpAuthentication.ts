@@ -95,7 +95,7 @@ export default function setupAuthentication() {
         }
 
         return req.services.sessionService
-          .setupPrincipleFromAuth(user.token)
+          .setupPrincipalFromAuth(user.token)
           .then(() => {
             res.locals.user = {
               ...req.user,

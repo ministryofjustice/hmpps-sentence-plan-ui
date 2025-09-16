@@ -35,7 +35,7 @@ describe('SessionService', () => {
     sessionService = new SessionService(requestMock, handoverContextServiceMock, planServiceMock)
   })
 
-  describe('setupSession', () => {
+  describe('setupSessionFromHandover', () => {
     it('should set up session with handover and plan', async () => {
       handoverContextServiceMock.getContext.mockResolvedValue(testHandoverContext)
       planServiceMock.getPlanByUuidAndVersionNumber.mockResolvedValue(testPlan)
@@ -88,8 +88,29 @@ describe('SessionService', () => {
     })
   })
 
-  describe('setupAuthSession', () => {
-    it('should set up session with handover and plan', async () => {
+  describe('setupPrincipalFromAuth', () => {
+    it('should set up principal details from auth token', async () => {
+      const token = createUserToken(['ROLE_SENTENCE_PLAN'])
+
+      await sessionService.setupPrincipalFromAuth(token)
+
+      expect(requestMock.session.principal).toEqual({
+        identifier: 'a23ccacf-7160-4431-9b4d-c560be9c9f5c',
+        displayName: 'Dr. Benjamin Runolfsdottir',
+        accessMode: 'READ_WRITE',
+        authType: AuthType.HMPPS_AUTH,
+      })
+    })
+
+    it('should throw error if token is invalid', async () => {
+      const invalidToken = 'invalid-token'
+
+      await expect(sessionService.setupPrincipalFromAuth(invalidToken)).rejects.toThrow()
+    })
+  })
+
+  describe('setupSessionFromAuth', () => {
+    it('should set up session with subject and plan details', async () => {
       const crn = 'X775086'
       planServiceMock.getPlanByCrn.mockResolvedValue({
         uuid: testPlan.uuid,
@@ -115,6 +136,21 @@ describe('SessionService', () => {
         id: testPlan.uuid,
         version: null,
       })
+    })
+
+    it('should handle when delius data is not found', async () => {
+      const crn = 'X775086'
+      requestMock.services.infoService.getPopData = jest.fn().mockRejectedValue(new Error('Not found'))
+
+      await expect(sessionService.setupSessionFromAuth(crn)).rejects.toThrow('Not found')
+    })
+
+    it('should handle when plan is not found', async () => {
+      const crn = 'X775086'
+      planServiceMock.getPlanByCrn.mockRejectedValue(new Error('Plan not found'))
+      requestMock.services.infoService.getPopData = jest.fn().mockResolvedValue(popData)
+
+      await expect(sessionService.setupSessionFromAuth(crn)).rejects.toThrow('Plan not found')
     })
   })
 })
