@@ -2,6 +2,7 @@ import { PlanEntity, PlanType } from '../../@types/PlanType'
 import SentencePlanApiClient from '../../data/sentencePlanApiClient'
 import { PlanAgreement } from '../../@types/PlanAgreement'
 import { NoteType } from '../../@types/NoteType'
+import logger from '../../../logger'
 
 export default class PlanService {
   constructor(private readonly sentencePlanApiClient: SentencePlanApiClient) {}
