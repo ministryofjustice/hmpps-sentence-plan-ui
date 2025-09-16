@@ -1,14 +1,20 @@
 {% extends "../partials/layout.njk" %}
 
 {% set locale = interpolate(locale, {
-  systemReturnUrl: data.systemReturnUrl
+  systemReturnUrl: data.systemReturnUrl,
+  managePeopleOnProbationUrl: managePeopleOnProbationUrl
 }) %}
 
 {% set resolutionMessage %}
-  {% if data.authSource == 'auth' %}
+  {% if user.authType == 'HMPPS_AUTH' %}
     {{ locale.resolution.auth | safe }}
-  {% else %}
+  {% elseif user.authType == 'OASYS' %}
     {{ locale.resolution.oasys | safe }}
+  {% else %}
+    <ul>
+      <li>{{ locale.resolution.oasys | safe }}</li>
+      <li>{{ locale.resolution.auth | safe }}</li>
+    </ul>
   {% endif %}
 {% endset %}
 

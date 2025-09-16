@@ -5,8 +5,8 @@ import locale from './locale.json'
 import testPlan from '../../testutils/data/planData'
 import testNoteData from '../../testutils/data/noteData'
 import PlanHistoryController from './PlanHistoryController'
-import { AccessMode } from '../../@types/Handover'
 import { AuditEvent } from '../../services/auditService'
+import { AccessMode } from '../../@types/SessionType'
 
 const systemReturnUrl = 'https://oasys.return.url'
 

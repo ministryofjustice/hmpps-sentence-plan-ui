@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express'
 import locale from './locale.json'
-import { AccessMode } from '../../@types/Handover'
 import { HttpError } from '../../utils/HttpError'
 import { AuditEvent } from '../../services/auditService'
+import { AccessMode } from '../../@types/SessionType'
 
 export default class PlanHistoryController {
   private render = async (req: Request, res: Response, next: NextFunction) => {

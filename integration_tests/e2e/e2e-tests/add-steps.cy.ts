@@ -2,7 +2,7 @@ import AddSteps from '../../pages/add-steps'
 import { PlanType } from '../../../server/@types/PlanType'
 import DataGenerator from '../../support/DataGenerator'
 import IntegrationUtils from '../../integrationUtils'
-import { AccessMode } from '../../../server/@types/Handover'
+import { AccessMode } from '../../../server/@types/SessionType'
 
 const selectStepDescriptionByIndex = (index: number) => {
   return cy.get(`table.goal-summary-card__steps .govuk-table__body > :nth-child(${index}) > :nth-child(2)`)

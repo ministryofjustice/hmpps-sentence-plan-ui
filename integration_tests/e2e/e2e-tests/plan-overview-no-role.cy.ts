@@ -11,10 +11,10 @@ describe('Attempt to access without having the role', () => {
 
   it('Redirects to the error page', () => {
     cy.get('.govuk-heading-l').should('have.text', 'You do not have permission to perform this action')
-    cy.contains('a', 'Go to the Auth homepage').should(
+    cy.contains('a', 'Return to the Manage People on Probation service').should(
       'have.attr',
       'href',
-      'http://localhost:9090/auth/sign-in?redirect_uri=http://localhost:3001/sign-in/hmpps-auth/callback',
+      Cypress.env('MPOP_URL'),
     )
   })
 

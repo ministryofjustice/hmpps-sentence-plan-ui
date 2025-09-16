@@ -3,7 +3,7 @@ import { Goal } from '../../../server/@types/GoalType'
 import DataGenerator from '../../support/DataGenerator'
 import { PlanType } from '../../../server/@types/PlanType'
 import { NewStep } from '../../../server/@types/StepType'
-import { AccessMode } from '../../../server/@types/Handover'
+import { AccessMode } from '../../../server/@types/SessionType'
 
 describe('Delete a goal from a Plan before it has been agreed', () => {
   beforeEach(() => {

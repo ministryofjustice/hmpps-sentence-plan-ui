@@ -9,7 +9,7 @@ import { AreaOfNeed } from '../../testutils/data/referenceData'
 import testPlan from '../../testutils/data/planData'
 import testHandoverContext from '../../testutils/data/handoverData'
 import { crimNeedsSubset, incompleteAssessmentData } from '../../testutils/data/testAssessmentData'
-import { AccessMode } from '../../@types/Handover'
+import { AccessMode } from '../../@types/SessionType'
 
 jest.mock('../../services/sentence-plan/referentialDataService', () => {
   return jest.fn().mockImplementation(() => ({
