@@ -5,15 +5,23 @@ import { HttpError } from '../utils/HttpError'
 import { JwtPayloadExtended } from '../@types/Token'
 
 export default function authorisationMiddleware(): RequestHandler {
-  return (req, res, next) => {
+  return async (req, res, next) => {
     // Auth
     if (req.services.sessionService.getPrincipalDetails()?.authType === AuthType.HMPPS_AUTH) {
-      const { authorities: roles = [] }: JwtPayloadExtended = jwtDecode(req?.user?.token)
+      const { authorities: roles = [], user_name }: JwtPayloadExtended = jwtDecode(req?.user?.token)
 
       if (roles.includes('ROLE_SENTENCE_PLAN')) {
-        return next()
+        const data = await req.services.sentencePlanAndDeliusService
+          .getDataByUsernameAndCrn(user_name, 'b')
+
+        if (data.canAccess) {
+          return next()
+        }
+
+        return next(HttpError(403, 'Case with CRN x is not accessible for this user.'))
       }
-      throw new HttpError(403, 'No role ROLE_SENTENCE_PLAN found for this user.')
+
+      return next(HttpError(403, 'No role ROLE_SENTENCE_PLAN found for this user.'))
     }
 
     // Handover
