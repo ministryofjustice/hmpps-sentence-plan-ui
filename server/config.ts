@@ -122,6 +122,15 @@ export default {
       },
       agent: new AgentConfig(Number(get('COORDINATOR_API_TIMEOUT_RESPONSE', 10000))),
     },
+    sentencePlanAndDeliusApi: {
+      url: get('DELIUS_API_BASE_URL', 'http://delius:8080', requiredInProduction),
+      healthPath: '/health/ping',
+      timeout: {
+        response: Number(get('DELIUS_API_TIMEOUT_RESPONSE', 10000)),
+        deadline: Number(get('DELIUS_API_TIMEOUT_DEADLINE', 10000)),
+      },
+      agent: new AgentConfig(Number(get('DELIUS_API_TIMEOUT_RESPONSE', 10000))),
+    },
   },
   sqs: {
     audit: auditConfig(),

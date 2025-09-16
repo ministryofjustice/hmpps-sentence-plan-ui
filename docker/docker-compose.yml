@@ -182,6 +182,7 @@ services:
       AUDIT_SQS_REGION: eu-west-2
       AUDIT_SERVICE_NAME: hmpps-sentence-plan-ui
       FEEDBACK_URL: http://localhost:9092
+      DELIUS_API_BASE_URL: http://delius:8080
 
   san-ui:
     image: ghcr.io/ministryofjustice/hmpps-strengths-based-needs-assessments-ui:latest

@@ -1,0 +1,20 @@
+{
+  "mappings": [
+    {
+      "request": {
+        "urlPattern": "/users/.*/access/.*$",
+        "method": "GET"
+      },
+      "response": {
+        "status": 200,
+        "headers": { "Content-Type": "application/json" },
+        "jsonBody": {
+          "inCaseload": "false",
+          "userExcluded": "false",
+          "userRestricted": "false",
+          "canAccess": "false"
+        }
+      }
+    }
+  ]
+}

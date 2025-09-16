@@ -58,6 +58,8 @@ export default class SessionService {
       const deliusData = await this.request.services.infoService.getPopData('X775086').catch((): null => null)
       deliusData.crn = 'X775086'
 
+      console.log(await this.request.services.sentencePlanAndDeliusService.getDataByUsernameAndCrn('a','b')) // TODO: move this
+
       this.request.session.handover = {
         assessmentContext: {
           // Why does SP need to know this?
