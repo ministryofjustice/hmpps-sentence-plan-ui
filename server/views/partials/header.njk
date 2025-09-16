@@ -57,6 +57,12 @@
               <span class="hmpps-header__account-details__sub-text">{{ locale.common.header.hmppsAuthUser if user.authType == 'HMPPS_AUTH' else locale.common.header.managedInOasysText }}</span>
             </div>
           </li>
+
+          {% if user.authType == 'HMPPS_AUTH' %}
+            <li class="hmpps-header__navigation__item">
+              <a data-qa="signOut" class="hmpps-header__link" href="/sign-out">Sign out</a>
+            </li>
+          {% endif %}
         {% endif %}
       </ul>
     </nav>
