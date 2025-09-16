@@ -162,7 +162,7 @@ export const openSentencePlanAuth = (
     getApiToken().then(apiToken => associateCrn(apiToken, planUuid, crn))
   })
 
-  cy.visit('/sign-in/hmpps-auth')
+  cy.visit(`/crn/${crn}/plan`)
   cy.get('#username').type(options.username)
   cy.get('#password').type('password123456')
   cy.get('#submit').click()
