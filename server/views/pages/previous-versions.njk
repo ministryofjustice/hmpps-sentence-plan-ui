@@ -63,17 +63,17 @@
       {% set version = entry.version %}
       {% set tagStatus = version.planVersion[tableConfig.tagSource] %} {# eg "DO_NOT_AGREE" #}
 
-      {% if version.assessmentVersion %}
-        {% set assessmentVersionLink %}
-          <a href="/form/view-historic/{{ version.assessmentVersion.uuid }}/accommodation-analysis" class="govuk-link" rel="noreferrer noopener" target="_blank">{{ locale.viewLinkText }}<span class="govuk-visually-hidden"> assessment from {{ version.assessmentVersion.updatedAt }} (opens in new tab) </span></a>
-        {% endset %}
-      {% endif %}
+      {% set assessmentVersionLink %}
+        {% if version.assessmentVersion %}
+            <a href="/form/view-historic/{{ version.assessmentVersion.uuid }}/accommodation-analysis" class="govuk-link" rel="noreferrer noopener" target="_blank">{{ locale.viewLinkText }}<span class="govuk-visually-hidden"> assessment from {{ version.assessmentVersion.updatedAt }} (opens in new tab) </span></a>
+        {% endif %}
+      {% endset %}
 
-      {% if version.planVersion %}
-        {% set planVersionLink %}
+      {% set planVersionLink %}
+        {% if version.planVersion %}
           <a href="/form/view-historic/{{ version.planVersion.uuid }}/accommodation-analysis" class="govuk-link" rel="noreferrer noopener" target="_blank">{{ locale.viewLinkText }}<span class="govuk-visually-hidden"> plan from {{ version.planVersion.updatedAt }} (opens in new tab) </span></a>
-        {% endset %}
-      {% endif %}
+        {% endif %}
+      {% endset %}
 
       {% set planVersionTag %}
         {{ showStatusTag( tableConfig, previousStatusKey, trackStatus, tagStatus) }}
