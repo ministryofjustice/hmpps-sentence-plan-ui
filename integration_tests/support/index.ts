@@ -12,7 +12,11 @@ import {
 import { checkAccessibility } from './commands/accessibility'
 import 'cypress-axe'
 import { hasFeedbackLink } from './commands/feedback'
-import { hasPreviousVersionsPageLink } from './commands/previousVersions'
+import {
+  checkSinglePreviousVersionsTable,
+  checkBothPreviousVersionsTables,
+  hasPreviousVersionsPageLink,
+} from './commands/previousVersions'
 
 compareSnapshotCommand()
 
@@ -37,3 +41,7 @@ Cypress.Commands.add('hasFeedbackLink', hasFeedbackLink)
 
 // Previous versions page links
 Cypress.Commands.add('hasPreviousVersionsPageLink', hasPreviousVersionsPageLink)
+
+// Previous versions Table check
+Cypress.Commands.add('checkSinglePreviousVersionsTable', checkSinglePreviousVersionsTable)
+Cypress.Commands.add('checkBothPreviousVersionsTables', checkBothPreviousVersionsTables)

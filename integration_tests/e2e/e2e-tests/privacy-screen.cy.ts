@@ -35,7 +35,7 @@ describe('Privacy Screen', () => {
     })
 
     it('Has no previous versions page link', () => {
-      cy.get('.plan-header [data-previous-versions-link]').should('not.exist')
+      cy.hasPreviousVersionsPageLink(false)
     })
 
     it('Display privacy page correctly on load', () => {

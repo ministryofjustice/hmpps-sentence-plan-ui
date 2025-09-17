@@ -26,7 +26,7 @@ describe('Rendering Plan History for READ_WRITE user', () => {
   })
 
   it('Has a previous versions page link', () => {
-    cy.hasPreviousVersionsPageLink()
+    cy.hasPreviousVersionsPageLink(true)
   })
 
   it('Display plan history page with plan agreement', () => {
