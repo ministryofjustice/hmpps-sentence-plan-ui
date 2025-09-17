@@ -2,6 +2,19 @@
   "mappings": [
     {
       "request": {
+        "urlPathPattern": "/health/ping",
+        "method": "GET"
+      },
+      "response": {
+        "status": 200,
+        "headers": { "Content-Type": "application/json" },
+        "jsonBody": {
+          "status": "UP"
+        }
+      }
+    },
+    {
+      "request": {
         "urlPattern": "/users/.*/access/X123456$",
         "method": "GET"
       },
