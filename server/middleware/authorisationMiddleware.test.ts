@@ -70,7 +70,7 @@ describe('authorisationMiddleware', () => {
       authType: AuthType.HMPPS_AUTH,
     })
     ;(req.services.sessionService.getSubjectDetails as jest.Mock).mockReturnValue({
-      crn: 'X000001'
+      crn: 'X000001',
     })
     req.originalUrl = '/test-url'
     req.session = {} as Session
@@ -85,24 +85,24 @@ describe('authorisationMiddleware', () => {
 
   it('should call next if the role is present and canAccess is true', async () => {
     const mockGetData = jest.fn().mockResolvedValue({
-        inCaseload: true,
-        userExcluded: false,
-        userRestricted: false,
-        canAccess: true,
+      inCaseload: true,
+      userExcluded: false,
+      userRestricted: false,
+      canAccess: true,
     })
 
     const req: any = {
       originalUrl: '/test-url',
       session: {} as Session,
       user: { authSource: 'auth', username: 'user1', token: createUserToken(['ROLE_SENTENCE_PLAN']) },
-      services : {
+      services: {
         sessionService: {
           getPrincipalDetails: jest.fn().mockReturnValue({
             ...handoverData.principal,
-            authType: 'HMPPS_AUTH'
+            authType: 'HMPPS_AUTH',
           }),
           getSubjectDetails: jest.fn().mockReturnValue({
-            crn: 'X000001'
+            crn: 'X000001',
           })
         },
         sentencePlanAndDeliusService: {
