@@ -11,6 +11,7 @@ import { AccessMode, AuthType } from '../@types/SessionType'
 jest.mock('../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
     getPrincipalDetails: jest.fn().mockReturnValue(handoverData.principal),
+    getSubjectDetails: jest.fn().mockReturnValue({}),
   }))
 })
 
@@ -68,6 +69,9 @@ describe('authorisationMiddleware', () => {
       ...handoverData.principal,
       authType: AuthType.HMPPS_AUTH,
     })
+    ;(req.services.sessionService.getSubjectDetails as jest.Mock).mockReturnValue({
+      crn: 'X000001'
+    })
     req.originalUrl = '/test-url'
     req.session = {} as Session
     req.user = { authSource: 'auth', username: 'user1', token: createUserToken([]) }
@@ -97,6 +101,9 @@ describe('authorisationMiddleware', () => {
             ...handoverData.principal,
             authType: 'HMPPS_AUTH'
           }),
+          getSubjectDetails: jest.fn().mockReturnValue({
+            crn: 'X000001'
+          })
         },
         sentencePlanAndDeliusService: {
           getDataByUsernameAndCrn: mockGetData,
@@ -107,7 +114,7 @@ describe('authorisationMiddleware', () => {
     const middleware = authorisationMiddleware()
     await middleware(req as Request, res as Response, next)
 
-    expect(mockGetData).toHaveBeenCalledWith('user1', 'b')
+    expect(mockGetData).toHaveBeenCalledWith('user1', 'X000001')
     expect(next).toHaveBeenCalled()
   })
 
@@ -129,6 +136,9 @@ describe('authorisationMiddleware', () => {
             ...handoverData.principal,
             authType: 'HMPPS_AUTH'
           }),
+          getSubjectDetails: jest.fn().mockReturnValue({
+            crn: 'X000001'
+          })
         },
         sentencePlanAndDeliusService: {
           getDataByUsernameAndCrn: mockGetData,

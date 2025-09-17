@@ -16,10 +16,11 @@ export default function authorisationMiddleware(): RequestHandler {
     // Auth
     if (principalDetails.authType === AuthType.HMPPS_AUTH) {
       const { authorities: roles = [], user_name }: JwtPayloadExtended = jwtDecode(req?.user?.token)
+      const { crn } = req.services.sessionService.getSubjectDetails()
 
       if (roles.includes('ROLE_SENTENCE_PLAN')) {
         const data = await req.services.sentencePlanAndDeliusService
-          .getDataByUsernameAndCrn(user_name, 'b')
+          .getDataByUsernameAndCrn(user_name, crn)
 
         if (data.canAccess) {
           return next()
