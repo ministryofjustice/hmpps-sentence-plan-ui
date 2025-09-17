@@ -49,6 +49,7 @@ describe('View Previous Versions', () => {
   describe('Plan with multiple previous versions', () => {
     const numberOfVersions = 5
     const numberOfCountersignedVersions = 0
+    const numberOfTables = 1
     beforeEach(() => {
       cy.createSentencePlanWithVersions(numberOfVersions, numberOfCountersignedVersions).then(planDetails => {
         cy.wrap(planDetails).as('plan')
@@ -70,7 +71,7 @@ describe('View Previous Versions', () => {
     })
 
     it('Should display the all versions table with correct column headers and no tableCaption', () => {
-      cy.get('.previous-versions-table').should('be.visible').and('have.length', 1)
+      cy.get('.previous-versions-table').should('be.visible').and('have.length', numberOfTables)
       cy.checkSinglePreviousVersionsTable(numberOfVersions, null)
     })
   })
@@ -78,6 +79,7 @@ describe('View Previous Versions', () => {
   describe('Plan with countersigned versions', () => {
     const numberOfVersions = 4
     const numberOfCountersignedVersions = 4
+    const numberOfTables = 2
     beforeEach(() => {
       cy.createSentencePlanWithVersions(numberOfVersions, numberOfCountersignedVersions).then(planDetails => {
         cy.wrap(planDetails).as('plan')
@@ -99,10 +101,8 @@ describe('View Previous Versions', () => {
     })
 
     it('Should display the countersigned versions table above the all versions table with correct column headers and table captions', () => {
-      cy.get('.previous-versions-table').should('be.visible').and('have.length', 2)
-      cy.get('.previous-versions-table')
-        .eq(0)
-        .checkBothPreviousVersionsTables(numberOfVersions, numberOfCountersignedVersions)
+      cy.get('.previous-versions-table').should('be.visible').and('have.length', numberOfTables)
+      cy.checkBothPreviousVersionsTables(numberOfVersions, numberOfCountersignedVersions)
     })
   })
 })

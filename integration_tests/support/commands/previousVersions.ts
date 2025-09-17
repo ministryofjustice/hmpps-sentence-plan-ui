@@ -30,6 +30,13 @@ const checkTable = (
   const tableSelector =
     tableIndex !== undefined ? `.previous-versions-table:eq(${tableIndex})` : '.previous-versions-table'
 
+  // consts to remove magic numbers:
+  const columnQuantity = 4
+  const dateColumnIndex = 0
+  const assessmentColumnIndex = 1
+  const planColumnIndex = 2
+  const statusColumnIndex = 3
+
   cy.get(tableSelector).within(() => {
     if (expectedCaption) {
       cy.get('.govuk-table__caption--m').should('contain.text', expectedCaption)
@@ -38,11 +45,11 @@ const checkTable = (
     }
 
     // table headers:
-    cy.get('thead th').should('have.length', 4)
-    cy.get('thead th').eq(0).should('contain.text', 'Date and what was updated')
-    cy.get('thead th').eq(1).should('contain.text', 'Assessment')
-    cy.get('thead th').eq(2).should('contain.text', 'Sentence plan')
-    cy.get('thead th').eq(3).should('contain.text', 'Status')
+    cy.get('thead th').should('have.length', columnQuantity)
+    cy.get('thead th').eq(dateColumnIndex).should('contain.text', 'Date and what was updated')
+    cy.get('thead th').eq(assessmentColumnIndex).should('contain.text', 'Assessment')
+    cy.get('thead th').eq(planColumnIndex).should('contain.text', 'Sentence plan')
+    cy.get('thead th').eq(statusColumnIndex).should('contain.text', 'Status')
 
     // number of rows:
     cy.get('tbody tr').should('have.length', numberOfVersions)
@@ -50,7 +57,7 @@ const checkTable = (
     // each row:
     cy.get('tbody tr').each((_el, index) => {
       const columns = `tbody tr:nth-child(${index + 1}) td`
-      cy.get(columns).should('have.length', 4)
+      cy.get(columns).should('have.length', columnQuantity)
 
       // expected date with offset:
       const today = new Date()
@@ -65,11 +72,11 @@ const checkTable = (
       })
 
       // date column:
-      cy.get(columns).eq(0).should('contain', expectedDate)
+      cy.get(columns).eq(dateColumnIndex).should('contain', expectedDate)
 
       // plan link view link:
       const linkAlias = `${linkAliasPrefix}-${tableIndex}-${index}`
-      cy.get(columns).eq(2).find('a').should('contain.text', 'View').as(linkAlias)
+      cy.get(columns).eq(planColumnIndex).find('a').should('contain.text', 'View').as(linkAlias)
 
       // link behavior:
       cy.get(`@${linkAlias}`).should('have.attr', 'target').and('equal', '_blank')
