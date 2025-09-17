@@ -47,8 +47,10 @@ describe('View Previous Versions', () => {
   })
 
   describe('Plan with multiple previous versions', () => {
+    const numberOfVersions = 5
+    const numberOfCountersignedVersions = 0
     beforeEach(() => {
-      cy.createSentencePlanWithVersions(5, 0).then(planDetails => {
+      cy.createSentencePlanWithVersions(numberOfVersions, numberOfCountersignedVersions).then(planDetails => {
         cy.wrap(planDetails).as('plan')
         cy.openSentencePlan(planDetails.oasysAssessmentPk)
         cy.visit(URLs.PREVIOUS_VERSIONS)
@@ -75,7 +77,7 @@ describe('View Previous Versions', () => {
       cy.get('thead th').eq(2).should('contain.text', 'Sentence plan')
       cy.get('thead th').eq(3).should('contain.text', 'Status')
 
-      cy.get('tbody tr').should('have.length', 5)
+      cy.get('tbody tr').should('have.length', numberOfVersions)
       cy.get('tbody tr').each((_el, index) => {
         const columns = `tbody tr:nth-child(${index + 1}) td`
         cy.get(columns).should('have.length', 4)
@@ -105,8 +107,10 @@ describe('View Previous Versions', () => {
   })
 
   describe('Plan with countersigned versions', () => {
+    const numberOfVersions = 4
+    const numberOfCountersignedVersions = 4
     beforeEach(() => {
-      cy.createSentencePlanWithVersions(4, 4).then(planDetails => {
+      cy.createSentencePlanWithVersions(numberOfVersions, numberOfCountersignedVersions).then(planDetails => {
         cy.wrap(planDetails).as('plan')
         cy.openSentencePlan(planDetails.oasysAssessmentPk)
         cy.visit(URLs.PREVIOUS_VERSIONS)
@@ -133,7 +137,7 @@ describe('View Previous Versions', () => {
         .within(() => {
           cy.get('.govuk-table__caption--m').should('contain.text', 'Countersigned versions')
           cy.get('thead th').should('have.length', 4)
-          cy.get('tbody tr').should('have.length', 4)
+          cy.get('tbody tr').should('have.length', numberOfCountersignedVersions)
 
           cy.get('tbody tr').each((_el, index) => {
             const columns = `tbody tr:nth-child(${index + 1}) td`
@@ -164,7 +168,7 @@ describe('View Previous Versions', () => {
         .eq(1)
         .within(() => {
           cy.get('thead th').should('have.length', 4)
-          cy.get('tbody tr').should('have.length', 4)
+          cy.get('tbody tr').should('have.length', numberOfVersions)
 
           cy.get('tbody tr').each((_el, index) => {
             const columns = `tbody tr:nth-child(${index + 1}) td`
@@ -173,7 +177,7 @@ describe('View Previous Versions', () => {
             const expectedDate = new Date(
               today.getFullYear(),
               today.getMonth(),
-              today.getDate() - index - 6,
+              today.getDate() - index - (numberOfVersions + numberOfCountersignedVersions - 2),
             ).toLocaleDateString('en-GB', {
               day: 'numeric',
               month: 'long',
