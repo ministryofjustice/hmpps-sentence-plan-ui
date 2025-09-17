@@ -1,6 +1,8 @@
 import { PreviousVersionsResponse } from '../../@types/PlanAndAssessmentVersions'
 import { PlanAgreementStatus, PlanStatus } from '../../@types/PlanType'
 
+// Below is the stub response received from coordinator,
+// which includes the latest (current) version in allVersions field:
 export const testPreviousVersionsResponse: PreviousVersionsResponse = {
   allVersions: {
     '2025-11-25': {
@@ -71,6 +73,8 @@ export const testPreviousVersionsResponse: PreviousVersionsResponse = {
   },
 }
 
+// And this is the output of previous versions controller,
+// which removes the current versions from allVersions as per requirement to only show previous versions:
 export const testPreviousVersionsResult: PreviousVersionsResponse = {
   allVersions: {
     '2025-11-25': {
