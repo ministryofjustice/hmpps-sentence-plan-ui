@@ -26,7 +26,7 @@ export default function authorisationMiddleware(): RequestHandler {
           return next()
         }
 
-        return next(HttpError(403, 'Case with CRN x is not accessible for this user.'))
+        return next(HttpError(403, `Case with CRN ${crn} is not accessible for this user.`))
       }
 
       return next(HttpError(403, 'No role ROLE_SENTENCE_PLAN found for this user.'))
