@@ -15,17 +15,17 @@ export default function authorisationMiddleware(): RequestHandler {
 
     // Auth
     if (principalDetails.authType === AuthType.HMPPS_AUTH) {
-      const { authorities: roles = [], user_name }: JwtPayloadExtended = jwtDecode(req?.user?.token)
+      const { authorities: roles = [], user_name: userName }: JwtPayloadExtended = jwtDecode(req?.user?.token)
       const { crn } = req.services.sessionService.getSubjectDetails()
 
       if (roles.includes('ROLE_SENTENCE_PLAN')) {
-        const data = await req.services.sentencePlanAndDeliusService.getDataByUsernameAndCrn(user_name, crn)
+        const data = await req.services.sentencePlanAndDeliusService.getDataByUsernameAndCrn(userName, crn)
 
         if (data.canAccess) {
           return next()
         }
 
-        return next(HttpError(403, `Case with CRN ${crn} is not accessible for this user.`))
+        return next(HttpError(403, `Case with CRN ${crn} is not accessible for user ${userName}.`))
       }
 
       return next(HttpError(403, 'No role ROLE_SENTENCE_PLAN found for this user.'))

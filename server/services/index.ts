@@ -39,7 +39,8 @@ export const requestServices = (appServices: Services) => ({
   stepService: (req: Request) => new StepService(req.services.sentencePlanApiClient),
   infoService: (req: Request) => new InfoService(req.services.sentencePlanApiClient),
   assessmentService: (req: Request) => new AssessmentService(req.services.assessmentApiClient),
-  sentencePlanAndDeliusService: (req: Request) => new SentencePlanAndDeliusService(req.services.sentencePlanAndDeliusApiClient),
+  sentencePlanAndDeliusService: (req: Request) =>
+    new SentencePlanAndDeliusService(req.services.sentencePlanAndDeliusApiClient),
   sessionService: (req: Request) =>
     new SessionService(req, appServices.handoverContextService, req.services.planService),
   auditService: (req: Request) => new AuditService(appServices.applicationInfo, req.services.sessionService, req.id),
