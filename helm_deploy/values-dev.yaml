@@ -16,6 +16,7 @@ generic-service:
     COORDINATOR_API_URL: "https://arns-coordinator-api-dev.hmpps.service.justice.gov.uk"
     TOKEN_VERIFICATION_API_URL: "https://token-verification-api-dev.prison.service.justice.gov.uk"
     DELIUS_API_BASE_URL: "https://sentence-plan-and-delius-dev.hmpps.service.justice.gov.uk"
+    MPOP_URL: "https://manage-people-on-probation-dev.hmpps.service.justice.gov.uk"
     ENVIRONMENT_NAME: DEV
 
   namespace_secrets:

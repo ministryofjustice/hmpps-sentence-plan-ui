@@ -4,9 +4,9 @@ import authorisationMiddleware from './authorisationMiddleware'
 import mockReq from '../testutils/preMadeMocks/mockReq'
 import mockRes from '../testutils/preMadeMocks/mockRes'
 import handoverData from '../testutils/data/handoverData'
-import { AccessMode, AuthType } from '../@types/Handover'
 import createUserToken from '../testutils/createUserToken'
 import { HttpError } from '../utils/HttpError'
+import { AccessMode, AuthType } from '../@types/SessionType'
 
 jest.mock('../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({

@@ -21,7 +21,7 @@ export interface Sentence {
   rarDaysCompleted?: number
 }
 
-export enum Gender {
+enum Gender {
   female,
   male,
   other,

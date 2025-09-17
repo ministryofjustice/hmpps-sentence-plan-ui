@@ -139,4 +139,5 @@ export default {
   environmentName: get('ENVIRONMENT_NAME', ''),
   deploymentName: get('DEPLOYMENT_NAME', ''),
   feedbackUrl: get('FEEDBACK_URL', null),
+  managePeopleOnProbationUrl: get('MPOP_URL', ''),
 }

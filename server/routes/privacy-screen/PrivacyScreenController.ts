@@ -5,9 +5,9 @@ import URLs from '../URLs'
 import transformRequest from '../../middleware/transformMiddleware'
 import validateRequest from '../../middleware/validationMiddleware'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
-import { AccessMode } from '../../@types/Handover'
 import PrivacyScreenPostModel from './models/PrivacyScreenPostModel'
 import { HttpError } from '../../utils/HttpError'
+import { AccessMode } from '../../@types/SessionType'
 
 export default class PrivacyScreenController {
   private redirect = async (req: Request, res: Response, next: NextFunction) => {

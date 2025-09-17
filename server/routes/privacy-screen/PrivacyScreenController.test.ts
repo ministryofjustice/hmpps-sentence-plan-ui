@@ -2,10 +2,10 @@ import { NextFunction, Request, Response } from 'express'
 import mockReq from '../../testutils/preMadeMocks/mockReq'
 import mockRes from '../../testutils/preMadeMocks/mockRes'
 import locale from './locale.json'
-import { AccessMode } from '../../@types/Handover'
 import PrivacyScreenController from './PrivacyScreenController'
 import runMiddlewareChain from '../../testutils/runMiddlewareChain'
 import URLs from '../URLs'
+import { AccessMode } from '../../@types/SessionType'
 
 const systemReturnUrl = 'https://oasys.return.url'
 

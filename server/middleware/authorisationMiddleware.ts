@@ -1,13 +1,20 @@
 import { RequestHandler } from 'express'
 import { jwtDecode } from 'jwt-decode'
-import { AccessMode, AuthType } from '../@types/Handover'
 import { HttpError } from '../utils/HttpError'
 import { JwtPayloadExtended } from '../@types/Token'
+import { AccessMode, AuthType } from '../@types/SessionType'
 
 export default function authorisationMiddleware(): RequestHandler {
   return async (req, res, next) => {
+    const principalDetails = req.services.sessionService.getPrincipalDetails()
+
+    if (!principalDetails) {
+      req.session.returnTo = req.originalUrl
+      return res.redirect('/sign-in/hmpps-auth')
+    }
+
     // Auth
-    if (req.services.sessionService.getPrincipalDetails()?.authType === AuthType.HMPPS_AUTH) {
+    if (principalDetails.authType === AuthType.HMPPS_AUTH) {
       const { authorities: roles = [], user_name }: JwtPayloadExtended = jwtDecode(req?.user?.token)
 
       if (roles.includes('ROLE_SENTENCE_PLAN')) {
@@ -25,13 +32,7 @@ export default function authorisationMiddleware(): RequestHandler {
     }
 
     // Handover
-    if (req.services.sessionService.getPrincipalDetails()) {
-      return next()
-    }
-
-    // Failure - no credentials
-    req.session.returnTo = req.originalUrl
-    return res.redirect('/sign-in/hmpps-auth')
+    return next()
   }
 }
 

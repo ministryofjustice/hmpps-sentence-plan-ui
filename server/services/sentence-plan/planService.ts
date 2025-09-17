@@ -1,7 +1,8 @@
-import { PlanType } from '../../@types/PlanType'
+import { PlanEntity, PlanType } from '../../@types/PlanType'
 import SentencePlanApiClient from '../../data/sentencePlanApiClient'
 import { PlanAgreement } from '../../@types/PlanAgreement'
 import { NoteType } from '../../@types/NoteType'
+import logger from '../../../logger'
 
 export default class PlanService {
   constructor(private readonly sentencePlanApiClient: SentencePlanApiClient) {}
@@ -37,6 +38,17 @@ export default class PlanService {
 
   async getPlanByCrn(crn: string) {
     const restClient = await this.sentencePlanApiClient.restClient(`Getting plan UUID for CRN: ${crn}`)
-    return restClient.get<PlanType[]>({ path: `/plans/crn/${crn}` })
+    // TODO: '/plans/crn/:crn/ returns PlanEntity, not PlanVersionEntity (which we map to PlanType.ts)
+    //  would be good to make a type for this, but, it's pretty much only used here.
+    const plans = await restClient.get<PlanEntity[]>({ path: `/plans/crn/${crn}` })
+
+    // NOTE: Currently this endpoint responds with an array of PlanType, this is _kind of_ a safety precaution in
+    //  case somehow a CRN ends up with multiple plans associated. This shouldn't happen, but until we get more clarity,
+    //  just take the first plan from the array.
+    if (plans.length > 1) {
+      logger.warn('More than one plan was returned, choosing first')
+    }
+
+    return plans[0]
   }
 }

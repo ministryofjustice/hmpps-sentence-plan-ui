@@ -16,6 +16,7 @@ generic-service:
     COORDINATOR_API_URL: "https://arns-coordinator-api.hmpps.service.justice.gov.uk"
     TOKEN_VERIFICATION_API_URL: "https://token-verification-api.prison.service.justice.gov.uk"
     DELIUS_API_BASE_URL: "https://sentence-plan-and-delius.hmpps.service.justice.gov.uk"
+    MPOP_URL: "https://manage-people-on-probation.hmpps.service.justice.gov.uk"
 
   namespace_secrets:
     hmpps-sentence-plan-ui-feedback-url:

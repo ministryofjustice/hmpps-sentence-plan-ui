@@ -6,9 +6,9 @@ import { VerificationClient, AuthenticatedRequest } from '@ministryofjustice/hmp
 import config from '../config'
 import { generateOauthClientToken } from '../utils/utils'
 import URLs from '../routes/URLs'
-import { AccessMode } from '../@types/Handover'
 import { HttpError } from '../utils/HttpError'
 import logger from '../../logger'
+import { AccessMode } from '../@types/SessionType'
 
 passport.serializeUser((user, done) => {
   // Not used but required for Passport
@@ -39,7 +39,7 @@ passport.use(
       scope: 'openid profile',
     },
     (token, refreshToken, params, profile, done) => {
-      return done(null, { token, username: params.user_name, authSource: params.auth_source })
+      return done(null, { token, username: params.user_name, authSource: 'handover' })
     },
   ),
 )
@@ -75,20 +75,41 @@ export default function setupAuthentication() {
   router.use(passport.session())
   router.use(flash())
 
+  router.get('/crn/:crn/plan', (req, res, next) => {
+    req.session.crn = req.params.crn
+    return passport.authenticate('oauth2')(req, res, next)
+  })
+
+  // NOTE: If someone logs in using this endpoint, we still have zero idea what CRN they wanted to access :(
   router.get('/sign-in/hmpps-auth', passport.authenticate('oauth2'))
 
   router.get('/sign-in/hmpps-auth/callback', (req, res, next) =>
     passport.authenticate('oauth2', {}, (err: any, user: Express.User) => {
       if (err) return next(err)
       if (!user) throw new HttpError(401)
+      const { crn } = req.session
 
-      return req.logIn(user, loginErr => {
-        if (err) return next(loginErr)
+      return req.logIn(user, async loginErr => {
+        if (loginErr) {
+          return next(loginErr)
+        }
 
         return req.services.sessionService
-          .setupAuthSession()
+          .setupPrincipalFromAuth(user.token)
           .then(() => {
-            res.redirect(URLs.PLAN_OVERVIEW)
+            res.locals.user = {
+              ...req.user,
+              ...req.services.sessionService.getPrincipalDetails(),
+            }
+
+            if (!crn) {
+              throw new HttpError(400, 'Missing CRN')
+            }
+
+            return req.services.sessionService.setupSessionFromAuth(crn)
+          })
+          .then(() => {
+            return res.redirect(URLs.PLAN_OVERVIEW)
           })
           .catch(next)
       })
@@ -106,7 +127,7 @@ export default function setupAuthentication() {
         if (err) return next(loginErr)
 
         return req.services.sessionService
-          .setupSession()
+          .setupSessionFromHandover()
           .then(() => {
             const redirectURL =
               req.session.returnTo ||
@@ -132,19 +153,20 @@ export default function setupAuthentication() {
     } else res.redirect(authSignOutUrl)
   })
 
-  router.use(async (req, res, next) => {
-    if (req?.user?.authSource === 'auth') {
-      if (
-        req.isAuthenticated() &&
-        (await tokenVerificationClient.verifyToken(req as unknown as AuthenticatedRequest))
-      ) {
+  router.use(async (req, _res, next) => {
+    try {
+      if (req.isAuthenticated() && req.user.authSource === 'handover') {
         return next()
       }
-      req.session.returnTo = req.originalUrl
-      return res.redirect('/sign-in/hmpps-auth')
+
+      if (req.isAuthenticated() && (await tokenVerificationClient.verifyToken(req as AuthenticatedRequest))) {
+        return next()
+      }
+
+      return next(new HttpError(401))
+    } catch (err) {
+      return next(err)
     }
-    // Do we verify the handover token anywhere?
-    return next()
   })
 
   router.use((req, res, next) => {
