@@ -19,13 +19,17 @@ export default function authorisationMiddleware(): RequestHandler {
       const { crn } = req.services.sessionService.getSubjectDetails()
 
       if (roles.includes('ROLE_SENTENCE_PLAN')) {
-        const data = await req.services.sentencePlanAndDeliusService.getDataByUsernameAndCrn(userName, crn)
+        try {
+          const data = await req.services.sentencePlanAndDeliusService.getDataByUsernameAndCrn(userName, crn)
 
-        if (data.canAccess) {
-          return next()
+          if (data.canAccess) {
+            return next()
+          }
+
+          return next(HttpError(403, `Case with CRN ${crn} is not accessible for user ${userName}.`))
+        } catch(e) {
+          return next(HttpError(500, e.message))
         }
-
-        return next(HttpError(403, `Case with CRN ${crn} is not accessible for user ${userName}.`))
       }
 
       return next(HttpError(403, 'No role ROLE_SENTENCE_PLAN found for this user.'))
