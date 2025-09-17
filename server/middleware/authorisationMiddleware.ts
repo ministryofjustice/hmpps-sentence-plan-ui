@@ -27,7 +27,7 @@ export default function authorisationMiddleware(): RequestHandler {
           }
 
           return next(HttpError(403, `Case with CRN ${crn} is not accessible for user ${userName}.`))
-        } catch(e) {
+        } catch (e) {
           return next(HttpError(500, e.message))
         }
       }
