@@ -13,8 +13,8 @@ import HmppsAuthClient from '../data/hmppsAuthClient'
 import SentencePlanApiClient from '../data/sentencePlanApiClient'
 import CoordinatorApiClient from '../data/coordinatorApiClient'
 import AssessmentService from './sentence-plan/assessmentService'
-import SentencePlanAndDeliusApiClient from "../data/SentencePlanAndDeliusApiClient";
-import SentencePlanAndDeliusService from "./sentence-plan/sentencePlanAndDeliusService";
+import SentencePlanAndDeliusApiClient from '../data/SentencePlanAndDeliusApiClient'
+import SentencePlanAndDeliusService from './sentence-plan/sentencePlanAndDeliusService'
 
 export const services = () => {
   const { applicationInfo, handoverApiClient } = dataAccess()

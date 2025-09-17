@@ -19,8 +19,7 @@ export default function authorisationMiddleware(): RequestHandler {
       const { crn } = req.services.sessionService.getSubjectDetails()
 
       if (roles.includes('ROLE_SENTENCE_PLAN')) {
-        const data = await req.services.sentencePlanAndDeliusService
-          .getDataByUsernameAndCrn(user_name, crn)
+        const data = await req.services.sentencePlanAndDeliusService.getDataByUsernameAndCrn(user_name, crn)
 
         if (data.canAccess) {
           return next()

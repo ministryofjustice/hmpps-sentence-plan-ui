@@ -130,20 +130,20 @@ describe('authorisationMiddleware', () => {
       originalUrl: '/test-url',
       session: {} as Session,
       user: { authSource: 'auth', username: 'user1', token: createUserToken(['ROLE_SENTENCE_PLAN']) },
-      services : {
+      services: {
         sessionService: {
           getPrincipalDetails: jest.fn().mockReturnValue({
             ...handoverData.principal,
-            authType: 'HMPPS_AUTH'
+            authType: 'HMPPS_AUTH',
           }),
           getSubjectDetails: jest.fn().mockReturnValue({
-            crn: 'X000001'
+            crn: 'X000001',
           })
         },
         sentencePlanAndDeliusService: {
           getDataByUsernameAndCrn: mockGetData,
         },
-      }
+      },
     }
 
     const middleware = authorisationMiddleware()
