@@ -1,8 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import { Session } from 'express-session'
 import authorisationMiddleware from './authorisationMiddleware'
-import mockReq from '../testutils/preMadeMocks/mockReq'
-import mockRes from '../testutils/preMadeMocks/mockRes'
 import handoverData from '../testutils/data/handoverData'
 import createUserToken from '../testutils/createUserToken'
 import { HttpError } from '../utils/HttpError'
@@ -11,88 +9,121 @@ import { AccessMode, AuthType } from '../@types/SessionType'
 jest.mock('../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
     getPrincipalDetails: jest.fn().mockReturnValue(handoverData.principal),
+    getSubjectDetails: jest.fn().mockReturnValue({}),
   }))
 })
 
+jest.mock('../services/sentence-plan/sentencePlanAndDeliusService', () => {
+  return jest.fn().mockImplementation(() => ({
+    getDataByUsernameAndCrn: jest.fn(),
+  }))
+})
+
+function createReqResNext() {
+  const req: any = {
+    originalUrl: '/test-url',
+    session: {} as Session,
+    services: {
+      sessionService: {
+        getPrincipalDetails: jest.fn().mockReturnValue(handoverData.principal),
+        getSubjectDetails: jest.fn().mockReturnValue({}),
+      },
+      sentencePlanAndDeliusService: {
+        getDataByUsernameAndCrn: jest.fn(),
+      },
+    },
+  }
+
+  const res: Partial<Response> = {
+    redirect: jest.fn(),
+  }
+
+  const next: NextFunction = jest.fn()
+
+  return { req, res, next }
+}
+
 describe('authorisationMiddleware', () => {
-  let req: Partial<Request>
-  let res: Partial<Response>
-  let next: NextFunction
+  it('calls next if READ_WRITE principal details are present', async () => {
+    const { req, res, next } = createReqResNext()
+    req.services.sessionService.getPrincipalDetails.mockReturnValue({})
 
-  beforeEach(() => {
-    req = mockReq()
-    res = mockRes()
-    next = jest.fn()
-  })
+    await authorisationMiddleware()(req as Request, res as Response, next)
 
-  it('should call next if READ_WRITE principal details are present', async () => {
-    ;(req.services.sessionService.getPrincipalDetails as jest.Mock).mockReturnValue({})
-
-    const middleware = authorisationMiddleware()
-    middleware(req as Request, res as Response, next)
-
-    expect(req.services!.sessionService.getPrincipalDetails).toHaveBeenCalled()
-    expect(next).toHaveBeenCalled()
+    expect(next).toHaveBeenCalledWith()
     expect(res.redirect).not.toHaveBeenCalled()
   })
 
-  it('should redirect to /sign-in if READ_ONLY principal details are present', async () => {
-    ;(req.services.sessionService.getPrincipalDetails as jest.Mock).mockReturnValue({
+  it('calls next if READ_ONLY principal details are present', async () => {
+    const { req, res, next } = createReqResNext()
+    req.services.sessionService.getPrincipalDetails.mockReturnValue({
       ...handoverData.principal,
       accessMode: AccessMode.READ_ONLY,
     })
 
-    const middleware = authorisationMiddleware()
-    middleware(req as Request, res as Response, next)
+    await authorisationMiddleware()(req as Request, res as Response, next)
 
-    expect(req.services!.sessionService.getPrincipalDetails).toHaveBeenCalled()
-    expect(next).toHaveBeenCalled()
+    expect(next).toHaveBeenCalledWith()
   })
 
-  it('should redirect to /sign-in/hmpps-auth if principal details are not present', async () => {
-    ;(req.services.sessionService.getPrincipalDetails as jest.Mock).mockReturnValue(null)
-    req.originalUrl = '/test-url'
-    req.session = {} as Session
+  it('redirects if principal details are not present', async () => {
+    const { req, res, next } = createReqResNext()
+    req.services.sessionService.getPrincipalDetails.mockReturnValue(null)
 
-    const middleware = authorisationMiddleware()
-    middleware(req as Request, res as Response, next)
+    await authorisationMiddleware()(req as Request, res as Response, next)
 
-    expect(req.services!.sessionService.getPrincipalDetails).toHaveBeenCalled()
     expect(next).not.toHaveBeenCalled()
     expect(res.redirect).toHaveBeenCalledWith('/sign-in/hmpps-auth')
-    expect(req.session!.returnTo).toBe('/test-url')
+    expect(req.session.returnTo).toBe('/test-url')
   })
 
-  it('should throw an error if the role is not present', async () => {
-    ;(req.services.sessionService.getPrincipalDetails as jest.Mock).mockReturnValue({
+  it('denies access if role is missing', async () => {
+    const { req, res, next } = createReqResNext()
+    req.services.sessionService.getPrincipalDetails.mockReturnValue({
       ...handoverData.principal,
       authType: AuthType.HMPPS_AUTH,
     })
-    req.originalUrl = '/test-url'
-    req.session = {} as Session
-    req.user = { authSource: 'auth', username: 'user1', token: createUserToken([]) }
+    req.user = { username: 'user1', token: createUserToken([]) }
 
-    const middleware = authorisationMiddleware()
-    try {
-      middleware(req as Request, res as Response, next)
-    } catch (error) {
-      expect(error).toBeInstanceOf(HttpError)
-      expect(error.status).toBe(403)
-    }
+    await authorisationMiddleware()(req as Request, res as Response, next)
+
+    expect(next).toHaveBeenCalledWith(expect.any(HttpError))
+    expect((next as jest.Mock).mock.calls[0][0].status).toBe(403)
   })
 
-  it('should call next if the role is present', async () => {
-    ;(req.services.sessionService.getPrincipalDetails as jest.Mock).mockReturnValue({
+  it('allows access if role present and canAccess is true', async () => {
+    const { req, res, next } = createReqResNext()
+    req.services.sessionService.getPrincipalDetails.mockReturnValue({
       ...handoverData.principal,
       authType: AuthType.HMPPS_AUTH,
     })
-    req.originalUrl = '/test-url'
-    req.session = {} as Session
-    req.user = { authSource: 'auth', username: 'user1', token: createUserToken(['ROLE_SENTENCE_PLAN']) }
+    req.services.sessionService.getSubjectDetails.mockReturnValue({ crn: 'X000001' })
+    req.services.sentencePlanAndDeliusService.getDataByUsernameAndCrn.mockResolvedValue({
+      canAccess: true,
+    })
+    req.user = { username: 'user1', token: createUserToken(['ROLE_SENTENCE_PLAN']) }
 
-    const middleware = authorisationMiddleware()
-    middleware(req as Request, res as Response, next)
+    await authorisationMiddleware()(req as Request, res as Response, next)
 
-    expect(next).toHaveBeenCalled()
+    expect(req.services.sentencePlanAndDeliusService.getDataByUsernameAndCrn).toHaveBeenCalledWith('user1', 'X000001')
+    expect(next).toHaveBeenCalledWith()
+  })
+
+  it('denies access if role present but canAccess is false', async () => {
+    const { req, res, next } = createReqResNext()
+    req.services.sessionService.getPrincipalDetails.mockReturnValue({
+      ...handoverData.principal,
+      authType: AuthType.HMPPS_AUTH,
+    })
+    req.services.sessionService.getSubjectDetails.mockReturnValue({ crn: 'X000001' })
+    req.services.sentencePlanAndDeliusService.getDataByUsernameAndCrn.mockResolvedValue({
+      canAccess: false,
+    })
+    req.user = { username: 'user1', token: createUserToken(['ROLE_SENTENCE_PLAN']) }
+
+    await authorisationMiddleware()(req as Request, res as Response, next)
+
+    expect(next).toHaveBeenCalledWith(expect.any(HttpError))
+    expect((next as jest.Mock).mock.calls[0][0].status).toBe(403)
   })
 })

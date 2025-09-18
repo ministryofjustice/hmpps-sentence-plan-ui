@@ -1,12 +1,9 @@
 describe('Unsaved information deleted', () => {
-  before(() => {
+  beforeEach(() => {
     cy.createSentencePlan().then(planDetails => {
       cy.wrap(planDetails).as('plan')
       cy.openSentencePlan(planDetails.oasysAssessmentPk)
     })
-  })
-
-  beforeEach(() => {
     cy.clock()
     cy.visit('/plan')
     cy.clock().tick(50 * 60 * 1000) // 50 minutes in milliseconds.

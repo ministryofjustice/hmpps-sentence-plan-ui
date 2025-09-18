@@ -15,6 +15,7 @@ generic-service:
     MANAGE_USERS_API_URL: "https://manage-users-api-preprod.hmpps.service.justice.gov.uk"
     COORDINATOR_API_URL: "https://arns-coordinator-api-preprod.hmpps.service.justice.gov.uk"
     TOKEN_VERIFICATION_API_URL: "https://token-verification-api-preprod.prison.service.justice.gov.uk"
+    DELIUS_API_BASE_URL: "https://sentence-plan-and-delius-preprod.hmpps.service.justice.gov.uk"
     MPOP_URL: "https://manage-people-on-probation-preprod.hmpps.service.justice.gov.uk"
     ENVIRONMENT_NAME: PRE-PRODUCTION
 
