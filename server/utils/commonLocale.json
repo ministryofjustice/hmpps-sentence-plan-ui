@@ -156,7 +156,7 @@
       "title": "Your session is about to expire",
       "message": "For your security, your session will expire in",
       "keepAliveButton": "Extend session",
-      "signOutButton": "Sign out"
+      "signOutButton": "End session"
     }
   },
   "cy": {}

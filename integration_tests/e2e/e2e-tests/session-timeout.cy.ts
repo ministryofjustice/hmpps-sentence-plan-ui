@@ -16,7 +16,7 @@ describe('Session timeout', () => {
         .should('exist')
         .should('contain', 'For your security, your session will expire in 10 minutes.')
       cy.get('#hmrc-timeout-keep-signin-btn').should('exist').should('contain', 'Extend session')
-      cy.get('#hmrc-timeout-sign-out-link').should('exist').should('contain', 'Sign out')
+      cy.get('#hmrc-timeout-sign-out-link').should('exist').should('contain', 'End session')
     })
 
     it('Should change the timeout modal text to reflect 5 minutes remaining of session timeout counter', () => {
@@ -39,14 +39,26 @@ describe('Session timeout', () => {
       cy.get('#hmrc-timeout-heading').should('not.exist')
     })
 
-    it(`Should sign out when 'Sign out' is clicked`, () => {
+    it(`Should destroy the session when 'End session' is clicked`, () => {
       cy.get('#hmrc-timeout-sign-out-link').click()
-      cy.url().should('include', '/auth/sign-in?signout')
+      cy.url().should('include', '/plan')
+      cy.get('h1').should('exist').contains('You need to sign in to use this service')
+      cy.get('p')
+        .contains('This could be because you’ve used a bookmarked link, or your session has expired due to inactivity.')
+        .should('exist')
+      cy.get('li').contains('Go to the OASys homepage to sign-in').should('exist')
+      cy.get('li').contains('Go to the Manage People on Probation service to sign-in').should('exist')
     })
 
-    it('Should sign out when session has expired', () => {
+    it('Should destroy the session when session has expired', () => {
       cy.clock().tick(10 * 60 * 1000) // 10 minutes in milliseconds.
-      cy.url().should('include', '/auth/sign-in?signout')
+      cy.url().should('include', '/plan')
+      cy.get('h1').should('exist').contains('You need to sign in to use this service')
+      cy.get('p')
+        .contains('This could be because you’ve used a bookmarked link, or your session has expired due to inactivity.')
+        .should('exist')
+      cy.get('li').contains('Go to the OASys homepage to sign-in').should('exist')
+      cy.get('li').contains('Go to the Manage People on Probation service to sign-in').should('exist')
     })
 
     it('Should display the session timeout modal again if a user hits inactivity of 50 minutes after continuing a session', () => {
