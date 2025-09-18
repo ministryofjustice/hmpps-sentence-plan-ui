@@ -105,7 +105,7 @@
     "uuid": "^11.1.0"
   },
   "devDependencies": {
-    "@faker-js/faker": "^9.9.0",
+    "@faker-js/faker": "^10.0.0",
     "@jgoz/esbuild-plugin-typecheck": "^4.0.3",
     "@ministryofjustice/eslint-config-hmpps": "^0.0.4",
     "@tsconfig/node22": "^22.0.2",
