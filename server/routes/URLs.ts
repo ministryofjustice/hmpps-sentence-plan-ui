@@ -17,6 +17,5 @@ export default {
   UPDATE_AGREE_PLAN: '/update-agree-plan',
   PLAN_HISTORY: '/plan-history',
   RE_ADD_GOAL: '/confirm-add-goal/:uuid',
-  UNSAVED_INFORMATION_DELETED: '/unsaved-information-deleted',
   DATA_PRIVACY: '/close-any-other-applications-before-appointment',
 }
