@@ -82,6 +82,16 @@ export default {
       systemClientId: get('SYSTEM_CLIENT_ID', 'clientid', requiredInProduction),
       systemClientSecret: get('SYSTEM_CLIENT_SECRET', 'clientsecret', requiredInProduction),
     },
+    tokenVerification: {
+      url: get('TOKEN_VERIFICATION_API_URL', 'http://localhost:8100', requiredInProduction),
+      healthPath: '/health/ping',
+      timeout: {
+        response: Number(get('TOKEN_VERIFICATION_API_TIMEOUT_RESPONSE', 5000)),
+        deadline: Number(get('TOKEN_VERIFICATION_API_TIMEOUT_DEADLINE', 5000)),
+      },
+      agent: new AgentConfig(Number(get('TOKEN_VERIFICATION_API_TIMEOUT_RESPONSE', 5000))),
+      enabled: get('TOKEN_VERIFICATION_ENABLED', 'false') === 'true',
+    },
     arnsHandover: {
       url: get('HMPPS_ARNS_HANDOVER_URL', 'http://localhost:7070', requiredInProduction),
       healthPath: '/health/ping',
@@ -112,6 +122,15 @@ export default {
       },
       agent: new AgentConfig(Number(get('COORDINATOR_API_TIMEOUT_RESPONSE', 10000))),
     },
+    sentencePlanAndDeliusApi: {
+      url: get('DELIUS_API_BASE_URL', 'http://delius:8080', requiredInProduction),
+      healthPath: '/health/ping',
+      timeout: {
+        response: Number(get('DELIUS_API_TIMEOUT_RESPONSE', 10000)),
+        deadline: Number(get('DELIUS_API_TIMEOUT_DEADLINE', 10000)),
+      },
+      agent: new AgentConfig(Number(get('DELIUS_API_TIMEOUT_RESPONSE', 10000))),
+    },
   },
   sqs: {
     audit: auditConfig(),
@@ -120,4 +139,5 @@ export default {
   environmentName: get('ENVIRONMENT_NAME', ''),
   deploymentName: get('DEPLOYMENT_NAME', ''),
   feedbackUrl: get('FEEDBACK_URL', null),
+  managePeopleOnProbationUrl: get('MPOP_URL', ''),
 }

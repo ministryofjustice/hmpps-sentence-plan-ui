@@ -16,6 +16,7 @@ generic-service:
     MANAGE_USERS_API_URL: "https://manage-users-api-dev.hmpps.service.justice.gov.uk"
     COORDINATOR_API_URL: "https://arns-coordinator-api-dev.hmpps.service.justice.gov.uk"
     TOKEN_VERIFICATION_API_URL: "https://token-verification-api-dev.prison.service.justice.gov.uk"
+    DELIUS_API_BASE_URL: "https://sentence-plan-and-delius-dev.hmpps.service.justice.gov.uk"
     DEPLOYMENT_NAME: PR-$PR_NUMBER
     ENVIRONMENT_NAME: DEV
 

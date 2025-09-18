@@ -1,4 +1,5 @@
-import { AccessMode, HandoverContextData } from '../../@types/Handover'
+import { AccessMode } from '../../@types/SessionType'
+import { HandoverContextData } from '../../@types/Handover'
 
 const testHandoverContext: HandoverContextData = {
   handoverSessionId: 'e7501b21-3951-426d-9a73-0c2c4527aa27',

@@ -5,9 +5,9 @@ import URLs from '../URLs'
 import transformRequest from '../../middleware/transformMiddleware'
 import validateRequest from '../../middleware/validationMiddleware'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
-import { AccessMode } from '../../@types/Handover'
 import PrivacyScreenPostModel from './models/PrivacyScreenPostModel'
 import { HttpError } from '../../utils/HttpError'
+import { AccessMode } from '../../@types/SessionType'
 
 export default class PrivacyScreenController {
   private redirect = async (req: Request, res: Response, next: NextFunction) => {
@@ -22,7 +22,7 @@ export default class PrivacyScreenController {
         locale: locale.en,
         data: {
           privacyScreen: true, // hides the navigation bar from the page
-          oasysReturnUrl: req.services.sessionService.getOasysReturnUrl(),
+          systemReturnUrl: req.services.sessionService.getSystemReturnUrl(),
           form: req.body,
         },
         errors,

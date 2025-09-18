@@ -49,7 +49,7 @@ You can connect to the remote debugger session on http://localhost:9230 like so
 [![API docs](https://github.com/ministryofjustice/hmpps-strengths-based-needs-assessments-ui/blob/main/.readme/debugger.png?raw=true)]()
 
 ### Testing
-The test suite can be run using `make test`
+The test suite can be run using `make test`.
 
 ### Visual Regression Testing
 Visual Regression Testing for SP is run through the SP CI pipeline. Any failed snapshots will be uploaded as artifacts and can be accessed there.

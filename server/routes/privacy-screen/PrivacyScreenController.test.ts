@@ -2,16 +2,16 @@ import { NextFunction, Request, Response } from 'express'
 import mockReq from '../../testutils/preMadeMocks/mockReq'
 import mockRes from '../../testutils/preMadeMocks/mockRes'
 import locale from './locale.json'
-import { AccessMode } from '../../@types/Handover'
 import PrivacyScreenController from './PrivacyScreenController'
 import runMiddlewareChain from '../../testutils/runMiddlewareChain'
 import URLs from '../URLs'
+import { AccessMode } from '../../@types/SessionType'
 
-const oasysReturnUrl = 'https://oasys.return.url'
+const systemReturnUrl = 'https://oasys.return.url'
 
 jest.mock('../../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
-    getOasysReturnUrl: jest.fn().mockReturnValue(oasysReturnUrl),
+    getSystemReturnUrl: jest.fn().mockReturnValue(systemReturnUrl),
     getAccessMode: jest.fn().mockReturnValue(AccessMode.READ_WRITE),
   }))
 })
@@ -31,7 +31,7 @@ describe('PrivacyScreenController with READ_WRITE permissions', () => {
       locale: locale.en,
       data: {
         privacyScreen: true,
-        oasysReturnUrl,
+        systemReturnUrl,
         form: {},
       },
       errors: {},

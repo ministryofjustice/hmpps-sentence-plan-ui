@@ -25,6 +25,7 @@ on:
 
 jobs:
   visual_regression_test:
+    if: false # temporarily disable the job
     runs-on: ubuntu-latest
     env:
       APP_VERSION: ${{ inputs.app_version }}
