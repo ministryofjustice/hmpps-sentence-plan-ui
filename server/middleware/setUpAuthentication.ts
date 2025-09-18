@@ -153,6 +153,16 @@ export default function setupAuthentication() {
     } else res.redirect(authSignOutUrl)
   })
 
+  router.use('/end-session', (req, res, next) => {
+    const home = URLs.PLAN_OVERVIEW
+    if (req.user) {
+      req.logout(err => {
+        if (err) return next(err)
+        return req.session.destroy(() => res.redirect(home))
+      })
+    } else res.redirect(home)
+  })
+
   router.use(async (req, _res, next) => {
     try {
       if (req.isAuthenticated() && req.user.authSource === 'handover') {
