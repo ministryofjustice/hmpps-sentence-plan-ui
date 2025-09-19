@@ -9,13 +9,13 @@ import transformRequest from '../../middleware/transformMiddleware'
 import CreateGoalPostModel from './models/CreateGoalPostModel'
 import validateRequest from '../../middleware/validationMiddleware'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
-import { AccessMode } from '../../@types/Handover'
 import { HttpError } from '../../utils/HttpError'
 import { getDateOptions, getGoalTargetDate } from '../../utils/goalTargetDateUtils'
 import { areaConfigs } from '../../utils/assessmentAreaConfig.json'
 import { AssessmentAreaConfig } from '../../@types/Assessment'
 import { getAssessmentDetailsForArea } from '../../utils/assessmentUtils'
 import { AuditEvent } from '../../services/auditService'
+import { AccessMode } from '../../@types/SessionType'
 
 export default class CreateGoalController {
   constructor(private readonly referentialDataService: ReferentialDataService) {}

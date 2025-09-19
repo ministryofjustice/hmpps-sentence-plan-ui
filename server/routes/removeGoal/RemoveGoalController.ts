@@ -9,9 +9,9 @@ import RemoveGoalPostModel from './models/RemoveGoalPostModel'
 import validateRequest from '../../middleware/validationMiddleware'
 import { goalStatusToTabName } from '../../utils/utils'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
-import { AccessMode } from '../../@types/Handover'
 import { HttpError } from '../../utils/HttpError'
 import { AuditEvent } from '../../services/auditService'
+import { AccessMode } from '../../@types/SessionType'
 
 export default class RemoveGoalController {
   render = async (req: Request, res: Response, next: NextFunction) => {

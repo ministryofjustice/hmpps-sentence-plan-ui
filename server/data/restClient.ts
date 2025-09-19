@@ -1,6 +1,6 @@
 import { Readable } from 'stream'
 
-import Agent, { HttpsAgent } from 'agentkeepalive'
+import { HttpAgent, HttpsAgent } from 'agentkeepalive'
 import superagent from 'superagent'
 
 import logger from '../../logger'
@@ -32,14 +32,14 @@ interface StreamRequest {
 }
 
 export default class RestClient {
-  agent: Agent
+  private readonly agent: HttpAgent
 
   constructor(
     private readonly name: string,
     private readonly config: ApiConfig,
     private readonly token: string,
   ) {
-    this.agent = config.url.startsWith('https') ? new HttpsAgent(config.agent) : new Agent(config.agent)
+    this.agent = config.url.startsWith('https') ? new HttpsAgent(config.agent) : new HttpAgent(config.agent)
   }
 
   private apiUrl() {

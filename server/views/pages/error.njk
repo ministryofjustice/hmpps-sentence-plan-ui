@@ -1,8 +1,22 @@
 {% extends "../partials/layout.njk" %}
 
 {% set locale = interpolate(locale, {
-  oasysReturnUrl: data.oasysReturnUrl
+  systemReturnUrl: data.systemReturnUrl,
+  managePeopleOnProbationUrl: managePeopleOnProbationUrl
 }) %}
+
+{% set resolutionMessage %}
+  {% if user.authType == 'HMPPS_AUTH' %}
+    {{ locale.resolution.auth | safe }}
+  {% elseif user.authType == 'OASYS' %}
+    {{ locale.resolution.oasys | safe }}
+  {% else %}
+    <ul>
+      <li>{{ locale.resolution.oasys | safe }}</li>
+      <li>{{ locale.resolution.auth | safe }}</li>
+    </ul>
+  {% endif %}
+{% endset %}
 
 {% block pageTitle %}
   {{ locale.page.title }}
@@ -23,7 +37,7 @@
       {% for suggestion in locale.suggestions %}
         <p class="govuk-body">{{ suggestion }}</p>
       {% endfor %}
-      {{ locale.resolution | safe }}
+      {{ resolutionMessage | safe }}
     </div>
   </div>
 

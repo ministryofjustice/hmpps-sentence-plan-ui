@@ -1,0 +1,50 @@
+{
+  "mappings": [
+    {
+      "request": {
+        "urlPathPattern": "/health/ping",
+        "method": "GET"
+      },
+      "response": {
+        "status": 200,
+        "headers": { "Content-Type": "application/json" },
+        "jsonBody": {
+          "status": "UP"
+        }
+      }
+    },
+    {
+      "request": {
+        "urlPattern": "/users/.*/access/X123456$",
+        "method": "GET"
+      },
+      "response": {
+        "status": 200,
+        "headers": { "Content-Type": "application/json" },
+        "jsonBody": {
+          "inCaseload": false,
+          "userExcluded": false,
+          "userRestricted": false,
+          "canAccess": false
+        }
+      }
+    },
+    {
+      "priority": 2147483647,
+      "request": {
+        "urlPattern": "/users/.*/access/.*$",
+        "method": "GET"
+      },
+      "response": {
+        "status": 200,
+        "headers": { "Content-Type": "application/json" },
+        "jsonBody": {
+          "inCaseload": true,
+          "userExcluded": false,
+          "userRestricted": false,
+          "canAccess": true
+        }
+      }
+    }
+  ]
+}

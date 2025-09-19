@@ -1,10 +1,10 @@
 import { NewGoal } from '../../../server/@types/NewGoalType'
 import { NewStep } from '../../../server/@types/StepType'
-import { AccessMode } from '../../../server/@types/Handover'
 import { GoalStatus } from '../../../server/@types/GoalType'
 import { PlanAgreement } from '../../../server/@types/PlanAgreement'
 import { PlanAgreementStatus } from '../../../server/@types/PlanType'
 import handoverData from '../../../server/testutils/data/handoverData'
+import { AccessMode } from '../../../server/@types/SessionType'
 
 const getApiToken = () => {
   const apiToken = Cypress.env('API_TOKEN')
@@ -30,6 +30,16 @@ const getApiToken = () => {
       })
       return response.body.access_token
     })
+}
+
+const associateCrn = (apiToken, planUuid: string, crn: string) => {
+  cy.request({
+    url: `${Cypress.env('SP_API_URL')}/plans/associate/${planUuid}/${crn}`,
+    method: 'PUT',
+    auth: {
+      bearer: apiToken,
+    },
+  })
 }
 
 function createHandoverContext(apiToken, oasysAssessmentPk, accessMode, sentencePlanVersion, crn) {
@@ -141,6 +151,21 @@ export const openSentencePlan = (
   )
 
   return cy.visit('/')
+}
+
+export const openSentencePlanAuth = (
+  oasysAssessmentPk: string,
+  options?: { accessMode?: string; planUuid?: string; planVersion?: number; crn?: string; username?: string },
+) => {
+  const { accessMode = AccessMode.READ_WRITE, planUuid, crn } = options ?? {}
+  cy.session(`${oasysAssessmentPk}_${accessMode}`, () => {
+    getApiToken().then(apiToken => associateCrn(apiToken, planUuid, crn))
+  })
+
+  cy.visit(`/crn/${crn}/plan`)
+  cy.get('#username').type(options.username)
+  cy.get('#password').type('password123456')
+  cy.get('#submit').click()
 }
 
 export const createSentencePlan = () => {

@@ -9,6 +9,9 @@
     "suggestions": [
       "This could be because you’ve used a bookmarked link, or your session has expired due to inactivity."
     ],
-    "resolution": "<a href='{{ oasysReturnUrl }}'>Go to the OASys homepage</a> to sign-in again"
+    "resolution": {
+      "oasys": "Go to the OASys homepage to sign-in",
+      "auth": "<a href='{{ managePeopleOnProbationUrl }}'>Go to the Manage People on Probation service</a> to sign-in"
+    }
   }
 }

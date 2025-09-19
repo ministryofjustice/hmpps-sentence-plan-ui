@@ -1,4 +1,4 @@
-import { AccessMode } from '../../../server/@types/Handover'
+import { AccessMode } from '../../../server/@types/SessionType'
 import URLs from '../../../server/routes/URLs'
 
 describe('Privacy Screen', () => {

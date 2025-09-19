@@ -1,13 +1,11 @@
 const testPopData = {
-  crn: 'X336018',
-  pnc: '01/14106572A',
-  nomisId: '',
-  givenName: 'Buster',
-  familyName: 'Sanford',
-  dateOfBirth: '2002-01-15',
+  firstName: 'Buster',
+  lastName: 'Sanford',
   gender: 1,
-  location: 'COMMUNITY',
-  sexuallyMotivatedOffenceHistory: 'YES',
+  doB: '2002-01-15',
+  crn: 'X336018',
+  prc: '01/14106572A',
+  courtOrderRequirements: {},
   sentences: [
     {
       description: 'Custodial Sentence',

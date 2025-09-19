@@ -3,6 +3,7 @@
     "header": {
       "serviceName": "{{ applicationName }}",
       "managedInOasysText": "OASys User",
+      "hmppsAuthUser": "Auth User",
       "signOutLink": "Sign out",
       "returnToOasysButton": "Return to OASys"
     },
@@ -153,12 +154,11 @@
         "no": "There are no strengths or protective factors related to this area"
       }
     },
-    "unsavedInformationModal": {
-      "title": "Your unsaved information will be deleted soon",
-      "message": "We will delete any unsaved information if you do not continue in the next",
-      "messageSuffix": "This is to protect your information.",
-      "keepAliveButton": "Continue using sentence plan",
-      "signOutButton": "Delete unsaved information"
+    "sessionTimeoutModal": {
+      "title": "Your session is about to expire",
+      "message": "For your security, your session will expire in",
+      "keepAliveButton": "Extend session",
+      "signOutButton": "End session"
     }
   },
   "cy": {}

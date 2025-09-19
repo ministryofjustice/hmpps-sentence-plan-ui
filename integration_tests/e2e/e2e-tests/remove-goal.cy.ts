@@ -5,7 +5,7 @@ import DataGenerator from '../../support/DataGenerator'
 import { PlanType } from '../../../server/@types/PlanType'
 import { NewStep } from '../../../server/@types/StepType'
 import PlanOverview from '../../pages/plan-overview'
-import { AccessMode } from '../../../server/@types/Handover'
+import { AccessMode } from '../../../server/@types/SessionType'
 
 describe('Remove a goal from a Plan after it has been agreed', () => {
   beforeEach(() => {

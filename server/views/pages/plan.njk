@@ -67,10 +67,10 @@
     items: [
         {
             text: locale.header.returnToOasysButton,
-            href: data.oasysReturnUrl,
+            href: data.systemReturnUrl,
             classes: "govuk-button--secondary govuk-!-display-none-print",
             type: 'button'
-        },
+        } if user.authType == 'OASYS',
         {
             text: locale.header.createGoalButton,
             href: "/create-goal/accommodation",

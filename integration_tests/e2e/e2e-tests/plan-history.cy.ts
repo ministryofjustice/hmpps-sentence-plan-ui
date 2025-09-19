@@ -1,6 +1,6 @@
 import PlanOverview from '../../pages/plan-overview'
 import DataGenerator from '../../support/DataGenerator'
-import { AccessMode } from '../../../server/@types/Handover'
+import { AccessMode } from '../../../server/@types/SessionType'
 
 describe('Rendering Plan History for READ_WRITE user', () => {
   const planOverview = new PlanOverview()
