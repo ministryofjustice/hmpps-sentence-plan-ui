@@ -56,8 +56,8 @@ passport.use(
       state: true,
       customHeaders: {
         Authorization: generateOauthClientToken(
-          config.apis.hmppsAuth.apiClientId,
-          config.apis.hmppsAuth.apiClientSecret,
+          config.apis.hmppsAuth.systemClientId,
+          config.apis.hmppsAuth.systemClientSecret,
         ),
       },
     },
