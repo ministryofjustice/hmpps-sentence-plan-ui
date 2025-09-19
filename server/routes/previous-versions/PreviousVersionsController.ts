@@ -28,7 +28,7 @@ export default class PreviousVersionsController {
         data: {
           planAgreementStatus: plan.agreementStatus,
           pageId,
-          oasysReturnUrl: req.services.sessionService.getOasysReturnUrl(),
+          oasysReturnUrl: req.services.sessionService.getSystemReturnUrl(),
           versions: {
             ...versions,
             allVersions: trimmedAllVersions,

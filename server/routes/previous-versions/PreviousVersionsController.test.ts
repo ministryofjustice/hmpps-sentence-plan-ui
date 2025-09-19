@@ -16,7 +16,7 @@ jest.mock('../../services/auditService')
 jest.mock('../../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
     getPlanUUID: jest.fn().mockReturnValue(testPlan.uuid),
-    getOasysReturnUrl: jest.fn().mockReturnValue(oasysReturnUrl),
+    getSystemReturnUrl: jest.fn().mockReturnValue(oasysReturnUrl),
     getReturnLink: jest.fn().mockReturnValue(returnLink),
   }))
 })
