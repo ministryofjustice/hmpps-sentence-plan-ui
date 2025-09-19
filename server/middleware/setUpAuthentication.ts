@@ -50,14 +50,14 @@ passport.use(
     {
       authorizationURL: `${config.apis.hmppsAuth.externalUrl}/oauth/authorize`,
       tokenURL: `${config.apis.hmppsAuth.url}/oauth/token`,
-      clientID: config.apis.hmppsAuth.apiClientId,
-      clientSecret: config.apis.hmppsAuth.apiClientSecret,
+      clientID: config.apis.hmppsAuth.systemClientId,
+      clientSecret: config.apis.hmppsAuth.systemClientSecret,
       callbackURL: `${config.domain}/sign-in/hmpps-auth/callback`,
       state: true,
       customHeaders: {
         Authorization: generateOauthClientToken(
-          config.apis.hmppsAuth.apiClientId,
-          config.apis.hmppsAuth.apiClientSecret,
+          config.apis.hmppsAuth.systemClientId,
+          config.apis.hmppsAuth.systemClientSecret,
         ),
       },
     },
