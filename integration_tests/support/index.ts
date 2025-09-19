@@ -4,6 +4,7 @@ import {
   addStepToGoal,
   agreePlan,
   createSentencePlan,
+  createSentencePlanWithVersions,
   lockPlan,
   openSentencePlan,
   openSentencePlanAuth,
@@ -12,6 +13,11 @@ import {
 import { checkAccessibility } from './commands/accessibility'
 import 'cypress-axe'
 import { hasFeedbackLink } from './commands/feedback'
+import {
+  checkSinglePreviousVersionsTable,
+  checkBothPreviousVersionsTables,
+  hasPreviousVersionsPageLink,
+} from './commands/previousVersions'
 
 compareSnapshotCommand()
 
@@ -27,9 +33,17 @@ Cypress.Commands.add('removeGoalFromPlan', removeGoalFromPlan)
 Cypress.Commands.add('agreePlan', agreePlan)
 
 Cypress.Commands.add('lockPlan', lockPlan)
+Cypress.Commands.add('createSentencePlanWithVersions', createSentencePlanWithVersions)
 
 // Accessibility
 Cypress.Commands.add('checkAccessibility', checkAccessibility)
 
 // Feedback
 Cypress.Commands.add('hasFeedbackLink', hasFeedbackLink)
+
+// Previous versions page links
+Cypress.Commands.add('hasPreviousVersionsPageLink', hasPreviousVersionsPageLink)
+
+// Previous versions Table check
+Cypress.Commands.add('checkSinglePreviousVersionsTable', checkSinglePreviousVersionsTable)
+Cypress.Commands.add('checkBothPreviousVersionsTables', checkBothPreviousVersionsTables)

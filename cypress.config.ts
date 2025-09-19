@@ -1,3 +1,4 @@
+import { Client } from 'pg'
 import { defineConfig } from 'cypress'
 import getCompareSnapshotsPlugin from 'cypress-image-diff-js/plugin'
 import cypressSplit from 'cypress-split'
@@ -25,6 +26,14 @@ export default defineConfig({
           console.table(message)
           return null
         },
+
+        async runDBQuery(sql: string) {
+          const client = new Client({ connectionString: 'postgres://root:dev@localhost:5432/postgres' })
+          await client.connect()
+          const res = await client.query(sql)
+          await client.end()
+          return res.rows
+        },
       })
       cypressSplit(on, config)
       // Add the visual regression plugin
@@ -47,6 +56,7 @@ export default defineConfig({
       COORDINATOR_API_URL: 'http://localhost:8070',
       OASTUB_URL: 'http://localhost:7072',
       FEEDBACK_URL: 'http://localhost:9092/',
+      PREVIOUS_VERSIONS_PAGE_URL: `http://localhost:3001/previous-versions`,
       MPOP_URL: 'http://localhost:9092',
     },
     viewportWidth: 1000, // Default value: 1280
