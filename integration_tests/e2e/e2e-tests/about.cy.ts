@@ -35,7 +35,7 @@ describe('Rendering About Person for READ_WRITE user', () => {
   })
 
   it('Has a previous versions page link', () => {
-    cy.hasPreviousVersionsPageLink(true)
+    cy.hasPreviousVersionsPageLink()
   })
 
   it('Should check if the hard-coded entries in Sentence information are displayed correctly', () => {

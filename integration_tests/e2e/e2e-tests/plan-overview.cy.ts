@@ -18,7 +18,7 @@ describe('View Plan Overview for READ_WRITE user', () => {
   })
 
   it('Has a previous versions page link', () => {
-    cy.hasPreviousVersionsPageLink(true)
+    cy.hasPreviousVersionsPageLink()
   })
 
   it('Should have a Create goal button and it should take to create goal', () => {

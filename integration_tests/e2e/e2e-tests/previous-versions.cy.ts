@@ -19,7 +19,7 @@ describe('View Previous Versions', () => {
     })
 
     it('Has no previous versions page link', () => {
-      cy.get('.plan-header [data-previous-versions-link]').should('not.exist')
+      cy.hasPreviousVersionsPageLink(false)
     })
 
     it('Should have a `Return to OASys` button and return the user to the OASys return URL', () => {

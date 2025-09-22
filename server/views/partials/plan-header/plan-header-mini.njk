@@ -18,9 +18,9 @@
                             <dd>{{ data.popData.dateOfBirth | formatSimpleDate }} </dd>
                         </div>
                     </dl>
-                    {% if "/" + data.pageId != locale.common.planHeader.mini.viewPreviousVersionsLinkPath and not data.privacyScreen%}
+                    {% if "/" + data.pageId != urls.PREVIOUS_VERSIONS and not data.privacyScreen %}
                       <div class ="plan-header__subject-details__navigation-links" >
-                          <a href="{{ locale.common.planHeader.mini.viewPreviousVersionsLinkPath }}"
+                          <a href="{{ urls.PREVIOUS_VERSIONS }}"
                              class="govuk-link govuk-link--no-visited-state"
                              data-previous-versions-link>
                             {{ locale.common.planHeader.mini.viewPreviousVersionsLinkText }}

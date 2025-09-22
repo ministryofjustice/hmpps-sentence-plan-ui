@@ -56,7 +56,6 @@ export default defineConfig({
       COORDINATOR_API_URL: 'http://localhost:8070',
       OASTUB_URL: 'http://localhost:7072',
       FEEDBACK_URL: 'http://localhost:9092/',
-      PREVIOUS_VERSIONS_PAGE_URL: `http://localhost:3001/previous-versions`,
       MPOP_URL: 'http://localhost:9092',
     },
     viewportWidth: 1000, // Default value: 1280

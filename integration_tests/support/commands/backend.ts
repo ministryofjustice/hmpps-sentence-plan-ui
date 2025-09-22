@@ -352,67 +352,41 @@ export const addStepToGoal = (goalUuid: string, step: NewStep) => {
   )
 }
 
-export const createSentencePlanWithVersions = (numberOfVersions: number, numberOfCountersignedVersions: number = 0) => {
-  const totalVersions = numberOfVersions + numberOfCountersignedVersions
+export const createSentencePlanWithVersions = (unsignedVersions: number, countersignedVersions: number = 0) => {
+  const versionsToCreate = [
+    ...new Array(countersignedVersions).fill('COUNTERSIGNED'),
+    ...new Array(unsignedVersions).fill('UNSIGNED'),
+  ]
 
-  const createVersions = (max: number, planUuid: string, apiToken: string) => {
-    if (max <= 0) {
-      return cy.task(
-        'runDBQuery',
-        `WITH plan_data AS (
-          SELECT id FROM "sentence-plan".plan WHERE uuid = '${planUuid}'
-        ),
-        version_dates AS (
-          SELECT
-            pv.id,
-            pv.version,
-            CURRENT_DATE - ((${totalVersions} - pv.version + 1) || ' days')::INTERVAL AS target_date
-          FROM "sentence-plan".plan_version pv
-                 JOIN plan_data pd ON pv.plan_id = pd.id
-        ),
-        latest_versions AS (
-          SELECT
-            pv.id,
-            ROW_NUMBER() OVER (ORDER BY pv.version DESC) AS rn
-          FROM "sentence-plan".plan_version pv
-                 JOIN plan_data pd ON pv.plan_id = pd.id
+  const createVersion = (planUuid: string, index: number) => {
+    const versionDateTimestamp = new Date().setDate(new Date().getDate() - index - 1)
+
+    return addGoalToPlan(planUuid, {
+      title: `Test goal ${index + 1}`,
+      areaOfNeed: 'ACCOMMODATION',
+      note: `Automated goal for version creation`,
+    }).then(() => {
+      return cy
+        .task(
+          'runDBQuery',
+          `UPDATE "sentence-plan".plan_version pv
+               SET
+                 created_date = to_timestamp(${versionDateTimestamp} / 1000.0),
+                 last_updated_date = to_timestamp(${versionDateTimestamp} / 1000.0),
+                 countersigning_status = '${versionsToCreate[index]}'
+               FROM "sentence-plan".plan p
+              WHERE p.id = pv.plan_id
+              AND p.uuid = '${planUuid}'
+              AND pv.version = ${index};
+            `,
         )
-        UPDATE "sentence-plan".plan_version pv
-        SET
-          created_date = vd.target_date,
-          last_updated_date = vd.target_date,
-          countersigning_status = CASE
-            WHEN lv.rn <= ${numberOfCountersignedVersions} THEN 'COUNTERSIGNED'
-            ELSE pv.countersigning_status
-            END
-          FROM version_dates vd, latest_versions lv
-        WHERE pv.id = vd.id
-            AND pv.id = lv.id;`,
-      )
-    }
-    return cy.lockPlan(planUuid).then(() => {
-      const versionGoal: NewGoal = {
-        title: `Version ${totalVersions - max + 1} Goal`,
-        areaOfNeed: 'ACCOMMODATION',
-        note: `Automated goal for version creation - ${totalVersions - max + 1}`,
-      }
-      cy.request({
-        url: `${Cypress.env('SP_API_URL')}/plans/${planUuid}/goals`,
-        method: 'POST',
-        auth: { bearer: apiToken },
-        body: versionGoal,
-        retryOnNetworkFailure: false,
-      }).then(() => {
-        createVersions(max - 1, planUuid, apiToken)
-      })
+        .then(() => {
+          if (versionsToCreate[index + 1]) createVersion(planUuid, index + 1)
+        })
     })
   }
 
   return cy.createSentencePlan().then(result => {
-    if (totalVersions <= 0) return result
-
-    return getApiToken().then(apiToken => {
-      return createVersions(totalVersions - 1, result.plan.uuid, apiToken).then(() => result)
-    })
+    return createVersion(result.plan.uuid, 0).then(() => result)
   })
 }

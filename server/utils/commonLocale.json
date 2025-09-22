@@ -18,8 +18,7 @@
         "crnLabel": "CRN:",
         "pncLabel": "PNC:",
         "dateOfBirthLabel": "Date of birth:",
-        "viewPreviousVersionsLinkText": "View previous versions",
-        "viewPreviousVersionsLinkPath": "/previous-versions"
+        "viewPreviousVersionsLinkText": "View previous versions"
       },
       "extended": {
         "createGoalButton": "Create goal",

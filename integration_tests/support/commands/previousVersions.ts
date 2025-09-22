@@ -1,14 +1,12 @@
 import URLs from '../../../server/routes/URLs'
 
-export const hasPreviousVersionsPageLink = (isTrue: boolean) => {
-  const stubPreviousVersionsPageUrl = Cypress.env('PREVIOUS_VERSIONS_PAGE_URL')
-
-  if (isTrue) {
+export const hasPreviousVersionsPageLink = (hasLink: boolean = true) => {
+  if (hasLink) {
     cy.get('.plan-header [data-previous-versions-link]').as('previousVersionsPageLink')
     cy.get('@previousVersionsPageLink').should('contain', `View previous versions`)
 
     cy.get('@previousVersionsPageLink').invoke('attr', 'target', '_self').click()
-    cy.url().should('equal', stubPreviousVersionsPageUrl)
+    cy.url().should('include', URLs.PREVIOUS_VERSIONS)
 
     cy.go('back')
   } else {
@@ -21,14 +19,11 @@ const checkTable = (
   options: {
     tableIndex?: number
     dateOffset?: number
-    linkAliasPrefix?: string
     expectedCaption?: string
   } = {},
 ) => {
-  const { tableIndex = 0, dateOffset = 0, linkAliasPrefix = 'view-link', expectedCaption } = options
-
-  const tableSelector =
-    tableIndex !== undefined ? `.previous-versions-table:eq(${tableIndex})` : '.previous-versions-table'
+  const { tableIndex = 0, dateOffset = 0, expectedCaption } = options
+  const tableSelector = `.previous-versions-table:eq(${tableIndex})`
 
   // consts to remove magic numbers:
   const columnQuantity = 4
@@ -75,7 +70,7 @@ const checkTable = (
       cy.get(columns).eq(dateColumnIndex).should('contain', expectedDate)
 
       // plan link view link:
-      const linkAlias = `${linkAliasPrefix}-${tableIndex}-${index}`
+      const linkAlias = `table-${tableIndex}-row-${index}`
       cy.get(columns).eq(planColumnIndex).find('a').should('contain.text', 'View').as(linkAlias)
 
       // link behavior:
@@ -91,8 +86,7 @@ const checkTable = (
 export const checkSinglePreviousVersionsTable = (numberOfVersions: number, expectedCaption: string) => {
   return checkTable(numberOfVersions, {
     tableIndex: 0,
-    dateOffset: 2,
-    linkAliasPrefix: 'view-link',
+    dateOffset: 1,
     expectedCaption,
   })
 }
@@ -101,16 +95,14 @@ export const checkBothPreviousVersionsTables = (numberOfVersions: number, number
   // countersigned versions table (first table):
   checkTable(numberOfCountersignedVersions, {
     tableIndex: 0,
-    dateOffset: 2,
-    linkAliasPrefix: 'countersigned-view-link',
+    dateOffset: 1,
     expectedCaption: 'Countersigned versions',
   })
 
   // all versions table (second table):
   checkTable(numberOfVersions, {
     tableIndex: 1,
-    dateOffset: numberOfVersions + numberOfCountersignedVersions - 2,
-    linkAliasPrefix: 'regular-view-link',
+    dateOffset: 1 + numberOfCountersignedVersions,
     expectedCaption: 'All versions',
   })
 }
