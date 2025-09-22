@@ -140,8 +140,8 @@ export function goalStatusToTabName(status: GoalStatus): string {
 }
 
 export function generateOauthClientToken(
-  clientId: string = config.apis.hmppsAuth.apiClientId,
-  clientSecret: string = config.apis.hmppsAuth.apiClientSecret,
+  clientId: string = config.apis.hmppsAuth.authClientId,
+  clientSecret: string = config.apis.hmppsAuth.authClientSecret,
 ): string {
   const token = Buffer.from(`${clientId}:${clientSecret}`).toString('base64')
   return `Basic ${token}`
