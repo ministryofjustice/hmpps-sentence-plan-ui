@@ -165,10 +165,10 @@ services:
       MANAGE_USERS_API_URL: false
       TOKEN_VERIFICATION_ENABLED: false
       TOKEN_VERIFICATION_API_URL: http://hmpps-auth:9091/verification
-      API_CLIENT_ID: sentence-plan-client
-      API_CLIENT_SECRET: sentence-plan-client
-      SYSTEM_CLIENT_ID: hmpps-assess-risks-and-needs-oastub-ui
-      SYSTEM_CLIENT_SECRET: clientsecret
+      AUTH_CODE_CLIENT_ID: sentence-plan-ui-auth-client
+      AUTH_CODE_CLIENT_SECRET: clientsecret
+      CLIENT_CREDS_CLIENT_ID: sentence-plan-ui-system-client
+      CLIENT_CREDS_CLIENT_SECRET: clientsecret
       HMPPS_ARNS_HANDOVER_CLIENT_ID: sentence-plan
       HMPPS_ARNS_HANDOVER_CLIENT_SECRET: sp-secret
       SESSION_SECRET: sessionsecret
