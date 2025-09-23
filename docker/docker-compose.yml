@@ -128,8 +128,8 @@ services:
     environment:
       SERVER_PORT: 8080
       DB_ENDPOINT: postgres:5432
-      API_CLIENT_ID: sentence-plan-api-client
-      API_CLIENT_SECRET: sentence-plan-api-client
+      CLIENT_CREDS_CLIENT_ID: sentence-plan-api-client
+      CLIENT_CREDS_CLIENT_SECRET: sentence-plan-api-client
       HMPPS_AUTH_BASE_URL: http://hmpps-auth:9090
       DELIUS_API_BASE_URL: http://delius:8080
 
