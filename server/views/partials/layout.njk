@@ -38,7 +38,7 @@
               href: '/about',
               active: data.pageId == 'about'
             } if user.authType == 'OASYS'
-          ]
+          ] | reject('string')
         }) }}
     {% elseif not data.privacyScreen  %}
         {{ mojPrimaryNavigation({
