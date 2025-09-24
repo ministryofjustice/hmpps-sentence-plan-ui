@@ -55,7 +55,7 @@ jobs:
         run: make up
 
       - name: Run visual regression testing
-        uses: cypress-io/github-action@v6.7.16
+        uses: cypress-io/github-action@v6.10.2
         with:
           publish-summary: false
           browser: edge
