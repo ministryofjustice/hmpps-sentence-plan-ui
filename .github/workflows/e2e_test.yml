@@ -32,7 +32,7 @@ jobs:
     env:
       APP_VERSION: ${{ inputs.app_version }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Download docker image
         uses: actions/download-artifact@v4
@@ -44,7 +44,7 @@ jobs:
         run: docker load --input ${{ runner.temp }}/build_image.tar
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: 'npm'
@@ -56,7 +56,7 @@ jobs:
         run: make up
 
       - name: Run split Cypress tests
-        uses: cypress-io/github-action@v6.7.16
+        uses: cypress-io/github-action@v6.10.2
         with:
           publish-summary: false
           browser: edge
