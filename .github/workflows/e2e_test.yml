@@ -32,10 +32,10 @@ jobs:
     env:
       APP_VERSION: ${{ inputs.app_version }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Download docker image
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: build_image
           path: ${{ runner.temp }}
