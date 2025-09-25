@@ -249,7 +249,7 @@ services:
     entrypoint: ["/docker-entrypoint.sh", "--global-response-templating", "--disable-gzip", "--verbose"]
 
   localstack:
-    image: localstack/localstack:3
+    image: localstack/localstack:4
     networks:
       - hmpps
     container_name: localstack-sqs
