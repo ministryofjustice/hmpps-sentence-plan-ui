@@ -36,7 +36,7 @@ declare namespace Cypress {
     hasFeedbackLink(): Chainable
 
     // Navigation links
-    hasPreviousVersionsPageLink(hasLink: boolean): Chainable
+    hasPreviousVersionsPageLink(hasLink: boolean = true): Chainable
 
     // Previous versions tables check
     checkSinglePreviousVersionsTable(numberOfVersions: number, expectedCaption: string): Chainable
