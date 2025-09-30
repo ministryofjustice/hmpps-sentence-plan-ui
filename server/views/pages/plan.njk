@@ -46,6 +46,7 @@
     plan: {
         agreementDate: data.plan.agreementDate | formatSimpleDate,
         createdDate: data.plan.createdDate | formatSimpleDate,
+        updatedDate: data.plan.updatedDate | formatSimpleDate,
         mostRecentUpdateDate: data.plan.mostRecentUpdateDate | formatSimpleDate,
         mostRecentUpdateByName: data.plan.mostRecentUpdateByName | convertToTitleCase
     },
@@ -106,7 +107,7 @@
           {%- elseif data.plan.agreementStatus === 'DO_NOT_AGREE' or data.plan.agreementStatus === 'UPDATED_DO_NOT_AGREE' %}
               {{ locale.notAgreePlan }}
           {%- endif %}
-          {%- if data.plan.agreementStatus !== 'DRAFT' and data.plan.agreementStatus !== 'COULD_NOT_ANSWER'%}
+          {%- if data.plan.agreementStatus !== 'DRAFT' and data.plan.agreementStatus !== 'COULD_NOT_ANSWER' and  not data.viewPreviousVersionMode %}
               <a class='govuk-!-display-none-print' href="/plan-history">{{ locale.viewPlanHistory }}</a>
           {%- endif %}
       {%- else %}
