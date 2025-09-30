@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
 import { plainToInstance } from 'class-transformer'
-import locale from '../planOverview/locale.json'
+import planOverviewLocale from '../planOverview/locale.json'
+import locale from './locale.json'
 import validateRequest, { getValidationErrors } from '../../middleware/validationMiddleware'
 import AgreedPlanModel from '../shared-models/AgreedPlanModel'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
@@ -19,23 +20,23 @@ export default class ViewPreviousVersionController {
     try {
       this.planVersion = await req.services.planService.getPlanVersionByVersionUuid(planVersionUuid)
 
+      await req.services.auditService.send(AuditEvent.VIEW_PREVIOUS_VERSION)
+
+      const readWrite = req.services.sessionService.getAccessMode() === AccessMode.READ_WRITE
+      const viewPreviousVersionMode: boolean = true
       const type = req.query?.type ?? 'current'
       const status = req.query?.status
+
       // was the plan updated more than 10s after the user agreed to it?
       let isUpdatedAfterAgreement = false
       if (this.planVersion.agreementDate !== null) {
-        const mostRecentUpdateDate = new Date(this.planVersion.mostRecentUpdateDate)
+        const updatedDate = new Date(this.planVersion.updatedDate)
         const agreementDate = new Date(this.planVersion.agreementDate)
-        isUpdatedAfterAgreement = Math.abs((mostRecentUpdateDate.getTime() - agreementDate.getTime()) / 1000) > 10
+        isUpdatedAfterAgreement = Math.abs((updatedDate.getTime() - agreementDate.getTime()) / 1000) > 10
       }
-      const readWrite = req.services.sessionService.getAccessMode() === AccessMode.READ_WRITE
-      const page = 'pages/plan'
 
-      await req.services.auditService.send(AuditEvent.VIEW_PREVIOUS_VERSION)
-      const viewPreviousVersionMode: boolean = true
-
-      return res.render(page, {
-        locale: locale.en,
+      return res.render('pages/plan', {
+        locale: { ...planOverviewLocale.en, ...locale.en },
         data: {
           planAgreementStatus: this.planVersion.agreementStatus, // required by layout.njk
           plan: this.planVersion,
