@@ -19,4 +19,5 @@ export default {
   RE_ADD_GOAL: '/confirm-add-goal/:uuid',
   DATA_PRIVACY: '/close-any-other-applications-before-appointment',
   PREVIOUS_VERSIONS: '/previous-versions',
+  VIEW_PREVIOUS_VERSION: '/previous-versions/view-historic/:planVersionUuid',
 }
