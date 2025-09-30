@@ -1,0 +1,9 @@
+{
+  "en": {
+    "page": {
+      "title": "Previous versions - {{ applicationName }}",
+      "errorTitle": "Error: Previous versions - {{ applicationName }}"
+    },
+    "lastUpdatedPlan": "Last updated on {{ plan.updatedDate }} by {{ plan.mostRecentUpdateByName }}."
+  }
+}
