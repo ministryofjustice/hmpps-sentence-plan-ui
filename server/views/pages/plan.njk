@@ -83,7 +83,7 @@
             type: 'submit',
             value: 'agree-plan'
         } if data.readWrite === true and data.plan.agreementStatus === 'DRAFT'
-    ]
+    ] if not data.viewPreviousVersionMode
 } %}
 
 {% block bodyStart %}
@@ -201,7 +201,7 @@
                     {% set buttons = [] %}
                     {% set actions = [] %}
 
-                    {% if data.readWrite === true %}
+                    {% if data.readWrite === true and not data.viewPreviousVersionMode%}
                         {% if not loop.first %}
                             {% set buttons = buttons.concat({
                                 text: locale.goalSummaryCard.buttons.moveUpButton,
@@ -300,11 +300,16 @@
                             text: locale.errors['goals'].arrayNotEmpty
                         }) }}
                     {% endif %}
-                <p class="govuk-!-display-none-print">{{ locale.ifNoCurrentGoals.text }}</p>
-                <ul class="govuk-!-display-none-print">
-                    <li><a href="/create-goal/accommodation">{{ locale.ifNoCurrentGoals.action1 }}</a></li>
-                    <li><a href="{{ urls.ABOUT_PERSON }}" >{{ locale.ifNoCurrentGoals.action2 }}</a></li>
-                </ul>
+
+                {# TODO: find out if there should be special wording for when there were no goals in previous version view #}
+                {% if not data.viewPreviousVersionMode %}
+                    <p class="govuk-!-display-none-print">{{ locale.ifNoCurrentGoals.text }}</p>
+                    <ul class="govuk-!-display-none-print">
+                        <li><a href="/create-goal/accommodation">{{ locale.ifNoCurrentGoals.action1 }}</a></li>
+                        <li><a href="{{ urls.ABOUT_PERSON }}" >{{ locale.ifNoCurrentGoals.action2 }}</a></li>
+                    </ul>
+                {% endif %}
+
                 </div>
             {% elseif goalType == 'future' and goals.length == 0 %}
                 <p>{{ locale.ifNoFutureGoals.text }}</p>
