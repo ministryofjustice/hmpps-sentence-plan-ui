@@ -21,28 +21,24 @@ down: ## Stops and removes all containers in the project.
 build-ui: ## Builds a production image of the UI.
 	docker compose ${LOCAL_COMPOSE_FILES} build sp-ui
 
-dev-up: ## Starts/restarts the UI in a development container. A remote debugger can be attached on port 9229.
-	@make install-node-modules
+dev-up: install-node-modules ## Starts/restarts the UI in a development container. A remote debugger can be attached on port 9229.
 	docker compose ${DEV_COMPOSE_FILES} down sp-ui
 	docker compose ${DEV_COMPOSE_FILES} up sp-ui --wait --no-recreate
 
-dev-build: ## Builds a development image of the UI and installs Node dependencies.
-	@make install-node-modules
+dev-build: install-node-modules ## Builds a development image of the UI and installs Node dependencies.
 	docker compose ${DEV_COMPOSE_FILES} build sp-ui
 
 dev-down: ## Stops and removes all dev containers.
 	docker compose ${DEV_COMPOSE_FILES} down
 
-test: ## Runs the unit test suite.
-	@make install-node-modules
+test: install-node-modules ## Runs the unit test suite.
 	docker compose ${DEV_COMPOSE_FILES} run --rm --no-deps sp-ui npm run test
 
 BASE_URL ?= "http://localhost:3001"
 vrt: ## Run the snapshot Visual Regression Tests UI; this allows for snapshots to be visually compared.
 	npx cypress-image-diff-html-report start
 
-e2e: ## Run the end-to-end tests locally in the Cypress app. Override the default base URL with BASE_URL=...
-	@make install-node-modules
+e2e: install-node-modules ## Run the end-to-end tests locally in the Cypress app. Override the default base URL with BASE_URL=...
 	docker compose ${DEV_COMPOSE_FILES} up --quiet-pull --no-recreate --wait
 	npx cypress install
 	npx cypress open --e2e -c baseUrl=${BASE_URL},experimentalInteractiveRunEvents=true
