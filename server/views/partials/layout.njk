@@ -1,13 +1,13 @@
 {% extends "govuk/template.njk" %}
 {% from "moj/components/primary-navigation/macro.njk" import mojPrimaryNavigation %}
 {% from  "hmrc/components/timeout-dialog/macro.njk" import hmrcTimeoutDialog %}
+{%- from "moj/components/alert/macro.njk" import mojAlert -%}
+
 
 {% set locale = interpolate(locale, {
   applicationName: applicationName,
   subject: data.popData
 }) %}
-
-{% set planVersionBaseUrl = data.planVersionBaseUrl | default('/plan') %}
 
 {% block head %}
   <link href="/assets/css/app.css?{{ version }}" rel="stylesheet" />
@@ -32,7 +32,7 @@
           label: 'Primary navigation',
           items: [{
               text: locale.common.primaryNavigation.planLinkText,
-              href: planVersionBaseUrl,
+              href: '/plan',
               active: data.pageId != 'plan-history' and data.pageId != 'about'
             },
             {
@@ -47,7 +47,7 @@
                   label: 'Primary navigation',
                   items: [{
                       text: locale.common.primaryNavigation.planLinkText,
-                      href: planVersionBaseUrl,
+                      href: '/plan',
                       active: data.pageId != 'plan-history' and data.pageId != 'about'
                     },
                     {
