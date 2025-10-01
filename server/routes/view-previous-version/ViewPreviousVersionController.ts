@@ -26,6 +26,7 @@ export default class ViewPreviousVersionController {
       const viewPreviousVersionMode: boolean = true
       const type = req.query?.type ?? 'current'
       const status = req.query?.status
+      const planVersionBaseUrl = `/view-historic/${planVersionUuid}`
 
       // was the plan updated more than 10s after the user agreed to it?
       let isUpdatedAfterAgreement = false
@@ -45,6 +46,7 @@ export default class ViewPreviousVersionController {
           status,
           readWrite,
           viewPreviousVersionMode,
+          planVersionBaseUrl,
         },
         errors,
       })

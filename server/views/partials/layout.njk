@@ -7,6 +7,8 @@
   subject: data.popData
 }) %}
 
+{% set planVersionBaseUrl = data.planVersionBaseUrl | default('/plan') %}
+
 {% block head %}
   <link href="/assets/css/app.css?{{ version }}" rel="stylesheet" />
 {% endblock %}
@@ -30,7 +32,7 @@
           label: 'Primary navigation',
           items: [{
               text: locale.common.primaryNavigation.planLinkText,
-              href: '/plan',
+              href: planVersionBaseUrl,
               active: data.pageId != 'plan-history' and data.pageId != 'about'
             },
             {
@@ -45,7 +47,7 @@
                   label: 'Primary navigation',
                   items: [{
                       text: locale.common.primaryNavigation.planLinkText,
-                      href: '/plan',
+                      href: planVersionBaseUrl,
                       active: data.pageId != 'plan-history' and data.pageId != 'about'
                     },
                     {

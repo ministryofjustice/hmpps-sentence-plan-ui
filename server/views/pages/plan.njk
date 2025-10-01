@@ -53,6 +53,8 @@
     subject: data.popData
 }) %}
 
+{% set planVersionBaseUrl = data.planVersionBaseUrl | default('/plan') %}
+
 {% block pageTitle %}
     {% if not (errors.domain | length) %}
         {{ locale.page.title }}
@@ -161,22 +163,22 @@
                 classes: 'plan-navigation',
                 items: [{
                     text: locale.subNavigation.currentGoals,
-                    href: '/plan?type=current',
+                    href: planVersionBaseUrl ~ '?type=current',
                     active: data.type === 'current' or data.type === undefined
                 },
                 {
                     text: locale.subNavigation.futureGoals,
-                    href: '/plan?type=future',
+                    href: planVersionBaseUrl ~ '?type=future',
                     active: data.type === 'future'
                 },
                 {
                     text: locale.subNavigation.achievedGoals,
-                    href: '/plan?type=achieved',
+                    href: planVersionBaseUrl ~ '?type=achieved',
                     active: data.type === 'achieved'
                 } if achievedGoals.length > 0,
                 {
                     text: locale.subNavigation.removedGoals,
-                    href: '/plan?type=removed',
+                    href: planVersionBaseUrl ~ '?type=removed',
                     active: data.type === 'removed'
                 } if removedGoals.length > 0 ] | reject('string')
             }) }}
