@@ -4,6 +4,9 @@
       "title": "Previous versions - {{ applicationName }}",
       "errorTitle": "Error: Previous versions - {{ applicationName }}"
     },
-    "lastUpdatedPlan": "Last updated on {{ plan.updatedDate }} by {{ plan.mostRecentUpdateByName }}."
+    "lastUpdatedPlan": "Last updated on {{ plan.updatedDate }} by {{ plan.mostRecentUpdateByName }}.",
+    "ifNoCurrentGoals": {
+      "text": "{{ subject.givenName }} does not have any goals to work on now."
+    }
   }
 }
