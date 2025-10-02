@@ -26,7 +26,7 @@
   {% endif %}
 <div class="govuk-!-display-none-print">
   {% include "./header.njk" %}
-  {% if data.popData %}
+  {% if data.popData and not data.viewPreviousVersionMode %}
     {% if data.planAgreementStatus === 'DRAFT' %}
         {{ mojPrimaryNavigation({
           label: 'Primary navigation',
