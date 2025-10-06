@@ -16,7 +16,7 @@
     },
     "errors": {
       "confirm-privacy-checkbox": {
-        "isNotEmpty": "Confirm you’ll do this before starting an appointment"
+        "isNotEmpty": "Confirm you'll do this before starting an appointment"
       }
     },
     "returnToOasysButton": "Return to OASys",

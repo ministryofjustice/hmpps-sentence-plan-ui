@@ -57,13 +57,10 @@ describe('Privacy Screen', () => {
       cy.get('.govuk-button').click()
       cy.url().should('include', URLs.DATA_PRIVACY)
       cy.title().should('contain', 'Error:')
-      cy.get('.govuk-error-summary').should(
-        'contain',
-        "Confirm you’ll do this before starting an appointment",
-      )
+      cy.get('.govuk-error-summary').should('contain', "Confirm you'll do this before starting an appointment")
       cy.get('#confirm-privacy-checkbox-error').should(
         'contain',
-        "Confirm you’ll do this before starting an appointment",
+        "Confirm you'll do this before starting an appointment",
       )
       cy.checkAccessibility()
     })
