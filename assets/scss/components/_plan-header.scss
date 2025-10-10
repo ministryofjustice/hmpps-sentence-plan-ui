@@ -6,8 +6,6 @@
   }
 
   &__subject-details {
-    margin: 0 0 govuk-spacing(6) 0;
-
     * {
       display: inline-block;
     }
@@ -42,6 +40,11 @@
       display: block;
       float: right;
     }
+  }
+
+  &__previous-version-date-banner .moj-alert{
+    margin-top: govuk-spacing(6);
+    margin-bottom: 0;
   }
 
   &__extended {

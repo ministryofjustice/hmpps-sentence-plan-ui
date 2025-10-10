@@ -18,29 +18,29 @@
                     </div>
                 </dl>
                 {% if "/" + data.pageId != urls.PREVIOUS_VERSIONS and not data.privacyScreen and not data.viewPreviousVersionMode%}
-                  <div class ="plan-header__subject-details__navigation-links" >
-                      <a href="{{ urls.PREVIOUS_VERSIONS }}"
-                         class="govuk-link govuk-link--no-visited-state"
-                         data-previous-versions-link>
-                        {{ locale.common.planHeader.mini.viewPreviousVersionsLinkText }}
-                      </a>
-                  </div>
+                    <div class ="plan-header__subject-details__navigation-links" >
+                        <a href="{{ urls.PREVIOUS_VERSIONS }}"
+                           class="govuk-link govuk-link--no-visited-state"
+                           data-previous-versions-link>
+                          {{ locale.common.planHeader.mini.viewPreviousVersionsLinkText }}
+                        </a>
+                    </div>
                 {% endif %}
             </div>
         </div>
-        <div class="plan-header__previous-version-date-banner">
-          {% if data.viewPreviousVersionMode %}
-            <div class="govuk-grid-row">
-              <div class="govuk-grid-column-full">
-                {{ mojAlert({
-                  variant: "information",
-                  title: "Plan version date",
-                  dismissible: false,
-                  html: '<span class="moj-alert__heading">This version is from ' ~ data.plan.updatedDate | formatSimpleDate ~ '</span>'})
-                }}
-              </div>
+        {% if data.viewPreviousVersionMode %}
+            <div class="plan-header__previous-version-date-banner">
+                <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-full">
+                        {{ mojAlert({
+                          variant: "information",
+                          title: "Plan version date",
+                          dismissible: false,
+                          html: '<span class="moj-alert__heading">This version is from ' ~ data.plan.updatedDate | formatSimpleDate ~ '</span>'})
+                        }}
+                    </div>
+                </div>
             </div>
-        </div>
         {% endif %}
         {% block extension %}
             {# Block for extended versions #}
