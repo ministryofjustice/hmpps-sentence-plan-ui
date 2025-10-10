@@ -1,35 +1,47 @@
 {% if data.popData %}
     <header class="plan-header" role="presentation">
-        <div class="plan-header__subject-details">
-            <div class="govuk-grid-row">
-                <div class="govuk-grid-column-full">
-                    <p class="plan-header__subject-details__title">{{ locale.common.planHeader.mini.title }}</p>
-                    <dl class="plan-header__subject-details__identifiers">
-                        <div>
-                            <dt>{{ locale.common.planHeader.mini.crnLabel }}</dt>
-                            <dd>{{ data.popData.crn }} </dd>
-                        </div>
-                        <div>
-                            <dt>{{ locale.common.planHeader.mini.pncLabel }}</dt>
-                            <dd>{{ data.popData.pnc }} </dd>
-                        </div>
-                        <div>
-                            <dt>{{ locale.common.planHeader.mini.dateOfBirthLabel }}</dt>
-                            <dd>{{ data.popData.dateOfBirth | formatSimpleDate }} </dd>
-                        </div>
-                    </dl>
-                    {% if "/" + data.pageId != urls.PREVIOUS_VERSIONS and not data.privacyScreen %}
-                      <div class ="plan-header__subject-details__navigation-links" >
-                          <a href="{{ urls.PREVIOUS_VERSIONS }}"
-                             class="govuk-link govuk-link--no-visited-state"
-                             data-previous-versions-link>
-                            {{ locale.common.planHeader.mini.viewPreviousVersionsLinkText }}
-                          </a>
-                      </div>
-                    {% endif %}
-                </div>
+        <div class="govuk-grid-row">
+            <div class="govuk-grid-column-full plan-header__subject-details">
+                <p class="plan-header__subject-details__title">{{ locale.common.planHeader.mini.title }}</p>
+                <dl class="plan-header__subject-details__identifiers">
+                    <div>
+                        <dt>{{ locale.common.planHeader.mini.crnLabel }}</dt>
+                        <dd>{{ data.popData.crn }} </dd>
+                    </div>
+                    <div>
+                        <dt>{{ locale.common.planHeader.mini.pncLabel }}</dt>
+                        <dd>{{ data.popData.pnc }} </dd>
+                    </div>
+                    <div>
+                        <dt>{{ locale.common.planHeader.mini.dateOfBirthLabel }}</dt>
+                        <dd>{{ data.popData.dateOfBirth | formatSimpleDate }} </dd>
+                    </div>
+                </dl>
+                {% if "/" + data.pageId != urls.PREVIOUS_VERSIONS and not data.privacyScreen and not data.viewPreviousVersionMode%}
+                    <div class ="plan-header__subject-details__navigation-links" >
+                        <a href="{{ urls.PREVIOUS_VERSIONS }}"
+                           class="govuk-link govuk-link--no-visited-state"
+                           data-previous-versions-link>
+                          {{ locale.common.planHeader.mini.viewPreviousVersionsLinkText }}
+                        </a>
+                    </div>
+                {% endif %}
             </div>
         </div>
+        {% if data.viewPreviousVersionMode %}
+            <div class="plan-header__previous-version-date-banner">
+                <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-full">
+                        {{ mojAlert({
+                          variant: "information",
+                          title: "Plan version date",
+                          dismissible: false,
+                          html: '<span class="moj-alert__heading">This version is from ' ~ data.plan.updatedDate | formatSimpleDate ~ '</span>'})
+                        }}
+                    </div>
+                </div>
+            </div>
+        {% endif %}
         {% block extension %}
             {# Block for extended versions #}
         {% endblock %}

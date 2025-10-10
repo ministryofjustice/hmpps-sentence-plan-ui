@@ -47,6 +47,7 @@ Cypress.Commands.add('hasPreviousVersionsPageLink', hasPreviousVersionsPageLink)
 // Previous versions Table check
 Cypress.Commands.add('checkSinglePreviousVersionsTable', checkSinglePreviousVersionsTable)
 Cypress.Commands.add('checkBothPreviousVersionsTables', checkBothPreviousVersionsTables)
+
 // Obfuscate dynamic data on the page (such as dates) before taking a screenshot for visual regression testing
 Cypress.Screenshot.defaults({
   onBeforeScreenshot($el) {

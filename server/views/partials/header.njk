@@ -35,7 +35,16 @@
         HMPPS
       </span>
 
-      <a class="hmpps-header__link hmpps-header__title__service-name" href="/">{{ locale.common.header.serviceName }}</a>
+      {% if data.viewPreviousVersionMode %}
+        <span class="hmpps-header__no-link hmpps-header__title__service-name">
+          {{ locale.common.header.serviceName }}
+        </span>
+      {% else %}
+        <a class="hmpps-header__link hmpps-header__title__service-name" href="/">
+          {{ locale.common.header.serviceName }}
+        </a>
+      {% endif %}
+
 
       {% if environmentName %}
         <div class="govuk-phase-banner">

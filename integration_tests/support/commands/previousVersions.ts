@@ -69,7 +69,7 @@ const checkTable = (
       // date column:
       cy.get(columns).eq(dateColumnIndex).should('contain', expectedDate)
 
-      // plan link view link:
+      // plan version view link:
       const linkAlias = `table-${tableIndex}-row-${index}`
       cy.get(columns).eq(planColumnIndex).find('a').should('contain.text', 'View').as(linkAlias)
 

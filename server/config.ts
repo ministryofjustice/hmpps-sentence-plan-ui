@@ -136,6 +136,7 @@ export default {
     audit: auditConfig(),
   },
   domain: get('INGRESS_URL', 'http://localhost:3001', requiredInProduction),
+  sanUrl: get('SAN_URL', 'http://localhost:3000', requiredInProduction),
   environmentName: get('ENVIRONMENT_NAME', ''),
   deploymentName: get('DEPLOYMENT_NAME', ''),
   feedbackUrl: get('FEEDBACK_URL', null),

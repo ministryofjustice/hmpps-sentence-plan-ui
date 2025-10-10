@@ -65,13 +65,13 @@
 
       {% set assessmentVersionLink %}
         {% if version.assessmentVersion %}
-            <a href="/form/view-historic/{{ version.assessmentVersion.uuid }}/accommodation-analysis" class="govuk-link" rel="noreferrer noopener" target="_blank">{{ locale.viewLinkText }}<span class="govuk-visually-hidden"> assessment from {{ version.assessmentVersion.updatedAt }} (opens in new tab) </span></a>
+          <a href="{{ sanUrl }}/form/view-historic/{{ version.assessmentVersion.uuid }}/accommodation-analysis" class="govuk-link" rel="noreferrer noopener" target="_blank">{{ locale.viewLinkText }}<span class="govuk-visually-hidden"> assessment from {{ version.assessmentVersion.updatedAt }} (opens in new tab) </span></a>
         {% endif %}
       {% endset %}
 
       {% set planVersionLink %}
         {% if version.planVersion %}
-          <a href="/form/view-historic/{{ version.planVersion.uuid }}/accommodation-analysis" class="govuk-link" rel="noreferrer noopener" target="_blank">{{ locale.viewLinkText }}<span class="govuk-visually-hidden"> plan from {{ version.planVersion.updatedAt }} (opens in new tab) </span></a>
+          <a href="/view-historic/{{ version.planVersion.uuid }}" class="govuk-link" rel="noreferrer noopener" target="_blank">{{ locale.viewLinkText }}<span class="govuk-visually-hidden"> plan from {{ version.planVersion.updatedAt }} (opens in new tab) </span></a>
         {% endif %}
       {% endset %}
 
