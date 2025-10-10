@@ -1,6 +1,6 @@
-import {PlanType} from "../../../server/@types/PlanType";
-import DataGenerator from "../../support/DataGenerator";
-import PlanOverview from "../../pages/plan-overview";
+import { PlanType } from '../../../server/@types/PlanType'
+import DataGenerator from '../../support/DataGenerator'
+import PlanOverview from '../../pages/plan-overview'
 
 describe('Users with the role can access the plan', () => {
   const planOverview = new PlanOverview()
