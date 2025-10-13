@@ -46,6 +46,7 @@ describe('Previous versions', () => {
       .eq(planColumnIndex)
       .find('a')
       .should('contain', 'View')
+      .invoke('removeAttr', 'target')
       .click()
 
     cy.compareSnapshot('previous-plan-version-view')
