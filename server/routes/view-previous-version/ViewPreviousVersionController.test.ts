@@ -50,11 +50,7 @@ describe('ViewPreviousVersionController', () => {
         viewPreviousVersionMode: true,
         planVersionBaseUrl: `/view-historic/${testPlan.uuid}`,
       },
-      errors: {
-        body: {},
-        params: {},
-        query: {},
-      },
+      errors: {},
     }
 
     req = mockReq({
@@ -62,6 +58,7 @@ describe('ViewPreviousVersionController', () => {
     })
     res = mockRes()
     next = jest.fn()
+
     controller = new ViewPreviousVersionController()
   })
 

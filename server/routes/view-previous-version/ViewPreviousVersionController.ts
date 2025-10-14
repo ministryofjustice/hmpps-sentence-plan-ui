@@ -1,12 +1,9 @@
 import { NextFunction, Request, Response } from 'express'
-import { plainToInstance } from 'class-transformer'
 import planOverviewLocale from '../planOverview/locale.json'
 import locale from './locale.json'
-import validateRequest, { getValidationErrors } from '../../middleware/validationMiddleware'
-import AgreedPlanModel from '../shared-models/AgreedPlanModel'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
 import { HttpError } from '../../utils/HttpError'
-import { PlanAgreementStatus, PlanType } from '../../@types/PlanType'
+import { PlanType } from '../../@types/PlanType'
 import { AuditEvent } from '../../services/auditService'
 import { AccessMode } from '../../@types/SessionType'
 
@@ -55,47 +52,5 @@ export default class ViewPreviousVersionController {
     }
   }
 
-  private validatePlan = async (req: Request, res: Response, next: NextFunction) => {
-    try {
-      const { planVersionUuid } = req.params
-      this.planVersion = await req.services.planService.getPlanVersionByVersionUuid(planVersionUuid)
-
-      req.errors = { ...req.errors }
-
-      let validationModel
-      if (req.method === 'GET' && this.planVersion.agreementStatus !== PlanAgreementStatus.DRAFT) {
-        validationModel = AgreedPlanModel
-      }
-      if (validationModel) {
-        req.errors.domain = getValidationErrors(plainToInstance(validationModel, this.planVersion))
-      }
-
-      return next()
-    } catch (e) {
-      return next(HttpError(500, e.message))
-    }
-  }
-
-  private handleValidationErrors = (req: Request, res: Response, next: NextFunction) => {
-    const hasErrors = Object.values(req.errors).some(errorCategory => Object.keys(errorCategory).length)
-
-    if (hasErrors && this.planVersion.agreementStatus === PlanAgreementStatus.DRAFT) {
-      if (req.query?.type) {
-        delete req.query.type
-      }
-      if (req.query?.status) {
-        delete req.query.status
-      }
-      return this.render(req, res, next)
-    }
-    return next()
-  }
-
-  get = [
-    requireAccessMode(AccessMode.READ_ONLY),
-    validateRequest(),
-    this.validatePlan,
-    this.handleValidationErrors,
-    this.render,
-  ]
+  get = [requireAccessMode(AccessMode.READ_ONLY), this.render]
 }
