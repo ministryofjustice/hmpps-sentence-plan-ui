@@ -43,22 +43,18 @@ describe('Session timeout', () => {
       cy.get('#hmrc-timeout-sign-out-link').click()
       cy.url().should('include', '/plan')
       cy.get('h1').should('exist').contains('You need to sign in to use this service')
-      cy.get('p')
-        .contains('This could be because you’ve used a bookmarked link, or your session has expired due to inactivity.')
-        .should('exist')
-      cy.get('li').contains('Go to the OASys homepage to sign-in').should('exist')
-      cy.get('li').contains('Go to the Manage People on Probation service to sign-in').should('exist')
+      cy.get('p').contains('You can sign in from:').should('exist')
+      cy.get('li').contains('the OASys homepage').should('exist')
+      cy.get('li').contains('Manage people on probation').should('exist')
     })
 
     it('Should destroy the session when session has expired', () => {
       cy.clock().tick(10 * 60 * 1000) // 10 minutes in milliseconds.
       cy.url().should('include', '/plan')
       cy.get('h1').should('exist').contains('You need to sign in to use this service')
-      cy.get('p')
-        .contains('This could be because you’ve used a bookmarked link, or your session has expired due to inactivity.')
-        .should('exist')
-      cy.get('li').contains('Go to the OASys homepage to sign-in').should('exist')
-      cy.get('li').contains('Go to the Manage People on Probation service to sign-in').should('exist')
+      cy.get('p').contains('You can sign in from:').should('exist')
+      cy.get('li').contains('the OASys homepage').should('exist')
+      cy.get('li').contains('Manage people on probation').should('exist')
     })
 
     it('Should display the session timeout modal again if a user hits inactivity of 50 minutes after continuing a session', () => {
@@ -80,11 +76,9 @@ describe('Session timeout', () => {
     it('Should render the 401 page', () => {
       cy.visit('/plan', { failOnStatusCode: false })
       cy.get('h1').should('exist').contains('You need to sign in to use this service')
-      cy.get('p')
-        .contains('This could be because you’ve used a bookmarked link, or your session has expired due to inactivity.')
-        .should('exist')
-      cy.get('li').contains('Go to the OASys homepage to sign-in').should('exist')
-      cy.get('li').contains('Go to the Manage People on Probation service to sign-in').should('exist')
+      cy.get('p').contains('You can sign in from:').should('exist')
+      cy.get('li').contains('the OASys homepage').should('exist')
+      cy.get('li').contains('Manage people on probation').should('exist')
     })
   })
 })
