@@ -7,17 +7,12 @@
 
   &__subject-details {
     * {
-      display: flex;
-      flex-wrap: wrap;
-    }
-
-    &:not(:last-child) {
-      margin: 0 0 govuk-spacing(6) 0;
+      display: inline-block;
     }
 
     &__title {
       font-weight: bold;
-      margin-right: govuk-spacing(4);
+      margin-right: govuk-spacing(3);
       margin-bottom: 0;
     }
 
@@ -26,13 +21,13 @@
       @include govuk-font($size: 19, $weight: 'normal');
 
       dd {
-        margin-left: govuk-spacing(2);
+        margin-left: govuk-spacing(1);
       }
 
       & > * {
         color: $govuk-secondary-text-colour;
         padding-right: govuk-spacing(2);
-        margin-right: govuk-spacing(2);
+        margin-right: govuk-spacing(1);
 
         &:not(:last-child) {
           box-shadow: inset -1px 0 0 $govuk-border-colour;
@@ -41,9 +36,15 @@
     }
 
     &__navigation-links {
-      margin-left: auto;
       white-space: nowrap;
+      display: block;
+      float: right;
     }
+  }
+
+  &__previous-version-date-banner .moj-alert{
+    margin-top: govuk-spacing(6);
+    margin-bottom: 0;
   }
 
   &__extended {
