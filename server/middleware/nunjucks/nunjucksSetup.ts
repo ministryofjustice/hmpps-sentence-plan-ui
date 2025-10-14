@@ -25,7 +25,6 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
   app.locals.sanUrl = config.sanUrl
   app.locals.oasysUrl = config.oasysUrl
 
-
   // Cachebusting version string
   if (production) {
     // Version only changes with new commits
