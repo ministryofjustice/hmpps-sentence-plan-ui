@@ -185,6 +185,8 @@ services:
       DELIUS_API_BASE_URL: http://delius:8080
       MPOP_URL: http://localhost:9092
       SAN_URL: http://localhost:3000
+      OASYS_URL: http://localhost:7072
+
 
   san-ui:
     image: ghcr.io/ministryofjustice/hmpps-strengths-based-needs-assessments-ui:latest

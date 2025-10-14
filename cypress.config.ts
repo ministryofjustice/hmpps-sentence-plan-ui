@@ -57,6 +57,7 @@ export default defineConfig({
       OASTUB_URL: 'http://localhost:7072',
       FEEDBACK_URL: 'http://localhost:9092/',
       MPOP_URL: 'http://localhost:9092',
+      OASYS_URL: 'http://localhost:7072',
     },
     viewportWidth: 1000, // Default value: 1280
     viewportHeight: 660, // Default value: 720

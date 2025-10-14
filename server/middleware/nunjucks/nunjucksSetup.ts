@@ -23,6 +23,8 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
   app.locals.sessionExpiryTime = config.session.expiryMinutes
   app.locals.managePeopleOnProbationUrl = config.managePeopleOnProbationUrl
   app.locals.sanUrl = config.sanUrl
+  app.locals.oasysUrl = config.oasysUrl
+
 
   // Cachebusting version string
   if (production) {
