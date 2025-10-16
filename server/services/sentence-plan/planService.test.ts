@@ -1,3 +1,4 @@
+import { randomUUID } from 'crypto'
 import SentencePlanApiClient from '../../data/sentencePlanApiClient'
 import PlanService from './planService'
 
@@ -27,6 +28,20 @@ describe('PlanService', () => {
       await planService.getPlanByUuid(planUuid)
 
       expect(mockSentencePlanApiClient.restClient).toHaveBeenCalledWith(`Getting plan with plan UUID: ${planUuid}`)
+      expect(mockRestClient.get).toHaveBeenCalledWith({ path: expectedPath })
+    })
+  })
+
+  describe('getPlanVersionByVersionUuid', () => {
+    it('should call restClient.get with correct path', async () => {
+      const planVersionUuid = randomUUID()
+      const expectedPath = `/plans/version/${planVersionUuid}`
+
+      await planService.getPlanVersionByVersionUuid(planVersionUuid)
+
+      expect(mockSentencePlanApiClient.restClient).toHaveBeenCalledWith(
+        `Getting plan version with UUID: ${planVersionUuid}`,
+      )
       expect(mockRestClient.get).toHaveBeenCalledWith({ path: expectedPath })
     })
   })
