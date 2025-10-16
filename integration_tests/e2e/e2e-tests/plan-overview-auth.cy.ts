@@ -17,11 +17,18 @@ describe('Users with the role can access the plan', () => {
   })
 
   it('Agreed plan does not show about page when using HMPPS Auth', () => {
-    cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
-      cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal({ title: 'Test Accommodation' })).then(goal => {
-        cy.addStepToGoal(goal.uuid, DataGenerator.generateStep())
-      })
-    })
+    cy.get("div.govuk-width-container header a").click();
+    cy.get("#goal-input-autocomplete").click();
+    cy.get("#goal-input-autocomplete").type("I will");
+    cy.get("#goal-input-autocomplete__option--0").click();
+    cy.get("#related-area-of-need-radio-2").click();
+    cy.get("#start-working-goal-radio").click();
+    cy.get("#date-selection-radio").click();
+    cy.get("#create-goal-form > div.govuk-button-group > button:nth-of-type(1)").click();
+    cy.get(`#step-actor-1`).select(1)
+    cy.get("#step-description-1").click();
+    cy.get("#step-description-1").type("Add a step");
+    cy.get("div:nth-of-type(3) button").click();
     planOverview.agreePlan()
     cy.get('.moj-primary-navigation__container').should('not.contain', 'About')
   })
