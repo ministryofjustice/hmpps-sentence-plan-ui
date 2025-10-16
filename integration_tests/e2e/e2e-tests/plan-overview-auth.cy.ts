@@ -16,19 +16,18 @@ describe('Users with the role can access the plan', () => {
     })
   })
 
-  it('Shows Auth User in the header', () => {
-    cy.get('.hmpps-header__account-details__sub-text').should('have.text', 'Auth User')
-    cy.checkAccessibility()
-  })
-
   it('Agreed plan does not show about page when using HMPPS Auth', () => {
     cy.get<{ plan: PlanType }>('@plan').then(({ plan }) => {
       cy.addGoalToPlan(plan.uuid, DataGenerator.generateGoal({ title: 'Test Accommodation' })).then(goal => {
         cy.addStepToGoal(goal.uuid, DataGenerator.generateStep())
-        cy.visit('/plan')
       })
     })
     planOverview.agreePlan()
     cy.get('.moj-primary-navigation__container').should('not.contain', 'About')
+  })
+
+  it('Shows Auth User in the header', () => {
+    cy.get('.hmpps-header__account-details__sub-text').should('have.text', 'Auth User')
+    cy.checkAccessibility()
   })
 })
