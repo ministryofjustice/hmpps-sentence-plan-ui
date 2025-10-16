@@ -7,11 +7,11 @@
       "title": "You need to sign in to use this service"
     },
     "suggestions": [
-      "This could be because you’ve used a bookmarked link, or your session has expired due to inactivity."
+      "You can sign in from:"
     ],
     "resolution": {
-      "oasys": "Go to the OASys homepage to sign-in",
-      "auth": "<a href='{{ managePeopleOnProbationUrl }}'>Go to the Manage People on Probation service</a> to sign-in"
+      "oasys": "<a href='{{ oasysUrl }}'>the OASys homepage</a>",
+      "auth": "<a href='{{ managePeopleOnProbationUrl }}'>Manage people on probation</a>"
     }
   }
 }
