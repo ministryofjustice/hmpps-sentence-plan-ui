@@ -15,7 +15,7 @@ describe('Users with the role can access the plan', () => {
   })
 
   it('Agreed plan does not show about page when using HMPPS Auth', () => {
-    cy.get('div.govuk-width-container header a').click()
+    cy.get('#create-goal-button').click()
     cy.get('#goal-input-autocomplete').click()
     cy.get('#goal-input-autocomplete').type('I will')
     cy.get('#goal-input-autocomplete__option--0').click()
