@@ -1,0 +1,12 @@
+{
+  "en": {
+    "page": {
+      "title": "Previous version of plan from {{ plan.updatedDate }} - {{ applicationName }}",
+      "errorTitle": "Error: Previous versions - {{ applicationName }}"
+    },
+    "lastUpdatedPlan": "Last updated on {{ plan.updatedDate }} by {{ plan.mostRecentUpdateByName }}.",
+    "ifNoCurrentGoals": {
+      "text": "{{ subject.givenName }} does not have any goals to work on now."
+    }
+  }
+}
