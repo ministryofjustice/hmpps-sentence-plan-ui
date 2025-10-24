@@ -56,7 +56,7 @@ jobs:
         run: make up
 
       - name: Run split Cypress tests
-        uses: cypress-io/github-action@v6.10.2
+        uses: cypress-io/github-action@v6.10.3
         with:
           publish-summary: false
           browser: edge
