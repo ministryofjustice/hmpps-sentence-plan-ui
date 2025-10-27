@@ -301,10 +301,7 @@
                         }) }}
                     {% endif %}
                     {% if user.authType == 'HMPPS_AUTH' %}
-                        <p class="govuk-!-display-none-print">{{ locale.ifNoCurrentGoals.textMpop }}</p>
-                            <ul class="govuk-!-display-none-print">
-                                <li><a href="/create-goal/accommodation">{{ locale.ifNoCurrentGoals.action1 }}</a></li>
-                            </ul>
+                        <p class="govuk-!-display-none-print">{{ locale.ifNoCurrentGoals.textMpop }} <a href="/create-goal/accommodation">{{ locale.ifNoCurrentGoals.action1 }}</a>.</p>
                     {% else %}
                         <p class="govuk-!-display-none-print">{{ locale.ifNoCurrentGoals.text }}</p>
                             <ul class="govuk-!-display-none-print">
