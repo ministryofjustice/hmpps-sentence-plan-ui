@@ -49,7 +49,8 @@ describe('Users with the role can access a plan without goals', () => {
     })
   })
 
-  it('Does not show view information link', () => {
+  it('Shows correct text and link', () => {
+    cy.get('#goal-list').contains('does not have any goals to work on now. You can:')
     cy.get('#goal-list').should('not.contain', 'view information from')
   })
 })
