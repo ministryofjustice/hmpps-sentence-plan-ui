@@ -31,6 +31,12 @@ describe('Users with the role can access a plan with goals', () => {
     cy.get('.moj-primary-navigation__container').should('not.contain', 'About')
   })
 
+  it('Agreed plan does not show return to OASys link on plan-history', () => {
+    cy.get('.moj-primary-navigation__container').contains('Plan history').click()
+    cy.get('h1').contains('Plan history')
+    cy.get('.govuk-button--secondary').should('not.exist')
+  })
+
   it('Shows Auth User in the header', () => {
     cy.get('.hmpps-header__account-details__sub-text').should('have.text', 'Auth User')
     cy.checkAccessibility()
