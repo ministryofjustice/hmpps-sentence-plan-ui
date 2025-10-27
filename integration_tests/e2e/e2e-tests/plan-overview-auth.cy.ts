@@ -1,6 +1,6 @@
 import PlanOverview from '../../pages/plan-overview'
 
-describe('Users with the role can access the plan', () => {
+describe('Users with the role can access a plan with goals', () => {
   const planOverview = new PlanOverview()
 
   beforeEach(() => {
@@ -34,5 +34,23 @@ describe('Users with the role can access the plan', () => {
   it('Shows Auth User in the header', () => {
     cy.get('.hmpps-header__account-details__sub-text').should('have.text', 'Auth User')
     cy.checkAccessibility()
+  })
+})
+
+describe('Users with the role can access a plan without goals', () => {
+  beforeEach(() => {
+    cy.createSentencePlan().then(planDetails => {
+      cy.wrap(planDetails).as('plan')
+      cy.openSentencePlanAuth(planDetails.oasysAssessmentPk, {
+        planUuid: planDetails.plan.uuid,
+        crn: 'X775085',
+        username: 'AUTH_ADM',
+      })
+    })
+  })
+
+  it('Shows correct text and link', () => {
+    cy.get('#goal-list').contains('does not have any goals to work on now. You can:')
+    cy.get('#goal-list').should('not.contain', 'view information from')
   })
 })
