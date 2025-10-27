@@ -1,18 +1,32 @@
 import PlanOverview from '../../pages/plan-overview'
+import URLs from '../../../server/routes/URLs'
 
-describe('Users with the role can access a plan with goals', () => {
-  const planOverview = new PlanOverview()
+const setupPlan = () => {
+  const randomCRN = `X${Math.floor(100000 + Math.random() * 900000)}`
+  return cy.createSentencePlan().then(planDetails => {
+    cy.wrap(planDetails).as('plan')
+    cy.openSentencePlanAuth(planDetails.oasysAssessmentPk, {
+      planUuid: planDetails.plan.uuid,
+      crn: randomCRN,
+      username: 'AUTH_ADM',
+    })
 
-  beforeEach(() => {
-    cy.createSentencePlan().then(planDetails => {
-      cy.wrap(planDetails).as('plan')
-      cy.openSentencePlanAuth(planDetails.oasysAssessmentPk, {
-        planUuid: planDetails.plan.uuid,
-        crn: 'X775086',
-        username: 'AUTH_ADM',
-      })
+    cy.url().then(url => {
+      if (url.includes(URLs.DATA_PRIVACY)) {
+        cy.get('.govuk-checkboxes').click()
+        cy.get('.govuk-button').click()
+        cy.url().should('include', URLs.PLAN_OVERVIEW)
+      }
     })
   })
+}
+
+describe('Users with the role can access a plan with goals (persist between first two tests)', { testIsolation: false }, () => {
+  before(() => {
+    setupPlan()
+  })
+
+  const planOverview = new PlanOverview()
 
   it('Agreed plan does not show about page when using HMPPS Auth', () => {
     cy.get('div.govuk-width-container header a').click()
@@ -36,6 +50,12 @@ describe('Users with the role can access a plan with goals', () => {
     cy.get('h1').contains('Plan history')
     cy.get('.govuk-button--secondary').should('not.exist')
   })
+})
+
+describe('Users with the role can access a plan with goals', () => {
+  beforeEach(() => {
+    setupPlan()
+  })
 
   it('Shows Auth User in the header', () => {
     cy.get('.hmpps-header__account-details__sub-text').should('have.text', 'Auth User')
@@ -45,16 +65,8 @@ describe('Users with the role can access a plan with goals', () => {
 
 describe('Users with the role can access a plan without goals', () => {
   beforeEach(() => {
-    cy.createSentencePlan().then(planDetails => {
-      cy.wrap(planDetails).as('plan')
-      cy.openSentencePlanAuth(planDetails.oasysAssessmentPk, {
-        planUuid: planDetails.plan.uuid,
-        crn: 'X775085',
-        username: 'AUTH_ADM',
-      })
-    })
+    setupPlan()
   })
-
   it('Shows correct text and link', () => {
     cy.get('#goal-list').contains('does not have any goals to work on now. You can create a goal with')
     cy.get('#goal-list').should('not.contain', 'view information from')
