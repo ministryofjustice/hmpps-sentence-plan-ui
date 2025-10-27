@@ -21,7 +21,7 @@ const setupPlan = () => {
   })
 }
 
-describe('Users with the role can access a plan with goals (persist between first two tests)', { testIsolation: false }, () => {
+describe('Users with the role can access a plan with goals', { testIsolation: false }, () => {
   before(() => {
     setupPlan()
   })
