@@ -305,14 +305,19 @@
                         }) }}
                     {% endif %}
 
-                    <p class="govuk-!-display-none-print">{{ locale.ifNoCurrentGoals.text }}</p>
-                    {% if not data.viewPreviousVersionMode %}
-                      <ul class="govuk-!-display-none-print">
-                          <li><a href="/create-goal/accommodation">{{ locale.ifNoCurrentGoals.action1 }}</a></li>
-                          <li><a href="{{ urls.ABOUT_PERSON }}" >{{ locale.ifNoCurrentGoals.action2 }}</a></li>
-                      </ul>
+                    {% if data.viewPreviousVersionMode %}
+                        <p class="govuk-!-display-none-print">{{ locale.ifNoCurrentGoals.text }}</p>
+                    {% else %}
+                        {% if user.authType == 'HMPPS_AUTH' %}
+                          <p class="govuk-!-display-none-print">{{ locale.ifNoCurrentGoals.textMpop }} <a href="/create-goal/accommodation">{{ locale.ifNoCurrentGoals.action1 }}</a>.</p>
+                        {% else %}
+                            <p class="govuk-!-display-none-print">{{ locale.ifNoCurrentGoals.text }}</p>
+                            <ul class="govuk-!-display-none-print">
+                              <li><a href="/create-goal/accommodation">{{ locale.ifNoCurrentGoals.action1 }}</a></li>
+                              <li><a href="{{ urls.ABOUT_PERSON }}">{{ locale.ifNoCurrentGoals.action2 }}</a></li>
+                            </ul>
+                        {% endif %}
                     {% endif %}
-
                 </div>
             {% elseif goalType == 'future' and goals.length == 0 %}
                 <p>{{ locale.ifNoFutureGoals.text }}</p>
