@@ -32,7 +32,7 @@ jobs:
       - uses: actions/checkout@v5
 
       - name: Download docker image
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: build_image
           path: ${{ runner.temp }}
@@ -54,7 +54,7 @@ jobs:
         run: make up
 
       - name: Run visual regression testing
-        uses: cypress-io/github-action@v6.10.2
+        uses: cypress-io/github-action@v6.10.3
         with:
           publish-summary: false
           browser: edge
@@ -65,14 +65,14 @@ jobs:
 
       - name: Upload failed image diff report
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: cypress_image_diff_report_${{ inputs.matrix-container }}
           path: 'cypress-image-diff-html-report'
 
       - name: Upload failed visual regression artifacts (if any)
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: failed_vrt_screenshots_${{ inputs.matrix-container }}
           path: 'cypress-image-diff-screenshots'
@@ -83,7 +83,7 @@ jobs:
 
       - name: Upload docker logs
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: vrt_docker_logs_${{ inputs.matrix-container }}
           path: |

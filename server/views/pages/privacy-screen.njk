@@ -65,7 +65,14 @@
                         name: "action",
                         value: "confirm"
                     }) }}
-                    <a class="govuk-!-display-none-print govuk-link--no-visited-state" href="{{ data.systemReturnUrl }}">{{ locale.returnToOasysButton }}</a>
+                    {% if user and user.authType == 'OASYS' %}
+                      <a
+                        class="govuk-!-display-none-print govuk-link--no-visited-state"
+                        href="{{ data.systemReturnUrl }}"
+                      >
+                        {{ locale.returnToOasysButton }}
+                      </a>
+                    {% endif %}
                 </div>
             </form>
         </div>

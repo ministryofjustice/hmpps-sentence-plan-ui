@@ -109,7 +109,12 @@ export default function setupAuthentication() {
             return req.services.sessionService.setupSessionFromAuth(crn)
           })
           .then(() => {
-            return res.redirect(URLs.PLAN_OVERVIEW)
+            const redirectURL =
+              req.session.returnTo ||
+              (req.services.sessionService.getAccessMode() === AccessMode.READ_WRITE
+                ? URLs.DATA_PRIVACY
+                : URLs.PLAN_OVERVIEW)
+            res.redirect(redirectURL)
           })
           .catch(next)
       })
