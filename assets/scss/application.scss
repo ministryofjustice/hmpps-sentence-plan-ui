@@ -28,4 +28,5 @@ $govuk-suppressed-warnings: 'govuk-typography-scale-14';
 @import "./components/print";
 @import "components/needs-scores";
 @import "components/user-feedback";
+@import "components/previous-versions-table";
 @import './local';

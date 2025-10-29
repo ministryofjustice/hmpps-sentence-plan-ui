@@ -46,11 +46,14 @@
     plan: {
         agreementDate: data.plan.agreementDate | formatSimpleDate,
         createdDate: data.plan.createdDate | formatSimpleDate,
+        updatedDate: data.plan.updatedDate | formatSimpleDate,
         mostRecentUpdateDate: data.plan.mostRecentUpdateDate | formatSimpleDate,
         mostRecentUpdateByName: data.plan.mostRecentUpdateByName | convertToTitleCase
     },
     subject: data.popData
 }) %}
+
+{% set planVersionBaseUrl = data.planVersionBaseUrl | default('/plan') %}
 
 {% block pageTitle %}
     {% if not (errors.domain | length) %}
@@ -75,7 +78,8 @@
             text: locale.header.createGoalButton,
             href: "/create-goal/accommodation",
             classes: "govuk-button--secondary govuk-!-display-none-print",
-            type: 'button'
+            type: 'button',
+            id: 'create-goal-button'
         } if data.readWrite === true,
         {
             classes: "govuk-!-display-none-print",
@@ -83,7 +87,7 @@
             type: 'submit',
             value: 'agree-plan'
         } if data.readWrite === true and data.plan.agreementStatus === 'DRAFT'
-    ]
+    ] if not data.viewPreviousVersionMode
 } %}
 
 {% block bodyStart %}
@@ -106,7 +110,7 @@
           {%- elseif data.plan.agreementStatus === 'DO_NOT_AGREE' or data.plan.agreementStatus === 'UPDATED_DO_NOT_AGREE' %}
               {{ locale.notAgreePlan }}
           {%- endif %}
-          {%- if data.plan.agreementStatus !== 'DRAFT' and data.plan.agreementStatus !== 'COULD_NOT_ANSWER'%}
+          {%- if data.plan.agreementStatus !== 'DRAFT' and data.plan.agreementStatus !== 'COULD_NOT_ANSWER' and  not data.viewPreviousVersionMode %}
               <a class='govuk-!-display-none-print' href="/plan-history">{{ locale.viewPlanHistory }}</a>
           {%- endif %}
       {%- else %}
@@ -160,22 +164,22 @@
                 classes: 'plan-navigation',
                 items: [{
                     text: locale.subNavigation.currentGoals,
-                    href: '/plan?type=current',
+                    href: planVersionBaseUrl ~ '?type=current',
                     active: data.type === 'current' or data.type === undefined
                 },
                 {
                     text: locale.subNavigation.futureGoals,
-                    href: '/plan?type=future',
+                    href: planVersionBaseUrl ~ '?type=future',
                     active: data.type === 'future'
                 },
                 {
                     text: locale.subNavigation.achievedGoals,
-                    href: '/plan?type=achieved',
+                    href: planVersionBaseUrl ~ '?type=achieved',
                     active: data.type === 'achieved'
                 } if achievedGoals.length > 0,
                 {
                     text: locale.subNavigation.removedGoals,
-                    href: '/plan?type=removed',
+                    href: planVersionBaseUrl ~ '?type=removed',
                     active: data.type === 'removed'
                 } if removedGoals.length > 0 ] | reject('string')
             }) }}
@@ -201,7 +205,7 @@
                     {% set buttons = [] %}
                     {% set actions = [] %}
 
-                    {% if data.readWrite === true %}
+                    {% if data.readWrite === true and not data.viewPreviousVersionMode%}
                         {% if not loop.first %}
                             {% set buttons = buttons.concat({
                                 text: locale.goalSummaryCard.buttons.moveUpButton,
@@ -300,14 +304,19 @@
                             text: locale.errors['goals'].arrayNotEmpty
                         }) }}
                     {% endif %}
-                    {% if user.authType == 'HMPPS_AUTH' %}
-                        <p class="govuk-!-display-none-print">{{ locale.ifNoCurrentGoals.textMpop }} <a href="/create-goal/accommodation">{{ locale.ifNoCurrentGoals.action1 }}</a>.</p>
-                    {% else %}
+
+                    {% if data.viewPreviousVersionMode %}
                         <p class="govuk-!-display-none-print">{{ locale.ifNoCurrentGoals.text }}</p>
+                    {% else %}
+                        {% if user.authType == 'HMPPS_AUTH' %}
+                          <p class="govuk-!-display-none-print">{{ locale.ifNoCurrentGoals.textMpop }} <a href="/create-goal/accommodation">{{ locale.ifNoCurrentGoals.action1 }}</a>.</p>
+                        {% else %}
+                            <p class="govuk-!-display-none-print">{{ locale.ifNoCurrentGoals.text }}</p>
                             <ul class="govuk-!-display-none-print">
-                                <li><a href="/create-goal/accommodation">{{ locale.ifNoCurrentGoals.action1 }}</a></li>
-                                <li><a href="/about" >{{ locale.ifNoCurrentGoals.action2 }}</a></li>
+                              <li><a href="/create-goal/accommodation">{{ locale.ifNoCurrentGoals.action1 }}</a></li>
+                              <li><a href="{{ urls.ABOUT_PERSON }}">{{ locale.ifNoCurrentGoals.action2 }}</a></li>
                             </ul>
+                        {% endif %}
                     {% endif %}
                 </div>
             {% elseif goalType == 'future' and goals.length == 0 %}

@@ -25,6 +25,10 @@ describe('Rendering Plan History for READ_WRITE user', () => {
     cy.hasFeedbackLink()
   })
 
+  it('Has a previous versions page link', () => {
+    cy.hasPreviousVersionsPageLink()
+  })
+
   it('Display plan history page with plan agreement', () => {
     planOverview.agreePlan()
     cy.get('.moj-primary-navigation__container').contains('Plan history').click()

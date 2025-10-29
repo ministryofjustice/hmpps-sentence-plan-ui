@@ -19,6 +19,7 @@ generic-service:
     DELIUS_API_BASE_URL: "https://sentence-plan-and-delius-dev.hmpps.service.justice.gov.uk"
     MPOP_URL: "https://manage-people-on-probation-dev.hmpps.service.justice.gov.uk"
     ENVIRONMENT_NAME: TEST
+    SAN_URL: "https://strengths-based-needs-assessments-test.hmpps.service.justice.gov.uk"
 
   namespace_secrets:
     hmpps-sentence-plan-ui-feedback-url:
