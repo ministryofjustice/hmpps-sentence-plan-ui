@@ -7,7 +7,7 @@
 {% from "../components/error-summary/error-summary.njk" import errorSummary with context %}
 {% from "moj/components/date-picker/macro.njk" import mojDatePicker %}
 {% from "moj/components/side-navigation/macro.njk" import mojSideNavigation %}
-{% from "../components/assessment/area-assessment-summary.njk" import assessmentInformationForArea %}
+{% from "../components/assessment/area-assessment-summary.njk" import assessmentInformationForArea with context %}
 
 {% set locale = interpolate(locale, {
     areaOfNeed: data.selectedAreaOfNeed.name,
