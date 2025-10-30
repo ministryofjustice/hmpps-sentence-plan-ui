@@ -18,6 +18,7 @@ import {
   checkBothPreviousVersionsTables,
   hasPreviousVersionsPageLink,
 } from './commands/previousVersions'
+import { handleDataPrivacyScreen } from './commands/privacyScreen'
 
 compareSnapshotCommand()
 
@@ -25,6 +26,7 @@ compareSnapshotCommand()
 Cypress.Commands.add('openSentencePlan', openSentencePlan)
 Cypress.Commands.add('openSentencePlanAuth', openSentencePlanAuth)
 Cypress.Commands.add('createSentencePlan', createSentencePlan)
+Cypress.Commands.add('handleDataPrivacyScreen', handleDataPrivacyScreen)
 
 // API
 Cypress.Commands.add('addGoalToPlan', addGoalToPlan)

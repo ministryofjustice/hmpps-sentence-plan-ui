@@ -9,7 +9,6 @@
 {% from "../components/error-summary/error-summary.njk" import errorSummary with context %}
 {% from "../components/assessment/area-assessment-summary.njk" import assessmentInformationForArea with context %}
 
-
 {% set locale = interpolate(locale, {
     areaOfNeed: data.selectedAreaOfNeed.name,
     dateOptions: {

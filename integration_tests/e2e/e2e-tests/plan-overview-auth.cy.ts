@@ -1,5 +1,5 @@
 import PlanOverview from '../../pages/plan-overview'
-import URLs from '../../../server/routes/URLs'
+import { handleDataPrivacyScreen } from '../../support/commands/privacyScreen'
 
 const setupPlan = () => {
   const randomCRN = `X${Math.floor(100000 + Math.random() * 900000)}`
@@ -11,13 +11,7 @@ const setupPlan = () => {
       username: 'AUTH_ADM',
     })
 
-    cy.url().then(url => {
-      if (url.includes(URLs.DATA_PRIVACY)) {
-        cy.get('.govuk-checkboxes').click()
-        cy.get('.govuk-button').click()
-        cy.url().should('include', URLs.PLAN_OVERVIEW)
-      }
-    })
+    handleDataPrivacyScreen()
   })
 }
 

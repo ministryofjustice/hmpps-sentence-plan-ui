@@ -246,19 +246,6 @@ describe('AboutPersonController - assessment incomplete', () => {
       expect(res.render).toHaveBeenCalledWith('pages/about', expectedPayload)
       expect(req.services.auditService.send).toHaveBeenCalledWith(AuditEvent.VIEW_ABOUT_PAGE)
     })
-
-    it('redirects HMPPS Auth users from the /about page to the /plan page', async () => {
-      const req = mockReq()
-      req.services.sessionService.getPrincipalDetails = jest.fn().mockReturnValue({ authType: AuthType.HMPPS_AUTH})
-      const res = mockRes()
-      const next = jest.fn()
-
-      await controller.get(req, res, next)
-
-      expect(res.redirect).toHaveBeenCalledWith(URLs.PLAN_OVERVIEW)
-      expect(next).not.toHaveBeenCalled()
-
-    })
   })
 
   describe('Get About Person READ_ONLY', () => {
@@ -285,6 +272,18 @@ describe('AboutPersonController - assessment incomplete', () => {
 
       expect(res.render).toHaveBeenCalledWith('pages/about', expectedPayload)
       expect(req.services.auditService.send).toHaveBeenCalledWith(AuditEvent.VIEW_ABOUT_PAGE)
+    })
+  })
+
+  describe('About person controller - handle redirect', () => {
+    it('redirects HMPPS Auth users from the /about page to the /plan page', async () => {
+      req.services.sessionService.getPrincipalDetails = jest.fn().mockReturnValue({ authType: AuthType.HMPPS_AUTH })
+      const next = jest.fn()
+
+      await controller.get(req, res, next)
+
+      expect(res.redirect).toHaveBeenCalledWith(URLs.PLAN_OVERVIEW)
+      expect(next).not.toHaveBeenCalled()
     })
   })
 })
