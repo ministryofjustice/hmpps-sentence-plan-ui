@@ -16,7 +16,8 @@ import { FormattedAssessment } from '../../@types/Assessment'
 
 import { formatAssessmentData } from '../../utils/assessmentUtils'
 import { AuditEvent } from '../../services/auditService'
-import { AccessMode } from '../../@types/SessionType'
+import { AccessMode, AuthType } from '../../@types/SessionType'
+import URLs from '../URLs'
 
 const systemReturnUrl = 'https://oasys.return.url'
 
@@ -244,6 +245,19 @@ describe('AboutPersonController - assessment incomplete', () => {
 
       expect(res.render).toHaveBeenCalledWith('pages/about', expectedPayload)
       expect(req.services.auditService.send).toHaveBeenCalledWith(AuditEvent.VIEW_ABOUT_PAGE)
+    })
+
+    it('redirects HMPPS Auth users from the /about page to the /plan page', async () => {
+      const req = mockReq()
+      req.services.sessionService.getPrincipalDetails = jest.fn().mockReturnValue({ authType: AuthType.HMPPS_AUTH})
+      const res = mockRes()
+      const next = jest.fn()
+
+      await controller.get(req, res, next)
+
+      expect(res.redirect).toHaveBeenCalledWith(URLs.PLAN_OVERVIEW)
+      expect(next).not.toHaveBeenCalled()
+
     })
   })
 
