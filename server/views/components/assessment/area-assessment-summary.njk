@@ -2,7 +2,8 @@
 {% from "govuk/components/warning-text/macro.njk" import govukWarningText %}
 
 {% macro assessmentInformationForArea(assessmentDetailsForArea, locale) %}
-<details class="govuk-details">
+  {% if user.authType == 'OASYS' %}
+  <details class="govuk-details">
     <summary class="govuk-details__summary">
         <span class="govuk-details__summary-text">
             {{ locale.common.assessmentInfo.detailsSummary }}
@@ -11,8 +12,10 @@
     <div class="govuk-details__text">
         {{ renderAreaAssessmentSummary(assessmentDetailsForArea, locale) }}
     </div>
-</details>
+  </details>
+  {% endif %}
 {% endmacro %}
+
 
 {% macro renderAreaAssessmentSummary(assessmentDetailsForArea, locale) %}
     {%- include "./_area-assessment-summary.njk" -%}

@@ -19,6 +19,7 @@ declare namespace Cypress {
       options?: { accessMode?: string; planUuid?: string; planVersion?: number; crn?: string; username?: string },
     ): Chainable<T>
     createSentencePlan(): Chainable<T>
+    handleDataPrivacyScreen(): Chainable<T>
 
     // API
     addGoalToPlan(planUuid: string, goal: NewGoal): Chainable<Goal>

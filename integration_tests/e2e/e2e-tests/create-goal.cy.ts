@@ -1,6 +1,7 @@
 import { faker } from '@faker-js/faker'
 import CreateGoal from '../../pages/create-goal'
 import { AccessMode } from '../../../server/@types/SessionType'
+import { handleDataPrivacyScreen } from '../../support/commands/privacyScreen'
 
 describe('Create a new Goal', () => {
   const createGoalPage = new CreateGoal()
@@ -149,6 +150,29 @@ describe('Create a new Goal', () => {
           )
         })
       cy.checkAccessibility()
+    })
+  })
+
+  describe('Assessment information (HMPPS Auth user)', () => {
+    const randomCRN = `X${Math.floor(100000 + Math.random() * 900000)}`
+
+    beforeEach(() => {
+      cy.createSentencePlan().then(planDetails => {
+        cy.openSentencePlanAuth(planDetails.oasysAssessmentPk, {
+          planUuid: planDetails.plan.uuid,
+          crn: randomCRN,
+          username: 'AUTH_ADM',
+        })
+
+        handleDataPrivacyScreen()
+      })
+    })
+
+    it('Hides show assessment info details dropdown when using HMPPS Auth', () => {
+      cy.visit('/create-goal/accommodation')
+
+      cy.get('.govuk-details__summary-text').should('not.exist')
+      cy.get('.govuk-details__text').should('not.exist')
     })
   })
 })
