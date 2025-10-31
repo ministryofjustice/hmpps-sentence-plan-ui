@@ -69,7 +69,7 @@
     ]
   },
   "dependencies": {
-    "@ministryofjustice/frontend": "^5.2.1",
+    "@ministryofjustice/frontend": "^7.1.0",
     "@ministryofjustice/hmpps-audit-client": "^1.1.1",
     "@types/pg": "^8.15.5",
     "@ministryofjustice/hmpps-auth-clients": "^0.0.3",
