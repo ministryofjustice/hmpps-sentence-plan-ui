@@ -9,6 +9,7 @@
     subject: data.popData,
     lastUpdatedDate: data.formattedAssessmentInfo.versionUpdatedAt | formatSimpleDate
 }) %}
+{% set isOasysAuthenticated = user and user.authType == 'OASYS' %}
 
 {% block pageTitle %}
     {% if not errors %}
@@ -26,10 +27,11 @@
 
 {% block content %}
     {{ super() }}
+    {% if isOasysAuthenticated %}
+      <a class="govuk-back-link govuk-!-display-none-print" href="{{ data.systemReturnUrl }}">{{ locale.common.backLink.text }}</a>
+    {% endif %}
 
-    <a class="govuk-back-link govuk-!-display-none-print" href="{{ data.systemReturnUrl }}">{{ locale.common.backLink.text }}</a>
-
-    <div class="govuk-grid-row">
+    <div class="govuk-grid-row{% if not (isOasysAuthenticated) %} govuk-!-margin-top-4{% endif %}">
         <div class="govuk-grid-column-two-thirds">
 
             {{ errorSummary({
@@ -65,7 +67,7 @@
                         name: "action",
                         value: "confirm"
                     }) }}
-                    {% if user and user.authType == 'OASYS' %}
+                    {% if isOasysAuthenticated %}
                       <a
                         class="govuk-!-display-none-print govuk-link--no-visited-state"
                         href="{{ data.systemReturnUrl }}"
