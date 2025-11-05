@@ -51,6 +51,8 @@ You can connect to the remote debugger session on http://localhost:9230 like so
 ### Testing
 The test suite can be run using `make test`.
 
+When testing with HMPPS Auth users, use the `AUTH_ADM` user account.
+
 ### Visual Regression Testing
 Visual Regression Testing for SP is run through the SP CI pipeline. Any failed snapshots will be uploaded as artifacts and can be accessed there.
 
