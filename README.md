@@ -48,23 +48,40 @@ In order to run this project, the following software is required:
 You can connect to the remote debugger session on http://localhost:9230 like so
 [![API docs](https://github.com/ministryofjustice/hmpps-strengths-based-needs-assessments-ui/blob/main/.readme/debugger.png?raw=true)]()
 
+### Linting
+
+Linting can be run using `make lint` and `make lint-fix`
+
 ### Testing
+
 The test suite can be run using `make test`.
 
-When testing with HMPPS Auth users, use the `AUTH_ADM` user account.
+For integration tests which rely on a user authenticating via HMPPS Auth, use the `AUTH_ADM` user account which is pre-configured in the hmpps-auth Docker container.
 
 ### Visual Regression Testing
-Visual Regression Testing for SP is run through the SP CI pipeline. Any failed snapshots will be uploaded as artifacts and can be accessed there.
 
-> **Note:** In order to compare failed snapshots locally, you will need to download the artifacts for each matrix container of visual regression testing.
-> These will need to be added to the respective `comparison` and `diff` folders locally in the SP project (create these directories locally if you
-> don't have them). The pipeline will also upload a JSON report for failed image diffs, which will need to be incorporated into the main
-> [cypress-image-diff-html-report](cypress-image-diff-html-report/cypress-image-diff.json) `or` add the failed report into the same directory.
+Visual Regression Testing (VRT) is run during CI builds in GitHub Actions. Tests that fail will store image snapshots as a zipped artifact within the `visual_regression_test` jobs and can be accessed through the relevant Github Action workflow run.
 
-> **Important note:** This needs to be done `before` running visual comparison locally.
+The baseline images which are used as a comparison against the running application are stored in `cypress-image-diff-screenshots/baseline`. New baseline images must be generated through a failing CI run rather than locally since they must use the resolution, PPI, browser version and font rendering that the application uses when the VRT runs in CI.
 
-To run the snapshot comparison UI locally, run `make vrt`. This will allow you to compare and update baseline snapshots using a UI. This also allows for visual inspection
-of failed snapshots by the team to ensure UI changes don't impact the overall look and feel of SP.
+You can then download the artifact to add or overwrite the existing baseline images with the new ones.
 
-### Linting
-Linting can be run using `make lint` and `make lint-fix`
+#### Comparing failed snapshots locally
+
+In order to compare CI failed snapshots locally, you will need to download the artifacts for each matrix container of visual regression testing.
+
+These will need to be added to the respective `comparison` and `diff` folders underneath `cypress-image-diff-screenshots/`.
+
+The pipeline will also create a `cypress-image-diff.json` file for failed image diffs, which you will need to download and use to overwrite your local version within `cypress-image-diff-html-report/`.
+
+You can then run `make vrt` and visit http://127.0.0.1:6868/ in a browser to see the visual diff report.
+
+#### Running VRT locally
+
+VRT can be run locally using `make vrt`, but will fail by default due to font rendering issues. If you want to run these tests locally you will need to generate new local-specific baseline images. To do this:
+
+1. run `make vrt`
+2. visit http://127.0.0.1:6868/ in a browser
+3. click the green "Update" button for each baseline image you want to update to match your local version
+
+This can be helpful when making significant UI changes, and it's recommended that if you take this approach you generate your local baseline images when running on the `main` branch.
