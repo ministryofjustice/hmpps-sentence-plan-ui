@@ -26,17 +26,17 @@ generic-service:
       FEEDBACK_URL: "FEEDBACK_URL"
 
   allowlist:
+    mp-nat-egress-one: 13.43.9.198/32
+    mp-nat-egress-two: 13.42.163.245/32
+    mp-nat-egress-three: 18.132.208.127/32
     capita-dev: 51.104.16.30/31
     capita-further: 172.167.141.40/32
-    neil-test: 51.155.102.238/32
     capita-developers-vms-one: 85.115.52.180/32
     capita-developers-vms-two: 85.115.52.200/29
     capita-developers-vms-three: 85.115.53.180/32
     capita-developers-vms-four: 85.115.53.200/29
     capita-developers-vms-five: 85.115.54.180/32
     capita-developers-vms-six: 85.115.54.200/29
-    krupal-app-sec: 80.195.27.199/32
-    kieran-accessibility: 5.181.59.114/32
 
 generic-prometheus-alerts:
   alertSeverity: hmpps-sentence-plan-notifications
