@@ -7,7 +7,7 @@ import {
   createSentencePlanWithVersions,
   lockPlan,
   openSentencePlan,
-  openSentencePlanAuth,
+  openSentencePlanHmppsAuth,
   removeGoalFromPlan,
 } from './commands/backend'
 import { checkAccessibility } from './commands/accessibility'
@@ -24,7 +24,7 @@ compareSnapshotCommand()
 
 // Handover/Auth
 Cypress.Commands.add('openSentencePlan', openSentencePlan)
-Cypress.Commands.add('openSentencePlanAuth', openSentencePlanAuth)
+Cypress.Commands.add('openSentencePlanAuth', openSentencePlanHmppsAuth)
 Cypress.Commands.add('createSentencePlan', createSentencePlan)
 Cypress.Commands.add('handleDataPrivacyScreen', handleDataPrivacyScreen)
 
