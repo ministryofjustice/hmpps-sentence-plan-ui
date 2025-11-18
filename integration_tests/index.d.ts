@@ -22,8 +22,12 @@ declare namespace Cypress {
     handleDataPrivacyScreen(): Chainable<T>
 
     // SAN handover session check when viewing previous version
-    createAssessment(): Chainable<T>
-    enterAssessment(): Chainable<T>
+    createAssessment(data?: { oasysPk?: string }): Chainable<T>
+    enterAssessment(
+      accessMode?: AccessMode,
+      assessmentContextOverride?: AssessmentContext,
+      completePrivacyDeclaration?: boolean,
+    ): Chainable
 
     // API
     addGoalToPlan(planUuid: string, goal: NewGoal): Chainable<Goal>
