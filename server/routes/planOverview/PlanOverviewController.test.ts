@@ -69,6 +69,8 @@ describe('PlanOverviewController', () => {
     res = mockRes()
     next = jest.fn()
 
+    req.session.hasAgreedPrivacyPolicy = true
+
     controller = new PlanOverviewController()
   })
 
@@ -137,6 +139,9 @@ describe('PlanOverviewController', () => {
           type: 'future',
           status: 'removed',
         },
+        session: {
+          hasAgreedPrivacyPolicy: true,
+        },
       })
 
       await runMiddlewareChain(controller.get, req, res, next)
@@ -158,6 +163,9 @@ describe('PlanOverviewController', () => {
         query: {
           type: 'cheese',
           status: 'sausage',
+        },
+        session: {
+          hasAgreedPrivacyPolicy: true,
         },
       })
 
