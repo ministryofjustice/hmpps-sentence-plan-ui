@@ -144,9 +144,12 @@ export const openSentencePlan = (
     getApiToken().then(apiToken =>
       cy
         .request(createHandoverContext(apiToken, oasysAssessmentPk, accessMode, planVersion, crn))
-        .then(handoverResponse =>
-          cy.visit(`${handoverResponse.body.handoverLink}?clientId=${Cypress.env('ARNS_HANDOVER_CLIENT_ID')}`),
-        ),
+        .then(handoverResponse => {
+          cy.visit(`${handoverResponse.body.handoverLink}?clientId=${Cypress.env('ARNS_HANDOVER_CLIENT_ID')}`)
+          if (accessMode === AccessMode.READ_WRITE) {
+            cy.handleDataPrivacyScreen()
+          }
+        }),
     ),
   )
 
