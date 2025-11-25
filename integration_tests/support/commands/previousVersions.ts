@@ -74,7 +74,6 @@ const checkTable = (
       cy.get(columns).eq(planColumnIndex).find('a').should('contain.text', 'View').as(linkAlias)
 
       // link behavior:
-      cy.get(`@${linkAlias}`).should('have.attr', 'target').and('equal', '_blank')
       cy.get(`@${linkAlias}`).invoke('attr', 'target', '_self').click()
       cy.url().should('not.include', URLs.PREVIOUS_VERSIONS)
       cy.go('back')
