@@ -21,7 +21,7 @@
       href: data.oasysReturnUrl,
       classes: "govuk-button--secondary",
       type: 'button'
-    }
+    } if user.authType == 'HMPPS_AUTH'
   ]
 } %}
 
@@ -63,11 +63,13 @@
       {% set version = entry.version %}
       {% set tagStatus = version.planVersion[tableConfig.tagSource] %} {# eg "DO_NOT_AGREE" #}
 
-      {% set assessmentVersionLink %}
-        {% if version.assessmentVersion %}
-          <a href="{{ sanUrl }}/view-previous-version/{{ version.assessmentVersion.uuid }}" class="govuk-link">{{ locale.viewLinkText }}<span class="govuk-visually-hidden"> assessment from {{ version.assessmentVersion.updatedAt }}</span></a>
-        {% endif %}
-      {% endset %}
+      {% if user.authType == 'HMPPS_AUTH' %}
+        {% set assessmentVersionLink %}
+          {% if version.assessmentVersion %}
+            <a href="{{ sanUrl }}/view-previous-version/{{ version.assessmentVersion.uuid }}" class="govuk-link">{{ locale.viewLinkText }}<span class="govuk-visually-hidden"> assessment from {{ version.assessmentVersion.updatedAt }}</span></a>
+          {% endif %}
+        {% endset %}
+      {% endif %}
 
       {% set planVersionLink %}
         {% if version.planVersion %}
@@ -89,10 +91,10 @@
 
       {% set row = [
         { html: [date | formatSimpleDate, version.description] | join("<br>") },
-        { html: assessmentVersionLink },
+        { html: assessmentVersionLink } if user.authType == 'HMPPS_AUTH', //TODO: CHANGE THIS AND THE REST TO OASYS!!
         { html: planVersionLink },
         { html: planVersionTag }
-      ]
+      ]  | reject('string')
       %}
       {% set tableRows = [row].concat(tableRows) %}
     {% endfor %}
@@ -104,10 +106,10 @@
       classes: "previous-versions-table",
       head: [
         { text: locale.mainBody.columnText.dateText, classes: "date-column"},
-        { text: locale.mainBody.columnText.assessmentText, classes: "view-link-column" },
+        { text: locale.mainBody.columnText.assessmentText, classes: "view-link-column" }  if user.authType == 'HMPPS_AUTH' ,
         { text: locale.mainBody.columnText.sentencePlanText, classes: "view-link-column" },
         { text: locale.mainBody.columnText.statusText, classes: "status-column" }
-      ],
+      ] | reject('string'),
       rows: tableRows })
     }}
   </div>

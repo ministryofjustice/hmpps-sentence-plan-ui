@@ -6,7 +6,7 @@ import PlanService from '../../services/sentence-plan/planService'
 import GoalService from '../../services/sentence-plan/goalService'
 import StepService from '../../services/sentence-plan/stepsService'
 import InfoService from '../../services/sentence-plan/infoService'
-import AsssessmentService from '../../services/sentence-plan/assessmentService'
+import AsssessmentService from '../../services/sentence-plan/coordinatorService'
 import AuditService from '../../services/auditService'
 
 jest.mock('../../services/formStorageService')

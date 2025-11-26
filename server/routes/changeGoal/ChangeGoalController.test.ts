@@ -40,7 +40,7 @@ jest.mock('../../services/sessionService', () => {
   }))
 })
 
-jest.mock('../../services/sentence-plan/assessmentService', () => {
+jest.mock('../../services/sentence-plan/coordinatorService', () => {
   return jest.fn().mockImplementation(() => ({
     getAssessmentByUuid: jest.fn().mockResolvedValue(incompleteAssessmentData),
   }))

@@ -27,7 +27,7 @@ jest.mock('../../services/sentence-plan/planService', () => {
   }))
 })
 
-jest.mock('../../services/sentence-plan/assessmentService', () => {
+jest.mock('../../services/sentence-plan/coordinatorService', () => {
   return jest.fn().mockImplementation(() => ({
     getVersionsByUuid: jest.fn().mockResolvedValue(testPreviousVersionsResponse),
   }))
