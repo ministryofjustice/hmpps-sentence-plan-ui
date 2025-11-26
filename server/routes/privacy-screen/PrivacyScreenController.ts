@@ -39,6 +39,11 @@ export default class PrivacyScreenController {
     return next()
   }
 
+  private setHasAgreedPrivacyPolicy = (req: Request, res: Response, next: NextFunction) => {
+    req.session.hasAgreedPrivacyPolicy = true
+    return next()
+  }
+
   get = [requireAccessMode(AccessMode.READ_WRITE), this.render]
 
   post = [
@@ -48,6 +53,7 @@ export default class PrivacyScreenController {
     }),
     validateRequest(),
     this.handleValidationErrors,
+    this.setHasAgreedPrivacyPolicy,
     this.redirect,
   ]
 }
