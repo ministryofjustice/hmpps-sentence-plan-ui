@@ -24,6 +24,7 @@ declare module 'express-session' {
     token: Token
     returnLink: string
     oauthLogin?: { nonce: string; crn: string; returnTo?: string }
+    previousVersion?: string
   }
 }
 
