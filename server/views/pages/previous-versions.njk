@@ -131,7 +131,7 @@
         }) }}
       </div>
 
-      {% if user.authType == 'OASYS' $}
+      {% if user.authType == 'OASYS' %}
         {% if data.versions.allVersions | length or data.versions.countersignedVersions | length %}
           <p> {{ locale.mainBody.textForWhenVersionsExist }} </p>
         {% else %}
