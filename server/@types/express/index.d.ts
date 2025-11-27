@@ -25,6 +25,7 @@ declare module 'express-session' {
     returnLink: string
     oauthLogin?: { nonce: string; crn: string; returnTo?: string }
     previousVersion?: string
+    hasAgreedPrivacyPolicy: boolean
   }
 }
 

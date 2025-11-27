@@ -13,6 +13,7 @@ import { HttpError } from '../../utils/HttpError'
 import { PlanAgreementStatus, PlanType } from '../../@types/PlanType'
 import { AuditEvent } from '../../services/auditService'
 import { AccessMode } from '../../@types/SessionType'
+import checkPrivacyScreenAgreed from '../../middleware/privacyScreenMiddleware'
 
 export default class PlanOverviewController {
   plan: PlanType
@@ -129,6 +130,7 @@ export default class PlanOverviewController {
 
   get = [
     requireAccessMode(AccessMode.READ_ONLY),
+    checkPrivacyScreenAgreed(),
     transformRequest({ query: PlanOverviewQueryModel }),
     validateRequest(),
     this.validatePlan,
