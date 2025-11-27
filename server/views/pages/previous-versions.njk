@@ -21,7 +21,7 @@
       href: data.oasysReturnUrl,
       classes: "govuk-button--secondary",
       type: 'button'
-    } if user.authType == 'HMPPS_AUTH'
+    } if user.authType == 'OASYS'
   ]
 } %}
 
@@ -63,7 +63,7 @@
       {% set version = entry.version %}
       {% set tagStatus = version.planVersion[tableConfig.tagSource] %} {# eg "DO_NOT_AGREE" #}
 
-      {% if user.authType == 'HMPPS_AUTH' %}
+      {% if user.authType == 'OASYS' %}
         {% set assessmentVersionLink %}
           {% if version.assessmentVersion %}
             <a href="{{ sanUrl }}/view-previous-version/{{ version.assessmentVersion.uuid }}" class="govuk-link">{{ locale.viewLinkText }}<span class="govuk-visually-hidden"> assessment from {{ version.assessmentVersion.updatedAt }}</span></a>
@@ -91,7 +91,7 @@
 
       {% set row = [
         { html: [date | formatSimpleDate, version.description] | join("<br>") },
-        { html: assessmentVersionLink } if user.authType == 'HMPPS_AUTH', //TODO: CHANGE THIS AND THE REST TO OASYS!!
+        { html: assessmentVersionLink } if user.authType == 'OASYS',
         { html: planVersionLink },
         { html: planVersionTag }
       ]  | reject('string')
@@ -106,7 +106,7 @@
       classes: "previous-versions-table",
       head: [
         { text: locale.mainBody.columnText.dateText, classes: "date-column"},
-        { text: locale.mainBody.columnText.assessmentText, classes: "view-link-column" }  if user.authType == 'HMPPS_AUTH' ,
+        { text: locale.mainBody.columnText.assessmentText, classes: "view-link-column" }  if user.authType == 'OASYS' ,
         { text: locale.mainBody.columnText.sentencePlanText, classes: "view-link-column" },
         { text: locale.mainBody.columnText.statusText, classes: "status-column" }
       ] | reject('string'),
@@ -131,11 +131,20 @@
         }) }}
       </div>
 
-      {% if data.versions.allVersions | length or data.versions.countersignedVersions | length %}
-        <p> {{ locale.mainBody.textForWhenVersionsExist }} </p>
+      {% if user.authType == 'OASYS' $}
+        {% if data.versions.allVersions | length or data.versions.countersignedVersions | length %}
+          <p> {{ locale.mainBody.textForWhenVersionsExist }} </p>
+        {% else %}
+          <p class="govuk-body govuk-!-margin-top-3 "> {{ locale.mainBody.textForWhenVersionsDontExist }} </p>
+        {% endif %}
       {% else %}
-        <p class="govuk-body govuk-!-margin-top-3 "> {{ locale.mainBody.textForWhenVersionsDontExist }} </p>
+        {% if data.versions.allVersions | length or data.versions.countersignedVersions | length %}
+           <p> {{ locale.mainBody.textForWhenVersionsExistMPoP }} </p>
+         {% else %}
+           <p class="govuk-body govuk-!-margin-top-3 "> {{ locale.mainBody.textForWhenVersionsDontExistMPoP }} </p>
+         {% endif %}
       {% endif %}
+
     </div>
 
     {% if data.versions.countersignedVersions | length %}

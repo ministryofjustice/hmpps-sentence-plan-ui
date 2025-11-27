@@ -9,6 +9,8 @@
     "mainBody": {
       "textForWhenVersionsExist": "Check versions of {{ subject.givenName }}'s current assessment and plan. The links will open in a new tab.",
       "textForWhenVersionsDontExist": "There are no previous versions of {{ subject.givenName }}'s assessment and plan yet.",
+      "textForWhenVersionsExistMPoP": "Check versions of {{ subject.givenName }}'s current plan. The links will open in a new tab.",
+      "textForWhenVersionsDontExistMPoP": "There are no previous versions of {{ subject.givenName }}'s plan yet.",
       "columnText": {
         "dateText": "Date and what was updated",
         "assessmentText": "Assessment",

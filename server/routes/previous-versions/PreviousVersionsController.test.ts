@@ -7,6 +7,7 @@ import testPlan from '../../testutils/data/planData'
 import { AuditEvent } from '../../services/auditService'
 import { testPreviousVersionsResponse, testPreviousVersionsResult } from '../../testutils/data/previousVersions'
 import { HttpError } from '../../utils/HttpError'
+import handoverData from '../../testutils/data/handoverData'
 
 const oasysReturnUrl = 'https://oasys.return.url'
 const returnLink = 'https://return.url'
@@ -18,6 +19,7 @@ jest.mock('../../services/sessionService', () => {
     getPlanUUID: jest.fn().mockReturnValue(testPlan.uuid),
     getSystemReturnUrl: jest.fn().mockReturnValue(oasysReturnUrl),
     getReturnLink: jest.fn().mockReturnValue(returnLink),
+    getPrincipalDetails: jest.fn().mockReturnValue(handoverData.principal),
   }))
 })
 
