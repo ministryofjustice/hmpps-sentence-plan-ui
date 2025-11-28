@@ -12,7 +12,8 @@ export default class PreviousVersionsController {
       const planUuid = req.services.sessionService.getPlanUUID()
       const pageId = 'previous-versions'
       const plan = await req.services.planService.getPlanByUuid(planUuid)
-      const versions = await req.services.assessmentService.getVersionsByUuid(planUuid)
+      const authType = req.services.sessionService.getPrincipalDetails()?.authType
+      const versions = await req.services.coordinatorService.getVersionsByUuid(planUuid, authType)
 
       // remove the latest(current) version from allVersions:
       const trimmedAllVersions = Object.fromEntries(

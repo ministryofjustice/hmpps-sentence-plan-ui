@@ -12,7 +12,7 @@ import SessionService from './sessionService'
 import HmppsAuthClient from '../data/hmppsAuthClient'
 import SentencePlanApiClient from '../data/sentencePlanApiClient'
 import CoordinatorApiClient from '../data/coordinatorApiClient'
-import AssessmentService from './sentence-plan/assessmentService'
+import CoordinatorService from './sentence-plan/coordinatorService'
 import SentencePlanAndDeliusApiClient from '../data/SentencePlanAndDeliusApiClient'
 import SentencePlanAndDeliusService from './sentence-plan/sentencePlanAndDeliusService'
 
@@ -38,7 +38,7 @@ export const requestServices = (appServices: Services) => ({
   goalService: (req: Request) => new GoalService(req.services.sentencePlanApiClient),
   stepService: (req: Request) => new StepService(req.services.sentencePlanApiClient),
   infoService: (req: Request) => new InfoService(req.services.sentencePlanApiClient),
-  assessmentService: (req: Request) => new AssessmentService(req.services.assessmentApiClient),
+  coordinatorService: (req: Request) => new CoordinatorService(req.services.assessmentApiClient),
   sentencePlanAndDeliusService: (req: Request) =>
     new SentencePlanAndDeliusService(req.services.sentencePlanAndDeliusApiClient),
   sessionService: (req: Request) =>
