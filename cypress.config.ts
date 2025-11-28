@@ -55,6 +55,7 @@ export default defineConfig({
       SAN_API_URL: 'http://localhost:8080',
       COORDINATOR_API_URL: 'http://localhost:8070',
       OASTUB_URL: 'http://localhost:7072',
+      OASYS_UI_URL: 'http://localhost:7072',
       FEEDBACK_URL: 'http://localhost:9092/',
       MPOP_URL: 'http://localhost:9092',
       OASYS_URL: 'http://localhost:7072',

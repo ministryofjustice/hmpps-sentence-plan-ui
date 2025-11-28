@@ -7,9 +7,10 @@ import {
   createSentencePlanWithVersions,
   lockPlan,
   openSentencePlan,
-  openSentencePlanAuth,
+  openSentencePlanHmppsAuth,
   removeGoalFromPlan,
 } from './commands/backend'
+import { createAssessment, enterAssessment } from './commands/backendSan'
 import { checkAccessibility } from './commands/accessibility'
 import 'cypress-axe'
 import { hasFeedbackLink } from './commands/feedback'
@@ -24,9 +25,13 @@ compareSnapshotCommand()
 
 // Handover/Auth
 Cypress.Commands.add('openSentencePlan', openSentencePlan)
-Cypress.Commands.add('openSentencePlanAuth', openSentencePlanAuth)
+Cypress.Commands.add('openSentencePlanAuth', openSentencePlanHmppsAuth)
 Cypress.Commands.add('createSentencePlan', createSentencePlan)
 Cypress.Commands.add('handleDataPrivacyScreen', handleDataPrivacyScreen)
+
+// SAN handover session check when viewing previous version
+Cypress.Commands.add('createAssessment', createAssessment)
+Cypress.Commands.add('enterAssessment', enterAssessment)
 
 // API
 Cypress.Commands.add('addGoalToPlan', addGoalToPlan)
