@@ -1,5 +1,4 @@
 import URLs from '../../../server/routes/URLs'
-import { handleDataPrivacyScreen } from '../../support/commands/privacyScreen'
 
 describe('View Previous Versions', () => {
   describe('Links and accessibility', () => {
@@ -172,10 +171,8 @@ describe('View Previous Versions', () => {
   })
 
   describe('Viewing page authenticated with HMPPS_AUTH', () => {
-
     const numberOfVersions = 5
     const numberOfCountersignedVersions = 0
-    const numberOfTables = 1
 
     beforeEach(() => {
       cy.createSentencePlanWithVersions(numberOfVersions, numberOfCountersignedVersions).then(planDetails => {
@@ -225,7 +222,6 @@ describe('View Previous Versions', () => {
           cy.get(`@${linkAlias}`).invoke('attr', 'target', '_self').click()
           cy.url().should('not.include', URLs.PREVIOUS_VERSIONS)
           cy.url().should('include', '/view-historic/')
-
 
           // no link in service name in header, just text:
           cy.get('.hmpps-header__title__service-name')
