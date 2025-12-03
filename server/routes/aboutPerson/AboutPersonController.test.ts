@@ -53,7 +53,7 @@ jest.mock('../../services/sentence-plan/infoService', () => {
   }))
 })
 
-jest.mock('../../services/sentence-plan/assessmentService', () => {
+jest.mock('../../services/sentence-plan/coordinatorService', () => {
   return jest.fn().mockImplementation(() => ({
     getAssessmentByUuid: jest.fn().mockResolvedValue(completeAssessmentData),
   }))
@@ -72,7 +72,7 @@ describe('AboutPersonController - API data error handling', () => {
     controller = new AboutPersonController()
     assessmentAreas = formatAssessmentData(fullCrimNeeds, completeAssessmentData, areaConfigs)
 
-    req.services.assessmentService.getAssessmentByUuid = jest.fn().mockResolvedValue(completeAssessmentData)
+    req.services.coordinatorService.getAssessmentByUuid = jest.fn().mockResolvedValue(completeAssessmentData)
     req.services.infoService.getPopData = jest.fn().mockResolvedValue(popData)
   })
 
@@ -103,7 +103,7 @@ describe('AboutPersonController - API data error handling', () => {
   })
 
   it('should have an assessment error if SAN API call fails', async () => {
-    req.services.assessmentService.getAssessmentByUuid = jest.fn().mockRejectedValue(new Error('API error'))
+    req.services.coordinatorService.getAssessmentByUuid = jest.fn().mockRejectedValue(new Error('API error'))
 
     await controller.get(req, res, next)
 
@@ -137,7 +137,7 @@ describe('AboutPersonController - API data error handling', () => {
   })
 
   it('should return a 500 error if both API calls fail', async () => {
-    req.services.assessmentService.getAssessmentByUuid = jest.fn().mockRejectedValue(new Error('API error'))
+    req.services.coordinatorService.getAssessmentByUuid = jest.fn().mockRejectedValue(new Error('API error'))
     req.services.infoService.getPopData = jest.fn().mockRejectedValue(new Error('API error'))
 
     await controller.get(req, res, next)
@@ -156,7 +156,7 @@ describe('AboutPersonController - assessment complete', () => {
   beforeEach(() => {
     jest.clearAllMocks()
     controller = new AboutPersonController()
-    req.services.assessmentService.getAssessmentByUuid = jest.fn().mockResolvedValue(completeAssessmentData)
+    req.services.coordinatorService.getAssessmentByUuid = jest.fn().mockResolvedValue(completeAssessmentData)
     assessmentAreas = formatAssessmentData(fullCrimNeeds, completeAssessmentData, areaConfigs)
   })
 
@@ -219,7 +219,7 @@ describe('AboutPersonController - assessment incomplete', () => {
   beforeEach(() => {
     jest.clearAllMocks()
     controller = new AboutPersonController()
-    req.services.assessmentService.getAssessmentByUuid = jest.fn().mockResolvedValue(incompleteAssessmentData)
+    req.services.coordinatorService.getAssessmentByUuid = jest.fn().mockResolvedValue(incompleteAssessmentData)
     assessmentAreas = formatAssessmentData(fullCrimNeeds, incompleteAssessmentData, areaConfigs)
   })
 
