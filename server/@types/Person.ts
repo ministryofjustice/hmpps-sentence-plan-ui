@@ -19,6 +19,7 @@ export interface Sentence {
   unpaidWorkMinutesCompleted?: number
   rarDaysOrdered?: number
   rarDaysCompleted?: number
+  rarRequirement?: boolean
 }
 
 enum Gender {
