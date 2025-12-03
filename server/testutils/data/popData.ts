@@ -16,6 +16,7 @@ const testPopData = {
       unpaidWorkMinutesCompleted: 20,
       rarDaysOrdered: 3,
       rarDaysCompleted: 1,
+      rarRequirement: false,
     },
     {
       description: 'ORA Community Order',
@@ -26,6 +27,7 @@ const testPopData = {
       unpaidWorkMinutesCompleted: 0,
       rarDaysOrdered: 0,
       rarDaysCompleted: 0,
+      rarRequirement: false,
     },
   ],
 }
