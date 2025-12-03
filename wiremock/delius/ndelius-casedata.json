@@ -48,7 +48,8 @@
               "unpaidWorkHoursOrdered": 10,
               "unpaidWorkMinutesCompleted": 20,
               "rarDaysOrdered": 3,
-              "rarDaysCompleted": 1
+              "rarDaysCompleted": 1,
+              "rarRequirement": true
             },
             {
               "description": "ORA Community Order",
@@ -58,7 +59,8 @@
               "unpaidWorkHoursOrdered": 0,
               "unpaidWorkMinutesCompleted": 0,
               "rarDaysOrdered": 0,
-              "rarDaysCompleted": 0
+              "rarDaysCompleted": 0,
+              "rarRequirement": false
             }
           ]
         }
@@ -95,7 +97,8 @@
               "unpaidWorkHoursOrdered": 10,
               "unpaidWorkMinutesCompleted": 20,
               "rarDaysOrdered": 3,
-              "rarDaysCompleted": 1
+              "rarDaysCompleted": 1,
+              "rarRequirement": true
             },
             {
               "description": "ORA Community Order",
@@ -105,7 +108,8 @@
               "unpaidWorkHoursOrdered": 0,
               "unpaidWorkMinutesCompleted": 0,
               "rarDaysOrdered": 0,
-              "rarDaysCompleted": 0
+              "rarDaysCompleted": 0,
+              "rarRequirement": false
             }
           ]
         }
