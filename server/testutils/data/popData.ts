@@ -16,7 +16,7 @@ const testPopData = {
       unpaidWorkMinutesCompleted: 20,
       rarDaysOrdered: 3,
       rarDaysCompleted: 1,
-      rarRequirement: false,
+      rarRequirement: true,
     },
     {
       description: 'ORA Community Order',
