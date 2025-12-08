@@ -30,7 +30,7 @@ export default class AddStepsController {
       const criminogenicNeedsData = req.services.sessionService.getCriminogenicNeeds()
 
       // get assessment data or swallow the service error and set to null so the template knows this data is missing
-      const assessmentDetailsForArea = await req.services.coordinatorService
+      const assessmentDetailsForArea = await req.services.assessmentService
         .getAssessmentByUuid(planUuid)
         .then(assessmentResponse => {
           const assessmentData = assessmentResponse.sanAssessmentData
