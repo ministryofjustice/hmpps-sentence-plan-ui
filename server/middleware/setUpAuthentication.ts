@@ -128,50 +128,23 @@ export default function setupAuthentication() {
       if (err) return next(err)
       if (!user) throw new HttpError(401)
 
-      const { previousVersion } = req.session
-
       return req.logIn(user, loginErr => {
         if (err) return next(loginErr)
 
         return req.services.sessionService
           .setupSessionFromHandover()
           .then(() => {
-            const isReadWrite = req.services.sessionService.getAccessMode() === AccessMode.READ_WRITE
-            const shouldShowPrivacy = req.session.returnTo || isReadWrite
-
-            if (previousVersion) {
-              res.redirect(previousVersion)
-            } else if (shouldShowPrivacy) {
-              res.redirect(URLs.DATA_PRIVACY)
-            } else {
-              res.redirect(URLs.PLAN_OVERVIEW)
-            }
+            const redirectURL =
+              req.session.returnTo ||
+              (req.services.sessionService.getAccessMode() === AccessMode.READ_WRITE
+                ? URLs.DATA_PRIVACY
+                : URLs.PLAN_OVERVIEW)
+            res.redirect(redirectURL)
           })
           .catch(next)
       })
     })(req, res, next),
   )
-
-  router.get('/view-previous-version/:planVersionUuid', (req, res, next) => {
-    req.session.previousVersion = `/view-historic/${req.params.planVersionUuid}`
-
-    passport.authenticate('handover-oauth2', {}, (err: any, user: Express.User) => {
-      if (err) return next(err)
-      if (!user) throw new HttpError(401)
-
-      return req.logIn(user, loginErr => {
-        if (err) return next(loginErr)
-
-        return req.services.sessionService
-          .setupSessionFromHandover()
-          .then(() => {
-            const redirectURL = `/view-historic/${req.params.planVersionUuid}`
-            res.redirect(redirectURL)
-          })
-          .catch(next)
-      })
-    })(req, res, next)
-  })
 
   router.use('/sign-out', (req, res, next) => {
     const authUrl = config.apis.hmppsAuth.externalUrl
