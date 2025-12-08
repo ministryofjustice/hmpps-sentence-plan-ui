@@ -60,10 +60,6 @@
     }
   }
 
-  &__no-link {
-    color: govuk-colour('white');
-  }
-
   &__link {
     @include govuk-link-common;
     @include govuk-link-style-default;

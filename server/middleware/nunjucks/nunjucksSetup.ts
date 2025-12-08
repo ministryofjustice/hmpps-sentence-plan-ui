@@ -8,7 +8,6 @@ import { initialiseName, mergeDeep, convertToTitleCase, nameFormatter } from '..
 import commonLocale from '../../utils/commonLocale.json'
 import { sentenceLength } from '../../utils/assessmentUtils'
 import { formatDate, localeInterpolation, merge, splitString, toFormattedError } from './helpers'
-import URLs from '../../routes/URLs'
 
 const production = process.env.NODE_ENV === 'production'
 
@@ -22,7 +21,6 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
   app.locals.environmentNameColour = config.environmentName === 'PRE-PRODUCTION' ? 'govuk-tag--green' : ''
   app.locals.sessionExpiryTime = config.session.expiryMinutes
   app.locals.managePeopleOnProbationUrl = config.managePeopleOnProbationUrl
-  app.locals.sanUrl = config.sanUrl
   app.locals.oasysUrl = config.oasysUrl
 
   // Cachebusting version string
@@ -82,7 +80,6 @@ export default function nunjucksSetup(app: express.Express, applicationInfo: App
             data: {
               popData,
             },
-            urls: URLs,
           }),
           callback,
         ])

@@ -71,7 +71,6 @@
   "dependencies": {
     "@ministryofjustice/frontend": "^5.2.1",
     "@ministryofjustice/hmpps-audit-client": "^1.1.1",
-    "@types/pg": "^8.15.5",
     "@ministryofjustice/hmpps-auth-clients": "^0.0.3",
     "@ministryofjustice/hmpps-monitoring": "^0.0.1",
     "accessible-autocomplete": "^3.0.1",
@@ -99,7 +98,6 @@
     "nunjucks": "^3.2.4",
     "passport": "^0.7.0",
     "passport-oauth2": "^1.8.0",
-    "pg": "^8.16.3",
     "redis": "^5.8.2",
     "reflect-metadata": "^0.2.2",
     "superagent": "^10.2.3",

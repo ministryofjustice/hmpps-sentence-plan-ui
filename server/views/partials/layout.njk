@@ -1,8 +1,6 @@
 {% extends "govuk/template.njk" %}
 {% from "moj/components/primary-navigation/macro.njk" import mojPrimaryNavigation %}
 {% from  "hmrc/components/timeout-dialog/macro.njk" import hmrcTimeoutDialog %}
-{%- from "moj/components/alert/macro.njk" import mojAlert -%}
-
 
 {% set locale = interpolate(locale, {
   applicationName: applicationName,
@@ -26,7 +24,7 @@
   {% endif %}
   <div class="govuk-!-display-none-print">
     {% include "./header.njk" %}
-    {% if data.popData and not data.viewPreviousVersionMode %}
+    {% if data.popData %}
       {% if data.planAgreementStatus === 'DRAFT' %}
         {{ mojPrimaryNavigation({
           label: 'Primary navigation',

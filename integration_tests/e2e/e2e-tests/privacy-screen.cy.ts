@@ -34,10 +34,6 @@ describe('Privacy Screen', () => {
       cy.hasFeedbackLink()
     })
 
-    it('Has no previous versions page link', () => {
-      cy.hasPreviousVersionsPageLink(false)
-    })
-
     it('Display privacy page correctly on load', () => {
       cy.get('button[value="confirm"]')
       cy.get('.moj-primary-navigation__container').should('not.exist')
