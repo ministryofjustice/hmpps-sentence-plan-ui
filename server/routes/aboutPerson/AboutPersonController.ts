@@ -4,8 +4,7 @@ import { areaConfigs } from '../../utils/assessmentAreaConfig.json'
 import { formatAssessmentData } from '../../utils/assessmentUtils'
 import { HttpError } from '../../utils/HttpError'
 import { AuditEvent } from '../../services/auditService'
-import { AccessMode, AuthType } from '../../@types/SessionType'
-import URLS from '../URLs'
+import { AccessMode } from '../../@types/SessionType'
 
 export default class AboutPersonController {
   constructor() {}

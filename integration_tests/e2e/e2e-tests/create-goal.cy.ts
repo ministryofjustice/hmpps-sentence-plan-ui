@@ -171,8 +171,8 @@ describe('Create a new Goal', () => {
     it('Shows assessment info details dropdown when using HMPPS Auth', () => {
       cy.visit('/create-goal/accommodation')
 
-      cy.get('.govuk-details__summary-text').should('.exist')
-      cy.get('.govuk-details__text').should('.exist')
+      cy.get('.govuk-details__summary-text').should('exist')
+      cy.get('.govuk-details__text').should('exist')
     })
   })
 })
