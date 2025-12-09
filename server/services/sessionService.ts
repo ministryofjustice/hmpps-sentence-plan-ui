@@ -1,8 +1,10 @@
 import * as Express from 'express'
+import { jwtDecode } from 'jwt-decode'
 import HandoverContextService from './handover/handoverContextService'
 import PlanService from './sentence-plan/planService'
 import Logger from '../../logger'
-import { AccessMode } from '../@types/Handover'
+import { JwtPayloadExtended } from '../@types/Token'
+import { AccessMode, AuthType, Gender } from '../@types/SessionType'
 
 export default class SessionService {
   constructor(
@@ -11,36 +13,82 @@ export default class SessionService {
     private readonly planService: PlanService,
   ) {}
 
-  setupSession = async () => {
+  setupSessionFromHandover = async () => {
     try {
-      this.request.session.handover = await this.handoverContextService.getContext(this.request.user?.token)
+      const handoverContext = await this.handoverContextService.getContext(this.request.user?.token)
+      const subjectCRN = handoverContext.subject.crn
+      const { planId, planVersion } = handoverContext.sentencePlanContext
 
-      const subjectCRN = this.getSubjectDetails()?.crn
+      this.request.session.principal = {
+        ...handoverContext.principal,
+        authType: AuthType.OASYS,
+      }
+      this.request.session.subject = handoverContext.subject
+      this.request.session.criminogenicNeeds = handoverContext.criminogenicNeedsData
+
       if (subjectCRN) {
-        await this.request.services.planService.associate(this.getPlanUUID(), subjectCRN)
+        await this.request.services.planService.associate(planId, subjectCRN)
       }
 
-      if (this.getPlanVersionNumber() != null) {
-        this.request.session.plan = await this.planService.getPlanByUuidAndVersionNumber(
-          this.getPlanUUID(),
-          this.getPlanVersionNumber(),
-        )
-      } else {
-        this.request.session.plan = await this.planService.getPlanByUuid(this.getPlanUUID())
+      this.request.session.plan = {
+        id: planId,
+        version: planVersion,
       }
     } catch (e) {
-      Logger.error('Failed to setup session:', e)
+      Logger.error('Failed to setup handover-based session:', e)
       throw Error(e)
     }
   }
 
-  getPlanUUID = () => this.request.session.handover?.sentencePlanContext.planId
+  setupPrincipalFromAuth = async (token: string) => {
+    try {
+      const { name, user_uuid: userUuid } = jwtDecode<JwtPayloadExtended>(token)
 
-  getPlanVersionNumber = () => this.request.session.handover?.sentencePlanContext.planVersion
+      this.request.session.principal = {
+        identifier: userUuid,
+        displayName: name,
+        accessMode: AccessMode.READ_WRITE,
+        authType: AuthType.HMPPS_AUTH,
+      }
+    } catch (e) {
+      Logger.error('Failed to setup hmpps-auth-based session:', e)
+      throw Error(e.message)
+    }
+  }
 
-  getPrincipalDetails = () => this.request.session.handover?.principal
+  setupSessionFromAuth = async (crn: string) => {
+    try {
+      const deliusData = await this.request.services.infoService.getPopData(crn)
 
-  getSubjectDetails = () => this.request.session.handover?.subject
+      this.request.session.subject = {
+        crn: deliusData.crn,
+        pnc: 'UNKNOWN PNC',
+        givenName: deliusData.firstName,
+        familyName: deliusData.lastName,
+        dateOfBirth: deliusData.doB,
+        gender: Gender.NotSpecified,
+        location: 'COMMUNITY',
+      }
+
+      const planDetails = await this.planService.getPlanByCrn(crn)
+
+      this.request.session.plan = {
+        id: planDetails.uuid,
+        version: null,
+      }
+    } catch (e) {
+      Logger.error('Failed to setup hmpps-auth-based session:', e)
+      throw Error(e.message)
+    }
+  }
+
+  getPlanUUID = () => this.request.session?.plan?.id
+
+  getPlanVersionNumber = () => this.request.session?.plan?.version
+
+  getPrincipalDetails = () => this.request.session.principal
+
+  getSubjectDetails = () => this.request.session.subject
 
   getAccessMode = () => {
     const isReadOnlyUser = this.getPrincipalDetails().accessMode === AccessMode.READ_ONLY
@@ -53,9 +101,9 @@ export default class SessionService {
     return AccessMode.READ_WRITE
   }
 
-  getOasysReturnUrl = () => this.request.session.handover?.principal.returnUrl
+  getSystemReturnUrl = () => this.request.session.principal?.returnUrl
 
-  getCriminogenicNeeds = () => this.request.session.handover?.criminogenicNeedsData
+  getCriminogenicNeeds = () => this.request.session.criminogenicNeeds
 
   getReturnLink = () => this.request.session.returnLink
 

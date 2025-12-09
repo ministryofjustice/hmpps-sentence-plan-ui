@@ -12,9 +12,9 @@ import { goalStatusToTabName, sortSteps } from '../../utils/utils'
 import { NewGoal } from '../../@types/NewGoalType'
 import { Goal } from '../../@types/GoalType'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
-import { AccessMode } from '../../@types/Handover'
 import { HttpError } from '../../utils/HttpError'
 import { AuditEvent } from '../../services/auditService'
+import { AccessMode } from '../../@types/SessionType'
 
 export default class UpdateGoalController {
   constructor(private readonly referentialDataService: ReferentialDataService) {}

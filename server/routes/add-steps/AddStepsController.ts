@@ -8,12 +8,12 @@ import transformRequest from '../../middleware/transformMiddleware'
 import { StepStatus } from '../../@types/StepType'
 import { NewGoal } from '../../@types/NewGoalType'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
-import { AccessMode } from '../../@types/Handover'
 import { HttpError } from '../../utils/HttpError'
 import { areaConfigs } from '../../utils/assessmentAreaConfig.json'
 import { AssessmentAreaConfig } from '../../@types/Assessment'
 import { getAssessmentDetailsForArea } from '../../utils/assessmentUtils'
 import { AuditEvent } from '../../services/auditService'
+import { AccessMode } from '../../@types/SessionType'
 
 export default class AddStepsController {
   private render = async (req: Request, res: Response, next: NextFunction) => {

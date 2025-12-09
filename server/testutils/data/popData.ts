@@ -1,13 +1,11 @@
 const testPopData = {
-  crn: 'X336018',
-  pnc: '01/14106572A',
-  nomisId: '',
-  givenName: 'Buster',
-  familyName: 'Sanford',
-  dateOfBirth: '2002-01-15',
+  firstName: 'Buster',
+  lastName: 'Sanford',
   gender: 1,
-  location: 'COMMUNITY',
-  sexuallyMotivatedOffenceHistory: 'YES',
+  doB: '2002-01-15',
+  crn: 'X336018',
+  prc: '01/14106572A',
+  courtOrderRequirements: {},
   sentences: [
     {
       description: 'Custodial Sentence',
@@ -18,6 +16,7 @@ const testPopData = {
       unpaidWorkMinutesCompleted: 20,
       rarDaysOrdered: 3,
       rarDaysCompleted: 1,
+      rarRequirement: true,
     },
     {
       description: 'ORA Community Order',
@@ -28,6 +27,7 @@ const testPopData = {
       unpaidWorkMinutesCompleted: 0,
       rarDaysOrdered: 0,
       rarDaysCompleted: 0,
+      rarRequirement: false,
     },
   ],
 }

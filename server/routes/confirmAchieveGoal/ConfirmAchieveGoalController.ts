@@ -4,11 +4,11 @@ import validateRequest from '../../middleware/validationMiddleware'
 import transformRequest from '../../middleware/transformMiddleware'
 import ConfirmAchieveGoalPostModel from './models/ConfirmAchieveGoalPostModel'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
-import { AccessMode } from '../../@types/Handover'
 import { HttpError } from '../../utils/HttpError'
 import URLs from '../URLs'
 import { goalStatusToTabName } from '../../utils/utils'
 import { AuditEvent } from '../../services/auditService'
+import { AccessMode } from '../../@types/SessionType'
 
 // AchieveGoalController is accessed through the 'Save goal and steps' button on the update goals page, only when all steps of the goal have been marked as complete. This will provide the user with a prompt to whether the goal has been achieved or not
 export default class ConfirmAchieveGoalController {

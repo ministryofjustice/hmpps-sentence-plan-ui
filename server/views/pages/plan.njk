@@ -67,10 +67,10 @@
     items: [
         {
             text: locale.header.returnToOasysButton,
-            href: data.oasysReturnUrl,
+            href: data.systemReturnUrl,
             classes: "govuk-button--secondary govuk-!-display-none-print",
             type: 'button'
-        },
+        } if user.authType == 'OASYS',
         {
             text: locale.header.createGoalButton,
             href: "/create-goal/accommodation",
@@ -300,11 +300,15 @@
                             text: locale.errors['goals'].arrayNotEmpty
                         }) }}
                     {% endif %}
-                <p class="govuk-!-display-none-print">{{ locale.ifNoCurrentGoals.text }}</p>
-                <ul class="govuk-!-display-none-print">
-                    <li><a href="/create-goal/accommodation">{{ locale.ifNoCurrentGoals.action1 }}</a></li>
-                    <li><a href="/about" >{{ locale.ifNoCurrentGoals.action2 }}</a></li>
-                </ul>
+                    {% if user.authType == 'HMPPS_AUTH' %}
+                        <p class="govuk-!-display-none-print">{{ locale.ifNoCurrentGoals.textMpop }} <a href="/create-goal/accommodation">{{ locale.ifNoCurrentGoals.action1 }}</a>.</p>
+                    {% else %}
+                        <p class="govuk-!-display-none-print">{{ locale.ifNoCurrentGoals.text }}</p>
+                            <ul class="govuk-!-display-none-print">
+                                <li><a href="/create-goal/accommodation">{{ locale.ifNoCurrentGoals.action1 }}</a></li>
+                                <li><a href="/about" >{{ locale.ifNoCurrentGoals.action2 }}</a></li>
+                            </ul>
+                    {% endif %}
                 </div>
             {% elseif goalType == 'future' and goals.length == 0 %}
                 <p>{{ locale.ifNoFutureGoals.text }}</p>

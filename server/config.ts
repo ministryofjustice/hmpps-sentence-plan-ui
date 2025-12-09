@@ -77,18 +77,25 @@ export default {
         deadline: Number(get('HMPPS_AUTH_TIMEOUT_DEADLINE', 10000)),
       },
       agent: new AgentConfig(Number(get('HMPPS_AUTH_TIMEOUT_RESPONSE', 10000))),
-      apiClientId: get('API_CLIENT_ID', 'clientid', requiredInProduction),
-      apiClientSecret: get('API_CLIENT_SECRET', 'clientsecret', requiredInProduction),
-      systemClientId: get('SYSTEM_CLIENT_ID', 'clientid', requiredInProduction),
-      systemClientSecret: get('SYSTEM_CLIENT_SECRET', 'clientsecret', requiredInProduction),
+      authClientId: get('AUTH_CODE_CLIENT_ID', 'clientid', requiredInProduction),
+      authClientSecret: get('AUTH_CODE_CLIENT_SECRET', 'clientsecret', requiredInProduction),
+      systemClientId: get('CLIENT_CREDS_CLIENT_ID', 'clientid', requiredInProduction),
+      systemClientSecret: get('CLIENT_CREDS_CLIENT_SECRET', 'clientsecret', requiredInProduction),
+    },
+    tokenVerification: {
+      url: get('TOKEN_VERIFICATION_API_URL', 'http://localhost:8100', requiredInProduction),
+      healthPath: '/health/ping',
+      timeout: {
+        response: Number(get('TOKEN_VERIFICATION_API_TIMEOUT_RESPONSE', 5000)),
+        deadline: Number(get('TOKEN_VERIFICATION_API_TIMEOUT_DEADLINE', 5000)),
+      },
+      agent: new AgentConfig(Number(get('TOKEN_VERIFICATION_API_TIMEOUT_RESPONSE', 5000))),
+      enabled: get('TOKEN_VERIFICATION_ENABLED', 'false') === 'true',
     },
     arnsHandover: {
-      url: get('HMPPS_ARNS_HANDOVER_URL', 'http://localhost:8080/oauth2/authorize', requiredInProduction),
+      url: get('HMPPS_ARNS_HANDOVER_URL', 'http://localhost:7070', requiredInProduction),
       healthPath: '/health/ping',
-      externalUrl: get(
-        'HMPPS_ARNS_HANDOVER_EXTERNAL_URL',
-        get('HMPPS_ARNS_HANDOVER_URL', 'http://localhost:9090/auth'),
-      ),
+      externalUrl: get('HMPPS_ARNS_HANDOVER_EXTERNAL_URL', get('HMPPS_ARNS_HANDOVER_URL', 'http://localhost:7070')),
       timeout: {
         response: Number(get('HMPPS_ARNS_HANDOVER_TIMEOUT_RESPONSE', 10000)),
         deadline: Number(get('HMPPS_ARNS_HANDOVER_TIMEOUT_DEADLINE', 10000)),
@@ -98,7 +105,7 @@ export default {
       clientSecret: get('HMPPS_ARNS_HANDOVER_CLIENT_SECRET', 'clientsecret', requiredInProduction),
     },
     sentencePlanApi: {
-      url: get('SENTENCE_PLAN_API_URL', 'https://sentence-plan-api-dev.hmpps.service.justice.gov.uk'),
+      url: get('SENTENCE_PLAN_API_URL', 'http://localhost:8081'),
       healthPath: '/health/ping',
       timeout: {
         response: Number(get('SENTENCE_PLAN_API_TIMEOUT_RESPONSE', 10000)),
@@ -107,7 +114,7 @@ export default {
       agent: new AgentConfig(Number(get('SENTENCE_PLAN_API_TIMEOUT_RESPONSE', 10000))),
     },
     coordinatorApi: {
-      url: get('COORDINATOR_API_URL', 'https://arns-coordinator-api-dev.hmpps.service.justice.gov.uk'),
+      url: get('COORDINATOR_API_URL', 'http://localhost:8070'),
       healthPath: '/health/ping',
       timeout: {
         response: Number(get('COORDINATOR_API_TIMEOUT_RESPONSE', 10000)),
@@ -115,12 +122,23 @@ export default {
       },
       agent: new AgentConfig(Number(get('COORDINATOR_API_TIMEOUT_RESPONSE', 10000))),
     },
+    sentencePlanAndDeliusApi: {
+      url: get('DELIUS_API_BASE_URL', 'http://delius:8080', requiredInProduction),
+      healthPath: '/health/ping',
+      timeout: {
+        response: Number(get('DELIUS_API_TIMEOUT_RESPONSE', 10000)),
+        deadline: Number(get('DELIUS_API_TIMEOUT_DEADLINE', 10000)),
+      },
+      agent: new AgentConfig(Number(get('DELIUS_API_TIMEOUT_RESPONSE', 10000))),
+    },
   },
   sqs: {
     audit: auditConfig(),
   },
-  domain: get('INGRESS_URL', 'http://localhost:3000', requiredInProduction),
+  domain: get('INGRESS_URL', 'http://localhost:3001', requiredInProduction),
+  oasysUrl: get('OASYS_URL', 'http://localhost:7072', requiredInProduction),
   environmentName: get('ENVIRONMENT_NAME', ''),
   deploymentName: get('DEPLOYMENT_NAME', ''),
   feedbackUrl: get('FEEDBACK_URL', null),
+  managePeopleOnProbationUrl: get('MPOP_URL', ''),
 }

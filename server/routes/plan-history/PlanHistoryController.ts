@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express'
 import locale from './locale.json'
-import { AccessMode } from '../../@types/Handover'
 import { HttpError } from '../../utils/HttpError'
 import { AuditEvent } from '../../services/auditService'
+import { AccessMode } from '../../@types/SessionType'
 
 export default class PlanHistoryController {
   private render = async (req: Request, res: Response, next: NextFunction) => {
@@ -17,7 +17,7 @@ export default class PlanHistoryController {
           ? await req.services.planService.getPlanByUuidAndVersionNumber(planUuid, planVersionNumber)
           : await req.services.planService.getPlanByUuid(planUuid)
 
-      const oasysReturnUrl = req.services.sessionService.getOasysReturnUrl()
+      const systemReturnUrl = req.services.sessionService.getSystemReturnUrl()
       const notes = await req.services.planService.getNotes(planUuid)
       const readWrite = req.services.sessionService.getAccessMode() === AccessMode.READ_WRITE
 
@@ -36,7 +36,7 @@ export default class PlanHistoryController {
         data: {
           notes,
           plan,
-          oasysReturnUrl,
+          systemReturnUrl,
           pageId,
           readWrite,
         },

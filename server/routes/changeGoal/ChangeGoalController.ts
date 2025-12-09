@@ -9,7 +9,6 @@ import ChangeGoalPostModel from './models/ChangeGoalPostModel'
 import validateRequest from '../../middleware/validationMiddleware'
 import { PlanAgreementStatus } from '../../@types/PlanType'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
-import { AccessMode } from '../../@types/Handover'
 import { HttpError } from '../../utils/HttpError'
 import { getDateOptions, getGoalTargetDate } from '../../utils/goalTargetDateUtils'
 import { NewGoal } from '../../@types/NewGoalType'
@@ -17,6 +16,7 @@ import { areaConfigs } from '../../utils/assessmentAreaConfig.json'
 import { AssessmentAreaConfig } from '../../@types/Assessment'
 import { getAssessmentDetailsForArea } from '../../utils/assessmentUtils'
 import { AuditEvent } from '../../services/auditService'
+import { AccessMode } from '../../@types/SessionType'
 
 export default class ChangeGoalController {
   constructor(private readonly referentialDataService: ReferentialDataService) {}

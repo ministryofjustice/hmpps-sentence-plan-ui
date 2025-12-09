@@ -685,34 +685,6 @@
           "comparisonPath": "cypress-image-diff-screenshots/comparison/plan-overview.cy.ts-base-error-validation-page.png"
         }
       ]
-    },
-    {
-      "name": "unsaved-information-deleted.cy.ts",
-      "path": "integration_tests/e2e/vrt-tests/unsaved-information-deleted.cy.ts",
-      "tests": [
-        {
-          "status": "pass",
-          "name": "unsaved-information-deleted.cy.ts-base-page",
-          "percentage": 0,
-          "failureThreshold": 0.05,
-          "specPath": "integration_tests/e2e/vrt-tests/unsaved-information-deleted.cy.ts",
-          "specFilename": "unsaved-information-deleted.cy.ts",
-          "baselinePath": "cypress-image-diff-screenshots/baseline/unsaved-information-deleted.cy.ts-base-page.png",
-          "diffPath": "",
-          "comparisonPath": "cypress-image-diff-screenshots/comparison/unsaved-information-deleted.cy.ts-base-page.png"
-        },
-        {
-          "status": "pass",
-          "name": "unsaved-information-deleted.cy.ts-return-to-plan-from-unsaved-information-deleted-page",
-          "percentage": 0,
-          "failureThreshold": 0.05,
-          "specPath": "integration_tests/e2e/vrt-tests/unsaved-information-deleted.cy.ts",
-          "specFilename": "unsaved-information-deleted.cy.ts",
-          "baselinePath": "cypress-image-diff-screenshots/baseline/unsaved-information-deleted.cy.ts-return-to-plan-from-unsaved-information-deleted-page.png",
-          "diffPath": "",
-          "comparisonPath": "cypress-image-diff-screenshots/comparison/unsaved-information-deleted.cy.ts-return-to-plan-from-unsaved-information-deleted-page.png"
-        }
-      ]
     }
   ],
   "startedAt": "2025-07-01T12:23:52.471Z",

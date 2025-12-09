@@ -5,12 +5,12 @@ import validateRequest from '../../middleware/validationMiddleware'
 import transformRequest from '../../middleware/transformMiddleware'
 import ReAddGoalPostModel from './models/ReAddGoalPostModel'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
-import { AccessMode } from '../../@types/Handover'
 import { HttpError } from '../../utils/HttpError'
 import { goalStatusToTabName } from '../../utils/utils'
 import { getDateOptions, getGoalTargetDate } from '../../utils/goalTargetDateUtils'
 import { ReAddGoal } from '../../@types/ReAddGoal'
 import { AuditEvent } from '../../services/auditService'
+import { AccessMode } from '../../@types/SessionType'
 
 export default class ReAddGoalController {
   constructor() {}

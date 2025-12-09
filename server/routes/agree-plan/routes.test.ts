@@ -47,7 +47,7 @@ describe(`GET ${URLs.AGREE_PLAN}`, () => {
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain(
-          `${locale.en.mainHeading.title.replace('{{ subject.givenName }}', testPopData.givenName)}`,
+          `${locale.en.mainHeading.title.replace('{{ subject.givenName }}', testPopData.firstName)}`,
         )
       })
   })

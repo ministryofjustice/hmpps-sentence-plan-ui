@@ -9,9 +9,9 @@ import AgreePlanPostModel from './models/AgreePlanPostModel'
 import { PlanAgreementStatus } from '../../@types/PlanType'
 import { PlanAgreement } from '../../@types/PlanAgreement'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
-import { AccessMode } from '../../@types/Handover'
 import { HttpError } from '../../utils/HttpError'
 import { AuditEvent } from '../../services/auditService'
+import { AccessMode } from '../../@types/SessionType'
 
 export default class AgreePlanController {
   private render = async (req: Request, res: Response, next: NextFunction) => {

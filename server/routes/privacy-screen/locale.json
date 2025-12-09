@@ -9,13 +9,14 @@
     },
     "mainBody": {
       "paragraph1": "For example, Outlook, Teams or NDelius.",
-      "paragraph2": "You must do this to avoid sharing sensitive information.",
-      "paragraph3": "You must not let {{ subject.givenName }} use your device either.",
-      "checkBoxLabel": "I confirm I'll close any other applications before starting an appointment"
+      "paragraph2": "You must also close other people's assessments or plans if you have them open in other tabs.",
+      "paragraph3": "Do not let {{ subject.givenName }} use your device either.",
+      "paragraph4": "This is to avoid sharing sensitive information.",
+      "checkBoxLabel": "I confirm I'll do this before starting an appointment"
     },
     "errors": {
       "confirm-privacy-checkbox": {
-        "isNotEmpty": "Confirm you'll close any other applications before starting an appointment"
+        "isNotEmpty": "Confirm you'll do this before starting an appointment"
       }
     },
     "returnToOasysButton": "Return to OASys",

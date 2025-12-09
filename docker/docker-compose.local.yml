@@ -1,0 +1,64 @@
+services:
+  redis:
+    ports:
+      - "6379:6379"
+
+  postgres:
+    ports:
+      - "5432:5432"
+
+  forward-proxy:
+    image: nginx:latest
+    networks:
+      - hmpps
+    depends_on:
+      - hmpps-auth
+      - arns-handover
+    ports:
+      - "9091:9091"
+      - "9092:9092"
+      - "7071:7071"
+    volumes:
+      - ./forward-proxy/nginx.conf:/etc/nginx/nginx.conf
+
+  hmpps-auth:
+    ports:
+      - "9090:9090"
+
+  arns-handover:
+    ports:
+      - "7070:7070"
+
+  oastub:
+    ports:
+      - "7072:3005"
+
+  coordinator-api:
+    ports:
+      - "8070:8080"
+
+  sp-api:
+    ports:
+      - "8081:8080"
+
+  sp-ui:
+    depends_on:
+      - forward-proxy
+    ports:
+      - "3001:3000"
+
+  san-api:
+    ports:
+      - "8080:8080"
+
+  san-ui:
+    depends_on:
+      - forward-proxy
+    environment:
+      FEEDBACK_URL: http://localhost:9092
+    ports:
+      - "3000:3000"
+
+  delius:
+    ports:
+      - "9094:8080"

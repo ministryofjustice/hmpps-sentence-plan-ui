@@ -5,10 +5,10 @@ import locale from './locale.json'
 import testPlan from '../../testutils/data/planData'
 import testNoteData from '../../testutils/data/noteData'
 import PlanHistoryController from './PlanHistoryController'
-import { AccessMode } from '../../@types/Handover'
 import { AuditEvent } from '../../services/auditService'
+import { AccessMode } from '../../@types/SessionType'
 
-const oasysReturnUrl = 'https://oasys.return.url'
+const systemReturnUrl = 'https://oasys.return.url'
 
 jest.mock('../../services/auditService')
 
@@ -16,7 +16,7 @@ jest.mock('../../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
     getPlanUUID: jest.fn().mockReturnValue(testPlan.uuid),
     getPlanVersionNumber: jest.fn().mockReturnValue(null),
-    getOasysReturnUrl: jest.fn().mockReturnValue(oasysReturnUrl),
+    getSystemReturnUrl: jest.fn().mockReturnValue(systemReturnUrl),
     getAccessMode: jest.fn().mockReturnValue(AccessMode.READ_WRITE),
     setReturnLink: jest.fn(),
   }))
@@ -45,7 +45,7 @@ describe('PlanHistoryController with READ_WRITE permissions', () => {
       data: {
         notes: [testNoteData],
         plan: testPlan,
-        oasysReturnUrl,
+        systemReturnUrl,
         pageId: 'plan-history',
         readWrite: true,
       },
@@ -101,7 +101,7 @@ describe('PlanHistoryController with READ_ONLY permissions', () => {
       data: {
         notes: [testNoteData],
         plan: testPlan,
-        oasysReturnUrl,
+        systemReturnUrl,
         pageId: 'plan-history',
         readWrite: false,
       },

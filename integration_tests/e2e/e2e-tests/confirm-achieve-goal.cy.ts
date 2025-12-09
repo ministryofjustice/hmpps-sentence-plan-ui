@@ -4,7 +4,7 @@ import { Goal } from '../../../server/@types/GoalType'
 import PlanOverview from '../../pages/plan-overview'
 import AchieveGoal from '../../pages/achieve-goal'
 import IntegrationUtils from '../../integrationUtils'
-import { AccessMode } from '../../../server/@types/Handover'
+import { AccessMode } from '../../../server/@types/SessionType'
 
 describe('Achieve goal', () => {
   const planOverview = new PlanOverview()

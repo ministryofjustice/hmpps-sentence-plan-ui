@@ -1,4 +1,4 @@
-import { AccessMode } from '../../../server/@types/Handover'
+import { AccessMode } from '../../../server/@types/SessionType'
 import DataGenerator from '../../support/DataGenerator'
 import { PlanType } from '../../../server/@types/PlanType'
 

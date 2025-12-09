@@ -4,9 +4,9 @@ import validateRequest from '../../middleware/validationMiddleware'
 import transformRequest from '../../middleware/transformMiddleware'
 import AchieveGoalPostModel from './models/AchieveGoalPostModel'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
-import { AccessMode } from '../../@types/Handover'
 import { HttpError } from '../../utils/HttpError'
 import { AuditEvent } from '../../services/auditService'
+import { AccessMode } from '../../@types/SessionType'
 
 // AchieveGoalController is accessed through the 'mark as achieved' button on the update goals page.
 export default class AchieveGoalController {

@@ -20,4 +20,21 @@ describe('Data privacy', () => {
     cy.get('button').contains('Confirm').click()
     cy.compareSnapshot('view-plan-after-agreeing-to-privacy-statement-page')
   })
+
+  describe('User is authenticated via HMPPS Auth', () => {
+    beforeEach(() => {
+      cy.createSentencePlan().then(planDetails => {
+        cy.wrap(planDetails).as('plan')
+        cy.openSentencePlanAuth(planDetails.oasysAssessmentPk, {
+          planUuid: planDetails.plan.uuid,
+          crn: 'X775086',
+          username: 'AUTH_ADM',
+        })
+      })
+    })
+    it('does not show the back link', () => {
+      cy.get('.govuk-back-link').should('not.exist')
+      cy.compareSnapshot('base-page-hmpps-auth')
+    })
+  })
 })

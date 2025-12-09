@@ -15,10 +15,11 @@ import {
 import { FormattedAssessment } from '../../@types/Assessment'
 
 import { formatAssessmentData } from '../../utils/assessmentUtils'
-import { AccessMode } from '../../@types/Handover'
 import { AuditEvent } from '../../services/auditService'
+import { AccessMode, AuthType } from '../../@types/SessionType'
+import URLs from '../URLs'
 
-const oasysReturnUrl = 'https://oasys.return.url'
+const systemReturnUrl = 'https://oasys.return.url'
 
 jest.mock('../../services/auditService')
 
@@ -37,7 +38,7 @@ jest.mock('../../services/sentence-plan/planService', () => {
 jest.mock('../../services/sessionService', () => {
   return jest.fn().mockImplementation(() => ({
     getPlanUUID: jest.fn().mockReturnValue(testPlan.uuid),
-    getOasysReturnUrl: jest.fn().mockReturnValue(oasysReturnUrl),
+    getSystemReturnUrl: jest.fn().mockReturnValue(systemReturnUrl),
     getPrincipalDetails: jest.fn().mockReturnValue(testHandoverContext.principal),
     getSubjectDetails: jest.fn().mockReturnValue(testHandoverContext.subject),
     getCriminogenicNeeds: jest.fn().mockReturnValue(fullCrimNeeds),
@@ -87,7 +88,7 @@ describe('AboutPersonController - API data error handling', () => {
       data: {
         deliusData,
         planAgreementStatus: testPlan.agreementStatus,
-        oasysReturnUrl,
+        systemReturnUrl,
         pageId: 'about',
         formattedAssessmentInfo: assessmentAreas,
         readWrite: true,
@@ -121,7 +122,7 @@ describe('AboutPersonController - API data error handling', () => {
       data: {
         deliusData: popData,
         planAgreementStatus: testPlan.agreementStatus,
-        oasysReturnUrl,
+        systemReturnUrl,
         pageId: 'about',
         formattedAssessmentInfo,
         readWrite: true,
@@ -168,7 +169,7 @@ describe('AboutPersonController - assessment complete', () => {
         locale: locale.en,
         data: {
           planAgreementStatus: testPlan.agreementStatus,
-          oasysReturnUrl,
+          systemReturnUrl,
           pageId: 'about',
           deliusData: popData,
           formattedAssessmentInfo: assessmentAreas,
@@ -194,7 +195,7 @@ describe('AboutPersonController - assessment complete', () => {
         locale: locale.en,
         data: {
           planAgreementStatus: testPlan.agreementStatus,
-          oasysReturnUrl,
+          systemReturnUrl,
           pageId: 'about',
           deliusData: popData,
           formattedAssessmentInfo: assessmentAreas,
@@ -233,7 +234,7 @@ describe('AboutPersonController - assessment incomplete', () => {
         locale: locale.en,
         data: {
           planAgreementStatus: testPlan.agreementStatus,
-          oasysReturnUrl,
+          systemReturnUrl,
           pageId: 'about',
           deliusData: popData,
           formattedAssessmentInfo: assessmentAreas,
@@ -260,7 +261,7 @@ describe('AboutPersonController - assessment incomplete', () => {
         locale: locale.en,
         data: {
           planAgreementStatus: testPlan.agreementStatus,
-          oasysReturnUrl,
+          systemReturnUrl,
           pageId: 'about',
           deliusData: popData,
           formattedAssessmentInfo: assessmentAreas,
@@ -271,6 +272,18 @@ describe('AboutPersonController - assessment incomplete', () => {
 
       expect(res.render).toHaveBeenCalledWith('pages/about', expectedPayload)
       expect(req.services.auditService.send).toHaveBeenCalledWith(AuditEvent.VIEW_ABOUT_PAGE)
+    })
+  })
+
+  describe('About person controller - handle redirect', () => {
+    it('redirects HMPPS Auth users from the /about page to the /plan page', async () => {
+      req.services.sessionService.getPrincipalDetails = jest.fn().mockReturnValue({ authType: AuthType.HMPPS_AUTH })
+      const next = jest.fn()
+
+      await controller.get(req, res, next)
+
+      expect(res.redirect).toHaveBeenCalledWith(URLs.PLAN_OVERVIEW)
+      expect(next).not.toHaveBeenCalled()
     })
   })
 })

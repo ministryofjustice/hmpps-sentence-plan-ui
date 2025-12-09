@@ -8,11 +8,12 @@ import PlanReadyForAgreementModel from '../shared-models/PlanReadyForAgreementMo
 import AgreedPlanModel from '../shared-models/AgreedPlanModel'
 import transformRequest from '../../middleware/transformMiddleware'
 import PlanOverviewQueryModel from './models/PlanOverviewQueryModel'
-import { AccessMode } from '../../@types/Handover'
 import { requireAccessMode } from '../../middleware/authorisationMiddleware'
 import { HttpError } from '../../utils/HttpError'
 import { PlanAgreementStatus, PlanType } from '../../@types/PlanType'
 import { AuditEvent } from '../../services/auditService'
+import { AccessMode } from '../../@types/SessionType'
+import checkPrivacyScreenAgreed from '../../middleware/privacyScreenMiddleware'
 
 export default class PlanOverviewController {
   plan: PlanType
@@ -30,7 +31,7 @@ export default class PlanOverviewController {
         this.plan = await req.services.planService.getPlanByUuid(planUuid)
       }
 
-      const oasysReturnUrl = req.services.sessionService.getOasysReturnUrl()
+      const systemReturnUrl = req.services.sessionService.getSystemReturnUrl()
       const type = req.query?.type ?? 'current'
       const status = req.query?.status
       // was the plan updated more than 10s after the user agreed to it?
@@ -57,7 +58,7 @@ export default class PlanOverviewController {
           isUpdatedAfterAgreement,
           type,
           status,
-          oasysReturnUrl,
+          systemReturnUrl,
           readWrite,
         },
         errors,
@@ -129,6 +130,7 @@ export default class PlanOverviewController {
 
   get = [
     requireAccessMode(AccessMode.READ_ONLY),
+    checkPrivacyScreenAgreed(),
     transformRequest({ query: PlanOverviewQueryModel }),
     validateRequest(),
     this.validatePlan,

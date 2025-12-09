@@ -12,6 +12,7 @@
     "allowSyntheticDefaultImports": true,
     "noImplicitAny": true,
     "experimentalDecorators": true,
+    "isolatedModules": true,
     "typeRoots": ["./server/@types", "./node_modules/@types"]
   },
   "exclude": [

@@ -21,6 +21,12 @@ export enum PlanStatus {
   UNSIGNED = 'UNSIGNED',
 }
 
+export enum PlanPublishedStatus {
+  UNPUBLISHED = 'UNPUBLISHED',
+  PUBLISHED = 'PUBLISHED',
+  ARCHIVED = 'ARCHIVED',
+}
+
 export type PlanType = {
   uuid: string
   status: PlanStatus
@@ -32,4 +38,21 @@ export type PlanType = {
   mostRecentUpdateDate: string
   crn: string
   goals: Goal[]
+}
+
+export type PlanEntity = {
+  publishedState: PlanPublishedStatus
+  uuid: string
+  createdDate: string
+  createdBy: {
+    externalId: string
+    username: string
+  }
+  lastUpdatedDate: string
+  lastUpdatedBy: {
+    externalId: string
+    username: string
+  }
+  currentVersion: PlanType
+  crn: string
 }

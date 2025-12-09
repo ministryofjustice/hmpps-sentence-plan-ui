@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker'
 import DataGenerator from '../../support/DataGenerator'
 import { PlanType } from '../../../server/@types/PlanType'
-import { AccessMode } from '../../../server/@types/Handover'
+import { AccessMode } from '../../../server/@types/SessionType'
 import PlanOverview from '../../pages/plan-overview'
 
 describe('Update Agree plan', () => {

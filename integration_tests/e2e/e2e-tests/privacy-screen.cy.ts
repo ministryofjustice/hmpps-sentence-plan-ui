@@ -1,4 +1,4 @@
-import { AccessMode } from '../../../server/@types/Handover'
+import { AccessMode } from '../../../server/@types/SessionType'
 import URLs from '../../../server/routes/URLs'
 
 describe('Privacy Screen', () => {
@@ -41,9 +41,12 @@ describe('Privacy Screen', () => {
         'Remember to close any other applications before starting an appointment with Sam',
       )
       cy.get('.govuk-body').contains('For example, Outlook, Teams or NDelius.')
-      cy.get('.govuk-body').contains('You must do this to avoid sharing sensitive information.')
-      cy.get('.govuk-body').contains('You must not let Sam use your device either.')
-      cy.get('.govuk-checkboxes').contains("I confirm I'll close any other applications before starting an appointment")
+      cy.get('.govuk-body').contains(
+        "You must also close other people's assessments or plans if you have them open in other tabs.",
+      )
+      cy.get('.govuk-body').contains('Do not let Sam use your device either.')
+      cy.get('.govuk-body').contains('This is to avoid sharing sensitive information.')
+      cy.get('.govuk-checkboxes').contains("I confirm I'll do this before starting an appointment")
       cy.get('.govuk-button').contains('Confirm')
       cy.contains('a', 'Return to OASys').should('have.attr', 'href').and('include', Cypress.env('OASTUB_URL'))
       cy.get('.govuk-back-link').should('have.attr', 'href').and('include', Cypress.env('OASTUB_URL'))
@@ -54,13 +57,10 @@ describe('Privacy Screen', () => {
       cy.get('.govuk-button').click()
       cy.url().should('include', URLs.DATA_PRIVACY)
       cy.title().should('contain', 'Error:')
-      cy.get('.govuk-error-summary').should(
-        'contain',
-        "Confirm you'll close any other applications before starting an appointment",
-      )
+      cy.get('.govuk-error-summary').should('contain', "Confirm you'll do this before starting an appointment")
       cy.get('#confirm-privacy-checkbox-error').should(
         'contain',
-        "Confirm you'll close any other applications before starting an appointment",
+        "Confirm you'll do this before starting an appointment",
       )
       cy.checkAccessibility()
     })
@@ -69,6 +69,22 @@ describe('Privacy Screen', () => {
       cy.get('.govuk-checkboxes').click()
       cy.get('.govuk-button').click()
       cy.url().should('include', URLs.PLAN_OVERVIEW)
+    })
+
+    describe('User is authenticated via HMPPS Auth', () => {
+      beforeEach(() => {
+        cy.createSentencePlan().then(planDetails => {
+          cy.wrap(planDetails).as('plan')
+          cy.openSentencePlanAuth(planDetails.oasysAssessmentPk, {
+            planUuid: planDetails.plan.uuid,
+            crn: 'X775086',
+            username: 'AUTH_ADM',
+          })
+        })
+      })
+      it('does not show the back link', () => {
+        cy.get('.govuk-back-link').should('not.exist')
+      })
     })
   })
 })

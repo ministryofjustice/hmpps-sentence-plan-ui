@@ -29,10 +29,10 @@ jobs:
     env:
       APP_VERSION: ${{ inputs.app_version }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Download docker image
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v6
         with:
           name: build_image
           path: ${{ runner.temp }}
@@ -42,45 +42,48 @@ jobs:
           docker load --input ${{ runner.temp }}/build_image.tar
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version: 24
           cache: 'npm'
 
       - name: Run npm ci
         run: npm ci
 
       - name: Stand up a test environment
-        run: |
-          make test-up
+        run: make up
 
       - name: Run visual regression testing
-        run: make vrt-ci
+        uses: cypress-io/github-action@v6.10.3
+        with:
+          publish-summary: false
+          browser: edge
         env:
+          SPEC: 'integration_tests/e2e/vrt-tests/**/*.cy.ts'
           SPLIT: ${{ inputs.job-total }}
           SPLIT_INDEX: ${{ inputs.job-index }}
 
       - name: Upload failed image diff report
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: cypress_image_diff_report_${{ inputs.matrix-container }}
           path: 'cypress-image-diff-html-report'
 
       - name: Upload failed visual regression artifacts (if any)
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: failed_vrt_screenshots_${{ inputs.matrix-container }}
           path: 'cypress-image-diff-screenshots'
 
       - name: Export container logs
         if: failure()
-        run: make save-logs PROJECT_NAME="hmpps-sentence-plan-test" OUTPUT_LOGS_DIR=${{ runner.temp }}/docker-logs
+        run: make save-logs OUTPUT_LOGS_DIR=${{ runner.temp }}/docker-logs
 
       - name: Upload docker logs
         if: failure()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: vrt_docker_logs_${{ inputs.matrix-container }}
           path: |

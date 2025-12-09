@@ -9,7 +9,7 @@ import { AreaOfNeed } from '../../testutils/data/referenceData'
 import testPlan from '../../testutils/data/planData'
 import testHandoverContext from '../../testutils/data/handoverData'
 import { crimNeedsSubset, incompleteAssessmentData } from '../../testutils/data/testAssessmentData'
-import { AccessMode } from '../../@types/Handover'
+import { AccessMode } from '../../@types/SessionType'
 
 jest.mock('../../services/sentence-plan/referentialDataService', () => {
   return jest.fn().mockImplementation(() => ({
@@ -41,7 +41,7 @@ jest.mock('../../services/sessionService', () => {
     getPrincipalDetails: jest.fn().mockReturnValue(testHandoverContext.principal),
     getSubjectDetails: jest.fn().mockReturnValue(testHandoverContext.subject),
     getCriminogenicNeeds: jest.fn().mockReturnValue(crimNeedsSubset),
-    getOasysReturnUrl: jest.fn().mockReturnValue('http://mock-return-url'),
+    getSystemReturnUrl: jest.fn().mockReturnValue('http://mock-return-url'),
     getAccessMode: jest.fn().mockReturnValue(AccessMode.READ_WRITE),
     setReturnLink: jest.fn(),
   }))
@@ -68,7 +68,7 @@ describe(`GET ${URLs.ABOUT_PERSON}`, () => {
       .expect('Content-Type', /html/)
       .expect(res => {
         expect(res.text).toContain(
-          locale.en.mainHeading.title.replace('{{ subject.givenName }}', testPopData.givenName),
+          locale.en.mainHeading.title.replace('{{ subject.givenName }}', testPopData.firstName),
         )
       })
   })
