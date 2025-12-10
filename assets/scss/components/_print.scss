@@ -16,4 +16,9 @@
     display: none;
     visibility: hidden;
   }
+
+  .govuk-details::details-content {
+    content-visibility: visible;
+    height: auto !important;
+  }
 }
