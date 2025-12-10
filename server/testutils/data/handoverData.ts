@@ -1,4 +1,4 @@
-import { AccessMode, AuthType } from '../../@types/SessionType'
+import { AccessMode } from '../../@types/SessionType'
 import { HandoverContextData } from '../../@types/Handover'
 
 const testHandoverContext: HandoverContextData = {
@@ -8,7 +8,6 @@ const testHandoverContext: HandoverContextData = {
     displayName: 'Dr. Benjamin Runolfsdottir',
     accessMode: AccessMode.READ_WRITE,
     returnUrl: 'https://oasys.return.url',
-    authType: AuthType.OASYS,
   },
   subject: {
     crn: 'X336018',

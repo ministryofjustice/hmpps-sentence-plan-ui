@@ -17,8 +17,7 @@
         "title": "{{ subject.givenName }} {{ subject.familyName }}",
         "crnLabel": "CRN:",
         "pncLabel": "PNC:",
-        "dateOfBirthLabel": "Date of birth:",
-        "viewPreviousVersionsLinkText": "View previous versions"
+        "dateOfBirthLabel": "Date of birth:"
       },
       "extended": {
         "createGoalButton": "Create goal",

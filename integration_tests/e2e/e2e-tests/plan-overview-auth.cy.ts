@@ -23,7 +23,7 @@ describe('Users with the role can access a plan with goals', { testIsolation: fa
   const planOverview = new PlanOverview()
 
   it('Agreed plan does not show about page when using HMPPS Auth', () => {
-    cy.get('#create-goal-button').click()
+    cy.get('div.govuk-width-container header a').click()
     cy.get('#goal-input-autocomplete').click()
     cy.get('#goal-input-autocomplete').type('I will')
     cy.get('#goal-input-autocomplete__option--0').click()

@@ -39,7 +39,7 @@ jest.mock('../../services/sessionService', () => {
   }))
 })
 
-jest.mock('../../services/sentence-plan/coordinatorService', () => {
+jest.mock('../../services/sentence-plan/assessmentService', () => {
   return jest.fn().mockImplementation(() => ({
     getAssessmentByUuid: jest.fn().mockResolvedValue(incompleteAssessmentData),
   }))
@@ -121,7 +121,7 @@ describe('CreateGoalController', () => {
     })
 
     it('should render without errors when assessment info is not available', async () => {
-      req.services.coordinatorService.getAssessmentByUuid = jest.fn().mockResolvedValue(null)
+      req.services.assessmentService.getAssessmentByUuid = jest.fn().mockResolvedValue(null)
 
       const viewDataWithoutAssessment = structuredClone(viewData)
       viewDataWithoutAssessment.data.assessmentDetailsForArea = null

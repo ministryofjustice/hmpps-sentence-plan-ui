@@ -34,10 +34,6 @@ describe('Rendering About Person for READ_WRITE user', () => {
     cy.hasFeedbackLink()
   })
 
-  it('Has a previous versions page link', () => {
-    cy.hasPreviousVersionsPageLink()
-  })
-
   it('Should check if the hard-coded entries in Sentence information are displayed correctly', () => {
     cy.get('tbody > :nth-child(2) > :nth-child(1)').contains('Custodial Sentence (4 years, 2 months and 6 days)') // this will select the first cell in the first row
     cy.get('tbody > :nth-child(2) > :nth-child(2)').contains('12 January 2029')

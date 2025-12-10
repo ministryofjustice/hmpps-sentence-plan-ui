@@ -19,11 +19,6 @@ export default class PlanService {
     return restClient.get<PlanType>({ path: `/plans/${planUuid}/version/${planVersionNumber}` })
   }
 
-  async getPlanVersionByVersionUuid(planVersionUuid: string) {
-    const restClient = await this.sentencePlanApiClient.restClient(`Getting plan version with UUID: ${planVersionUuid}`)
-    return restClient.get<PlanType>({ path: `/plans/version/${planVersionUuid}` })
-  }
-
   async agreePlan(planUuid: string, agreement: PlanAgreement) {
     const restClient = await this.sentencePlanApiClient.restClient(`Agreeing plan with plan UUID: ${planUuid}`)
     return restClient.post<PlanType>({ path: `/plans/${planUuid}/agree`, data: agreement })

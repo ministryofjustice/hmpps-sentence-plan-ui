@@ -1,4 +1,3 @@
-import { Client } from 'pg'
 import { defineConfig } from 'cypress'
 import getCompareSnapshotsPlugin from 'cypress-image-diff-js/plugin'
 import cypressSplit from 'cypress-split'
@@ -25,14 +24,6 @@ export default defineConfig({
           // eslint-disable-next-line no-console
           console.table(message)
           return null
-        },
-
-        async runDBQuery(sql: string) {
-          const client = new Client({ connectionString: 'postgres://root:dev@localhost:5432/postgres' })
-          await client.connect()
-          const res = await client.query(sql)
-          await client.end()
-          return res.rows
         },
       })
       cypressSplit(on, config)

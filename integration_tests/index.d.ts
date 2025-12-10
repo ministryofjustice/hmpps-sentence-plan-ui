@@ -28,19 +28,11 @@ declare namespace Cypress {
     agreePlan(planUuid: string): Chainable<Goal>
 
     lockPlan(planUuid: string): Chainable<T>
-    createSentencePlanWithVersions(numberOfVersions: number, numberOfCountersignedVersions: number): Chainable<T>
 
     // Accessibility
     checkAccessibility(injectAxe: boolean = true, disabledRules: string[] = []): Chainable<T>
 
     // Feedback
     hasFeedbackLink(): Chainable
-
-    // Navigation links
-    hasPreviousVersionsPageLink(hasLink: boolean = true): Chainable
-
-    // Previous versions tables check
-    checkSinglePreviousVersionsTable(numberOfVersions: number, expectedCaption: string): Chainable
-    checkBothPreviousVersionsTables(numberOfVersions: number, numberOfCountersignedVersions: number): Chainable
   }
 }

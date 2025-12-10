@@ -27,7 +27,7 @@ export default class AboutPersonController {
       const errorMessages = []
 
       const deliusData = await req.services.infoService.getPopData(popData.crn).catch((): null => null)
-      const assessmentData = await req.services.coordinatorService.getAssessmentByUuid(planUuid).catch((): null => null)
+      const assessmentData = await req.services.assessmentService.getAssessmentByUuid(planUuid).catch((): null => null)
 
       if (deliusData === null && assessmentData !== null) {
         errorMessages.push('noDeliusDataFound')

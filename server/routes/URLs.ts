@@ -18,6 +18,4 @@ export default {
   PLAN_HISTORY: '/plan-history',
   RE_ADD_GOAL: '/confirm-add-goal/:uuid',
   DATA_PRIVACY: '/close-any-other-applications-before-appointment',
-  PREVIOUS_VERSIONS: '/previous-versions',
-  VIEW_PREVIOUS_VERSION: '/view-historic/:planVersionUuid',
 }
