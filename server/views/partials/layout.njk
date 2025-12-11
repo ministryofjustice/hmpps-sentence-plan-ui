@@ -39,32 +39,31 @@
               text: locale.common.primaryNavigation.aboutPopText,
               href: '/about',
               active: data.pageId == 'about'
-            } if user.authType == 'OASYS'
-          ] | reject('string')
+            }
+          ]
         }) }}
       {% elseif not data.privacyScreen %}
         {{ mojPrimaryNavigation({
-          label: 'Primary navigation',
-          items: [{
-            text: locale.common.primaryNavigation.planLinkText,
-            href: '/plan',
-            active: data.pageId != 'plan-history' and data.pageId != 'about'
-          },
-            {
-              text: locale.common.primaryNavigation.planHistoryText,
-              href: '/plan-history',
-              active: data.pageId == 'plan-history'
-            },
-            {
-              text: locale.common.primaryNavigation.aboutPopText,
-              href: '/about',
-              active: data.pageId == 'about'
-            } if user.authType == 'OASYS'
-          ] | reject('string')
-        }) }}
-       {# Due to an issue with the component, if auth is HMPPS_AUTH we get an empty string. reject('string') Strips this to prevent invisible elements on the nav #}
-      {% endif %}
-    {% endif %}
+                  label: 'Primary navigation',
+                   items: [{
+                       text: locale.common.primaryNavigation.planLinkText,
+                       href: '/plan',
+                       active: data.pageId != 'plan-history' and data.pageId != 'about'
+                     },
+                     {
+                       text: locale.common.primaryNavigation.planHistoryText,
+                       href: '/plan-history',
+                       active: data.pageId == 'plan-history'
+                     },
+                     {
+                       text: locale.common.primaryNavigation.aboutPopText,
+                       href: '/about',
+                       active: data.pageId == 'about'
+                     }
+                   ]
+                 }) }}
+     {% endif  %}
+   {% endif  %}
   </div>
 {% endblock %}
 

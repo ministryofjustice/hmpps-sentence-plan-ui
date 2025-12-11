@@ -4,8 +4,7 @@ import { areaConfigs } from '../../utils/assessmentAreaConfig.json'
 import { formatAssessmentData } from '../../utils/assessmentUtils'
 import { HttpError } from '../../utils/HttpError'
 import { AuditEvent } from '../../services/auditService'
-import { AccessMode, AuthType } from '../../@types/SessionType'
-import URLS from '../URLs'
+import { AccessMode } from '../../@types/SessionType'
 
 export default class AboutPersonController {
   constructor() {}
@@ -13,12 +12,6 @@ export default class AboutPersonController {
   get = async (req: Request, res: Response, next: NextFunction) => {
     let { errors } = req
     try {
-      // if the user is authenticated via HMPPS Auth, redirect to the plan overview page
-      const authType = req.services.sessionService.getPrincipalDetails()?.authType
-      if (authType === AuthType.HMPPS_AUTH) {
-        return res.redirect(URLS.PLAN_OVERVIEW)
-      }
-
       const planUuid = req.services.sessionService.getPlanUUID()
       const popData = req.services.sessionService.getSubjectDetails()
       const systemReturnUrl = req.services.sessionService.getSystemReturnUrl()
