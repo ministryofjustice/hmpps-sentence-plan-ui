@@ -17,7 +17,7 @@ services:
       - /var/lib/postgres
 
   hmpps-auth:
-    image: quay.io/hmpps/hmpps-auth:2024-12-30.26692.44389cd
+    image: ghcr.io/ministryofjustice/hmpps-auth
     networks:
       - hmpps
     healthcheck:
