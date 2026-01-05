@@ -18,7 +18,7 @@
     "int-test-ui": "cypress open --e2e --browser chrome",
     "clean": "rm -rf dist build node_modules stylesheets",
     "rebuild": "npm run clean && npm i && npm run build",
-    "setup": "npm ci && hmpps-npm-script-run-allowlist"
+    "setup": "npm ci && hmpps-npm-script-run-allowlist && cypress install"
   },
   "engines": {
     "node": "^22",
