@@ -58,6 +58,7 @@ jobs:
       - name: Run split Cypress tests
         uses: cypress-io/github-action@v6.10.5
         with:
+          install: false
           publish-summary: false
           browser: edge
         env:
