@@ -44,7 +44,7 @@ ARG GIT_BRANCH
 
 COPY . .
 RUN rm -rf dist node_modules
-RUN CYPRESS_INSTALL_BINARY=0 npm ci --no-audit
+RUN CYPRESS_INSTALL_BINARY=0 npm run setup
 RUN npm run build
 RUN npm prune --no-audit --omit=dev
 
