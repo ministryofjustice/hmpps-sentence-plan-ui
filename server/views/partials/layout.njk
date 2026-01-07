@@ -34,12 +34,7 @@
             text: locale.common.primaryNavigation.planLinkText,
             href: '/plan',
             active: data.pageId != 'plan-history' and data.pageId != 'about'
-          },
-            {
-              text: locale.common.primaryNavigation.aboutPopText,
-              href: '/about',
-              active: data.pageId == 'about'
-            }
+          }
           ]
         }) }}
       {% elseif not data.privacyScreen %}
@@ -54,11 +49,6 @@
                        text: locale.common.primaryNavigation.planHistoryText,
                        href: '/plan-history',
                        active: data.pageId == 'plan-history'
-                     },
-                     {
-                       text: locale.common.primaryNavigation.aboutPopText,
-                       href: '/about',
-                       active: data.pageId == 'about'
                      }
                    ]
                  }) }}
