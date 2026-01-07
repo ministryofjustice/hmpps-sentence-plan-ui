@@ -17,13 +17,6 @@
 {% endblock %}
 
 {% block header %}
-  {% if deploymentName %}
-    <div class="custom-deployment-banner">
-      <span class="govuk-body">
-        <u><strong>Notice</strong></u>: You are viewing deployment <strong>{{ deploymentName }}</strong>.
-      </span>
-    </div>
-  {% endif %}
   <div class="govuk-!-display-none-print">
     {% include "./header.njk" %}
     {% if data.popData and not data.viewPreviousVersionMode %}
@@ -34,12 +27,7 @@
             text: locale.common.primaryNavigation.planLinkText,
             href: '/plan',
             active: data.pageId != 'plan-history' and data.pageId != 'about'
-          },
-            {
-              text: locale.common.primaryNavigation.aboutPopText,
-              href: '/about',
-              active: data.pageId == 'about'
-            }
+          }
           ]
         }) }}
       {% elseif not data.privacyScreen %}
@@ -54,11 +42,6 @@
                        text: locale.common.primaryNavigation.planHistoryText,
                        href: '/plan-history',
                        active: data.pageId == 'plan-history'
-                     },
-                     {
-                       text: locale.common.primaryNavigation.aboutPopText,
-                       href: '/about',
-                       active: data.pageId == 'about'
                      }
                    ]
                  }) }}
