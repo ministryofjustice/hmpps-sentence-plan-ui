@@ -311,9 +311,9 @@
                     {% endif %}
 
                 {% if data.viewPreviousVersionMode %}
-                   <p class="govuk-!-display-none-print">{{ locale.ifNoCurrentGoals.text }}</p>
+                   <p class="govuk-!-display-none-print">{{ locale.ifNoCurrentGoals.text }} | safe</p>
                 {% else %}
-                   <p class="govuk-!-display-none-print">{{ locale.ifNoCurrentGoals.text }}</p>
+                   <p class="govuk-!-display-none-print">{{ locale.ifNoCurrentGoals.text }} | safe</p>
                 {% endif %}
             {% elseif goalType == 'future' and goals.length == 0 %}
                 <p>{{ locale.ifNoFutureGoals.text }}</p>
