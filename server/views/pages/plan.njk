@@ -314,10 +314,6 @@
                    <p class="govuk-!-display-none-print">{{ locale.ifNoCurrentGoals.text }}</p>
                 {% else %}
                    <p class="govuk-!-display-none-print">{{ locale.ifNoCurrentGoals.text }}</p>
-                   <ul class="govuk-!-display-none-print">
-                   <li><a href="/create-goal/accommodation">{{ locale.ifNoCurrentGoals.action1 }}</a></li>
-                   </ul>
-                   </div>
                 {% endif %}
             {% elseif goalType == 'future' and goals.length == 0 %}
                 <p>{{ locale.ifNoFutureGoals.text }}</p>
