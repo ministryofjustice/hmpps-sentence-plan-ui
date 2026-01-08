@@ -16,6 +16,10 @@ export default [
     text: 'Commissioned rehabilitative services (CRS) provider',
   },
   {
+    value: 7,
+    text: 'Prison offender manager',
+  },
+  {
     value: 6,
     text: 'Someone else',
   },

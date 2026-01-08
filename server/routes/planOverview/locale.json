@@ -30,7 +30,7 @@
       "removedGoals": "Removed goals ({{ goalCounts.removedGoals }})"
     },
     "ifNoCurrentGoals": {
-      "text": "{{ subject.givenName }} does not have any goals to work on now. You can either:",
+      "text": "{{ subject.givenName }} does not have any goals to work on now. You can <a href='/create-goal/accommodation'>create a goal with {{ subject.givenName }}</a>",
       "action1": "create a goal with {{ subject.givenName }}",
       "action2": "view information from {{ subject.possessiveName }} assessment"
     },
