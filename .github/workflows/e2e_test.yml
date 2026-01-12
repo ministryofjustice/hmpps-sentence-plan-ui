@@ -49,15 +49,16 @@ jobs:
           node-version: 24
           cache: 'npm'
 
-      - name: Run npm ci
-        run: npm ci
+      - name: Install dependencies
+        run: npm run setup
 
       - name: Stand up a test environment
         run: make up
 
       - name: Run split Cypress tests
-        uses: cypress-io/github-action@v6.10.5
+        uses: cypress-io/github-action@v6.10.8
         with:
+          install: false
           publish-summary: false
           browser: edge
         env:

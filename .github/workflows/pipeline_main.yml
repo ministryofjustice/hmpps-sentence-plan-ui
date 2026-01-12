@@ -30,6 +30,8 @@ jobs:
     name: node build
     uses: ministryofjustice/hmpps-github-actions/.github/workflows/node_build.yml@v2
     secrets: inherit
+    with:
+      install_command: "npm run setup"
 
   node_unit_tests:
     name: node unit tests
@@ -92,7 +94,7 @@ jobs:
           pattern: npm_unit_test_artifacts
 
       - name: Publish Test Results
-        uses: EnricoMi/publish-unit-test-result-action@34d7c956a59aed1bfebf31df77b8de55db9bbaaf # v2.21.0
+        uses: EnricoMi/publish-unit-test-result-action@27d65e188ec43221b20d26de30f4892fad91df2f # v2.22.0
         with:
           files: "unit_test_artifacts/**/*.xml"
           check_name: "Unit Test Results"
@@ -104,7 +106,7 @@ jobs:
           pattern: test_results_*
 
       - name: Publish Test Results
-        uses: EnricoMi/publish-unit-test-result-action@34d7c956a59aed1bfebf31df77b8de55db9bbaaf # v2.21.0
+        uses: EnricoMi/publish-unit-test-result-action@27d65e188ec43221b20d26de30f4892fad91df2f # v2.22.0
         with:
           files: "artifacts/**/*.xml"
           check_name: "Cypress Test Results"
