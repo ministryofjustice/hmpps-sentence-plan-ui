@@ -47,8 +47,8 @@ jobs:
           node-version: 24
           cache: 'npm'
 
-      - name: Run npm ci
-        run: npm ci
+      - name: Install dependencies
+        run: npm run setup
 
       - name: Stand up a test environment
         run: make up
