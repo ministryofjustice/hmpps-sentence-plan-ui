@@ -7,7 +7,7 @@
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "moj/components/side-navigation/macro.njk" import mojSideNavigation %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
-{% from "../components/assessment/area-assessment-summary.njk" import assessmentInformationForArea %}
+{% from "../components/assessment/area-assessment-summary.njk" import assessmentInformationForArea with context %}
 
 {% set locale = interpolate(locale, {
     goal: data.goal
