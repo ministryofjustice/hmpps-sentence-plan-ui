@@ -22,7 +22,7 @@ describe('Users with the role can access a plan with goals', { testIsolation: fa
 
   const planOverview = new PlanOverview()
 
-  it('Agreed plan does not show return to OASys link on plan-history', () => {
+  it('Agreed plan does not show about page when using HMPPS Auth', () => {
     cy.get('#create-goal-button').click()
     cy.get('#goal-input-autocomplete').click()
     cy.get('#goal-input-autocomplete').type('I will')
@@ -36,6 +36,10 @@ describe('Users with the role can access a plan with goals', { testIsolation: fa
     cy.get('#step-description-1').type('Add a step')
     cy.get('div:nth-of-type(3) button').click()
     planOverview.agreePlan()
+    cy.get('.moj-primary-navigation__container').should('not.contain', 'About')
+  })
+
+  it('Agreed plan does not show return to OASys link on plan-history', () => {
     cy.get('.moj-primary-navigation__container').contains('Plan history').click()
     cy.get('h1').contains('Plan history')
     cy.get('.govuk-button--secondary').should('not.exist')
@@ -58,7 +62,7 @@ describe('Users with the role can access a plan without goals', () => {
     setupPlan()
   })
   it('Shows correct text and link', () => {
-    cy.get('#goal-list').contains('does not have any goals to work on now. You can either:')
-    cy.get('#goal-list').should('contain', 'view information from')
+    cy.get('#goal-list').contains('does not have any goals to work on now. You can create a goal with')
+    cy.get('#goal-list').should('not.contain', 'view information from')
   })
 })

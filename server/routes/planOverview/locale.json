@@ -31,6 +31,7 @@
     },
     "ifNoCurrentGoals": {
       "text": "{{ subject.givenName }} does not have any goals to work on now. You can either:",
+      "textMpop": "{{ subject.givenName }} does not have any goals to work on now. You can",
       "action1": "create a goal with {{ subject.givenName }}",
       "action2": "view information from {{ subject.possessiveName }} assessment"
     },
