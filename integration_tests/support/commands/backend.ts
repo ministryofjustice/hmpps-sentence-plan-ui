@@ -156,7 +156,7 @@ export const openSentencePlan = (
   return cy.visit('/')
 }
 
-export const openSentencePlanAuth = (
+export const openSentencePlanHmppsAuth = (
   oasysAssessmentPk: string,
   options?: { accessMode?: string; planUuid?: string; planVersion?: number; crn?: string; username?: string },
 ) => {
