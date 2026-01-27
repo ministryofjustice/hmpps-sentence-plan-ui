@@ -2,7 +2,7 @@
   "en": {
     "page": {
       "title": "Change goal - {{ applicationName }}",
-      "errorTitle": "Error: Create a goal - {{ applicationName }}"
+      "errorTitle": "Error: Change goal - {{ applicationName }}"
     },
     "mainHeading": {
       "title": "Change goal with {{ subject.givenName }}",
