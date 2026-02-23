@@ -163,5 +163,8 @@
     "supertest": "^7.1.4",
     "ts-jest": "^29.4.1",
     "typescript": "^5.9.2"
+  },
+  "overrides": {
+    "diff": "8.0.3"
   }
 }
