@@ -41,7 +41,7 @@ services:
       - redis
       - localstack
     healthcheck:
-      test: ["CMD", "wget", "-q", "-O", "-", "http://arns-handover:7070/health/ping"]
+      test: ["CMD", "curl", "-fsS", "http://arns-handover:7070/health/ping"]
       interval: 5s
       retries: 60
     networks:
