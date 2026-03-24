@@ -166,7 +166,7 @@
   },
   "overrides": {
     "diff": "8.0.3",
-    "fast-xml-parser": "5.4.2",
+    "fast-xml-parser": "5.5.8",
     "minimatch": "10.2.4",
     "serialize-javascript": "7.0.4"
   }
