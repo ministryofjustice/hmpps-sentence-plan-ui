@@ -11,10 +11,10 @@ generic-service:
     INGRESS_URL: "https://sentence-plan-dev.hmpps.service.justice.gov.uk"
     SENTENCE_PLAN_API_URL: "https://sentence-plan-api-dev.hmpps.service.justice.gov.uk"
     HMPPS_AUTH_URL: "https://sign-in-dev.hmpps.service.justice.gov.uk/auth"
-    HMPPS_ARNS_HANDOVER_URL: "https://arns-handover-service-dev.hmpps.service.justice.gov.uk"
+    HMPPS_ARNS_HANDOVER_URL: "https://pr-216.arns-handover-service-dev.hmpps.service.justice.gov.uk"
     OASYS_URL: "https://arns-oastub-dev.hmpps.service.justice.gov.uk"
     MANAGE_USERS_API_URL: "https://manage-users-api-dev.hmpps.service.justice.gov.uk"
-    COORDINATOR_API_URL: "https://arns-coordinator-api-dev.hmpps.service.justice.gov.uk"
+    COORDINATOR_API_URL: "https://pr-217.arns-coordinator-api-dev.hmpps.service.justice.gov.uk"
     TOKEN_VERIFICATION_API_URL: "https://token-verification-api-dev.prison.service.justice.gov.uk"
     DELIUS_API_BASE_URL: "https://sentence-plan-and-delius-dev.hmpps.service.justice.gov.uk"
     MPOP_URL: "https://manage-people-on-probation-dev.hmpps.service.justice.gov.uk"
@@ -28,14 +28,12 @@ generic-service:
   allowlist:
     capita-dev: 51.104.16.30/31
     captia-further: 172.167.141.40/32
-    neil-test: 51.155.102.238/32
     capita-developers-vms-one: 85.115.52.180/32
     capita-developers-vms-two: 85.115.52.200/29
     capita-developers-vms-three: 85.115.53.180/32
     capita-developers-vms-four: 85.115.53.200/29
     capita-developers-vms-five: 85.115.54.180/32
     capita-developers-vms-six: 85.115.54.200/29
-    krupal-app-sec: 80.195.27.199/32
 
 generic-prometheus-alerts:
   alertSeverity: hmpps-sentence-plan-notifications
